@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: fa7f304cdb9b8be4583fa1f4ac47f24a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Sunny Spells Basic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Fonts/SunnySpellsBasicRegular-Yz1Wv.ttf
+  uploadId: 744242

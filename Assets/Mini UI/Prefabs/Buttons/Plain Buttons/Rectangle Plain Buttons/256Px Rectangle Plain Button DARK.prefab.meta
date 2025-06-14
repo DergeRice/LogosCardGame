@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 88cc769ea693b41429a95b884e2f76e3
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Plain Buttons/Rectangle Plain Buttons/256Px
+    Rectangle Plain Button DARK.prefab
+  uploadId: 501689

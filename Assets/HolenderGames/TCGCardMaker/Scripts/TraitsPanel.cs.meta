@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7a3d01ba6b4891c43ba703e52e00ee7e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Scripts/TraitsPanel.cs
+  uploadId: 744242

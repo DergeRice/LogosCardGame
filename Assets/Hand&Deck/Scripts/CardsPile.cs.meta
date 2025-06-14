@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e8a00e44c4a752041af6111669365475
+timeCreated: 1472981807
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182857
+  packageName: Hand & Deck for TCG
+  packageVersion: 1.0
+  assetPath: Assets/Hand&Deck/Scripts/CardsPile.cs
+  uploadId: 405786

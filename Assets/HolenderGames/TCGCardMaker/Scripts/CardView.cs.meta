@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 37b6676397b7c62448cf66de188acafd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Scripts/CardView.cs
+  uploadId: 744242

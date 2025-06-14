@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ab72a1612bccc134a95eb6ee75c0c0f8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Scripts/UI/YesNoDialog.cs
+  uploadId: 744242

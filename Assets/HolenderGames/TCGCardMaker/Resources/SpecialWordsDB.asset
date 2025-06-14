@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a33088c800cd24f9a5c11b72e61e6b, type: 3}
+  m_Name: SpecialWordsDB
+  m_EditorClassIdentifier: 
+  words:
+  - "\uB300\uBA85\uC0AC"
+  - "\uC18C\uC720\uACA9"
+  - "\uBD80\uC815\uAD00\uC0AC"
+  - "\uC815\uAD00\uC0AC"
+  - "Be\uB3D9\uC0AC"
+  - "\uC77C\uBC18\uB3D9\uC0AC"
+  - "\uC11C\uC220\uC5B4"
+  - "\uC18C\uC720\uACA9"
+  - "\uC804\uCE58\uC0AC"
+  - "\uB0AB"
+  - "\uBCA0\uB9AC"
+  - "\uBD80\uC0AC"
+  - "\uBE48\uB3C4\uBD80\uC0AC"
+  - "\uC870\uB3D9\uC0AC"
+  - "\uD615\uC6A9\uC0AC"
+  - Ge
+  - Ex
+  - Pr
+  - Rob
+  specialColor: {r: 0.7254902, g: 0.28888786, b: 0.18823528, a: 1}

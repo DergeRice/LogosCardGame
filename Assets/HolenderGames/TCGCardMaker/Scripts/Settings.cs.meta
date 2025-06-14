@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 269840033a9f29a458e6595f414af695
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Scripts/Settings.cs
+  uploadId: 744242

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 09defce973c87c846b3ff37447bfb4de
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182857
+  packageName: Hand & Deck for TCG
+  packageVersion: 1.0
+  assetPath: Assets/Hand&Deck/Scripts/DemoScript.cs
+  uploadId: 405786

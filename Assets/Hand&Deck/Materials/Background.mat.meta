@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e0fabfdcd90a8f2489268485e997599e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182857
+  packageName: Hand & Deck for TCG
+  packageVersion: 1.0
+  assetPath: Assets/Hand&Deck/Materials/Background.mat
+  uploadId: 405786

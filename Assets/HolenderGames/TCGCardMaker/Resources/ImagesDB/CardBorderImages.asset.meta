@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 29664dab84a47bf45aacdd91697848b9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Resources/ImagesDB/CardBorderImages.asset
+  uploadId: 744242

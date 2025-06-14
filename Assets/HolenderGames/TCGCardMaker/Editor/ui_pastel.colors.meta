@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a31dc2f6c653d124b9eeac9feea6ace4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Editor/ui_pastel.colors
+  uploadId: 744242

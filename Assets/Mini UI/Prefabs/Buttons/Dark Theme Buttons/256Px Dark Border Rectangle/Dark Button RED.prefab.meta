@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9ca36c61c96482b45af6adf89c369bb2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Dark Theme Buttons/256Px Dark Border
+    Rectangle/Dark Button RED.prefab
+  uploadId: 501689

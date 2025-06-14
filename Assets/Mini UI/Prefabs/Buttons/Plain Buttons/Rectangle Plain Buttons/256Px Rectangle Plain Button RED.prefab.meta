@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 047c352705a0a394eb432b233d0c25e2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Plain Buttons/Rectangle Plain Buttons/256Px
+    Rectangle Plain Button RED.prefab
+  uploadId: 501689

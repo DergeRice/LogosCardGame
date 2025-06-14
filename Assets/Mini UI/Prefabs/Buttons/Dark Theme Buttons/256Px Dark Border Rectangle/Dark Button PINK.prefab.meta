@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 095b8c6216f594841b99105e11e5fda6
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Dark Theme Buttons/256Px Dark Border
+    Rectangle/Dark Button PINK.prefab
+  uploadId: 501689

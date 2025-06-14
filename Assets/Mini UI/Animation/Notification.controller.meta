@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2fade6c4d3a738145958a51f69c72ced
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Animation/Notification.controller
+  uploadId: 501689

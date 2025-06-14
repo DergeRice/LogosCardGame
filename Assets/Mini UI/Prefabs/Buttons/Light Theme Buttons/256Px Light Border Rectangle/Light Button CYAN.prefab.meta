@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5c529d9396b53214e99693b98cfea0fd
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Light Theme Buttons/256Px Light Border
+    Rectangle/Light Button CYAN.prefab
+  uploadId: 501689

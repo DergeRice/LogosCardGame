@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5588f40d6da5d7946a15010a2a1bd620
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Prefabs/TraitView.prefab
+  uploadId: 744242

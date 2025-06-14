@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6b0e1097c09e4ab408ae6084bafec8df
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/InnerBorder Buttons/Rectangle InnerBorder
+    Buttons/256Px Rectangle InnerBorder DARK.prefab
+  uploadId: 501689

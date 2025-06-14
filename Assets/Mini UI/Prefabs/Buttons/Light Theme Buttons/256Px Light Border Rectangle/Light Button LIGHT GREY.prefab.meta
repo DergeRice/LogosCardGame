@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fe2b8435ca3b7b547a06c60915300c00
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Light Theme Buttons/256Px Light Border
+    Rectangle/Light Button LIGHT GREY.prefab
+  uploadId: 501689

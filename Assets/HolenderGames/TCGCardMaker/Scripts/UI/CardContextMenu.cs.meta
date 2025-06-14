@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3c58617c7db92d44eb599bb8c6844cd1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Scripts/UI/CardContextMenu.cs
+  uploadId: 744242

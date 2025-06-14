@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a41c92b07e7ed4d4da155cd1d84f60f1, type: 3}
+  m_Name: "card_\uBD80\uC815\uAD00\uC0AC"
+  m_EditorClassIdentifier: 
+  Title: "\uBD80\uC815\uAD00\uC0AC"
+  Description: "\uB2E8\uC5B4:a, an\n\uAE30\uB2A5:\uC140 \uC218 \uC788\uB294 \uBA85\uC0AC
+    \uC55E"
+  Cost: x2
+  Type: 3
+  Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
+  Art: {fileID: 287562236161145738, guid: 0711d10ffa9e6431f9fb4cc2c1d2a661, type: 3}
+  IsTargeting: 0
+  Traits:
+  - {fileID: 11400000, guid: 7bff843024999d844a3add025c3994d8, type: 2}

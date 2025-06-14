@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a41c92b07e7ed4d4da155cd1d84f60f1, type: 3}
+  m_Name: "card_\uC140_\uC218_\uC5C6\uB294_\uBA85\uC0AC4"
+  m_EditorClassIdentifier: 
+  Title: "\uC140 \uC218 \uC5C6\uB294 \uBA85\uC0AC4"
+  Description: "\uB2E8\uC5B4: Tom,Jane,Water,milk,salt\n\uAE30\uB2A5:\uC815\uAD00\uC0AC\uB098
+    \uC18C\uC720\uACA9\uC774 \uC55E\uC5D0 \uC62C \uC218 \uC788\uC74C"
+  Cost: 
+  Type: 1
+  Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
+  Art: {fileID: -6728632817980769878, guid: 853ab6ce51ead42d1bc29c85de9ba0c4, type: 3}
+  IsTargeting: 0
+  Traits: []

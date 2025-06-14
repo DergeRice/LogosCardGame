@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0e274f3b58e89e24d931b61e9790f2e3
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/License-openai.txt
+  uploadId: 744242

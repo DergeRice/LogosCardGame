@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: dcb88f17cd7c1a94e9d12aede48f272d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Panels Prefabs/Light Theme/Inventory Light.prefab
+  uploadId: 501689

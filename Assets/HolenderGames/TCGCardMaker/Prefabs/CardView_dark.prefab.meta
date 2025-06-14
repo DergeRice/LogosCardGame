@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a1b9bd47908145848bce1a3e47f9be76
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Prefabs/CardView_dark.prefab
+  uploadId: 744242
