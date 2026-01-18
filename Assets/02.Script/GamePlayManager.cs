@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Fusion;
 using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
@@ -21,7 +18,6 @@ public class GamePlayManager : MonoBehaviour
 
     public void CheckGrammar(bool isValid)
     {
-
         if (isValid == true)
         {
             List<ScoreStep> steps;
@@ -30,7 +26,9 @@ public class GamePlayManager : MonoBehaviour
 
             gameUIManager.GrammarCorrect(score);
         }
-        
-        else { gameUIManager.GrammarFail(); }
+        else
+        {
+            gameUIManager.GrammarFail();
+        }
     }
 }

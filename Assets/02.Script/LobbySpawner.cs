@@ -1,12 +1,14 @@
 using UnityEngine;
-using Fusion;
 
-public class LobbySpawner : NetworkBehaviour {
-    
-    [SerializeField] private NetworkPrefabRef _character;
+public class LobbySpawner : MonoBehaviour
+{
+    [SerializeField] private GameObject characterPrefab;
 
-    public override void Spawned()
+    private void Start()
     {
-        Runner.Spawn(_character, Vector3.zero, inputAuthority: Runner.LocalPlayer);
+        if (characterPrefab != null)
+        {
+            Instantiate(characterPrefab, Vector3.zero, Quaternion.identity);
+        }
     }
 }

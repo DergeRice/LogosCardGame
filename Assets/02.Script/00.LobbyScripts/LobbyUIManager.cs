@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyUIManager : MonoBehaviour
 {
@@ -15,23 +16,23 @@ public class LobbyUIManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        nicknameConfirmButton.onClick.AddListener(()=>
+        nicknameConfirmButton.onClick.AddListener(() =>
         {
-            FusionConnector.Instance.LocalPlayerName = nicknameSelect.text;
+            SinglePlayerSession.LocalPlayerName = nicknameSelect.text;
             nicknameConfirmButton.transform.parent.gameObject.SetActive(false);
-        });    
-
-        quickStartButton.onClick.AddListener(()=>
-        {
-            multiplayLobby.SetActive(true);
-            FusionConnector.Instance.StartGame(true);
         });
-    
+
+        quickStartButton.onClick.AddListener(() =>
+        {
+            multiplayLobby.SetActive(false);
+            SceneManager.LoadScene("04.GameScene");
+        });
+
     }
 
     public void SetMyNameText(string str)
     {
         nameText.text = str;
-        
+
     }
 }

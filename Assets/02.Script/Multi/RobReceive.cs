@@ -1,14 +1,21 @@
+#if MULTI
+using Fusion;
 using TCG_CardMaker;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Multi
+{
 public class RobReceive : MonoBehaviour
 {
+
     public GameObject Ui;
     public CardView robbedView;
 
     public Button acceptBtn;
+
+    public PlayerRef sender;
 
     public GameObject resultObject;
 
@@ -25,11 +32,15 @@ public class RobReceive : MonoBehaviour
         });
     }
 
-    public void ReceivedRob(string senderName, CardSO robCard)
+
+    public void ReceivedRob(PlayerRef _sender, string senderName, CardSO robCard)
     {
         Ui.SetActive(true);
         FieldManager.Instance.FadeField(0);
         robbedView.SetData(robCard);
+        sender = _sender;
+
+        // senderNameText.text = senderName;/
 
         ShowAnimation();
 
@@ -42,3 +53,5 @@ public class RobReceive : MonoBehaviour
         resultObject.SetActive(true);
     }
 }
+}
+#endif

@@ -1,10 +1,14 @@
+#if MULTI
 using System.Collections.Generic;
 using UnityEngine;
 using TCG_CardMaker;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Collections;
 using DG.Tweening;
 
+namespace Multi
+{
 public class HandManager : MonoBehaviour
 {
     public HorizontalLayoutGroup cardHolder;
@@ -21,7 +25,20 @@ public class HandManager : MonoBehaviour
     // private int spacingThreshold = 8;        // 간격 줄이기 시작할 카드 수
     public float angleStep = 5f;            // 카드 사이 각도 차이 (절대값)
     public float maxAngle = 30f;            // 양 끝 카드 최대 회전각도
-    [SerializeField] private float verticalCurveFactor = 1f;
+    [SerializeField] private float verticalCurveFactor =   1f;
+
+
+    void Start()
+    {
+        if (FusionConnector.Instance != null)
+        {
+            var runner = FusionConnector.Instance.runner;
+            if (runner != null && runner.IsSharedModeMasterClient)
+            {
+                // 마스터일 때 처리 (필요 시)
+            }
+        }
+    }
 
     public void CheckHoldEnd() => isOn.SetActive(false);
     public void ShowIsOn() => isOn.SetActive(true);
@@ -70,14 +87,14 @@ public class HandManager : MonoBehaviour
             float yOffset = -Mathf.Pow(offsetFromCenter, 2) * verticalCurveFactor;
 
             // 만약 이 카드가 targetCardView면, -10에서 천천히 올라오게
-            if (targetCardView != null && deckCardView.cardView == targetCardView)
+            if (targetCardView != null  && deckCardView.cardView == targetCardView)
             {
                 rt.anchoredPosition = new Vector2(0, -230f); // 시작점
 
                 // DOTween으로 천천히 올라감
                 rt.DOAnchorPosY(yOffset, 1.3f)
                     .SetEase(Ease.OutBack);
-                // .SetDelay(0.05f); // 혹시 약간의 딜레이 주고 싶다면
+                    // .SetDelay(0.05f); // 혹시 약간의 딜레이 주고 싶다면
             }
             else
             {
@@ -86,4 +103,8 @@ public class HandManager : MonoBehaviour
             }
         }
     }
+
+
 }
+}
+#endif
