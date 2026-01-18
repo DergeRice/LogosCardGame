@@ -63,6 +63,48 @@ public class NetworkManager : MonoBehaviour
         // ownData.profileindex = PlayerPrefsManager.Instance.GetIntSetting(PlayerPrefsData.profileIndex);
     }
 
+    public void CheckGrammar(string json, Action success = null, Action fail = null)
+    {
+        if (json == "") return;
+        StartCoroutine(CheckGrammarToServer(json,success,fail));
+    }
+
+    public IEnumerator CheckGrammarToServer(string sendData, Action success, Action fail)
+    {
+        // JSON 객체로 만들기
+        string jsonData = $"{{\"pos\": {sendData}}}";
+
+        byte[] jsonDataBytes = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+        UnityWebRequest www = new UnityWebRequest("https://dergerice.kr/api4/", "POST");
+        www.uploadHandler = new UploadHandlerRaw(jsonDataBytes);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        Debug.Log("Sending: " + jsonData);
+
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError(www.error);
+            // fail?.Invoke();
+            // bool isValid = JsonConvert.DeserializeObject<Dictionary<string, bool>>(www.downloadHandler.text)["valid"];
+            // GamePlayManager.instance.CheckGrammar(isValid);
+
+        }
+        else
+        {
+            success?.Invoke();
+
+            bool isValid = JsonConvert.DeserializeObject<Dictionary<string, bool>>(www.downloadHandler.text)["valid"];
+            GamePlayManager.instance.CheckGrammar(isValid);
+
+            Debug.Log("Response: " + www.downloadHandler.text);
+        }
+    }
+
+
 
 
     [ContextMenu("TestInsert")]

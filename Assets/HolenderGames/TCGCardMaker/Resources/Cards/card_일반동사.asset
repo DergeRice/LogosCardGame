@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: "card_\uC77C\uBC18\uB3D9\uC0AC"
   m_EditorClassIdentifier: 
   Title: "\uC77C\uBC18\uB3D9\uC0AC"
-  Description: "\uB2E8\uC5B4:\uC790\uB3D9\uC0AC, \uD0C0\uB3D9\uC0AC,\uC218\uC5EC
-    \uB3D9\uC0AC\n\uAE30\uB2A5:\uBB38\uC7A5\uC758 \uC11C\uC220\uC5B4 \uAE30\uB2A5"
+  Description: "\uAE30\uB2A5:\uBB38\uC7A5\uC758 \uC11C\uC220\uC5B4 \uAE30\uB2A5"
   Cost: "\xF72"
   Type: 7
-  Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
+  Border: {fileID: 21300000, guid: d837ee152794e3945a48b7e35d39270a, type: 3}
   Art: {fileID: -9201164740898115759, guid: add08ca8b3c14403187f12247b19d35f, type: 3}
   IsTargeting: 0
   IsSpecial: 0

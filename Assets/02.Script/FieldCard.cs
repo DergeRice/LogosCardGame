@@ -1,7 +1,7 @@
 using TCG_CardMaker;
 using UnityEngine;
 
-public class FieldCard : MonoBehaviour
+public class FieldCard : CardBase
 {
     public CardView cardView;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

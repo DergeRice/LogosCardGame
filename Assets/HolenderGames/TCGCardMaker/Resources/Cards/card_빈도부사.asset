@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: "card_\uBE48\uB3C4\uBD80\uC0AC"
   m_EditorClassIdentifier: 
   Title: "\uBE48\uB3C4\uBD80\uC0AC"
-  Description: "\uB2E8\uC5B4:always,usally,often\n\uAE30\uB2A5: \uC77C\uBC18\uB3D9\uC0AC
-    \uC55E Be\uB3D9\uC0AC \uB4A4"
+  Description: "\uAE30\uB2A5: \uC77C\uBC18\uB3D9\uC0AC \uC55E Be\uB3D9\uC0AC \uB4A4"
   Cost: 
   Type: 13
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
   Art: {fileID: -8666569897855789300, guid: 711bdf76e4d674d96be7388481e5abb1, type: 3}
   IsTargeting: 0
+  IsSpecial: 0
+  IsDivide: 0
   Traits: []

@@ -1,0 +1,5 @@
+/Users/isangjin/Documents/GitHub/LogosCardGame/.utmp/RelWithDebInfo/3s5m5l2s/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/isangjin/Documents/GitHub/LogosCardGame/.utmp/RelWithDebInfo/3s5m5l2s/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/isangjin/Documents/GitHub/LogosCardGame/.utmp/RelWithDebInfo/3s5m5l2s/arm64-v8a/GameActivity/CMakeFiles/game.dir
+/Users/isangjin/Documents/GitHub/LogosCardGame/.utmp/RelWithDebInfo/3s5m5l2s/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+/Users/isangjin/Documents/GitHub/LogosCardGame/.utmp/RelWithDebInfo/3s5m5l2s/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

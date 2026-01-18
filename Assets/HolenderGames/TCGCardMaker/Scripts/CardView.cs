@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 namespace TCG_CardMaker
 {
@@ -15,17 +16,47 @@ namespace TCG_CardMaker
         [SerializeField] private Image imgBorder;
         [SerializeField] private Image imgArt;
         [SerializeField] private Image costImg;
-        [SerializeField] private Sprite costSpecial;
-        [SerializeField] private Sprite costDivide;
+        [SerializeField] private Sprite costAdd, costMulti, costSpecial;
 
         [SerializeField] public CardSO cardData;
 
         public GameObject selectCardFrame;
+        [SerializeField] private TextMeshProUGUI specialTitle;
+        [SerializeField] private Image specialBorder,specialImg;
+
+        public bool isHandCard;
+
+        public Transform center;
+        
 
         public void SetData(CardSO card)
         {
             this.cardData = card;
             UpdateCardUI();
+        }
+
+        public void HoldFunction()
+        {
+            if (isHandCard)
+            {
+                selectCardFrame.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        }
+
+        public void HoldEndFunction()
+        {
+            if (isHandCard)
+            {
+                // selectCardFrame.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(true);
+            }
         }
 
         public void UpdateCardUI()
@@ -34,25 +65,62 @@ namespace TCG_CardMaker
                 return;
 
             txtTitle.text = cardData.Title;
+            specialTitle.text = cardData.Title;
+
             txtCardType.text = cardData.Type.ToString()[0].ToString();
             txtDescription.text = SpecialWords.Instance.GetSpecialWordsFormat(cardData.Description);
             txtCost.text = cardData.Cost.ToString();
+
             imgBorder.sprite = cardData.Border;
+            specialBorder.sprite = cardData.Border;
+
             imgArt.sprite = cardData.Art;
+            specialImg.sprite = cardData.Art;
 
             if (cardData.Cost == "")
             {
                 costImg.enabled = false;
             }
-            else if (cardData.Cost == "S")
+            else
             {
-                costImg.sprite = costSpecial;
+                costImg.enabled = true;
             }
 
-            if (cardData.IsDivide) costImg.sprite = costDivide;
-        }
+            if (cardData.Cost.Contains("+")) costImg.sprite = costAdd;
+            if (cardData.Cost.Contains("x")) costImg.sprite = costMulti;
 
-       
+
+            if (cardData.Cost == "S")
+            {
+                costImg.sprite = costSpecial;
+
+                // 일반 카드용 비활성
+                txtTitle.gameObject.SetActive(false);
+                imgBorder.gameObject.SetActive(false);
+                imgArt.transform.parent.gameObject.SetActive(false);
+
+                // 특수 카드용 활성
+                specialBorder.transform.parent.gameObject.SetActive(true);  // ✅ 추가
+                specialBorder.gameObject.SetActive(true);
+                specialTitle.gameObject.SetActive(true);                    // ✅ 추가
+                specialImg.gameObject.SetActive(true);                      // ✅ 추가
+            }
+            else
+            {
+                // 특수 카드용 비활성
+                specialBorder.transform.parent.gameObject.SetActive(false);
+                specialBorder.gameObject.SetActive(false);
+                specialTitle.gameObject.SetActive(false);                   // ✅ 추가
+                specialImg.gameObject.SetActive(false);                     // ✅ 추가
+
+                // 일반 카드용 활성
+                txtTitle.gameObject.SetActive(true);
+                imgBorder.gameObject.SetActive(true);
+                imgArt.transform.parent.gameObject.SetActive(true);
+            }
+
+
+        }
 
         private void OnValidate()
         {

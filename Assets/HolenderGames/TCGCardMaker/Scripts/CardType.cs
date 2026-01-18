@@ -23,4 +23,28 @@ namespace TCG_CardMaker
         Pr,
         Ro
     }
+
+    public enum CardTypeJson
+    {
+        PRP,
+        NNU,
+        PRP_POS,
+        DT_AN,
+        NNC,
+        DT_THE,
+        BE,
+        VB,
+        DO,
+        IN,
+        RB_NOT,
+        VERY,
+        RB,
+        RB_FREQ,
+        MODAL,
+        JJ,
+        Ge,
+        Ex,
+        Pr,
+        Ro
+    }
 }

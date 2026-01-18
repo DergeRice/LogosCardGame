@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: "card_\uD615\uC6A9\uC0AC_2"
   m_EditorClassIdentifier: 
   Title: "\uD615\uC6A9\uC0AC 2"
-  Description: "\uB2E8\uC5B4:big,old,kind,cold,red\n\uAE30\uB2A5: \uBA85\uC0AC\uB97C
-    \uC218\uC2DD\uD558\uAC70\uB098, Be\uB3D9\uC0AC \uB4A4\uC5D0"
+  Description: "\uAE30\uB2A5: \uBA85\uC0AC\uB97C \uC218\uC2DD\uD558\uAC70\uB098,
+    Be\uB3D9\uC0AC \uB4A4\uC5D0"
   Cost: 
   Type: 15
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
   Art: {fileID: -2759285059052138724, guid: 711bdf76e4d674d96be7388481e5abb1, type: 3}
   IsTargeting: 0
+  IsSpecial: 0
+  IsDivide: 0
   Traits: []

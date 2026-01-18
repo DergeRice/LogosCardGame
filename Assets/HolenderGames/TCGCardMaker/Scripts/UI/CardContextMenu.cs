@@ -9,8 +9,8 @@ namespace TCG_CardMaker
         public static event Action<CardSO> OnEditCardClick;
         public static event Action<CardSO> OnDeleteCardClick;
 
-        [SerializeField] private Button btnEdit;
-        [SerializeField] private Button btnDelete;
+        // [SerializeField] private Button btnEdit;
+        // [SerializeField] private Button btnDelete;
 
         private CardSO card;
         private void Awake()

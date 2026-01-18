@@ -77,4 +77,9 @@ public class Utils : MonoBehaviour
             return null;
         }
     }
+
+    public static Quaternion RandomZRotation()
+    {
+        return Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
+    }
 }

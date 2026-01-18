@@ -646,10 +646,10 @@ RectTransform:
   - {fileID: 2890368535080717581}
   m_Father: {fileID: 2056286142513693690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -2.4143066}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 41}
+  m_SizeDelta: {x: 300, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1191869803562846379
 CanvasRenderer:
@@ -866,7 +866,7 @@ RectTransform:
   m_GameObject: {fileID: 8764025150188024828}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 294990142556130433}
@@ -878,7 +878,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 31}
   m_SizeDelta: {x: 300, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6943672367015062238
@@ -903,6 +903,11 @@ MonoBehaviour:
   costSpecial: {fileID: 21300000, guid: 06c487ef7d0a52e45affa9b5203e224b, type: 3}
   costDivide: {fileID: 21300000, guid: 9a4841dfe3437a045b4782d81da27e0d, type: 3}
   cardData: {fileID: 0}
+  selectCardFrame: {fileID: 0}
+  specialTitle: {fileID: 0}
+  specialBorder: {fileID: 0}
+  specialImg: {fileID: 0}
+  isHandCard: 0
 --- !u!222 &6869376076778728614
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -923,6 +928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da00ceee0cdf44eb3b11157fc7222352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardView: {fileID: 0}
 --- !u!1 &8802142698122153404
 GameObject:
   m_ObjectHideFlags: 0

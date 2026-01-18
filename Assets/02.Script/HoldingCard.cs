@@ -15,6 +15,8 @@ public class HoldingCard : MonoBehaviour
 
     public bool isHolding;
 
+    public bool isHandCard;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -29,7 +31,7 @@ public class HoldingCard : MonoBehaviour
 
         if (enabled == false)
         {
-            CardManager.cardManager.fieldManager.CheckHoldEnd();
+            CardManager.instance.fieldManager.CheckHoldEnd();
         }
         else
         {
@@ -50,10 +52,11 @@ public class HoldingCard : MonoBehaviour
         out pos
         );
         rectTransform.localPosition = pos; 
-    } 
+    }
 
     internal void originCardDestory()
     {
         Destroy(orignCard);
+        GamePlayManager.instance.handManager.RefreshHandLayout();
     }
 }

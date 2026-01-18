@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: card_not
   m_EditorClassIdentifier: 
   Title: not
-  Description: "\uB2E8\uC5B4:not\n\uAE30\uB2A5:do + not + \uC77C\uBC18\uB3D9\uC0AC,
-    be\uB3D9\uC0AC + not"
+  Description: "\uAE30\uB2A5:do + not + \uC77C\uBC18\uB3D9\uC0AC, be\uB3D9\uC0AC
+    + not"
   Cost: +3
   Type: 10
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
   Art: {fileID: -8680460188413302370, guid: 711bdf76e4d674d96be7388481e5abb1, type: 3}
   IsTargeting: 0
+  IsSpecial: 0
+  IsDivide: 0
   Traits:
   - {fileID: 11400000, guid: 7297bd255414b48c4b4ecc8596f23ef5, type: 2}

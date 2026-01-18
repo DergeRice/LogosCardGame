@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: "card_\uBD80\uC0AC"
   m_EditorClassIdentifier: 
   Title: "\uBD80\uC0AC"
-  Description: "\uB2E8\uC5B4:now, then, three, soon\n\uAE30\uB2A5: \uB3D9\uC0AC,
-    \uD615\uC6A9\uC0AC, \uB2E4\uB978 \uBD80\uC0AC,\uBB38\uC7A5\uC744 \uC218\uC2DD"
+  Description: "\uAE30\uB2A5: \uB3D9\uC0AC, \uD615\uC6A9\uC0AC, \uB2E4\uB978 \uBD80\uC0AC,\uBB38\uC7A5\uC744
+    \uC218\uC2DD"
   Cost: +2
   Type: 12
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
   Art: {fileID: -2687338500330340516, guid: 711bdf76e4d674d96be7388481e5abb1, type: 3}
   IsTargeting: 0
+  IsSpecial: 0
+  IsDivide: 0
   Traits:
   - {fileID: 11400000, guid: 527036c0b73f24cbb89df5a471a50340, type: 2}
