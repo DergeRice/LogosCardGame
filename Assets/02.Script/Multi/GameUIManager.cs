@@ -1,13 +1,20 @@
+#if MULTI
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Fusion;
+using JetBrains.Annotations;
+using NUnit.Framework;
 using TCG_CardMaker;
 using TMPro;
+// using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Multi
+{
 public enum SpecialEvent
 {
     Exchange,
@@ -32,6 +39,7 @@ public struct ScoreStep
 public class GameUIManager : MonoBehaviour
 {
     public Transform leftParent;
+    private NetworkRunner runner;
 
     public Button summitButton;
 
@@ -75,12 +83,13 @@ public class GameUIManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        wholeCanvas.DOLocalMoveY(-1000f, 0f);
+        wholeCanvas.DOLocalMoveY(-1000f,0f);
 
-        wholeCanvas.DOLocalMoveY(0, 2f).SetEase(Ease.InOutCubic);
+        wholeCanvas.DOLocalMoveY(0,2f).SetEase(Ease.InOutCubic);
         localUIManager.GetComponent<CanvasGroup>().alpha = 0;
-        localUIManager.GetComponent<CanvasGroup>().DOFade(1, 0.5f).SetDelay(2f);
+        localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.5f).SetDelay(2f);
 
+        runner = FusionConnector.Instance.runner;
         summitButton.onClick.AddListener(() =>
         {
             NetworkManager.instance.CheckGrammar(FieldManager.Instance.MakeJsonToSummit());
@@ -91,15 +100,17 @@ public class GameUIManager : MonoBehaviour
     public void TurnManagerInit(TurnManager turnManager)
     {
         this.turnManager = turnManager;
-        SpawnPlayerUIs();
+        GamePlayerSpawner.instance.allPlayerSpawnedAction += SpawnPlayerUIs;
     }
 
     public void SpawnPlayerUIs()
     {
-        if (turnManager == null)
-        {
-            return;
-        }
+        // yield return new WaitForSeconds(3f); // 스폰 다 되도록 대기
+
+        Debug.Log("엄준식");
+        // var playerObject = FindObjectsOfType<DeckManager>().ToList();
+        // var sorted = Runner.ActivePlayers.OrderBy(p => p.RawEncoded).ToList();
+        // playerObject = playerObject.Reverse();
 
         for (int i = 0; i < turnManager.deckManagers.Count; i++)
         {
@@ -110,39 +121,33 @@ public class GameUIManager : MonoBehaviour
 
     public void DoExchangePanel()
     {
-        if (turnManager != null && turnManager.IsSinglePlayer)
-        {
-            GameManager.instance.ToastText("싱글 플레이에서는 교환 카드가 비활성화됩니다.");
-            SpecialCardSuccessEnd();
-            return;
-        }
-
         currentEvent = SpecialEvent.Exchange;
         ShowOpHandList();
         exchangeManager.PopupExchange();
+        // protectedPlayerObject 키고, deckmanagers의 button 전부 enabled
         SpecialCardStart();
+
+
+        //deck manager 누르면 showplayerhandlist 랑 팝업 뜨기; 
     }
     public void DoRob()
     {
-        if (turnManager != null && turnManager.IsSinglePlayer)
-        {
-            GameManager.instance.ToastText("싱글 플레이에서는 강탈 카드가 비활성화됩니다.");
-            SpecialCardSuccessEnd();
-            return;
-        }
-
         currentEvent = SpecialEvent.Rob;
         ShowOpHandList();
         robManager.PopupRob();
+        // protectedPlayerObject 키고, deckmanagers의 button 전부 enabled
         SpecialCardStart();
     }
 
     public void ShowOpHandList()
     {
+        // int playerIndex = myDeckManagerIndex;
+
+
         opHandPopup.SetActive(true);
         ClearParent(ophandPopupParent);
 
-        var list = GamePlayerSpawner.instance != null ? GamePlayerSpawner.instance.GetOpDeckList() : new List<int>();
+        var list = GamePlayerSpawner.instance.GetOpDeckList();
 
         for (int i = 0; i < list.Count; i++)
         {
@@ -161,7 +166,9 @@ public class GameUIManager : MonoBehaviour
         myHandPopup.SetActive(true);
         ClearParent(myhandPopupParent);
 
-        var list = GamePlayerSpawner.instance != null ? GamePlayerSpawner.instance.GetMyDeckList() : new List<int>();
+        // var playerIndex = turnManager.players.FindIndex(p => p == runner.LocalPlayer);
+
+        var list = runner.IsSharedModeMasterClient? GamePlayerSpawner.instance.myCards : GamePlayerSpawner.instance.opCards;
 
         for (int i = 0; i < list.Count(); i++)
         {
@@ -179,28 +186,31 @@ public class GameUIManager : MonoBehaviour
     {
         for (int i = parent.childCount - 1; i >= 0; i--)
         {
-            Destroy(parent.GetChild(i).gameObject);
+            GameObject.Destroy(parent.GetChild(i).gameObject);
         }
     }
 
     public void SpecialCardStart()
     {
+        // localUIManager.GetComponent<CanvasGroup>().DOFade(0.5f,0.2f);
         FieldManager.Instance.FadeField(0);
     }
 
     public void SpecialCardSuccessEnd()
     {
+        // localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.2f);
         FieldManager.Instance.FadeField(1);
     }
 
     public void SpecialCardTimesUp()
     {
+        // localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.2f);
         FieldManager.Instance.FadeField(1);
     }
 
     public void GrammarCorrect(int score)
     {
-        turnManager.deckManager.UpdateScore(score);
+        turnManager.deckManager.PlayerScore.Set(score.ToString());
         thisTurnGotStar = false;
     }
 
@@ -225,13 +235,16 @@ public class GameUIManager : MonoBehaviour
 
 
             float fill = step.value / 20f;
+            // mainStar.fillAmount = Mathf.Clamp(fill, 0f, 1f);
+
+            // ShakeUIs(mainStar.transform.parent.gameObject);
 
             if (step.value >= 20 && thisTurnGotStar == false)
             {
                 thisTurnGotStar = true;
                 starParticle.SetActive(false);
                 starParticle.SetActive(true);
-                GamePlayManager.instance.gameUIManager.turnManager.deckManager.UpdateScore(Mathf.FloorToInt(step.value));
+                GamePlayManager.instance.gameUIManager.turnManager.RPC_GetStar(runner.LocalPlayer);
             }
         }
 
@@ -258,3 +271,5 @@ public class GameUIManager : MonoBehaviour
         scoreText.text = FieldManager.Instance.MakeJsonToSummit();
     }
 }
+}
+#endif

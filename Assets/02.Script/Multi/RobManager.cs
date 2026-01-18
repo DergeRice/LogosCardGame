@@ -1,12 +1,21 @@
+#if MULTI
+using Fusion;
 using TCG_CardMaker;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Multi
+{
 public class RobManager : MonoBehaviour
 {
     public GameObject UI;
     public CardView requestCardView;
     public int robIndex;
+
+    // public const int showOrder = 16;
+    // public const int hideOrder = 3;
+
+    public PlayerRef rpcTarget;
 
     public GameObject dimmer, effect;
 
@@ -21,14 +30,20 @@ public class RobManager : MonoBehaviour
     {
         robButton.onClick.AddListener(RobExcute);
         cancelButton.onClick.AddListener(RobExcute);
-        cardContainer.onClick.AddListener(() => { GamePlayManager.instance.gameUIManager.ShowOpHandList(); });
+        cardContainer.onClick.AddListener(()=> { GamePlayManager.instance.gameUIManager.ShowOpHandList(); });
     }
 
     public void PopupRob()
     {
         UI.SetActive(true);
+        // opPanel.gameObject.SetActive(true);
         Debug.Log("Tnlqkf");
+        // opCanvas.sortingOrder = hideOrder;
+        // playersCanvas.sortingOrder = showOrder;
+
         GameManager.instance.ToastText("<< 카드를 선택하세요");
+
+        
     }
     public void SelectRobCard(CardSO cardSO)
     {
@@ -41,16 +56,24 @@ public class RobManager : MonoBehaviour
 
     public void RobExcute()
     {
+        Debug.Log("GOEXE");
+
+        rpcTarget = GamePlayManager.instance.gameUIManager.turnManager.GetOp();
         GamePlayManager.instance.gameUIManager.SpecialCardSuccessEnd();
-        GameManager.instance.ToastText("싱글 플레이에서는 강탈 카드가 비활성화됩니다.");
+
+        GamePlayManager.instance.gameUIManager.turnManager.RPC_RobExcute(FusionConnector.Instance.runner.LocalPlayer, rpcTarget,
+        robIndex, GamePlayManager.instance.gameUIManager.turnManager.deckManager.PlayerName.Value);
+
+        GamePlayManager.instance.gameUIManager.turnManager.deckManager.RPC_GiveCardToPlayer(FusionConnector.Instance.runner.LocalPlayer, robIndex, 0);
 
         UI.SetActive(false);
         GamePlayManager.instance.gameUIManager.robReceive.ShowAnimation();
 
         opCanvas.gameObject.SetActive(false);
         opPanel.gameObject.SetActive(false);
-
+        
         requestCardView.gameObject.SetActive(false);
+
     }
 
     public void Cancel()
@@ -65,3 +88,5 @@ public class RobManager : MonoBehaviour
         GamePlayManager.instance.gameUIManager.turnManager.deckManager.AddCardToHand_Local(0);
     }
 }
+}
+#endif
