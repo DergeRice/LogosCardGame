@@ -50,7 +50,7 @@ public class TurnManager : NetworkBehaviour
         deckManagers = FindObjectsByType<DeckManager>(FindObjectsSortMode.None).ToList();
 
         // Order by playerRef.RawEncoded ensures consistent order across clients
-        deckManagers = deckManagers.OrderBy(dm => dm.playerRef.RawEncoded).ToList();
+        // deckManagers = deckManagers.OrderBy(dm => dm.playerRef.RawEncoded).ToList();
 
         foreach (var item in deckManagers)
         {
@@ -58,10 +58,10 @@ public class TurnManager : NetworkBehaviour
         }
     }
 
-    public DeckManager FindDeckManagerByPlayerRef(PlayerRef player)
-    {
-        return deckManagers.FirstOrDefault(d => d.playerRef == player);
-    }
+    // public DeckManager FindDeckManagerByPlayerRef(PlayerRef player)
+    // {
+    //     // return deckManagers.FirstOrDefault(d => d.playerRef == player);
+    // }
 
 
 
@@ -70,14 +70,14 @@ public class TurnManager : NetworkBehaviour
         // Debug.Log($"order making...");
 
         deckManagers = FindObjectsByType<DeckManager>(FindObjectsSortMode.None).ToList();
-        deckManagers = deckManagers.OrderBy(dm => dm.playerRef.RawEncoded).ToList();
+        // deckManagers = deckManagers.OrderBy(dm => dm.playerRef.RawEncoded).ToList();
 
         foreach (var item in deckManagers)
         {
             item.ConnectTurnManager();
         }
 
-        players = deckManagers.Select(dm => dm.playerRef).ToList();
+        // players = deckManagers.Select(dm => dm.playerRef).ToList();
 
         if (Runner.IsSharedModeMasterClient && players.Count > 0)
         {
@@ -91,15 +91,15 @@ public class TurnManager : NetworkBehaviour
     {
         if (!isMyTurn) return;
 
-        var currentIndex = deckManagers.FindIndex(x => x.playerRef == Runner.LocalPlayer);
+        // var currentIndex = deckManagers.FindIndex(x => x.playerRef == Runner.LocalPlayer);
         int nextIndex = 1;
-        if (deckManagers.Count > 0) nextIndex = (currentIndex + 1) % deckManagers.Count;
-        var next = deckManagers[nextIndex].playerRef;
+        // if (deckManagers.Count > 0) nextIndex = (currentIndex + 1) % deckManagers.Count;
+        // var next = deckManagers[nextIndex].playerRef;
 
 
         GamePlayManager.instance.gameUIManager.localUIManager.EndMyTurn();
 
-        RPC_ReceiveTurn(next);
+        // RPC_ReceiveTurn(next);
         isMyTurn = false;
         if (myTurnObject == null) myTurnObject = GamePlayManager.instance.gameUIManager.localUIManager.myTurnObject;
 
@@ -107,11 +107,11 @@ public class TurnManager : NetworkBehaviour
         GamePlayManager.instance.gameUIManager.localUIManager.submitBlock.SetActive(false);
     }
 
-    public string GetPlayerNameByPlayerRef(PlayerRef player)
-    {
-        var match = deckManagers.Find(x => x.playerRef == player);
-        return match != null ? match.PlayerName.ToString() : "Unknown";
-    }
+    // public string GetPlayerNameByPlayerRef(PlayerRef player)
+    // {
+    //     // var match = deckManagers.Find(x => x.playerRef == player);
+    //     // return match != null ? match.PlayerName.ToString() : "Unknown";
+    // }
 
 
     [Rpc(RpcSources.All, RpcTargets.All)]
@@ -125,16 +125,16 @@ public class TurnManager : NetworkBehaviour
         myTurnObject.SetActive(isMyTurn);
 
         FindDeckManager();
-        foreach (var dm in deckManagers)
-        {
-            dm.SetMyTurn(dm.playerRef == target);
-        }
+        // foreach (var dm in deckManagers)
+        // {
+        //     dm.SetMyTurn(dm.playerRef == target);
+        // }
 
-        // 마스터만 카드 지급
-        if (Runner.IsSharedModeMasterClient)
-        {
-            deckManager.GiveOneCardTo(target);
-        }
+        // // 마스터만 카드 지급
+        // if (Runner.IsSharedModeMasterClient)
+        // {
+        //     deckManager.GiveOneCardTo(target);
+        // }
 
         GamePlayManager.instance.gameUIManager.localUIManager.isMyTurn = this.isMyTurn;
 
@@ -145,8 +145,8 @@ public class TurnManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_GiveAllSpecial()
     {
-        foreach (var player in Runner.ActivePlayers)
-            deckManager.GiveAllSpecial(player);
+        // foreach (var player in Runner.ActivePlayers)
+            // deckManager.GiveAllSpecial(player);
     }
 
 

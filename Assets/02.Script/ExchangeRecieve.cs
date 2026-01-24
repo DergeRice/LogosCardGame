@@ -92,7 +92,7 @@ public class ExchangeRecieve : MonoBehaviour
             PlayerRef myPlayer = FusionConnector.Instance.runner.LocalPlayer; // 내 플레이어
 
             // 마스터에게 카드 소환 요청 (두 플레이어에게 각각 카드 생성)
-            GamePlayManager.instance.gameUIManager.turnManager.deckManager.RPC_ExchangeCards(senderPlayer, myPlayer, sendingCardIndex, requestCardIndex);
+            // GamePlayManager.instance.gameUIManager.turnManager.deckManager.RPC_ExchangeCards(senderPlayer, myPlayer, sendingCardIndex, requestCardIndex);
             Destroy(CardManager.instance.GetCardObjectByIndex(sendingCardIndex));
         }
         else

@@ -86,7 +86,7 @@ public class GameUIManager : MonoBehaviour
         localUIManager.GetComponent<CanvasGroup>().alpha = 0;
         localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.5f).SetDelay(2f);
 
-        runner = FusionConnector.Instance.runner;
+        // runner = FusionConnector.Instance.runner;
         summitButton.onClick.AddListener(() =>
         {
             NetworkManager.instance.CheckGrammar(FieldManager.Instance.MakeJsonToSummit());
@@ -207,7 +207,7 @@ public class GameUIManager : MonoBehaviour
 
     public void GrammarCorrect(int score)
     {
-        turnManager.deckManager.PlayerScore.Set(score.ToString());
+        // turnManager.deckManager.PlayerScore.Set(score.ToString());
         thisTurnGotStar = false;
     }
 

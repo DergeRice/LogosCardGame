@@ -2338,21 +2338,7 @@ MonoBehaviour:
   turnItem: {fileID: 7547112783801993475}
   nameText: {fileID: 8922126004810550464}
   scoreText: {fileID: 4063509834669116472}
-  _PlayerName:
-    _length: 0
-    _data:
-      Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  _PlayerScore:
-    _length: 0
-    _data:
-      Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   cardViewPrefab: {fileID: 0}
-  _robBool:
-    _value: 0
-  _exchangeBool:
-    _value: 0
-  _protectBool:
-    _value: 0
   robIndicator: {fileID: 1529952507478670257}
   exchangeIndicator: {fileID: 1251581326554021760}
   protectIndicator: {fileID: 4480222678917065296}
@@ -2379,8 +2365,7 @@ MonoBehaviour:
   - {fileID: 6519740902371964668}
   - {fileID: 6973540430266699121}
   - {fileID: 6919764957965839291}
-  NetworkedBehaviours:
-  - {fileID: 376758740566291037}
+  NetworkedBehaviours: []
   ForceRemoteRenderTimeframe: 0
 --- !u!222 &5964223792493895517
 CanvasRenderer:

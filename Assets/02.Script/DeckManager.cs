@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TCG_CardMaker;
-using Fusion;
-using Fusion.Photon;
+// using Fusion;
+// using Fusion.Photon;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
@@ -12,7 +12,7 @@ using System.Collections;
 using Unity.VisualScripting;
 
 
-public class DeckManager : NetworkBehaviour
+public class DeckManager : MonoBehaviour
 {
     [SerializeField] private Transform cardsContainer;
     [SerializeField] private DeckCardView deckCardViewPrefab;
@@ -20,11 +20,11 @@ public class DeckManager : NetworkBehaviour
 
     public TMP_Text nameText, scoreText;
 
-    [Networked, OnChangedRender(nameof(OnPlayerNameChanged))]
-    public NetworkString<_16> PlayerName { get; set; }
+    // [Networked, OnChangedRender(nameof(OnPlayerNameChanged))]
+    // public NetworkString<_16> PlayerName { get; set; }
 
-    [Networked, OnChangedRender(nameof(OnPlayerScoreChanged))]
-    public NetworkString<_16> PlayerScore { get; set; }
+    // [Networked, OnChangedRender(nameof(OnPlayerScoreChanged))]
+    // public NetworkString<_16> PlayerScore { get; set; }
 
     List<DeckCardView> cards = new List<DeckCardView>();
     public CardView cardViewPrefab;
@@ -33,16 +33,16 @@ public class DeckManager : NetworkBehaviour
 
     HorizontalLayoutGroup horiziontal;
 
-    public PlayerRef playerRef;
-    [Networked, OnChangedRender(nameof(GetRob))]
+    // public PlayerRef playerRef;
+    // [Networked, OnChangedRender(nameof(GetRob))]
 
-    public NetworkBool robBool { get; set; }
+    // public NetworkBool robBool { get; set; }
 
-    [Networked, OnChangedRender(nameof(GetExchange))]
-    public NetworkBool exchangeBool { get; set; }
+    // [Networked, OnChangedRender(nameof(GetExchange))]
+    // public NetworkBool exchangeBool { get; set; }
 
-    [Networked, OnChangedRender(nameof(GetProtect))]
-    public NetworkBool protectBool { get; set; }
+    // [Networked, OnChangedRender(nameof(GetProtect))]
+    // public NetworkBool protectBool { get; set; }
 
     public GameObject robIndicator, exchangeIndicator, protectIndicator;
 
@@ -54,7 +54,7 @@ public class DeckManager : NetworkBehaviour
 
     public GameObject protectedPlayerObject;
 
-    public PlayerRef opponent;
+    // public PlayerRef opponent;
     // public NetworkObject robIndicator, exchangeIndicator, protectIndicator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -76,61 +76,61 @@ public class DeckManager : NetworkBehaviour
 
     }
 
-    public override void Spawned()
-    {
-        if (Runner.IsSharedModeMasterClient)
-        {
-            GamePlayerSpawner.instance.allPlayerSpawnedAction += TestCards;
-            // GamePlayerSpawner.instance.allPlayerSpawnedAction += turnManager.SetOp;
-        }
+    // public void Spawned()
+    // // {
+    //     // if (Runner.IsSharedModeMasterClient)
+    //     // {
+    //     //     GamePlayerSpawner.instance.allPlayerSpawnedAction += TestCards;
+    //     //     // GamePlayerSpawner.instance.allPlayerSpawnedAction += turnManager.SetOp;
+    //     // }
 
 
-        handManager = FindAnyObjectByType<HandManager>();
+    //     // handManager = FindAnyObjectByType<HandManager>();
 
-        cardsContainer = handManager.cardsContainer;
-        // horiziontal = cardsContainer.GetComponent<HorizontalLayoutGroup>();
-        deckCardViewPrefab = handManager.deckCardViewPrefab;
+    //     // cardsContainer = handManager.cardsContainer;
+    //     // // horiziontal = cardsContainer.GetComponent<HorizontalLayoutGroup>();
+    //     // deckCardViewPrefab = handManager.deckCardViewPrefab;
 
-        cardViewPrefab = handManager.cardViewPrefab;
+    //     // cardViewPrefab = handManager.cardViewPrefab;
 
-        playerRef = Object.InputAuthority;
-        if (Object.HasInputAuthority)
-        {
-            RPC_ReportReady(Runner.LocalPlayer);
-            GamePlayManager.instance.gameUIManager.myDeckManagerIndex = playerIndex;
-        }
-        else
-        {
-            GamePlayManager.instance.gameUIManager.opProfile.SetName(PlayerName.Value);
-        }
-        nameText.text = PlayerName.Value;
+    //     // playerRef = Object.InputAuthority;
+    //     // if (Object.HasInputAuthority)
+    //     // {
+    //     //     RPC_ReportReady(Runner.LocalPlayer);
+    //     //     GamePlayManager.instance.gameUIManager.myDeckManagerIndex = playerIndex;
+    //     // }
+    //     // else
+    //     // {
+    //     //     GamePlayManager.instance.gameUIManager.opProfile.SetName(PlayerName.Value);
+    //     // }
+    //     // nameText.text = PlayerName.Value;
 
 
 
-        // Debug.Log("DeckManager Spawn");
-    }
+    //     // Debug.Log("DeckManager Spawn");
+    // }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    private void RPC_ReportReady(PlayerRef who)
-    {
-        // Debug.Log($"[RPC] ReportReady from {who}");
-        GamePlayerSpawner spawner = GamePlayerSpawner.instance;
-        spawner?.ReportReady(who);
-    }
+    // [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    // private void RPC_ReportReady(PlayerRef who)
+    // {
+    //     // Debug.Log($"[RPC] ReportReady from {who}");
+    //     GamePlayerSpawner spawner = GamePlayerSpawner.instance;
+    //     spawner?.ReportReady(who);
+    // }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_GameOperation()
-    {
-        Utils.DelayCall(() =>
-        {
-            GamePlayerSpawner.instance.allPlayerSpawnedAction?.Invoke();
-        }, 0.5f);
-    }
+    // [Rpc(RpcSources.All, RpcTargets.All)]
+    // public void RPC_GameOperation()
+    // {
+    //     Utils.DelayCall(() =>
+    //     {
+    //         GamePlayerSpawner.instance.allPlayerSpawnedAction?.Invoke();
+    //     }, 0.5f);
+    // }
 
     private void ShuffleDeck()
     {
-        if (!Runner.IsSharedModeMasterClient) return;
-        if (!HasInputAuthority) return;
+        // if (!Runner.IsSharedModeMasterClient) return;
+        // if (!HasInputAuthority) return;
 
         turnManager.ShuffleDeck();
     }
@@ -139,7 +139,7 @@ public class DeckManager : NetworkBehaviour
 
     public void TestCards()
     {
-        if (Runner.IsSharedModeMasterClient && HasInputAuthority)
+        // if (Runner.IsSharedModeMasterClient && HasInputAuthority)
         {
             // Debug.Log($"{PlayerName}");
             StartCoroutine(InitialCards(5));
@@ -170,11 +170,11 @@ public class DeckManager : NetworkBehaviour
                 // if (currentDeckIndex >= shuffledIndexes.Count) return; // 덱 끝
                 int cardIndex = turnManager.shuffledIndexes[turnManager.currentDeckIndex++];
                 int cardNumber = turnManager.currentDeckIndex;
-                RPC_GiveCardToPlayer(playerList[i], cardIndex, cardNumber);
+                // RPC_GiveCardToPlayer(playerList[i], cardIndex, cardNumber);
             }
         }
     }
-    public void GiveOneCardTo(PlayerRef playerRef)
+    public void GiveOneCardTo()
     {
         if (!FusionConnector.Instance.runner.IsSharedModeMasterClient) return;
 
@@ -189,61 +189,62 @@ public class DeckManager : NetworkBehaviour
         int cardIndex = turnManager.shuffledIndexes[turnManager.currentDeckIndex];
         int cardNumber = turnManager.currentDeckIndex; // 1번째부터 시작하도록
 
-        RPC_GiveCardToPlayer(playerRef, cardIndex, cardNumber);
+        // RPC_GiveCardToPlayer(playerRef, cardIndex, cardNumber);
         turnManager.currentDeckIndex++;
     }
-    public void GiveAllSpecial(PlayerRef playerRef)
+    public void GiveAllSpecial()
     {
         if (!FusionConnector.Instance.runner.IsSharedModeMasterClient) return;
 
-        RPC_GiveCardToPlayer(playerRef, 0, 0);
-        RPC_GiveCardToPlayer(playerRef, 1, 0);
-        RPC_GiveCardToPlayer(playerRef, 2, 0);
-        RPC_GiveCardToPlayer(playerRef, 3, 0);
-        RPC_GiveCardToPlayer(playerRef, 4, 0);
+
         // turnManager.currentDeckIndex++;
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_GiveCardToPlayer(PlayerRef playerRef, int cardIndex, int cardNumber)
+    // // [Rpc(RpcSources.All, RpcTargets.All)]
+    // public void RPC_GiveCardToPlayer(PlayerRef playerRef, int cardIndex, int cardNumber)
+    // {
+    //     // Debug.Log($"[{cardNumber}번째 카드] Give Card {cardIndex} to {playerRef}");
+
+    //     // playersDeck.Add(playerRef,cardIndex);
+    //     // if (Runner.IsSharedModeMasterClient)
+    //     {
+    //         var playerList = FusionConnector.Instance.runner.ActivePlayers.ToList();
+    //         GamePlayerSpawner.instance.AddCardToPlayer(playerList.IndexOf(playerRef), cardIndex);
+    //         if (cardIndex < 3)
+    //         {
+    //             var targetPlayerDeckManager = turnManager.FindDeckManagerByPlayerRef(playerRef);
+    //             targetPlayerDeckManager.RPC_SetSpecialAbility(playerRef, cardIndex);
+    //         }
+    //     }
+
+    //     if (FusionConnector.Instance.runner.LocalPlayer != playerRef)
+    //         return; // 내 카드가 아니면 무시
+
+
+
+    //     // UI와 handList는 로컬에서 처리
+    //     AddCardToHand_Local(cardIndex);
+
+    // }
+
+    // [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    // public void RPC_ExchangeCards(PlayerRef player1, PlayerRef player2, int cardIndexForPlayer1, int cardIndexForPlayer2)
+    // {
+    //     // player1에게 줄 카드 생성
+    //     RPC_GiveCardToPlayer(player1, cardIndexForPlayer1, 0);
+
+    //     // player2에게 줄 카드 생성
+    //     RPC_GiveCardToPlayer(player2, cardIndexForPlayer2, 0);
+
+    //     Debug.Log($"교환 카드 생성 완료: {player1}에게 카드 {cardIndexForPlayer1}, {player2}에게 카드 {cardIndexForPlayer2}");
+    // }
+
+
+    [UnityEngine.ContextMenu("GetCard")]
+    public void AddCardToHand_Local()
     {
-        // Debug.Log($"[{cardNumber}번째 카드] Give Card {cardIndex} to {playerRef}");
-
-        // playersDeck.Add(playerRef,cardIndex);
-        if (Runner.IsSharedModeMasterClient)
-        {
-            var playerList = FusionConnector.Instance.runner.ActivePlayers.ToList();
-            GamePlayerSpawner.instance.AddCardToPlayer(playerList.IndexOf(playerRef), cardIndex);
-            if (cardIndex < 3)
-            {
-                var targetPlayerDeckManager = turnManager.FindDeckManagerByPlayerRef(playerRef);
-                targetPlayerDeckManager.RPC_SetSpecialAbility(playerRef, cardIndex);
-            }
-        }
-
-        if (FusionConnector.Instance.runner.LocalPlayer != playerRef)
-            return; // 내 카드가 아니면 무시
-
-
-
-        // UI와 handList는 로컬에서 처리
-        AddCardToHand_Local(cardIndex);
-
+        AddCardToHand_Local(14);
     }
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_ExchangeCards(PlayerRef player1, PlayerRef player2, int cardIndexForPlayer1, int cardIndexForPlayer2)
-    {
-        // player1에게 줄 카드 생성
-        RPC_GiveCardToPlayer(player1, cardIndexForPlayer1, 0);
-
-        // player2에게 줄 카드 생성
-        RPC_GiveCardToPlayer(player2, cardIndexForPlayer2, 0);
-
-        Debug.Log($"교환 카드 생성 완료: {player1}에게 카드 {cardIndexForPlayer1}, {player2}에게 카드 {cardIndexForPlayer2}");
-    }
-
-
     public void AddCardToHand_Local(int cardIndex)
     {
         // 카드 데이터 가져오기
@@ -281,7 +282,7 @@ public class DeckManager : NetworkBehaviour
             handManager.RefreshHandLayout(view);
 
         }, ValueDictionary.CardGainSecond);
-        
+
     }
 
 
@@ -302,15 +303,15 @@ public class DeckManager : NetworkBehaviour
         // }
 
     }
-    private void OnPlayerNameChanged()
-    {
-        nameText.text = PlayerName.Value;
-    }
+    // private void OnPlayerNameChanged()
+    // {
+    //     nameText.text = PlayerName.Value;
+    // }
 
-    private void OnPlayerScoreChanged()
-    {
-        scoreText.text = PlayerScore.Value;
-    }
+    // private void OnPlayerScoreChanged()
+    // {
+    //     scoreText.text = PlayerScore.Value;
+    // }
 
     public void SetMyTurn(bool turn)
     {
@@ -325,17 +326,23 @@ public class DeckManager : NetworkBehaviour
     }
 
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_SetSpecialAbility(PlayerRef target, int index)
+    // [Rpc(RpcSources.All, RpcTargets.All)]
+    // public void RPC_SetSpecialAbility(PlayerRef target, int index)
+    // {
+    //     if (target != Object.InputAuthority) return; // 내 오브젝트가 아니면 무시
+    //     // Debug.Log("오 나 스페셜 받음!!!");
+    //     switch (index)
+    //     {
+    //         case 0: robBool = true; break;
+    //         case 1: exchangeBool = true; break;
+    //         case 2: protectBool = true; break;
+    //     }
+    // }
+
+    [UnityEngine.ContextMenu("GetRandom")]
+    public void GiveMeCard()
     {
-        if (target != Object.InputAuthority) return; // 내 오브젝트가 아니면 무시
-        // Debug.Log("오 나 스페셜 받음!!!");
-        switch (index)
-        {
-            case 0: robBool = true; break;
-            case 1: exchangeBool = true; break;
-            case 2: protectBool = true; break;
-        }
+        GiveMeCard(5);
     }
 
     public void GiveMeCard(int count)
@@ -347,39 +354,39 @@ public class DeckManager : NetworkBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            RPC_RequestOneCardFromMaster(default, 1); // 한 장 요청
+            // RPC_RequestOneCardFromMaster(default, 1); // 한 장 요청
             yield return new WaitForSeconds(ValueDictionary.CardGainSecond); // 1.5초 대기
         }
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_RequestOneCardFromMaster(RpcInfo info = default, int count = 1)
-    {
-        if (!Runner.IsSharedModeMasterClient) return;
+    // [Rpc(RpcSources.All, RpcTargets.All)]
+    // public void RPC_RequestOneCardFromMaster(RpcInfo info = default, int count = 1)
+    // {
+    //     if (!Runner.IsSharedModeMasterClient) return;
 
-        PlayerRef requestingPlayer = info.Source;
+    //     PlayerRef requestingPlayer = info.Source;
 
-        // 마스터가 해당 플레이어에게 카드 주기
-        for (int i = 0; i < count; i++)
-        {
-            GiveOneCardTo(requestingPlayer);
-        }
+    //     // 마스터가 해당 플레이어에게 카드 주기
+    //     for (int i = 0; i < count; i++)
+    //     {
+    //         GiveOneCardTo(requestingPlayer);
+    //     }
         
-    }
+    // }
 
-    public void GetRob()
-    {
-        robIndicator.SetActive(robBool);
-    }
+    // public void GetRob()
+    // {
+    //     robIndicator.SetActive(robBool);
+    // }
 
-    public void GetExchange()
-    {
-        exchangeIndicator.SetActive(exchangeBool);
-    }
-    public void GetProtect()
-    {
-        protectIndicator.SetActive(protectBool);
-    }
+    // public void GetExchange()
+    // {
+    //     exchangeIndicator.SetActive(exchangeBool);
+    // }
+    // public void GetProtect()
+    // {
+    //     protectIndicator.SetActive(protectBool);
+    // }
 
     // public void SpecialCardBegin()
     // {

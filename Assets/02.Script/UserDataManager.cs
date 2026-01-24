@@ -28,6 +28,6 @@ public class UserDataManager : MonoBehaviour
 
         ownData.gameNickName = Random.Range(0, 9999).ToString();
         LobbySceneManager.instance.lobbyUIManager.SetMyNameText(ownData.gameNickName);
-        FusionConnector.Instance.LocalPlayerName = ownData.gameNickName;
+        // FusionConnector.Instance.LocalPlayerName = ownData.gameNickName; 
     }
 }

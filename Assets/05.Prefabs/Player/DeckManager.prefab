@@ -47,7 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardsContainer: {fileID: 0}
   deckCardViewPrefab: {fileID: 5642410938595342928, guid: 5d7d358809585c042bf12761c7ccf336, type: 3}
+  turnItem: {fileID: 0}
+  nameText: {fileID: 0}
+  scoreText: {fileID: 0}
   cardViewPrefab: {fileID: 6176879476892378344, guid: 53cc9afe54f0f4d2ab08cdf37629863d, type: 3}
+  robIndicator: {fileID: 0}
+  exchangeIndicator: {fileID: 0}
+  protectIndicator: {fileID: 0}
+  turnManager: {fileID: 0}
+  playerIndex: 0
+  selectTargetButton: {fileID: 0}
+  protectedPlayerObject: {fileID: 0}
 --- !u!114 &5604724026545712362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +74,5 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 131073
   NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 9189521413448322833}
+  NetworkedBehaviours: []
   ForceRemoteRenderTimeframe: 0

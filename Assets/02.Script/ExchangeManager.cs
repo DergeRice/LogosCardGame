@@ -96,7 +96,7 @@ public class ExchangeManager : MonoBehaviour
         UI.SetActive(false);
         GamePlayManager.instance.gameUIManager.SpecialCardSuccessEnd();
 
-        GamePlayManager.instance.gameUIManager.turnManager.RPC_ExchageRequest(FusionConnector.Instance.runner.LocalPlayer, rpcTarget, requestCardIndex, sendingCardIndex, GamePlayManager.instance.gameUIManager.turnManager.deckManager.PlayerName.Value);
+        // GamePlayManager.instance.gameUIManager.turnManager.RPC_ExchageRequest(FusionConnector.Instance.runner.LocalPlayer, rpcTarget, requestCardIndex, sendingCardIndex, GamePlayManager.instance.gameUIManager.turnManager.deckManager.PlayerName.Value);
 
         requestCardView.gameObject.SetActive(false);
         sendingCardView.gameObject.SetActive(false);

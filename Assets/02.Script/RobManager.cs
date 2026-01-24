@@ -58,10 +58,10 @@ public class RobManager : MonoBehaviour
         rpcTarget = GamePlayManager.instance.gameUIManager.turnManager.GetOp();
         GamePlayManager.instance.gameUIManager.SpecialCardSuccessEnd();
 
-        GamePlayManager.instance.gameUIManager.turnManager.RPC_RobExcute(FusionConnector.Instance.runner.LocalPlayer, rpcTarget,
-        robIndex, GamePlayManager.instance.gameUIManager.turnManager.deckManager.PlayerName.Value);
+        // GamePlayManager.instance.gameUIManager.turnManager.RPC_RobExcute(FusionConnector.Instance.runner.LocalPlayer, rpcTarget,
+        // robIndex, GamePlayManager.instance.gameUIManager.turnManager.deckManager.PlayerName.Value);
 
-        GamePlayManager.instance.gameUIManager.turnManager.deckManager.RPC_GiveCardToPlayer(FusionConnector.Instance.runner.LocalPlayer, robIndex, 0);
+        // GamePlayManager.instance.gameUIManager.turnManager.deckManager.RPC_GiveCardToPlayer(FusionConnector.Instance.runner.LocalPlayer, robIndex, 0);
 
         UI.SetActive(false);
         GamePlayManager.instance.gameUIManager.robReceive.ShowAnimation();

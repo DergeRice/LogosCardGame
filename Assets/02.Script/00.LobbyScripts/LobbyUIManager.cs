@@ -17,14 +17,14 @@ public class LobbyUIManager : MonoBehaviour
     {
         nicknameConfirmButton.onClick.AddListener(()=>
         {
-            FusionConnector.Instance.LocalPlayerName = nicknameSelect.text;
+            // FusionConnector.Instance.LocalPlayerName = nicknameSelect.text;
             nicknameConfirmButton.transform.parent.gameObject.SetActive(false);
         });    
 
         quickStartButton.onClick.AddListener(()=>
         {
             multiplayLobby.SetActive(true);
-            FusionConnector.Instance.StartGame(true);
+            // FusionConnector.Instance.StartGame(true);
         });
     
     }

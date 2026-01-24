@@ -90,13 +90,13 @@ public class GamePlayerSpawner : NetworkBehaviour, IPlayerJoined, IPlayerLeft
 
             string playerName = connector.LocalPlayerName;
 
-            if (string.IsNullOrEmpty(playerName))
-                tempPlayer.PlayerName = "Player " + temp.StateAuthority.PlayerId;
-            else
-                tempPlayer.PlayerName = playerName;
+            // if (string.IsNullOrEmpty(playerName))
+            //     tempPlayer.PlayerName = "Player " + temp.StateAuthority.PlayerId;
+            // else
+            //     tempPlayer.PlayerName = playerName;
 
 
-            tempPlayer.playerRef = Runner.LocalPlayer;
+            // tempPlayer.playerRef = Runner.LocalPlayer;
             // Assigns a random avatar
             // tempPlayer.ChosenAvatar = Random.Range(0, testPlayer.avatarSprites.Length);
         }
