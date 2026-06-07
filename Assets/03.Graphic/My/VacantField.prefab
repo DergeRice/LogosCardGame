@@ -646,10 +646,10 @@ RectTransform:
   - {fileID: 2890368535080717581}
   m_Father: {fileID: 2056286142513693690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 41}
-  m_SizeDelta: {x: 300, y: 400}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1191869803562846379
 CanvasRenderer:
@@ -679,8 +679,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2c26ed36989d948a3a42cdbdb153b728, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: a08bb88dc6ecd4f3ca3aa827e959e54f, type: 3}
+  m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
@@ -866,7 +866,7 @@ RectTransform:
   m_GameObject: {fileID: 8764025150188024828}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 294990142556130433}
@@ -879,7 +879,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 31}
-  m_SizeDelta: {x: 300, y: 400}
+  m_SizeDelta: {x: 200, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6943672367015062238
 MonoBehaviour:
@@ -900,14 +900,16 @@ MonoBehaviour:
   imgBorder: {fileID: 3756405574447794889}
   imgArt: {fileID: 8947492734827319313}
   costImg: {fileID: 5611082591718478355}
+  costAdd: {fileID: 0}
+  costMulti: {fileID: 0}
   costSpecial: {fileID: 21300000, guid: 06c487ef7d0a52e45affa9b5203e224b, type: 3}
-  costDivide: {fileID: 21300000, guid: 9a4841dfe3437a045b4782d81da27e0d, type: 3}
   cardData: {fileID: 0}
   selectCardFrame: {fileID: 0}
   specialTitle: {fileID: 0}
   specialBorder: {fileID: 0}
   specialImg: {fileID: 0}
   isHandCard: 0
+  center: {fileID: 0}
 --- !u!222 &6869376076778728614
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -71,8 +71,8 @@ namespace TCG_CardMaker
             var target = isAdd ? add : multi;
 
             // Canvas floatingCanvas = null;
-            if (cost.Contains("+")) target = add;
-            if (cost.Contains("x")) target = multi;
+            if (cost.Contains("+") || cost.Contains("-")) target = add;
+            if (cost.Contains("x") || cost.Contains("/") || cost.Contains("*")) target = multi;
             
             canvasGroup.DOFade(0.1f, 0.2f);
             canvasGroup.DOFade(1f, 0.2f).SetDelay(0.2f);
@@ -82,36 +82,37 @@ namespace TCG_CardMaker
             floatingCanvas.sortingOrder = 35;
 
             target.gameObject.SetActive(true);
-            if(cost == "") target.text = card.Cost;  
+            if(cost == "") target.text = card.GetCostText();  
             else{ target.text = cost; }
 
             MakeStarDust(target.gameObject);
             
         }
 
+        public void ShowCalulateText(Calculate.Multifier modifier, float value)
+        {
+            string token = Calculate.ToToken(modifier, value);
+            bool isAdd = modifier == Calculate.Multifier.Add || modifier == Calculate.Multifier.Subtract;
+            ShowCalulateText(isAdd, token);
+        }
+
         public void MakeStarDust(GameObject target = null,bool isMakingDust = true)
         {
             GameObject temp = null;
 
-            var targetRect = GamePlayManager.instance.gameUIManager.profile.GetComponent<RectTransform>();
-            var targetPos =  targetRect.TransformPoint(targetRect.rect.center);
             var starParticle = GamePlayManager.instance.gameUIManager.starParticle;
 
             if (isMakingDust == true)
             {
-                temp = Instantiate(starParticle, cardView.center.position, Utils.RandomZRotation());
+                temp = Instantiate(starParticle, cardView.transform);
+
+                temp.transform.position = cardView.center.position;
+                temp.transform.rotation = Utils.RandomZRotation();
+
+                // starParticle.GetComponent<Canvas>().sortingOrder = 35;
+
                 temp.transform.parent = transform;
                 temp.transform.localScale = Vector3.one;
-                temp.transform.DOMove(targetPos, 1.5f).SetEase(Ease.InBounce);
-            }
-            else
-            {
-                // canvasGroup.alpha = 0.5f;
-                // temp = Instantiate(starParticle, targetPos, Utils.RandomZRotation());
-                // temp.transform.parent = transform;
-                // temp.transform.localScale = Vector3.one;
-                // temp.transform.DOMove(transform.position, 1.5f).SetEase(Ease.Linear);
-                // canvasGroup.DOFade(1f,0.5f);
             }
 
 

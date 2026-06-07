@@ -17,6 +17,7 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private Transform cardsContainer;
     [SerializeField] private DeckCardView deckCardViewPrefab;
     [SerializeField] private GameObject turnItem;
+    [SerializeField] private DeckSO startingDeck;
 
     public TMP_Text nameText, scoreText;
 
@@ -30,6 +31,7 @@ public class DeckManager : MonoBehaviour
     public CardView cardViewPrefab;
 
     private HandManager handManager;
+    private RunDeck runDeck;
 
     HorizontalLayoutGroup horiziontal;
 
@@ -60,6 +62,7 @@ public class DeckManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        InitializeRunDeckIfNeeded();
 
 
         
@@ -74,6 +77,57 @@ public class DeckManager : MonoBehaviour
         // });
         // selectTargetButton.enabled = false;
 
+    }
+
+    private void InitializeRunDeckIfNeeded()
+    {
+        if (runDeck != null) return;
+        if (startingDeck == null) return;
+        if (RunContext.Instance != null)
+        {
+            RunContext.Instance.EnsureDefaultsFrom(startingDeck);
+            var cards = RunContext.Instance.BuildDeckCards(cloneCards: true);
+            if (cards != null && cards.Count > 0)
+            {
+                runDeck = new RunDeck(cards);
+                return;
+            }
+        }
+
+        runDeck = new RunDeck(startingDeck, true);
+    }
+
+    // Called by shop purchases to inject newly bought cards into the current run immediately.
+    public void AddPurchasedCardToRunDeck(CardSO card)
+    {
+        if (card == null) return;
+        InitializeRunDeckIfNeeded();
+        if (runDeck == null) return;
+        runDeck.AddToDrawPile(card, shuffle: true);
+    }
+
+    public void DiscardToRunDeck(IEnumerable<CardSO> cards)
+    {
+        InitializeRunDeckIfNeeded();
+        if (runDeck == null) return;
+        runDeck.DiscardMany(cards);
+    }
+
+    public int DrawFromRunDeck(int count)
+    {
+        InitializeRunDeckIfNeeded();
+        if (runDeck == null) return 0;
+
+        int drawn = 0;
+        for (int i = 0; i < count; i++)
+        {
+            CardSO cardData = runDeck.Draw();
+            if (cardData == null) break;
+            AddCardToHand_Local(cardData);
+            drawn++;
+        }
+
+        return drawn;
     }
 
     // public void Spawned()
@@ -176,6 +230,13 @@ public class DeckManager : MonoBehaviour
     }
     public void GiveOneCardTo()
     {
+        if (runDeck != null)
+        {
+            DrawOneFromRunDeck();
+            return;
+        }
+
+        if (FusionConnector.Instance == null || FusionConnector.Instance.runner == null) return;
         if (!FusionConnector.Instance.runner.IsSharedModeMasterClient) return;
 
         if (turnManager.currentDeckIndex >= turnManager.shuffledIndexes.Count)
@@ -255,11 +316,18 @@ public class DeckManager : MonoBehaviour
             return;
         }
 
-        // Debug.Log($" {cardIndex}번째 카드를 받았습니다.");
+        AddCardToHand_Local(cardData);
+    }
+
+    public void AddCardToHand_Local(CardSO cardData)
+    {
+        if (cardData == null)
+        {
+            Debug.LogError("CardSO is null.");
+            return;
+        }
 
         GamePlayManager.instance.gameUIManager.localUIManager.CardBackAnimation();
-
-        // handList.Add(cardData);
 
         // 카드 UI 생성
         handManager = FindAnyObjectByType<HandManager>();
@@ -281,8 +349,26 @@ public class DeckManager : MonoBehaviour
             OnHandChanged();
             handManager.RefreshHandLayout(view);
 
-        }, ValueDictionary.CardGainSecond);
+        }, 1.5f);
+    }
 
+    public void DrawOneFromRunDeck()
+    {
+        InitializeRunDeckIfNeeded();
+        if (runDeck == null)
+        {
+            Debug.LogWarning("RunDeck is not initialized.");
+            return;
+        }
+
+        CardSO cardData = runDeck.Draw();
+        if (cardData == null)
+        {
+            Debug.LogWarning("RunDeck is empty.");
+            return;
+        }
+
+        AddCardToHand_Local(cardData);
     }
 
 
@@ -354,7 +440,10 @@ public class DeckManager : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            // RPC_RequestOneCardFromMaster(default, 1); // 한 장 요청
+            if (runDeck != null)
+            {
+                DrawOneFromRunDeck();
+            }
             yield return new WaitForSeconds(ValueDictionary.CardGainSecond); // 1.5초 대기
         }
     }

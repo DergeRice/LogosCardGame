@@ -32,269 +32,116 @@ public struct ScoreStep
     }
 }
 
-
 public class GameUIManager : MonoBehaviour
 {
-    public Transform leftParent;
-    private NetworkRunner runner;
-
-    public Button summitButton;
-
-    public TurnManager turnManager;
-
-
-    public GameObject opHandPopup, myHandPopup;
-
-    public CardView miniCardPrefab;
-
-    public Transform ophandPopupParent, myhandPopupParent;
-    public ExchangeManager exchangeManager;
-    public RobManager robManager;
-
-    public ExchangeRecieve exchangeRecieve;
-    public RobReceive robReceive;
-
-    public int myDeckManagerIndex;
-
-    public SpecialEvent currentEvent;
+    public Button playButton, dropButton;
+    public Button skipButton;
 
     public LocalUIManager localUIManager;
 
-    public TMP_Text scoreText;
-    private Coroutine hideCoroutine;
     public GameObject starParticle;
 
-    private bool thisTurnGotStar;
-
-    public Profile profile;
-    public OpProfile opProfile;
-
-    [SerializeField] private RectTransform wholeCanvas;
-
-
+    public TMP_Text currentRoundText, maxRoundText;
+    public TMP_Text currentPlayText, currentDropText;
 
     //=================================================================
-
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        wholeCanvas.DOLocalMoveY(-1000f,0f);
+        // wholeCanvas.DOLocalMoveY(-1000f,0f);
 
-        wholeCanvas.DOLocalMoveY(0,2f).SetEase(Ease.InOutCubic);
-        localUIManager.GetComponent<CanvasGroup>().alpha = 0;
-        localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.5f).SetDelay(2f);
+        // wholeCanvas.DOLocalMoveY(0,2f).SetEase(Ease.InOutCubic);
+        // localUIManager.GetComponent<CanvasGroup>().alpha = 0;
+        // localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.5f).SetDelay(2f);
 
         // runner = FusionConnector.Instance.runner;
-        summitButton.onClick.AddListener(() =>
+        playButton.onClick.AddListener(() =>
         {
-            NetworkManager.instance.CheckGrammar(FieldManager.Instance.MakeJsonToSummit());
-            turnManager.PassMyTurn();
+            GamePlayManager.instance.TrySubmitHand();
         });
-    }
 
-    public void TurnManagerInit(TurnManager turnManager)
-    {
-        this.turnManager = turnManager;
-        GamePlayerSpawner.instance.allPlayerSpawnedAction += SpawnPlayerUIs;
-    }
-
-    public void SpawnPlayerUIs()
-    {
-        // yield return new WaitForSeconds(3f); // 스폰 다 되도록 대기
-
-        Debug.Log("엄준식");
-        // var playerObject = FindObjectsOfType<DeckManager>().ToList();
-        // var sorted = Runner.ActivePlayers.OrderBy(p => p.RawEncoded).ToList();
-        // playerObject = playerObject.Reverse();
-
-        for (int i = 0; i < turnManager.deckManagers.Count; i++)
+        dropButton.onClick.AddListener(() =>
         {
-            turnManager.deckManagers[i].transform.SetParent(leftParent, false);
-            turnManager.deckManagers[i].playerIndex = i;
-        }
-    }
+            GamePlayManager.instance.TryDiscardSelected();
+        });
 
-    public void DoExchangePanel()
-    {
-        currentEvent = SpecialEvent.Exchange;
-        ShowOpHandList();
-        exchangeManager.PopupExchange();
-        // protectedPlayerObject 키고, deckmanagers의 button 전부 enabled
-        SpecialCardStart();
-
-
-        //deck manager 누르면 showplayerhandlist 랑 팝업 뜨기; 
-    }
-    public void DoRob()
-    {
-        currentEvent = SpecialEvent.Rob;
-        ShowOpHandList();
-        robManager.PopupRob();
-        // protectedPlayerObject 키고, deckmanagers의 button 전부 enabled
-        SpecialCardStart();
-    }
-
-    public void ShowOpHandList()
-    {
-        // int playerIndex = myDeckManagerIndex;
-
-
-        opHandPopup.SetActive(true);
-        ClearParent(ophandPopupParent);
-
-        var list = GamePlayerSpawner.instance.GetOpDeckList();
-
-        for (int i = 0; i < list.Count; i++)
+        if (skipButton != null)
         {
-            if (CardsDB.Instance.Cards[list[i]].Cost != "S")
+            skipButton.onClick.AddListener(() =>
             {
-                var card = Instantiate(miniCardPrefab, ophandPopupParent);
-                card.SetData(CardsDB.Instance.Cards[list[i]]);
-                card.GetComponent<MiniCardUI>().SettingAction(currentEvent);
-            }
-        }
-
-    }
-
-    public void ShowMyHandList()
-    {
-        myHandPopup.SetActive(true);
-        ClearParent(myhandPopupParent);
-
-        // var playerIndex = turnManager.players.FindIndex(p => p == runner.LocalPlayer);
-
-        var list = runner.IsSharedModeMasterClient? GamePlayerSpawner.instance.myCards : GamePlayerSpawner.instance.opCards;
-
-        for (int i = 0; i < list.Count(); i++)
-        {
-            if (CardsDB.Instance.Cards[list[i]].Cost != "S")
-            {
-                var card = Instantiate(miniCardPrefab, myhandPopupParent);
-                card.SetData(CardsDB.Instance.Cards[list[i]]);
-                card.GetComponent<MiniCardUI>().isMyObject = true;
-                card.GetComponent<MiniCardUI>().SettingAction(currentEvent);
-            }
+                GamePlayManager.instance.TrySkipArcana();
+            });
         }
     }
 
-    public void ClearParent(Transform parent)
-    {
-        for (int i = parent.childCount - 1; i >= 0; i--)
-        {
-            GameObject.Destroy(parent.GetChild(i).gameObject);
-        }
-    }
 
-    public void SpecialCardStart()
-    {
-        // localUIManager.GetComponent<CanvasGroup>().DOFade(0.5f,0.2f);
-        FieldManager.Instance.FadeField(0);
-    }
-
-    public void SpecialCardSuccessEnd()
-    {
-        // localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.2f);
-        FieldManager.Instance.FadeField(1);
-    }
-
-    public void SpecialCardTimesUp()
-    {
-        // localUIManager.GetComponent<CanvasGroup>().DOFade(1,0.2f);
-        FieldManager.Instance.FadeField(1);
-    }
-
-    public void GrammarCorrect(int score)
-    {
-        // turnManager.deckManager.PlayerScore.Set(score.ToString());
-        thisTurnGotStar = false;
-    }
 
     public void GrammarFail()
     {
-        GameManager.instance.ToastText("문장이 완벽하지 못해요!");
-        thisTurnGotStar = false;
+        // GameManager.instance.ToastText("문장이 완벽하지 못해요!");
     }
 
 
 
     public IEnumerator PlayScoreAnimation(List<ScoreStep> steps)
     {
-        float delay = 0.7f;
+        float delay = 0.3f;
 
         foreach (var step in steps)
         {
             yield return new WaitForSeconds(delay);
-            profile.ValueChange(Mathf.FloorToInt(step.value));
-
             step.cardAction?.Invoke();
-
-
-            float fill = step.value / 20f;
-            // mainStar.fillAmount = Mathf.Clamp(fill, 0f, 1f);
-
-            // ShakeUIs(mainStar.transform.parent.gameObject);
-
-            if (step.value >= 20 && thisTurnGotStar == false)
-            {
-                GetStar();
-                thisTurnGotStar = true;
-                break;
-            }
         }
     }
 
 
-    private IEnumerator HideAfterDelay(float delay)
+
+    public void UpdateCurrentUI()
     {
-        yield return new WaitForSeconds(delay);
-        // scoreText.gameObject.SetActive(false);
-        hideCoroutine = null;
-    }
-    [UnityEngine.ContextMenu("TestGetStar")]
-    public void GetStar()
-    {
-        // mainAnimationStar.SetActive(true);
-        // Utils.DelayCall(() =>
-        // {
-        //     stars[starCount].SetActive(false);
-        //     starCount++;
+        if (currentRoundText != null && currentRoundText.GetComponent<RunStatTextBinding>() == null)
+            currentRoundText.text = GamePlayManager.instance.currentRound.ToString();
+        if (maxRoundText != null && maxRoundText.GetComponent<RunStatTextBinding>() == null)
+            maxRoundText.text = GamePlayManager.instance.maxRound.ToString();
 
-        //     mainAnimationStar.SetActive(false);
-        //     thisTurnGotStar = false;
-        // }, 2.3f);
+        if (currentPlayText != null && currentPlayText.GetComponent<RunStatTextBinding>() == null)
+            currentPlayText.text = GamePlayManager.instance.currentPlayCount.ToString();
 
-        profile.GetStar();
-        Utils.DelayCall(() => { FieldManager.Instance.ClearField(); }, 2f);
-        var target = GamePlayManager.instance.gameUIManager.turnManager.GetOp();
-        GamePlayManager.instance.gameUIManager.turnManager.RPC_GetStar(target);
+        if (currentDropText != null && currentDropText.GetComponent<RunStatTextBinding>() == null)
+            currentDropText.text = GamePlayManager.instance.currentDropCount.ToString();
 
-        if (opProfile.GetDamage()) // Give Damage and Check Dead
+        bool arcanaActive = ArcanaSelectionMode.Instance != null && ArcanaSelectionMode.Instance.IsActive;
+        if (arcanaActive)
         {
-            Utils.DelayCall(() =>
+            // In arcana mode, Play button acts as Confirm.
+            // Some arcanas require a field card (targeting), others don't.
+            if (ArcanaSelectionMode.Instance.ModeType == ArcanaModeType.CardPackPickOne
+                || ArcanaSelectionMode.Instance.ModeType == ArcanaModeType.HandTypePickOne)
             {
-                Debug.Log("I win");
-            },6f);
-            Utils.DelayCall(() =>
+                playButton.interactable = ArcanaSelectionMode.Instance.SelectedIndex >= 0;
+            }
+            else if (ArcanaSelectionMode.Instance.ModeType == ArcanaModeType.DeckTransformPickFrom
+                || ArcanaSelectionMode.Instance.ModeType == ArcanaModeType.DeckTransformPickTo)
             {
-                
-                Application.Quit();
-            },10f);
-        };
+                playButton.interactable = ArcanaSelectionMode.Instance.SelectedIndex >= 0;
+            }
+            else if (ArcanaSelectionMode.Instance.RequireFieldCardForConfirm)
+            {
+                playButton.interactable = GamePlayManager.instance.fieldManager != null && GamePlayManager.instance.fieldManager.fieldParent != null
+                    && GamePlayManager.instance.fieldManager.fieldParent.childCount > 0;
+            }
+            else
+            {
+                playButton.interactable = true;
+            }
+            dropButton.interactable = true;
+            if (skipButton != null) skipButton.interactable = true;
+        }
+        else
+        {
+            playButton.interactable = GamePlayManager.instance.currentPlayCount > 0;
+            dropButton.interactable = GamePlayManager.instance.currentDropCount > 0;
+            if (skipButton != null) skipButton.interactable = false;
+        }
     }
-
-    public void QuitApp()
-    {
-        Application.Quit();
-    }
-
-    public void CopyGrammar()
-    {
-        UniClipboard.SetText(FieldManager.Instance.MakeJsonToSummit());
-    }
-
-
-
-
 }

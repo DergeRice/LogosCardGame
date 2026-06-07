@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: Protect
   Description: "Rob\uC73C\uB85C \uBD80\uD130 \uBCF4\uD638\uD569\uB2C8\uB2E4."
-  Cost: S
+  CardPOS: 
+  Cost: 
   Type: 18
   Border: {fileID: 21300000, guid: e6e77efb7b3964467a7261cfa04d0db8, type: 3}
   Art: {fileID: -6003386537562518593, guid: 2cfcbb2b16fb34541b423f4d287aec3e, type: 3}
@@ -22,3 +23,4 @@ MonoBehaviour:
   IsSpecial: 1
   IsDivide: 0
   Traits: []
+  CostModifiers: []

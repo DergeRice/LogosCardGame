@@ -15,7 +15,8 @@ MonoBehaviour:
   Title: "\uC18C\uC720\uACA9"
   Description: "\uAE30\uB2A5:\uC140 \uC218 \uC788\uB294 \uBA85\uC0AC \uB610\uB294
     \uC140 \uC218 \uC5C6\uB294 \uBA85\uC0AC \uC55E"
-  Cost: x2
+  CardPOS: 
+  Cost: 
   Type: 2
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
   Art: {fileID: -8944830228517193097, guid: 2cfcbb2b16fb34541b423f4d287aec3e, type: 3}
@@ -24,3 +25,4 @@ MonoBehaviour:
   IsDivide: 0
   Traits:
   - {fileID: 11400000, guid: 7bff843024999d844a3add025c3994d8, type: 2}
+  CostModifiers: []

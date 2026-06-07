@@ -15,6 +15,7 @@ MonoBehaviour:
   Title: "\uC140 \uC788 \uBA85\uC0AC3"
   Description: "\uAE30\uB2A5:\uBD80\uC815\uAD00\uC0AC, \uC815\uAD00\uC0AC, \uC18C\uC720\uACA9\uACFC
     \uD568\uAED8 \uC4F0\uC784"
+  CardPOS: 
   Cost: 
   Type: 4
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
@@ -23,3 +24,4 @@ MonoBehaviour:
   IsSpecial: 0
   IsDivide: 0
   Traits: []
+  CostModifiers: []

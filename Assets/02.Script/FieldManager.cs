@@ -5,9 +5,12 @@ using System.Collections.Generic;
 // using UnityEditor.Localization.Plugins.XLIFF.V12;
 using System.Collections;
 using TMPro;
+using UnityEngine.Playables;
 public class FieldManager : MonoBehaviour
 {
     public static FieldManager Instance;
+
+    public List<DeckCardView> deckCards = new List<DeckCardView>();
 
     public Transform fieldParent;
     public DeckCardView fieldCardView;
@@ -17,9 +20,6 @@ public class FieldManager : MonoBehaviour
 
     public bool isOnBoard;
     public int indexOfField;
-
-    public List<string> fieldCardList;
-
     [SerializeField] private float thresholdDistance = 50f;
 
     public bool isTradingTime = false;
@@ -55,6 +55,11 @@ public class FieldManager : MonoBehaviour
     {
         if (tempField == null) return;
 
+        // Arcana selection mode: only one card can exist on the field.
+        if (ArcanaSelectionMode.Instance != null && ArcanaSelectionMode.Instance.IsActive)
+        {
+            ReturnAllFieldCardsToHand();
+        }
 
         if (card.IsSpecial)
         {
@@ -65,6 +70,9 @@ public class FieldManager : MonoBehaviour
         indexOfField = tempField.transform.GetSiblingIndex();
 
         DeckCardView newCard = Instantiate(fieldCardView, fieldParent);
+
+        deckCards.Add(newCard);
+
         CardView view = Instantiate(cardView, newCard.transform);
 
         newCard.cardView = view;
@@ -76,26 +84,92 @@ public class FieldManager : MonoBehaviour
 
 
         CheckHoldEnd();
-        RefreshFieldScale();
+        RefreshCardList();
     }
 
-    public void RefreshFieldScale()
+    public void ReturnAllFieldCardsToHand()
     {
-        // int cardCount = fieldParent.childCount;
+        // Move all placed cards back to hand.
+        var toReturn = new List<CardSO>();
+        foreach (Transform child in fieldParent)
+        {
+            DeckCardView view = child.GetComponent<DeckCardView>();
+            if (view == null || view.card == null) continue;
+            toReturn.Add(view.card);
+        }
 
-        // float baseScale = 0.5f;
-        // float scaleStep = 0.035f;
-        // float minScale = 0.3f;
-        // float maxScale = 0.5f;
+        if (toReturn.Count == 0) return;
 
-        // float newScale = baseScale;
+        HandManager hand = FindAnyObjectByType<HandManager>();
+        if (hand == null)
+        {
+            Debug.LogWarning("HandManager not found. Cannot return cards to hand.");
+            return;
+        }
 
-        // if (cardCount > 7)
-        //     newScale = Mathf.Max(minScale, baseScale - (cardCount - 7) * scaleStep);
-        // else
-        //     newScale = Mathf.Min(maxScale, baseScale + (7 - cardCount) * scaleStep);
+        // Destroy board objects first to avoid duplicates in layout.
+        foreach (Transform child in fieldParent)
+        {
+            DeckCardView view = child.GetComponent<DeckCardView>();
+            if (view == null || view.card == null) continue;
+            Destroy(child.gameObject);
+        }
 
-        // fieldParent.localScale = new Vector3(newScale, newScale, 1f);
+        for (int i = 0; i < toReturn.Count; i++)
+        {
+            hand.MakeCardOnHand(toReturn[i]);
+        }
+
+        RefreshCardList();
+        CheckHoldEnd();
+    }
+
+    public void ClearFieldOnly()
+    {
+        foreach (Transform child in fieldParent)
+        {
+            Destroy(child.gameObject);
+        }
+        RefreshCardList();
+        CheckHoldEnd();
+    }
+
+    public void ShowCandidatesOnField(List<CardSO> candidates, Action<int> onPicked)
+    {
+        // Clear any previous candidates/placed cards.
+        foreach (Transform child in fieldParent)
+        {
+            Destroy(child.gameObject);
+        }
+        RefreshCardList();
+        CheckHoldEnd();
+
+        if (candidates == null || candidates.Count == 0) return;
+
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            CardSO card = candidates[i];
+            if (card == null) continue;
+
+            DeckCardView newCard = Instantiate(fieldCardView, fieldParent);
+            deckCards.Add(newCard);
+
+            CardView view = Instantiate(cardView, newCard.transform);
+            newCard.cardView = view;
+            newCard.UpdateCardSO(card);
+            newCard.cardView.SetData(card);
+            view.isHandCard = false;
+
+            var click = newCard.gameObject.AddComponent<CandidateCardClick>();
+            click.Init(i, onPicked);
+        }
+
+        RefreshCardList();
+    }
+
+    public void RefreshCardList()
+    {
+        deckCards.RemoveAll(item => item == null);
     }
 
     public void UpdateGhostCardPosition(Vector2 screenPos)
@@ -167,24 +241,15 @@ public class FieldManager : MonoBehaviour
         switch (card.Type)
         {
             case CardType.Ge:
-                GameManager.instance.ToastText("Get");
-                //                  
-                int count = int.Parse(card.Title.Replace("Get", ""));
-                FindAnyObjectByType<TurnManager>().deckManager.GiveMeCard(count);
-                break;
-            case CardType.Ex:
-                GameManager.instance.ToastText("Exchange");
-                Debug.Log("EX");
-                GamePlayManager.instance.gameUIManager.DoExchangePanel();
-                break;
-            case CardType.Ro:
-                GameManager.instance.ToastText("Rob");
-                Debug.Log("Rob");
-                GamePlayManager.instance.gameUIManager.DoRob();
-                break;
-            case CardType.Pr:
-                GamePlayManager.instance.gameUIManager.turnManager.deckManager.AddCardToHand_Local(2);
-                GameManager.instance.ToastText("이 카드는 사용할 수 없습니다.");
+                // // GameManager.instance.ToastText("Get");
+                // int count = int.Parse(card.Title.Replace("Get", ""));
+                // DeckManager deckManager = FindAnyObjectByType<DeckManager>();
+                // if (deckManager == null)
+                // {
+                //     Debug.LogWarning("DeckManager not found. Cannot give cards.");
+                //     break;
+                // }
+                // deckManager.GiveMeCard(count);
                 break;
         }
     }
@@ -206,49 +271,20 @@ public class FieldManager : MonoBehaviour
             steps.Add(new ScoreStep(currentScore, $"+1", () => { deckCard.ShowCalulateText(true, $"+1"); }));
         }
 
-        // 2단계: 특수 카드 처리
+        // 2단계: 카드 수식 처리 (순서대로 적용)
         foreach (Transform child in fieldParent)
         {
             DeckCardView deckCard = child.GetComponent<DeckCardView>();
             if (deckCard == null || deckCard.card == null) continue;
 
-            string cost = deckCard.card.Cost;
-            if (string.IsNullOrEmpty(cost))
+            var modifiers = deckCard.card.GetCostModifiers();
+            if (modifiers == null || modifiers.Count == 0) continue;
+
+            foreach (var modifier in modifiers)
             {
-                // steps.Add(new ScoreStep(currentScore, $"", () => { deckCard.MakeStarDust(); }));
-                continue;
-            }
-
-            float operand;
-            if (!float.TryParse(cost.Substring(1), out operand)) continue;
-
-            if (cost.StartsWith("x"))
-            {
-                currentScore *= operand;
-                steps.Add(new ScoreStep(currentScore, $"x{operand}", () => { deckCard.ShowCalulateText(false); }));
-            }
-        }
-
-        foreach (Transform child in fieldParent)
-        {
-            DeckCardView deckCard = child.GetComponent<DeckCardView>();
-            if (deckCard == null || deckCard.card == null) continue;
-
-            string cost = deckCard.card.Cost;
-            if (string.IsNullOrEmpty(cost))
-            {
-                // steps.Add(new ScoreStep(currentScore, $"", () => { deckCard.MakeStarDust(); }));
-                continue;
-            }
-
-            float operand;
-            if (!float.TryParse(cost.Substring(1), out operand)) continue;
-
-
-            if (cost.StartsWith("+"))
-            {
-                currentScore += operand;
-                steps.Add(new ScoreStep(currentScore, $"+{operand}", () => { deckCard.ShowCalulateText(true); }));
+                currentScore = Calculate.Apply(currentScore, modifier.Modifier, modifier.Value);
+                string token = Calculate.ToToken(modifier.Modifier, modifier.Value);
+                steps.Add(new ScoreStep(currentScore, token, () => { deckCard.ShowCalulateText(modifier.Modifier, modifier.Value); }));
             }
         }
 
@@ -258,10 +294,39 @@ public class FieldManager : MonoBehaviour
 
     public void ClearField()
     {
-        foreach (Transform child in fieldParent)
+        StartCoroutine(ClearFieldRoutine());
+    }
+
+    private IEnumerator ClearFieldRoutine()
+    {
+        RefreshCardList();
+
+        foreach (DeckCardView child in deckCards)
+        {
+            if (child == null || child.cardView == null) continue;
+
+            PlayAndDestroy(child);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private void PlayAndDestroy(DeckCardView child)
+    {
+        PlayableDirector director = child.cardView.GetComponent<PlayableDirector>();
+        if (director == null)
         {
             Destroy(child.gameObject);
+            return;
         }
+
+        void OnStopped(PlayableDirector d)
+        {
+            d.stopped -= OnStopped;
+            Destroy(child.gameObject);
+        }
+
+        director.stopped += OnStopped;
+        director.Play();
     }
 
     public void FadeField(float value)

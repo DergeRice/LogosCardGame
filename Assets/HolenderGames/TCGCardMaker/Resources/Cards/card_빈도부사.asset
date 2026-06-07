@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: "\uBE48\uB3C4\uBD80\uC0AC"
   Description: "\uAE30\uB2A5: \uC77C\uBC18\uB3D9\uC0AC \uC55E Be\uB3D9\uC0AC \uB4A4"
+  CardPOS: 
   Cost: 
   Type: 13
   Border: {fileID: 21300000, guid: 9d737ef755c84254bb78abdb2c5990ba, type: 3}
@@ -22,3 +23,4 @@ MonoBehaviour:
   IsSpecial: 0
   IsDivide: 0
   Traits: []
+  CostModifiers: []

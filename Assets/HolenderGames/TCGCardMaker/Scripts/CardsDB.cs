@@ -13,7 +13,7 @@ namespace TCG_CardMaker
             get { 
                 if (instance == null)
                 {
-                    instance = Resources.Load<CardsDB>("CardsDB");
+                    instance = Resources.Load<CardsDB>("CardsDB RogueLike");
                 }
                 return instance; 
             }

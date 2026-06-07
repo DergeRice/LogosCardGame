@@ -65,8 +65,14 @@ public class NetworkManager : MonoBehaviour
 
     public void CheckGrammar(string json, Action success = null, Action fail = null)
     {
-        if (json == "") return;
-        StartCoroutine(CheckGrammarToServer(json,success,fail));
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return;
+        }
+
+        GrammarCheckResult result = LocalGrammarChecker.CheckDetailedFromJsonArray(json);
+        success?.Invoke();
+        GamePlayManager.instance.CheckGrammar(result.valid, result.handType);
     }
 
     public IEnumerator CheckGrammarToServer(string sendData, Action success, Action fail)
@@ -107,7 +113,7 @@ public class NetworkManager : MonoBehaviour
 
 
 
-    [ContextMenu("TestInsert")]
+    [UnityEngine.ContextMenu("TestInsert")]
     public void EnrollOwnData()
     {
         EnrollUser(ownData);
@@ -417,7 +423,7 @@ public class NetworkManager : MonoBehaviour
 
 
 
-    [ContextMenu("rank")]
+    [UnityEngine.ContextMenu("rank")]
     public void GetRank()
     {
         StartCoroutine(GetRanking());

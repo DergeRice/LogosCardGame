@@ -75,13 +75,13 @@ namespace TCG_CardMaker
             // throw new System.NotImplementedException();
             if (CardManager.instance.fieldManager.isOnBoard == true)
             {
-                // if (deckCardView.cardView.cardData.Cost == "S")
-                // {
-                //     // CardManager.cardManager.fieldManager.DoSpecial(deckCardView.cardView.cardData);
-                //     CardManager.cardManager.fieldManager.MakeCardOnBoard(deckCardView.cardView.cardData);
-                //     CardManager.cardManager.holdingCard.originCardDestory();
-                //     return;
-                // }
+                if (deckCardView.cardView.cardData.Cost == "S")
+                {
+                    CardManager.instance.fieldManager.DoSpecialEvent(deckCardView.cardView.cardData);
+                    CardManager.instance.fieldManager.MakeCardOnBoard(deckCardView.cardView.cardData);
+                    CardManager.instance.holdingCard.originCardDestory();
+                    return;
+                }
                 CardManager.instance.fieldManager.MakeCardOnBoard(deckCardView.cardView.cardData);
                 CardManager.instance.holdingCard.originCardDestory();
             }

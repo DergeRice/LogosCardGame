@@ -69,15 +69,16 @@ namespace TCG_CardMaker
 
             txtCardType.text = cardData.Type.ToString()[0].ToString();
             txtDescription.text = SpecialWords.Instance.GetSpecialWordsFormat(cardData.Description);
-            txtCost.text = cardData.Cost.ToString();
+            string costText = cardData.GetCostText();
+            txtCost.text = costText;
 
-            imgBorder.sprite = cardData.Border;
-            specialBorder.sprite = cardData.Border;
+            // imgBorder.sprite = cardData.Border;
+            // specialBorder.sprite = cardData.Border;
 
-            imgArt.sprite = cardData.Art;
-            specialImg.sprite = cardData.Art;
+            // imgArt.sprite = cardData.Art;
+            // specialImg.sprite = cardData.Art;
 
-            if (cardData.Cost == "")
+            if (costText == "")
             {
                 costImg.enabled = false;
             }
@@ -86,32 +87,20 @@ namespace TCG_CardMaker
                 costImg.enabled = true;
             }
 
-            if (cardData.Cost.Contains("+")) costImg.sprite = costAdd;
-            if (cardData.Cost.Contains("x")) costImg.sprite = costMulti;
+            if (costText.Contains("+") || costText.Contains("-")) costImg.sprite = costAdd;
+            if (costText.Contains("x") || costText.Contains("/") || costText.Contains("*")) costImg.sprite = costMulti;
 
 
             if (cardData.Cost == "S")
             {
-                costImg.sprite = costSpecial;
-
-                // 일반 카드용 비활성
-                txtTitle.gameObject.SetActive(false);
-                imgBorder.gameObject.SetActive(false);
-                imgArt.transform.parent.gameObject.SetActive(false);
-
-                // 특수 카드용 활성
-                specialBorder.transform.parent.gameObject.SetActive(true);  // ✅ 추가
                 specialBorder.gameObject.SetActive(true);
-                specialTitle.gameObject.SetActive(true);                    // ✅ 추가
-                specialImg.gameObject.SetActive(true);                      // ✅ 추가
+                txtTitle.text = cardData.Title;
             }
             else
             {
                 // 특수 카드용 비활성
-                specialBorder.transform.parent.gameObject.SetActive(false);
-                specialBorder.gameObject.SetActive(false);
-                specialTitle.gameObject.SetActive(false);                   // ✅ 추가
-                specialImg.gameObject.SetActive(false);                     // ✅ 추가
+
+                specialBorder.gameObject.SetActive(false);            // ✅ 추가
 
                 // 일반 카드용 활성
                 txtTitle.gameObject.SetActive(true);

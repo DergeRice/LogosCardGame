@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public static class ValueDictionary
 {
-    public static float CardGainSecond = 0.98f;
+    public static float CardGainSecond = 0.1f;
 }
 
 public class LocalUIManager : MonoBehaviour
@@ -35,37 +35,37 @@ public class LocalUIManager : MonoBehaviour
     void Start()
     {
         gameUIManager = FindAnyObjectByType<GameUIManager>();
-        currentTime = myTurnTime;
+        // currentTime = myTurnTime;
 
-        if (isMyTurn == false)
-        {
-            EndMyTurn();
-        }
+        // if (isMyTurn == false)
+        // {
+        //     EndMyTurn();
+        // }
     }
 
     ///============= Local UI ================///
     private void Update()
     {
-        if (isMyTurn)
-        {
-            currentTime -= Time.deltaTime;
+        // if (isMyTurn)
+        // {
+        //     currentTime -= Time.deltaTime;
 
-            // Fill amount (0 ~ 1)
-            float fill = Mathf.Clamp01(currentTime / myTurnTime);
-            timerSlider.fillAmount = fill;
+        //     // Fill amount (0 ~ 1)
+        //     float fill = Mathf.Clamp01(currentTime / myTurnTime);
+        //     timerSlider.fillAmount = fill;
 
-            // Time text (정수로 표기)
-            timerText.text = currentTime.ToString("F1");
+        //     // Time text (정수로 표기)
+        //     timerText.text = currentTime.ToString("F1");
 
-            if (currentTime <= 0f)
-            {
-                EndMyTurn();
-                currentTime = myTurnTime;
+        //     if (currentTime <= 0f)
+        //     {
+        //         EndMyTurn();
+        //         currentTime = myTurnTime;
 
-                NetworkManager.instance.CheckGrammar(FieldManager.Instance.MakeJsonToSummit());
-                gameUIManager.turnManager.PassMyTurn();
-            }
-        }
+        //         NetworkManager.instance.CheckGrammar(FieldManager.Instance.MakeJsonToSummit());
+        //         gameUIManager.turnManager.PassMyTurn();
+        //     }
+        // }
     }
 
     /// <summary>
@@ -124,12 +124,12 @@ public class LocalUIManager : MonoBehaviour
     public void CardBackAnimation()
     {
         var temp = Instantiate(backPrefab, backParent);
-        temp.transform.position = backPrefab.transform.position;
+        // temp.transform.position = Vector3.zero;
         temp.SetActive(true);
         
         Utils.DelayCall(() =>
         {
-            Destroy(temp);
+            // Destroy(temp);
         },ValueDictionary.CardGainSecond);
         
     }

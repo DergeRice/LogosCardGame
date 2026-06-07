@@ -38,10 +38,10 @@ public class TurnManager : NetworkBehaviour
         GamePlayerSpawner.instance.allPlayerSpawnedAction += TurnOrderMaker;
         // GamePlayerSpawner.instance.allPlayerSpawnedAction += SetOp;
 
-        GamePlayManager.instance.gameUIManager.summitButton.onClick.AddListener(PassMyTurn);
+        // GamePlayManager.instance.gameUIManager.summitButton.onClick.AddListener(PassMyTurn);
         // if (Runner.IsSharedModeMasterClient) seti = true;
 
-        FindAnyObjectByType<GameUIManager>().TurnManagerInit(this);
+        // FindAnyObjectByType<GameUIManager>().TurnManagerInit(this);
 
     }
 
@@ -89,22 +89,22 @@ public class TurnManager : NetworkBehaviour
 
     public void PassMyTurn()
     {
-        if (!isMyTurn) return;
+        // if (!isMyTurn) return;
 
-        // var currentIndex = deckManagers.FindIndex(x => x.playerRef == Runner.LocalPlayer);
-        int nextIndex = 1;
-        // if (deckManagers.Count > 0) nextIndex = (currentIndex + 1) % deckManagers.Count;
-        // var next = deckManagers[nextIndex].playerRef;
+        // // var currentIndex = deckManagers.FindIndex(x => x.playerRef == Runner.LocalPlayer);
+        // int nextIndex = 1;
+        // // if (deckManagers.Count > 0) nextIndex = (currentIndex + 1) % deckManagers.Count;
+        // // var next = deckManagers[nextIndex].playerRef;
 
 
-        GamePlayManager.instance.gameUIManager.localUIManager.EndMyTurn();
+        // GamePlayManager.instance.gameUIManager.localUIManager.EndMyTurn();
 
-        // RPC_ReceiveTurn(next);
-        isMyTurn = false;
-        if (myTurnObject == null) myTurnObject = GamePlayManager.instance.gameUIManager.localUIManager.myTurnObject;
+        // // RPC_ReceiveTurn(next);
+        // isMyTurn = false;
+        // if (myTurnObject == null) myTurnObject = GamePlayManager.instance.gameUIManager.localUIManager.myTurnObject;
 
-        myTurnObject.SetActive(false);
-        GamePlayManager.instance.gameUIManager.localUIManager.submitBlock.SetActive(false);
+        // myTurnObject.SetActive(false);
+        // GamePlayManager.instance.gameUIManager.localUIManager.submitBlock.SetActive(false);
     }
 
     // public string GetPlayerNameByPlayerRef(PlayerRef player)
@@ -141,68 +141,7 @@ public class TurnManager : NetworkBehaviour
 
         if (isMyTurn == true) GamePlayManager.instance.gameUIManager.localUIManager.GetMyTurn();
     }
-    [UnityEngine.ContextMenu("dd")]
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_GiveAllSpecial()
-    {
-        // foreach (var player in Runner.ActivePlayers)
-            // deckManager.GiveAllSpecial(player);
-    }
 
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_ExchageRequest(PlayerRef sender, PlayerRef target, int requestCardIndex, int sendingCardIndex, string senderName)
-    {
-        if (target == Runner.LocalPlayer)
-        {
-            Debug.Log($"RPC 받음: A = {requestCardIndex}, B = {sendingCardIndex}");
-            GamePlayManager.instance.gameUIManager.exchangeRecieve.ReceivedRequest(sender, senderName, CardsDB.Instance.Cards[requestCardIndex], CardsDB.Instance.Cards[sendingCardIndex]);
-        }
-        // 여기에 받은 값 처리 로직 작성
-    }
-
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_ExchageResult(PlayerRef sender, bool isAccepted)
-    {
-        if (sender == Runner.LocalPlayer)
-        {
-            Debug.Log($"교환 결과 받음");
-
-            GamePlayManager.instance.gameUIManager.exchangeRecieve.ReceivedResult(isAccepted);
-        }
-
-        // 여기에 받은 값 처리 로직 작성
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_RobExcute(PlayerRef sender, PlayerRef target, int robIndex, string senderName)
-    {
-        Debug.Log("GORob");
-        if (target == Runner.LocalPlayer)
-        {
-            Debug.Log($"RPC 받음: A = ");
-            GamePlayManager.instance.gameUIManager.robReceive.ReceivedRob(sender, senderName, CardsDB.Instance.Cards[robIndex]);
-        }
-        // 여기에 받은 값 처리 로직 작성
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_GetStar(PlayerRef target)
-    {
-        Debug.Log("GetDamged");
-
-        if (target == Runner.LocalPlayer)
-        {
-            // Debug.Log($"RPC 받음: A = ");
-            GameManager.instance.ToastText("아야");
-            Debug.Log("아야");
-            
-            // GamePlayManager.instance.gameUIManager.robReceive.ReceivedRob(sender, senderName, CardsDB.Instance.Cards[robIndex]);
-            GamePlayManager.instance.gameUIManager.profile.GetDamage();
-        }
-        // 여기에 받은 값 처리 로직 작성
-    }
 
 
     public void ReShuffleDeck()

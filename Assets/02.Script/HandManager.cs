@@ -52,7 +52,7 @@ public class HandManager : MonoBehaviour
 
         RefreshHandLayout(view);
         CheckHoldEnd();
-        GamePlayManager.instance.fieldManager.RefreshFieldScale();
+        GamePlayManager.instance.fieldManager.RefreshCardList();
     }
 
     public void RefreshHandLayout(CardView targetCardView = null)
