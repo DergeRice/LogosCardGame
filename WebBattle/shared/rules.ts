@@ -1,8 +1,16 @@
 import { CheckPlayableSegment, LearningPosType, type LearningGrammarCheckResult } from './LearningLocalGrammarChecker.js';
 // Rendering identifiers map explicitly to the original numeric Unity POS enum.
-export type Kind = 'pronoun' | 'count' | 'mass' | 'article' | 'possessive' | 'verb' | 'be' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect';
+export type Kind = 'pronoun' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect';
 export type Card = { id: string; kind: Kind; variant?: string };
 export const CATALOG: Record<Kind, { name: string; symbol: string; example: string; sheet: number; col: number; row: number; tone: string }> = {
+ indefinite: { name: '부정관사', symbol: 'A', example: 'a · an', sheet: 2, col: 0, row: 2, tone: 'gold' },
+ do: { name: 'Do', symbol: 'DO', example: 'do · does · did', sheet: 4, col: 1, row: 0, tone: 'green' },
+ modal: { name: '조동사', symbol: 'MD', example: 'shall · will · must · can · may', sheet: 5, col: 1, row: 0, tone: 'green' },
+ not: { name: 'not', symbol: 'NOT', example: 'not', sheet: 5, col: 3, row: 0, tone: 'pink' },
+ frequency: { name: '빈도부사', symbol: 'FREQ', example: 'always · usually · often', sheet: 5, col: 0, row: 1, tone: 'pink' },
+ adverb: { name: '부사', symbol: 'ADV', example: 'now · then · soon', sheet: 5, col: 1, row: 2, tone: 'pink' },
+ preposition: { name: '전치사', symbol: 'PREP', example: 'in · on · at · by · to', sheet: 4, col: 1, row: 1, tone: 'gold' },
+ very: { name: 'Very', symbol: 'VERY', example: 'very', sheet: 5, col: 3, row: 2, tone: 'pink' },
  pronoun: { name: '대명사', symbol: 'P', example: 'I · you · we', sheet: 1, col: 2, row: 0, tone: 'coral' },
  count: { name: '셀 수 있는 명사', symbol: 'N', example: 'book · cat', sheet: 2, col: 2, row: 0, tone: 'blue' },
  mass: { name: '셀 수 없는 명사', symbol: 'N', example: 'water · milk', sheet: 1, col: 2, row: 2, tone: 'blue' },
@@ -18,6 +26,9 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  protect: { name: 'Protect', symbol: 'S', example: '가지고 있으면 Rob 방어', sheet: 4, col: 3, row: 1, tone: 'gold' }
 };
 export const CARD_POS: Record<Kind, LearningPosType | null> = {
+ indefinite: LearningPosType.DT_AN, do: LearningPosType.DO, modal: LearningPosType.MODAL,
+ not: LearningPosType.RB_NOT, frequency: LearningPosType.RB_FREQ, adverb: LearningPosType.RB,
+ preposition: LearningPosType.IN, very: LearningPosType.RB,
  pronoun: LearningPosType.PRP, possessive: LearningPosType.PRP_POS,
  mass: LearningPosType.NNU, count: LearningPosType.NNC, article: LearningPosType.DT_THE,
  be: LearningPosType.BE, verb: LearningPosType.VB, adjective: LearningPosType.JJ,
@@ -25,6 +36,19 @@ export const CARD_POS: Record<Kind, LearningPosType | null> = {
 };
 // Only effects visibly printed on these exact faces are enabled. Client-supplied effects are never accepted.
 export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; row: number; multiply: number; add: number }> = {
+ 'possessive-minus2': { kind:'possessive',sheet:1,col:1,row:0,multiply:1,add:-2 },
+ 'indefinite-x2': { kind:'indefinite',sheet:2,col:2,row:1,multiply:2,add:0 },
+ 'indefinite-minus2': { kind:'indefinite',sheet:2,col:3,row:1,multiply:1,add:-2 },
+ 'verb-div2': { kind:'verb',sheet:3,col:0,row:0,multiply:0.5,add:0 },
+ 'be-div2': { kind:'be',sheet:3,col:2,row:1,multiply:0.5,add:0 },
+ 'do-x2': { kind:'do',sheet:4,col:0,row:0,multiply:2,add:0 },
+ 'preposition-x3': { kind:'preposition',sheet:4,col:0,row:1,multiply:3,add:0 },
+ 'preposition-thirteen': { kind:'preposition',sheet:4,col:3,row:2,multiply:1,add:0 },
+ 'modal-plus2': { kind:'modal',sheet:5,col:0,row:0,multiply:1,add:2 },
+ 'not-plus3': { kind:'not',sheet:5,col:2,row:0,multiply:1,add:3 },
+ 'frequency-thirteen': { kind:'frequency',sheet:5,col:1,row:1,multiply:1,add:0 },
+ 'adverb-plus2': { kind:'adverb',sheet:5,col:0,row:2,multiply:1,add:2 },
+ 'very-plus3': { kind:'very',sheet:5,col:2,row:2,multiply:1,add:3 },
  'pronoun-eight': { kind:'pronoun',sheet:1,col:3,row:0,multiply:1,add:0 },
  'pronoun-fifteen': { kind:'pronoun',sheet:1,col:0,row:1,multiply:1,add:0 },
  'pronoun-fourteen': { kind:'pronoun',sheet:1,col:1,row:1,multiply:1,add:0 },
@@ -59,7 +83,7 @@ export const DECK_FACES: Omit<Card,'id'>[] = [
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }
 export function cardFace(card: Card) { const variant = card.variant ? VARIANTS[card.variant] : undefined; return variant?.kind === card.kind ? { ...CATALOG[card.kind], ...variant } : CATALOG[card.kind]; }
-export function effectLabel(card: Card) { const e=cardEffect(card); return e.multiply!==1 ? `×${e.multiply}` : e.add ? `+${e.add}` : ''; }
+export function effectLabel(card: Card) { const e=cardEffect(card); return e.multiply!==1 ? e.multiply<1 ? `÷${1/e.multiply}` : `×${e.multiply}` : e.add ? e.add<0 ? `−${-e.add}` : `+${e.add}` : ''; }
 export type Judgment = LearningGrammarCheckResult & { form?: number; label?: string; points: number; formula?: string; reason: string; accepted?: boolean; submissionId?: string; spans: { start: number; end: number; role: string }[] };
 export function judge(kinds: Kind[]): Judgment {
  // This is the actual battle entry point. Check() has different semantics.
@@ -79,7 +103,7 @@ export function judgeCards(cards: Card[], go = 1): Judgment {
  const factors = accepted.map(cardEffect).filter(e=>e.multiply!==1).map(e=>e.multiply);
  const adds = accepted.map(cardEffect).filter(e=>e.add!==0).map(e=>e.add);
  const subtotal = result.usedLength * factors.reduce((a,b)=>a*b,1) + adds.reduce((a,b)=>a+b,0);
- const expression = [String(result.usedLength),...factors.map(x=>`× ${x}`),...adds.map(x=>`+ ${x}`)].join(' ');
+ const expression = [String(result.usedLength),...factors.map(x=>x<1?`÷ ${1/x}`:`× ${x}`),...adds.map(x=>x<0?`− ${-x}`:`+ ${x}`)].join(' ');
  result.points = subtotal * go;
  result.formula = go === 1 ? `${expression} = ${result.points}점` : `(${expression}) × ${go}고배율 = ${result.points}점`;
  return result;
