@@ -113,7 +113,7 @@ test('EXCHANGE includes and swaps older field cards; scores stay and stale field
 test('ROB hides protected targets, preserves blocked ROB and ignores duplicate blocked requests',()=>{
  const {game,a,b,r}=setup(),rob=card('rob'),shield=card('protect'),gift=card('verb'),out:any[]=[];
  a.socket={...socket(),send(data:string){out.push(JSON.parse(data))}};a.hand=[rob];b.hand=[shield,gift];
- game.inspectRob(a,{matchId:r.matchId,cardId:rob.id});assert.deepEqual(out.at(-1).players[0].cards,[]);
+ game.inspectRob(a,{matchId:r.matchId,cardId:rob.id});assert.deepEqual(out.at(-1).players[0].cards,[]);assert.equal(out.at(-1).players[0].protected,true);
  const msg={matchId:r.matchId,handVersion:a.handVersion,requestId:randomUUID(),cardId:rob.id,targetId:b.id,stealId:gift.id,stealSource:'hand',targetHandVersion:b.handVersion};
  game.special(a,msg);game.special(a,msg);assert.deepEqual(a.hand,[rob]);assert.deepEqual(b.hand,[shield,gift]);assert.equal(r.discard.length,0);assert.equal(out.at(-1).duplicate,true);
 });

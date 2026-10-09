@@ -167,7 +167,7 @@ export class Game {
   if(!r||r.phase!=='battle'||msg.matchId!==r.matchId||r.decision)return this.fail(p,'지금은 ROB 대상을 볼 수 없어요.');
   const card=p.hand.find(c=>c.id===msg.cardId&&c.kind==='rob');
   if(!card)return this.fail(p,'ROB 카드를 가지고 있어야 해요.');
-  this.send(p.socket,{type:'robView',matchId:r.matchId,cardId:card.id,players:r.players.filter(x=>x!==p).map(x=>({id:x.id,name:x.name,avatar:x.avatar,connected:Boolean(x.ai||x.socket?.readyState===1),handVersion:x.handVersion,fieldVersion:x.fieldVersion??0,cards:x.hand.some(c=>c.kind==='protect')?[]:[...x.hand.filter(canTransferCard).map(c=>({...c,source:'hand' as const})),...fieldCards(x).filter(canTransferCard).map(c=>({...c,source:'field' as const}))]}))});
+  this.send(p.socket,{type:'robView',matchId:r.matchId,cardId:card.id,players:r.players.filter(x=>x!==p).map(x=>({id:x.id,name:x.name,avatar:x.avatar,connected:Boolean(x.ai||x.socket?.readyState===1),handVersion:x.handVersion,fieldVersion:x.fieldVersion??0,protected:x.hand.some(c=>c.kind==='protect'),cards:x.hand.some(c=>c.kind==='protect')?[]:[...x.hand.filter(canTransferCard).map(c=>({...c,source:'hand' as const})),...fieldCards(x).filter(canTransferCard).map(c=>({...c,source:'field' as const}))]}))});
  }
  inspectExchange(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room);
