@@ -362,3 +362,13 @@ npm run test:e2e
 - Cloudflare 공용 서버 배포 버전: 8321531a-b394-4031-81f1-7007b0a4b3e3. 기존 Free 플랜에서 배포하며 플랜 변경은 하지 않았습니다.
 - Netlify 공개 배포: 6ac76686c7939ea04d2240bd (v0.9.03). 말풍선과 프로필 폴백/두 줄 배분 HUD 캡처를 직접 검토했습니다.
 - 공개 사이트 검사3/3 통과(38.9초): 모바일 일반/시스템 바 축소 UI fixture2개와 실제 독립 두 브라우저 공용 Cloudflare 대전1개. 실제 통신에서는 고유 덱, 손패/필드 미리보기, 마우스/터치 이동, 전원 동의 배분, 감정표현, VB 제출 유지/무득점, 새로고침 복귀를 확인했습니다. 점수/승패 강제 변경 없이 통과했으며 브라우저 오류가 없었습니다. 검사용 Vite5175 종료, 개인 프로필 편집기5174는 유지합니다.
+
+## 2026-10-09 v0.9.04: GitHub 원본 소스 및 Netlify 자동 배포
+
+- DergeRice/LogosCardGame 저장소의 새 `web-battle` 브랜치에 원본 웹 소스·공유 판정기·서버·테스트·카드 원본/웹 이미지·프로필·문서를 올렸습니다. 최초 소스 커밋7400049, 168개 파일, 약28MB입니다.
+- 기존 main의 Unity 파일은 다운로드하거나 수정하지 않았습니다. Git 메타데이터만 부분 fetch했고, main 원격 HEAD20e42c965dfed075e9dc01bb40089c14c2cb9b98이 유지되는 것을 확인했습니다. 수 GB Unity 저장소 전체를 Netlify 빌드 때 받지 않도록 웹 브랜치는 독립 이력입니다.
+- `.env*` 실제 값·CLI 인증/런타임/빌드 결과/테스트 스크린샷은 제외하고 `.env.example`만 포함합니다. 업로드 대상에서 토큰/비밀키 패턴 검출0건을 확인했습니다.
+- Netlify 계정ghehf1117@naver.com / ghehf1117's team의 기존 logos-card-battle 프로젝트에 GitHub를 연결했습니다. 읽기 전용 Git 배포 키 및 push/pull_request/delete 웹훅이 활성화됐습니다. 프로젝트/도메인/요금제는 새로 만들거나 변경하지 않았습니다.
+- Git 브랜치web-battle, base WebBattle, command npm run build, publish dist, Node24, production VITE_WS_URL 기존 Cloudflare WSS 주소를 확인했습니다. netlify.toml·.nvmrc·README·DEPLOY 문서에도 기록했습니다.
+- 로컬 전체 운영 빌드(원본 카드39종 생성·TypeScript·Vite·Node 서버 컴파일) 통과. 게임 로직 변경 없이 버전v0.9.04로 식별합니다. Cloudflare 서버는 기존 배포를 유지하며 서버 코드 변경 시 별도 검사/배포가 필요합니다.
+- Git 연결로 원격 커밋7400049의 Netlify 빌드6ac88fd2c4027d38ba799d0f가 자동 시작되는 것을 확인했습니다.
