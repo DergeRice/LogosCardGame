@@ -108,7 +108,7 @@ export function judgeCards(cards: Card[], go = 1): Judgment {
  result.formula = go === 1 ? `${expression} = ${result.points}점` : `(${expression}) × ${go}고배율 = ${result.points}점`;
  return result;
 }
-export const RULES = { handSize: 5, maxPlayers: 4, maxSelected: 15, matchSeconds: 0, reconnectSeconds: 30, actionCooldownMs: 1500, exchangeCooldownMs: 6000, dealMs: 30_000, matchingMs: 6000, revealMs: 3000, dealingMs: 2400, decisionMs: 10_000, goThreshold: 20, maxGo: 3 };
+export const RULES = { handSize: 5, minPlayers: 4, maxPlayers: 6, maxSelected: 15, matchSeconds: 0, reconnectSeconds: 30, actionCooldownMs: 1500, exchangeCooldownMs: 6000, dealMs: 30_000, matchingMs: 6000, revealMs: 3000, dealingMs: 2400, decisionMs: 10_000, goThreshold: 20, maxGo: 3 };
 export const goMultiplier = (goCount: number) => 1 + Math.min(3, Math.max(0, goCount));
 export type Difficulty = 'easy' | 'normal' | 'hard';
 export const REACTIONS=['👍','👏','😮','🔥'] as const;

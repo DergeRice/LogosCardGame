@@ -7,13 +7,14 @@ import { chooseMove, thinkMs } from './ai.js';
 
 type Player = { robNotices?:RobNotice[]; id: string; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; reward: number; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 type Room = { code: string; phase: RoomView['phase']; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
-type Options = { durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number };
+type Options = { durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 function shuffle<T>(items: T[]): T[] { for (let i = items.length - 1; i > 0; i--) { const j = randomInt(i + 1); [items[i], items[j]] = [items[j], items[i]]; } return items; }
 export class Game {
+ minimumPlayers = RULES.minPlayers;
  rooms = new Map<string, Room>(); sessions = new Map<string, Player>();
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number;
- constructor(options: Options = {}) { this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 10 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs; }
+ constructor(options: Options = {}) { this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 10 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
  fail(p: Player, message: string, requestId?: string) { this.send(p.socket, { type: 'error', message, requestId }); }
  newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
@@ -44,11 +45,14 @@ export class Game {
   if (this.rooms.size >= 500) return this.fail(p, '방이 모두 사용 중입니다. 잠시 후 다시 시도하세요.');
   let code: string; do { code = String(randomInt(100000, 1000000)); } while (this.rooms.has(code));
   this.resetPlayer(p); p.room = code;
-  const bot = this.newPlayer('로고스 AI'); bot.token = ''; bot.ai = 'normal'; bot.room = code; bot.avatar = avatars[(avatars.indexOf(p.avatar) + 1) % avatars.length];
-  const r: Room = { code, phase: 'matching', matchId: randomUUID(), players: [p, bot], deck: [], discard: [], dealCursor: 0, stageEndsAt: Date.now() + this.matchingMs, nextDealAt: 0, dealSerial: 0, goCount: 0, highScore: 0, endsAt: 0, expiresAt: Date.now() + this.lobbyMs, log: [] };
+  const r: Room = { code, phase: 'matching', matchId: randomUUID(), players: [p], deck: [], discard: [], dealCursor: 0, stageEndsAt: Date.now() + this.matchingMs, nextDealAt: 0, dealSerial: 0, goCount: 0, highScore: 0, endsAt: 0, expiresAt: Date.now() + this.lobbyMs, log: [] };
   this.rooms.set(code, r); this.broadcast(r);
  }
  reveal(r: Room) {
+  while(r.players.length<this.minimumPlayers){
+   const bot=this.newPlayer(`로고스 AI ${r.players.filter(p=>p.ai).length+1}`);
+   bot.token='';bot.ai='normal';bot.room=r.code;bot.avatar=avatars[r.players.length%avatars.length];r.players.push(bot);
+  }
   r.phase = 'reveal'; r.matchId = randomUUID(); r.stageEndsAt = Date.now() + this.revealMs; r.endsAt = 0; r.goCount = 0; r.highScore = 0; r.leaderId=undefined; r.drawVote=undefined; r.nextDrawRequestAt=0; r.testMode = false; r.decision = undefined; r.exchange=undefined; r.winner = undefined; r.reason = undefined; r.dealSerial = 0; r.log = []; r.discard = [];
   r.deck = shuffle(DECK_FACES.map(face=>({...face,id:randomUUID()}))); r.dealCursor=randomInt(r.players.length);
   for (const p of r.players) this.resetPlayer(p);
@@ -80,7 +84,7 @@ export class Game {
  }
  debugSpecials(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room),id=String(msg.requestId??'');
-  if(!r||r.phase!=='battle'||msg.matchId!==r.matchId||p.ai||r.players.length!==2||r.players.some(x=>x!==p&&!x.ai))return this.fail(p,'특수카드 치트는 AI 대전에서만 사용할 수 있어요.',id);
+  if(!r||r.phase!=='battle'||msg.matchId!==r.matchId||p.ai||r.players.some(x=>x!==p&&!x.ai))return this.fail(p,'특수카드 치트는 AI 대전에서만 사용할 수 있어요.',id);
   if(!/^[\w-]{1,80}$/.test(id))return this.fail(p,'올바르지 않은 요청 번호예요.',id);
   if(p.seen.has(id)){this.send(p.socket,{type:'ack',requestId:id,duplicate:true});return;}
   p.seen.add(id);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
@@ -316,5 +320,4 @@ export class Game {
   for (const [token, p] of this.sessions) if (!p.room && !p.socket && now - p.touchedAt > 60 * 60_000) this.sessions.delete(token);
  }
 }
-
 

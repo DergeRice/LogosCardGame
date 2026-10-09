@@ -15,7 +15,7 @@ class Client {
  get score(){return this.room!.players.find(p=>p.id===this.room!.you)!.score;}
  move(){const r=this.room!,cards=chooseMove(r.hand,'hard');if(!cards)return null;const request={cards,handVersion:r.handVersion,requestId:randomUUID(),matchId:r.matchId};this.send('submit',request);return request;}
 }
-async function server(options:Parameters<typeof createBattleServer>[0]){const app=createBattleServer(options);await new Promise<void>(r=>app.server.listen(0,'127.0.0.1',r));return{app,url:`ws://127.0.0.1:${(app.server.address() as {port:number}).port}/socket`};}
+async function server(options:Parameters<typeof createBattleServer>[0]){const app=createBattleServer({minimumPlayers:2,...options});await new Promise<void>(r=>app.server.listen(0,'127.0.0.1',r));return{app,url:`ws://127.0.0.1:${(app.server.address() as {port:number}).port}/socket`};}
 
 test('four real sockets: unanimous draw, unique shared deck, retained Correct, duplicate/stale requests, result/rematch',async()=>{
  const {app,url}=await server({matchingMs:1200,revealMs:50,dealingMs:50,durationMs:0});

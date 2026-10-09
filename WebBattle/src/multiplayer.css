@@ -1,0 +1,78 @@
+/* Equal seats, readable scores, and owner-grouped actions for four to six players. */
+.illustration{background:transparent!important;border-radius:9%/6.35%}
+.hand.hand-fan .game-card,.hand.hand-fan .game-card:hover:not(:disabled),.hand.hand-fan .game-card:focus-visible{box-shadow:none;filter:drop-shadow(0 5px 6px #17291a30)}
+.battle .table-scoreboard{display:grid;grid-template-columns:repeat(var(--player-count,4),minmax(0,1fr));gap:8px}
+.battle .table-player{display:flex;align-items:center;gap:6px;min-width:0;padding:8px 10px}
+.table-player .player-profile-hit{flex:1;min-width:0;gap:7px}
+.table-player .player-profile-details{min-width:0;flex:1}
+.table-player .player-profile-details>b{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.table-player .player-hand-count{font-size:10px;color:#8e8197;line-height:1.2}
+.battle .table-player>strong{flex:none;font-size:25px;line-height:1;font-variant-numeric:tabular-nums}
+.battle .table-player .character-avatar{--profile-size:36px}
+.table-player .mini-hand-preview{max-width:100%}
+.battle .table-player .reaction-bubble{right:3px;top:-8px;font-size:21px!important}
+.special-dialog.rob-dialog,.special-dialog.exchange-dialog{display:flex;flex-direction:column;width:min(1000px,calc(var(--game-width) - 24px));max-height:calc(var(--game-height) - 24px);overflow:hidden;text-align:left;padding:20px;gap:10px}
+.special-dialog h2{flex:none;margin:0;font-size:22px}
+.rob-all-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;overflow-y:auto;min-height:0;max-height:none;gap:12px;padding:2px}
+.rob-player-group,.exchange-player{min-width:0;background:#f1eaf5;border:1px solid #e0d4e7;border-radius:14px;padding:10px}
+.rob-player-heading,.exchange-player-name{display:flex;align-items:center;gap:7px;margin:0 0 8px;text-align:left}
+.rob-player-heading .character-avatar,.exchange-player-name .character-avatar{--profile-size:28px;flex:none}
+.rob-player-heading>b,.exchange-player-name>b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.rob-player-heading>small,.exchange-player-name>small{margin-left:auto;white-space:nowrap;color:#8c7897;font-size:10px}
+.rob-player-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:7px}
+.rob-card-choice{width:auto;min-width:0;flex:none}
+.rob-card-owner{font-size:8px;height:auto;min-height:22px}
+.rob-card-owner .character-avatar{display:none}
+.rob-card-choice>button,.exchange-cards>button{background:transparent!important;border-radius:9%;padding:0;border:2px solid transparent}
+.rob-card-choice>button.selected,.exchange-cards>button.selected{border-color:#9b70bc;box-shadow:0 0 0 2px #ddc3f0}
+.special-dialog .illustration{background:transparent;border-radius:9%/6.35%}
+.exchange-picker{display:grid;grid-template-columns:minmax(150px,.7fr) minmax(0,2fr);gap:14px;overflow-y:auto;min-height:0;flex:1}
+.exchange-column{min-width:0;padding:8px;background:transparent}
+.exchange-column:first-child{position:sticky;top:0;align-self:start;max-height:calc(var(--game-height) - 150px);overflow-y:auto;border-right:1px solid #e4d9ea;background:#fffcf8;z-index:1}
+.exchange-column h3{font-size:13px;margin:0 0 10px;color:#705781}
+.exchange-column:last-child{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-content:start}
+.exchange-column:last-child>h3{grid-column:1/-1}
+.exchange-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:6px;overflow:visible;max-height:none}
+.special-selection-summary{flex:none;background:#ede2f4;border:1px solid #dac7e7;border-radius:10px;padding:8px 12px;font-size:12px;line-height:1.5;color:#694c7c;min-height:34px}
+.special-actions{flex:none;margin:0;justify-content:flex-end;gap:8px}
+.special-actions>button{min-height:40px;padding:10px 16px}
+.matching-slots{gap:8px;max-width:100%}.matching-slots>span{width:40px;height:40px}.matching-slots .character-avatar{--profile-size:40px}
+.rival-profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;min-width:0}
+.rival-profiles .match-profile .character-avatar{--profile-size:clamp(44px,7vw,90px)}
+.rival-profiles .match-profile h3{font-size:13px;overflow-wrap:anywhere}.rival-profiles .match-profile small,.rival-profiles .match-profile>span{font-size:9px;letter-spacing:0}
+.result-scores{gap:18px;overflow-y:auto;max-height:42dvh}.result-scores>div{min-width:130px}.result-scores strong{font-size:30px}
+@media(max-width:1000px){
+ .battle .table-scoreboard[data-player-count="5"],.battle .table-scoreboard[data-player-count="6"]{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+ .battle:has(.table-scoreboard[data-player-count="5"]),.battle:has(.table-scoreboard[data-player-count="6"]){grid-template-rows:100px 38px minmax(0,1fr) var(--hand-stage-height)}
+ .battle .table-player{padding:4px 6px;gap:3px;border-radius:12px}.battle .table-player .character-avatar{--profile-size:25px}.battle .table-player>strong{font-size:19px}
+ .table-player .player-profile-details>b{font-size:10px}.table-player .player-hand-count{font-size:9px}
+ .rob-all-cards{gap:6px}.rob-player-group,.exchange-player{padding:6px}
+ .exchange-column:last-child{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(orientation:landscape) and (max-height:650px){
+ .special-dialog.rob-dialog,.special-dialog.exchange-dialog{padding:10px;gap:6px}
+ .special-dialog h2{font-size:17px}.special-actions>button{min-height:32px;padding:6px 12px}.special-selection-summary{min-height:28px;padding:5px 9px;font-size:10px}
+ .rob-player-heading .character-avatar,.exchange-player-name .character-avatar{--profile-size:21px}
+ .rob-player-cards{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:4px}
+ .battle .table-scoreboard{gap:4px}.table-player .mini-hand-preview{height:15px!important}.table-player .status-card-block{font-size:8px;padding:1px 3px}
+ .battle .table-player .player-last-action{max-height:32px;overflow:hidden;font-size:8px!important}
+}
+@media(orientation:portrait) and (max-width:600px){
+ .battle .table-scoreboard{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px}
+ .battle .table-player{min-height:58px;height:58px}.battle .table-player .character-avatar{--profile-size:29px}
+ .rob-all-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .exchange-picker{grid-template-columns:1fr}.exchange-column:first-child{position:static;max-height:none;border-right:0;border-bottom:1px solid #e4d9ea}
+ .exchange-column:last-child{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .versus-layout{gap:10px}.rival-profiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .shell:has(.battle),.shell[data-fullscreen="true"]:has(.battle){padding-top:max(30px,env(safe-area-inset-top))}
+ .shell .battle{--hand-stage-height:114px;grid-template-rows:44px 26px minmax(0,1fr) var(--hand-stage-height);gap:3px}
+ .shell .battle:has(.table-scoreboard[data-player-count="5"]),.shell .battle:has(.table-scoreboard[data-player-count="6"]){--hand-stage-height:114px;grid-template-rows:44px 26px minmax(0,1fr) var(--hand-stage-height);gap:3px}
+ .battle .table-scoreboard[data-player-count="5"],.battle .table-scoreboard[data-player-count="6"]{grid-template-columns:repeat(var(--player-count),minmax(0,1fr));gap:3px}
+ .table-scoreboard[data-player-count="5"] .character-avatar,.table-scoreboard[data-player-count="6"] .character-avatar{--profile-size:18px}
+ .table-scoreboard[data-player-count="5"] .player-profile-hit,.table-scoreboard[data-player-count="6"] .player-profile-hit{gap:3px}
+ .table-scoreboard[data-player-count="5"] .player-profile-details>b,.table-scoreboard[data-player-count="6"] .player-profile-details>b{font-size:9px}
+ .table-scoreboard[data-player-count="5"] .mini-hand-preview,.table-scoreboard[data-player-count="6"] .mini-hand-preview{display:none!important}
+ .table-scoreboard[data-player-count="5"] .table-player,.table-scoreboard[data-player-count="6"] .table-player{padding:3px 5px}
+}

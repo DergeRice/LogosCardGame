@@ -5,7 +5,7 @@ import {Game,type GameSocket} from '../server/game.js';
 import type {Card,Kind} from '../shared/rules.js';
 const socket=():GameSocket=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}});
 const card=(kind:Kind):Card=>({id:randomUUID(),kind});
-function setup(){const game=new Game(),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);r.deck=[];return {game,a,b,r};}
+function setup(){const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);r.deck=[];return {game,a,b,r};}
 const use=(game:Game,p:ReturnType<Game['newPlayer']>,r:ReturnType<typeof setup>['r'],c:Card,extra:Record<string,unknown>={})=>game.special(p,{matchId:r.matchId,handVersion:p.handVersion,requestId:randomUUID(),cardId:c.id,...extra});
 test('GET 2/3 draws exactly available unique cards from shared deck and cannot replay',()=>{
  const {game,a,r}=setup();const two=card('get2'),three=card('get3');a.hand=[two,three];r.deck=[card('verb'),card('be'),card('count'),card('pronoun')];
@@ -55,7 +55,7 @@ test('EXCHANGE checks chosen opponent card, accepts exact pair and reports quick
  const third=card('exchange');a.hand.push(third);a.actionAt=0;use(game,a,r,third,{targetId:b.id,offerId:give.id,wantedId:offer.id,targetHandVersion:b.handVersion});r.exchange!.expiresAt=Date.now()-1;game.tick();assert.equal(r.exchange,undefined);assert.equal(a.hand[0].id,give.id);
 });
 test('EXCHANGE inspection is private to its holder; stale target and unlisted reply are rejected',()=>{
- const game=new Game(),sentA:any[]=[],sentB:any[]=[],sa={...socket(),send(data:string){sentA.push(JSON.parse(data));}},sb={...socket(),send(data:string){sentB.push(JSON.parse(data));}};
+ const game=new Game({minimumPlayers:2}),sentA:any[]=[],sentB:any[]=[],sa={...socket(),send(data:string){sentA.push(JSON.parse(data));}},sb={...socket(),send(data:string){sentB.push(JSON.parse(data));}};
  const a=game.hello(sa,null,'A'),b=game.hello(sb,null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
  const ex=card('exchange'),offer=card('pronoun'),wanted=card('verb');a.hand=[ex,offer];b.hand=[wanted];a.handVersion++;b.handVersion++;
  game.inspectExchange(a,{matchId:r.matchId,cardId:ex.id});assert.equal(sentA.at(-1).type,'exchangeView');assert.equal(sentA.at(-1).players[0].cards[0].id,wanted.id);assert.equal(sentB.some(m=>m.type==='exchangeView'),false);
@@ -70,7 +70,7 @@ test('function cards are rejected in grammar submit and AI uses its own GET card
  const bot=game.newPlayer('AI');bot.ai='normal';bot.room=r.code;r.players.push(bot);bot.hand=[card('get3')];bot.nextAI=0;r.deck=[card('verb'),card('be')];game.tick();assert.equal(bot.hand.length,2);assert.equal(r.deck.length,0);
 });
 test('temporary special-card cheat is AI-only, moves existing cards, is idempotent and disables rewards',()=>{
- const game=new Game(),a=game.hello(socket(),null,'Tester');game.quick(a);const r=game.rooms.get(a.room!)!;
+ const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'Tester');game.quick(a);const r=game.rooms.get(a.room!)!;
  game.reveal(r);game.begin(r);const bot=r.players.find(p=>p.ai)!;
  a.hand=[card('get2')];bot.hand=[card('rob')];r.deck=[card('get3'),card('exchange')];r.discard=[card('protect')];
  const request={matchId:r.matchId,requestId:randomUUID()};game.debugSpecials(a,request);
@@ -80,7 +80,7 @@ test('temporary special-card cheat is AI-only, moves existing cards, is idempote
  game.debugSpecials(a,request);assert.equal(a.hand.length,5);
  const rating=a.rating,points=a.points;a.score=30;game.finish(r,'test');assert.equal(a.rating,rating);assert.equal(a.points,points);assert.equal(a.reward,0);
  game.reveal(r);assert.equal(r.testMode,false);
- const other=new Game(),p=other.hello(socket(),null,'P'),q=other.hello(socket(),null,'Q');other.quick(p);other.quick(q);const human=other.rooms.get(p.room!)!;other.reveal(human);other.begin(human);
+ const other=new Game({minimumPlayers:2}),p=other.hello(socket(),null,'P'),q=other.hello(socket(),null,'Q');other.quick(p);other.quick(q);const human=other.rooms.get(p.room!)!;other.reveal(human);other.begin(human);
  const before=p.hand.length;other.debugSpecials(p,{matchId:human.matchId,requestId:randomUUID()});assert.equal(p.hand.length,before);assert.equal(human.testMode,false);
 });
 
@@ -89,7 +89,7 @@ test('ROB victim notice is private, survives reconnect snapshot, and acknowledge
  const request={matchId:r.matchId,handVersion:a.handVersion,requestId:randomUUID(),cardId:rob.id,targetId:b.id,stealId:gift.id,stealSource:'hand',targetHandVersion:b.handVersion};
  game.special(a,request);game.special(a,request);
  const notices=game.view(r,b).robNotices!;assert.equal(notices.length,1);assert.equal(notices[0].fromName,a.name);assert.deepEqual(notices[0].card,gift);assert.equal(notices[0].source,'hand');assert.equal(game.view(r,a).robNotices?.length??0,0);
- const {snapshot,restore}=await import('../server/persistence.js');const restored=new Game();restore(restored,snapshot(game));const rb=restored.sessions.get(b.token)!,rr=restored.rooms.get(r.code)!;assert.equal(restored.view(rr,rb).robNotices?.[0].id,notices[0].id);
+ const {snapshot,restore}=await import('../server/persistence.js');const restored=new Game({minimumPlayers:2});restore(restored,snapshot(game));const rb=restored.sessions.get(b.token)!,rr=restored.rooms.get(r.code)!;assert.equal(restored.view(rr,rb).robNotices?.[0].id,notices[0].id);
  game.handle(a,{type:'robNoticeRead',matchId:r.matchId,noticeId:notices[0].id});assert.equal(b.robNotices!.length,1);
  game.handle(b,{type:'robNoticeRead',matchId:'old-match',noticeId:notices[0].id});assert.equal(b.robNotices!.length,1);
  game.handle(b,{type:'robNoticeRead',matchId:r.matchId,noticeId:notices[0].id});assert.equal(b.robNotices!.length,0);

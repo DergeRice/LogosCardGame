@@ -5,7 +5,7 @@ import {Game,type GameSocket} from '../server/game.js';
 import type {Card} from '../shared/rules.js';
 
 const socket=()=>({readyState:1,bufferedAmount:0,messages:[] as any[],send(data:string){this.messages.push(JSON.parse(data));},close(){},terminate(){}});
-function roomForTwo(){const game=new Game(),sa=socket(),sb=socket(),a=game.hello(sa,null,'A'),b=game.hello(sb,null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.deal(r,5);game.begin(r);return{game,sa,sb,a,b,r};}
+function roomForTwo(){const game=new Game({minimumPlayers:2}),sa=socket(),sb=socket(),a=game.hello(sa,null,'A'),b=game.hello(sb,null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.deal(r,5);game.begin(r);return{game,sa,sb,a,b,r};}
 const fixture=():Card[]=>[
  {id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},
  {id:randomUUID(),kind:'verb'},
