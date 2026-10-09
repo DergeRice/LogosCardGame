@@ -1,0 +1,13 @@
+{
+ "$schema":"node_modules/wrangler/config-schema.json",
+ "name":"logos-card-battle-server",
+ "main":"cloudflare/worker.ts",
+ "compatibility_date":"2026-09-01",
+ "compatibility_flags":["nodejs_compat"],
+ "workers_dev":true,
+ "preview_urls":false,
+ "vars":{"ALLOWED_ORIGINS":"https://logos-card-battle.netlify.app,http://localhost:5173,http://127.0.0.1:5173","MATCH_SECONDS":"0","RECONNECT_SECONDS":"30"},
+ "durable_objects":{"bindings":[{"name":"BATTLE","class_name":"BattleArena"}]},
+ "migrations":[{"tag":"v1","new_sqlite_classes":["BattleArena"]}],
+ "observability":{"enabled":false}
+}

@@ -1,0 +1,113 @@
+/* v0.9: visual viewport stage, separate field and hand, shared distribution/score HUD. */
+:root{--game-height:100dvh;--game-width:100vw;--game-top:0px;--game-left:0px}
+.build-version{position:fixed;left:calc(var(--game-left) + max(9px,env(safe-area-inset-left)));top:calc(var(--game-top) + var(--game-height) - max(6px,env(safe-area-inset-bottom)) - 12px);bottom:auto;z-index:100;font-size:10px;line-height:1.2;color:#85768e;pointer-events:none;font-variant-numeric:tabular-nums}
+.field-feedback-wrap>.return-all-icon{position:absolute;left:7px;top:7px;z-index:10;display:grid;place-items:center;width:32px;height:32px;min-height:32px;padding:0;border-radius:50%;background:#fffdf9e8;color:#74608e;box-shadow:0 2px 8px #74608e18}
+.table-feedback-row{height:46px;margin:0;background:#eee8f2;border-radius:14px;position:relative}
+.table-feedback-slot{display:none}
+.table-feedback-row.feedback-active{background:#fff;box-shadow:0 3px 16px #84709026}
+.table-feedback-row.feedback-active .table-feedback-slot{position:absolute;inset:0;display:grid;place-items:center;z-index:5;background:#fff;border-radius:inherit;pointer-events:none}
+.table-feedback-row.feedback-active .draw-gauge{visibility:hidden;pointer-events:none}
+.table-feedback-row .draw-gauge.compact-deck.draw-request-control{position:relative;width:100%;height:100%;inset:auto;margin:0;padding:0;transform:none;border:0;background:none}
+.draw-gauge.compact-deck::before,.draw-gauge.compact-deck::after{display:none}
+.table-feedback-row .deck-request-button{width:100%;height:100%;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;gap:12px;overflow:hidden;border:1px solid #d0c4db;border-radius:14px;background:#eee8f2;box-shadow:none;padding:0 12px;color:#6c577e}
+.table-feedback-row .deck-request-button>strong,.table-feedback-row .deck-request-button>span:not(.deck-request-fill):not(.deck-progress),.table-feedback-row .deck-request-button>small{position:relative;inset:auto;z-index:1;line-height:1;font-size:12px;color:inherit;white-space:nowrap}
+.table-feedback-row .deck-request-button>strong{font-size:15px}.table-feedback-row .deck-request-button>small{opacity:.65;font-size:10px}
+.table-feedback-row .deck-request-button:disabled{opacity:1}
+.table-feedback-row .deck-request-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#d4e7c2,#c5dbaf);border-right:2px solid #abc98f;transition:width .2s linear;pointer-events:none}
+.deck-progress{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.table-feedback-row .leader-deal-button{position:absolute;right:5px;top:50%;transform:translateY(-50%);z-index:2;min-height:24px;padding:4px 8px;font-size:9px;border-radius:8px}
+.table-feedback-row .deal-flight{top:50%;left:50%;z-index:6;pointer-events:none}
+.table-feedback-row .deck-request-button.awaiting-consent{animation:none}
+.table-feedback-row .deck-request-button.last-consent{animation:none}
+@keyframes last-consent-shake{0%,50%,100%{transform:none}10%,30%{transform:translateX(-2px)}20%,40%{transform:translateX(2px)}}
+.table-feedback-slot .score-calculation.score-only{position:relative;width:100%;height:100%;background:#fff;border-radius:14px;isolation:isolate;font-size:34px;line-height:1;font-weight:900;overflow:visible;letter-spacing:-1px;text-align:center}
+.table-feedback-slot .judgment.score-only-judgment.invalid{display:flex;flex-direction:column;gap:3px;background:#fff}
+.table-feedback-slot .judgment.invalid strong{font-size:17px}.table-feedback-slot .judgment.invalid small{font-size:10px}
+.score-detonation{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:-1}
+.score-shockwave{position:absolute;width:26px;height:26px;border:3px solid currentColor;border-radius:50%;animation:score-shockwave .55s ease-out both}
+.score-spark{position:absolute;width:5px;height:10px;border-radius:3px;background:currentColor;transform:rotate(var(--spark-angle));animation:score-spark .5s ease-out both}
+.score-detonation.finished .score-shockwave{border-width:5px;animation-duration:.75s}.score-detonation.finished .score-spark{width:7px;height:13px;--burst-scale:1.6;animation-duration:.7s}
+.score-calculation[data-beat="0"]>.rolling-number{animation:score-kick-a .23s ease-out}.score-calculation[data-beat="1"]>.rolling-number{animation:score-kick-b .23s ease-out}
+@keyframes score-kick-a{0%{transform:scale(1.6) rotate(-7deg);filter:brightness(1.35)}60%{transform:scale(.94) rotate(3deg)}100%{transform:none}}
+@keyframes score-kick-b{0%{transform:scale(1.6) rotate(7deg);filter:brightness(1.35)}60%{transform:scale(.94) rotate(-3deg)}100%{transform:none}}
+@keyframes score-shockwave{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(4.5)}}
+@keyframes score-spark{0%{opacity:1;transform:rotate(var(--spark-angle)) translateY(-8px) scale(1)}100%{opacity:0;transform:rotate(var(--spark-angle)) translateY(calc(-1 * var(--spark-distance) * var(--burst-scale,1))) scale(.1)}}
+@keyframes table-impact-a{0%,100%{transform:none}15%{transform:translate(-3px,2px) rotate(-.15deg)}40%{transform:translate(3px,-2px)}65%{transform:translate(-1px,1px)}}
+@keyframes table-impact-b{0%,100%{transform:none}15%{transform:translate(3px,2px) rotate(.15deg)}40%{transform:translate(-3px,-2px)}65%{transform:translate(1px,1px)}}
+@keyframes table-burst{0%,100%{transform:none}15%{transform:translate(-5px,3px) scale(1.006)}30%{transform:translate(5px,-3px)}45%{transform:translate(-3px,2px)}65%{transform:translate(2px,-1px)}}
+.score-building[data-score-beat="0"] .field-feedback-wrap{animation:table-impact-a .24s ease-out}.score-building[data-score-beat="1"] .field-feedback-wrap{animation:table-impact-b .24s ease-out}
+.score-burst .field-feedback-wrap{animation:table-burst .6s ease-out}
+.table-player:has(.rolling-number.rolling) strong{animation:table-impact-a .18s linear infinite;text-shadow:0 0 16px #b99fe8}
+@media(orientation:landscape){
+ html,body,#root{height:100%;overflow:hidden;overscroll-behavior:none}
+ .shell{position:fixed;left:var(--game-left);top:var(--game-top);width:var(--game-width);height:var(--game-height);min-height:0;max-width:none;overflow:hidden}
+ .shell:has(.battle){padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(0px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));height:var(--game-height)}
+ .shell .battle{--hand-stage-height:calc(clamp(80px,calc(var(--game-height)*.18),145px)*1.72 + 42px);position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:88px 44px minmax(0,1fr) var(--hand-stage-height);gap:5px;height:100%;min-height:0;padding:0;overflow:visible}
+ .battle .table-scoreboard{grid-row:1;grid-column:1;min-height:0}.battle .table-player{height:100%;min-height:0}
+ .battle .round-strip{display:none}
+ .battle .table-feedback-row{grid-row:2;grid-column:1;height:100%;align-self:stretch;z-index:12;pointer-events:auto}
+ .battle .field-feedback-wrap{grid-row:3;grid-column:1;height:100%;min-height:0;container-type:size;overflow:visible}
+ .battle .field-feedback-wrap .sentence-area{height:100%;min-height:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-items:center;justify-content:flex-start;padding:6px 8px;gap:8px}
+ .battle .sentence-area>.sentence-card:first-of-type{margin-left:auto}.battle .sentence-area>.sentence-card:last-of-type{margin-right:auto}
+ .battle .field-feedback-wrap .sentence-card{width:clamp(40px,calc((100cqh - 16px)*.704),160px);min-width:40px;max-width:none;flex:none;margin-top:0;margin-bottom:0}
+ .battle .empty-sentence{width:100%;text-align:center;align-items:center}
+ .battle .field-feedback-wrap .sentence-actions{position:absolute;left:auto;right:7px;bottom:7px;transform:none;width:auto;height:30px;display:flex;flex-direction:row;justify-content:center;align-items:center;margin:0;z-index:6}
+ .battle .field-feedback-wrap .sentence-actions .submit{width:auto;min-width:125px;min-height:30px;padding:6px 14px!important;white-space:nowrap;font-size:12px}
+ .battle>div.battle-hand-zone:last-child{grid-row:4;grid-column:1;position:relative;left:auto;right:auto;bottom:auto;height:100%;min-height:0;padding:0;z-index:8;background:transparent;overflow:visible;pointer-events:auto}
+ .battle .battle-hand-zone .hand-container{position:absolute;inset:0 0 42px;height:auto;overflow:visible}
+ .battle .hand.hand-fan{position:absolute;left:0;right:0;bottom:0;height:var(--fan-height)!important;overflow:visible}
+ .battle .hand.hand-fan .game-card{top:2px}
+ .battle .hand.hand-spread{height:100%;padding:0 44px 0 0;align-items:flex-start}.battle .hand.hand-spread .game-card{flex:0 0 var(--mobile-hand-width);width:var(--mobile-hand-width)}
+ .battle .hand-emote-control{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);margin:0}.battle .hand-layout-toggle{right:0;top:0}
+ .battle .field-feedback-wrap .opponent-field-preview{height:100%;padding-bottom:38px}
+ .quick-home,.match-screen,.result{height:100%;max-height:100%}
+ .settings-trigger{--settings-size:38px;top:calc(var(--game-top) + var(--game-height) - max(8px,env(safe-area-inset-bottom)) - var(--settings-size));bottom:auto;width:var(--settings-size);height:var(--settings-size)}
+ .game-settings{top:calc(var(--game-top) + var(--game-height)*.5);max-height:calc(var(--game-height) - 24px)}
+ .special-backdrop,.decision-backdrop,.settings-backdrop,.card-inspect-backdrop{top:var(--game-top);left:var(--game-left);width:var(--game-width);height:var(--game-height);bottom:auto;right:auto}
+ .special-backdrop>section{max-height:calc(var(--game-height) - 16px)}
+}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .shell .battle{--hand-stage-height:calc(clamp(60px,calc(var(--game-height)*.19),88px)*1.42 + 40px);grid-template-rows:56px 34px minmax(0,1fr) var(--hand-stage-height);gap:4px}
+ .shell[data-fullscreen="true"]:has(.battle){padding-top:max(14px,env(safe-area-inset-top));padding-bottom:max(8px,env(safe-area-inset-bottom))}
+ .battle .table-player{padding:3px 6px}.table-player .character-avatar{--profile-size:28px}.table-player .player-last-action{font-size:8px!important}
+ .battle .battle-hand-zone .hand-container{bottom:28px}
+ .battle .field-feedback-wrap .sentence-area{padding:5px 7px;gap:5px;border-radius:17px}
+ .battle .field-feedback-wrap .sentence-card{width:clamp(32px,calc((100cqh - 14px)*.704),160px);min-width:32px}
+ .battle .field-feedback-wrap>.return-all-icon{width:26px;height:26px;min-height:26px;left:5px;top:5px;padding:0}
+ .battle .field-feedback-wrap .sentence-actions{bottom:5px;height:27px}
+ .battle .field-feedback-wrap .sentence-actions .submit{font-size:10px;min-width:114px;min-height:27px;padding:4px 12px!important}
+ .table-feedback-slot .score-calculation.score-only{font-size:27px}
+ .table-feedback-row .deck-request-button>strong{font-size:13px}.table-feedback-row .deck-request-button>span:not(.deck-request-fill):not(.deck-progress){font-size:10px}.table-feedback-row .deck-request-button>small{font-size:9px}
+}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .shell .battle{grid-template-rows:50px 28px minmax(0,1fr) var(--hand-stage-height);gap:3px}.settings-trigger{--settings-size:32px}
+ .battle .field-feedback-wrap .sentence-area{padding-top:4px;padding-bottom:4px}.battle .field-feedback-wrap .sentence-card{width:clamp(28px,calc((100cqh - 12px)*.704),160px);min-width:28px}
+ .table-feedback-slot .score-calculation.score-only{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){
+ .score-detonation{display:none}.score-calculation>.rolling-number,.score-building .field-feedback-wrap,.score-burst .field-feedback-wrap,.table-player:has(.rolling-number.rolling) strong,.table-feedback-row .deck-request-button{animation:none!important}
+}
+.table-feedback-row .deck-request-button>.deck-request-fill{position:absolute;left:0;top:0;bottom:0;z-index:0}
+.field-feedback-wrap:has(.opponent-field-preview)>.return-all-icon,.field-feedback-wrap:has(.opponent-field-preview)>.sentence-actions{display:none}
+
+/* Buttons overlay the full-height card lane; do not reserve a button row. */
+.battle .sentence-card,.battle .sentence-card .illustration{border-radius:3px}
+.battle .hand .game-card,.battle .hand .game-card .illustration{border-radius:4px}
+.table-feedback-row .deck-request-button>strong{color:#655f69;background:#88818c24;border-radius:7px;padding:4px 8px;font-weight:600}
+.table-feedback-row .deck-request-button>.deck-request-action{font-weight:800}
+.table-feedback-row .deck-request-button.awaiting-consent,.table-feedback-row .deck-request-button.last-consent{animation:none;transform:none}
+
+/* Compact two-line consent display, with communication outside clipped profile details. */
+.table-feedback-row .deck-request-button{flex-direction:column;gap:2px;padding:2px 10px}
+.table-feedback-row .deck-request-button>strong{font-size:12px;padding:1px 7px;line-height:1}
+.table-feedback-row .deck-request-button>.deck-request-caption{font-size:10px;line-height:1.1;color:#756b7d}
+.table-feedback-row .deck-request-button.last-consent::after{display:none}
+.battle .table-scoreboard{overflow:visible;position:relative;z-index:20}
+.battle .table-player,.battle .table-player.self{overflow:visible;position:relative}
+.battle .table-player .player-last-action{position:absolute;left:0;bottom:calc(100% + 3px);top:auto;z-index:25;display:block;box-sizing:border-box;width:max-content;max-width:100%;padding:5px 8px;border-radius:10px;background:#fffdf9;box-shadow:0 3px 12px #66517424;border:1px solid #e0d5e7;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;font-size:10px!important;line-height:1.2;text-align:center;color:#7f5866!important}
+.battle .table-player .player-last-action::after{content:'';position:absolute;left:18px;top:100%;border:4px solid transparent;border-top-color:#fffdf9}
+.battle .table-player .character-avatar{flex:none;display:inline-block;visibility:visible;opacity:1}
+.battle .table-player .character-avatar>img{display:block;width:100%;height:100%;object-fit:cover;opacity:1;visibility:visible}
+.battle .table-player .reaction-bubble{top:4px;left:auto;right:28px;font-size:26px!important;line-height:1;display:grid;place-items:center;width:34px;height:34px;padding:0}
+@media(orientation:landscape){.shell:has(.battle),.shell[data-fullscreen="true"]:has(.battle){padding-top:max(38px,env(safe-area-inset-top))}}
+@media(orientation:landscape) and (pointer:coarse){.battle .table-player .player-last-action{font-size:9px!important;padding:4px 6px}}

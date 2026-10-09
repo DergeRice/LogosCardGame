@@ -1,0 +1,27 @@
+.table-player .player-profile-hit{display:flex;align-items:center;gap:10px;flex:1;min-width:0;min-height:0;padding:0;background:transparent;text-align:left;align-self:stretch}
+.table-player .player-profile-hit:hover{transform:none}
+.table-player .player-profile-details{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;overflow:hidden}
+.table-player .player-profile-details>b{color:var(--ink)}
+.table-player.viewing{border-color:#6e9a61;box-shadow:0 0 0 2px #9aca7a}
+.table-player{height:140px;overflow:visible}
+.table-player .mini-hand-preview{display:flex;align-items:center;width:100%;height:27px;overflow:hidden;padding-left:2px}
+.mini-hand-preview img{display:block;flex:0 0 19px;width:19px;height:26px;object-fit:cover;border:1px solid #9bac91;border-radius:3px;background:#fff;box-shadow:0 1px 2px #17291a33}
+.mini-hand-preview img+img{margin-left:-7px}
+.opponent-field-preview{display:flex;flex-direction:column;width:100%;height:176px;min-height:0;overflow:hidden;border:1px solid #a9bea0;border-radius:16px;background:linear-gradient(110deg,#e8f0e3,#f8f8f1)}
+.opponent-preview-heading{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex:none;padding:5px 8px 2px;color:#38533c;font-size:12px}
+.opponent-preview-heading button{order:-1;width:28px;height:25px;padding:0;border-radius:6px;background:#dbe8d4;font-size:19px;line-height:1}
+.opponent-preview-scroll{display:flex;align-items:flex-start;gap:12px;flex:1;min-height:0;overflow-x:auto;overflow-y:hidden;padding:0 8px 6px;scrollbar-width:thin}
+.opponent-preview-group{flex:none;display:flex;flex-direction:column;gap:3px;min-width:42px;max-width:none}
+.opponent-preview-group>small{color:#657968;font-size:9px;font-weight:800;white-space:nowrap}
+.opponent-preview-cards{display:flex;gap:3px;min-height:0}
+.opponent-preview-cards img{display:block;flex:none;width:72px;aspect-ratio:488/693;object-fit:cover;border:1px solid #9aac93;border-radius:4px;background:white}
+.opponent-preview-empty{font-size:10px;color:#839183;white-space:nowrap}
+.battle-hand-zone{position:relative}
+.hand-emote-control{position:absolute;z-index:45;left:0;bottom:6px}
+.emoji-trigger{display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid #a9bca0;border-radius:50%;background:#fffef6;box-shadow:0 2px 8px #17291a33;font-size:21px}
+.emoji-options{position:absolute;left:0;bottom:calc(100% + 6px);display:flex;gap:4px;width:max-content;padding:6px;border:1px solid #9db690;border-radius:10px;background:#fffef6;box-shadow:0 5px 15px #17291a44}
+.emoji-options button{width:32px;height:32px;padding:0;border-radius:7px;background:#eaf1e3;font-size:20px}
+@media(max-width:600px){.table-player{height:118px}.table-player .player-profile-hit{gap:5px}.table-player .mini-hand-preview{height:20px}.mini-hand-preview img{flex-basis:14px;width:14px;height:19px}.mini-hand-preview img+img{margin-left:-5px}.opponent-preview-cards img{width:54px}}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){.table-player,.table-player.self{height:56px}.table-player .player-profile-hit{gap:4px}.table-player .mini-hand-preview{height:13px}.mini-hand-preview img{flex-basis:10px;width:10px;height:13px}.mini-hand-preview img+img{margin-left:-4px}.field-feedback-wrap .opponent-field-preview{height:100%;border-radius:10px}.opponent-preview-heading{height:29px;padding:3px 5px 1px;font-size:9px}.opponent-preview-heading button{width:22px;height:21px;font-size:15px}.opponent-preview-scroll{gap:8px;padding:0 5px 3px}.opponent-preview-group{gap:1px}.opponent-preview-group>small{font-size:7px}.opponent-preview-cards img{width:min(50px,calc((100dvh - 150px)*.24))}.hand-emote-control{bottom:4px;left:3px}.emoji-trigger{width:26px;height:26px;font-size:16px}.emoji-options{padding:3px}.emoji-options button{width:24px;height:24px;font-size:15px}}
+@media(orientation:landscape) and (max-height:400px) and (pointer:coarse){.table-player,.table-player.self{height:48px}}
+

@@ -1,0 +1,19 @@
+import { test, expect, type Page } from '@playwright/test';
+async function enter(p:Page,_name:string){await p.goto('/');await expect(p.getByTestId('guest-name')).toHaveText(/게스트 \d{4}/);await expect(p.getByRole('heading',{name:'대전방',exact:true})).toBeVisible();await expect(p.getByText('ONLINE',{exact:true})).toBeVisible();}
+async function score(p:Page){await p.getByRole('button',{name:'손패 펼쳐 보기'}).click();await p.getByRole('button',{name:'대명사 카드 선택',exact:true}).first().dragTo(p.getByLabel('문장 조합 영역'));await p.getByRole('button',{name:'일반동사 카드 선택',exact:true}).first().click();await p.getByRole('button',{name:'문장 제출'}).click();await expect(p.getByTestId('my-score')).toHaveText('14');}
+test('two isolated browser sessions play a normal 90 second match, reload, rematch, disconnect grace',async({browser})=>{
+ const ca=await browser.newContext(),cb=await browser.newContext();const a=await ca.newPage(),b=await cb.newPage();const errors:string[]=[];for(const p of [a,b])p.on('pageerror',e=>errors.push(e.message));
+ await enter(a,'문장가');await enter(b,'도전자');await a.getByRole('button',{name:'새 대전방 만들기'}).click();const code=await a.getByTestId('room-code').innerText();await b.getByLabel('방번호로 참가').fill(code);await b.getByRole('button',{name:'참가 ↗',exact:true}).click();
+ await a.getByRole('button',{name:'준비 완료',exact:true}).click();await b.getByRole('button',{name:'준비 완료',exact:true}).click();await expect(a.getByLabel('문장 조합 영역')).toBeVisible();await expect(b.getByLabel('문장 조합 영역')).toBeVisible();await a.waitForTimeout(1200);
+ await Promise.all([score(a),score(b)]);await a.reload();await expect(a.getByTestId('my-score')).toHaveText('14');
+ await a.screenshot({path:'test-results/desktop-battle.png',fullPage:true});
+ await expect(a.getByText('팽팽했던 한 판.',{exact:true})).toBeVisible({timeout:95_000});await expect(b.getByText('팽팽했던 한 판.',{exact:true})).toBeVisible();
+ await a.getByRole('button',{name:'한 판 더! 재대결'}).click();await b.getByRole('button',{name:'한 판 더! 재대결'}).click();await expect(a.getByTestId('my-score')).toHaveText('0');
+ await cb.close();await expect(a.getByText('당신의 문장이 이겼어요.',{exact:true})).toBeVisible({timeout:60_000});await expect(a.getByText(/재접속 유예시간이 끝났어요/).first()).toBeVisible();expect(errors).toEqual([]);await ca.close();
+});
+test('mobile touch card order and AI plays a normal 90 second match through result and rematch',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});const page=await context.newPage();const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await enter(page,'모바일');await page.getByLabel('AI 난이도').selectOption('hard');await page.getByRole('button',{name:'AI 대전 시작',exact:true}).tap();await page.getByRole('button',{name:'준비 완료',exact:true}).tap();await expect(page.getByLabel('문장 조합 영역')).toBeVisible();
+ await page.getByRole('button',{name:'손패 펼쳐 보기'}).tap();await page.getByRole('button',{name:'일반동사 카드 선택',exact:true}).first().tap();await page.getByRole('button',{name:'대명사 카드 선택',exact:true}).first().tap();await page.getByRole('button',{name:'2번 카드 왼쪽 이동',exact:true}).tap();await page.getByRole('button',{name:'2번 카드 되돌리기',exact:true}).tap();await page.getByRole('button',{name:'일반동사 카드 선택',exact:true}).first().tap();await page.getByRole('button',{name:'문장 제출'}).tap();await expect(page.getByTestId('my-score')).toHaveText('14');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/mobile-battle.png',fullPage:true});
+ await expect(page.getByRole('button',{name:'한 판 더! 재대결'})).toBeVisible({timeout:95_000});await page.screenshot({path:'test-results/mobile-result.png',fullPage:true});await page.getByRole('button',{name:'한 판 더! 재대결'}).tap();await expect(page.getByTestId('my-score')).toHaveText('0');expect(errors).toEqual([]);await context.close();
+});

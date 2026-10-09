@@ -1,0 +1,16 @@
+{
+  "compared": 457893,
+  "cases": 457893,
+  "mismatches": 0,
+  "sourceSha256": "9aba7a2f54289abec9c381526055891ed8ef0375eb8042540c382cd4d731eb47",
+  "fields": [
+    "valid",
+    "patternType",
+    "usedStartIndex",
+    "usedLength",
+    "message",
+    "debugLog"
+  ],
+  "enumeration": "19 POS, lengths 0..4 exhaustive; 15000 seeded longer cases plus curated branches; segment(false), segment(true), Check",
+  "examples": []
+}

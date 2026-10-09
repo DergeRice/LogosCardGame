@@ -1,0 +1,76 @@
+.fullscreen-button{font-size:19px;line-height:1;color:#435d45;background:#e9f0e4}
+:fullscreen .shell{max-width:none;width:100%;min-height:100dvh}
+
+/* A phone reports its CSS viewport, often about 844 × 390, even on a 1920 × 1080 display. */
+@media (orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ html:has(.battle),body:has(.battle),body:has(.battle) #root{height:100%;overflow:hidden}
+ .shell:has(.battle){max-width:none;width:100%;height:100dvh;min-height:0;padding:0 max(7px,env(safe-area-inset-right)) 0 max(7px,env(safe-area-inset-left));overflow:hidden}
+ .shell:has(.battle) .game-toolbar{position:absolute;z-index:90;top:max(2px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));height:24px;padding:0;gap:4px}
+ .game-toolbar .toolbar-action{font-size:9px;padding:3px 6px;max-height:23px}
+ .game-toolbar .icon-button{width:24px;height:24px;font-size:16px}
+ .game-toolbar .connection{margin-right:0}
+ .battle{height:100dvh;min-height:0;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:22px 56px 24px minmax(70px,1fr) 28px 126px;gap:2px;padding:2px 0 max(3px,env(safe-area-inset-bottom))}
+ .battle-caption{grid-row:1;justify-content:flex-start;gap:12px;padding:0 2px;font-size:8px;line-height:20px;letter-spacing:.4px;white-space:nowrap}
+ .battle-caption b{margin-left:3px;letter-spacing:1px}
+ .battle-caption .text-button{padding:2px;font-size:9px}
+ .table-scoreboard{grid-row:2;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:4px;min-height:0}
+ .table-player,.table-player.self{min-height:0;height:56px;padding:3px 5px;gap:4px;border-radius:8px;overflow:hidden}
+ .table-player .character-avatar{--profile-size:29px;border-width:1px}
+ .table-player div{gap:0;min-width:0}
+ .table-player small,.table-player span:not(.character-avatar){font-size:8px;line-height:1.1}
+ .table-player b{font-size:10px;line-height:1.2}
+ .table-player strong{font-size:19px;flex:none}
+ .table-player .player-last-action{font-size:7px!important}
+ .table-player .player-sentence-preview{height:13px;min-height:0}
+ .player-sentence-preview img{width:9px;height:13px;flex-basis:9px}
+ .round-strip{grid-row:3;align-items:center;justify-content:space-between;min-height:0;height:24px;padding:0 2px;font-size:9px;gap:4px}
+ .round-strip>span:first-child{max-width:35%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .round-strip>span:last-child{white-space:nowrap}
+ .reaction-bar button{width:22px;height:22px;font-size:14px;border-radius:5px}
+ .table-feedback-row{grid-row:4;grid-column:1;z-index:3;height:37px;align-self:start;pointer-events:none}
+ .table-feedback-slot{inset:0 51px;pointer-events:none}
+ .table-feedback-slot .score-calculation.score-only{font-size:27px}
+ .table-feedback-row .draw-gauge.compact-deck.draw-request-control{width:43px;height:47px;top:5px;right:4px;transform:none;margin:0;pointer-events:auto}
+ .draw-request-control .deck-request-button svg{top:2px;width:20px;height:27px}
+ .draw-request-control .deck-request-button span{font-size:7px;bottom:2px;line-height:1}
+ .field-feedback-wrap{grid-row:4;grid-column:1;min-height:0;overflow:hidden}
+ .field-feedback-wrap .sentence-area{height:100%;min-height:0;min-width:0;justify-content:flex-start;align-content:center;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:5px;padding:40px 7px 4px;border-radius:10px}
+ .field-feedback-wrap .sentence-card{flex:0 0 auto;width:min(63px,calc((100dvh - 100px)*.75));max-width:none;min-width:43px;margin:0}
+ .field-feedback-wrap .sentence-card>small{top:2px;left:2px;font-size:7px}
+ .field-feedback-wrap .drop-preview{flex:0 0 60px;max-width:60px}
+ .field-feedback-wrap .empty-sentence{width:100%;gap:2px;line-height:1.1}
+ .empty-sentence>span{font-size:17px}.empty-sentence b{font-size:9px}.empty-sentence small{font-size:7px}
+ .sentence-actions{grid-row:5;height:28px;min-height:0;margin:0;align-self:center}
+ .sentence-actions>span,.sentence-actions .text-button{font-size:9px}
+ .sentence-actions .submit{min-width:110px;min-height:25px;padding:3px 8px!important;font-size:10px;border-radius:6px}
+ .sentence-actions .submit span{font-size:15px}
+ .battle>div:last-child{grid-row:6;min-height:0;overflow:hidden}
+ .battle .hand-container{height:100%;min-height:0;overflow:visible}
+ .battle .hand.hand-fan{height:100%!important;overflow:visible}
+ .battle .hand.hand-fan .game-card{top:2px}
+ .battle .hand-layout-toggle{width:27px;height:27px;right:2px;top:0}
+ .battle .hand-layout-toggle svg{width:16px;height:16px}
+ .battle .hand.hand-spread{height:100%;padding:0 30px 0 0;align-items:flex-start}
+ .battle .hand.hand-spread .game-card{flex:0 0 80px;width:80px}
+ .battle .hand-empty{padding:30px 8px;font-size:10px}
+ .draw-vote-panel{top:31px;right:max(8px,env(safe-area-inset-right));width:min(260px,42vw);padding:8px;border-radius:9px}
+ .draw-vote-person .character-avatar{--profile-size:24px}
+ .draw-vote-person b{font-size:10px}.draw-vote-person small,.draw-vote-panel>span{font-size:8px}
+ .draw-vote-actions{margin-top:5px}.draw-vote-actions button{padding:4px 6px;font-size:10px}
+ .battle>.connection-banner{position:fixed;z-index:70;left:10px;bottom:8px;margin:0;padding:5px 8px;font-size:9px}
+ .decision-backdrop{padding:8px}.go-dialog{max-width:430px;padding:12px}.go-dialog h1{font-size:26px;margin:5px}.go-dialog>strong{font-size:22px}.go-dialog>small{margin-top:7px}.go-actions{margin-top:9px}.go-actions button{padding:9px;font-size:13px}
+ .special-backdrop{padding:5px}.special-backdrop>section{max-height:94dvh;overflow:auto}
+ .toast{top:28px;padding:7px 10px;font-size:10px}
+}
+
+@media (orientation:landscape) and (max-height:400px) and (pointer:coarse){
+ .battle{grid-template-rows:20px 48px 22px minmax(60px,1fr) 26px 138px}
+ .table-player,.table-player.self{height:48px}
+ .table-player .character-avatar{--profile-size:25px}
+ .table-player .player-sentence-preview{display:none!important}
+ .round-strip{height:22px}
+ .field-feedback-wrap .sentence-area{padding-top:35px}
+ .field-feedback-wrap .sentence-card{width:min(55px,calc((100dvh - 100px)*.75))}
+ .battle .hand.hand-spread .game-card{flex-basis:70px;width:70px}
+}
+

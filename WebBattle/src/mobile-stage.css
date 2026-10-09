@@ -1,0 +1,70 @@
+/* Keep emoji controls in their own row under the hand, on every screen size. */
+.battle-hand-zone{display:flex;flex-direction:column;align-items:stretch;padding-bottom:4px}
+.hand-emote-control{position:relative;left:auto;bottom:auto;align-self:center;flex:none;margin-top:4px}
+.emoji-options{left:50%;transform:translateX(-50%)}
+.deck-request-button.awaiting-consent{animation:consent-pulse 1.4s ease-in-out infinite;border-color:#66843c}
+@keyframes consent-pulse{50%{box-shadow:0 0 0 4px #96b94c55,0 0 18px #b4ce6899;filter:brightness(1.13)}}
+@media(prefers-reduced-motion:reduce){.deck-request-button.awaiting-consent{animation:none;outline:2px solid #8eae44}}
+/* Mobile landscape is a fixed viewport stage. Card lists scroll inside their own area. */
+@media(orientation:landscape) and (pointer:coarse){
+ html,body,#root{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+ .shell{width:100%;max-width:none;height:100dvh;min-height:0;overflow:hidden;padding:0 max(8px,env(safe-area-inset-right)) 0 max(8px,env(safe-area-inset-left))}
+ .shell>.game-toolbar{position:absolute;right:max(8px,env(safe-area-inset-right));top:max(2px,env(safe-area-inset-top));z-index:90;height:26px;padding:0;gap:4px;flex-wrap:nowrap}
+ .shell>.connection-banner{position:fixed;z-index:95;bottom:5px;left:8px;margin:0;padding:5px 8px;font-size:10px}
+ .quick-home{height:100dvh;max-width:100%;margin:0;padding:30px 5vw 10px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto auto auto;column-gap:6vw;align-items:center;justify-items:center}
+ .quick-home h1{grid-column:1;grid-row:1;margin:0;font-size:clamp(24px,5dvh,52px);letter-spacing:-1px}
+ .home-profile{grid-column:1;grid-row:2;font-size:12px}
+ .quick-art{grid-column:2;grid-row:1 / 4;margin:0;width:280px;height:min(260px,60dvh)}
+ .quick-art .original-demo{width:min(120px,26dvh);height:auto;left:calc(50% - min(60px,13dvh));top:15%}
+ .quick-art .demo-0{transform:translateX(-65px) rotate(-17deg)}.quick-art .demo-2{transform:translateX(65px) rotate(17deg)}
+ .quick-home .quick-start{grid-column:1;grid-row:3;min-width:210px;padding:10px 20px;margin-top:10px;font-size:18px}
+ .quick-home>p{display:none}.quick-rules{grid-column:1 / -1;grid-row:4;gap:12px;margin-top:8px;font-size:9px}
+ .quick-rules span+span:before{margin-right:12px}
+ .match-screen{height:100dvh;min-height:0;padding:30px 12px 8px;gap:8px;overflow:hidden}
+ .match-screen h1{font-size:clamp(22px,5dvh,42px);margin:0}.match-screen .eyebrow{font-size:8px}
+ .matching-orbit{margin:0;padding:10px}.matching-orbit .character-avatar{--profile-size:clamp(50px,18dvh,110px)}
+ .matching-slots{margin:0;gap:8px}.matching-slots>span,.matching-slots .character-avatar{width:32px;height:32px;--profile-size:32px}
+ .match-screen>strong{font-size:12px}.match-screen>.text-button{padding:4px}
+ .versus-layout{flex:1;min-height:0;margin:0;gap:12px;width:min(980px,100%)}
+ .match-profile .character-avatar{--profile-size:clamp(60px,24dvh,150px)}
+ .rival-profiles:has(>div:nth-child(2)) .character-avatar{--profile-size:clamp(42px,17dvh,86px)}
+ .rival-profiles{flex-wrap:nowrap;gap:8px}.match-profile small,.match-profile>span{margin-top:4px;font-size:8px;letter-spacing:0}.match-profile h3{font-size:13px;margin:4px 0;overflow-wrap:anywhere}.vs-mark{font-size:clamp(28px,10dvh,72px)}
+ .versus-screen>p{font-size:10px;margin:0}
+ .result{height:100dvh;min-height:0;max-width:100%;margin:0;padding:30px 10px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+ .result-emblem{font-size:clamp(22px,8dvh,70px);margin:0;line-height:1}.result h1{font-size:clamp(20px,5dvh,38px);margin:0}.result>.muted{margin:0;font-size:10px}
+ .result-scores{width:100%;flex-wrap:nowrap;gap:8px;margin:4px 0}.result-scores>div{flex:1;min-width:0;gap:3px}.result-scores strong{font-size:clamp(22px,7dvh,45px)}.result-scores span{font-size:10px}.result-scores b{font-size:8px;letter-spacing:0}
+ .result>.primary{padding:8px 14px;min-width:230px;font-size:12px}.result>.text-button,.result>p{margin:0;padding:3px;font-size:10px}
+ .battle{height:100dvh;min-height:0;overflow:hidden}
+ .battle-hand-zone .hand-container{flex:1;min-height:0}
+ .battle .battle-hand-zone{overflow:visible}
+ .hand-emote-control{left:auto;bottom:auto;margin-top:0}
+ .emoji-trigger{width:26px;height:26px;font-size:16px}
+ .special-backdrop>section{display:flex;flex-direction:column;max-height:calc(100dvh - 12px);overflow:hidden}
+ .special-dialog>h2{flex:none;margin:0 0 6px;font-size:16px}
+ .rob-all-cards,.exchange-picker{flex:1;min-height:0;overflow:auto}
+ .special-actions{flex:none;margin-top:6px}
+}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .battle{grid-template-rows:22px 56px 22px minmax(70px,1fr) 28px 146px}
+ .battle .hand-container{height:auto}
+ .battle .hand.hand-fan{height:100%!important}
+ .battle .hand.hand-spread .game-card{flex-basis:68px;width:68px}
+ .field-feedback-wrap .sentence-card{width:clamp(36px,15dvh,63px);min-width:36px}
+ .field-feedback-wrap .sentence-area{padding-top:34px}
+}
+@media(orientation:landscape) and (max-height:400px) and (pointer:coarse){
+ .battle{grid-template-rows:20px 48px 20px minmax(64px,1fr) 26px 124px}
+ .battle .hand.hand-spread .game-card{flex-basis:54px;width:54px}
+ .round-strip{height:20px}
+ .go-dialog p{font-size:11px;margin:6px 0}.go-dialog>small{margin-top:5px}
+ .special-dialog{padding:8px}.exchange-pair{margin:3px 0}.exchange-pair>div{width:45px}.special-dialog>p{margin:4px 0;font-size:10px}
+ .exchange-quick-replies{margin-top:5px;padding-top:5px;gap:4px}.exchange-quick-replies>small{display:none}
+}
+@media(orientation:landscape) and (min-height:901px) and (pointer:coarse){.shell>.game-toolbar{height:35px;top:3px}.battle{padding-top:40px}.battle .hand-container{flex:none}}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .draw-request-control .deck-request-button strong{top:5px;font-size:11px}
+ .draw-request-control .deck-request-button span{bottom:13px;font-size:7px;line-height:1}
+ .draw-request-control .deck-request-button small{bottom:4px;font-size:5px;line-height:1}
+}
+
+

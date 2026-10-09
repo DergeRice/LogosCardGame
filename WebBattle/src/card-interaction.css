@@ -1,0 +1,25 @@
+.game-card,.pointer-field .sentence-card{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pointer-field .sentence-card{cursor:grab;flex-shrink:0;align-self:center;margin:8px 0;min-width:78px;transition:none;background:transparent;box-shadow:0 4px 10px #20381920}
+.pointer-field .sentence-card:hover:not(:disabled){transform:none;outline:2px solid #789758;outline-offset:3px}
+.drag-source{opacity:0!important;pointer-events:none!important}
+.pointer-field{position:relative;align-items:center;gap:12px}
+.drop-preview{flex:0 0 104px;aspect-ratio:488/693;border:2px dashed #698d3e;border-radius:10px;background:#d8eab783;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#4a6930;gap:8px;pointer-events:none}.drop-preview b{font-size:24px}.drop-preview span{font-size:11px}
+.hand-return-target{outline:2px dashed #8dba64;outline-offset:5px;background:#dbeec14d;border-radius:20px}
+.field-feedback-wrap{position:relative}.correct-effect{position:absolute;inset:0;pointer-events:none;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#eff6dbea;border-radius:18px;animation:correct-pop 2.2s both;color:#4e783b}.correct-effect strong{font-size:clamp(36px,6vw,58px);font-style:italic;letter-spacing:-2px}.correct-effect span{font-size:19px;font-weight:800}.correct-effect small{font-size:12px}.correct-effect.confirmed{color:#836223;background:#fcf0cbeb}
+@keyframes correct-pop{0%{opacity:0;transform:scale(.9)}12%,75%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.03)}}
+.used-cards{font-size:12px;color:#74816e;border-top:1px solid #d6dfd0;padding:15px 0}.used-cards summary{cursor:pointer}.used-cards>div{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.used-cards>div>span{width:65px}.used-cards .illustration{width:100%;aspect-ratio:488/693;border-radius:6px}
+.draw-gauge{width:min(600px,100%);margin:12px auto 24px;padding:15px 20px;border:1px solid #d7dfcf;border-radius:16px;background:#ffffff70}.draw-gauge-header{display:flex;justify-content:space-between;gap:10px;font-size:12px}.draw-gauge-track{height:14px;background:#dfe5d8;border-radius:20px;overflow:hidden;margin:12px 0 8px}.draw-gauge-fill{height:100%;background:linear-gradient(90deg,#819b5c,#bad878);border-radius:inherit;transition:width .2s linear}.draw-gauge small{font-size:11px;color:#798771}.draw-gauge.exhausted .draw-gauge-fill{background:#aab4a1}.draw-gauge.initial-deal{min-height:0}.draw-gauge .deal-flight{left:50%;top:55%}
+@media(max-width:600px){.drop-preview{flex-basis:calc(33.333% - 9px);max-width:104px}.pointer-field{gap:10px}.correct-effect span{font-size:16px}.draw-gauge{padding:12px 14px;margin:8px auto 15px}}
+@media(prefers-reduced-motion:reduce){.correct-effect{animation:none}.draw-gauge-fill{transition:none}}
+.draw-gauge.compact-deck{position:relative;width:48px;height:68px;margin:12px 6px 12px auto;padding:0;border:0;border-radius:7px;background:transparent}
+.compact-deck::before,.compact-deck::after{content:'';position:absolute;inset:0;border:1px solid #aab89b;border-radius:7px;background:#e3e9d9;transform:translate(5px,-4px);z-index:0}
+.compact-deck::after{transform:translate(2px,-2px)}
+.deck-charge-card{position:relative;z-index:1;width:100%;height:100%;overflow:hidden;border:1px solid #7e9467;border-radius:7px;background:#e5ebdc;box-shadow:0 3px 8px #30472318}
+.deck-charge-fill{position:absolute;inset:auto 0 0;background:linear-gradient(0deg,#83a657,#c5db92);transition:height .2s linear}
+.deck-charge-card svg{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);fill:none;stroke:#58713e;stroke-width:1.2}
+.compact-deck.exhausted{opacity:.38}
+.hand-container{position:relative}
+.hand-layout-toggle{position:absolute;right:0;top:0;z-index:30;width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#7c8b71;cursor:pointer}
+.hand-layout-toggle:hover,.hand-layout-toggle:focus-visible{background:#dde7d0;color:#3d5e28}
+.hand.hand-spread{padding-top:42px}
+@media(prefers-reduced-motion:reduce){.deck-charge-fill{transition:none}}

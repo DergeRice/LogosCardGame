@@ -1,0 +1,1 @@
+{"extends":"./tsconfig.json","compilerOptions":{"lib":["ES2022"],"types":["@cloudflare/workers-types","node"],"noEmit":true},"include":["cloudflare","server/game.ts","server/persistence.ts","server/ai.ts","shared"]}

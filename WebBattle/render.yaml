@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: logos-battle
+    runtime: node
+    plan: free
+    rootDir: WebBattle
+    buildCommand: npm ci --include=dev && npm run build:server
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 24
+      - key: NODE_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://logos-card-battle.netlify.app
+      - key: MATCH_SECONDS
+        value: 90
+      - key: RECONNECT_SECONDS
+        value: 30

@@ -1,0 +1,204 @@
+/* Soft tabletop palette; adjust these tokens to direct the game's appearance. */
+:root{--bg:#f7f4ee;--ink:#373442;--muted:#7a7482;--accent:#e9d9ff;--line:#e4dedf;--panel:#fffcf8;--table-plum:#74608e;--table-peach:#edc7ae;--table-mint:#dce9df;font-family:'Noto Sans KR',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(ellipse at 90% 100%,#e5ede5 0,transparent 58%),radial-gradient(ellipse at 0 0,#f1e5f1 0,transparent 55%),#f7f4ee}
+button.primary{background:#74608e;border-radius:18px;box-shadow:0 4px 0 #5e4c73,0 8px 18px #74608e18}
+button.primary:hover:not(:disabled){background:#806b99}
+button.primary:disabled{box-shadow:none}
+.primary span{color:#f2e8ff}
+.secondary{border-radius:16px;background:#ece7f1;border-color:#dcd2e4}
+.icon-button,.emoji-trigger,.hand-layout-toggle{border-color:#e2d9e7;background:#fffcf8;box-shadow:0 3px 10px #75648712}
+.game-toolbar .toolbar-action{color:#71617e;background:#eee6f3;border:0;border-radius:999px;font-weight:700}
+.game-toolbar .toolbar-action.active{background:#74608e;color:white}
+.table-player,.table-player.self{border:1px solid #ffffffb8;border-radius:20px;background:#fffaf5c9;box-shadow:0 4px 15px #7d63830b}
+.table-player.self{background:#eee5f5;border-color:#d8c8e6}
+.table-player.viewing{border-color:#af98c4;box-shadow:0 0 0 2px #d7c6e7}
+.table-player strong{color:#74608e;font-variant-numeric:tabular-nums}
+.table-player small{letter-spacing:.3px;color:#8e8197}
+.character-avatar{border-color:#fffaf6;box-shadow:0 2px 7px #55445e15}
+.sentence-area{border:1px solid #e3d9e7;background:linear-gradient(145deg,#fffaf5,#f1eaf5);box-shadow:inset 0 0 0 4px #ffffff5c;border-radius:24px}
+.empty-sentence{color:#9b89aa}.empty-sentence small{display:none}
+.hand .game-card .illustration,.sentence-card .illustration{border-radius:9px;image-rendering:auto;backface-visibility:hidden}
+.card-readable-label{position:absolute;left:3px;top:-19px;display:flex;align-items:center;gap:3px;max-width:calc(100% - 6px);padding:2px 5px;min-height:18px;border-radius:7px;background:#fffcf8;color:#4d415b;box-shadow:0 1px 5px #4433501c;font-size:10px;font-weight:800;line-height:1.25;white-space:nowrap;pointer-events:none}
+.card-readable-label i{font-style:normal;color:#c16c45}
+.sentence-card .card-readable-label{top:auto;bottom:-21px;left:50%;transform:translateX(-50%);max-width:none}
+.sentence-card>small{border-radius:50%;background:#fffaf6;color:#756482}
+.emoji-options{background:#fffcf8;border-color:#e0d4e7;border-radius:18px;padding:7px;box-shadow:0 8px 25px #66517422}
+.emoji-options button{border-radius:11px;background:#f2eaf6}
+.special-dialog,.go-dialog{background:#fffcf8;border:1px solid #e6dbea;border-radius:24px;box-shadow:0 20px 80px #2c21372e}
+.special-backdrop,.decision-backdrop{background:#35253e85;backdrop-filter:blur(8px)}
+.special-actions>button:not(.primary),.exchange-quick-replies button{border-radius:12px;background:#f0e9f4;border-color:#dfd1e8;color:#695575}
+.exchange-column{background:#f8f3f9;border-color:#e9deed;border-radius:15px}
+.exchange-cards button.selected,.rob-card-choice button.selected{border-color:#9c7abb;background:#eadcf5}
+.opponent-field-preview{background:linear-gradient(130deg,#faf4fd,#f9f8f0);border-color:#d9cbe3;border-radius:24px}
+.quick-home h1 em{color:#8c719d}.quick-start{border-radius:24px!important}
+.match-profile .character-avatar{box-shadow:0 0 0 8px #fff8,0 12px 35px #8b719922}
+.vs-mark{color:#cf947f;text-shadow:0 4px 0 #fff8}
+.result-scores>div{padding:12px;border-radius:22px;background:#fffcf8b8}.result-scores strong{color:#80628e}
+.card-readable-label{display:none}
+
+.table-player strong span{font-size:inherit!important;color:inherit!important}
+.compact-deck::before,.compact-deck::after{border-color:#d9c9e3;background:#eee4f3;border-radius:13px}
+.text-button{color:#776581}.empty-sentence{color:#826d92}
+@media(pointer:coarse){.hand.hand-spread .game-card{touch-action:pan-x}}
+.card-preload-screen{height:100dvh;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 20% 10%,#eee2f1,transparent 65%),#f7f4ee;color:#74617f}
+.card-preload-icon{color:#aa8fbe}.card-preload-screen small{color:#8e7f97}
+.card-preload-track{background:#e5dce9}.card-preload-track>span{background:#b29bc5}
+/* Status previews use readable, ordered word blocks; the playing cards keep their original faces. */
+.table-player .mini-hand-preview,.table-player .player-sentence-preview{display:flex!important;align-items:center;height:22px;min-height:0;gap:3px;overflow:hidden;padding:0;flex:none}
+.table-player .played-sentence{display:flex;gap:3px;flex:none;padding-right:5px;border-right:1px solid #d8cbe0}
+.table-player .status-card-block{display:inline-flex;align-items:center;flex:none;gap:2px;white-space:nowrap;padding:3px 5px;border-radius:5px;background:#eae2f2;color:#69517e;font-size:11px;line-height:1.1;font-weight:700}
+.table-player .status-card-block[data-kind="count"],.table-player .status-card-block[data-kind="mass"]{background:#e1ebdf;color:#53714e}
+.table-player .status-card-block[data-kind="verb"],.table-player .status-card-block[data-kind="be"]{background:#f4dfd6;color:#9b624a}
+.table-player .status-card-block[data-kind="adjective"]{background:#e0e9f6;color:#526d96}
+.table-player .status-card-block i{font-style:normal;font-size:.9em;opacity:.8}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .table-player .player-profile-details{gap:1px}
+ .table-player .player-profile-details>small{display:none}
+ .table-player .mini-hand-preview,.table-player .player-sentence-preview{height:16px;gap:2px}
+ .table-player .status-card-block{font-size:10px;padding:2px 4px;border-radius:4px}
+ .table-player .player-last-action{font-size:9px!important}
+ .table-player,.table-player.self{height:64px;border-radius:13px}
+ .battle{--mobile-hand-row:calc(clamp(60px,19dvh,88px)*1.42 + 50px);grid-template-rows:22px 64px 12px minmax(70px,1fr) 28px var(--mobile-hand-row)}
+ .round-strip{height:12px}
+ .field-feedback-wrap{container-type:size}
+ .field-feedback-wrap .sentence-area{padding:22px 7px 4px;align-items:center}
+ .field-feedback-wrap .sentence-card{width:clamp(30px,calc((100cqh - 28px)*.704),88px);min-width:30px}
+ .battle .hand.hand-spread .game-card{flex-basis:var(--mobile-hand-width);width:var(--mobile-hand-width)}
+}
+@media(orientation:landscape) and (max-height:400px) and (pointer:coarse){
+ .battle{grid-template-rows:20px 60px 10px minmax(64px,1fr) 26px var(--mobile-hand-row)}
+ .table-player,.table-player.self{height:60px}
+ .round-strip{height:10px}
+}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .battle{grid-template-rows:20px 56px 0px minmax(42px,1fr) 26px var(--mobile-hand-row)}
+}
+
+
+/* Mobile card sizing: retain the bottom hand and scroll only the modal card lists. */
+@media(pointer:coarse) and (max-width:1024px){
+ .exchange-cards{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+ .rob-card-choice{flex-basis:106px}
+ .rob-card-owner{height:36px;font-size:11px}
+ .rob-card-owner .character-avatar{--profile-size:22px}
+ .exchange-pair>div{width:100px}
+}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .exchange-cards{grid-template-columns:repeat(auto-fill,clamp(80px,25dvh,112px));gap:8px;max-height:none;overflow:visible}
+ .exchange-picker{min-height:0;align-items:start}
+ .rob-card-choice{flex-basis:clamp(80px,25dvh,112px)}
+ .rob-all-cards{gap:8px;max-height:none}
+ .rob-card-owner{height:30px;font-size:10px}
+ .rob-card-owner .character-avatar{--profile-size:20px}
+ .exchange-pair>div{width:clamp(72px,22dvh,100px)}
+ .exchange-player-name{font-size:11px}
+ .exchange-column h3{font-size:12px}
+}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .field-feedback-wrap .sentence-area{padding-top:20px}
+ .field-feedback-wrap .sentence-card{width:clamp(26px,calc((100cqh - 26px)*.704),63px);min-width:26px}
+}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .special-dialog:has(.exchange-pair){padding:8px}
+ .special-dialog:has(.exchange-pair)>p{font-size:11px;margin:4px 0}
+ .special-dialog:has(.exchange-pair) .exchange-quick-replies>small{display:none}
+ .special-dialog:has(.exchange-pair) .exchange-sender{margin:3px 0;font-size:11px}
+ .special-dialog:has(.exchange-pair) .exchange-sender .character-avatar{--profile-size:26px}
+ .special-dialog:has(.exchange-pair) .exchange-pair{flex:none;margin:3px 0;gap:14px}
+ .special-dialog:has(.exchange-pair) .special-actions button{padding:6px 12px;min-height:30px;font-size:12px}
+ .special-dialog:has(.exchange-pair) .exchange-quick-replies{gap:4px;margin-top:4px;padding-top:4px}
+ .special-dialog:has(.exchange-pair) .exchange-quick-replies button{padding:4px 6px;font-size:10px}
+}
+
+.rob-notice-backdrop{z-index:180}
+.rob-notice{width:min(480px,96vw)}
+.rob-notice-body{display:flex;align-items:center;justify-content:center;gap:20px}
+.rob-notice-body>.illustration{width:110px;height:auto;aspect-ratio:488/693;border-radius:9px;flex:none}
+.rob-notice-body p{font-size:14px;line-height:1.8}
+.rob-notice-body strong{color:#9d5c49}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .table-player,.table-player.self{height:56px}
+ .round-strip{visibility:hidden;height:0}
+ .field-feedback-wrap .sentence-area{padding-top:12px;padding-bottom:4px}
+ .field-feedback-wrap .sentence-card{width:clamp(20px,calc((100cqh - 18px)*.704),88px);min-width:20px}
+ .rob-notice{padding:12px}
+ .rob-notice-body>.illustration{width:88px}
+ .rob-notice-body p{margin:4px 0;font-size:12px}
+}
+
+
+.quick-home .quick-start{justify-content:center;text-align:center;gap:14px;margin-left:auto;margin-right:auto}
+.table-player .mini-hand-preview{overflow-x:auto;scrollbar-width:none}
+@media(orientation:landscape) and (pointer:coarse){.quick-home .quick-start{grid-column:1 / -1;justify-self:center}.quick-home .quick-art{grid-row:1 / 3}}
+
+/* Only the final outstanding voter gets the stronger draw invitation. */
+.deck-request-button.awaiting-consent.last-consent{animation:last-consent-shake 1.25s ease-in-out infinite;border-color:#b9984f;box-shadow:0 0 0 3px #f0d58d88,0 0 22px #e7bc58aa}
+.deck-request-button.last-consent::after{content:'';position:absolute;inset:-30% -80%;pointer-events:none;background:linear-gradient(105deg,transparent 40%,#fff9cfcc 50%,transparent 60%);animation:last-consent-shine 1.8s ease-in-out infinite}
+@keyframes last-consent-shake{0%,55%,100%{transform:rotate(0)}10%,30%{transform:rotate(-6deg)}20%,40%{transform:rotate(6deg)}65%{filter:brightness(1.2)}}
+@keyframes last-consent-shine{0%,20%{transform:translateX(-65%)}75%,100%{transform:translateX(65%)}}
+@media(prefers-reduced-motion:reduce){.deck-request-button.awaiting-consent.last-consent,.deck-request-button.last-consent::after{animation:none}.deck-request-button.last-consent::after{display:none}}
+
+/* Controls live in a bottom-right settings drawer, leaving the table clear. */
+.settings-trigger{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));z-index:130;width:38px;height:38px;border-radius:50%;background:#fffcf8;color:#74608e;border:1px solid #dacde5;box-shadow:0 3px 12px #5b426426;font-size:24px;display:grid;place-items:center;padding:0}
+.settings-backdrop{position:fixed;inset:0;z-index:125;background:#392a4733}
+.game-settings{position:fixed;left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);z-index:130;width:min(290px,calc(100vw - 20px));max-height:calc(100dvh - 68px);overflow:auto;padding:14px;border:1px solid #dacde5;border-radius:20px;background:#fffcf8;box-shadow:0 10px 40px #46334f33}
+.settings-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;color:#74608e}
+.settings-heading button{background:#eee5f5;border-radius:50%;width:28px;height:28px;padding:0;font-size:22px}
+.shell .game-settings .game-toolbar{position:static!important;display:flex;flex-direction:column;align-items:stretch;height:auto!important;padding:0;gap:8px;flex-wrap:nowrap}
+.shell .game-settings .game-toolbar button{width:100%;height:auto;min-height:36px;max-height:none;white-space:normal;padding:9px 12px;text-align:center;justify-content:center;font-size:13px;border-radius:10px;background:#efe7f5;color:#69517e;border:0}
+.game-settings .connection{align-self:flex-end}.settings-leave{color:#ab5c55!important}
+.field-feedback-wrap .sentence-actions{position:absolute;bottom:7px;left:9px;right:9px;z-index:6;margin:0;height:30px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.field-feedback-wrap .sentence-area{padding-bottom:48px}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .battle{grid-template-rows:64px 12px minmax(80px,1fr) var(--mobile-hand-row);gap:2px;padding-top:max(3px,env(safe-area-inset-top))}
+ .table-scoreboard{grid-row:1}.round-strip{grid-row:2}.table-feedback-row,.field-feedback-wrap{grid-row:3;grid-column:1}.battle>div.battle-hand-zone:last-child{grid-row:4}
+ .field-feedback-wrap .sentence-area{padding:24px 8px 38px;border-radius:18px}
+ .field-feedback-wrap .sentence-card{width:clamp(34px,calc((100cqh - 66px)*.704),108px);min-width:34px}
+ .field-feedback-wrap .sentence-actions{bottom:6px;left:9px;right:9px;height:27px;grid-row:auto}
+ .field-feedback-wrap .sentence-actions .submit{min-height:27px;padding:4px 14px!important;border-radius:10px;min-width:110px}
+ .field-feedback-wrap .sentence-actions .text-button{font-size:10px;padding:5px 9px;background:#fffcf8c9;border-radius:10px}
+}
+@media(orientation:landscape) and (max-height:400px) and (pointer:coarse){.battle{grid-template-rows:60px 10px minmax(76px,1fr) var(--mobile-hand-row)}}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .battle{grid-template-rows:56px 0 minmax(66px,1fr) var(--mobile-hand-row)}
+ .field-feedback-wrap .sentence-area{padding-top:16px;padding-bottom:36px}
+ .field-feedback-wrap .sentence-card{width:clamp(30px,calc((100cqh - 56px)*.704),108px);min-width:30px}
+ .settings-trigger{width:32px;height:32px;font-size:21px}
+}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .field-feedback-wrap .sentence-area{padding:24px 134px 6px 8px}
+ .field-feedback-wrap .sentence-card{width:clamp(34px,calc((100cqh - 34px)*.704),108px);min-width:34px}
+ .field-feedback-wrap .sentence-actions{left:auto;right:8px;bottom:7px;width:118px;height:auto;flex-direction:column-reverse;gap:4px;align-items:stretch}
+ .field-feedback-wrap .sentence-actions .submit{min-width:0;width:100%}
+ .field-feedback-wrap .sentence-actions .text-button{text-align:center;min-height:23px}
+}
+@media(orientation:landscape) and (max-height:350px) and (pointer:coarse){
+ .field-feedback-wrap .sentence-area{padding-top:16px;padding-right:122px}
+ .field-feedback-wrap .sentence-card{width:clamp(30px,calc((100cqh - 26px)*.704),108px);min-width:30px}
+ .field-feedback-wrap .sentence-actions{width:106px}
+}
+
+/* Floating controls never reserve table space. Popups share a centered presentation. */
+.game-settings,.special-dialog,.go-dialog{text-align:center}
+.settings-heading{position:relative;justify-content:center;min-height:28px}
+.settings-heading>button{position:absolute;right:0;top:0}
+.special-actions,.special-targets,.exchange-sender,.exchange-player-name,.exchange-quick-replies{justify-content:center}
+.exchange-player-name small{margin-left:0}
+.exchange-cards{justify-content:center}
+.special-dialog button{text-align:center}
+.rob-all-cards{justify-content:center}
+.rob-notice-body{text-align:center}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .battle{--mobile-hand-row:calc(clamp(60px,19dvh,88px)*1.42 + 40px);padding-top:max(8px,env(safe-area-inset-top));padding-bottom:0}
+ .battle-hand-zone{position:relative;padding-bottom:0}
+ .battle-hand-zone .hand-container{flex:none;height:calc(100% - 28px)}
+ .battle-hand-zone .hand-emote-control{position:absolute;left:50%;bottom:0;transform:translateX(-50%);margin:0}
+ .settings-trigger{position:fixed;margin:0}
+}
+.hand .game-card .illustration{display:block}
+.special-targets button{justify-content:center}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){
+ .field-feedback-wrap .sentence-actions .submit{white-space:nowrap;gap:4px;padding-left:8px!important;padding-right:8px!important}
+ .field-feedback-wrap .sentence-actions .submit span{font-size:12px;flex:none}
+}
+

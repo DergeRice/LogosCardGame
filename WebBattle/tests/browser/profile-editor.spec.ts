@@ -1,0 +1,14 @@
+import {test,expect} from '@playwright/test';
+for(const touch of [false,true])test(`private profile editor: ${touch?'touch':'mouse'} pan, card library and PNG`,async({browser})=>{
+ const ctx=await browser.newContext(touch?{viewport:{width:390,height:844},isMobile:true,hasTouch:true}:{viewport:{width:1100,height:950}}),page=await ctx.newPage();const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+ try{
+  await page.goto('/');await expect(page.locator('#preview')).toHaveAttribute('src',/^data:image\/png/);const canvas=page.locator('#crop');await canvas.scrollIntoViewIfNeeded();const first=await canvas.evaluate(e=>(e as HTMLCanvasElement).toDataURL());const r=(await canvas.boundingBox())!;
+  if(touch){const cdp=await ctx.newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x+r.width*.4,y:r.y+r.height*.4}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:r.x+r.width*.4+35,y:r.y+r.height*.4+25}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();}else{await page.mouse.move(r.x+r.width*.4,r.y+r.height*.4);await page.mouse.down();await page.mouse.move(r.x+r.width*.4+35,r.y+r.height*.4+25,{steps:8});await page.mouse.up();}
+  expect(await canvas.evaluate(e=>(e as HTMLCanvasElement).toDataURL())).not.toBe(first);
+  await page.getByRole('button',{name:'카드에서 이미지 불러오기'}).click();await expect(page.locator('#card-library')).toBeVisible();await expect(page.locator('#card-library-grid button')).toHaveCount(39);await page.locator('#card-library-grid [data-face="pronoun-x2"]').click();await expect(page.locator('#card-library')).not.toBeVisible();await expect(page.getByRole('status')).toContainText('이미지를 불러왔어요');
+  expect(await canvas.evaluate(e=>(e as HTMLCanvasElement).toDataURL())).not.toBe(first);await page.locator('#zoom').fill('1.5');await page.locator('#zoom').dispatchEvent('input');
+  const download=page.waitForEvent('download');await page.getByRole('button',{name:'PNG 다운로드'}).click();const file=await download;expect(file.suggestedFilename()).toBe('pronoun.png');await file.saveAs('.runtime/profile-crop-'+(touch?'touch':'mouse')+'.png');
+  let saved:any;await page.route('**/save',async route=>{saved=route.request().postDataJSON();await route.fulfill({json:{url:'/profiles/pronoun.png'}})});await page.getByRole('button',{name:'크롭 저장',exact:true}).click();await expect(page.getByRole('status')).toContainText('저장했습니다');expect(saved.kind).toBe('pronoun');expect(saved.image).toMatch(/^data:image\/png;base64,/);const bytes=Buffer.from(saved.image.split(',')[1],'base64');expect(bytes.readUInt32BE(16)).toBe(512);expect(bytes.readUInt32BE(20)).toBe(512);expect(errors).toEqual([]);
+  await page.screenshot({path:'docs/screenshots/profile-editor-'+(touch?'touch':'mouse')+'.png',fullPage:true});
+ }finally{await ctx.close()}
+});
