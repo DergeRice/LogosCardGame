@@ -38,3 +38,13 @@ test('legacy cloud vote migrates to the 30-second shared consent timer',t=>{
  assert.equal(nextDeadline(fresh),now+fresh.dealMs);
 });
 
+
+test('exhausted four-player match gives a final chance, survives restart and settles the actual winner',t=>{
+ let now=100000;t.mock.method(Date,'now',()=>now);
+ const game=new Game(),a=game.hello(socket(),null,'Me');game.quick(a);const r=game.rooms.get(a.room!)!;game.reveal(r);game.deal(r,5);game.begin(r);
+ r.deck=[];r.players.forEach(p=>p.nextAI=Infinity);a.score=36;r.players[3].score=66;r.goCount=2;
+ game.tick();assert.equal(r.phase,'battle');assert.equal(r.finalRound,true);assert.equal(r.endsAt,now+30000);
+ now+=10000;game.tick();assert.equal(r.endsAt,120000+10000);
+ const fresh=new Game();restore(fresh,snapshot(game));const saved=fresh.rooms.get(r.code)!;assert.equal(saved.endsAt,r.endsAt);assert.equal(saved.finalRound,true);
+ now+=20000;game.tick();assert.equal(r.phase,'result');assert.equal(r.winner,r.players[3].id);
+});

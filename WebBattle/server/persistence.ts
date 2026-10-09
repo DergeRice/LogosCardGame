@@ -35,7 +35,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
    r.nextDealAt=Date.now()+game.dealMs;
   }
   if(r.phase==='battle'&&r.nextDealAt>Date.now()+game.dealMs)r.nextDealAt=Date.now()+game.dealMs;
-  if(game.durationMs===0&&['reveal','dealing','battle'].includes(r.phase)){r.endsAt=0;r.expiresAt=0;}
+  if(game.durationMs===0&&['reveal','dealing','battle'].includes(r.phase)){if(!r.finalRound)r.endsAt=0;r.expiresAt=0;}
   if(r.decision&&!players.get(r.decision.playerId)?.ai)r.decision.expiresAt=0;
   game.rooms.set(r.code,{...r,players:r.players.map(id=>players.get(id)!).filter(Boolean)});
  }
