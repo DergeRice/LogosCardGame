@@ -372,3 +372,5 @@ npm run test:e2e
 - Git 브랜치web-battle, base WebBattle, command npm run build, publish dist, Node24, production VITE_WS_URL 기존 Cloudflare WSS 주소를 확인했습니다. netlify.toml·.nvmrc·README·DEPLOY 문서에도 기록했습니다.
 - 로컬 전체 운영 빌드(원본 카드39종 생성·TypeScript·Vite·Node 서버 컴파일) 통과. 게임 로직 변경 없이 버전v0.9.04로 식별합니다. Cloudflare 서버는 기존 배포를 유지하며 서버 코드 변경 시 별도 검사/배포가 필요합니다.
 - Git 연결로 원격 커밋7400049의 Netlify 빌드6ac88fd2c4027d38ba799d0f가 자동 시작되는 것을 확인했습니다.
+- 최초 Git 커밋의 Netlify 빌드6ac88fd2c4027d38ba799d0f 및 연결 후 문서 커밋5d2179b의 자동 빌드6ac8901c5993480008db1d1c가 모두 ready/published 상태인 것을 확인했습니다. 후자는 수동 배포 없이 GitHub push로 시작했고 웹훅 전달은204 OK였습니다.
+- 공개 사이트 검사3/3 통과(1.3분): 모바일 일반/시스템 바 축소 UI fixture2개에서 v0.9.04·레이아웃·프로필 로딩 실패 폴백을 확인하고, 독립 두 브라우저 실제 Cloudflare 대전1개에서 고유 덱·선택/반환·마우스/터치 드래그·전원 동의 배분·감정표현·VB 문법 제출 유지/무득점·새로고침 복귀를 확인했습니다. 실제 대전 검사에는 점수/승패 강제 변경이 없었고 브라우저 오류가 없었습니다. 게임 코드는 이후 변경하지 않고 검증 문서만 저장합니다.
