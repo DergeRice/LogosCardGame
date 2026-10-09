@@ -49,6 +49,7 @@ export function nextDeadline(game:Game):number|null{
   if(['reveal','dealing'].includes(r.phase)||(r.phase==='matching'&&r.players.some(p=>!p.ai&&p.socket?.readyState===1)))deadlines.push(r.stageEndsAt);
   if(['matching','reveal','dealing','battle'].includes(r.phase))for(const p of r.players)if(!p.ai&&p.disconnectedAt)deadlines.push(p.disconnectedAt+game.reconnectMs);
   if(r.phase==='battle'){
+   if(r.finalRound&&r.endsAt>0)deadlines.push(r.endsAt);
    if(r.exchange)deadlines.push(r.exchange.expiresAt);
    if(r.nextDealAt>0&&!r.decision)deadlines.push(r.nextDealAt);
    if(r.decision){if(r.decision.expiresAt>0)deadlines.push(r.decision.expiresAt);if(r.players.find(p=>p.id===r.decision!.playerId)?.ai)deadlines.push(r.decision.startedAt+1801);}
