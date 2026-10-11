@@ -44,12 +44,12 @@ public class LearningBattleTabBridge : MonoBehaviour
 
     public void CreateRoomUnsupported()
     {
-        SetStatus("방 만들기는 아직 지원하지 않습니다.");
+        LearningSceneLoader.LoadWebBattle();
     }
 
     public void JoinRoomUnsupported()
     {
-        SetStatus("참가하기는 아직 지원하지 않습니다.");
+        LearningSceneLoader.LoadWebBattle();
     }
 
     private void SetStatus(string text)

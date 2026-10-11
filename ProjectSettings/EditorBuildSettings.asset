@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01.Scene/5.BattleScreen.unity
     guid: 7ad9b8da58c1448b28725445c57e6781
+  - enabled: 1
+    path: Assets/01.Scene/6.WebBattleScreen.unity
+    guid: 7a1f0d13b8c66489fbaf718dc466a710
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: d815c504434ae448f86aff7cef96d4a2, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
