@@ -19,8 +19,7 @@ for(const template of templates){
  expanded.push([...before,'modal',...after],[...before,'frequency',...after],[...template,'adverb']);
  if(after[0]==='verb')expanded.push([...before,'do','not',...after]);
  else expanded.push([...before,'be','not',...after.slice(1)]);
- const adjectiveAt=template.indexOf('adjective');
- if(adjectiveAt>=0)expanded.push([...template.slice(0,adjectiveAt),'very',...template.slice(adjectiveAt)]);
+ if(after[0]==='verb')expanded.push([...before,'verb','to-infinitive','verb']);
  for(const noun of [['pronoun'],['mass']] as Kind[][])expanded.push([...template,'preposition',...noun]);
 }
 const candidates = expanded.filter(t => t.length <= 8).sort((a, b) => a.length - b.length);
