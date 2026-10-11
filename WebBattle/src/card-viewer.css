@@ -1,4 +1,6 @@
 .viewer-page{min-height:100dvh;color:#263b31;background:radial-gradient(circle at 90% 0%,#e9efdf 0,transparent 35%),#f8f6ec;font-family:system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif}
+html.card-viewer-route,html.card-viewer-route body,html.card-viewer-route #root{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto}
+html.card-viewer-route{touch-action:pan-y}
 .game-toolbar .card-viewer-link{display:inline-flex;align-items:center;text-decoration:none}
 .viewer-header{max-width:1440px;margin:auto;padding:24px clamp(20px,4vw,58px);display:flex;justify-content:space-between;align-items:center;gap:16px}
 .viewer-brand{text-decoration:none;color:#284e3c;font-weight:950;font-size:24px;letter-spacing:-1px}.viewer-brand span{display:block;font-size:9px;letter-spacing:3px;color:#718973}

@@ -184,7 +184,8 @@ function App() {
   {room?.decision && !scoreProgress.running && <div className="decision-backdrop"><section className="go-dialog" role="dialog" aria-label="고 스톱 선택"><div className="eyebrow">NEW HIGH SCORE · {room.highScore} PT</div><h1>{room.decision.playerId===room.you?'고? 스톱!':`${room.players.find(p=>p.id===room.decision?.playerId)?.name} 님의 선택`}</h1><p>{room.decision.playerId===room.you?'최고점을 갱신했어요. 판을 키울까요?':'잠시 기다려 주세요. 카드 지급과 경기 시간이 멈춥니다.'}</p>{room.decision.expiresAt>0&&<strong>{Math.max(0,Math.ceil((room.decision.expiresAt-now)/1000))}초</strong>}{room.decision.playerId===room.you&&<div className="go-actions"><button className="primary" disabled={!connected||room.goCount>=3} onClick={()=>send('choice',{decisionId:room.decision?.id,choice:'go'})}>{room.goCount>=3?'고 완료':'고!'}</button><button className="secondary" disabled={!connected} onClick={()=>send('choice',{decisionId:room.decision?.id,choice:'stop'})}>스톱!</button></div>}{room.decision.playerId===room.you&&<small>선택할 때까지 기다립니다</small>}</section></div>}
  </div>;
 }
-createRoot(document.getElementById('root')!).render(location.pathname.replace(/\/$/,'')==='/cards'?<CardViewer/>:<App/>);
-
+const cardViewerRoute=location.pathname.replace(/\/$/,'')==='/cards';
+document.documentElement.classList.toggle('card-viewer-route',cardViewerRoute);
+createRoot(document.getElementById('root')!).render(cardViewerRoute?<CardViewer/>:<App/>);
 
 

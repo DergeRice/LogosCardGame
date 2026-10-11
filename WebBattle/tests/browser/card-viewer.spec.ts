@@ -24,3 +24,20 @@ test('card viewer works in a narrow phone viewport',async({page})=>{
  await expect(page.locator('.viewer-tile')).toHaveCount(5);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+
+test('card viewer scrolls through the full deck in landscape',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:932,height:430},hasTouch:true,isMobile:true});
+ const phone=await context.newPage();
+ try{
+  await phone.goto('/cards');
+  await expect(phone.locator('.viewer-tile')).toHaveCount(60);
+  const before=await phone.evaluate(()=>({height:document.scrollingElement!.scrollHeight,top:scrollY,visible:innerHeight}));
+  expect(before.height).toBeGreaterThan(before.visible);
+  await phone.mouse.move(400,220);
+  await phone.mouse.wheel(0,600);
+  await expect.poll(()=>phone.evaluate(()=>scrollY)).toBeGreaterThan(0);
+  await phone.locator('.viewer-tile').last().scrollIntoViewIfNeeded();
+  expect(await phone.evaluate(()=>scrollY)).toBeGreaterThan(0);
+  await expect(phone.locator('.viewer-tile').last()).toBeInViewport();
+ }finally{await context.close();}
+});
