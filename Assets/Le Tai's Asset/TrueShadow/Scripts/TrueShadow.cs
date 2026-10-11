@@ -612,6 +612,8 @@ public partial class TrueShadow : UIBehaviour, IMeshModifier, ICanvasElement
 
     bool ShouldPerformWorks()
     {
+        if (!shadowRenderer) return false;
+
         bool areCanvasRenderersCulled = CanvasRenderer && CanvasRenderer.cull &&
                                         shadowRenderer.CanvasRenderer && shadowRenderer.CanvasRenderer.cull;
         return isActiveAndEnabled && !areCanvasRenderersCulled;
@@ -619,6 +621,8 @@ public partial class TrueShadow : UIBehaviour, IMeshModifier, ICanvasElement
 
     void LateUpdate()
     {
+        if (!shadowRenderer) return;
+
         shadowRenderer.gameObject.SetActive(Graphic && Graphic.isActiveAndEnabled);
 
         if (!ShouldPerformWorks())
@@ -645,6 +649,7 @@ public partial class TrueShadow : UIBehaviour, IMeshModifier, ICanvasElement
     void OnWillRenderCanvas()
     {
         if (!isActiveAndEnabled) return;
+        if (!shadowRenderer) return;
 
 #if LETAI_TRUESHADOW_DEBUG
         if (alwaysRender) textureDirty = true;

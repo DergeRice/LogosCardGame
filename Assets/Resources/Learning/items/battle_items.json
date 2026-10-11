@@ -1,0 +1,1124 @@
+{
+  "items": [
+    {
+      "itemId": "battle_b_01",
+      "displayName": "속도 압박 1",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_02",
+      "displayName": "대전 점수 쿠키 2",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_03",
+      "displayName": "대전 힌트 3",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_04",
+      "displayName": "속도 압박 4",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_05",
+      "displayName": "대전 점수 쿠키 5",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_06",
+      "displayName": "대전 힌트 6",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_07",
+      "displayName": "속도 압박 7",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_08",
+      "displayName": "대전 점수 쿠키 8",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_09",
+      "displayName": "대전 힌트 9",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_10",
+      "displayName": "속도 압박 10",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_11",
+      "displayName": "대전 점수 쿠키 11",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_12",
+      "displayName": "대전 힌트 12",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_13",
+      "displayName": "속도 압박 13",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_14",
+      "displayName": "대전 점수 쿠키 14",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_15",
+      "displayName": "대전 힌트 15",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_16",
+      "displayName": "속도 압박 16",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_17",
+      "displayName": "대전 점수 쿠키 17",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_18",
+      "displayName": "대전 힌트 18",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_19",
+      "displayName": "속도 압박 19",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_20",
+      "displayName": "대전 점수 쿠키 20",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_21",
+      "displayName": "대전 힌트 21",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_22",
+      "displayName": "속도 압박 22",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_23",
+      "displayName": "대전 점수 쿠키 23",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_24",
+      "displayName": "대전 힌트 24",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_25",
+      "displayName": "속도 압박 25",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_26",
+      "displayName": "대전 점수 쿠키 26",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_27",
+      "displayName": "대전 힌트 27",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_28",
+      "displayName": "속도 압박 28",
+      "description": "상대 풀이 압박 효과 예정",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_29",
+      "displayName": "대전 점수 쿠키 29",
+      "description": "이번 제출 점수 +40",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 40,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_b_30",
+      "displayName": "대전 힌트 30",
+      "description": "빈칸 하나의 답을 확인",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "RevealOneBlankAnswer",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_01",
+      "displayName": "강한 속도 압박 1",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_02",
+      "displayName": "대전 배율 부적 2",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_03",
+      "displayName": "대전 임시 카드 3",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_04",
+      "displayName": "강한 속도 압박 4",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_05",
+      "displayName": "대전 배율 부적 5",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_06",
+      "displayName": "대전 임시 카드 6",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_07",
+      "displayName": "강한 속도 압박 7",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_08",
+      "displayName": "대전 배율 부적 8",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_09",
+      "displayName": "대전 임시 카드 9",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_10",
+      "displayName": "강한 속도 압박 10",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_11",
+      "displayName": "대전 배율 부적 11",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_12",
+      "displayName": "대전 임시 카드 12",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_13",
+      "displayName": "강한 속도 압박 13",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_14",
+      "displayName": "대전 배율 부적 14",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_15",
+      "displayName": "대전 임시 카드 15",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_16",
+      "displayName": "강한 속도 압박 16",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_17",
+      "displayName": "대전 배율 부적 17",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_18",
+      "displayName": "대전 임시 카드 18",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_19",
+      "displayName": "강한 속도 압박 19",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_20",
+      "displayName": "대전 배율 부적 20",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_21",
+      "displayName": "대전 임시 카드 21",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_22",
+      "displayName": "강한 속도 압박 22",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_23",
+      "displayName": "대전 배율 부적 23",
+      "description": "이번 제출 점수 x1.2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.2
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_24",
+      "displayName": "대전 임시 카드 24",
+      "description": "임시 카드 2장 추가",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddTemporaryPosCards",
+          "intValue": 2,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_a_25",
+      "displayName": "강한 속도 압박 25",
+      "description": "상대 풀이 압박 강화 예정",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "ExtraTime",
+          "intValue": 4,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_01",
+      "displayName": "대전 역전 별 1",
+      "description": "이번 제출 점수 +300",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 300,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_02",
+      "displayName": "대전 황금 배율 2",
+      "description": "이번 제출 점수 x1.45",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.45
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_03",
+      "displayName": "대전 완충 보호막 3",
+      "description": "실수 1회를 보정",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "HealMistake",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_04",
+      "displayName": "대전 역전 별 4",
+      "description": "이번 제출 점수 +300",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 300,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_05",
+      "displayName": "대전 황금 배율 5",
+      "description": "이번 제출 점수 x1.45",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.45
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_06",
+      "displayName": "대전 완충 보호막 6",
+      "description": "실수 1회를 보정",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "HealMistake",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_07",
+      "displayName": "대전 역전 별 7",
+      "description": "이번 제출 점수 +300",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 300,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_08",
+      "displayName": "대전 황금 배율 8",
+      "description": "이번 제출 점수 x1.45",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.45
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_09",
+      "displayName": "대전 완충 보호막 9",
+      "description": "실수 1회를 보정",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "HealMistake",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_10",
+      "displayName": "대전 역전 별 10",
+      "description": "이번 제출 점수 +300",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 300,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_11",
+      "displayName": "대전 황금 배율 11",
+      "description": "이번 제출 점수 x1.45",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.45
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_12",
+      "displayName": "대전 완충 보호막 12",
+      "description": "실수 1회를 보정",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "HealMistake",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_13",
+      "displayName": "대전 역전 별 13",
+      "description": "이번 제출 점수 +300",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "AddScore",
+          "intValue": 300,
+          "floatValue": 0
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_14",
+      "displayName": "대전 황금 배율 14",
+      "description": "이번 제출 점수 x1.45",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "MultiplyScore",
+          "intValue": 0,
+          "floatValue": 0.45
+        }
+      ]
+    },
+    {
+      "itemId": "battle_s_15",
+      "displayName": "대전 완충 보호막 15",
+      "description": "실수 1회를 보정",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "BattleOnly",
+      "consumable": true,
+      "effects": [
+        {
+          "effectType": "HealMistake",
+          "intValue": 1,
+          "floatValue": 0
+        }
+      ]
+    }
+  ]
+}

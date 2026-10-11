@@ -1,0 +1,23 @@
+{
+  "cues": [
+    { "key": "ui_click", "resourcePath": "Learning/Feedback/Sfx_Click", "volume": 0.42, "pitchMin": 0.96, "pitchMax": 1.04, "enabled": true },
+    { "key": "learning_block_select", "resourcePath": "Learning/Feedback/Sfx_Card", "volume": 0.45, "pitchMin": 1.02, "pitchMax": 1.09, "enabled": true },
+    { "key": "learning_number_place", "resourcePath": "Learning/Feedback/Sfx_Card", "volume": 0.56, "pitchMin": 0.96, "pitchMax": 1.06, "enabled": true },
+    { "key": "learning_backspace", "resourcePath": "Learning/Feedback/Sfx_Click", "volume": 0.40, "pitchMin": 0.88, "pitchMax": 0.94, "enabled": true },
+    { "key": "learning_correct", "resourcePath": "Learning/Feedback/Sfx_Success", "volume": 0.82, "pitchMin": 1.00, "pitchMax": 1.00, "enabled": true },
+    { "key": "learning_wrong", "resourcePath": "Learning/Feedback/Sfx_Error", "volume": 0.55, "pitchMin": 1.00, "pitchMax": 1.00, "enabled": true },
+    { "key": "card_play", "resourcePath": "Learning/Feedback/Sfx_Card", "volume": 0.56, "pitchMin": 0.96, "pitchMax": 1.06, "enabled": true },
+    { "key": "card_return", "resourcePath": "Learning/Feedback/Sfx_Click", "volume": 0.42, "pitchMin": 0.94, "pitchMax": 1.00, "enabled": true },
+    { "key": "card_reorder", "resourcePath": "Learning/Feedback/Sfx_Click", "volume": 0.36, "pitchMin": 1.00, "pitchMax": 1.06, "enabled": true },
+    { "key": "submit_valid", "resourcePath": "Learning/Feedback/Sfx_Score", "volume": 0.44, "pitchMin": 1.00, "pitchMax": 1.00, "enabled": true },
+    { "key": "submit_invalid", "resourcePath": "Learning/Feedback/Sfx_Error", "volume": 0.55, "pitchMin": 1.00, "pitchMax": 1.00, "enabled": true },
+    { "key": "card_tick", "resourcePath": "Learning/Feedback/Sfx_Card", "volume": 0.45, "pitchMin": 0.96, "pitchMax": 1.06, "enabled": true },
+    { "key": "score_tick", "resourcePath": "Learning/Feedback/Sfx_Score", "volume": 0.44, "pitchMin": 0.98, "pitchMax": 1.07, "enabled": true },
+    { "key": "item_trigger", "resourcePath": "Learning/Feedback/Sfx_Score", "volume": 0.60, "pitchMin": 0.92, "pitchMax": 0.92, "enabled": true },
+    { "key": "round_start", "resourcePath": "Learning/Feedback/Sfx_Attack", "volume": 0.50, "pitchMin": 0.84, "pitchMax": 0.84, "enabled": true },
+    { "key": "projectile_fire", "resourcePath": "Learning/Feedback/Sfx_Attack", "volume": 0.70, "pitchMin": 1.00, "pitchMax": 1.00, "enabled": true },
+    { "key": "boss_hit", "resourcePath": "Learning/Feedback/Sfx_Hit", "volume": 0.76, "pitchMin": 0.92, "pitchMax": 1.02, "enabled": true },
+    { "key": "hp_drain", "resourcePath": "Learning/Feedback/Sfx_Hit", "volume": 0.38, "pitchMin": 1.12, "pitchMax": 1.12, "enabled": true },
+    { "key": "boss_clear", "resourcePath": "Learning/Feedback/Sfx_Clear", "volume": 0.80, "pitchMin": 1.00, "pitchMax": 1.00, "enabled": true }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "prototype": "legacy_room_number_01",
+  "generation": "spacy_dependency_v1",
+  "works": [
+    {
+      "id": "sherlock_holmes_adventures",
+      "title": "The Adventures of Sherlock Holmes",
+      "file": "sherlock_holmes_adventures.json",
+      "total": 6630,
+      "playable": 193,
+      "review": 0
+    },
+    {
+      "id": "secret_garden",
+      "title": "The Secret Garden",
+      "file": "secret_garden.json",
+      "total": 5882,
+      "playable": 265,
+      "review": 1
+    },
+    {
+      "id": "railway_children",
+      "title": "The Railway Children",
+      "file": "railway_children.json",
+      "total": 4257,
+      "playable": 201,
+      "review": 0
+    },
+    {
+      "id": "wonderful_wizard_of_oz",
+      "title": "The Wonderful Wizard of Oz",
+      "file": "wonderful_wizard_of_oz.json",
+      "total": 1999,
+      "playable": 21,
+      "review": 0
+    },
+    {
+      "id": "anne_of_green_gables",
+      "title": "Anne of Green Gables",
+      "file": "anne_of_green_gables.json",
+      "total": 6825,
+      "playable": 439,
+      "review": 1
+    },
+    {
+      "id": "treasure_island",
+      "title": "Treasure Island",
+      "file": "treasure_island.json",
+      "total": 3510,
+      "playable": 115,
+      "review": 0
+    },
+    {
+      "id": "happy_prince_and_other_tales",
+      "title": "The Happy Prince and Other Tales",
+      "file": "happy_prince_and_other_tales.json",
+      "total": 973,
+      "playable": 35,
+      "review": 0
+    },
+    {
+      "id": "the_four_million",
+      "title": "The Four Million",
+      "file": "the_four_million.json",
+      "total": 3310,
+      "playable": 229,
+      "review": 3
+    },
+    {
+      "id": "little_women",
+      "title": "Little Women",
+      "file": "little_women.json",
+      "total": 9326,
+      "playable": 161,
+      "review": 0
+    },
+    {
+      "id": "tale_of_peter_rabbit",
+      "title": "The Tale of Peter Rabbit",
+      "file": "tale_of_peter_rabbit.json",
+      "total": 110,
+      "playable": 4,
+      "review": 0
+    },
+    {
+      "id": "aesops_fables",
+      "title": "Aesop's Fables",
+      "file": "aesops_fables.json",
+      "total": 1797,
+      "playable": 85,
+      "review": 0
+    },
+    {
+      "id": "blue_castle",
+      "title": "The Blue Castle",
+      "file": "blue_castle.json",
+      "total": 5859,
+      "playable": 582,
+      "review": 0
+    }
+  ],
+  "totalSentences": 50478,
+  "playableSentences": 2330,
+  "seedCount": 1200,
+  "reviewRule": "Only high-confidence simple-clause analyses are in the playable seed. All other source sentences remain in their work file for editorial review."
+}

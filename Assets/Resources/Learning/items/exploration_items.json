@@ -1,0 +1,2879 @@
+{
+  "items": [
+    {
+      "itemId": "e_b_001",
+      "displayName": "일반동사 손질",
+      "description": "랜덤으로 1장 일반동사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Anvil"
+    },
+    {
+      "itemId": "e_b_002",
+      "displayName": "Be동사 손질",
+      "description": "랜덤으로 1장 Be동사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bag_0"
+    },
+    {
+      "itemId": "e_b_003",
+      "displayName": "셀없명사 손질",
+      "description": "랜덤으로 1장 셀없명사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀없명사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bag_1"
+    },
+    {
+      "itemId": "e_b_004",
+      "displayName": "대명사 손질",
+      "description": "랜덤으로 1장 대명사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Battery"
+    },
+    {
+      "itemId": "e_b_005",
+      "displayName": "셀있명사 손질",
+      "description": "랜덤으로 1장 셀있명사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Battery_Booster"
+    },
+    {
+      "itemId": "e_b_006",
+      "displayName": "형용사 손질",
+      "description": "랜덤으로 1장 형용사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bell"
+    },
+    {
+      "itemId": "e_b_007",
+      "displayName": "부사 손질",
+      "description": "랜덤으로 1장 부사 카드 추가 점수 +3",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "random_one",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bomb"
+    },
+    {
+      "itemId": "e_b_008",
+      "displayName": "일반동사 감각",
+      "description": "일반동사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bomb_Red"
+    },
+    {
+      "itemId": "e_b_009",
+      "displayName": "Be동사 감각",
+      "description": "Be동사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bone"
+    },
+    {
+      "itemId": "e_b_010",
+      "displayName": "셀없명사 감각",
+      "description": "셀없명사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀없명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Book_Blue"
+    },
+    {
+      "itemId": "e_b_011",
+      "displayName": "대명사 감각",
+      "description": "대명사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Book_Purple"
+    },
+    {
+      "itemId": "e_b_012",
+      "displayName": "셀있명사 감각",
+      "description": "셀있명사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Boss"
+    },
+    {
+      "itemId": "e_b_013",
+      "displayName": "형용사 감각",
+      "description": "형용사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Box"
+    },
+    {
+      "itemId": "e_b_014",
+      "displayName": "부사 감각",
+      "description": "부사가 트리거되면 추가 점수 +35",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 35,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bulb"
+    },
+    {
+      "itemId": "e_b_015",
+      "displayName": "1형식 훈련",
+      "description": "1형식 제출이면 추가 점수 +30",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternScore",
+          "intValue": 30,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "1형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Bullet"
+    },
+    {
+      "itemId": "e_b_016",
+      "displayName": "2형식 훈련",
+      "description": "2형식 제출이면 추가 점수 +30",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternScore",
+          "intValue": 30,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "2형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Burger"
+    },
+    {
+      "itemId": "e_b_017",
+      "displayName": "3형식 훈련",
+      "description": "3형식 제출이면 추가 점수 +30",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternScore",
+          "intValue": 30,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "3형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Cactus"
+    },
+    {
+      "itemId": "e_b_018",
+      "displayName": "4형식 훈련",
+      "description": "4형식 제출이면 추가 점수 +30",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternScore",
+          "intValue": 30,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "4형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Calendar"
+    },
+    {
+      "itemId": "e_b_019",
+      "displayName": "5형식 훈련",
+      "description": "5형식 제출이면 추가 점수 +30",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternScore",
+          "intValue": 30,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "5형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Camera_Blue"
+    },
+    {
+      "itemId": "e_b_020",
+      "displayName": "불타는 첫 문장",
+      "description": "시작 배수 +20, 제출마다 -1, 0이면 사라짐",
+      "rarity": "B",
+      "price": 5,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 20,
+      "maxStackValue": 20,
+      "stackResetTiming": "submit",
+      "removeWhenStackZero": true,
+      "effects": [
+        {
+          "effectType": "AddOpeningDecayMultiplier",
+          "intValue": 20,
+          "intValue2": 1,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "start_decay",
+          "stackDisplay": "stackValue",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Camera_Red"
+    },
+    {
+      "itemId": "e_b_021",
+      "displayName": "낡은 증폭기",
+      "description": "배수 +12, 블라인드 클리어마다 -4",
+      "rarity": "B",
+      "price": 5,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 12,
+      "maxStackValue": 12,
+      "stackResetTiming": "blind_clear",
+      "removeWhenStackZero": true,
+      "effects": [
+        {
+          "effectType": "AddBlindDecayMultiplier",
+          "intValue": 12,
+          "intValue2": 4,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "blind_decay",
+          "stackDisplay": "stackValue",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Card"
+    },
+    {
+      "itemId": "e_b_022",
+      "displayName": "드로우 피해",
+      "description": "드로우할 때 뽑은 카드 1장마다 즉발 피해 +10",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDropDamagePerCard",
+          "intValue": 10,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "supply",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Castle"
+    },
+    {
+      "itemId": "e_b_023",
+      "displayName": "Get2 보급",
+      "description": "Get2 카드 1장 덱에 추가",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardToDeck",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Get2",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Chat"
+    },
+    {
+      "itemId": "e_b_024",
+      "displayName": "Get3 보급",
+      "description": "Get3 카드 1장 덱에 추가",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardToDeck",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Get3",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Chat_Talk"
+    },
+    {
+      "itemId": "e_b_025",
+      "displayName": "일반동사 보급",
+      "description": "일반동사 카드 2장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Chest_Blue"
+    },
+    {
+      "itemId": "e_b_026",
+      "displayName": "Be동사 보급",
+      "description": "Be동사 카드 2장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Chest_Blue_Open"
+    },
+    {
+      "itemId": "e_b_027",
+      "displayName": "명사 보급",
+      "description": "셀없명사 1장, 셀있명사 1장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀없명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Chest_Brown"
+    },
+    {
+      "itemId": "e_b_028",
+      "displayName": "대명사 보급",
+      "description": "대명사 카드 2장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Chest_Brown_Open"
+    },
+    {
+      "itemId": "e_b_029",
+      "displayName": "형용사 보급",
+      "description": "형용사 카드 2장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Clover_"
+    },
+    {
+      "itemId": "e_b_030",
+      "displayName": "부사 보급",
+      "description": "부사 카드 2장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Coin_Blue"
+    },
+    {
+      "itemId": "e_b_031",
+      "displayName": "관사 보급",
+      "description": "정관사 1장, a/an 1장 획득",
+      "rarity": "B",
+      "price": 4,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "정관사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "a/an",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Coin_Gold_Dollar"
+    },
+    {
+      "itemId": "e_b_032",
+      "displayName": "특수 카드 할인",
+      "description": "특수 카드 구매 비용 -1G",
+      "rarity": "B",
+      "price": 3,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": -1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "shop_discount",
+          "stackDisplay": "",
+          "stringValue": "SpecialCardDiscount"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Coin_Gold_Star"
+    },
+    {
+      "itemId": "e_b_033",
+      "displayName": "가벼운 덱",
+      "description": "덱 카드 수가 24장 이하이면 추가 점수 +100, 스택에 현재 덱 카드 수 표시",
+      "rarity": "B",
+      "price": 5,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckSizeConditionalScore",
+          "intValue": 100,
+          "intValue2": 24,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "deck_size",
+          "condition": "lte_24",
+          "stackDisplay": "deck_card_count",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Compass"
+    },
+    {
+      "itemId": "e_b_034",
+      "displayName": "두꺼운 덱",
+      "description": "덱 카드 수가 40장 이상이면 추가 점수 +100, 스택에 현재 덱 카드 수 표시",
+      "rarity": "B",
+      "price": 5,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckSizeConditionalScore",
+          "intValue": 100,
+          "intValue2": 40,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "deck_size",
+          "condition": "gte_40",
+          "stackDisplay": "deck_card_count",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Crown_0"
+    },
+    {
+      "itemId": "e_a_001",
+      "displayName": "일반동사 전면 강화",
+      "description": "덱의 모든 일반동사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Crown_1"
+    },
+    {
+      "itemId": "e_a_002",
+      "displayName": "Be동사 전면 강화",
+      "description": "덱의 모든 Be동사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Diamond_Blue"
+    },
+    {
+      "itemId": "e_a_003",
+      "displayName": "셀없명사 전면 강화",
+      "description": "덱의 모든 셀없명사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀없명사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Diamond_Purple"
+    },
+    {
+      "itemId": "e_a_004",
+      "displayName": "대명사 전면 강화",
+      "description": "덱의 모든 대명사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Diamond_Red"
+    },
+    {
+      "itemId": "e_a_005",
+      "displayName": "셀있명사 전면 강화",
+      "description": "덱의 모든 셀있명사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Dice_Red"
+    },
+    {
+      "itemId": "e_a_006",
+      "displayName": "형용사 전면 강화",
+      "description": "덱의 모든 형용사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Dice_White"
+    },
+    {
+      "itemId": "e_a_007",
+      "displayName": "부사 전면 강화",
+      "description": "덱의 모든 부사 카드 추가 점수 +7",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 7,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Document"
+    },
+    {
+      "itemId": "e_a_008",
+      "displayName": "일반동사 증폭",
+      "description": "일반동사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Dynamite"
+    },
+    {
+      "itemId": "e_a_009",
+      "displayName": "Be동사 증폭",
+      "description": "Be동사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Eatrh"
+    },
+    {
+      "itemId": "e_a_010",
+      "displayName": "셀없명사 증폭",
+      "description": "셀없명사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "셀없명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Egg"
+    },
+    {
+      "itemId": "e_a_011",
+      "displayName": "대명사 증폭",
+      "description": "대명사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Energy_0_Green"
+    },
+    {
+      "itemId": "e_a_012",
+      "displayName": "셀있명사 증폭",
+      "description": "셀있명사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Energy_0_Pruple"
+    },
+    {
+      "itemId": "e_a_013",
+      "displayName": "형용사 증폭",
+      "description": "형용사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Energy_0_Red"
+    },
+    {
+      "itemId": "e_a_014",
+      "displayName": "부사 증폭",
+      "description": "부사가 트리거되면 배수 +1.5",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.5,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Energy_0_Yellow"
+    },
+    {
+      "itemId": "e_a_015",
+      "displayName": "1형식 숙련",
+      "description": "1형식 제출이면 배수 +2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 2.0,
+          "floatValue2": 0.0,
+          "target": "1형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Energy_1"
+    },
+    {
+      "itemId": "e_a_016",
+      "displayName": "2형식 숙련",
+      "description": "2형식 제출이면 배수 +2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 2.0,
+          "floatValue2": 0.0,
+          "target": "2형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Armor"
+    },
+    {
+      "itemId": "e_a_017",
+      "displayName": "3형식 숙련",
+      "description": "3형식 제출이면 배수 +2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 2.0,
+          "floatValue2": 0.0,
+          "target": "3형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Arrows"
+    },
+    {
+      "itemId": "e_a_018",
+      "displayName": "4형식 숙련",
+      "description": "4형식 제출이면 배수 +2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 2.0,
+          "floatValue2": 0.0,
+          "target": "4형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Helmet"
+    },
+    {
+      "itemId": "e_a_019",
+      "displayName": "5형식 숙련",
+      "description": "5형식 제출이면 배수 +2",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 2.0,
+          "floatValue2": 0.0,
+          "target": "5형식",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Helmet_Viking"
+    },
+    {
+      "itemId": "e_a_020",
+      "displayName": "일반동사 엔진",
+      "description": "일반동사 카드 5장 획득, 모든 일반동사 추가 점수 +4",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 5,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 4,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Helmet_Witch"
+    },
+    {
+      "itemId": "e_a_021",
+      "displayName": "Be동사 엔진",
+      "description": "Be동사 카드 5장 획득, 모든 Be동사 추가 점수 +4",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 5,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 4,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Ring"
+    },
+    {
+      "itemId": "e_a_022",
+      "displayName": "명사 엔진",
+      "description": "명사 카드 8장 획득, 모든 명사 추가 점수 +3",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 8,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddDeckPosBonusScore",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "명사",
+          "condition": "all_deck",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Shield"
+    },
+    {
+      "itemId": "e_a_023",
+      "displayName": "대명사 엔진",
+      "description": "대명사 카드 5장 획득, 대명사 트리거 시 추가 점수 +4",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 5,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddPosTriggerScore",
+          "intValue": 4,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "대명사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Shield_Viking"
+    },
+    {
+      "itemId": "e_a_024",
+      "displayName": "형용사 엔진",
+      "description": "형용사 카드 6장 획득, 형용사 트리거 시 배수 +1",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 6,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Sword"
+    },
+    {
+      "itemId": "e_a_025",
+      "displayName": "부사 엔진",
+      "description": "부사 카드 6장 획득, 부사 트리거 시 배수 +1",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddRandomCardsToDeck",
+          "intValue": 6,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddPosTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "trigger",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Weapon_Ax"
+    },
+    {
+      "itemId": "e_a_026",
+      "displayName": "일반동사 삭제",
+      "description": "일반동사 모두 제거",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "RemoveAllPosCards",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "일반동사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Weapon_Battle"
+    },
+    {
+      "itemId": "e_a_027",
+      "displayName": "Be동사 삭제",
+      "description": "Be동사 모두 제거",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "RemoveAllPosCards",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "Be동사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Weapon_Bow"
+    },
+    {
+      "itemId": "e_a_028",
+      "displayName": "셀있명사 삭제",
+      "description": "셀있명사 모두 제거",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "RemoveAllPosCards",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Weapon_Hammer"
+    },
+    {
+      "itemId": "e_a_029",
+      "displayName": "셀없명사 삭제",
+      "description": "셀없명사 모두 제거",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "RemoveAllPosCards",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀없명사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Equipment_Weapon_Spear"
+    },
+    {
+      "itemId": "e_a_030",
+      "displayName": "특수 카드 세트",
+      "description": "특수 카드 종류별 1장 획득",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddSpecialCardSet",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Eye"
+    },
+    {
+      "itemId": "e_a_031",
+      "displayName": "황금 전치사",
+      "description": "배수 x5 전치사 카드 1장 덱에 추가",
+      "rarity": "A",
+      "price": 10,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddGoldenSpecialCard",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 5.0,
+          "floatValue2": 0.0,
+          "target": "전치사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Feather"
+    },
+    {
+      "itemId": "e_a_032",
+      "displayName": "황금 관사",
+      "description": "배수 x5 관사 카드 1장 덱에 추가",
+      "rarity": "A",
+      "price": 10,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddGoldenSpecialCard",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 5.0,
+          "floatValue2": 0.0,
+          "target": "관사",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Fire"
+    },
+    {
+      "itemId": "e_a_033",
+      "displayName": "황금 to",
+      "description": "배수 x5 to 카드 1장 덱에 추가",
+      "rarity": "A",
+      "price": 10,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddGoldenSpecialCard",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 5.0,
+          "floatValue2": 0.0,
+          "target": "to",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flag_0_Blue"
+    },
+    {
+      "itemId": "e_a_034",
+      "displayName": "황금 소유격",
+      "description": "배수 x5 소유격 카드 1장 덱에 추가",
+      "rarity": "A",
+      "price": 10,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddGoldenSpecialCard",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 5.0,
+          "floatValue2": 0.0,
+          "target": "소유격",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flag_0_Red"
+    },
+    {
+      "itemId": "e_a_035",
+      "displayName": "황금 not",
+      "description": "배수 x5 not 카드 1장 덱에 추가",
+      "rarity": "A",
+      "price": 10,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddGoldenSpecialCard",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 5.0,
+          "floatValue2": 0.0,
+          "target": "not",
+          "condition": "shop_buy",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flag_1_Clan"
+    },
+    {
+      "itemId": "e_a_036",
+      "displayName": "무관사 명사",
+      "description": "셀있명사를 관사 없이 문법 인정",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddNoArticleRule",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "셀있명사",
+          "condition": "passive",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flag_Pirate"
+    },
+    {
+      "itemId": "e_a_037",
+      "displayName": "카드 폭주",
+      "description": "첫 턴에 3장 더 뽑음, 제출 횟수 -2",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddStartingHandSize",
+          "intValue": 3,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddSubmitCount",
+          "intValue": -2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flask_Blue"
+    },
+    {
+      "itemId": "e_a_038",
+      "displayName": "제출 폭주",
+      "description": "제출 횟수 +2, 기본 배율 -2.5배",
+      "rarity": "A",
+      "price": 9,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddSubmitCount",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "AddBaseMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": -2.5,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_passive",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flask_Green"
+    },
+    {
+      "itemId": "e_a_039",
+      "displayName": "추가 카드",
+      "description": "첫 턴에 카드를 1장 더 뽑음.",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddStartingHandSize",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flask_Purple"
+    },
+    {
+      "itemId": "e_a_040",
+      "displayName": "제출 연습",
+      "description": "제출 횟수 +1",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddSubmitCount",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Flask_Red"
+    },
+    {
+      "itemId": "e_a_041",
+      "displayName": "리롤 할인",
+      "description": "상점 리롤 비용 -1G",
+      "rarity": "A",
+      "price": 7,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddShopRerollDiscount",
+          "intValue": -1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "shop",
+          "condition": "run_passive",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Friends"
+    },
+    {
+      "itemId": "e_a_042",
+      "displayName": "무료 리롤 묶음",
+      "description": "상점 리롤 5번 무료",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 5,
+      "maxStackValue": 5,
+      "stackResetTiming": "reroll",
+      "removeWhenStackZero": true,
+      "effects": [
+        {
+          "effectType": "AddFreeRerolls",
+          "intValue": 5,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "shop",
+          "condition": "run_passive",
+          "stackDisplay": "stackValue",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Gear"
+    },
+    {
+      "itemId": "e_a_043",
+      "displayName": "빈손 보충",
+      "description": "제출 후 손이 비면 즉시 2장 드로우",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "RefillHandWhenEmpty",
+          "intValue": 2,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "hand_empty",
+          "condition": "submit_end",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Gem_Blue"
+    },
+    {
+      "itemId": "e_a_044",
+      "displayName": "드로우 보급",
+      "description": "매 3번째 드로우마다 카드를 1장 더 뽑음",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDrawAfterDrop",
+          "intValue": 1,
+          "intValue2": 3,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "supply_every",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Gem_Green"
+    },
+    {
+      "itemId": "e_a_045",
+      "displayName": "제출 보급",
+      "description": "제출 후 1장 더 뽑음",
+      "rarity": "A",
+      "price": 8,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDrawAfterSubmit",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Gem_Purple"
+    },
+    {
+      "itemId": "e_s_001",
+      "displayName": "형식 행진",
+      "description": "이전 형식과 다르면 배수 +3. 같으면 일반 점수.",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDifferentPatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 3.0,
+          "floatValue2": 0.0,
+          "target": "pattern",
+          "condition": "submit",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Gift_Blue"
+    },
+    {
+      "itemId": "e_s_002",
+      "displayName": "형식 연쇄",
+      "description": "같은 형식을 연속 제출할 때마다 배수 +2씩 누적. 다른 형식이면 초기화.",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddConsecutivePatternMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 2.0,
+          "floatValue2": 0.0,
+          "target": "pattern",
+          "condition": "submit",
+          "stackDisplay": "chain_count",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Gift_Red"
+    },
+    {
+      "itemId": "e_s_003",
+      "displayName": "완벽한 난문",
+      "description": "특수 카드 5종 이상이 점수 계산에 쓰이면 배수 +20",
+      "rarity": "S",
+      "price": 16,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 5,
+          "floatValue": 20.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "used_unique_gte_5",
+          "stackDisplay": "",
+          "stringValue": "SpecialCardPerfect"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Globe"
+    },
+    {
+      "itemId": "e_s_004",
+      "displayName": "불안정 문법",
+      "description": "특수 카드 3종 이상이 점수 계산에 쓰이면 배수 +12",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 3,
+          "floatValue": 12.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "used_unique_gte_3",
+          "stackDisplay": "",
+          "stringValue": "SpecialCardUnstable"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Glove"
+    },
+    {
+      "itemId": "e_s_005",
+      "displayName": "난문 덱",
+      "description": "덱에 특수 카드가 10장 이상이면 배수 +10, 스택에 현재 특수 카드 수 표시",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 10,
+          "floatValue": 10.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "deck_count_gte_10",
+          "stackDisplay": "special_card_count",
+          "stringValue": "SpecialCardDeck"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Heart"
+    },
+    {
+      "itemId": "e_s_006",
+      "displayName": "특수 저점",
+      "description": "특수 카드가 1장 이상 점수 계산에 쓰이면 추가 점수 +300",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 300,
+          "intValue2": 1,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "used_count_gte_1",
+          "stackDisplay": "",
+          "stringValue": "SpecialCardFloor"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Home"
+    },
+    {
+      "itemId": "e_s_007",
+      "displayName": "특수 고점",
+      "description": "특수 카드가 3장 이상 점수 계산에 쓰이면 배수 +8",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 3,
+          "floatValue": 8.0,
+          "floatValue2": 0.0,
+          "target": "특수 카드",
+          "condition": "used_count_gte_3",
+          "stackDisplay": "",
+          "stringValue": "SpecialCardCeiling"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Home_Shop_0"
+    },
+    {
+      "itemId": "e_s_008",
+      "displayName": "최후의 한 수",
+      "description": "제출 횟수를 1로 고정, 배수 +25",
+      "rarity": "S",
+      "price": 16,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "FixSubmitCount",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 25.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Home_Shop_1"
+    },
+    {
+      "itemId": "e_s_009",
+      "displayName": "폭주 제출",
+      "description": "시작 핸드 +4, 드로우 횟수 0으로 고정",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddStartingHandSize",
+          "intValue": 4,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        },
+        {
+          "effectType": "FixDropCount",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Hourglass"
+    },
+    {
+      "itemId": "e_s_011",
+      "displayName": "드로우 흡수",
+      "description": "드로우할 때 뽑은 카드 점수의 10배를 즉발 피해",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDropDamageFromBonusScore",
+          "intValue": 10,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "supply",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Hp"
+    },
+    {
+      "itemId": "e_s_012",
+      "displayName": "드로우 성장",
+      "description": "드로우할 때마다 배수 +0.1 누적 증가.",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDropStackMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 0.1,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "supply",
+          "stackDisplay": "stackValue",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Key_Gold"
+    },
+    {
+      "itemId": "e_s_013",
+      "displayName": "제출 성장",
+      "description": "제출할 때마다 배수 +1 누적",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddSubmitStackMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "submit",
+          "stackDisplay": "stackValue",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Key_Silver"
+    },
+    {
+      "itemId": "e_s_014",
+      "displayName": "패시브 폭주",
+      "description": "패시브 아이템이 트리거될 때마다 배수 +1 누적",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddPassiveTriggerMultiplier",
+          "intValue": 0,
+          "intValue2": 0,
+          "floatValue": 1.0,
+          "floatValue2": 0.0,
+          "target": "passive",
+          "condition": "trigger",
+          "stackDisplay": "stackValue",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Leaderboard"
+    },
+    {
+      "itemId": "e_s_015",
+      "displayName": "얇은 덱 왕관",
+      "description": "덱 카드 수 18장 이하이면 배수 +15, 스택에 현재 덱 카드 수 표시",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckSizeConditionalMultiplier",
+          "intValue": 0,
+          "intValue2": 18,
+          "floatValue": 15.0,
+          "floatValue2": 0.0,
+          "target": "deck_size",
+          "condition": "lte_18",
+          "stackDisplay": "deck_card_count",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Lock"
+    },
+    {
+      "itemId": "e_s_016",
+      "displayName": "두꺼운 덱 왕관",
+      "description": "덱 카드 수 50장 이상이면 배수 +15, 스택에 현재 덱 카드 수 표시",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddDeckSizeConditionalMultiplier",
+          "intValue": 0,
+          "intValue2": 50,
+          "floatValue": 15.0,
+          "floatValue2": 0.0,
+          "target": "deck_size",
+          "condition": "gte_50",
+          "stackDisplay": "deck_card_count",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Magnet"
+    },
+    {
+      "itemId": "e_s_017",
+      "displayName": "명사 제국",
+      "description": "명사가 3장 이상 점수 계산에 쓰이면 배수 +12",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 3,
+          "floatValue": 12.0,
+          "floatValue2": 0.0,
+          "target": "명사",
+          "condition": "used_count_gte_3",
+          "stackDisplay": "",
+          "stringValue": "NounEmpire"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Mail"
+    },
+    {
+      "itemId": "e_s_018",
+      "displayName": "동사 제국",
+      "description": "일반동사 또는 Be동사가 2장 이상 점수 계산에 쓰이면 배수 +12",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 2,
+          "floatValue": 12.0,
+          "floatValue2": 0.0,
+          "target": "동사",
+          "condition": "used_count_gte_2",
+          "stackDisplay": "",
+          "stringValue": "VerbEmpire"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Mail_Open"
+    },
+    {
+      "itemId": "e_s_019",
+      "displayName": "형용사 제국",
+      "description": "형용사가 2장 이상 점수 계산에 쓰이면 배수 +10",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 2,
+          "floatValue": 10.0,
+          "floatValue2": 0.0,
+          "target": "형용사",
+          "condition": "used_count_gte_2",
+          "stackDisplay": "",
+          "stringValue": "AdjectiveEmpire"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Map"
+    },
+    {
+      "itemId": "e_s_020",
+      "displayName": "부사 제국",
+      "description": "부사가 2장 이상 점수 계산에 쓰이면 배수 +10",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 0,
+          "intValue2": 2,
+          "floatValue": 10.0,
+          "floatValue2": 0.0,
+          "target": "부사",
+          "condition": "used_count_gte_2",
+          "stackDisplay": "",
+          "stringValue": "AdverbEmpire"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Map_Pin"
+    },
+    {
+      "itemId": "e_s_021",
+      "displayName": "임시 카드 실체화",
+      "description": "임시 카드를 획득할 때 임시 대신 덱에서 같은 수만큼 드로우",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "RealizeTemporaryCards",
+          "intValue": 1,
+          "intValue2": 0,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_passive",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Map_Route"
+    },
+    {
+      "itemId": "e_s_022",
+      "displayName": "손패 순환",
+      "description": "플레이 후 손패가 3장 이하이면 3장 드로우",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "Custom",
+          "intValue": 3,
+          "intValue2": 3,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "hand_size",
+          "condition": "play_end_lte_3",
+          "stackDisplay": "",
+          "stringValue": "HandCycle"
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Meat"
+    },
+    {
+      "itemId": "e_s_023",
+      "displayName": "궁극 슬롯",
+      "description": "아이템 슬롯 +2, 최대 5",
+      "rarity": "S",
+      "price": 14,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddItemSlots",
+          "intValue": 2,
+          "intValue2": 5,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "",
+          "condition": "run_start",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Medal"
+    },
+    {
+      "itemId": "e_s_024",
+      "displayName": "카드 성장",
+      "description": "제출 점수가 500 이상이면 점수 계산에 쓰인 카드들의 추가 점수 +1",
+      "rarity": "S",
+      "price": 15,
+      "useMode": "ExplorationOnly",
+      "consumable": false,
+      "stackValue": 0,
+      "maxStackValue": 0,
+      "stackResetTiming": "",
+      "removeWhenStackZero": false,
+      "effects": [
+        {
+          "effectType": "AddCardGrowthOnScoreThreshold",
+          "intValue": 1,
+          "intValue2": 500,
+          "floatValue": 0.0,
+          "floatValue2": 0.0,
+          "target": "scoring_cards",
+          "condition": "score_gte_500",
+          "stackDisplay": "",
+          "stringValue": ""
+        }
+      ],
+      "iconResourcePath": "Learning/ItemIcons/Remaster/Itemicon_Megaphone"
+    }
+  ]
+}

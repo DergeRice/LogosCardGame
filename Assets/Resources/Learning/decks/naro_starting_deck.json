@@ -1,0 +1,110 @@
+{
+  "deckId": "naro_starting_deck",
+  "displayName": "Naro Deck",
+  "cards": [
+    {
+      "id": "vb_1",
+      "pos": "VB",
+      "displayName": "일반동사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "vb_2",
+      "pos": "VB",
+      "displayName": "일반동사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "vb_3",
+      "pos": "VB",
+      "displayName": "일반동사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "be_1",
+      "pos": "BE",
+      "displayName": "Be동사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "nnu_1",
+      "pos": "NNU",
+      "displayName": "셀없명사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "nnu_2",
+      "pos": "NNU",
+      "displayName": "셀없명사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "nnu_3",
+      "pos": "NNU",
+      "displayName": "셀없명사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "prp_1",
+      "pos": "PRP",
+      "displayName": "대명사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "prp_2",
+      "pos": "PRP",
+      "displayName": "대명사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "jj_1",
+      "pos": "JJ",
+      "displayName": "형용사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "wh_1",
+      "pos": "WH",
+      "displayName": "Wh의문사",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "get2_1",
+      "pos": "RB",
+      "displayName": "Get2",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    },
+    {
+      "id": "get3_1",
+      "pos": "RB",
+      "displayName": "Get3",
+      "bonusScore": 0,
+      "multiplier": 1,
+      "temporary": false
+    }
+  ]
+}

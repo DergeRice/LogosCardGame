@@ -1,4 +1,10 @@
 // Android Resolver Repos Start
+([rootProject] + (rootProject.subprojects as List)).each {
+    ext {
+        it.setProperty("android.useAndroidX", true)
+        it.setProperty("android.enableJetifier", true)
+    }
+}
 ([rootProject] + (rootProject.subprojects as List)).each { project ->
     project.repositories {
         def unityProjectPath = $/file:///**DIR_UNITYPROJECT**/$.replace("\\", "/")
@@ -6,10 +12,12 @@
             url "https://maven.google.com"
         }
         maven {
+            url (unityProjectPath + "/Assets/GooglePlayGames/com.google.play.games/Editor/m2repository") // Assets/GooglePlayGames/com.google.play.games/Editor/GooglePlayGamesPluginDependencies.xml:11
+        }
+        maven {
             url "https://maven.google.com/" // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:12, Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:12, Packages/com.unity.ads/Editor/Source/Dependencies.xml:7
         }
         mavenLocal()
-        jcenter()
         mavenCentral()
     }
 }
@@ -22,9 +30,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
     implementation 'com.google.android.gms:play-services-ads-identifier:18.1.0' // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:12
-    implementation 'com.unity3d.ads:unity-ads:[4.12.0,4.13[' // Packages/com.unity.ads/Editor/Source/Dependencies.xml:7
+    implementation 'com.google.android.play:app-update:2.1.0' // Assets/GooglePlayPlugins/com.google.play.appupdate/Editor/Dependencies.xml:3
+    implementation 'com.google.android.play:core-common:2.0.4' // Assets/GooglePlayPlugins/com.google.play.core/Editor/Dependencies.xml:3
+    implementation 'com.google.games:gpgs-plugin-support:2.1.0' // Assets/GooglePlayGames/com.google.play.games/Editor/GooglePlayGamesPluginDependencies.xml:11
+    implementation 'com.unity3d.ads:unity-ads:[4.16.3,4.17[' // Packages/com.unity.ads/Editor/Source/Dependencies.xml:7
     implementation 'com.unity3d.ads:unity-ads:4.15.0' // Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:12
-    implementation 'com.unity3d.ads-mediation:mediation-sdk:8.10.0' // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:5
+    implementation 'com.unity3d.ads-mediation:mediation-sdk:8.12.0' // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:5
     implementation 'com.unity3d.ads-mediation:unityads-adapter:4.3.55' // Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:5
 // Android Resolver Dependencies End
 **DEPS**}

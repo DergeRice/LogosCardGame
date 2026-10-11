@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+  <!-- Disabled: Android Google Sign-In support AAR is not used. -->
+</dependencies>

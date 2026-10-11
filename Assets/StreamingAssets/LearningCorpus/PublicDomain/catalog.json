@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "catalogName": "Logos English Public Domain Corpus",
+  "purpose": "Immutable source corpus. These files are not learner questions; select and annotate sentences into a separate learning database.",
+  "sourceProvider": "Project Gutenberg",
+  "rightsNote": "Each source is recorded as public domain in the United States by the source provider. Confirm rights for every commercial distribution territory and avoid later translations, adaptations, cover art, annotations, and audiobooks unless separately cleared.",
+  "works": [
+    { "id": "sherlock_holmes_adventures", "title": "The Adventures of Sherlock Holmes", "author": "Arthur Conan Doyle", "firstPublished": 1892, "gutenbergId": 1661, "localPath": "texts/sherlock_holmes_adventures.txt", "collection": "Mystery", "recommendedBand": "Intermediate" },
+    { "id": "secret_garden", "title": "The Secret Garden", "author": "Frances Hodgson Burnett", "firstPublished": 1911, "gutenbergId": 17396, "localPath": "texts/secret_garden.txt", "collection": "Growth and Nature", "recommendedBand": "Foundation" },
+    { "id": "railway_children", "title": "The Railway Children", "author": "E. Nesbit", "firstPublished": 1905, "gutenbergId": 1874, "localPath": "texts/railway_children.txt", "collection": "Family and Adventure", "recommendedBand": "Foundation" },
+    { "id": "wonderful_wizard_of_oz", "title": "The Wonderful Wizard of Oz", "author": "L. Frank Baum", "firstPublished": 1900, "gutenbergId": 55, "localPath": "texts/wonderful_wizard_of_oz.txt", "collection": "Fantasy", "recommendedBand": "Foundation" },
+    { "id": "anne_of_green_gables", "title": "Anne of Green Gables", "author": "L. M. Montgomery", "firstPublished": 1908, "gutenbergId": 45, "localPath": "texts/anne_of_green_gables.txt", "collection": "Coming of Age", "recommendedBand": "Intermediate" },
+    { "id": "treasure_island", "title": "Treasure Island", "author": "Robert Louis Stevenson", "firstPublished": 1883, "gutenbergId": 120, "localPath": "texts/treasure_island.txt", "collection": "Adventure", "recommendedBand": "Upper Intermediate" },
+    { "id": "happy_prince_and_other_tales", "title": "The Happy Prince and Other Tales", "author": "Oscar Wilde", "firstPublished": 1888, "gutenbergId": 30120, "localPath": "texts/happy_prince_and_other_tales.txt", "collection": "Short Literary Tales", "recommendedBand": "Intermediate" },
+    { "id": "the_four_million", "title": "The Four Million", "author": "O. Henry", "firstPublished": 1906, "gutenbergId": 2776, "localPath": "texts/the_four_million.txt", "collection": "Short Stories", "recommendedBand": "Upper Intermediate" },
+    { "id": "little_women", "title": "Little Women", "author": "Louisa May Alcott", "firstPublished": 1868, "gutenbergId": 514, "localPath": "texts/little_women.txt", "collection": "Family and Dialogue", "recommendedBand": "Intermediate" },
+    { "id": "tale_of_peter_rabbit", "title": "The Tale of Peter Rabbit", "author": "Beatrix Potter", "firstPublished": 1902, "gutenbergId": 14838, "localPath": "texts/tale_of_peter_rabbit.txt", "collection": "Starter Tales", "recommendedBand": "Starter" },
+    { "id": "aesops_fables", "title": "Aesop's Fables", "author": "Aesop", "firstPublished": null, "gutenbergId": 19994, "localPath": "texts/aesops_fables.txt", "collection": "Starter Tales", "recommendedBand": "Starter" },
+    { "id": "blue_castle", "title": "The Blue Castle", "author": "L. M. Montgomery", "firstPublished": 1926, "gutenbergId": 67979, "localPath": "texts/blue_castle.txt", "collection": "Inner Life", "recommendedBand": "Advanced" }
+  ]
+}
