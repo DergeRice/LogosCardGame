@@ -4,7 +4,7 @@ import { WebSocket } from 'ws';
 import { randomUUID } from 'node:crypto';
 import { createBattleServer } from '../server/index.js';
 import { chooseMove } from '../server/ai.js';
-import { judgeCards, faceKey, type RoomView } from '../shared/rules.js';
+import { DECK_FACES, judgeCards, faceKey, type RoomView } from '../shared/rules.js';
 const wait = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 class Client {
  ws:WebSocket; messages:any[]=[]; room?:RoomView; token='';
@@ -22,21 +22,21 @@ test('four real sockets: unanimous draw, unique shared deck, retained Correct, d
  try{
   const clients=await Promise.all(['A','B','C','D'].map(n=>new Client(url).hello(n)));
   clients[0].send('quick');await clients[0].until(()=>!!clients[0].room);for(const c of clients.slice(1)){c.send('quick');await c.until(()=>!!c.room);}for(const c of clients)await c.until(()=>c.room?.phase==='battle');
-  assert.equal(new Set(clients.map(c=>c.room!.code)).size,1);assert.equal(clients[0].room!.deckCount,40);assert.ok(clients.every(c=>c.room!.hand.length===5));
+  assert.equal(new Set(clients.map(c=>c.room!.code)).size,1);assert.equal(clients[0].room!.deckCount,DECK_FACES.length-20);assert.ok(clients.every(c=>c.room!.hand.length===5));
   const seen=new Map<string,string>();const inspect=()=>{for(const c of clients)for(const card of c.room!.hand){const key=faceKey(card);assert.ok(!seen.has(key)||seen.get(key)===card.id);seen.set(key,card.id);}};inspect();
   for(const other of clients.slice(1))assert.deepEqual(clients[0].room!.players.find(p=>p.id===other.room!.you)?.handPreview?.map(c=>c.id),other.room!.hand.map(c=>c.id));
   const approveDraw=async()=>{const before=clients[0].room!.deckCount,voteId=clients[0].room!.drawVote!.id;for(const c of clients)c.send('drawVote',{voteId,approve:true});for(const c of clients)await c.until(()=>c.room!.deckCount===before-4);inspect();};
-  await approveDraw();await approveDraw();assert.equal(clients[0].room!.deckCount,32);
+  await approveDraw();await approveDraw();assert.equal(clients[0].room!.deckCount,DECK_FACES.length-28);
   while(!clients.some(c=>c.room!.hand.some(card=>card.kind==='verb')))await approveDraw();
   const player=clients.find(c=>c.room!.hand.some(card=>card.kind==='verb'))!;assert.ok(player);const verb=player.room!.hand.find(c=>c.kind==='verb')!;
   const msg={cards:[verb.id],requestId:randomUUID(),handVersion:player.room!.handVersion};player.send('submit',msg);player.send('submit',msg);
   await player.until(()=>player.room!.judgment?.submissionId===msg.requestId);assert.equal(player.room!.judgment!.valid,true);assert.equal(player.room!.judgment!.accepted,false);assert.equal(player.score,0);assert.ok(player.room!.hand.some(c=>c.id===verb.id));await player.until(()=>player.messages.some(m=>m.duplicate));
   while(clients[0].room!.deckCount>=4)await approveDraw();
-  assert.equal(clients[0].room!.deckCount,0);assert.equal(seen.size,60);assert.equal(clients.flatMap(c=>c.room!.hand).length,60);
+  assert.equal(clients[0].room!.deckCount,DECK_FACES.length%4);assert.equal(seen.size,DECK_FACES.length-2);assert.equal(clients.flatMap(c=>c.room!.hand).length,DECK_FACES.length-2);
   const staleId=randomUUID();player.send('submit',{...msg,requestId:staleId});await player.until(()=>player.messages.some(m=>m.type==='error'&&m.requestId===staleId&&m.message.includes('이전 카드')));assert.equal(player.score,0);
   assert.equal(clients[0].room!.drawVote,undefined);clients[0].send('drawVote',{voteId:randomUUID(),approve:true});await clients[0].until(()=>clients[0].messages.some(m=>m.type==='error'&&m.message.includes('동의할')));
   clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');assert.ok(clients[1].room!.players.every(p=>p.score===0));
-  const match=clients[1].room!.matchId;for(const c of clients.slice(1))c.send('rematch');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='battle'&&c.room.matchId!==match);assert.equal(clients[1].room!.deckCount,45);
+  const match=clients[1].room!.matchId;for(const c of clients.slice(1))c.send('rematch');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='battle'&&c.room.matchId!==match);assert.equal(clients[1].room!.deckCount,DECK_FACES.length-15);
  }finally{await app.close();}
 });
 test('real sockets: reconnect, forfeit grace, session rating, result cleanup and expired session',async()=>{

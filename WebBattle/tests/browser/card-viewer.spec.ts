@@ -3,12 +3,13 @@ import {test,expect} from '@playwright/test';
 test('card viewer lists the active deck and opens the new grammar card',async({page})=>{
  await page.goto('/cards');
  await expect(page.getByRole('heading',{name:'카드 뷰어'})).toBeVisible();
- await expect(page.locator('.viewer-tile')).toHaveCount(60);
+ await expect(page.locator('.viewer-tile')).toHaveCount(62);
  await expect(page.getByRole('button',{name:/Very 카드 보기/})).toHaveCount(0);
  await page.getByRole('searchbox',{name:'카드 검색'}).fill('to부정사');
- await expect(page.locator('.viewer-tile')).toHaveCount(2);
- await page.getByRole('button',{name:'to부정사 +3 카드 보기'}).click();
- await expect(page.getByRole('dialog',{name:'to부정사 카드 상세'})).toBeVisible();
+ await expect(page.locator('.viewer-tile')).toHaveCount(4);
+ expect(await page.locator('.viewer-tile img').evaluateAll(images=>images.every(image=>(image as HTMLImageElement).complete&&(image as HTMLImageElement).naturalWidth>0))).toBe(true);
+ await page.getByRole('button',{name:'To부정사 ×2 카드 보기'}).click();
+ await expect(page.getByRole('dialog',{name:'To부정사 카드 상세'})).toBeVisible();
  await expect(page.getByRole('dialog')).toContainText('동사원형 앞에 놓아');
  await page.keyboard.press('Escape');
  await expect(page.getByRole('dialog')).toHaveCount(0);
@@ -30,7 +31,7 @@ test('card viewer scrolls through the full deck in landscape',async({browser})=>
  const phone=await context.newPage();
  try{
   await phone.goto('/cards');
-  await expect(phone.locator('.viewer-tile')).toHaveCount(60);
+  await expect(phone.locator('.viewer-tile')).toHaveCount(62);
   const before=await phone.evaluate(()=>({height:document.scrollingElement!.scrollHeight,top:scrollY,visible:innerHeight}));
   expect(before.height).toBeGreaterThan(before.visible);
   await phone.mouse.move(400,220);
