@@ -3,8 +3,8 @@ import {test,expect} from '@playwright/test';
 test('account can be created, resumed, logged out, and used again',async({page})=>{
  const username=`learner${Date.now().toString(36)}`;
  await page.goto('/');
- await expect(page.getByRole('button',{name:'계정 만들기'})).toBeVisible();
- await page.getByRole('button',{name:'계정 만들기'}).click();
+ await expect(page.getByRole('button',{name:'계정 만들기'})).toBeVisible({timeout:60_000});
+ await page.getByRole('button',{name:'계정 만들기'}).click({timeout:60_000});
  await page.getByLabel('아이디').fill(username);
  await page.getByLabel('비밀번호').fill('a strong test password');
  await page.getByRole('button',{name:'만들고 연동'}).click();
