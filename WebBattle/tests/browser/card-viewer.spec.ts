@@ -7,7 +7,10 @@ test('card viewer lists the active deck and opens the new grammar card',async({p
  await expect(page.getByRole('button',{name:/Very 카드 보기/})).toHaveCount(0);
  await page.getByRole('searchbox',{name:'카드 검색'}).fill('to부정사');
  await expect(page.locator('.viewer-tile')).toHaveCount(4);
- expect(await page.locator('.viewer-tile img').evaluateAll(images=>images.every(image=>(image as HTMLImageElement).complete&&(image as HTMLImageElement).naturalWidth>0))).toBe(true);
+ for(const image of await page.locator('.viewer-tile img').all()){
+  await image.scrollIntoViewIfNeeded();
+  await expect.poll(()=>image.evaluate(element=>(element as HTMLImageElement).complete&&(element as HTMLImageElement).naturalWidth>0)).toBe(true);
+ }
  await page.getByRole('button',{name:'To부정사 ×2 카드 보기'}).click();
  await expect(page.getByRole('dialog',{name:'To부정사 카드 상세'})).toBeVisible();
  await expect(page.getByRole('dialog')).toContainText('동사원형 앞에 놓아');
