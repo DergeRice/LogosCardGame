@@ -95,7 +95,7 @@ export class BattleArena extends DurableObject<Env>{
     const now=Date.now();a.tokens=Math.min(20,a.tokens+(now-a.at)/250)-1;a.at=now;ws.serializeAttachment(a);
     if(a.tokens<0){this.game.send(adapter,{type:'error',message:'요청이 너무 빨라요. 잠시 기다려 주세요.'});if(a.tokens< -20)ws.close(4008,'rate limit');return;}
     const msg=JSON.parse(raw);if(!msg||typeof msg!=='object'||Array.isArray(msg))throw Error('잘못된 메시지예요.');
-    if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name);a.id=p.id;ws.serializeAttachment(a);}
+    if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken);a.id=p.id;ws.serializeAttachment(a);}
     else if(p.socket===adapter)this.game.handle(p,msg);
    }catch(e){this.game.send(adapter,{type:'error',message:e instanceof SyntaxError?'읽을 수 없는 요청이에요.':e instanceof Error?e.message:'요청 오류'});}
   });

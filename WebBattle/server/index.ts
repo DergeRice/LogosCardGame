@@ -25,7 +25,7 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
     const now = Date.now(); tokens = Math.min(20, tokens + (now - at) / 250); at = now;
     if (--tokens < 0) { game.send(ws, { type: 'error', message: '요청이 너무 빨라요. 잠시 기다려 주세요.' }); if (tokens < -20) ws.close(4008, 'rate limit'); return; }
     const msg = JSON.parse(raw.toString()); if (!msg || typeof msg !== 'object' || Array.isArray(msg)) throw Error('잘못된 메시지예요.');
-    if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name); clearTimeout(helloTimeout); }
+    if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken); clearTimeout(helloTimeout); }
     else if (player.socket === ws) game.handle(player, msg);
    } catch (e) { game.send(ws, { type: 'error', message: e instanceof SyntaxError ? '읽을 수 없는 요청이에요.' : e instanceof Error ? e.message : '요청 오류' }); }
   });

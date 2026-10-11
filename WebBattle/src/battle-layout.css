@@ -63,7 +63,7 @@
  .quick-home,.match-screen,.result{height:100%;max-height:100%}
  .settings-trigger{--settings-size:38px;top:calc(var(--game-top) + var(--game-height) - max(8px,env(safe-area-inset-bottom)) - var(--settings-size));bottom:auto;width:var(--settings-size);height:var(--settings-size)}
  .game-settings{top:calc(var(--game-top) + var(--game-height)*.5);max-height:calc(var(--game-height) - 24px)}
- .special-backdrop,.decision-backdrop,.settings-backdrop,.card-inspect-backdrop{top:var(--game-top);left:var(--game-left);width:var(--game-width);height:var(--game-height);bottom:auto;right:auto}
+ .special-backdrop,.decision-backdrop,.settings-backdrop,.card-inspect-backdrop,.account-backdrop{top:var(--game-top);left:var(--game-left);width:var(--game-width);height:var(--game-height);bottom:auto;right:auto}
  .special-backdrop>section{max-height:calc(var(--game-height) - 16px)}
 }
 @media(orientation:landscape) and (max-height:900px) and (pointer:coarse){

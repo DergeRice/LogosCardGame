@@ -17,10 +17,16 @@ export function snapshot(game:Game):Map<string,string>{
   const {socket,seen,...rest}=p;
   records.set('player:'+p.id,JSON.stringify({...rest,seen:[...seen]} satisfies StoredPlayer));
  }
+ for(const [key,account] of game.accounts)records.set('account:'+key,JSON.stringify(account));
+ for(const [hash,session] of game.accountSessions)records.set('auth:'+hash,JSON.stringify(session));
  return records;
 }
 export function restore(game:Game,records:Map<string,string>):Map<string,Player>{
- game.rooms.clear();game.sessions.clear();const players=new Map<string,Player>();
+ game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();const players=new Map<string,Player>();
+ for(const [key,json] of records){
+  if(key.startsWith('account:'))game.accounts.set(key.slice(8),JSON.parse(json));
+  if(key.startsWith('auth:'))game.accountSessions.set(key.slice(5),JSON.parse(json));
+ }
  for(const [key,json] of records)if(key.startsWith('player:')){
   const p=JSON.parse(json) as StoredPlayer,player={...p,seen:new Set(p.seen)};
   players.set(player.id,player);if(!player.ai)game.sessions.set(player.token,player);
