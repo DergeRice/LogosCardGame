@@ -29,7 +29,7 @@ test('after Go only current leader can deal; new high score transfers deal and d
  const score=(p:typeof a)=>{p.hand=fixture();p.handVersion++;now+=1600;game.action(p,{matchId:r.matchId,requestId:randomUUID(),handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
  score(a);assert.equal(a.score,26);assert.equal(r.leaderId,a.id);assert.equal(r.decision?.playerId,a.id);
  game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);
- const start=r.deck.length;game.drawRequest(b,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start);assert.match(sb.messages.at(-1)?.message,/최고점/);
+ const start=r.deck.length;game.drawRequest(b,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start);assert.match(sb.messages.filter(m=>m.type==='error').at(-1)?.message,/최고점/);
  game.drawRequest(a,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start-2);assert.ok(r.drawVote);
  score(b);assert.ok(b.score>a.score);assert.equal(r.leaderId,b.id);assert.equal(r.decision?.playerId,b.id);
  game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});now+=3100;const before=r.deck.length;
@@ -63,3 +63,4 @@ test('opponent field preview follows validated draft order and excludes those ca
  assert.equal(publicA.draftPreview?.length,0);
  assert.equal(publicA.playedSentences?.length,1);
 });
+

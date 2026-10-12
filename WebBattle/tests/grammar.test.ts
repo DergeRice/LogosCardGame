@@ -37,7 +37,8 @@ test('points use only recognized cards, including single-card commands',()=>{
  assert.equal(judge(['pronoun','verb','adjective']).patternType,2); // Deliberately allowed in source.
 });
 test('to-infinitive participates in a playable clause with a base verb',()=>{
- const result=judge(['pronoun','verb','to-infinitive','verb']);
- assert.equal(result.valid,true);assert.equal(result.usedLength,4);assert.equal(result.points,4);
+ const result=judge(['pronoun','verb','pronoun','to-infinitive']);
+ assert.equal(result.valid,true);assert.equal(result.usedLength,4);assert.equal(result.points,4);assert.equal(result.patternType,5);
  assert.equal(judge(['pronoun','verb','preposition','verb']).usedLength<4,true);
 });
+

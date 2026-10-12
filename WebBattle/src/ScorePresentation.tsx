@@ -9,7 +9,7 @@ export function AnimatedNumber({value,duration=SCORE_MOTION.scoreboardMs,classNa
  useEffect(()=>{
   if(reduced||duration===0||value<current.current){current.current=value;setDisplay(value);return;}
   const from=current.current,start=performance.now();let raf=0;
-  const tick=(time:number)=>{const progress=Math.min(1,(time-start)/duration),next=Math.round(from+(value-from)*(1-(1-progress)**2));current.current=next;setDisplay(next);if(progress<1)raf=requestAnimationFrame(tick);};
+  const tick=(time:number)=>{const progress=Math.min(1,(time-start)/duration),next=progress===1?value:Math.min(Math.max(from,value),Math.max(Math.min(from,value),Math.round(from+(value-from)*(1-(1-progress)**2))));current.current=next;setDisplay(next);if(progress<1)raf=requestAnimationFrame(tick);};
   raf=requestAnimationFrame(tick);return()=>cancelAnimationFrame(raf);
  },[value,duration,reduced]);
  return <span className={`rolling-number ${display!==value?'rolling':''} ${className}`} data-testid={testId} data-target={value}>{display}</span>;

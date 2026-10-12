@@ -1,3 +1,5 @@
+import {BUILD_VERSION} from '../src/buildVersion.js';
+import {makeAudit,safeDetails,type AuditEvent} from './audit.js';
 import {fieldCards,canTransferCard} from '../shared/cardViews.js';
 import { randomInt, randomUUID, randomBytes, scryptSync, timingSafeEqual, createHash } from 'node:crypto';
 export interface GameSocket { readonly readyState: number; readonly bufferedAmount: number; send(data: string): void; close(code?: number, reason?: string): void; terminate(): void; }
@@ -9,17 +11,24 @@ type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; token: s
 export type Account = {id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = { code: string; phase: RoomView['phase']; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
-type Options = { durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; minimumPlayers?: number };
+type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 function shuffle<T>(items: T[]): T[] { for (let i = items.length - 1; i > 0; i--) { const j = randomInt(i + 1); [items[i], items[j]] = [items[j], items[i]]; } return items; }
 export class Game {
+ auditSink?: (event:AuditEvent)=>void; audits:AuditEvent[]=[]; telemetryAt=new Map<string,number>();
  minimumPlayers = RULES.minPlayers;
  rooms = new Map<string, Room>(); sessions = new Map<string, Player>();
  accounts = new Map<string,Account>(); accountSessions = new Map<string,AccountSession>();
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number;
- constructor(options: Options = {}) { this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 10 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs; }
+ constructor(options: Options = {}) { this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 10 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
- fail(p: Player, message: string, requestId?: string) { this.send(p.socket, { type: 'error', message, requestId }); }
+ audit(p:Player|undefined,event:string,level:AuditEvent['level']='info',details:Record<string,unknown>={},overrideRoom?:Room){
+  const r=overrideRoom??(p?.room?this.rooms.get(p.room):undefined);
+  const record=makeAudit(event,level,{player:p?.name??'',playerId:p?.id??'',room:r?.code??p?.room??'',matchId:r?.matchId??''},safeDetails(details));
+  record.details={...record.details,serverBuild:BUILD_VERSION,serverPhase:r?.phase,...(p?{serverPhase:r?.phase,serverHandVersion:p.handVersion,cooldownMs:Math.max(0,p.actionAt-Date.now()),decision:r?.decision?.playerId,selectedCards:Array.isArray(details.cards)?details.cards.slice(0,15).map(id=>p.hand.find(c=>c.id===id)).filter(Boolean):undefined}:{})};
+  if(this.auditSink)this.auditSink(record);else{this.audits.push(record);if(this.audits.length>5000)this.audits.shift();}
+ }
+ fail(p: Player, message: string, requestId?: string) { this.audit(p,'rejected','warn',{reason:message,requestId});this.send(p.socket, { type: 'error', message, requestId });const r=p.room&&this.rooms.get(p.room);if(requestId&&r)this.send(p.socket,{type:'state',room:this.view(r,p)}); }
  newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
  hello(socket: WebSocket, token: unknown, name: unknown, authToken?:unknown): Player {
   this.tick();
@@ -83,7 +92,7 @@ export class Game {
   return state;
  }
  broadcast(r: Room) { for (const p of r.players) if (!p.ai) this.send(p.socket, { type: 'state', room: this.view(r, p) }); }
- log(r: Room, text: string, actor?: Player) { const id=randomUUID(); r.log.unshift({ id, text }); r.log.length = Math.min(r.log.length, 8); if(actor)actor.lastAction={id,text}; }
+ log(r: Room, text: string, actor?: Player) { const id=randomUUID(); r.log.unshift({ id, text }); r.log.length = Math.min(r.log.length, 8); if(actor)actor.lastAction={id,text};this.audit(actor,'game_event','info',{reason:text},r); }
  resetPlayer(p: Player) { p.robNotices=[]; p.hand = []; p.handVersion++; p.fieldVersion=0;p.draftIds=[]; p.score = 0; p.ready = true; p.rematch = false; p.judgment = undefined; p.lastPlayed=undefined; p.playedSentences=[]; p.lastAction=undefined; p.reaction=undefined; p.reactionAt=0; p.ratingDelta = 0; p.reward = 0; p.seen.clear(); }
  quick(p: Player) {
   if (p.room) return this.fail(p, '이미 매칭 중이거나 대전 중이에요.');
@@ -303,7 +312,7 @@ export class Game {
   if (!r || r.phase !== 'battle') return this.fail(p, '진행 중인 경기가 없어요.', String(msg.requestId));
   if (typeof msg.requestId !== 'string' || !/^[\w-]{1,80}$/.test(msg.requestId)) return this.fail(p, '올바르지 않은 요청 번호예요.');
   if (p.seen.has(msg.requestId)) { this.send(p.socket, { type: 'ack', requestId: msg.requestId, duplicate: true }); return; }
-  p.seen.add(msg.requestId); if (p.seen.size > 256) p.seen.delete(p.seen.values().next().value!);
+
   if (msg.matchId !== r.matchId || msg.handVersion !== p.handVersion) return this.fail(p, '이전 카드 상태의 요청이에요. 현재 손패로 다시 조합해 주세요.', msg.requestId);
   if (r.decision) return this.fail(p, '고 / 스톱 선택 중에는 잠시 기다려 주세요.', msg.requestId);
   if (r.endsAt > 0 && Date.now() >= r.endsAt) { this.finish(r, r.finalRound?'마지막 5분이 끝났어요. 최종 점수 정산 · 경기 세션 만료':'경기 시간이 끝났어요. 현재 점수로 정산합니다.',undefined,Boolean(r.finalRound)); return; }
@@ -313,8 +322,10 @@ export class Game {
   if(r.exchange?.fromId===p.id&&(msg.cards as string[]).includes(r.exchange.offerId))return this.fail(p,'교환 요청 중인 카드는 문장에 사용할 수 없어요.',String(msg.requestId));
   if(selected.some(c=>c&&['get2','get3','rob','exchange','protect'].includes(c.kind)))return this.fail(p,'기능 카드는 문장에 넣을 수 없어요.',String(msg.requestId));
   if (selected.some(c => !c)) return this.fail(p, '내 손패에 없는 카드는 사용할 수 없어요.', msg.requestId);
+  p.seen.add(msg.requestId);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
   p.draftIds=msg.cards as string[];
   p.actionAt = Date.now() + RULES.actionCooldownMs; p.judgment = judgeCards(selected as Card[], goMultiplier(r.goCount));
+  this.audit(p,'judgment','info',{...msg,reason:p.judgment.message});
   p.judgment.submissionId=msg.requestId; p.judgment.accepted=p.judgment.valid && p.judgment.points>RULES.goThreshold;
   if (p.judgment.accepted) {
    p.score += p.judgment.points;
@@ -327,10 +338,13 @@ export class Game {
    this.log(r, `${p.name} · ${p.judgment.label} +${p.judgment.points}점`,p);
    if (p.score >= RULES.goThreshold && p.score > r.highScore) { r.highScore = p.score; r.leaderId=p.id; r.decision = { id: randomUUID(), playerId: p.id, startedAt: Date.now(), expiresAt: p.ai ? Date.now() + this.decisionMs : 0 }; this.log(r, `${p.name} 님이 최고점 ${p.score}점! 고 / 스톱 및 카드 배분 주도권 획득`); }
   }
+  this.audit(p,'submit_result','info',{...msg,points:p.judgment.points,valid:p.judgment.valid,patternType:p.judgment.patternType,usedStartIndex:p.judgment.usedStartIndex,usedLength:p.judgment.usedLength,accepted:p.judgment.accepted,reason:p.judgment.accepted?'scored':p.judgment.valid?'valid_below_threshold':'invalid_grammar'});
   this.send(p.socket, { type: 'ack', requestId: msg.requestId }); this.broadcast(r);
  }
  handle(p: Player, msg: Record<string, unknown>) {
   p.touchedAt = Date.now(); this.tick();
+  if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'?'warn':'info',msg);}return;}
+  if(msg.type!=='ping')this.audit(p,'request','info',msg);
   if(msg.type==='register'||msg.type==='login')return this.authenticate(p,msg);
   if(msg.type==='logout')return this.logout(p);
   if(msg.type==='robNoticeRead'){const room=p.room&&this.rooms.get(p.room);if(room&&msg.matchId===room.matchId&&typeof msg.noticeId==='string'){p.robNotices=(p.robNotices??[]).filter(n=>n.id!==msg.noticeId);this.send(p.socket,{type:'state',room:this.view(room,p)});}return;}
@@ -375,3 +389,9 @@ export class Game {
   for(const [hash,session] of this.accountSessions)if(session.expiresAt<=now)this.accountSessions.delete(hash);
  }
 }
+
+
+
+
+
+

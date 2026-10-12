@@ -7,7 +7,7 @@ const templates: Kind[][] = [['verb']];
 for (const s of nounPhrases) {
  templates.push([...s, 'verb'], [...s, 'be', 'adjective']);
  for (const o of nounPhrases) {
-  templates.push([...s, 'be', ...o], [...s, 'verb', ...o], [...s, 'verb', ...o, 'adjective']);
+  templates.push([...s, 'be', ...o], [...s, 'verb', ...o], [...s, 'verb', ...o, 'adjective'],[...s,'verb',...o,'to-infinitive']);
   for (const o2 of nounPhrases) templates.push([...s, 'verb', ...o, ...o2]);
  }
 }
@@ -19,7 +19,7 @@ for(const template of templates){
  expanded.push([...before,'modal',...after],[...before,'frequency',...after],[...template,'adverb']);
  if(after[0]==='verb')expanded.push([...before,'do','not',...after]);
  else expanded.push([...before,'be','not',...after.slice(1)]);
- if(after[0]==='verb')expanded.push([...before,'verb','to-infinitive','verb']);
+
  for(const noun of [['pronoun'],['mass']] as Kind[][])expanded.push([...template,'preposition',...noun]);
 }
 const candidates = expanded.filter(t => t.length <= 8).sort((a, b) => a.length - b.length);
@@ -45,3 +45,4 @@ export function chooseMove(hand: Card[], difficulty: Difficulty): string[] | nul
  return best;
 }
 export const thinkMs = (d: Difficulty) => ({ easy: 6500, normal: 4300, hard: 2600 }[d]);
+

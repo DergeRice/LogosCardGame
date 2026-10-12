@@ -23,14 +23,14 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
   ws.on('message', raw => {
    try {
     const now = Date.now(); tokens = Math.min(20, tokens + (now - at) / 250); at = now;
-    if (--tokens < 0) { game.send(ws, { type: 'error', message: '요청이 너무 빨라요. 잠시 기다려 주세요.' }); if (tokens < -20) ws.close(4008, 'rate limit'); return; }
+    if (--tokens < 0) { game.audit(player,'rate_limit','warn',{code:'RATE_LIMIT'});game.send(ws, { type: 'error', message: '요청이 너무 빨라요. 잠시 기다려 주세요.' }); if (tokens < -20) ws.close(4008, 'rate limit'); return; }
     const msg = JSON.parse(raw.toString()); if (!msg || typeof msg !== 'object' || Array.isArray(msg)) throw Error('잘못된 메시지예요.');
-    if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken); clearTimeout(helloTimeout); }
+    if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken); clearTimeout(helloTimeout);game.audit(player,'connected'); }
     else if (player.socket === ws) game.handle(player, msg);
-   } catch (e) { game.send(ws, { type: 'error', message: e instanceof SyntaxError ? '읽을 수 없는 요청이에요.' : e instanceof Error ? e.message : '요청 오류' }); }
+   } catch (e) { game.audit(player,'server_error','error',{code:'SERVER_ERROR',reason:e instanceof Error?e.message:'요청 오류'});game.send(ws, { type: 'error', message: e instanceof SyntaxError ? '읽을 수 없는 요청이에요.' : e instanceof Error ? e.message : '요청 오류' }); }
   });
   ws.on('error', () => {});
-  ws.on('close', () => { clearInterval(heartbeat); clearTimeout(helloTimeout); if (player) game.disconnected(player, ws); });
+  ws.on('close', () => { clearInterval(heartbeat); clearTimeout(helloTimeout); if (player){game.audit(player,'disconnected','warn');game.disconnected(player, ws);} });
  });
  const timer = setInterval(() => { game.tick(); for (const [ip, entry] of ips) if (Date.now() - entry.at > 60_000) ips.delete(ip); }, 200);
  return { server, game, close: async () => { clearInterval(timer); for (const ws of wss.clients) ws.terminate(); await new Promise<void>(resolve => wss.close(() => resolve())); await new Promise<void>(resolve => server.close(() => resolve())); } };
@@ -41,3 +41,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
  app.server.listen(Number(process.env.PORT ?? 3001), '0.0.0.0', () => console.log('LOGOS WebSocket server ready on port', process.env.PORT ?? 3001));
  const stop = () => { void app.close().then(() => process.exit(0)); }; process.on('SIGINT', stop); process.on('SIGTERM', stop);
 }
+
+

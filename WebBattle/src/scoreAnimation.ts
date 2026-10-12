@@ -7,7 +7,7 @@ export function scoreSteps(cards:Card[],judgment:Judgment,multiplier:number):Sco
  if(!judgment.valid)return [];
  const used=cards.slice(judgment.usedStartIndex,judgment.usedStartIndex+judgment.usedLength),steps:ScoreStep[]=[];let value=0;
  for(const card of used)steps.push({kind:'base',cardId:card.id,label:'+1',value:++value});
- for(const card of used){const effect=cardEffect(card);if(effect.multiply!==1)steps.push({kind:'multiply',cardId:card.id,label:`×${effect.multiply}`,value:value*=effect.multiply});}
+ for(const card of used){const effect=cardEffect(card);if(effect.multiply!==1)steps.push({kind:'multiply',cardId:card.id,label:effect.multiply<1?`÷${1/effect.multiply}`:`×${effect.multiply}`,value:value*=effect.multiply});}
  for(const card of used){const effect=cardEffect(card);if(effect.add)steps.push({kind:'add',cardId:card.id,label:`+${effect.add}`,value:value+=effect.add});}
  if(multiplier>1)steps.push({kind:'go',label:`GO ×${multiplier}`,value:value*=multiplier});
  // Never animate a different total if the server rules/version changed.

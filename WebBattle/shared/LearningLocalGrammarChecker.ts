@@ -18,7 +18,7 @@ const P = LearningPosType, T = SentencePatternType;
 const initial = (message: string): LearningGrammarCheckResult => ({ valid: false, patternType: T.Type1, message, usedStartIndex: 0, usedLength: 0, debugLog: null });
 
 class CheckContext {
- constructor(private readonly allowBareCountableNounThisCheck: boolean) {}
+ constructor(private readonly allowBareCountableNounThisCheck: boolean, private readonly battleToObjectOnly=false) {}
 
  Check(sequence: Sequence | null | undefined): LearningGrammarCheckResult {
   const result = initial('문장 구조가 맞지 않습니다.');
@@ -108,7 +108,7 @@ class CheckContext {
   if (start + 2 < end && seq[start] === P.JJ) {
    const adjectiveObjectForComplementEnd = this.TryParseNP(seq, start + 1, end);
    if (adjectiveObjectForComplementEnd !== null) {
-    const adjectiveObjectComplementEnd = this.TryParseComplement(seq, adjectiveObjectForComplementEnd, end);
+    const adjectiveObjectComplementEnd = this.TryParseComplement(seq, adjectiveObjectForComplementEnd, end, true);
     if (adjectiveObjectComplementEnd !== null && this.SkipAdverbs(seq, adjectiveObjectComplementEnd, end) === end) return T.Type5;
    }
   }
@@ -126,7 +126,7 @@ class CheckContext {
   if (obj2End !== null && this.SkipAdverbs(seq, obj2End, end) === end) return T.Type4;
   const vpCompEnd = this.TryParseVerbPhraseComplement(seq, obj1End, end);
   if (vpCompEnd !== null && this.SkipAdverbs(seq, vpCompEnd, end) === end) return T.Type5;
-  const compEnd = this.TryParseComplement(seq, obj1End, end);
+  const compEnd = this.TryParseComplement(seq, obj1End, end, true);
   if (compEnd !== null && this.SkipAdverbs(seq, compEnd, end) === end) return T.Type5;
   const ppEnd = this.TryParsePP(seq, obj1End, end);
   if (ppEnd !== null && this.SkipAdverbs(seq, ppEnd, end) === end) return T.Type3;
@@ -208,9 +208,12 @@ class CheckContext {
   return null;
  }
 
- private TryParseComplement(seq: Sequence, start: number, end: number): number | null {
+ private TryParseComplement(seq: Sequence, start: number, end: number, objectComplement=false): number | null {
   const next = this.TryParseAdjP(seq, start, end);
   if (next !== null) return next;
+  // Battle rule: this physical card already contains the infinitive verb.
+  // Keep the original Unity behavior when this explicit battle option is off.
+  if (start < end && seq[start] === P.TO_VB && this.battleToObjectOnly) return objectComplement ? start + 1 : null;
   if (start + 1 < end && seq[start] === P.TO_VB && seq[start + 1] === P.VB) return start + 2;
   if (start < end && seq[start] === P.TO_VB) return start + 1;
   if (start < end && (seq[start] === P.VB || seq[start] === P.MODAL)) return start + 1;
@@ -239,7 +242,7 @@ class CheckContext {
 export function Check(sequence: Sequence | null | undefined): LearningGrammarCheckResult {
  return new CheckContext(false).Check(sequence);
 }
-export function CheckPlayableSegment(sequence: Sequence | null | undefined, allowBareCountableNoun = false): LearningGrammarCheckResult {
- return new CheckContext(allowBareCountableNoun).CheckPlayableSegment(sequence);
+export function CheckPlayableSegment(sequence: Sequence | null | undefined, allowBareCountableNoun = false, battleToObjectOnly=false): LearningGrammarCheckResult {
+ return new CheckContext(allowBareCountableNoun,battleToObjectOnly).CheckPlayableSegment(sequence);
 }
 export const LearningLocalGrammarChecker = { Check, CheckPlayableSegment };

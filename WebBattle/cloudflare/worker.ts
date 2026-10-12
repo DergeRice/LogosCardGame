@@ -1,7 +1,9 @@
 import { DurableObject } from 'cloudflare:workers';
 import { Game,type GameSocket } from '../server/game.js';
 import { snapshot,restore,nextDeadline } from '../server/persistence.js';
-interface Env { BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string }
+import {AuditStore} from './audit-store.js';
+import {adminAuthorized} from '../server/audit.js';
+interface Env { BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;ADMIN_LOG_TOKEN?:string }
 type Attachment={id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
@@ -9,6 +11,17 @@ const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Numbe
 export default {
  async fetch(request:Request,env:Env):Promise<Response>{
   const url=new URL(request.url);
+  if(url.pathname.startsWith('/admin/logs')){
+   const origin=request.headers.get('Origin'),allowed=!origin||env.ALLOWED_ORIGINS.split(',').includes(origin);
+   const headers=new Headers({'Cache-Control':'no-store','Vary':'Origin'});
+   if(origin&&allowed){headers.set('Access-Control-Allow-Origin',origin);headers.set('Access-Control-Allow-Headers','Authorization,Content-Type');headers.set('Access-Control-Allow-Methods','GET,POST,OPTIONS');}
+   if(!allowed)return new Response('Origin not allowed',{status:403});
+   if(request.method==='OPTIONS')return new Response(null,{status:204,headers});
+   if(!adminAuthorized(request.headers.get('Authorization'),env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 접근 코드가 필요합니다.'},{status:401,headers});
+   const response=await env.BATTLE.getByName('public-arena-v1').fetch(request);
+   for(const [key,value]of response.headers)headers.set(key,value);
+   return new Response(response.body,{status:response.status,headers});
+  }
   if(url.pathname!=='/health'&&url.pathname!=='/socket')return new Response('Not found',{status:404});
   if(url.pathname==='/socket'){
    if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return new Response('WebSocket required',{status:426});
@@ -21,12 +34,13 @@ export default {
 } satisfies ExportedHandler<Env>;
 
 export class BattleArena extends DurableObject<Env>{
- game:Game;cache=new Map<string,string>();adapters=new Map<WebSocket,GameSocket>();
+ game:Game; audit:AuditStore;cache=new Map<string,string>();adapters=new Map<WebSocket,GameSocket>();
  // All game mutations AND persistence are serialized; responses flush after commit.
  queue:Promise<unknown>=Promise.resolve();outbox:(()=>void)[]|null=null;
  constructor(ctx:DurableObjectState,env:Env){
   super(ctx,env);
-  this.game=new Game({durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,30,2,120)*1000});
+  this.audit=new AuditStore(ctx.storage.sql);
+  this.game=new Game({auditSink:event=>this.audit.insert(event),durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,30,2,120)*1000});
   ctx.blockConcurrencyWhile(async()=>{
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY,value TEXT NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');
@@ -71,6 +85,7 @@ export class BattleArena extends DurableObject<Env>{
   if(deadline!==null)await this.ctx.storage.setAlarm(deadline);else await this.ctx.storage.deleteAlarm();
  }
  async fetch(request:Request):Promise<Response>{
+  if(new URL(request.url).pathname.startsWith('/admin/logs'))return this.audit.handle(request);
   return this.serial(()=>{
    this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');
    this.game.tick();
@@ -93,15 +108,15 @@ export class BattleArena extends DurableObject<Env>{
    try{
     if(typeof raw!=='string'||new TextEncoder().encode(raw).byteLength>4096){ws.close(1009,'Message too large');return;}
     const now=Date.now();a.tokens=Math.min(20,a.tokens+(now-a.at)/250)-1;a.at=now;ws.serializeAttachment(a);
-    if(a.tokens<0){this.game.send(adapter,{type:'error',message:'요청이 너무 빨라요. 잠시 기다려 주세요.'});if(a.tokens< -20)ws.close(4008,'rate limit');return;}
+    if(a.tokens<0){this.game.audit(p,'rate_limit','warn',{code:'RATE_LIMIT'});this.game.send(adapter,{type:'error',message:'요청이 너무 빨라요. 잠시 기다려 주세요.'});if(a.tokens< -20)ws.close(4008,'rate limit');return;}
     const msg=JSON.parse(raw);if(!msg||typeof msg!=='object'||Array.isArray(msg))throw Error('잘못된 메시지예요.');
-    if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken);a.id=p.id;ws.serializeAttachment(a);}
+    if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken);this.game.audit(p,'connected');a.id=p.id;ws.serializeAttachment(a);}
     else if(p.socket===adapter)this.game.handle(p,msg);
-   }catch(e){this.game.send(adapter,{type:'error',message:e instanceof SyntaxError?'읽을 수 없는 요청이에요.':e instanceof Error?e.message:'요청 오류'});}
+   }catch(e){const message=e instanceof SyntaxError?'읽을 수 없는 요청이에요.':e instanceof Error?e.message:'요청 오류';this.game.audit(p,'server_error','error',{code:'SERVER_ERROR',reason:message});this.game.send(adapter,{type:'error',message});}
   });
  }
  async webSocketClose(ws:WebSocket,code:number,reason:string){await this.disconnected(ws);try{ws.close(code,reason);}catch{/* already closed */}}
  async webSocketError(ws:WebSocket){await this.disconnected(ws);}
- async disconnected(ws:WebSocket){await this.serial(()=>{const a=ws.deserializeAttachment() as Attachment;const p=[...this.game.sessions.values()].find(p=>p.id===a.id);if(p)this.game.disconnected(p,this.adapter(ws));this.adapters.delete(ws);});}
+ async disconnected(ws:WebSocket){await this.serial(()=>{const a=ws.deserializeAttachment() as Attachment;const p=[...this.game.sessions.values()].find(p=>p.id===a.id);if(p){this.game.audit(p,'disconnected','warn');this.game.disconnected(p,this.adapter(ws));}this.adapters.delete(ws);});}
  async alarm(){await this.serial(()=>this.game.tick());}
 }

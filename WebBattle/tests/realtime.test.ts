@@ -32,7 +32,7 @@ test('four real sockets: unanimous draw, unique shared deck, retained Correct, d
   const msg={cards:[verb.id],requestId:randomUUID(),handVersion:player.room!.handVersion};player.send('submit',msg);player.send('submit',msg);
   await player.until(()=>player.room!.judgment?.submissionId===msg.requestId);assert.equal(player.room!.judgment!.valid,true);assert.equal(player.room!.judgment!.accepted,false);assert.equal(player.score,0);assert.ok(player.room!.hand.some(c=>c.id===verb.id));await player.until(()=>player.messages.some(m=>m.duplicate));
   while(clients[0].room!.deckCount>=4)await approveDraw();
-  assert.equal(clients[0].room!.deckCount,DECK_FACES.length%4);assert.equal(seen.size,DECK_FACES.length-2);assert.equal(clients.flatMap(c=>c.room!.hand).length,DECK_FACES.length-2);
+  assert.equal(clients[0].room!.deckCount,DECK_FACES.length%4);assert.equal(seen.size,DECK_FACES.length-DECK_FACES.length%4);assert.equal(clients.flatMap(c=>c.room!.hand).length,DECK_FACES.length-DECK_FACES.length%4);
   const staleId=randomUUID();player.send('submit',{...msg,requestId:staleId});await player.until(()=>player.messages.some(m=>m.type==='error'&&m.requestId===staleId&&m.message.includes('이전 카드')));assert.equal(player.score,0);
   assert.equal(clients[0].room!.drawVote,undefined);clients[0].send('drawVote',{voteId:randomUUID(),approve:true});await clients[0].until(()=>clients[0].messages.some(m=>m.type==='error'&&m.message.includes('동의할')));
   clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');assert.ok(clients[1].room!.players.every(p=>p.score===0));
@@ -83,3 +83,5 @@ test('two real sockets with controlled 26-point hand: human decision waits and G
   b.send('drawRequest',{requestId:randomUUID()});await b.until(()=>b.room!.deckCount===next-2);
  }finally{await app.close();}
 });
+
+

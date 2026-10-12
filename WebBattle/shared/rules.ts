@@ -11,7 +11,7 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  adverb: { name: '부사', symbol: 'ADV', example: 'now · then · soon', sheet: 5, col: 1, row: 2, tone: 'pink' },
  preposition: { name: '전치사', symbol: 'PREP', example: 'in · on · at · by · to', sheet: 4, col: 1, row: 1, tone: 'gold' },
  very: { name: 'Very', symbol: 'VERY', example: 'very', sheet: 5, col: 3, row: 2, tone: 'pink' },
- 'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to · 동사원형', sheet: 6, col: 0, row: 0, tone: 'green' },
+ 'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to + 동사 포함 · 5형식 목적격 보어 전용', sheet: 6, col: 0, row: 0, tone: 'green' },
  pronoun: { name: '대명사', symbol: 'P', example: 'I · you · we', sheet: 1, col: 2, row: 0, tone: 'coral' },
  count: { name: '셀 수 있는 명사', symbol: 'N', example: 'book · cat', sheet: 2, col: 2, row: 0, tone: 'blue' },
  mass: { name: '셀 수 없는 명사', symbol: 'N', example: 'water · milk', sheet: 1, col: 2, row: 2, tone: 'blue' },
@@ -84,7 +84,7 @@ export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; 
 };
 export const DECK_FACES: Omit<Card,'id'>[] = [
  ...(Object.keys(CATALOG) as Kind[]).filter(kind=>kind!=='very').map(kind=>({kind})),
- ...Object.entries(VARIANTS).filter(([variant,face])=>face.kind!=='very'&&variant!=='to-infinitive-plus3').map(([variant,face])=>({kind:face.kind,variant}))
+ ...Object.entries(VARIANTS).filter(([variant,face])=>face.kind!=='very'&&variant!=='to-infinitive-plus3'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant}))
 ];
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }
@@ -95,7 +95,7 @@ export function judge(kinds: Kind[]): Judgment {
  // This is the actual battle entry point. Check() has different semantics.
  const positions=kinds.map(kind => CARD_POS[kind]);
  if(positions.some(pos=>pos===null))return {valid:false,patternType:1,message:'기능 카드는 문장에 넣을 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'기능 카드는 손패에서 사용하세요.',spans:[]};
- const result = CheckPlayableSegment(positions as LearningPosType[], false);
+ const result = CheckPlayableSegment(positions as LearningPosType[], false, true);
  return { ...result, form: result.valid ? result.patternType : undefined, label: result.message,
   points: result.valid ? result.usedLength : 0,
   reason: result.valid ? `${result.message} · 제출 ${result.usedStartIndex + 1}~${result.usedStartIndex + result.usedLength}번 카드 인정` : result.message,
