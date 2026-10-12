@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Central feedback layer. Clips are curated from Cute UI & Interact Sound Effects Pack;
+/// Central feedback layer. Clips are curated from the project's existing audio and prior games;
 /// burst particles use the texture contained by Cartoon FX Remaster prefabs.
 /// </summary>
 public sealed class LearningFeedback : MonoBehaviour
