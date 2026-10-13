@@ -21,6 +21,7 @@ import {type SentenceExample} from '../shared/sentence-examples.js';
 import {cardSentenceExample} from '../shared/card-sentence-example.js';
 import {SentenceExamplePanel} from './SentenceExamplePanel.js';
 import {primeSpeech} from './speech.js';
+import {preloadExampleAudio,unlockGameAudio} from './exampleAudio.js';
 import './score-presentation.css';
 import './game-stage.css';
 import './special-cards.css';
@@ -90,15 +91,11 @@ function App() {
  useEffect(()=>{if(!correct||scoreProgress.running||exampleShown.current===correct.id)return;exampleShown.current=correct.id;const pattern=correct.judgment.patternType,key=`logos-example-index-${pattern}`,index=Number(localStorage.getItem(key))||0;localStorage.setItem(key,String(index+1));const used=correct.cards.slice(correct.judgment.usedStartIndex,correct.judgment.usedStartIndex+correct.judgment.usedLength);const built=cardSentenceExample(correct.cards,correct.judgment,index);setExample(built.example);if(!built.example)trace('example_missing',{code:'EXAMPLE_MISSING',reason:built.reason});},[correct,scoreProgress.running]);
  useEffect(()=>{setExample(null);exampleShown.current='';},[room?.matchId,room?.phase]);
  const feedbackTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
- function tone(win = false) { if (!soundRef.current) return; try { const ctx = audioRef.current ??= new AudioContext(); void ctx.resume(); const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.setValueAtTime(win ? 660 : 440, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(win ? 990 : 660, ctx.currentTime + .12); g.gain.setValueAtTime(.06, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .2); o.start(); o.stop(ctx.currentTime + .21); } catch { /* Audio is optional. */ } }
+ function tone(win = false) { if (!soundRef.current) return; try { const ctx = audioRef.current ??= unlockGameAudio();if(!ctx)return; void ctx.resume(); const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.setValueAtTime(win ? 660 : 440, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(win ? 990 : 660, ctx.currentTime + .12); g.gain.setValueAtTime(.06, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .2); o.start(); o.stop(ctx.currentTime + .21); } catch { /* Audio is optional. */ } }
  useEffect(() => { soundRef.current = sound; localStorage.setItem('logos-sound', sound ? 'on' : 'off'); }, [sound]);
  useEffect(()=>{
   const activate=()=>{
-   primeSpeech();if(!soundRef.current)return;
-   try{const AudioCtor=window.AudioContext??(window as Window & {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;if(!AudioCtor)return;
-    const fresh=!audioRef.current,ctx=audioRef.current??=new AudioCtor();void ctx.resume().catch(()=>{});
-    if(fresh){const source=ctx.createBufferSource();source.buffer=ctx.createBuffer(1,1,ctx.sampleRate);source.connect(ctx.destination);source.start();}
-   }catch{/* Browsers without Web Audio can still play the game. */}
+   primeSpeech();audioRef.current=unlockGameAudio();
   };
   document.addEventListener('click',activate,true);document.addEventListener('touchend',activate,true);
   return()=>{document.removeEventListener('click',activate,true);document.removeEventListener('touchend',activate,true);};
@@ -117,7 +114,7 @@ function App() {
   if(document.fullscreenElement||doc.webkitFullscreenElement){try{if(document.exitFullscreen)await document.exitFullscreen();else await doc.webkitExitFullscreen?.();}catch{}return;}
   await enterGameFullscreen();
  }
- useEffect(()=>{let active=true;void Promise.all([preloadProfiles(),preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));})]).then(([, {failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;void Promise.all([preloadProfiles(),preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}),preloadExampleAudio().catch(()=>null)]).then(([, {failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
  useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 200); return () => clearInterval(t); }, []);
  useEffect(() => {
   let stopped = false, retry: ReturnType<typeof setTimeout>, heartbeat: ReturnType<typeof setInterval>, attempts = 0;

@@ -1,7 +1,9 @@
+import {unlockGameAudio} from './exampleAudio.js';
 let primed=false;
 let primer:SpeechSynthesisUtterance|null=null;
 /** Call synchronously inside a trusted click/touch event, before delayed examples. */
 export function primeSpeech(){
+ unlockGameAudio();
  if(primed||typeof speechSynthesis==='undefined'||typeof SpeechSynthesisUtterance==='undefined')return;
  if(speechSynthesis.speaking)return;
  try{

@@ -18,6 +18,7 @@
     "test:parity": "tsx scripts/compare-grammar.ts",
     "profile-editor": "tsx scripts/profile-editor.ts",
     "cards:build": "tsx scripts/generate-card-faces.ts",
+    "audio:build": "tsx scripts/generate-example-audio.ts",
     "version:next": "node scripts/bump-version.mjs"
   },
   "dependencies": {

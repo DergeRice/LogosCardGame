@@ -1,7 +1,9 @@
 import {test,expect} from '@playwright/test';
 import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
+import {observeRecordedAudio} from './helpers/audio.js';
 for(const mobile of [false,true])test(`example after score, field overlay and TTS: ${mobile?'landscape reduced viewport':'desktop'}`,async({browser})=>{
  const ctx=await browser.newContext({viewport:mobile?{width:900,height:430}:{width:1280,height:900},hasTouch:mobile,isMobile:mobile});
+ await ctx.addInitScript(observeRecordedAudio);
  await ctx.addInitScript(({mobile})=>{
   const AudioCtor=window.AudioContext;
   if(AudioCtor)Object.defineProperty(window,'AudioContext',{value:class extends AudioCtor{constructor(options?:AudioContextOptions){super(options);(window as any).__gameAudio=this;}}});
@@ -27,9 +29,9 @@ for(const mobile of [false,true])test(`example after score, field overlay and TT
   if(mobile)await expect(page.locator('.shell')).toHaveAttribute('data-viewport-height','370');
   if(mobile)expect(await page.evaluate(()=>(window as any).__speechUnlocked)).toBe(true);
   await expect.poll(()=>page.evaluate(()=>(window as any).__gameAudio?.state)).toBe('running');
-  await expect.poll(()=>page.evaluate(()=>(window as any).__spoken.length)).toBe(1);
-  expect(await page.evaluate(()=>(window as any).__spoken[0])).toBe('I make the student ready.');
-  await page.screenshot({path:`docs/screenshots/example-panel-${mobile?'mobile':'desktop'}.png`});await page.evaluate(()=>(window as any).__finishSpeech());
-  await page.waitForTimeout(1500);await expect(panel).toBeVisible();await expect(panel).toHaveCount(0,{timeout:1500});await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toBeVisible();expect(await page.evaluate(()=>(window as any).__spoken.length)).toBe(1);expect(errors).toEqual([]);
+  if(mobile){await expect.poll(()=>page.evaluate(()=>(window as any).__recordedBuffers.length)).toBe(1);expect(await page.evaluate(()=>(window as any).__recordedBuffers[0].peak)).toBeGreaterThan(.02);await expect.poll(()=>page.evaluate(()=>(window as any).__recordedBuffers[0].end),{timeout:15000}).toBeGreaterThan(0);}
+  else{await expect.poll(()=>page.evaluate(()=>(window as any).__spoken.length)).toBe(1);expect(await page.evaluate(()=>(window as any).__spoken[0])).toBe('I make the student ready.');await page.evaluate(()=>(window as any).__finishSpeech());}
+  await page.screenshot({path:`docs/screenshots/example-panel-${mobile?'mobile':'desktop'}.png`});
+  await page.waitForTimeout(1500);await expect(panel).toBeVisible();await expect(panel).toHaveCount(0,{timeout:1500});await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toBeVisible();expect(await page.evaluate(()=>(window as any).__spoken.length)).toBe(mobile?0:1);expect(errors).toEqual([]);
  }finally{await ctx.close();}
 });
