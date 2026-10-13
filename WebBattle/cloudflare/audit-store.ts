@@ -1,6 +1,8 @@
 import {AUDIT_MAX_ROWS,AUDIT_RETENTION_MS,type AuditEvent} from '../server/audit.js';
 import type {SqlStorage} from '@cloudflare/workers-types';
 import {observedSentence,submissionKey,type SentenceCombo} from '../shared/sentence-analytics.js';
+import {createHash,randomBytes} from 'node:crypto';
+const accessHash=(token:string)=>createHash('sha256').update(token).digest('hex');
 export class AuditStore{
  private cleanedAt=0;
  private insertCount=0;
@@ -8,6 +10,7 @@ export class AuditStore{
   sql.exec("CREATE TABLE IF NOT EXISTS audit_logs(id TEXT PRIMARY KEY,time INTEGER NOT NULL,level TEXT NOT NULL,event TEXT NOT NULL,action TEXT,player TEXT,room TEXT,request_id TEXT,data TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'open',note TEXT NOT NULL DEFAULT '')");
   sql.exec('CREATE INDEX IF NOT EXISTS audit_time ON audit_logs(time)');
   sql.exec('CREATE INDEX IF NOT EXISTS audit_request ON audit_logs(request_id,event)');
+  sql.exec('CREATE TABLE IF NOT EXISTS admin_access(hash TEXT PRIMARY KEY,kind TEXT NOT NULL,expires INTEGER NOT NULL)');
   sql.exec('CREATE TABLE IF NOT EXISTS sentence_combos(key TEXT PRIMARY KEY,pattern INTEGER NOT NULL,sample TEXT NOT NULL,count INTEGER NOT NULL,scored INTEGER NOT NULL,ai INTEGER NOT NULL,unknown_actor INTEGER NOT NULL,first_at INTEGER NOT NULL,last_at INTEGER NOT NULL)');
   sql.exec('CREATE TABLE IF NOT EXISTS sentence_seen(key TEXT PRIMARY KEY)');
   sql.exec('CREATE TABLE IF NOT EXISTS sentence_meta(key TEXT PRIMARY KEY,value INTEGER NOT NULL)');
@@ -18,6 +21,27 @@ export class AuditStore{
    for(const e of history)if(e.event==='submit_result')this.observe(e,snapshots.get(submissionKey(e)));
    sql.exec("INSERT INTO sentence_meta(key,value) VALUES('backfilled',?)",Date.now());
   }
+ }
+ authorized(header:string|null){
+  const token=header?.startsWith('Bearer ')?header.slice(7):'';
+  if(!/^[A-Za-z0-9_-]{32,128}$/.test(token))return false;
+  return Boolean(this.sql.exec('SELECT hash FROM admin_access WHERE hash=? AND kind=\'session\' AND expires>?',accessHash(token),Date.now()).toArray().length);
+ }
+ async access(request:Request):Promise<Response>{
+  if(request.method!=='POST')return Response.json({error:'Method not allowed'},{status:405});
+  const action=new URL(request.url).pathname.split('/').at(-1);
+  this.sql.exec('DELETE FROM admin_access WHERE expires<=?',Date.now());
+  if(action==='revoke'){const token=request.headers.get('Authorization')?.slice(7)??'';this.sql.exec('DELETE FROM admin_access WHERE hash=?',accessHash(token));return Response.json({ok:true});}
+  if(action==='redeem'){
+   const text=await request.text();if(text.length>1000)return Response.json({error:'올바른 접속 링크가 필요합니다.'},{status:400});
+   let code;try{code=JSON.parse(text)?.code}catch{return Response.json({error:'올바른 접속 링크가 필요합니다.'},{status:400})}
+   if(typeof code!=='string'||!/^[a-f0-9]{64}$/.test(code))return Response.json({error:'올바른 접속 링크가 필요합니다.'},{status:401});
+   const rows=this.sql.exec('DELETE FROM admin_access WHERE hash=? AND kind=\'bootstrap\' AND expires>? RETURNING hash',accessHash(code),Date.now()).toArray();
+   if(!rows.length)return Response.json({error:'접속 링크가 만료됐거나 이미 사용됐습니다.'},{status:401});
+  }else if(action!=='bootstrap'&&action!=='session')return Response.json({error:'Not found'},{status:404});
+  const bootstrap=action==='bootstrap',token=Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''),expiresAt=Date.now()+(bootstrap?10*60_000:90*24*60*60_000);
+  this.sql.exec('INSERT INTO admin_access(hash,kind,expires) VALUES(?,?,?)',accessHash(token),bootstrap?'bootstrap':'session',expiresAt);
+  return Response.json({token,expiresAt},{headers:{'Cache-Control':'no-store'}});
  }
  private observe(e:AuditEvent,earlier?:AuditEvent){
   if(e.event!=='submit_result'||e.details.valid!==true)return;

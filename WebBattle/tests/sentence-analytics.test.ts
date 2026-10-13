@@ -8,6 +8,17 @@ import {Game} from '../server/game.js';
 const cards=[{id:'unused',kind:'adjective'},{id:'s',kind:'pronoun',variant:'pronoun-x2'},{id:'v',kind:'verb'},{id:'o',kind:'mass',variant:'mass-plus2'}];
 const event=(requestId:string,overrides:Record<string,unknown>={})=>makeAudit('submit_result','info',{playerId:'p',matchId:'m',requestId},{valid:true,accepted:true,patternType:3,usedStartIndex:1,usedLength:3,submittedCards:cards,...overrides});
 function storage(){const db=new DatabaseSync(':memory:');return {db,sql:{exec(query:string,...bindings:any[]){const s=db.prepare(query);const rows=s.columns().length?s.all(...bindings):(s.run(...bindings),[]);return {toArray:()=>rows,one:()=>{assert.equal(rows.length,1);return rows[0]}}}}};}
+test('administrator bootstrap is single-use; hashed browser sessions persist, expire and revoke',async()=>{
+ const {db,sql}=storage(),store=new AuditStore(sql as any);
+ const created=await (await store.access(new Request('https://local/admin/logs/access/bootstrap',{method:'POST'}))).json();
+ const redeem=()=>store.access(new Request('https://local/admin/logs/access/redeem',{method:'POST',body:JSON.stringify({code:created.token})}));
+ const [a,b]=await Promise.all([redeem(),redeem()]);assert.deepEqual([a.status,b.status].sort(),[200,401]);
+ const session=await (a.status===200?a:b).json();assert.equal(store.authorized('Bearer '+session.token),true);assert.equal(store.authorized('Bearer '+created.token),false);assert.equal(store.authorized('Bearer wrong'),false);
+ assert.equal(JSON.stringify(sql.exec('SELECT * FROM admin_access').toArray()).includes(session.token),false);
+ const restored=new AuditStore(sql as any);assert.equal(restored.authorized('Bearer '+session.token),true);
+ await restored.access(new Request('https://local/admin/logs/access/revoke',{method:'POST',headers:{Authorization:'Bearer '+session.token}}));assert.equal(restored.authorized('Bearer '+session.token),false);
+ const expired=await (await restored.access(new Request('https://local/admin/logs/access/session',{method:'POST'}))).json();sql.exec('UPDATE admin_access SET expires=0');assert.equal(restored.authorized('Bearer '+expired.token),false);db.close();
+});
 test('POS normalization retains order and repetition, excludes unrecognized cards and merges effects',()=>{
  const a=observedSentence(event('a'))!;assert.equal(a.key,'PRP VB NNU');assert.deepEqual(a.cards.map(c=>c.id),['s','v','o']);
  const b=observedSentence(event('b',{submittedCards:cards.map(c=>({...c,variant:undefined}))}))!;assert.equal(a.key,b.key);

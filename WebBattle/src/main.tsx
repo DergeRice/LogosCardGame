@@ -1,3 +1,4 @@
+import {QuickTools} from './QuickTools.js';
 import {AdminLogs} from './AdminLogs.js';
 import {playerCards,fieldCards,canTransferCard} from '../shared/cardViews.js';
 import React, { useEffect, useRef, useState, type CSSProperties } from 'react';
@@ -207,7 +208,7 @@ const adminRoute=['/admin','/admin/'].includes(location.pathname);
 document.documentElement.classList.toggle('admin-route',adminRoute);
 const cardViewerRoute=location.pathname.replace(/\/$/,'')==='/cards';
 document.documentElement.classList.toggle('card-viewer-route',cardViewerRoute);
-createRoot(document.getElementById('root')!).render(adminRoute?<AdminLogs/>:cardViewerRoute?<CardViewer/>:<App/>);
+createRoot(document.getElementById('root')!).render(<>{adminRoute?<AdminLogs/>:cardViewerRoute?<CardViewer/>:<App/>}<QuickTools/></>);
 
 
 

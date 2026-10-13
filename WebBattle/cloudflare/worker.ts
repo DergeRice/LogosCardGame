@@ -17,7 +17,6 @@ export default {
    if(origin&&allowed){headers.set('Access-Control-Allow-Origin',origin);headers.set('Access-Control-Allow-Headers','Authorization,Content-Type');headers.set('Access-Control-Allow-Methods','GET,POST,OPTIONS');}
    if(!allowed)return new Response('Origin not allowed',{status:403});
    if(request.method==='OPTIONS')return new Response(null,{status:204,headers});
-   if(!adminAuthorized(request.headers.get('Authorization'),env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 접근 코드가 필요합니다.'},{status:401,headers});
    const response=await env.BATTLE.getByName('public-arena-v1').fetch(request);
    for(const [key,value]of response.headers)headers.set(key,value);
    return new Response(response.body,{status:response.status,headers});
@@ -85,7 +84,12 @@ export class BattleArena extends DurableObject<Env>{
   if(deadline!==null)await this.ctx.storage.setAlarm(deadline);else await this.ctx.storage.deleteAlarm();
  }
  async fetch(request:Request):Promise<Response>{
-  if(new URL(request.url).pathname.startsWith('/admin/logs'))return this.audit.handle(request);
+  if(new URL(request.url).pathname.startsWith('/admin/logs')){
+   const path=new URL(request.url).pathname,header=request.headers.get('Authorization');
+   const redeem=path==='/admin/logs/access/redeem';
+   if(!redeem&&!adminAuthorized(header,this.env.ADMIN_LOG_TOKEN)&&!this.audit.authorized(header))return Response.json({error:'관리자 접속 인증이 필요합니다.'},{status:401});
+   return path.startsWith('/admin/logs/access/')?this.audit.access(request):this.audit.handle(request);
+  }
   return this.serial(()=>{
    this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');
    this.game.tick();
