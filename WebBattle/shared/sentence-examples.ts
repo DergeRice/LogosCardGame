@@ -1,6 +1,7 @@
+import type {Kind} from './rules.js';
 export type ExampleRole='subject'|'verb'|'object'|'indirect'|'direct'|'subjectComplement'|'objectComplement'|'manner'|'place'|'time'|'target'|'accompaniment';
-export type ExamplePart={text:string;role:ExampleRole};
-export type SentenceExample={id:string;patternType:number;parts:ExamplePart[];english:string;korean:string;imperative?:boolean};
+export type ExamplePart={text:string;role:ExampleRole;kind?:Kind;cardId?:string};
+export type SentenceExample={id:string;patternType:number;parts:ExamplePart[];english:string;korean:string;imperative?:boolean;cardAligned?:boolean};
 export const EXAMPLE_ROLE_LABELS:Record<ExampleRole,string>={subject:'주어',verb:'동사',object:'목적어',indirect:'간접 목적어',direct:'직접 목적어',subjectComplement:'주격 보어',objectComplement:'목적격 보어',manner:'방법',place:'장소',time:'시간',target:'대상 부사어',accompaniment:'곁들임 부사어'};
 type Modifier=ExamplePart&{ko:string};
 type Seed={patternType:number;core:ExamplePart[];ko:string;modifiers:[Modifier,Modifier,Modifier];alternatives:[Modifier,Modifier]};

@@ -1,0 +1,30 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {cardSentenceExample} from '../shared/card-sentence-example.js';
+import {judge,judgeCards,type Kind,type Card} from '../shared/rules.js';
+import {CheckPlayableSegment,LearningPosType as P} from '../shared/LearningLocalGrammarChecker.js';
+import observed from './fixtures/observed-pos-combinations.json' with {type:'json'};
+const make=(kinds:Kind[]):Card[]=>kinds.map((kind,i)=>({id:'c'+i,kind}));
+test('all 64 previously observed anonymous POS sequences receive card-aligned examples',()=>{
+ for(const sequence of observed as Kind[][]){const cards=make(sequence),result=judgeCards(cards);assert.equal(result.valid,true,sequence.join(' '));const example=cardSentenceExample(cards,result).example!;assert.ok(example,sequence.join(' '));assert.deepEqual(example.parts.map(p=>p.kind),sequence);}
+});
+test('realized words preserve every accepted card kind, identity and order across all five forms',()=>{
+ const arrays:Kind[][]=[['pronoun','verb'],['mass','verb'],['article','count','verb'],['possessive','adjective','count','verb'],['pronoun','be','adjective'],['pronoun','verb','adjective'],['mass','be','article','count'],['pronoun','verb','mass'],['pronoun','verb','pronoun','mass'],['pronoun','verb','mass','adjective'],['pronoun','verb','pronoun','to-infinitive'],['do','pronoun','verb'],['pronoun','modal','frequency','verb','preposition','pronoun'],['pronoun','do','not','verb','article','count'],['mass','be','not','adjective','adverb'],['pronoun','verb','pronoun','verb','indefinite','count']];
+ for(const kinds of arrays)for(let variation=0;variation<3;variation++){
+  const cards=make(kinds),r=judgeCards(cards);assert.equal(r.valid,true,kinds.join(' '));const e=cardSentenceExample(cards,r,variation).example!;assert.ok(e,kinds.join(' '));assert.deepEqual(e.parts.map(p=>p.kind),kinds.slice(r.usedStartIndex,r.usedStartIndex+r.usedLength));assert.deepEqual(e.parts.map(p=>p.cardId),cards.slice(r.usedStartIndex,r.usedStartIndex+r.usedLength).map(c=>c.id));assert.match(e.korean,/[가-힣]/);assert.ok(!e.english.includes('undefined'));assert.ok(!e.korean.includes('undefined'));
+ }
+});
+test('pronoun and noun agreement, auxiliaries and one-card To complements are realized correctly',()=>{
+ const realize=(kinds:Kind[],variation=0)=>{const c=make(kinds);return cardSentenceExample(c,judgeCards(c),variation).example!.english};
+ assert.equal(realize(['pronoun','be','adjective']), 'I am happy.');assert.equal(realize(['pronoun','be','adjective'],1),'We are happy.');assert.equal(realize(['pronoun','be','adjective'],2),'She is happy.');
+ assert.equal(realize(['article','count','verb']),'The teacher works.');assert.equal(realize(['mass','verb']),'Traffic flows.');assert.equal(realize(['pronoun','do','not','verb']),'I do not work.');
+ assert.equal(realize(['pronoun','verb','pronoun','to-infinitive']),'I want them to work.');assert.equal(realize(['pronoun','verb','mass','adjective']),'I make work easy.');
+ const partial=make(['adjective','verb','adjective']);const r=judgeCards(partial),e=cardSentenceExample(partial,r).example!;assert.equal(e.english,'Run!');assert.deepEqual(e.parts.map(p=>p.cardId),['c1']);
+});
+test('new battle rejects nonstandard legacy structures while the Unity reference entry remains intact',()=>{
+ for(const seq of [['pronoun','verb','modal'],['pronoun','verb','verb'],['indefinite','mass','verb'],['article','adverb','count','verb']] as Kind[][]){assert.equal(judge(seq).valid,false,seq.join(' '));assert.match(judge(seq).reason,/비표준/);}
+ assert.equal(judge(['pronoun','verb','adjective','mass']).patternType,3);
+ assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.JJ,P.NNU],false,true).patternType,4);
+ assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.MODAL],false,true).valid,true);
+ assert.equal(CheckPlayableSegment([P.DT_AN,P.NNU,P.VB],false,true).valid,true);
+});

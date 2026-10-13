@@ -1,3 +1,4 @@
+import {cardSentenceExample} from './card-sentence-example.js';
 import { CheckPlayableSegment, LearningPosType, type LearningGrammarCheckResult } from './LearningLocalGrammarChecker.js';
 // Rendering identifiers map explicitly to the original numeric Unity POS enum.
 export type Kind = 'pronoun' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'to-infinitive' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect';
@@ -96,6 +97,7 @@ export function judge(kinds: Kind[]): Judgment {
  const positions=kinds.map(kind => CARD_POS[kind]);
  if(positions.some(pos=>pos===null))return {valid:false,patternType:1,message:'기능 카드는 문장에 넣을 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'기능 카드는 손패에서 사용하세요.',spans:[]};
  const result = CheckPlayableSegment(positions as LearningPosType[], false, true);
+ if(result.valid){const example=cardSentenceExample(kinds.map((kind,i)=>({id:String(i),kind})),{...result,points:0,reason:'',spans:[]});if(!example.example){result.valid=false;result.message='비표준 문장 조합: '+example.reason;result.usedStartIndex=0;result.usedLength=0;}else if(result.patternType!==example.example.patternType){result.debugLog+=' | [BattleSyntax] noun-phrase form corrected';result.patternType=example.example.patternType as LearningGrammarCheckResult['patternType'];result.message=`${result.patternType}형식 문장`;}}
  return { ...result, form: result.valid ? result.patternType : undefined, label: result.message,
   points: result.valid ? result.usedLength : 0,
   reason: result.valid ? `${result.message} · 제출 ${result.usedStartIndex + 1}~${result.usedStartIndex + result.usedLength}번 카드 인정` : result.message,
