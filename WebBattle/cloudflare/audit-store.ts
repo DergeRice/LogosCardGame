@@ -1,17 +1,51 @@
 import {AUDIT_MAX_ROWS,AUDIT_RETENTION_MS,type AuditEvent} from '../server/audit.js';
+import type {SqlStorage} from '@cloudflare/workers-types';
+import {observedSentence,submissionKey,type SentenceCombo} from '../shared/sentence-analytics.js';
 export class AuditStore{
  private cleanedAt=0;
  private insertCount=0;
  constructor(private readonly sql:SqlStorage){
   sql.exec("CREATE TABLE IF NOT EXISTS audit_logs(id TEXT PRIMARY KEY,time INTEGER NOT NULL,level TEXT NOT NULL,event TEXT NOT NULL,action TEXT,player TEXT,room TEXT,request_id TEXT,data TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'open',note TEXT NOT NULL DEFAULT '')");
   sql.exec('CREATE INDEX IF NOT EXISTS audit_time ON audit_logs(time)');
+  sql.exec('CREATE INDEX IF NOT EXISTS audit_request ON audit_logs(request_id,event)');
+  sql.exec('CREATE TABLE IF NOT EXISTS sentence_combos(key TEXT PRIMARY KEY,pattern INTEGER NOT NULL,sample TEXT NOT NULL,count INTEGER NOT NULL,scored INTEGER NOT NULL,ai INTEGER NOT NULL,unknown_actor INTEGER NOT NULL,first_at INTEGER NOT NULL,last_at INTEGER NOT NULL)');
+  sql.exec('CREATE TABLE IF NOT EXISTS sentence_seen(key TEXT PRIMARY KEY)');
+  sql.exec('CREATE TABLE IF NOT EXISTS sentence_meta(key TEXT PRIMARY KEY,value INTEGER NOT NULL)');
+  if(!sql.exec("SELECT value FROM sentence_meta WHERE key='backfilled'").toArray().length){
+   const history=sql.exec<{data:string}>('SELECT data FROM audit_logs ORDER BY time,id').toArray().map(r=>JSON.parse(r.data) as AuditEvent);
+   const snapshots=new Map<string,AuditEvent>();
+   for(const e of history)if(e.event==='judgment'||e.event==='request'&&e.action==='submit'&&!snapshots.has(submissionKey(e)))snapshots.set(submissionKey(e),e);
+   for(const e of history)if(e.event==='submit_result')this.observe(e,snapshots.get(submissionKey(e)));
+   sql.exec("INSERT INTO sentence_meta(key,value) VALUES('backfilled',?)",Date.now());
+  }
+ }
+ private observe(e:AuditEvent,earlier?:AuditEvent){
+  if(e.event!=='submit_result'||e.details.valid!==true)return;
+  const key=submissionKey(e);
+  if(this.sql.exec('SELECT key FROM sentence_seen WHERE key=?',key).toArray().length)return;
+  this.sql.exec('INSERT INTO sentence_seen(key) VALUES(?)',key);
+  const sentence=observedSentence(e,earlier);
+  if(!sentence){this.sql.exec("INSERT INTO sentence_meta(key,value) VALUES('missing',1) ON CONFLICT(key) DO UPDATE SET value=value+1");return;}
+  this.sql.exec('INSERT INTO sentence_combos(key,pattern,sample,count,scored,ai,unknown_actor,first_at,last_at) VALUES(?,?,?,1,?,?,?,?,?) ON CONFLICT(key) DO UPDATE SET count=count+1,scored=scored+excluded.scored,ai=ai+excluded.ai,unknown_actor=unknown_actor+excluded.unknown_actor,first_at=MIN(first_at,excluded.first_at),last_at=MAX(last_at,excluded.last_at)',sentence.key,sentence.patternType,JSON.stringify({positions:sentence.positions,kinds:sentence.kinds}),Number(sentence.accepted),Number(sentence.ai===true),Number(sentence.ai===null),sentence.time,sentence.time);
+ }
+ private sentences(url:URL):Response{
+  const offset=Math.max(0,Math.floor(Number(url.searchParams.get('offset'))||0)),limit=Math.min(500,Math.max(1,Math.floor(Number(url.searchParams.get('limit'))||100)));
+  const form=Number(url.searchParams.get('form'))||0;
+  const totals=this.sql.exec<{total:number;unique:number;scoredTotal:number;scoredUnique:number;since:number|null}>('SELECT COALESCE(SUM(count),0) AS total,COUNT(*) AS "unique",COALESCE(SUM(scored),0) AS scoredTotal,COALESCE(SUM(CASE WHEN scored>0 THEN 1 ELSE 0 END),0) AS scoredUnique,MIN(first_at) AS since FROM sentence_combos').one();
+  const forms=this.sql.exec('SELECT pattern AS patternType,SUM(count) AS count,COUNT(*) AS "unique",SUM(scored) AS scoredCount FROM sentence_combos GROUP BY pattern ORDER BY count DESC').toArray();
+  const rows=this.sql.exec<{key:string;pattern:number;sample:string;count:number;scored:number;ai:number;unknown_actor:number;first_at:number;last_at:number}>('SELECT * FROM sentence_combos WHERE (?=0 OR pattern=?) ORDER BY count DESC,key LIMIT ? OFFSET ?',form,form,limit+1,offset).toArray();
+  const combinations:SentenceCombo[]=rows.slice(0,limit).map(r=>({key:r.key,patternType:r.pattern,...JSON.parse(r.sample),count:r.count,scoredCount:r.scored,aiCount:r.ai,unknownActorCount:r.unknown_actor,firstAt:r.first_at,lastAt:r.last_at}));
+  const missing=this.sql.exec<{value:number}>("SELECT value FROM sentence_meta WHERE key='missing'").toArray()[0]?.value??0;
+  return Response.json({...totals,forms,combinations,missingCards:missing,nextOffset:rows.length>limit?offset+limit:null},{headers:{'Cache-Control':'no-store'}});
  }
  insert(e:AuditEvent){
   this.sql.exec('INSERT INTO audit_logs(id,time,level,event,action,player,room,request_id,data) VALUES(?,?,?,?,?,?,?,?,?)',e.id,e.time,e.level,e.event,e.action,e.player??'',e.room??'',e.requestId,JSON.stringify(e));
+  this.observe(e);
   if(++this.insertCount%32===0||Date.now()-this.cleanedAt>60000){this.cleanedAt=Date.now();this.sql.exec('DELETE FROM audit_logs WHERE time<?',Date.now()-AUDIT_RETENTION_MS);this.sql.exec('DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs ORDER BY time DESC LIMIT -1 OFFSET ?)',AUDIT_MAX_ROWS);}
  }
  async handle(request:Request):Promise<Response>{
   const url=new URL(request.url),id=url.pathname.split('/')[3];
+  if(id==='sentences')return request.method==='GET'?this.sentences(url):Response.json({error:'Method not allowed'},{status:405});
   if(request.method==='POST'&&id){
    const text=await request.text();if(text.length>2400)return Response.json({error:'수정 내용이 너무 깁니다.'},{status:413});
    let body;try{body=JSON.parse(text)}catch{return Response.json({error:'올바른 JSON이 필요합니다.'},{status:400})}
@@ -25,7 +59,14 @@ export class AuditStore{
   const beforeId=url.searchParams.get('beforeId')??'zzzz';
   this.sql.exec('DELETE FROM audit_logs WHERE time<?',Date.now()-AUDIT_RETENTION_MS);
   const rows=this.sql.exec<{data:string;status:string;note:string}>('SELECT data,status,note FROM audit_logs WHERE (time<? OR (time=? AND id<?)) AND time>? AND (?=\'\' OR level=?) AND (?=\'\' OR status=?) AND (?=\'\' OR player LIKE ? OR room LIKE ? OR request_id LIKE ? OR data LIKE ?) ORDER BY time DESC,id DESC LIMIT ?',before,before,beforeId,Date.now()-AUDIT_RETENTION_MS,level,level,status,status,q,`%${q}%`,`%${q}%`,`%${q}%`,`%${q}%`,limit).toArray();
-  const logs=rows.map(row=>({...JSON.parse(row.data),status:row.status,note:row.note}));
+  const logs=rows.map(row=>{
+   const e={...JSON.parse(row.data),status:row.status,note:row.note} as AuditEvent;
+   if(e.event==='submit_result'&&!Array.isArray(e.details.submittedCards)&&e.requestId){
+    const earlier=this.sql.exec<{data:string}>('SELECT data FROM audit_logs WHERE request_id=? AND event=\'judgment\' LIMIT 30',e.requestId).toArray().map(r=>JSON.parse(r.data) as AuditEvent).find(r=>r.playerId===e.playerId&&r.matchId===e.matchId);
+    if(earlier)e.details.submittedCards=earlier.details.selectedCards;
+   }
+   return e;
+  });
   const counts=this.sql.exec<{level:string;count:number}>('SELECT level,COUNT(*) AS count FROM audit_logs GROUP BY level').toArray();
   return Response.json({logs,counts,nextBefore:logs.length===limit?logs[logs.length-1].time:null,nextBeforeId:logs.length===limit?logs[logs.length-1].id:null,retentionDays:7,maxRows:AUDIT_MAX_ROWS},{headers:{'Cache-Control':'no-store'}});
  }

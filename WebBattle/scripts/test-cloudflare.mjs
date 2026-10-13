@@ -42,6 +42,9 @@ try{
  assert.equal((await mf.dispatchFetch('http://localhost/admin/logs',{headers:{Authorization:'Bearer wrong'}})).status,401);
  const audit=await (await mf.dispatchFetch('http://localhost/admin/logs?q='+message.requestId,{headers:adminHeaders})).json();
  assert.ok(audit.logs.some(e=>e.event==='submit_result'));
+ const resultLog=audit.logs.find(e=>e.event==='submit_result');assert.equal(resultLog.details.submittedCards[0].id,played.id);
+ const sentenceStats=await (await mf.dispatchFetch('http://localhost/admin/logs/sentences',{headers:adminHeaders})).json();
+ assert.equal(sentenceStats.total,naturalCorrect?1:0);assert.equal(sentenceStats.unique,naturalCorrect?1:0);
  const auditId=audit.logs[0].id;
  assert.equal(JSON.stringify(audit).includes(accountToken),false);
  const reviewed=await mf.dispatchFetch('http://localhost/admin/logs/'+auditId,{method:'POST',headers:{...adminHeaders,'Content-Type':'application/json'},body:JSON.stringify({status:'investigating',note:'재시작 저장 검사'})});assert.equal(reviewed.status,200);
@@ -50,6 +53,7 @@ try{
  clients=await Promise.all(saved.map((s,i)=>new Client(url).hello('resumed',s.token,i===0?accountToken:undefined)));
  for(let i=0;i<4;i++){await clients[i].until(()=>clients[i].room?.phase==='battle');assert.equal(clients[i].room.matchId,saved[i].room.matchId);assert.deepEqual(clients[i].room.hand,saved[i].room.hand);}
  const persistedAudit=await (await mf.dispatchFetch('http://localhost/admin/logs?q='+message.requestId,{headers:adminHeaders})).json();assert.ok(persistedAudit.logs.some(e=>e.id===auditId&&e.note==='재시작 저장 검사'));
+ const persistedStats=await (await mf.dispatchFetch('http://localhost/admin/logs/sentences',{headers:adminHeaders})).json();assert.equal(persistedStats.total,sentenceStats.total);assert.equal(persistedStats.unique,sentenceStats.unique);
  const restored=clients[saved.findIndex(s=>s.token===actor.token)];restored.send('submit',message);await restored.until(()=>restored.messages.some(m=>m.duplicate));
  const beforeDraw=clients[0].room.deckCount,voteId=clients[0].room.drawVote.id,handSizes=clients.map(c=>c.room.hand.length);for(const c of clients)c.send('drawVote',{voteId,approve:true});for(let i=0;i<clients.length;i++)await clients[i].until(()=>clients[i].room.hand.length===handSizes[i]+1);assert.equal(clients[0].room.deckCount,beforeDraw-4);
  clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');

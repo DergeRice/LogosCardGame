@@ -22,10 +22,10 @@ export class Game {
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number;
  constructor(options: Options = {}) { this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 10 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
- audit(p:Player|undefined,event:string,level:AuditEvent['level']='info',details:Record<string,unknown>={},overrideRoom?:Room){
+ audit(p:Player|undefined,event:string,level:AuditEvent['level']='info',details:Record<string,unknown>={},overrideRoom?:Room,submittedCards?:readonly Card[]){
   const r=overrideRoom??(p?.room?this.rooms.get(p.room):undefined);
   const record=makeAudit(event,level,{player:p?.name??'',playerId:p?.id??'',room:r?.code??p?.room??'',matchId:r?.matchId??''},safeDetails(details));
-  record.details={...record.details,serverBuild:BUILD_VERSION,serverPhase:r?.phase,...(p?{serverPhase:r?.phase,serverHandVersion:p.handVersion,cooldownMs:Math.max(0,p.actionAt-Date.now()),decision:r?.decision?.playerId,selectedCards:Array.isArray(details.cards)?details.cards.slice(0,15).map(id=>p.hand.find(c=>c.id===id)).filter(Boolean):undefined}:{})};
+  record.details={...record.details,serverBuild:BUILD_VERSION,serverPhase:r?.phase,submittedCards:submittedCards?.map(c=>({...c})),...(p?{actorAI:Boolean(p.ai),serverPhase:r?.phase,serverHandVersion:p.handVersion,cooldownMs:Math.max(0,p.actionAt-Date.now()),decision:r?.decision?.playerId,selectedCards:Array.isArray(details.cards)?details.cards.slice(0,15).map(id=>p.hand.find(c=>c.id===id)).filter(Boolean):undefined}:{})};
   if(this.auditSink)this.auditSink(record);else{this.audits.push(record);if(this.audits.length>5000)this.audits.shift();}
  }
  fail(p: Player, message: string, requestId?: string) { this.audit(p,'rejected','warn',{reason:message,requestId});this.send(p.socket, { type: 'error', message, requestId });const r=p.room&&this.rooms.get(p.room);if(requestId&&r)this.send(p.socket,{type:'state',room:this.view(r,p)}); }
@@ -251,6 +251,7 @@ export class Game {
   if(card.kind==='rob'&&target&&!([...target.hand,...fieldCards(target)].some(c=>c.id===msg.stealId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT 카드는 뺏을 수 없어요.',id);
   if(card.kind==='exchange'&&(![...p.hand,...fieldCards(p)].some(c=>c.id===msg.offerId&&canTransferCard(c))||!target||![...target.hand,...fieldCards(target)].some(c=>c.id===msg.wantedId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT 카드는 교환할 수 없어요.',id);
   if((card.kind==='get2'||card.kind==='get3')&&!r.deck.length)return this.fail(p,'공용 덱이 비었어요.',id);
+  const specialCards=[card,...[msg.offerId,msg.wantedId,msg.stealId].flatMap(id=>{const found=r.players.flatMap(x=>[...x.hand,...fieldCards(x)]).find(c=>c.id===id);return found?[found]:[];})];
   p.seen.add(id);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
   const blocked=card.kind==='rob'&&target?.hand.some(c=>c.kind==='protect');
   if(!blocked){p.hand=p.hand.filter(c=>c.id!==card.id);p.handVersion++;r.discard.push(card);}p.actionAt=Date.now()+RULES.actionCooldownMs;
@@ -277,6 +278,7 @@ export class Game {
    r.exchange={id:randomUUID(),fromId:p.id,toId:target.id,offerId:String(msg.offerId),wantedId:String(msg.wantedId),expiresAt:Date.now()+15000};
    this.log(r,`${p.name} 님이 ${target.name} 님에게 교환을 요청했어요.`,p);
   }
+  this.audit(p,'special_result','info',{...msg,reason:blocked?'protected':'used'},r,specialCards);
   this.send(p.socket,{type:'ack',requestId:id});this.broadcast(r);
  }
  removeOwnedCard(r:Room,p:Player,id:string){p.hand=p.hand.filter(c=>c.id!==id);if(fieldCards(p).some(c=>c.id===id)){r.discard=r.discard.filter(c=>c.id!==id);p.lastPlayed=(p.lastPlayed??[]).filter(c=>c.id!==id);p.playedSentences=(p.playedSentences??[]).map(sentence=>sentence.filter(c=>c.id!==id)).filter(sentence=>sentence.length);p.fieldVersion=(p.fieldVersion??0)+1;}p.draftIds=(p.draftIds??[]).filter(x=>x!==id);}
@@ -338,7 +340,7 @@ export class Game {
    this.log(r, `${p.name} · ${p.judgment.label} +${p.judgment.points}점`,p);
    if (p.score >= RULES.goThreshold && p.score > r.highScore) { r.highScore = p.score; r.leaderId=p.id; r.decision = { id: randomUUID(), playerId: p.id, startedAt: Date.now(), expiresAt: p.ai ? Date.now() + this.decisionMs : 0 }; this.log(r, `${p.name} 님이 최고점 ${p.score}점! 고 / 스톱 및 카드 배분 주도권 획득`); }
   }
-  this.audit(p,'submit_result','info',{...msg,points:p.judgment.points,valid:p.judgment.valid,patternType:p.judgment.patternType,usedStartIndex:p.judgment.usedStartIndex,usedLength:p.judgment.usedLength,accepted:p.judgment.accepted,reason:p.judgment.accepted?'scored':p.judgment.valid?'valid_below_threshold':'invalid_grammar'});
+  this.audit(p,'submit_result','info',{...msg,points:p.judgment.points,valid:p.judgment.valid,patternType:p.judgment.patternType,usedStartIndex:p.judgment.usedStartIndex,usedLength:p.judgment.usedLength,accepted:p.judgment.accepted,reason:p.judgment.accepted?'scored':p.judgment.valid?'valid_below_threshold':'invalid_grammar'},undefined,selected as Card[]);
   this.send(p.socket, { type: 'ack', requestId: msg.requestId }); this.broadcast(r);
  }
  handle(p: Player, msg: Record<string, unknown>) {
