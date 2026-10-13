@@ -24,17 +24,14 @@ test('30-second automatic deal is accelerated only by unanimous consent; no reje
  game.drawVote(b,{matchId:r.matchId,voteId,approve:true});assert.equal(r.deck.length,initial-2);
  now+=30000;game.tick();assert.equal(r.deck.length,initial-4);assert.equal(a.hand.length,7);assert.equal(b.hand.length,7);
 });
-test('after Go only current leader can deal; new high score transfers deal and decision authority',t=>{
+test('after Go distribution stays automatic and unanimous; new high score only transfers Go/Stop',t=>{
  let now=100_000;t.mock.method(Date,'now',()=>now);const{game,sa,sb,a,b,r}=roomForTwo();
  const score=(p:typeof a)=>{p.hand=fixture();p.handVersion++;now+=1600;game.action(p,{matchId:r.matchId,requestId:randomUUID(),handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
- score(a);assert.equal(a.score,26);assert.equal(r.leaderId,a.id);assert.equal(r.decision?.playerId,a.id);
- game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);
- const start=r.deck.length;game.drawRequest(b,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start);assert.match(sb.messages.filter(m=>m.type==='error').at(-1)?.message,/최고점/);
- game.drawRequest(a,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start-2);assert.ok(r.drawVote);
- score(b);assert.ok(b.score>a.score);assert.equal(r.leaderId,b.id);assert.equal(r.decision?.playerId,b.id);
- game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});now+=3100;const before=r.deck.length;
- game.drawRequest(a,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,before);
- game.drawRequest(b,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,before-2);assert.equal(r.goCount,2);assert.ok(sa.messages.some(m=>m.type==='state'&&m.room.leaderId===b.id));
+ score(a);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);
+ const start=r.deck.length;for(const p of [a,b])game.drawRequest(p,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start);assert.match(sa.messages.filter(m=>m.type==='error').at(-1)?.message,/전원 동의/);
+ const vote=r.drawVote!.id;game.drawVote(b,{matchId:r.matchId,voteId:vote,approve:true});assert.equal(r.deck.length,start);game.drawVote(a,{matchId:r.matchId,voteId:vote,approve:true});assert.equal(r.deck.length,start-2);
+ score(b);assert.equal(r.decision?.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,2);const before=r.deck.length;
+ now=r.nextDealAt;game.tick();assert.equal(r.deck.length,before-2);assert.ok(r.drawVote);assert.equal(r.leaderId,b.id);
 });
 test('only four emoji reactions are broadcast and rapid repeats are rejected',()=>{
  const{game,sa,sb,a,b,r}=roomForTwo();game.react(a,{matchId:r.matchId,emoji:'🔥'});assert.equal(sb.messages.at(-1)?.room.players.find((p:any)=>p.id===a.id).reaction.emoji,'🔥');game.react(a,{matchId:r.matchId,emoji:'💯'});assert.match(sa.messages.at(-1)?.message,/사용할 수 없는/);game.react(a,{matchId:r.matchId,emoji:'👏'});assert.match(sa.messages.at(-1)?.message,/잠시 후/);assert.equal(b.reaction,undefined);
@@ -63,4 +60,5 @@ test('opponent field preview follows validated draft order and excludes those ca
  assert.equal(publicA.draftPreview?.length,0);
  assert.equal(publicA.playedSentences?.length,1);
 });
+
 

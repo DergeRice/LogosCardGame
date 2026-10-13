@@ -54,6 +54,9 @@ try{
  const auditId=audit.logs[0].id;
  assert.equal(JSON.stringify(audit).includes(accountToken),false);
  const reviewed=await mf.dispatchFetch('http://localhost/admin/logs/'+auditId,{method:'POST',headers:{...adminHeaders,'Content-Type':'application/json'},body:JSON.stringify({status:'investigating',note:'재시작 저장 검사'})});assert.equal(reviewed.status,200);
+ await wait(Math.max(0,actor.room.actionAt-Date.now())+30);
+ const trashCard=actor.room.hand.find(c=>c.id!==played.id)??actor.room.hand[0],trashSize=actor.room.hand.length,trashDeck=actor.room.deckCount,trashRequest={requestId:randomUUID(),cardId:trashCard.id,handVersion:actor.room.handVersion};
+ actor.send('discard',trashRequest);actor.send('discard',trashRequest);await actor.until(()=>actor.room.hand.length===trashSize-1);await actor.until(()=>actor.messages.some(m=>m.requestId===trashRequest.requestId&&m.duplicate));assert.equal(actor.room.deckCount,trashDeck);assert.equal(actor.room.usedCards.filter(c=>c.id===trashCard.id).length,1);
  const saved=clients.map(c=>({token:c.token,room:c.room}));for(const c of clients)c.ws.close();await wait(250);await mf.dispose();
  mf=make();url=new URL('/socket',await mf.ready);url.protocol='ws:';
  clients=await Promise.all(saved.map((s,i)=>new Client(url).hello('resumed',s.token,i===0?accountToken:undefined)));
@@ -65,6 +68,6 @@ try{
  const beforeDraw=clients[0].room.deckCount,voteId=clients[0].room.drawVote.id,handSizes=clients.map(c=>c.room.hand.length);for(const c of clients)c.send('drawVote',{voteId,approve:true});for(let i=0;i<clients.length;i++)await clients[i].until(()=>clients[i].room.hand.length===handSizes[i]+1);assert.equal(clients[0].room.deckCount,beforeDraw-4);
  clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');
  for(const c of clients.slice(1))c.send('rematch');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='battle'&&c.room.matchId!==saved[0].room.matchId);
- console.log(`PASS: real Cloudflare runtime: 4 WebSockets, unique deck, ${naturalCorrect?'Correct':'invalid natural submission'} retention/dedupe, SQLite process restart recovery, unanimous draw, forfeit, rematch, rejected origin. No forced score/hand/winner.`);
+ console.log(`PASS: real Cloudflare runtime: 4 WebSockets, unique deck, ${naturalCorrect?'Correct':'invalid natural submission'} retention/dedupe, discard/dedupe, SQLite process restart recovery, unanimous draw, forfeit, rematch, rejected origin. No forced score/hand/winner.`);
 }finally{for(const c of clients)c.ws.close();await mf.dispose();}
 

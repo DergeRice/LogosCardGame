@@ -2,3 +2,6 @@
 .battle .pointer-field .drop-preview{flex:0 0 auto;max-width:none;aspect-ratio:488/693;box-sizing:border-box;padding:0;border:2px dashed #8d78a0;border-radius:3px;background:#bca9cb24;box-shadow:none;animation:none;position:relative;cursor:grabbing}
 .field-drag-slot>.illustration,.field-drag-slot>.card-readable-label,.field-drag-slot>.card-score-badge{visibility:hidden}
 .field-drag-slot>.drop-slot-label{position:absolute;inset:0;display:grid;place-items:center;white-space:normal;font-size:clamp(9px,1vw,12px);color:#80668f;font-weight:600}
+.card-trash-zone{position:fixed;left:var(--game-left,0px);width:var(--game-width,100vw);bottom:max(0px,calc(100dvh - var(--game-height,100dvh) - var(--game-top,0px)));z-index:110;min-height:52px;padding:8px 16px max(8px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;background:#fff1f3f2;border-top:2px dashed #c58296;color:#9c5369;pointer-events:none;box-shadow:0 -5px 24px #7b415126;backdrop-filter:blur(8px)}
+.card-trash-zone>span{font-size:25px}.card-trash-zone>b{font-size:13px}.card-trash-zone.trash-hover{background:#d96b81ee;color:#fff;border-top-style:solid}
+@media(orientation:landscape) and (max-height:500px){.card-trash-zone{min-height:42px;padding-top:4px;padding-bottom:max(4px,env(safe-area-inset-bottom))}.card-trash-zone>span{font-size:22px}}

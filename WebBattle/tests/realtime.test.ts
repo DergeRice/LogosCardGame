@@ -17,6 +17,13 @@ class Client {
 }
 async function server(options:Parameters<typeof createBattleServer>[0]){const app=createBattleServer({minimumPlayers:2,...options});await new Promise<void>(r=>app.server.listen(0,'127.0.0.1',r));return{app,url:`ws://127.0.0.1:${(app.server.address() as {port:number}).port}/socket`};}
 
+test('two real sockets discard a naturally dealt card once and synchronize public ownership',async()=>{
+ const{app,url}=await server({matchingMs:600,revealMs:50,dealingMs:50,durationMs:0});
+ try{const a=await new Client(url).hello('Discard A'),b=await new Client(url).hello('Discard B');a.send('quick');b.send('quick');await a.until(()=>a.room?.phase==='battle');await b.until(()=>b.room?.phase==='battle');const card=a.room!.hand[0],before=a.room!.deckCount;
+  const msg={cardId:card.id,requestId:randomUUID(),handVersion:a.room!.handVersion};a.send('discard',msg);a.send('discard',msg);await a.until(()=>a.room!.hand.length===4);await b.until(()=>b.room!.players.find(p=>p.id===a.room!.you)!.handCount===4);await a.until(()=>a.messages.some(m=>m.duplicate));assert.equal(a.score,0);assert.equal(a.room!.deckCount,before);assert.equal(a.room!.usedCards.filter(c=>c.id===card.id).length,1);assert.ok(!b.room!.players.find(p=>p.id===a.room!.you)!.handPreview!.some(c=>c.id===card.id));
+ }finally{await app.close();}
+});
+
 test('four real sockets: unanimous draw, unique shared deck, retained Correct, duplicate/stale requests, result/rematch',async()=>{
  const {app,url}=await server({matchingMs:1200,revealMs:50,dealingMs:50,durationMs:0});
  try{
@@ -74,14 +81,15 @@ test('two real sockets with controlled 26-point hand: human decision waits and G
   assert.equal(b.room!.players.find(p=>p.id===a.room!.you)?.lastAction?.text.includes('+26점'),true);
   await wait(450);assert.equal(a.room!.phase,'battle');assert.equal(a.room!.decision?.playerId,a.room!.you);
   a.send('choice',{decisionId:a.room!.decision!.id,choice:'go'});await a.until(()=>a.room?.goCount===1);await b.until(()=>b.room?.goCount===1);assert.equal(a.room!.multiplier,2);
-  const before=a.room!.deckCount;b.send('drawRequest',{requestId:randomUUID()});await b.until(()=>b.messages.some(m=>m.type==='error'&&m.message.includes('최고점')));assert.equal(b.room!.deckCount,before);
-  a.send('drawRequest',{requestId:randomUUID()});await a.until(()=>a.room!.deckCount===before-2);await b.until(()=>b.room!.deckCount===before-2);assert.ok(a.room!.drawVote);
+  const before=a.room!.deckCount;b.send('drawRequest',{requestId:randomUUID()});await b.until(()=>b.messages.some(m=>m.type==='error'&&m.message.includes('전원 동의')));assert.equal(b.room!.deckCount,before);
+  const vote=a.room!.drawVote!.id;b.send('drawVote',{voteId:vote,approve:true});await a.until(()=>a.room!.drawVote!.approved.includes(b.room!.you));a.send('drawVote',{voteId:vote,approve:true});await a.until(()=>a.room!.deckCount===before-2);await b.until(()=>b.room!.deckCount===before-2);assert.ok(a.room!.drawVote);
   const rival=room.players.find(p=>p.id===b.room!.you)!;rival.hand=[{id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:'verb'},{id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:'count',variant:'count-plus3'},{id:randomUUID(),kind:'adjective',variant:'adjective-plus3'}];rival.handVersion++;app.game.broadcast(room);await b.until(()=>b.room!.handVersion===rival.handVersion);
   b.send('submit',{cards:b.room!.hand.map(c=>c.id),handVersion:b.room!.handVersion,requestId:randomUUID()});await b.until(()=>b.room?.decision?.playerId===b.room?.you);assert.equal(b.room!.leaderId,b.room!.you);assert.equal(b.score,52);
   b.send('choice',{decisionId:b.room!.decision!.id,choice:'go'});await b.until(()=>b.room?.goCount===2);room.nextDrawRequestAt=0;const next=b.room!.deckCount;
-  a.send('drawRequest',{requestId:randomUUID()});await a.until(()=>a.messages.some(m=>m.type==='error'&&m.message.includes('최고점')));assert.equal(a.room!.deckCount,next);
-  b.send('drawRequest',{requestId:randomUUID()});await b.until(()=>b.room!.deckCount===next-2);
+  a.send('drawRequest',{requestId:randomUUID()});await a.until(()=>a.messages.some(m=>m.type==='error'&&m.message.includes('전원 동의')));assert.equal(a.room!.deckCount,next);
+  const nextVote=b.room!.drawVote!.id;b.send('drawVote',{voteId:nextVote,approve:true});await a.until(()=>a.room!.drawVote!.approved.includes(b.room!.you));a.send('drawVote',{voteId:nextVote,approve:true});await b.until(()=>b.room!.deckCount===next-2);
  }finally{await app.close();}
 });
+
 
 
