@@ -15,6 +15,8 @@ test('20+ score finishes card calculation and score roll before Go/Stop, then Go
  await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toHaveCount(0);
  await expect(page.locator('.score-calculation[data-phase="complete"]')).toBeVisible();
  await expect(page.getByTestId('my-score')).toHaveText('26');
+  await expect(page.getByRole('region',{name:'문장 형식 대표 예문'})).toBeVisible();
+  await page.getByRole('button',{name:'예문 닫기'}).click();
  await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toBeVisible();
  await page.reload();await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toBeVisible();
  await expect(page.getByText('미선택 시 자동 스톱')).toHaveCount(0);
