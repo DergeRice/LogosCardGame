@@ -1,5 +1,11 @@
 # LOGOS WebBattle
 
+### v0.9.22 재생·드래그 수정
+
+사용자의 클릭·터치에서 무음 음성으로 SpeechSynthesis 세션을 활성화하고 Web Audio 컨텍스트를 생성·재개합니다. 지연된 예문 자동 재생이 모바일 사용자 제스처 제한에 걸리는 경로를 보완하며, 실제 발화 객체는 패널이 닫힐 때까지 참조를 유지합니다. PC 드래그의 위치 판정은 드래그 시작 시 카드 위치를 기준으로 고정하고, 실제 카드와 같은 크기의 빈 슬롯을 표시합니다. 필드 재배치 시 원래 버튼 노드를 유지해 포인터 캡처가 끊기지 않도록 했습니다.
+
+검증: 단위/실시간 테스트 99개, PC 및 작은 visualViewport를 사용하는 모바일 가로 드래그·예문 테스트 4개. 모바일 음성은 사용자 제스처 제한을 재현한 브라우저 테스트이며 실제 휴대폰 스피커 출력은 별도 확인이 필요합니다. SpeechSynthesis 활성화 근거: [WebKit SpeechSynthesis 구현](https://github.com/WebKit/WebKit/blob/main/Source/WebCore/Modules/speech/SpeechSynthesis.cpp).
+
 원본 소스: [DergeRice/LogosCardGame — web-battle 브랜치](https://github.com/DergeRice/LogosCardGame/tree/web-battle/WebBattle).
 이 브랜치에 push하면 Netlify가 `WebBattle/`를 자동으로 빌드합니다. Unity 프로젝트는 기존 `main` 브랜치에 보존되어 있습니다.
 

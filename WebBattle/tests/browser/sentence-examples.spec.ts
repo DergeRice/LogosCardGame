@@ -3,10 +3,13 @@ import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
 for(const mobile of [false,true])test(`example after score, field overlay and TTS: ${mobile?'landscape reduced viewport':'desktop'}`,async({browser})=>{
  const ctx=await browser.newContext({viewport:mobile?{width:900,height:430}:{width:1280,height:900},hasTouch:mobile,isMobile:mobile});
  await ctx.addInitScript(({mobile})=>{
+  const AudioCtor=window.AudioContext;
+  if(AudioCtor)Object.defineProperty(window,'AudioContext',{value:class extends AudioCtor{constructor(options?:AudioContextOptions){super(options);(window as any).__gameAudio=this;}}});
   if(mobile){const vv=new EventTarget();Object.assign(vv,{width:900,height:370,offsetTop:20,offsetLeft:0,scale:1});Object.defineProperty(window,'visualViewport',{value:vv});localStorage.setItem('logos-example-tts','off');localStorage.setItem('logos-example-index-5','21');}
   const spoken:string[]=[];(window as any).__spoken=spoken;
   (window as any).SpeechSynthesisUtterance=class{ text:string;constructor(text:string){this.text=text;}};
-  Object.defineProperty(window,'speechSynthesis',{value:{getVoices:()=>[{lang:'en-US',localService:true}],cancel(){},speak(u:any){spoken.push(u.text);u.onstart?.();(window as any).__finishSpeech=()=>u.onend?.();}}});
+  let unlocked=!mobile;
+  Object.defineProperty(window,'speechSynthesis',{value:{getVoices:()=>[{lang:'en-US',localService:true}],cancel(){},resume(){},speak(u:any){if(u.volume===0){unlocked=navigator.userActivation.isActive;(window as any).__speechUnlocked=unlocked;u.onend?.();return;}if(!unlocked)throw Error('Mobile speech requires a gesture');spoken.push(u.text);u.onstart?.();(window as any).__finishSpeech=()=>u.onend?.();}}});
  },{mobile});
  const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  const cards:Card[]=[{id:'a',kind:'pronoun',variant:'pronoun-x2'},{id:'b',kind:'verb'},{id:'c',kind:'article',variant:'article-x2'},{id:'d',kind:'count',variant:'count-plus3'},{id:'e',kind:'adjective',variant:'adjective-plus3'}];
@@ -22,6 +25,8 @@ for(const mobile of [false,true])test(`example after score, field overlay and TT
   expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight&&document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   const inside=await panel.evaluate(el=>{const box=el.getBoundingClientRect();return [...el.querySelectorAll('header,.example-part b,.example-korean,footer button')].every(part=>{const p=part.getBoundingClientRect();return p.top>=box.top-1&&p.bottom<=box.bottom+1&&p.left>=box.left-1&&p.right<=box.right+1});});expect(inside).toBe(true);
   if(mobile)await expect(page.locator('.shell')).toHaveAttribute('data-viewport-height','370');
+  if(mobile)expect(await page.evaluate(()=>(window as any).__speechUnlocked)).toBe(true);
+  await expect.poll(()=>page.evaluate(()=>(window as any).__gameAudio?.state)).toBe('running');
   await expect.poll(()=>page.evaluate(()=>(window as any).__spoken.length)).toBe(1);
   expect(await page.evaluate(()=>(window as any).__spoken[0])).toBe('I make the student ready.');
   await page.screenshot({path:`docs/screenshots/example-panel-${mobile?'mobile':'desktop'}.png`});await page.evaluate(()=>(window as any).__finishSpeech());

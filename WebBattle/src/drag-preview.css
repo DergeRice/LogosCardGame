@@ -1,0 +1,4 @@
+/* Match the actual card lane sizing, including container-sized phone cards. */
+.battle .pointer-field .drop-preview{flex:0 0 auto;max-width:none;aspect-ratio:488/693;box-sizing:border-box;padding:0;border:2px dashed #8d78a0;border-radius:3px;background:#bca9cb24;box-shadow:none;animation:none;position:relative;cursor:grabbing}
+.field-drag-slot>.illustration,.field-drag-slot>.card-readable-label,.field-drag-slot>.card-score-badge{visibility:hidden}
+.field-drag-slot>.drop-slot-label{position:absolute;inset:0;display:grid;place-items:center;white-space:normal;font-size:clamp(9px,1vw,12px);color:#80668f;font-weight:600}

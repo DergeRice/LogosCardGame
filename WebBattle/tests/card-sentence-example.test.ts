@@ -40,3 +40,9 @@ test('battle accepts up to three chained adjectives as modifiers and complements
  for(const kinds of [['pronoun','be','adjective','adjective','adjective','adjective'],['article','adjective','adjective','adjective','adjective','count','verb']] as Kind[][]){assert.equal(judge(kinds).valid,false);assert.match(judge(kinds).reason,/3장/);}
  assert.equal(CheckPlayableSegment([P.PRP,P.BE,P.JJ,P.JJ,P.JJ],false).usedLength,3);
 });
+test('two consecutive adverbs count fully, preserve order and receive aligned examples; three are rejected',()=>{
+ for(const kinds of [['pronoun','verb','adverb','adverb'],['pronoun','be','adverb','adverb','adjective'],['adverb','adverb','pronoun','verb'],['pronoun','modal','frequency','frequency','verb']] as Kind[][]){const c=make(kinds),r=judgeCards(c);assert.equal(r.valid,true,kinds.join(' '));assert.equal(r.usedLength,kinds.length);assert.equal(r.points,kinds.length);assert.deepEqual(cardSentenceExample(c,r).example!.parts.map(p=>p.kind),kinds);}
+ const kinds:Kind[]=['pronoun','be','adverb','adverb','adjective'];const c=make(kinds);assert.equal(cardSentenceExample(c,judgeCards(c)).example!.english,'I am really very happy.');
+ assert.equal(judge(['pronoun','verb','adverb','adverb','adverb']).valid,false);assert.match(judge(['pronoun','verb','frequency','adverb','frequency']).reason,/2장/);
+ assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.RB,P.RB,P.RB]).valid,true);
+});

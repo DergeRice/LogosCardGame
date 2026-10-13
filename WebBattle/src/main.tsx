@@ -20,6 +20,7 @@ import {scoreSteps,SCORE_MOTION,type ScoreReveal} from './scoreAnimation.js';
 import {type SentenceExample} from '../shared/sentence-examples.js';
 import {cardSentenceExample} from '../shared/card-sentence-example.js';
 import {SentenceExamplePanel} from './SentenceExamplePanel.js';
+import {primeSpeech} from './speech.js';
 import './score-presentation.css';
 import './game-stage.css';
 import './special-cards.css';
@@ -31,6 +32,7 @@ import './tabletop.css';
 import './battle-layout.css';
 import './multiplayer.css';
 import './player-status.css';
+import './drag-preview.css';
 import {BUILD_VERSION} from './buildVersion.js';
 import {useGameViewport} from './useGameViewport.js';
 import {useDealtHand} from './useDealtHand.js';
@@ -90,6 +92,17 @@ function App() {
  const feedbackTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
  function tone(win = false) { if (!soundRef.current) return; try { const ctx = audioRef.current ??= new AudioContext(); void ctx.resume(); const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.setValueAtTime(win ? 660 : 440, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(win ? 990 : 660, ctx.currentTime + .12); g.gain.setValueAtTime(.06, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .2); o.start(); o.stop(ctx.currentTime + .21); } catch { /* Audio is optional. */ } }
  useEffect(() => { soundRef.current = sound; localStorage.setItem('logos-sound', sound ? 'on' : 'off'); }, [sound]);
+ useEffect(()=>{
+  const activate=()=>{
+   primeSpeech();if(!soundRef.current)return;
+   try{const AudioCtor=window.AudioContext??(window as Window & {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;if(!AudioCtor)return;
+    const fresh=!audioRef.current,ctx=audioRef.current??=new AudioCtor();void ctx.resume().catch(()=>{});
+    if(fresh){const source=ctx.createBufferSource();source.buffer=ctx.createBuffer(1,1,ctx.sampleRate);source.connect(ctx.destination);source.start();}
+   }catch{/* Browsers without Web Audio can still play the game. */}
+  };
+  document.addEventListener('click',activate,true);document.addEventListener('touchend',activate,true);
+  return()=>{document.removeEventListener('click',activate,true);document.removeEventListener('touchend',activate,true);};
+ },[]);
  useEffect(()=>{const sync=()=>setFullscreen(Boolean(document.fullscreenElement||(document as Document & {webkitFullscreenElement?:Element}).webkitFullscreenElement));document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);return()=>{document.removeEventListener('fullscreenchange',sync);document.removeEventListener('webkitfullscreenchange',sync);};},[]);
  async function enterGameFullscreen(quiet=false){
   const doc=document as Document & {webkitFullscreenElement?:Element};

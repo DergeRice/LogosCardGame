@@ -44,6 +44,12 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  const cycle=(xs:string[])=>xs[((Math.floor(index)%xs.length)+xs.length)%xs.length];
  let singular=true,person1=false,question=false,imperative=false,main=-1,pattern=judgment.patternType;
  const put=(at:number,role:ExampleRole,text:string,ko:string)=>{roles[at]=role;words[at]=text;gloss[at]=ko};
+ function adverbWord(i:number):[string,string]{
+  if(seq[i]==='frequency')return seq[i+1]==='frequency'?['almost','거의']:seq[i-1]==='frequency'?['always','항상']:['often','자주'];
+  if(seq[i+1]==='adverb')return i<start?['today,','오늘']:seq[i+2]==='adjective'?['really','정말']:['very','아주'];
+  if(seq[i-1]==='adverb')return seq[i+1]==='adjective'?['very','매우']:i<start?['quietly','조용히']:['well','잘'];
+  return seq[i+1]==='adjective'?['very','매우']:seq[i+1]==='not'?['really','정말']:i>main&&i<stop&&result?.object?['only','오직']:['today','오늘'];
+ }
  function noun(n:NP,role:ExampleRole,place=false){
   nounRanges.push(n);const k=seq[n.head];let text='',ko='';
   if(k==='pronoun'){text=role==='subject'?cycle(['I','we','she']):role==='indirect'?'us':role==='subjectComplement'?'me':'them';ko=role==='subject'?cycle(['나','우리','그녀']):role==='indirect'?'우리':role==='subjectComplement'?'나': '그들';}
@@ -58,7 +64,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
   for(let i=n.start;i<n.head;i++){
    if(seq[i]==='article')put(i,role,'the','그');else if(seq[i]==='indefinite')put(i,role,'a','한');else if(seq[i]==='possessive')put(i,role,role==='subject'?'my':role==='subjectComplement'&&!imperative?'your':'our',role==='subject'?'나의':role==='subjectComplement'&&!imperative?'너의':'우리의');
    else if(seq[i]==='adjective'){const human=seq[n.head]==='count'&&(role!=='direct'&&pattern!==3);const options=text==='water'?[['clean','깨끗한'],['fresh','신선한'],['cool','시원한']]:human?[['kind','친절한'],['young','젊은'],['helpful','도움이 되는']]:[['helpful','도움이 되는'],['useful','유용한'],['good','좋은']];const option=options[(Math.floor(index)+i-n.start)%options.length];put(i,role,option[0],option[1]);}
-   else if(seq[i]==='adverb')put(i,role,'very','매우');else if(seq[i]==='frequency')put(i,role,'often','자주');
+   else if(adv(seq[i])){const w=seq[i-1]==='adverb'||seq[i+1]==='adverb'?adverbWord(i):seq[i]==='adverb'?['very','매우']:['often','자주'];put(i,role,w[0],w[1]);}
   }
   for(const p of n.pps)placePhrase(p);
  }
@@ -70,7 +76,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
     const options=role==='objectComplement'?(seq[result?.object?.head??-1]==='mass'?[['easy','쉬운'],['useful','유용한'],['important','중요한']]:[['ready','준비된'],['confident','자신 있는'],['happy','행복한']]):seq[subject?.head??-1]==='mass'?[['important','중요한'],['useful','유용한'],['valuable','가치 있는']]:[['happy','행복한'],['calm','차분한'],['confident','자신 있는']];
     const option=options[adjectiveIndex];put(i,role,option[0]+(adjectiveIndex<adjectiveCount-1?',':''),option[1]);adjectiveIndex++;
    }
-   else if(seq[i]==='adverb')put(i,role,'very','매우');else if(seq[i]==='frequency')put(i,role,'often','자주');
+   else if(adv(seq[i])){const w=adverbWord(i);put(i,role,w[0],w[1]);}
    else if(seq[i]==='to-infinitive')put(i,role,'to work','일하기');
   }
  }
@@ -113,8 +119,8 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  if(seq.filter(k=>k==='not').length>1)return fail('부정어 중복 조합');
  for(let i=0;i<end;i++)if(!words[i]){
   if(seq[i]==='not')put(i,'manner','not','않다');
-  else if(seq[i]==='frequency')put(i,'time',i<start&&imperative?'always':i<start?'sometimes':'often',i<start&&imperative?'항상':i<start?'때때로':'자주');
-  else if(seq[i]==='adverb')put(i,'manner',seq[i+1]==='adjective'?'very':seq[i+1]==='not'?'really':i>main&&i<stop&&result?.object?'only':'today',seq[i+1]==='adjective'?'매우':seq[i+1]==='not'?'정말':i>main&&i<stop&&result?.object?'오직':'오늘');
+  else if(seq[i]==='frequency'){const w=seq[i-1]==='frequency'||seq[i+1]==='frequency'?adverbWord(i):[i<start&&imperative?'always':i<start?'sometimes':'often',i<start&&imperative?'항상':i<start?'때때로':'자주'];put(i,'time',w[0],w[1]);}
+  else if(seq[i]==='adverb'){const w=adverbWord(i);put(i,'manner',w[0],w[1]);}
   else return fail(`${CATALOG[seq[i]].name}의 역할을 분석할 수 없습니다.`);
  }
  if(result?.object&&seq.slice(main+1,result.object.start).includes('frequency'))return fail('목적어 앞 빈도부사 허용 조합');
