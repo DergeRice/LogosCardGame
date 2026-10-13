@@ -96,7 +96,9 @@ export function judge(kinds: Kind[]): Judgment {
  // This is the actual battle entry point. Check() has different semantics.
  const positions=kinds.map(kind => CARD_POS[kind]);
  if(positions.some(pos=>pos===null))return {valid:false,patternType:1,message:'기능 카드는 문장에 넣을 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'기능 카드는 손패에서 사용하세요.',spans:[]};
- const result = CheckPlayableSegment(positions as LearningPosType[], false, true);
+ let adjectiveRun=0;
+ for(const kind of kinds){adjectiveRun=kind==='adjective'?adjectiveRun+1:0;if(adjectiveRun>3)return {valid:false,patternType:1,message:'형용사는 연속 3장까지 사용할 수 있습니다.',debugLog:'[BattleSyntax] adjective chain limit',usedStartIndex:0,usedLength:0,points:0,reason:'형용사는 연속 3장까지 사용할 수 있습니다.',spans:[]};}
+ const result = CheckPlayableSegment(positions as LearningPosType[], false, true, true);
  if(result.valid){const example=cardSentenceExample(kinds.map((kind,i)=>({id:String(i),kind})),{...result,points:0,reason:'',spans:[]});if(!example.example){result.valid=false;result.message='비표준 문장 조합: '+example.reason;result.usedStartIndex=0;result.usedLength=0;}else if(result.patternType!==example.example.patternType){result.debugLog+=' | [BattleSyntax] noun-phrase form corrected';result.patternType=example.example.patternType as LearningGrammarCheckResult['patternType'];result.message=`${result.patternType}형식 문장`;}}
  return { ...result, form: result.valid ? result.patternType : undefined, label: result.message,
   points: result.valid ? result.usedLength : 0,

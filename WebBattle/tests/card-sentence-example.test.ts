@@ -28,3 +28,15 @@ test('new battle rejects nonstandard legacy structures while the Unity reference
  assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.MODAL],false,true).valid,true);
  assert.equal(CheckPlayableSegment([P.DT_AN,P.NNU,P.VB],false,true).valid,true);
 });
+
+test('battle accepts up to three chained adjectives as modifiers and complements',()=>{
+ for(let count=1;count<=3;count++)for(const kinds of [
+  ['pronoun','be',...Array(count).fill('adjective')],
+  ['pronoun','verb',...Array(count).fill('adjective')],
+  ['pronoun','verb','pronoun',...Array(count).fill('adjective')],
+  ['article',...Array(count).fill('adjective'),'count','verb'],
+ ] as Kind[][]){const cards=make(kinds),r=judgeCards(cards);assert.equal(r.valid,true,kinds.join(' '));assert.equal(r.usedLength,kinds.length);assert.equal(r.points,kinds.length);const e=cardSentenceExample(cards,r).example!;assert.deepEqual(e.parts.map(p=>p.kind),kinds);assert.ok(!e.english.includes('undefined'));}
+ const kinds:Kind[]=['pronoun','be','adjective','adjective','adjective'];const c=make(kinds);assert.equal(cardSentenceExample(c,judgeCards(c)).example!.english,'I am happy, calm, confident.');
+ for(const kinds of [['pronoun','be','adjective','adjective','adjective','adjective'],['article','adjective','adjective','adjective','adjective','count','verb']] as Kind[][]){assert.equal(judge(kinds).valid,false);assert.match(judge(kinds).reason,/3장/);}
+ assert.equal(CheckPlayableSegment([P.PRP,P.BE,P.JJ,P.JJ,P.JJ],false).usedLength,3);
+});

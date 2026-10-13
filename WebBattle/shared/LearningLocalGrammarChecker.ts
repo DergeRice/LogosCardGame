@@ -18,7 +18,7 @@ const P = LearningPosType, T = SentencePatternType;
 const initial = (message: string): LearningGrammarCheckResult => ({ valid: false, patternType: T.Type1, message, usedStartIndex: 0, usedLength: 0, debugLog: null });
 
 class CheckContext {
- constructor(private readonly allowBareCountableNounThisCheck: boolean, private readonly battleToObjectOnly=false) {}
+ constructor(private readonly allowBareCountableNounThisCheck: boolean, private readonly battleToObjectOnly=false, private readonly battleAdjectiveChains=false) {}
 
  Check(sequence: Sequence | null | undefined): LearningGrammarCheckResult {
   const result = initial('문장 구조가 맞지 않습니다.');
@@ -204,7 +204,11 @@ class CheckContext {
 
  private TryParseAdjP(seq: Sequence, start: number, end: number): number | null {
   while (start < end && this.IsAdverb(seq[start])) start++;
-  if (start < end && seq[start] === P.JJ) return start + 1;
+  if (start < end && seq[start] === P.JJ) {
+   let next=start+1;
+   if(this.battleAdjectiveChains)while(next<end&&seq[next]===P.JJ&&next-start<3)next++;
+   return next;
+  }
   return null;
  }
 
@@ -242,7 +246,7 @@ class CheckContext {
 export function Check(sequence: Sequence | null | undefined): LearningGrammarCheckResult {
  return new CheckContext(false).Check(sequence);
 }
-export function CheckPlayableSegment(sequence: Sequence | null | undefined, allowBareCountableNoun = false, battleToObjectOnly=false): LearningGrammarCheckResult {
- return new CheckContext(allowBareCountableNoun,battleToObjectOnly).CheckPlayableSegment(sequence);
+export function CheckPlayableSegment(sequence: Sequence | null | undefined, allowBareCountableNoun = false, battleToObjectOnly=false, battleAdjectiveChains=false): LearningGrammarCheckResult {
+ return new CheckContext(allowBareCountableNoun,battleToObjectOnly,battleAdjectiveChains).CheckPlayableSegment(sequence);
 }
 export const LearningLocalGrammarChecker = { Check, CheckPlayableSegment };

@@ -27,7 +27,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  }
  function pp(s:number,e:number):PP|null{if(seq[s]!=='preposition')return null;const noun=np(s+1,e);return noun?{start:s,end:noun.end,np:noun}:null;}
  function comp(s:number,e:number,object=false):Complement|null{
-  const a=skip(s,e);if(seq[a]==='adjective')return {start:s,end:a+1,kind:'adjective'};
+  const a=skip(s,e);if(seq[a]==='adjective'){let next=a+1;while(next<e&&seq[next]==='adjective'&&next-a<3)next++;return {start:s,end:next,kind:'adjective'};}
   if(seq[s]==='to-infinitive'&&object)return {start:s,end:s+1,kind:'to'};
   if(seq[s]==='verb'||seq[s]==='modal')return {start:s,end:s+1,kind:seq[s]};return null;
  }
@@ -64,8 +64,12 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  }
  function placePhrase(p:PP,preposition='near'){put(p.start,'place',preposition,preposition==='with'?'함께':'근처에서');noun(p.np,'place',true);}
  function complement(c:Complement,role:ExampleRole){
+  let adjectiveIndex=0;const adjectiveCount=seq.slice(c.start,c.end).filter(k=>k==='adjective').length;
   for(let i=c.start;i<c.end;i++){
-   if(seq[i]==='adjective')put(i,role,role==='objectComplement'?(seq[result?.object?.head??-1]==='mass'?'easy':'ready'):seq[subject?.head??-1]==='mass'?'important':'happy',role==='objectComplement'?(seq[result?.object?.head??-1]==='mass'?'쉬운':'준비된'):seq[subject?.head??-1]==='mass'?'중요한':'행복한');
+   if(seq[i]==='adjective'){
+    const options=role==='objectComplement'?(seq[result?.object?.head??-1]==='mass'?[['easy','쉬운'],['useful','유용한'],['important','중요한']]:[['ready','준비된'],['confident','자신 있는'],['happy','행복한']]):seq[subject?.head??-1]==='mass'?[['important','중요한'],['useful','유용한'],['valuable','가치 있는']]:[['happy','행복한'],['calm','차분한'],['confident','자신 있는']];
+    const option=options[adjectiveIndex];put(i,role,option[0]+(adjectiveIndex<adjectiveCount-1?',':''),option[1]);adjectiveIndex++;
+   }
    else if(seq[i]==='adverb')put(i,role,'very','매우');else if(seq[i]==='frequency')put(i,role,'often','자주');
    else if(seq[i]==='to-infinitive')put(i,role,'to work','일하기');
   }
@@ -116,15 +120,16 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  if(result?.object&&seq.slice(main+1,result.object.start).includes('frequency'))return fail('목적어 앞 빈도부사 허용 조합');
  const particle=(text:string,yes:string,no:string)=>{const code=text.charCodeAt(text.length-1)-0xac00;return text+(code>=0&&code<11172&&code%28!==0?yes:no)};
  function koNP(n:NP):string{const base=gloss.slice(n.start,n.baseEnd).join(' ');return n.pps.map(p=>koNP(p.np)+' 근처에 있는 ').join('')+base;}
+ function koAdjectives(c:Complement):string{return seq.slice(c.start,c.end).flatMap((kind,i)=>kind==='adjective'?[gloss[c.start+i]]:[]).join(', ');}
  function koTail(t:Tail):string{
   const obj=t.object?koNP(t.object):'',second=t.second?koNP(t.second):'';
   if(t.pattern===1)return (t.pp?koNP(t.pp.np)+' 근처에서 ':'')+(words[main].startsWith('flow')?'흐른다':'일한다');
-  if(t.pattern===2){if(t.complement){const adjective=gloss[t.complement.end-1];return adjective==='행복한'?'행복해 보인다':'중요해 보인다';}return '이다';}
+  if(t.pattern===2){if(t.complement){if(seq.slice(t.complement.start,t.complement.end).filter(k=>k==='adjective').length>1)return koAdjectives(t.complement)+' 상태로 보인다';const adjective=gloss[t.complement.end-1];return adjective==='행복한'?'행복해 보인다':'중요해 보인다';}return '이다';}
   if(t.pattern===3)return particle(obj,'을','를')+' 필요로 한다';
   if(t.pattern===4)return obj+'에게 '+particle(second,'을','를')+' 준다';
   if(t.complement?.kind==='to'){const inner=seq.flatMap((k,i)=>i>t.complement!.start&&(k==='frequency'||k==='adverb')?[gloss[i]]:[]).join(' ');return particle(obj,'이','가')+' '+(inner?inner+' ':'')+'일하기를 원한다';}
   if(t.vp)return particle(obj,'을','를')+' '+(t.vp.tail.pattern===1?'일하게':t.vp.tail.object?particle(koNP(t.vp.tail.object),'을','를')+' 읽게':'일하게')+' 만든다';
-  return particle(obj,'을','를')+' '+(t.complement&&gloss[t.complement.end-1]==='쉬운'?'쉽게':'준비된 상태로')+' 만든다';
+  return particle(obj,'을','를')+' '+(t.complement&&seq.slice(t.complement.start,t.complement.end).filter(k=>k==='adjective').length>1?koAdjectives(t.complement)+' 상태로':t.complement&&gloss[t.complement.end-1]==='쉬운'?'쉽게':'준비된 상태로')+' 만든다';
  }
  function koreanSentence():string{
   const modifiers=seq.flatMap((k,i)=>result?.complement?.kind==='to'&&i>result.complement.start?[]:k==='frequency'?[gloss[i]]:k==='adverb'&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
@@ -132,7 +137,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
   if(imperative)predicate=main===0&&end===1?'달려!':(nounRanges[0]?particle(koNP(nounRanges[0]),'이','가')+' 되어라!':'되어라!');
   else if(seq[main]==='be'){
    const c=nounRanges.find(n=>roles[n.head]==='subjectComplement');
-   if(c)predicate=koNP(c)+'이다';else if(result?.pp)predicate=koNP(result.pp.np)+' 근처에 있다';else predicate=result?.complement&&gloss[result.complement.end-1]==='중요한'?'중요하다':'행복하다';
+   if(c)predicate=koNP(c)+'이다';else if(result?.pp)predicate=koNP(result.pp.np)+' 근처에 있다';else if(result?.complement&&seq.slice(result.complement.start,result.complement.end).filter(k=>k==='adjective').length>1)predicate=koAdjectives(result.complement)+' 상태이다';else predicate=result?.complement&&gloss[result.complement.end-1]==='중요한'?'중요하다':'행복하다';
   }else predicate=result?koTail(result):'';
   if(!imperative&&seq.includes('not'))predicate=predicate.endsWith('흐른다')?predicate.slice(0,-3)+'흐르지 않는다':predicate.endsWith('이다')?predicate.slice(0,-2)+'이 아니다':predicate.endsWith('한다')?predicate.slice(0,-2)+'하지 않는다':predicate.endsWith('준다')?predicate.slice(0,-2)+'주지 않는다':predicate.endsWith('원한다')?predicate.slice(0,-3)+'원하지 않는다':predicate.endsWith('만든다')?predicate.slice(0,-3)+'만들지 않는다':predicate.endsWith('있다')?predicate.slice(0,-2)+'있지 않다':predicate.endsWith('보인다')?predicate.slice(0,-3)+'보이지 않는다':predicate.endsWith('하다')?predicate.slice(0,-2)+'하지 않다':predicate;
   if(aux>=0&&seq[aux]==='modal'){

@@ -28,7 +28,7 @@ test('controlled fixtures: <=20 retains hand, no score even for repeated new req
  let now=1e6;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2}),p=game.hello(socket(),null,'A');game.quick(p);const r=game.rooms.get(p.room!)!;game.reveal(r);game.begin(r);
  p.hand=fixture(20);const before=[...p.hand],version=p.handVersion;
  for(let i=0;i<3;i++){now+=1600;const msg={requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)};game.action(p,msg);game.action(p,msg);assert.equal(p.judgment!.valid,true);assert.equal(p.judgment!.points,20);assert.equal(p.judgment!.accepted,false);assert.equal(p.score,0);assert.deepEqual(p.hand,before);assert.equal(p.handVersion,version);assert.equal(r.discard.length,0);}
- p.hand=[...fixture(26),{id:randomUUID(),kind:'adjective'}];p.handVersion++;const leftover=p.hand.at(-1)!;now+=1600;
+ p.hand=[...fixture(26),{id:randomUUID(),kind:'pronoun'}];p.handVersion++;const leftover=p.hand.at(-1)!;now+=1600;
  const msg={requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)};game.action(p,msg);game.action(p,msg);
  assert.equal(p.score,26);assert.equal(p.judgment!.usedLength,5);assert.equal(p.judgment!.accepted,true);assert.deepEqual(p.hand,[leftover]);assert.equal(r.discard.length,5);assert.equal(game.view(r,p).usedCards.length,5);assert.equal(r.decision!.playerId,p.id);
 });
