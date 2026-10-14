@@ -97,10 +97,11 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  else if(seq[start]==='be'){
   const c=np(start+1,stop);if(!c||c.end!==stop)return fail('BE 시작 구간을 분석할 수 없습니다.');imperative=true;main=start;put(main,'verb','be','되어라');noun(c,'subjectComplement');
  }else{
-  if(seq[start]==='do'||seq[start]==='modal'){question=true;aux=start;subject=np(start+1,stop);if(subject)main=auxSkip(subject.end,stop);}
+  if(seq[start]==='do'&&seq[start+1]==='not'){imperative=true;aux=start;main=auxSkip(start+1,stop);}
+  else if(seq[start]==='do'||seq[start]==='modal'){question=true;aux=start;subject=np(start+1,stop);if(subject)main=auxSkip(subject.end,stop);}
   else {subject=np(start,stop);if(subject){main=subject.end;while(seq[main]==='frequency')main++;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
-  if(!subject||main<0||main>=stop)return fail('주어와 동사를 분석할 수 없습니다.');
-  noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';
+  if((!imperative&&!subject)||main<0||main>=stop)return fail('주어와 동사를 분석할 수 없습니다.');
+  if(subject){noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';}
   if(seq[main]==='be'){
    let s=skip(main+1,stop);if(seq[s]==='not')s=skip(s+1,stop);
    const n=np(s,stop),c=comp(s,stop),p=pp(s,stop);
@@ -109,8 +110,8 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
    else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};
   }else if(seq[main]==='verb')result=afterVerb(main+1,stop);
   if(!result)return fail('문장 구조를 분석할 수 없습니다.');pattern=result.pattern;
-  const reason=tail(result,main,aux<0);if(reason)return fail(reason);
-  if(aux>=0)put(aux,'verb',seq[aux]==='modal'?'can':singular?'does':'do',seq[aux]==='modal'?'할 수 있다':'한다');
+  const reason=tail(result,main,imperative?false:aux<0);if(reason)return fail(reason);
+  if(aux>=0)put(aux,'verb',seq[aux]==='modal'?'can':imperative?'do':singular?'does':'do',seq[aux]==='modal'?'할 수 있다':'한다');
  }
  for(const n of nounRanges){
   if(seq[n.start]==='indefinite'&&seq[n.head]==='mass')return fail('부정관사와 불가산명사를 함께 허용한 원본 조합');
@@ -140,7 +141,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function koreanSentence():string{
   const modifiers=seq.flatMap((k,i)=>result?.complement?.kind==='to'&&i>result.complement.start?[]:k==='frequency'?[gloss[i]]:k==='adverb'&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
   let predicate='';
-  if(imperative)predicate=main===0&&end===1?'달려!':(nounRanges[0]?particle(koNP(nounRanges[0]),'이','가')+' 되어라!':'되어라!');
+  if(imperative)predicate=seq[0]==='do'&&seq[1]==='not'?'하지 마!':main===0&&end===1?'달려!':(nounRanges[0]?particle(koNP(nounRanges[0]),'이','가')+' 되어라!':'되어라!');
   else if(seq[main]==='be'){
    const c=nounRanges.find(n=>roles[n.head]==='subjectComplement');
    if(c)predicate=koNP(c)+'이다';else if(result?.pp)predicate=koNP(result.pp.np)+' 근처에 있다';else if(result?.complement&&seq.slice(result.complement.start,result.complement.end).filter(k=>k==='adjective').length>1)predicate=koAdjectives(result.complement)+' 상태이다';else predicate=result?.complement&&gloss[result.complement.end-1]==='중요한'?'중요하다':'행복하다';

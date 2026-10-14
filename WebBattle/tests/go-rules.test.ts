@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import type { WebSocket } from 'ws';
 import { Game } from '../server/game.js';
-import { DECK_FACES,cardFace,faceKey,type Card } from '../shared/rules.js';
+import { DECK_FACES,cardFace,faceKey,judgeCards,type Card } from '../shared/rules.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){}} as unknown as WebSocket);
 const fixture=(mode:20|26|13):Card[]=>[
  {id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'}, {id:randomUUID(),kind:'verb'},
@@ -51,3 +51,6 @@ test('human 20+ score gets a bounded choice and settles once if the phone suspen
  const points=p.points;game.tick();assert.equal(p.points,points);
 });
 
+
+
+test('Do Not begins a playable negative imperative',()=>{const result=judgeCards([{id:'do',kind:'do'},{id:'not',kind:'not'},{id:'verb',kind:'verb'}]);assert.equal(result.valid,true);assert.equal(result.points,3);});

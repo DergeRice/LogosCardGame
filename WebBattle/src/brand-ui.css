@@ -172,3 +172,18 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
 @keyframes go-banner-wiggle{0%,72%{transform:rotate(0)}78%{transform:rotate(-3deg)}86%{transform:rotate(3deg)}94%{transform:rotate(-2deg)}100%{transform:rotate(0)}}
 @media(orientation:portrait) and (max-width:700px){.battle .round-score-status{display:none}.sentence-actions{display:flex;flex-direction:column;justify-content:center;gap:5px;align-items:flex-end}.go-progress-banner{font-size:10px;padding:4px 8px}}
 @media(prefers-reduced-motion:reduce){.go-progress-banner{animation:none}}
+/* Quick-start menu: no replayed landing animation, only the three entry controls. */
+.dashboard-quick-entry-art{display:none!important}
+.dashboard-home .dashboard-secondary-actions>.room-open-button,.dashboard-home .dashboard-secondary-actions>.practice-entry{transform:none;margin-inline:0}
+@media(orientation:portrait) and (max-width:700px){
+ .dashboard-home .dashboard-actions{width:min(340px,calc(100vw - 40px));gap:7px;transform:translateY(-4vh)}
+ .dashboard-home .dashboard-secondary-actions{gap:6px;padding:0 18px}
+ .dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{min-height:49px;font-size:17px!important}
+}
+@media(orientation:landscape) and (max-height:500px) and (pointer:coarse){
+ .quick-home.dashboard-home{justify-content:center;padding:8px 12px}
+ .dashboard-home .dashboard-actions{position:absolute;left:50%;top:50%;width:min(340px,76vw);margin:0;transform:translate(-50%,-42%);gap:7px}
+ .dashboard-home .dashboard-secondary-actions{gap:7px;padding:0 14px}
+ .dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{display:flex!important;min-height:37px;font-size:14px!important}
+ .dashboard-cards{display:none}
+}

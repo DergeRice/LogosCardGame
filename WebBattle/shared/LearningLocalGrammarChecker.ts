@@ -73,6 +73,8 @@ class CheckContext {
   if (end - start < 2) return null;
   if (seq[start] === P.WH) return this.TryMatchClause(seq, start + 1, end);
   if (seq[start] === P.DO) {
+   // Imperative negative: DO + NOT + base verb (for example, “Do not run.”).
+   if (seq[start + 1] === P.RB_NOT) { const verbIndex = this.SkipAuxiliaryModifiers(seq, start + 2, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end); }
    const doNpEnd = this.TryParseNP(seq, start + 1, end);
    if (doNpEnd !== null) { const verbIndex = this.SkipAuxiliaryModifiers(seq, doNpEnd, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end); }
   }
