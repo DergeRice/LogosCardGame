@@ -46,5 +46,5 @@ test('exhausted four-player match gives a final chance, survives restart and set
  game.tick();assert.equal(r.phase,'battle');assert.equal(r.finalRound,true);assert.equal(r.endsAt,now+300000);
  now+=10000;game.tick();assert.equal(r.endsAt,400000);
  const fresh=new Game();restore(fresh,snapshot(game));const saved=fresh.rooms.get(r.code)!;assert.equal(saved.endsAt,r.endsAt);assert.equal(saved.finalRound,true);
- r.decision={id:'pending',playerId:a.id,startedAt:now,expiresAt:0};now+=290000;game.tick();assert.equal(r.phase,'result');assert.equal(r.winner,r.players[3].id);assert.equal(game.rooms.has(r.code),false);assert.ok(r.players.every(p=>p.room===undefined));
+ r.decision={id:'pending',playerId:a.id,startedAt:now,expiresAt:0};now+=290000;game.tick();assert.equal(r.phase,'result');assert.equal(r.winner,r.players[3].id);assert.equal(game.rooms.has(r.code),true);assert.ok(r.expiresAt>now);assert.ok(r.players.every(p=>p.room===r.code));
 });

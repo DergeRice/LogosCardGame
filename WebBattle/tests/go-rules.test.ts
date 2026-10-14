@@ -40,13 +40,14 @@ test('controlled fixtures: Go authority, pause, ties, cap and one-time settlemen
  submit(b,13);assert.equal(b.score,0);assert.equal(r.decision,undefined);submit(b,26);assert.equal(b.score,26);assert.equal(r.decision,undefined);submit(b,26);assert.equal(b.score,52);assert.equal(r.leaderId,b.id);choice(b);assert.equal(r.goCount,2);
  submit(a,26);assert.equal(a.score,52);assert.equal(r.decision,undefined);submit(a,26);assert.equal(a.score,78);choice(a);assert.equal(r.goCount,3);assert.equal(r.phase,'result');assert.equal(r.winner,a.id);assert.equal(a.reward,600);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
 });
-test('human 20+ score opens a decision that does not auto-stop after ten seconds',t=>{
+test('human 20+ score gets a bounded choice and settles once if the phone suspends it',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);
- const game=new Game({minimumPlayers:2,decisionMs:10000}),p=game.hello(socket(),null,'A');game.quick(p);const r=game.rooms.get(p.room!)!;game.reveal(r);game.begin(r);
+ const game=new Game({minimumPlayers:2,decisionMs:10000,humanDecisionMs:60000}),p=game.hello(socket(),null,'A');game.quick(p);const r=game.rooms.get(p.room!)!;game.reveal(r);game.begin(r);
  p.hand=fixture(26);p.handVersion++;
  game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});
- assert.equal(p.score,26);assert.equal(r.decision?.playerId,p.id);assert.equal(r.decision?.expiresAt,0);
- const id=r.decision!.id;now+=60_000;game.tick();assert.equal(r.phase,'battle');assert.equal(r.decision?.id,id);
- game.choice(p,{matchId:r.matchId,decisionId:id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.decision,undefined);
+ assert.equal(p.score,26);assert.equal(r.decision?.playerId,p.id);assert.equal(r.decision?.expiresAt,now+60_000);
+ now+=59_999;game.tick();assert.equal(r.phase,'battle');
+ now+=2;game.tick();assert.equal(r.phase,'result');assert.match(r.reason!,/자동 스톱/);assert.equal(r.decision,undefined);assert.equal(r.goCount,0);
+ const points=p.points;game.tick();assert.equal(p.points,points);
 });
 

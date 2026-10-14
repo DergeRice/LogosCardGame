@@ -39,7 +39,7 @@ export class BattleArena extends DurableObject<Env>{
  constructor(ctx:DurableObjectState,env:Env){
   super(ctx,env);
   this.audit=new AuditStore(ctx.storage.sql);
-  this.game=new Game({auditSink:event=>this.audit.insert(event),durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,30,2,120)*1000});
+  this.game=new Game({auditSink:event=>this.audit.insert(event),durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,180,2,300)*1000});
   ctx.blockConcurrencyWhile(async()=>{
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY,value TEXT NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');

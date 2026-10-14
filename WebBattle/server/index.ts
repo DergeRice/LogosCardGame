@@ -37,7 +37,7 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
  const bounded = (value: string | undefined, fallback: number, min: number, max: number) => value && Number.isFinite(Number(value)) ? Math.min(max, Math.max(min, Number(value))) : fallback;
- const app = createBattleServer({ durationMs: bounded(process.env.MATCH_SECONDS, 0, 0, 600) * 1000, reconnectMs: bounded(process.env.RECONNECT_SECONDS, 30, 2, 120) * 1000 });
+ const app = createBattleServer({ durationMs: bounded(process.env.MATCH_SECONDS, 0, 0, 600) * 1000, reconnectMs: bounded(process.env.RECONNECT_SECONDS, 180, 2, 300) * 1000 });
  app.server.listen(Number(process.env.PORT ?? 3001), '0.0.0.0', () => console.log('LOGOS WebSocket server ready on port', process.env.PORT ?? 3001));
  const stop = () => { void app.close().then(() => process.exit(0)); }; process.on('SIGINT', stop); process.on('SIGTERM', stop);
 }

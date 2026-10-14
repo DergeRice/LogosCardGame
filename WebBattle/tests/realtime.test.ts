@@ -24,7 +24,7 @@ test('two real sockets discard a naturally dealt card once and synchronize publi
  }finally{await app.close();}
 });
 
-test('four real sockets: unanimous draw, unique shared deck, retained Correct, duplicate/stale requests, result/rematch',async()=>{
+test('four real sockets: unanimous draw, unique shared deck, retained Correct, duplicate/stale requests, final result',async()=>{
  const {app,url}=await server({matchingMs:1200,revealMs:50,dealingMs:50,durationMs:0});
  try{
   const clients=await Promise.all(['A','B','C','D'].map(n=>new Client(url).hello(n)));
@@ -43,7 +43,7 @@ test('four real sockets: unanimous draw, unique shared deck, retained Correct, d
   const staleId=randomUUID();player.send('submit',{...msg,requestId:staleId});await player.until(()=>player.messages.some(m=>m.type==='error'&&m.requestId===staleId&&m.message.includes('이전 카드')));assert.equal(player.score,0);
   assert.equal(clients[0].room!.drawVote,undefined);clients[0].send('drawVote',{voteId:randomUUID(),approve:true});await clients[0].until(()=>clients[0].messages.some(m=>m.type==='error'&&m.message.includes('동의할')));
   clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');assert.ok(clients[1].room!.players.every(p=>p.score===0));
-  const match=clients[1].room!.matchId;for(const c of clients.slice(1))c.send('rematch');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='battle'&&c.room.matchId!==match);assert.equal(clients[1].room!.deckCount,DECK_FACES.length-15);
+  assert.equal(clients[1].room!.finalRound,true);for(const c of clients.slice(1))c.send('rematch');await wait(100);assert.equal(clients[1].room!.phase,'result');clients[1].send('leave');await clients[1].until(()=>clients[1].messages.some(m=>m.type==='home'));
  }finally{await app.close();}
 });
 test('real sockets: reconnect, forfeit grace, session rating, result cleanup and expired session',async()=>{
@@ -52,7 +52,7 @@ test('real sockets: reconnect, forfeit grace, session rating, result cleanup and
   const a=await new Client(url).hello('A'),b=await new Client(url).hello('B');a.send('quick');await a.until(()=>!!a.room);b.send('quick');await b.until(()=>b.room?.phase==='battle');await a.until(()=>a.room?.phase==='battle');
   const before=a.room!,token=a.token;a.ws.close();await wait(80);const resumed=await new Client(url).hello('ignored',token);await resumed.until(()=>resumed.room?.phase==='battle');assert.equal(resumed.room!.matchId,before.matchId);assert.deepEqual(resumed.room!.hand,before.hand);
   b.ws.close();await resumed.until(()=>resumed.room?.phase==='result');assert.equal(resumed.room!.winner,resumed.room!.you);assert.match(resumed.room!.reason!,/유예/);assert.equal(resumed.room!.players.find(p=>p.id===resumed.room!.you)!.rating,1012);
-  await resumed.until(()=>resumed.messages.some(m=>m.type==='home'&&m.message?.includes('만료')));assert.equal(app.game.rooms.size,0);
+  await resumed.until(()=>resumed.messages.some(m=>m.type==='home'&&m.message?.includes('보관 시간이 끝났어요')));assert.equal(app.game.rooms.size,0);
   const fresh=await new Client(url).hello('Fresh','nonexistent');assert.ok(fresh.messages.some(m=>m.type==='home'&&m.message?.includes('만료')));
  }finally{await app.close();}
 });
@@ -67,15 +67,15 @@ test('actual AI from quick start through timed result and rematch; invalid input
   for(let i=0;i<30;i++)a.send('ping');await a.until(()=>a.messages.some(m=>m.type==='error'&&m.message.includes('너무 빨라')));
  }finally{await app.close();}
 });
-test('two real sockets with controlled 26-point hand: human decision waits and Go is shared',async()=>{
- const {app,url}=await server({matchingMs:1000,revealMs:20,dealingMs:20,durationMs:0,decisionMs:200,dealMs:10000});
+test('two real sockets with controlled 26-point hand: bounded human decision and shared Go',async()=>{
+ const {app,url}=await server({matchingMs:1000,revealMs:20,dealingMs:20,durationMs:0,decisionMs:200,humanDecisionMs:1000,dealMs:10000});
  try{
   const a=await new Client(url).hello('A'),b=await new Client(url).hello('B');a.send('quick');await a.until(()=>!!a.room);b.send('quick');await b.until(()=>b.room?.phase==='battle');await a.until(()=>a.room?.phase==='battle');
   const room=app.game.rooms.get(a.room!.code)!,player=room.players.find(p=>p.id===a.room!.you)!;
   player.hand=[{id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:'verb'},{id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:'count',variant:'count-plus3'},{id:randomUUID(),kind:'adjective',variant:'adjective-plus3'}];player.handVersion++;app.game.broadcast(room);
   await a.until(()=>a.room?.handVersion===player.handVersion);
   a.send('submit',{cards:a.room!.hand.map(c=>c.id),handVersion:a.room!.handVersion,requestId:randomUUID()});
-  await a.until(()=>a.room?.decision?.playerId===a.room?.you);await b.until(()=>!!b.room?.decision);assert.equal(a.score,26);assert.equal(a.room!.decision!.expiresAt,0);
+  await a.until(()=>a.room?.decision?.playerId===a.room?.you);await b.until(()=>!!b.room?.decision);assert.equal(a.score,26);assert.ok(a.room!.decision!.expiresAt>Date.now());
   assert.equal(a.room!.players.find(p=>p.id===a.room!.you)?.lastPlayed?.length,5);
   assert.equal(b.room!.players.find(p=>p.id===a.room!.you)?.playedSentences?.[0].length,5);
   assert.equal(b.room!.players.find(p=>p.id===a.room!.you)?.lastAction?.text.includes('+26점'),true);

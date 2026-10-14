@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
 const persistence=await mkdtemp(join(tmpdir(),'logos-cloud-test-'));
-const make=()=>new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:resolve('.runtime/cloudflare-build/worker.js'),compatibilityDate:'2026-09-01',compatibilityFlags:['nodejs_compat'],durableObjects:{BATTLE:{className:'BattleArena',useSQLite:true}},resourcePersistencePath:persistence,bindings:{ALLOWED_ORIGINS:'https://logos-card-battle.netlify.app',MATCH_SECONDS:'0',RECONNECT_SECONDS:'30',ADMIN_LOG_TOKEN:'test-admin-secret-32-characters-long'}}));
+const make=()=>new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:resolve('.runtime/cloudflare-build/worker.js'),compatibilityDate:'2026-09-01',compatibilityFlags:['nodejs_compat'],durableObjects:{BATTLE:{className:'BattleArena',useSQLite:true}},resourcePersistencePath:persistence,bindings:{ALLOWED_ORIGINS:'https://logos-card-battle.netlify.app',MATCH_SECONDS:'0',RECONNECT_SECONDS:'180',ADMIN_LOG_TOKEN:'test-admin-secret-32-characters-long'}}));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 class Client{
  constructor(url){this.messages=[];this.ws=new WebSocket(url,{origin:'https://logos-card-battle.netlify.app'});this.ws.on('message',raw=>{const m=JSON.parse(raw);this.messages.push(m);if(m.type==='session')this.token=m.token;if(m.type==='state')this.room=m.room;});this.ws.on('error',()=>{});}
