@@ -141,11 +141,20 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
 .preload-mascot-fallback img{animation:loading-float 3s ease-in-out infinite}
 @keyframes loading-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-/* Matching reuses the login arrival art without the logo, under the room status. */
-.match-landing-screen{position:fixed!important;inset:0!important;max-width:none!important;overflow:hidden!important;isolation:isolate;background:#a5d9f2}
-.match-landing-background{position:absolute;inset:-12%;z-index:-2;background:#a5d9f2 url('/landing/background.jpg') center/cover no-repeat}
-.match-landing-art{position:absolute;z-index:-1;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.92}
-.match-landing-art .landing-art{width:min(calc(100% - 16px),calc(var(--game-height,100dvh) - 190px),790px)}
-.match-presentation-content{position:relative;z-index:1;display:flex;flex:1;min-height:0;flex-direction:column;align-items:center;justify-content:center}
-.match-landing-screen .matching-orbit,.match-landing-screen .versus-layout{position:relative;z-index:2}
-@media(orientation:landscape) and (max-height:650px){.match-landing-art{justify-items:start;padding-left:3vw}.match-landing-art .landing-art{width:min(57vw,calc(var(--game-height,100dvh) - 16px))}.match-landing-screen .match-presentation-content{margin-left:34vw}}
+/* The home entry, not matching, replays the login art without its title above Quick Start. */
+.dashboard-quick-entry-art{width:clamp(150px,42vw,220px);aspect-ratio:1;overflow:visible;pointer-events:none}
+.dashboard-quick-entry-art .landing-art{width:100%;height:100%;aspect-ratio:1}
+.dashboard-quick-entry-art .landing-title{display:none}
+.dashboard-quick-entry-art .landing-cards{inset:0;width:100%}
+.dashboard-quick-entry-art .landing-mascots{width:43%;left:28.5%;top:35%}
+.dashboard-quick-mascots{display:none}
+@media(max-width:600px){.dashboard-quick-entry-art{width:clamp(145px,48vw,190px)}}
+@media(orientation:landscape) and (max-height:500px){.dashboard-quick-entry-art{width:clamp(88px,22vh,122px)}}
+
+/* A profile opens one full, unsegmented card board above every game surface. */
+.opponent-preview-backdrop{position:fixed;z-index:220;inset:0;display:grid;place-items:center;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:#163b2770;backdrop-filter:blur(3px)}
+.opponent-preview-backdrop .opponent-field-preview{position:relative;z-index:1;display:flex;width:min(920px,100%);height:min(680px,calc(100dvh - 24px));min-height:0;overflow:hidden;border:3px solid #318242;border-radius:22px;background:#fffdf3;box-shadow:0 12px 0 #15502c,0 26px 55px #14392977}
+.opponent-preview-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px 10px;font-size:17px}.opponent-preview-heading>div{display:grid;gap:3px}.opponent-preview-heading small{font-size:11px;color:#55743f}.opponent-preview-heading button{order:0;flex:none;width:36px;height:36px;border:2px solid #173d27;border-radius:50%;background:#ffda4f;box-shadow:0 3px 0 #173d27;font-size:24px;line-height:1}
+.opponent-preview-scroll{display:block;flex:1;min-height:0;overflow:auto;padding:8px 14px 16px}.opponent-preview-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:12px}.opponent-preview-cards img{display:block;width:100%;height:auto;aspect-ratio:488/693;object-fit:cover;border:2px solid #9aac93;border-radius:8px;background:white;box-shadow:0 3px 7px #17291a28}.opponent-preview-empty{margin:auto;padding:24px;font-size:14px;color:#657968}
+@media(max-width:600px){.opponent-preview-backdrop{padding:8px}.opponent-preview-backdrop .opponent-field-preview{height:calc(100dvh - 16px);border-radius:16px}.opponent-preview-heading{padding:10px 12px 7px;font-size:15px}.opponent-preview-heading button{width:32px;height:32px;font-size:21px}.opponent-preview-scroll{padding:7px 9px 12px}.opponent-preview-cards{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}.opponent-preview-cards img{border-radius:6px}}
+@media(orientation:landscape) and (max-height:500px){.opponent-preview-backdrop .opponent-field-preview{width:min(900px,calc(100vw - 16px));height:calc(100dvh - 16px)}.opponent-preview-heading{padding:7px 10px;font-size:13px}.opponent-preview-heading button{width:28px;height:28px;font-size:18px}.opponent-preview-scroll{padding:5px 9px 9px}.opponent-preview-cards{grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px}}
