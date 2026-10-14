@@ -1,4 +1,4 @@
-import {test,expect,type WebSocketRoute} from '@playwright/test';
+import {test,expect,type WebSocketRoute} from './fixtures.js';
 import type {Card,RoomView} from '../../shared/rules.js';
 test('special cards UI: GET, every ROB card together, EXCHANGE offer and recipient reply',async({page})=>{
  const own:Card[]=[{id:'get',kind:'get2'},{id:'rob',kind:'rob'},{id:'ex',kind:'exchange'},{id:'shield',kind:'protect'},{id:'offer',kind:'pronoun'}];

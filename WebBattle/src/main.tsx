@@ -1,4 +1,4 @@
-import {HomeAccess} from './HomeAccess.js';
+import {LoginLanding} from './LoginLanding.js';
 import {PracticeMode} from './PracticeMode.js';
 import {PersonalResult} from './PersonalResult.js';
 import {ReactionImage} from './ReactionImage.js';
@@ -63,6 +63,7 @@ function guestName() {
  sessionStorage.setItem('logos-name', name);
  return name;
 }
+function GameEntry({practice=false}:{practice?:boolean}){useGameViewport();const [entered,setEntered]=useState(()=>sessionStorage.getItem('logos-entry')==='guest'||Boolean(localStorage.getItem('logos-account-token')));return entered?(practice?<PracticeMode/>:<App/>):<LoginLanding onGuest={()=>{sessionStorage.setItem('logos-entry','guest');const saved=localStorage.getItem('logos-guest-name');if(saved)sessionStorage.setItem('logos-name',saved);setEntered(true)}}/>;}
 function App() {
  const [name, setName] = useState(guestName);
  const [connected, setConnected] = useState(false), [status, setStatus] = useState('연결 준비 중');
@@ -127,10 +128,10 @@ function App() {
    if (stopped) return; setStatus(attempts ? '재연결 중 · 무료 서버를 깨우는 데 잠시 걸릴 수 있어요' : '서버 연결 중');
    const url = import.meta.env.VITE_WS_URL || `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/socket`;
    const ws = new WebSocket(url); socketRef.current = ws;
-   ws.onopen = () => { ws.send(JSON.stringify({ type: 'hello', name: sessionStorage.getItem('logos-name') || name, token: sessionStorage.getItem('logos-token'),authToken:localStorage.getItem('logos-account-token') })); heartbeat = setInterval(() => { if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'ping' })); }, 12000); };
+   ws.onopen = () => { ws.send(JSON.stringify({ type: 'hello', name: sessionStorage.getItem('logos-name') || name, token: sessionStorage.getItem('logos-token')||localStorage.getItem('logos-guest-token'),authToken:localStorage.getItem('logos-account-token') })); heartbeat = setInterval(() => { if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'ping' })); }, 12000); };
    ws.onmessage = event => {
     const msg = JSON.parse(event.data);
-    if (msg.type === 'session') { sessionStorage.setItem('logos-token', msg.token); sessionStorage.setItem('logos-name', msg.name); setName(msg.name); setAccount(msg.account?.username??null); setProfile({avatar:msg.avatar, rating:msg.rating, points:msg.points}); setConnected(true); setStatus('서버 연결됨'); attempts = 0; }
+    if (msg.type === 'session') { sessionStorage.setItem('logos-token', msg.token); sessionStorage.setItem('logos-name', msg.name); if(!msg.account){localStorage.setItem('logos-guest-token',msg.token);localStorage.setItem('logos-guest-name',msg.name);}setName(msg.name); setAccount(msg.account?.username??null); setProfile({avatar:msg.avatar, rating:msg.rating, points:msg.points}); setConnected(true); setStatus('서버 연결됨'); attempts = 0; }
     if (msg.type === 'auth') { if(msg.authToken){localStorage.setItem('logos-account-token',msg.authToken);setAccount(msg.username);setAuthMode(null);setAuthPassword('');setNotice('계정이 연결됐어요. 이제 레이팅이 저장됩니다.');}else{localStorage.removeItem('logos-account-token');sessionStorage.removeItem('logos-token');location.reload();} }
     if (msg.type === 'state') {
      const r = msg.room as RoomView, previous = roomRef.current;if(r.phase!=='battle'||(previous&&previous.matchId!==r.matchId)||r.judgment?.submissionId===pendingId.current){pendingId.current=null;pendingAt.current=0;setPending(false);} offset.current = r.serverNow - Date.now();
@@ -188,7 +189,7 @@ function App() {
   {!connected && <div className="connection-banner" role="status">{status}. 새로고침해도 같은 세션으로 복귀합니다.</div>}
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}
-  {!room && <main className="quick-home"><div className="eyebrow">LOGOS · CARD BATTLE</div><h1>한 장으로 시작하는<br/><em>짜릿한 문장 대결.</em></h1><HomeAccess account={account}/><div className="home-profile"><Avatar kind={profile.avatar}/><div><b data-testid="guest-name">{name}</b><small>RATING {profile.rating} · {profile.points} P</small><small>{account?'계정 레이팅 저장 중':'게스트 레이팅은 임시 저장'}</small></div></div><div className="quick-art" aria-hidden="true">{(['pronoun','verb','adjective'] as Kind[]).map((k,i)=><div key={k} className={`original-demo demo-${i}`}><Illustration kind={k}/></div>)}</div><button className="primary quick-start" disabled={!connected} onClick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick');}}>빠른시작 <span>↗</span></button><a className="practice-entry" href="/practice">혼자 연습하기</a></main>}
+  {!room && <main className="quick-home"><div className="eyebrow">LOGOS · CARD BATTLE</div><h1>한 장으로 시작하는<br/><em>짜릿한 문장 대결.</em></h1><div className="home-profile"><Avatar kind={profile.avatar}/><div><b data-testid="guest-name">{name}</b><small>레이팅 {profile.rating} · 포인트 {profile.points} P</small><small>{account?'계정 레이팅 저장 중':'게스트 계정 · 포인트와 레이팅 별도 저장'}</small></div></div><div className="quick-art" aria-hidden="true">{(['pronoun','verb','adjective'] as Kind[]).map((k,i)=><div key={k} className={`original-demo demo-${i}`}><Illustration kind={k}/></div>)}</div><button className="primary quick-start" disabled={!connected} onClick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick');}}>빠른시작 <span>↗</span></button><a className="practice-entry" href="/practice">혼자 연습하기</a></main>}
   {authMode&&!room&&<div className="account-backdrop" onClick={()=>setAuthMode(null)}><form className="account-dialog" role="dialog" aria-label={authMode==='register'?'계정 만들기':'계정 로그인'} onClick={e=>e.stopPropagation()} onSubmit={e=>{e.preventDefault();send(authMode,{username:authName,password:authPassword});}}><h2>{authMode==='register'?'계정 만들기':'계정 로그인'}</h2><p>같은 계정으로 웹과 Unity 웹뷰에서 레이팅을 이어갑니다.</p><label htmlFor="account-name">아이디</label><input id="account-name" autoComplete="username" minLength={3} maxLength={16} value={authName} onChange={e=>setAuthName(e.target.value)} required/><label htmlFor="account-password">비밀번호</label><input id="account-password" type="password" autoComplete={authMode==='register'?'new-password':'current-password'} minLength={10} maxLength={128} value={authPassword} onChange={e=>setAuthPassword(e.target.value)} required/><div className="account-dialog-actions"><button type="button" onClick={()=>setAuthMode(null)}>취소</button><button className="primary" disabled={!connected} type="submit">{authMode==='register'?'만들고 연동':'로그인'}</button></div></form></div>}
   {room && ['matching','reveal'].includes(room.phase) && <MatchPresentation room={room} now={now} cancel={()=>send('leave')}/>}
   {room && ['battle','dealing'].includes(room.phase) && <main className={`battle ${correct?scoreProgress.running?'score-building':'score-burst':''}`} data-score-beat={scoreProgress.completed%2}>
@@ -227,7 +228,7 @@ const practiceRoute=location.pathname.replace(/\/$/,'')==='/practice';
 document.documentElement.classList.toggle('practice-route',practiceRoute);
 const cardViewerRoute=location.pathname.replace(/\/$/,'')==='/cards';
 document.documentElement.classList.toggle('card-viewer-route',cardViewerRoute);
-createRoot(document.getElementById('root')!).render(<>{adminRoute?<AdminLogs/>:cardViewerRoute?<CardViewer/>:practiceRoute?<PracticeMode/>:<App/>}<QuickTools/></>);
+createRoot(document.getElementById('root')!).render(<>{adminRoute?<AdminLogs/>:cardViewerRoute?<CardViewer/>:practiceRoute?<GameEntry practice/>:<GameEntry/>}<QuickTools/></>);
 
 
 

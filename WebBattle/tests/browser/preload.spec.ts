@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 import {CARD_FACE_URLS} from '../../src/preloadCards.js';
 
 test('all unique card faces load before quick start becomes available',async({page})=>{

@@ -1,4 +1,4 @@
-import {test,expect,type WebSocketRoute} from '@playwright/test';
+import {test,expect,type WebSocketRoute} from './fixtures.js';
 import {judgeCards,type RoomView} from '../../shared/rules.js';
 test('submit ignores unrelated ACK, recovers rejected stale state and submits again',async({page})=>{
  const card={id:'verb',kind:'verb' as const},p={id:'me',name:'제출 검사',avatar:'verb' as const,rating:1000,ratingDelta:0,points:0,reward:0,score:0,ready:true,connected:true,handCount:1,rematch:false,ai:false};

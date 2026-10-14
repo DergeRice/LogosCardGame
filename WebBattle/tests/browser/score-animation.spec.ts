@@ -1,9 +1,10 @@
-import {test,expect} from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import {test,expect} from './fixtures.js';
 import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
 
 // Explicit UI fixtures: the server response sets the score; the browser only presents it.
 for(const mobile of [false,true])test(`score presentation fixture: ${mobile?'mobile':'desktop'} numbers only, integer roll and card effects`,async({browser})=>{
- const ctx=await browser.newContext({viewport:mobile?{width:844,height:390}:{width:1280,height:1000},hasTouch:mobile,isMobile:mobile}),p=await ctx.newPage();
+ const ctx=await guestContext(browser,{viewport:mobile?{width:844,height:390}:{width:1280,height:1000},hasTouch:mobile,isMobile:mobile}),p=await ctx.newPage();
  const cards:Card[]=[{id:'a',kind:'pronoun',variant:'pronoun-x2'},{id:'b',kind:'verb'},{id:'c',kind:'article',variant:'article-x2'},{id:'d',kind:'count',variant:'count-plus3'},{id:'e',kind:'adjective',variant:'adjective-plus3'},{id:'excluded',kind:'adjective'}];
  const player={id:'me',name:'게스트 1000',avatar:'pronoun' as const,rating:1000,ratingDelta:0,points:0,reward:0,score:0,ready:true,connected:true,handCount:6,rematch:false,ai:false};
  const room:RoomView={code:'123456',phase:'battle',matchId:'fixture',players:[player,{...player,id:'other',name:'상대'}],you:'me',hand:cards,handVersion:1,endsAt:Date.now()+90000,stageEndsAt:0,nextDealAt:Date.now()+10000,dealSerial:1,deckCount:22,deckTotal:39,usedCards:[],dealIntervalMs:10000,goCount:0,multiplier:1,highScore:0,serverNow:Date.now(),actionAt:0,exchangeAt:0,reconnectMs:30000,durationMs:90000,log:[],expiresAt:Date.now()+600000};

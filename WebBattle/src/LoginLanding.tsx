@@ -1,0 +1,4 @@
+import {BUILD_VERSION} from './buildVersion.js';
+export function LoginLanding({onGuest}:{onGuest:()=>void}){
+ return <main className="login-landing"><div className="eyebrow">LOGOS · CARD BATTLE</div><h1>카드 배틀</h1><p>로그인하고 문장 대결을 시작하세요.</p><div className="entry-login-options" aria-label="로그인 방식"><button disabled className="google-login"><b aria-hidden="true">G</b><span>Google로 로그인<small>업데이트 예정</small></span></button><button disabled className="apple-login"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 2c0 2-1 4-3 4 0-2 1-4 3-4ZM18 7c-2-1-3 0-5 0-2 0-3-1-5 0-5 3-2 13 2 14 1 0 2-1 3-1 2 0 2 1 4 1 2-1 3-3 4-5-4-2-5-6-1-8l-2-1Z"/></svg><span>Apple ID로 로그인<small>업데이트 예정</small></span></button><button className="guest-login" onClick={onGuest}>게스트로 로그인 <span aria-hidden="true">→</span></button></div><small>게스트 계정의 포인트와 레이팅은 이 브라우저에서 이어집니다.</small><span className="build-version">{BUILD_VERSION}</span></main>;
+}

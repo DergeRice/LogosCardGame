@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
 
 test('20+ score finishes card calculation and score roll before Go/Stop, then Go heats the field',async({page})=>{

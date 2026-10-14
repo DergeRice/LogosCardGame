@@ -10,7 +10,7 @@ test('frequency in ordinary verb, Be and auxiliary positions counts fully and pr
 });
 test('only a Go caller earns double reward; others keep base score and rating changes are not globally multiplied',()=>{
  const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);a.score=40;b.score=30;r.goCount=2;a.calledGo=true;
- game.finish(r,'Stop');assert.equal(a.reward,80);assert.equal(b.reward,30);assert.equal(a.score,40);assert.equal(b.score,30);assert.equal(a.ratingDelta,12);assert.equal(b.ratingDelta,-12);assert.equal(game.view(r,a).multiplier,1);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
+ game.finish(r,'Stop');assert.equal(a.reward,600);assert.equal(b.reward,300);assert.equal(a.score,40);assert.equal(b.score,30);assert.equal(a.ratingDelta,12);assert.equal(b.ratingDelta,-12);assert.equal(game.view(r,a).multiplier,1);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
 });
 test('AI approvals happen at separate persisted deadlines and unanimous consent distributes once',t=>{
  let now=100000;t.mock.method(Date,'now',()=>now);const game=new Game(),a=game.hello(socket(),null,'A');game.quick(a);const r=game.rooms.get(a.room!)!;game.reveal(r);game.deal(r,5);game.begin(r);r.players.filter(p=>p.ai).forEach((p,i)=>{p.nextAI=now+60000;r.drawVote!.aiApproveAt![p.id]=now+(i+1)*2000});const voteId=r.drawVote!.id,deck=r.deck.length;

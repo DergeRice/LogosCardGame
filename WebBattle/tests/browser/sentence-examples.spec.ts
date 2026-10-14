@@ -1,8 +1,9 @@
-import {test,expect} from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import {test,expect} from './fixtures.js';
 import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
 import {observeRecordedAudio} from './helpers/audio.js';
 for(const mobile of [false,true])test(`example after score, field overlay and TTS: ${mobile?'landscape reduced viewport':'desktop'}`,async({browser})=>{
- const ctx=await browser.newContext({viewport:mobile?{width:900,height:430}:{width:1280,height:900},hasTouch:mobile,isMobile:mobile});
+ const ctx=await guestContext(browser,{viewport:mobile?{width:900,height:430}:{width:1280,height:900},hasTouch:mobile,isMobile:mobile});
  await ctx.addInitScript(observeRecordedAudio);
  await ctx.addInitScript(({mobile})=>{
   const AudioCtor=window.AudioContext;
@@ -19,7 +20,7 @@ for(const mobile of [false,true])test(`example after score, field overlay and TT
  const room:RoomView={code:'123456',phase:'battle',matchId:'example-fixture',players:[me,{...me,id:'other',name:'상대'}],you:'me',hand:cards,handVersion:1,endsAt:0,stageEndsAt:0,nextDealAt:Date.now()+30000,dealSerial:1,deckCount:40,deckTotal:60,usedCards:[],dealIntervalMs:30000,goCount:0,multiplier:1,highScore:0,serverNow:Date.now(),actionAt:0,exchangeAt:0,reconnectMs:30000,durationMs:0,log:[],expiresAt:0};
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{const msg=JSON.parse(String(raw));if(msg.type==='hello'){ws.send(JSON.stringify({type:'session',token:'example-fixture',name:me.name,avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}if(msg.type==='submit'){room.judgment={...judgeCards(cards),accepted:true,submissionId:msg.requestId};room.players[0].score=26;room.highScore=26;room.hand=[];room.handVersion++;room.players[0].lastPlayed=cards;room.decision={id:'choice',playerId:'me',startedAt:Date.now(),expiresAt:0};ws.send(JSON.stringify({type:'state',room}));}}));
  try{
-  await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();for(const c of cards)await page.locator(`[data-card-id="${c.id}"]`).click();
+  await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();for(const c of cards)await page.locator(`[data-card-id="${c.id}"]`).click();
   const geometry=await page.locator('.field-feedback-wrap').boundingBox();await page.getByRole('button',{name:'문장 제출'}).click();await expect(page.locator('.score-calculation[data-phase="calculating"]')).toBeVisible();await expect(page.locator('.sentence-example-panel')).toHaveCount(0);
   const panel=page.getByRole('region',{name:'카드에 맞춘 예문'});await expect(panel).toBeVisible();await expect(page.getByTestId('my-score')).toHaveText('26');await expect(panel).not.toContainText('5형식');await expect(panel.locator('.example-english')).toHaveAttribute('aria-label','I make the student ready.');await expect(panel.locator('.role-objectComplement')).toContainText('ready');await expect(panel.locator('header,footer,button')).toHaveCount(0);await expect(panel.locator('[data-example-card-id]')).toHaveCount(5);await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toHaveCount(0);
   await expect.poll(async()=>Math.abs((await page.locator('.field-feedback-wrap').boundingBox())!.y-geometry!.y)).toBeLessThan(.5);

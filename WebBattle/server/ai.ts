@@ -24,13 +24,13 @@ for(const template of templates){
 }
 const candidates = expanded.filter(t => t.length <= 8).sort((a, b) => a.length - b.length);
 export function chooseMove(hand: Card[], difficulty: Difficulty): string[] | null {
- const budget = { easy: 100, normal: 900, hard: 5000 }[difficulty];
+ const budget = { easy: 450, normal: 900, hard: 5000 }[difficulty];
  const started = performance.now(); let nodes = 0, best: string[] | null = null, score = -1;
  const ranked = [...hand].sort((a,b)=>{const x=cardEffect(a),y=cardEffect(b);return (y.multiply-x.multiply)*100+y.add-x.add;});
  for (const candidate of candidates) {
   if(candidate.some(kind=>!hand.some(card=>card.kind===kind)))continue;
   if (nodes >= budget || performance.now() - started > 8) break;
-  if (difficulty === 'easy' && candidate.length > 3) break;
+  if (difficulty === 'easy' && candidate.length > 7) break;
   const chosen: Card[] = [];
   for (const kind of candidate) {
    if (++nodes > budget) break;
@@ -40,7 +40,7 @@ export function chooseMove(hand: Card[], difficulty: Difficulty): string[] | nul
   }
   if (chosen.length !== candidate.length) continue;
   const result = judgeCards(chosen);
-  if (result.valid && result.points > score) { best = chosen.slice(result.usedStartIndex, result.usedStartIndex + result.usedLength).map(c => c.id); score = result.points; if (difficulty === 'easy') break; }
+  if (result.valid && result.points > score) { best = chosen.slice(result.usedStartIndex, result.usedStartIndex + result.usedLength).map(c => c.id); score = result.points; if (difficulty === 'easy'&&result.points>20) break; }
  }
  return best;
 }

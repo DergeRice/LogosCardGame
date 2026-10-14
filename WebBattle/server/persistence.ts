@@ -1,3 +1,4 @@
+import {GUEST_RETENTION_MS} from '../shared/progression.js';
 import {cardEffect} from '../shared/rules.js';
 import { randomUUID } from 'node:crypto';
 import { Game } from './game.js';
@@ -73,7 +74,7 @@ export function nextDeadline(game:Game):number|null{
    else{if(r.endsAt>0)deadlines.push(r.endsAt);for(const p of r.players)if(p.ai)deadlines.push(p.nextAI);}
   }
  }
- for(const p of game.sessions.values())if(!p.room&&!p.socket)deadlines.push(p.touchedAt+3600001);
+ for(const p of game.sessions.values())if(!p.room&&!p.socket)deadlines.push(p.touchedAt+GUEST_RETENTION_MS+1);
  return deadlines.length?Math.max(Date.now()+50,Math.min(...deadlines)):null;
 }
 

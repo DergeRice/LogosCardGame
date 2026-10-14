@@ -1,9 +1,10 @@
-import {test,expect} from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import {test,expect} from './fixtures.js';
 import {DECK_FACES,type Card,type Kind,type RoomView} from '../../shared/rules.js';
 
 for(const count of [4,6])for(const size of [{width:1280,height:720},{width:932,height:430},{width:667,height:320}])test(`${count} players ${size.width}: board, ROB groups and EXCHANGE remain usable`,async({browser})=>{
  const mobile=size.width<1000;
- const context=await browser.newContext({viewport:size,isMobile:mobile,hasTouch:mobile});const page=await context.newPage();
+ const context=await guestContext(browser,{viewport:size,isMobile:mobile,hasTouch:mobile});const page=await context.newPage();await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));
  if(mobile)await page.addInitScript(({width,height})=>{Object.defineProperty(window,'visualViewport',{configurable:true,value:Object.assign(new EventTarget(),{width,height:height-36,offsetTop:18,offsetLeft:0})});},size);
  const hand:Card[]=['rob','exchange','pronoun','verb','count'].map((kind,i)=>({...DECK_FACES.find(c=>c.kind===kind)!,id:`own-${i}`}));
  const players=Array.from({length:count},(_,i)=>({id:`p${i}`,name:`게스트 ${1000+i}`,avatar:['pronoun','verb','adjective','count'][i%4] as Kind,rating:1000,ratingDelta:0,points:0,reward:0,score:i*12,ready:true,connected:true,handCount:5,handPreview:i===0?hand:DECK_FACES.slice(i*5,i*5+5).map((c,j)=>({...c,id:`p${i}-${j}`})),rematch:false,ai:i>0}));

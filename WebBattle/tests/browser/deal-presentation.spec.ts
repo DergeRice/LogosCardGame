@@ -1,4 +1,4 @@
-import {test,expect,type WebSocketRoute} from '@playwright/test';
+import {test,expect,type WebSocketRoute} from './fixtures.js';
 import {DECK_FACES,type RoomView} from '../../shared/rules.js';
 test('controlled deal fixture: sequential opaque arrivals, 23-card hand, return without redeal',async({page})=>{
  const cards=DECK_FACES.slice(0,23).map((c,i)=>({...c,id:'deal-'+i}));

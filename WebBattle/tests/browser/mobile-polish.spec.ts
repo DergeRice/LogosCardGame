@@ -1,5 +1,6 @@
+import {guestContext} from './fixtures.js';
 import {BUILD_VERSION} from '../../src/buildVersion.js';
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 import {DECK_FACES,judgeCards,type RoomView} from '../../shared/rules.js';
 function fixture():RoomView{
  const players=Array.from({length:4},(_,i)=>({id:`player-${i}`,name:`게스트 ${1000+i}`,avatar:['pronoun','verb','adjective','count'][i] as 'pronoun'|'verb'|'adjective'|'count',rating:1000,ratingDelta:0,points:0,reward:0,score:i*3,ready:true,connected:true,handCount:5,handPreview:DECK_FACES.slice(i*5,i*5+5).map((c,j)=>({...c,id:`preview-${i}-${j}`})),draftPreview:DECK_FACES.slice(i*5,i*5+1).map((c,j)=>({...c,id:`draft-${i}-${j}`})),playedSentences:[DECK_FACES.slice(i*5,i*5+2).map((c,j)=>({...c,id:`played-${i}-${j}`}))],rematch:false,ai:false}));
@@ -7,14 +8,14 @@ function fixture():RoomView{
 }
 
 for(const size of [{width:667,height:320},{width:844,height:390},{width:932,height:430}])test('readable mobile cards and unclipped labels '+size.width,async({browser})=>{
- const ctx=await browser.newContext({viewport:size,isMobile:true,hasTouch:true,deviceScaleFactor:3});const page=await ctx.newPage();const room=fixture();room.dealSerial=0;
+ const ctx=await guestContext(browser,{viewport:size,isMobile:true,hasTouch:true,deviceScaleFactor:3});const page=await ctx.newPage();const room=fixture();room.dealSerial=0;
  room.hand=['pronoun','verb','adjective','be','get3'].map((kind,i)=>({...DECK_FACES.find(c=>c.kind===kind)!,id:'readable-'+i}));
  room.drawVote={id:'readable-vote',approved:[]};room.nextDealAt=Date.now()+40000;room.dealIntervalMs=40000;
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.routeWebSocket('**/socket',ws=>{ws.onMessage(raw=>{const m=JSON.parse(String(raw));if(m.type==='hello'){ws.send(JSON.stringify({type:'session',token:'readable',name:'게스트 1000',avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}else if(m.type==='submit'){room.judgment={...judgeCards(m.cards.map((id:string)=>room.hand.find(c=>c.id===id)!)),accepted:false,submissionId:m.requestId};ws.send(JSON.stringify({type:'ack',requestId:m.requestId}));ws.send(JSON.stringify({type:'state',room}));}})});
  const check=async()=>{const g=await page.evaluate(()=>{const board=document.querySelector('.sentence-area')!.getBoundingClientRect();return{scroll:document.documentElement.scrollHeight,h:innerHeight,images:[...document.querySelectorAll('.sentence-card .illustration')].map(el=>{const r=el.getBoundingClientRect();return{top:r.top,bottom:r.bottom,boardTop:board.top,boardBottom:board.bottom,natural:(el as HTMLImageElement).naturalWidth}}),labels:[...document.querySelectorAll('.sentence-card .card-readable-label')].map(el=>{const r=el.getBoundingClientRect();return{bottom:r.bottom,boardBottom:board.bottom,font:parseFloat(getComputedStyle(el).fontSize),overflow:el.scrollWidth>el.clientWidth+1}})}});expect(g.scroll).toBeLessThanOrEqual(g.h);for(const r of g.images){expect(r.top).toBeGreaterThanOrEqual(r.boardTop);expect(r.bottom).toBeLessThanOrEqual(r.boardBottom);expect(r.natural).toBe(488)}};
  try{
-  await page.goto('/');await expect(page.locator('.hand .game-card')).toHaveCount(5,{timeout:45000});await page.evaluate(()=>document.fonts.ready);await expect(page.locator('.character-avatar>img')).toHaveCount(4);
+  await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await expect(page.locator('.hand .game-card')).toHaveCount(5,{timeout:45000});await page.evaluate(()=>document.fonts.ready);await expect(page.locator('.character-avatar>img')).toHaveCount(4);
   const card=page.locator('.hand .game-card').first();expect(await card.evaluate(e=>e.clientWidth)).toBeGreaterThanOrEqual(60);expect(await page.getByTestId('my-score').evaluate(e=>parseFloat(getComputedStyle(e).fontSize))).toBeGreaterThanOrEqual(19);
   await page.getByRole('button',{name:'손패 펼쳐 보기'}).tap();
   await expect(page.locator('.table-player .mini-hand-preview img')).toHaveCount(0);

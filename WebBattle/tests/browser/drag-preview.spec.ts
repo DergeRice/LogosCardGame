@@ -1,7 +1,8 @@
-import {test,expect} from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import {test,expect} from './fixtures.js';
 import type {Card,RoomView} from '../../shared/rules.js';
 for(const mobile of [false,true])test(`stable card-size insertion preview and field reorder (${mobile?'phone landscape':'desktop'})`,async({browser})=>{
- const ctx=await browser.newContext({viewport:mobile?{width:900,height:430}:{width:1280,height:900},isMobile:mobile,hasTouch:mobile});const page=await ctx.newPage();
+ const ctx=await guestContext(browser,{viewport:mobile?{width:900,height:430}:{width:1280,height:900},isMobile:mobile,hasTouch:mobile});const page=await ctx.newPage();
  if(mobile)await ctx.addInitScript(()=>{const vv=new EventTarget();Object.assign(vv,{width:900,height:370,offsetTop:20,offsetLeft:0,scale:1});Object.defineProperty(window,'visualViewport',{value:vv});});
  const cards:Card[]=[{id:'a',kind:'pronoun'},{id:'b',kind:'verb'},{id:'c',kind:'adjective'},{id:'d',kind:'mass'},{id:'special',kind:'protect'}];
  const player={id:'me',name:'드래그 검사',avatar:'pronoun' as const,rating:1000,ratingDelta:0,points:0,reward:0,score:0,ready:true,connected:true,handCount:4,rematch:false,ai:false};
@@ -10,7 +11,7 @@ for(const mobile of [false,true])test(`stable card-size insertion preview and fi
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{const m=JSON.parse(String(raw));if(m.type==='hello'){ws.send(JSON.stringify({type:'session',token:'drag-fixture',name:player.name,avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}if(m.type==='discard'){discarded.push(m.cardId);room.hand=room.hand.filter(c=>c.id!==m.cardId);room.handVersion++;ws.send(JSON.stringify({type:'ack',requestId:m.requestId}));ws.send(JSON.stringify({type:'state',room}));}}));
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  try{
-  await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();for(const id of ['a','b','c'])await page.locator(`[data-card-id="${id}"]`).click();
+  await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();for(const id of ['a','b','c'])await page.locator(`[data-card-id="${id}"]`).click();
   const a=await page.locator('[data-field-id="a"]').boundingBox(),c=await page.locator('[data-field-id="c"]').boundingBox();
   await page.mouse.move(a!.x+a!.width/2,a!.y+a!.height/2);await page.mouse.down();const x=c!.x+c!.width-2,y=c!.y+c!.height/2;await page.mouse.move(x,y,{steps:10});
   const preview=page.locator('.drop-preview');await expect(preview).toHaveCount(1);await expect(preview).toHaveAttribute('aria-label','3번 위치 미리보기');const box=(await preview.boundingBox())!;expect(Math.abs(box.width-a!.width)).toBeLessThan(2);expect(Math.abs(box.height-a!.height)).toBeLessThan(3);

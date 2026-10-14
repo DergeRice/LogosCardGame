@@ -1,4 +1,5 @@
-import {test,expect} from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import {test,expect} from './fixtures.js';
 
 test('card viewer lists the active deck and opens the new grammar card',async({page})=>{
  await page.goto('/cards');
@@ -30,7 +31,7 @@ test('card viewer works in a narrow phone viewport',async({page})=>{
 });
 
 test('card viewer scrolls through the full deck in landscape',async({browser})=>{
- const context=await browser.newContext({viewport:{width:932,height:430},hasTouch:true,isMobile:true});
+ const context=await guestContext(browser,{viewport:{width:932,height:430},hasTouch:true,isMobile:true});
  const phone=await context.newPage();
  try{
   await phone.goto('/cards');

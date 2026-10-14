@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 test('admin code gate, filters, escaped details and review notes',async({page})=>{
  const secret='test-only-admin-code-at-least-32-characters',log={id:'row-1',time:Date.now(),level:'warn',event:'rejected',action:'submit',player:'게스트 검사',playerId:'p',room:'123456',matchId:'m',requestId:'req-1',details:{reason:'이전 카드 상태',serverHandVersion:4},status:'open',note:''};let saved:any;
  await page.route('**/admin/logs**',async route=>{if(route.request().headers().authorization!=='Bearer '+secret)return route.fulfill({status:401,json:{error:'관리자 접근 코드가 필요합니다.'}});if(route.request().method()==='POST'){saved=route.request().postDataJSON();return route.fulfill({json:{ok:true}})}return route.fulfill({json:{logs:[{...log,...saved}],counts:[{level:'warn',count:1}],nextBefore:null}})});

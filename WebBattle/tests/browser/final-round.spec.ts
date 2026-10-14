@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 import type {RoomView} from '../../shared/rules.js';
 test('final countdown and explicit AI winner remain visible',async({page})=>{
  const player={id:'me',name:'나',avatar:'pronoun' as const,rating:1000,ratingDelta:0,points:0,reward:0,score:36,ready:true,connected:true,handCount:0,rematch:false,ai:false};

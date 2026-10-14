@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import { test, expect, type Page } from './fixtures.js';
 import { CATALOG, type Card, type Kind } from '../../shared/rules.js';
 import { chooseMove } from '../../server/ai.js';
 async function hand(page:Page):Promise<Card[]>{return page.locator('.hand .game-card').evaluateAll(els=>els.map(e=>({id:e.getAttribute('data-card-id')!,kind:e.getAttribute('data-kind') as Kind,variant:e.getAttribute('data-variant')||undefined})));}
@@ -14,7 +15,7 @@ async function pick(page:Page,id:string,touch=false){const button=page.locator(`
 });expect(point).not.toBeNull();if(touch)await page.touchscreen.tap(point!.x,point!.y);else await page.mouse.click(point!.x,point!.y);await expect(button).toHaveCount(0);}
 
 test('two isolated browsers: unique deck, click return, mouse/touch drag preview, unanimous draw and reconnect',async({browser})=>{
- const ca=await browser.newContext({viewport:{width:1280,height:1000}}),cb=await browser.newContext({viewport:process.env.BATTLE_MOBILE_LANDSCAPE?{width:844,height:390}:{width:390,height:844},isMobile:true,hasTouch:true});const a=await ca.newPage(),b=await cb.newPage();const urls:string[]=[],errors:string[]=[];for(const p of[a,b]){p.on('websocket',ws=>{if(new URL(ws.url()).pathname==='/socket')urls.push(ws.url());});p.on('pageerror',e=>errors.push(e.message));}
+ const ca=await guestContext(browser,{viewport:{width:1280,height:1000}}),cb=await guestContext(browser,{viewport:process.env.BATTLE_MOBILE_LANDSCAPE?{width:844,height:390}:{width:390,height:844},isMobile:true,hasTouch:true});const a=await ca.newPage(),b=await cb.newPage();const urls:string[]=[],errors:string[]=[];for(const p of[a,b]){p.on('websocket',ws=>{if(new URL(ws.url()).pathname==='/socket')urls.push(ws.url());});p.on('pageerror',e=>errors.push(e.message));}
  try{
   await Promise.all([a.goto('/',{waitUntil:'domcontentloaded'}),b.goto('/',{waitUntil:'domcontentloaded'})]);
   for(const p of [a,b])await expect(p.getByRole('button',{name:'빠른시작'})).toBeVisible({timeout:45000});
@@ -51,7 +52,7 @@ test('two isolated browsers: unique deck, click return, mouse/touch drag preview
 });
 
 test('two isolated browsers receive the automatic card at 30 seconds without a vote',async({browser})=>{
- const contexts=await Promise.all([browser.newContext(),browser.newContext()]);
+ const contexts=await Promise.all([guestContext(browser,),guestContext(browser,)]);
  const pages=await Promise.all(contexts.map(c=>c.newPage()));
  try{
   await Promise.all(pages.map(p=>p.goto('/')));
@@ -64,12 +65,12 @@ test('two isolated browsers receive the automatic card at 30 seconds without a v
 });
 
 test('mobile unlimited AI match: quick start, refresh and intentional exit',async({browser})=>{
- const ctx=await browser.newContext({viewport:process.env.BATTLE_MOBILE_LANDSCAPE?{width:844,height:390}:{width:390,height:844},isMobile:true,hasTouch:true});const p=await ctx.newPage(),errors:string[]=[];p.on('pageerror',e=>errors.push(e.message));
+ const ctx=await guestContext(browser,{viewport:process.env.BATTLE_MOBILE_LANDSCAPE?{width:844,height:390}:{width:390,height:844},isMobile:true,hasTouch:true});const p=await ctx.newPage(),errors:string[]=[];p.on('pageerror',e=>errors.push(e.message));
  try{await p.goto('/');await expect(p.getByRole('button',{name:'빠른시작'})).toBeVisible({timeout:45000});await p.getByRole('button',{name:'빠른시작'}).tap();await expect(p.getByText('대기 중인 상대가 없어 AI 매칭을 준비했어요.')).toHaveCount(0);await expect(p.getByRole('heading',{name:'매칭 성사!'})).toBeVisible();await expect(p.locator('.rival-profiles')).toContainText('로고스 AI');await expect(p.locator('.battle')).toBeVisible({timeout:15000});await expect(p.locator('.table-scoreboard')).toContainText('AI');await expect(p.locator('.round-strip')).toContainText('시간 제한 없음');await p.reload();await expect(p.locator('.battle')).toBeVisible({timeout:45000});await expect(p.locator('.round-strip')).toContainText('시간 제한 없음');p.once('dialog',d=>d.accept());await p.getByRole('button',{name:'설정 열기'}).tap();await p.getByRole('button',{name:'대전 나가기'}).tap();await expect(p.getByRole('button',{name:'빠른시작'})).toBeVisible();expect(errors).toEqual([]);}finally{await ctx.close();}
 });
 
 test('four independent browser guests share a table and see a synchronized forfeit result',async({browser})=>{
- const contexts=await Promise.all(Array.from({length:4},(_,i)=>browser.newContext({viewport:i===3?{width:390,height:844}:{width:1280,height:900},hasTouch:i===3,isMobile:i===3}))),pages=await Promise.all(contexts.map(c=>c.newPage()));
+ const contexts=await Promise.all(Array.from({length:4},(_,i)=>guestContext(browser,{viewport:i===3?{width:390,height:844}:{width:1280,height:900},hasTouch:i===3,isMobile:i===3}))),pages=await Promise.all(contexts.map(c=>c.newPage()));
  try{
   await Promise.all(pages.map(p=>p.goto('/',{waitUntil:'domcontentloaded'})));await Promise.all(pages.map(p=>expect(p.getByRole('button',{name:'빠른시작'})).toBeVisible({timeout:60000})));await Promise.all(pages.map(p=>p.getByRole('button',{name:'빠른시작'}).click()));
   await Promise.all(pages.map(p=>expect(p.locator('.match-profile')).toHaveCount(4)));for(const p of pages){await expect(p.locator('.table-player')).toHaveCount(4);await expect(p.locator('.hand .game-card')).toHaveCount(5);}

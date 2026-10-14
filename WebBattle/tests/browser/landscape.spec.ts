@@ -1,5 +1,6 @@
+import {guestContext} from './fixtures.js';
 import {BUILD_VERSION} from '../../src/buildVersion.js';
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 import {DECK_FACES,type RoomView} from '../../shared/rules.js';
 import {canTransferCard} from '../../shared/cardViews.js';
 
@@ -8,10 +9,10 @@ function fixture():RoomView{
  return {code:'123456',phase:'battle',matchId:'landscape-fixture',players,you:players[0].id,hand:DECK_FACES.slice(0,5).map((c,i)=>({...c,id:`landscape-${i}`})),handVersion:1,endsAt:0,stageEndsAt:0,nextDealAt:0,dealSerial:1,deckCount:19,deckTotal:39,usedCards:[],dealIntervalMs:0,goCount:0,multiplier:1,highScore:0,serverNow:Date.now(),actionAt:0,exchangeAt:0,reconnectMs:30000,durationMs:0,log:[],expiresAt:0};
 }
 for(const size of [{width:667,height:320},{width:844,height:390},{width:932,height:430},{width:1024,height:768},{width:1920,height:1080}])test(`mobile landscape ${size.width}x${size.height}: board and hand fit, fullscreen can be tested`,async({browser})=>{
- const context=await browser.newContext({viewport:size,isMobile:true,hasTouch:true,deviceScaleFactor:2});const page=await context.newPage();const room=fixture(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+ const context=await guestContext(browser,{viewport:size,isMobile:true,hasTouch:true,deviceScaleFactor:2});const page=await context.newPage();const room=fixture(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.routeWebSocket('**/socket',ws=>{ws.onMessage(()=>{ws.send(JSON.stringify({type:'session',token:'landscape-fixture',name:'게스트 1000',avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));});});
-  await page.goto('/',{waitUntil:'domcontentloaded'});await expect(page.locator('.battle')).toBeVisible();await expect(page.locator('.table-player')).toHaveCount(4);await expect(page.locator('.hand .game-card')).toHaveCount(5);
+  await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/',{waitUntil:'domcontentloaded'});await expect(page.locator('.battle')).toBeVisible();await expect(page.locator('.table-player')).toHaveCount(4);await expect(page.locator('.hand .game-card')).toHaveCount(5);
   await expect(page.getByRole('button',{name:'설정 열기'})).toBeVisible();await expect(page.locator('.game-settings')).toHaveCount(0); 
   const geometry=await page.evaluate(()=>{const rect=(selector:string)=>{const b=document.querySelector(selector)!.getBoundingClientRect();return{top:b.top,bottom:b.bottom,left:b.left,right:b.right};};return{width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,score:rect('.table-scoreboard'),field:rect('.sentence-area'),hand:rect('.hand .game-card'),fullscreen:rect('.settings-trigger')};});
   if(size.height<=900)expect(geometry.score.top).toBeGreaterThanOrEqual(8);expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width+2);expect(geometry.scrollHeight).toBeLessThanOrEqual(geometry.height+2);
@@ -30,12 +31,12 @@ for(const size of [{width:667,height:320},{width:844,height:390},{width:932,heig
 
 
 for(const size of [{width:667,height:320},{width:844,height:390},{width:932,height:430}])test(`landscape all screens ${size.width}x${size.height}: home, match, result, consent and dialogs`,async({browser})=>{
- const context=await browser.newContext({viewport:size,isMobile:true,hasTouch:true,deviceScaleFactor:2});const page=await context.newPage();let push:(r:RoomView|null)=>void=()=>{};const messages:any[]=[];
+ const context=await guestContext(browser,{viewport:size,isMobile:true,hasTouch:true,deviceScaleFactor:2});const page=await context.newPage();let push:(r:RoomView|null)=>void=()=>{};const messages:any[]=[];
  const room=fixture();room.dealSerial=0;
  await page.routeWebSocket('**/socket',ws=>{push=r=>ws.send(JSON.stringify({type:'state',room:r}));ws.onMessage(raw=>{const m=JSON.parse(String(raw));messages.push(m);if(m.type==='hello'){ws.send(JSON.stringify({type:'session',token:'screens-fixture',name:'게스트 1000',avatar:'pronoun',rating:1000,points:0}));push(null);}else if(m.type==='inspectRob')ws.send(JSON.stringify({type:'robView',matchId:room.matchId,cardId:m.cardId,players:[{...room.players[1],handVersion:1,fieldVersion:1,cards:DECK_FACES.slice(0,30).map((c,i)=>({...c,id:'rob-'+i,source:'hand'}))}]}));else if(m.type==='inspectExchange')ws.send(JSON.stringify({type:'exchangeView',matchId:room.matchId,cardId:m.cardId,players:[{...room.players[1],handVersion:1,cards:DECK_FACES.slice(0,30).map((c,i)=>({...c,id:'exchange-'+i}))}]}));})});
  const fits=async(selectors:string[])=>{const g=await page.evaluate(selectors=>({w:innerWidth,h:innerHeight,sw:document.documentElement.scrollWidth,sh:document.documentElement.scrollHeight,rects:selectors.map(s=>{const r=document.querySelector(s)!.getBoundingClientRect();return {s,t:r.top,b:r.bottom,l:r.left,r:r.right}})}),selectors);expect(g.sw).toBeLessThanOrEqual(g.w+2);expect(g.sh).toBeLessThanOrEqual(g.h+2);for(const r of g.rects){expect(r.t,r.s).toBeGreaterThanOrEqual(-2);expect(r.b,r.s).toBeLessThanOrEqual(g.h+3);expect(r.l,r.s).toBeGreaterThanOrEqual(-2);expect(r.r,r.s).toBeLessThanOrEqual(g.w+3)}};
  try{
-  await page.goto('/');await expect(page.locator('.quick-start')).toBeEnabled();await fits(['.quick-start','.home-profile']);expect(await page.locator('.quick-start').evaluate(el=>{const r=el.getBoundingClientRect();return Math.abs(r.left+r.width/2-innerWidth/2)})).toBeLessThan(2);
+  await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await expect(page.locator('.quick-start')).toBeEnabled();await fits(['.quick-start','.home-profile']);expect(await page.locator('.quick-start').evaluate(el=>{const r=el.getBoundingClientRect();return Math.abs(r.left+r.width/2-innerWidth/2)})).toBeLessThan(2);
   for(const phase of ['matching','reveal','dealing'] as const){room.phase=phase;room.stageEndsAt=Date.now()+5000;push(room);await expect(page.locator(phase==='dealing'?'.battle':'.match-screen')).toBeVisible();await fits(phase==='matching'?['.matching-slots','.match-screen>.text-button']:phase==='reveal'?['.versus-layout','.versus-screen>p']:['.sentence-actions','.emoji-trigger']);}
   room.phase='battle';room.drawVote={id:'consent',approved:[]};room.nextDealAt=Date.now()+40000;room.dealIntervalMs=40000;push(room);
   const approve=page.getByRole('button',{name:'카드 배분 동의',exact:true});await expect(approve).toHaveClass(/awaiting-consent/);await expect(approve).not.toHaveClass(/last-consent/);room.drawVote.approved=room.players.filter(p=>p.id!==room.you).map(p=>p.id);push(room);await expect(approve).toHaveClass(/last-consent/);expect(await approve.evaluate(el=>getComputedStyle(el).animationName)).toBe('none');await expect(page.locator('.draw-vote-panel')).toHaveCount(0);await approve.tap();await expect.poll(()=>messages.some(m=>m.type==='drawVote'&&m.approve===true)).toBe(true);
@@ -56,10 +57,10 @@ for(const size of [{width:667,height:320},{width:844,height:390},{width:932,heig
 
 
 test('desktop table fills middle, hand hugs bottom and return is only an icon',async({browser})=>{
- const context=await browser.newContext({viewport:{width:1366,height:768}}),page=await context.newPage(),room=fixture();
+ const context=await guestContext(browser,{viewport:{width:1366,height:768}}),page=await context.newPage(),room=fixture();
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(()=>{ws.send(JSON.stringify({type:'session',token:'desktop-layout',name:'게스트 1000',avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}));
  try{
-  await page.goto('/');await expect(page.locator('.battle')).toBeVisible();await expect(page.locator('.hand .game-card')).toHaveCount(5);
+  await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await expect(page.locator('.battle')).toBeVisible();await expect(page.locator('.hand .game-card')).toHaveCount(5);
   const geometry=await page.evaluate(()=>{const b=(s:string)=>document.querySelector(s)!.getBoundingClientRect();return{height:innerHeight,scroll:document.documentElement.scrollHeight,field:b('.sentence-area').toJSON(),hand:b('.battle-hand-zone').toJSON(),cardsBottom:Math.max(...[...document.querySelectorAll('.hand .game-card')].map(c=>c.getBoundingClientRect().bottom)),emojiTop:b('.emoji-trigger').top,settings: getComputedStyle(document.querySelector('.settings-trigger')!).position}});
   expect(geometry.scroll).toBe(geometry.height);expect(geometry.field.height).toBeGreaterThan(geometry.height*.3);expect(geometry.hand.bottom).toBe(geometry.height);expect(geometry.field.bottom).toBeLessThan(geometry.hand.top);await expect(page.locator('.build-version')).toHaveText(BUILD_VERSION);expect(geometry.emojiTop-geometry.cardsBottom).toBeGreaterThanOrEqual(0);expect(geometry.emojiTop-geometry.cardsBottom).toBeLessThanOrEqual(8);expect(geometry.settings).toBe('fixed');
   const back=page.getByRole('button',{name:'모두 되돌리기'});await expect(back).toHaveText('');await expect(back.locator('svg')).toHaveCount(1);

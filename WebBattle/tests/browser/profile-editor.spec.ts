@@ -1,6 +1,7 @@
-import {test,expect} from '@playwright/test';
+import {guestContext} from './fixtures.js';
+import {test,expect} from './fixtures.js';
 for(const touch of [false,true])test(`private profile editor: ${touch?'touch':'mouse'} pan, card library and PNG`,async({browser})=>{
- const ctx=await browser.newContext(touch?{viewport:{width:390,height:844},isMobile:true,hasTouch:true}:{viewport:{width:1100,height:950}}),page=await ctx.newPage();const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+ const ctx=await guestContext(browser,touch?{viewport:{width:390,height:844},isMobile:true,hasTouch:true}:{viewport:{width:1100,height:950}}),page=await ctx.newPage();const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.goto('/');await expect(page.locator('#preview')).toHaveAttribute('src',/^data:image\/png/);const canvas=page.locator('#crop');await canvas.scrollIntoViewIfNeeded();const first=await canvas.evaluate(e=>(e as HTMLCanvasElement).toDataURL());const r=(await canvas.boundingBox())!;
   if(touch){const cdp=await ctx.newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x+r.width*.4,y:r.y+r.height*.4}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:r.x+r.width*.4+35,y:r.y+r.height*.4+25}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();}else{await page.mouse.move(r.x+r.width*.4,r.y+r.height*.4);await page.mouse.down();await page.mouse.move(r.x+r.width*.4+35,r.y+r.height*.4+25,{steps:8});await page.mouse.up();}

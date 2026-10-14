@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 
 test('account can be created, resumed, logged out, and used again',async({page})=>{
  const username=`learner${Date.now().toString(36)}`;
