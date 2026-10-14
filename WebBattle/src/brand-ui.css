@@ -158,3 +158,17 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
 .opponent-preview-scroll{display:block;flex:1;min-height:0;overflow:auto;padding:8px 14px 16px}.opponent-preview-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:12px}.opponent-preview-cards img{display:block;width:100%;height:auto;aspect-ratio:488/693;object-fit:cover;border:2px solid #9aac93;border-radius:8px;background:white;box-shadow:0 3px 7px #17291a28}.opponent-preview-empty{margin:auto;padding:24px;font-size:14px;color:#657968}
 @media(max-width:600px){.opponent-preview-backdrop{padding:8px}.opponent-preview-backdrop .opponent-field-preview{height:calc(100dvh - 16px);border-radius:16px}.opponent-preview-heading{padding:10px 12px 7px;font-size:15px}.opponent-preview-heading button{width:32px;height:32px;font-size:21px}.opponent-preview-scroll{padding:7px 9px 12px}.opponent-preview-cards{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}.opponent-preview-cards img{border-radius:6px}}
 @media(orientation:landscape) and (max-height:500px){.opponent-preview-backdrop .opponent-field-preview{width:min(900px,calc(100vw - 16px));height:calc(100dvh - 16px)}.opponent-preview-heading{padding:7px 10px;font-size:13px}.opponent-preview-heading button{width:28px;height:28px;font-size:18px}.opponent-preview-scroll{padding:5px 9px 9px}.opponent-preview-cards{grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px}}
+/* Home artwork and compact secondary entry buttons. */
+.dashboard-quick-entry-art{width:clamp(300px,64vw,560px)}
+.dashboard-secondary-actions{gap:8px;justify-content:center;transform:translateY(-2px)}
+.dashboard-secondary-actions>.room-open-button,.dashboard-secondary-actions>.practice-entry{transform:scale(.667);transform-origin:top center;margin-inline:-15%;}
+@media(max-width:600px){.dashboard-quick-entry-art{width:min(86vw,330px)}.dashboard-secondary-actions{margin-top:-4px}.dashboard-secondary-actions>.room-open-button,.dashboard-secondary-actions>.practice-entry{margin-inline:-11%}}
+@media(orientation:landscape) and (max-height:500px){.dashboard-quick-entry-art{width:min(43vw,180px)}.dashboard-secondary-actions{margin-top:-2px}}
+
+/* Portrait keeps the score strip clear; Go state stays immediately above submit. */
+.go-progress-banner{align-self:flex-end;margin:0 2px -2px;padding:4px 9px;border:2px solid #fff3ae;border-radius:999px;background:#e85538;color:#fffdf2;font-size:11px;line-height:1;box-shadow:0 3px 0 #9d3229,0 5px 10px #5e211b44;animation:go-banner-enter .32s cubic-bezier(.2,1.65,.4,1),go-banner-wiggle .42s ease-in-out 2.6s infinite alternate}
+.sentence-actions{flex-wrap:wrap;align-items:flex-end}
+@keyframes go-banner-enter{from{opacity:0;transform:translateY(12px) scale(.75)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes go-banner-wiggle{0%,72%{transform:rotate(0)}78%{transform:rotate(-3deg)}86%{transform:rotate(3deg)}94%{transform:rotate(-2deg)}100%{transform:rotate(0)}}
+@media(orientation:portrait) and (max-width:700px){.battle .round-score-status{display:none}.sentence-actions{display:flex;flex-direction:column;justify-content:center;gap:5px;align-items:flex-end}.go-progress-banner{font-size:10px;padding:4px 8px}}
+@media(prefers-reduced-motion:reduce){.go-progress-banner{animation:none}}

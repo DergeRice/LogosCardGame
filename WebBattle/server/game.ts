@@ -250,7 +250,7 @@ export class Game {
   if (msg.choice === 'stop') return this.finish(r, `${p.name} 님의 스톱! 개인 고 보상 정산`);
   if (r.goCount >= RULES.maxGo) return this.fail(p, '3고 이후에는 스톱만 가능합니다.');
   const paused = Date.now() - d.startedAt; p.calledGo=true; r.goCount++; if(r.endsAt > 0&&!r.finalRound) r.endsAt += paused; if(r.nextDealAt>0)r.nextDealAt+=paused; if(r.drawVote?.aiApproveAt)for(const id of Object.keys(r.drawVote.aiApproveAt))r.drawVote.aiApproveAt[id]+=paused; for (const x of r.players) x.nextAI += paused; r.decision = undefined;
-  if(r.goCount===RULES.maxGo)return this.finish(r,`${p.name} 님의 3고! 개인 고 보상 정산`);
+  if(r.goCount===RULES.maxGo){if(p.ai)p.score=Math.max(...r.players.map(player=>player.score))+1;return this.finish(r,`${p.name} 님의 3고! 개인 고 보상 정산`);}
   this.log(r, `${p.name} 님의 ${r.goCount}고! 고를 외친 플레이어만 획득 포인트 2배 · ${r.highScore}점을 먼저 넘으면 주도권 획득`); this.broadcast(r);
  }
  newDrawVote(r:Room):DrawVote|undefined{return r.deck.length>=r.players.length?{id:randomUUID(),approved:[],aiApproveAt:Object.fromEntries(r.players.filter(x=>x.ai).map(x=>[x.id,Date.now()+randomInt(1200,9000)]))}:undefined;}
@@ -470,7 +470,7 @@ export class Game {
    if(!r.drawVote&&r.deck.length>=r.players.length){r.drawVote=this.newDrawVote(r);if(r.nextDealAt<=0)r.nextDealAt=now+this.dealMs;this.broadcast(r);}
    if(r.deck.length<r.players.length&&!r.finalRound){r.finalRound=true;r.endsAt=r.endsAt>0?Math.min(r.endsAt,now+300000):now+300000;this.log(r,'공용 덱 배분 종료 · 마지막 5분! 남은 카드로 역전할 수 있어요.');this.broadcast(r);}
    if(r.finalRound&&r.endsAt>0&&now>=r.endsAt){this.finish(r,'마지막 5분이 끝났어요. 최종 점수로 정산합니다.');continue;}
-   if (r.decision) { const p = r.players.find(x => x.id === r.decision!.playerId)!; if (r.decision.expiresAt > 0 && now >= r.decision.expiresAt) this.finish(r, `${p.name} 님의 선택 시간이 끝나 자동 스톱됐어요.`); else if (p.ai && now - r.decision.startedAt > 1800) this.choice(p, { matchId: r.matchId, decisionId: r.decision.id, choice: r.goCount < RULES.maxGo ? 'go' : 'stop' }); continue; }
+   if (r.decision) { const p = r.players.find(x => x.id === r.decision!.playerId)!; if (r.decision.expiresAt > 0 && now >= r.decision.expiresAt) this.finish(r, `${p.name} 님의 선택 시간이 끝나 자동 스톱됐어요.`); else if (p.ai && now - r.decision.startedAt > 1800) { const stopChance=r.goCount===0?.30:r.goCount===1?.48:0; const choice=r.goCount>=RULES.maxGo-1?'go':randomInt(100)<stopChance?'stop':'go'; this.choice(p, { matchId: r.matchId, decisionId: r.decision.id, choice }); } continue; }
    if (r.endsAt > 0 && now >= r.endsAt) { this.finish(r, r.finalRound?'마지막 5분이 끝났어요. 최종 점수로 정산합니다.':'경기 시간이 끝났어요. 현재 점수로 정산합니다.'); continue; }
    if(!r.decision&&r.drawVote){let changed=false;for(const p of r.players)if(p.ai&&!r.drawVote.approved.includes(p.id)&&now>=(r.drawVote.aiApproveAt?.[p.id]??now)){r.drawVote.approved.push(p.id);changed=true;}if(r.drawVote.approved.length===r.players.length){this.distribute(r,'unanimous');continue;}if(changed)this.broadcast(r);}
    if(r.nextDealAt>0&&now>=r.nextDealAt){this.distribute(r,'automatic');continue;}

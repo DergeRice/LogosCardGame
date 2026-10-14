@@ -82,3 +82,15 @@
 @media(orientation:landscape) and (max-height:350px){.shell .battle:has(.table-scoreboard[data-player-count="5"]),.shell .battle:has(.table-scoreboard[data-player-count="6"]){grid-template-rows:44px 26px minmax(0,1fr) var(--hand-stage-height)}}
 @media(orientation:landscape) and (max-height:350px){.shell .battle,.shell .battle:has(.table-scoreboard[data-player-count="5"]),.shell .battle:has(.table-scoreboard[data-player-count="6"]){--hand-stage-height:94px;grid-template-rows:44px 26px minmax(0,1fr) var(--hand-stage-height)}}
 @media(orientation:landscape) and (min-height:351px) and (max-height:650px){.shell .battle{--hand-stage-height:calc(clamp(60px,calc(var(--game-height)*.19),88px)*1.42 + 16px);grid-template-rows:56px 34px minmax(0,1fr) var(--hand-stage-height)}}
+/* A portrait exchange sheet has one scrollable body; headers, confirmation and actions remain reachable. */
+@media(orientation:portrait) and (max-width:700px){
+ .special-backdrop{padding:8px}
+ .special-dialog.exchange-dialog{width:calc(100vw - 16px);height:calc(100dvh - 16px);max-height:calc(100dvh - 16px);padding:10px;gap:7px}
+ .exchange-dialog .exchange-picker{display:flex;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;flex-direction:column;gap:7px;padding-right:2px}
+ .exchange-dialog .exchange-column,.exchange-dialog .exchange-column:first-child{position:static;display:block;max-height:none;overflow:visible;border:1px solid #e4d9ea;border-radius:10px;padding:7px}
+ .exchange-dialog .exchange-column:last-child{display:block}
+ .exchange-dialog .exchange-player{margin-top:7px}
+ .exchange-dialog .exchange-cards{max-height:none;overflow:visible;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:4px}
+ .exchange-dialog .special-selection-summary{max-height:48px;overflow:auto;font-size:10px;padding:6px 8px}
+ .exchange-dialog .special-actions{padding-bottom:max(0px,env(safe-area-inset-bottom))}
+}
