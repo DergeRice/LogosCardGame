@@ -19,7 +19,7 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
     const {Application,Assets,Sprite,Particle,ParticleContainer,Texture}=await import('pixi.js');
     if(cancelled)return;
     const instance=new Application();app=instance;
-    await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:false,autoDensity:true,resolution:pixiResolution(),preference:'webgl',powerPreference:'low-power'});
+    await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:false,autoDensity:true,resolution:pixiResolution(true),preference:'webgl',powerPreference:'low-power'});
     if(cancelled){instance.destroy(true,{children:true});return;}
     instance.ticker.stop();
     const textures=await Promise.all(assets.map(path=>Assets.load(path)));
