@@ -187,3 +187,13 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
  .dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{display:flex!important;min-height:37px;font-size:14px!important}
  .dashboard-cards{display:none}
 }
+/* The opponent-card close control never yields height to the card grid. */
+.opponent-preview-backdrop .opponent-field-preview{position:relative}
+.opponent-preview-heading{position:relative;flex:0 0 auto;min-height:48px;padding-right:54px}
+.opponent-preview-heading button{position:absolute;z-index:3;top:50%;right:12px;transform:translateY(-50%);display:grid;place-items:center}
+.opponent-preview-scroll{min-height:0}
+@media(orientation:landscape) and (max-height:500px){
+ .opponent-preview-heading{min-height:40px;padding:7px 48px 7px 10px}
+ .opponent-preview-heading button{position:absolute;right:9px;width:30px;height:30px;font-size:21px}
+ .opponent-preview-scroll{padding-top:4px}
+}
