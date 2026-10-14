@@ -8,7 +8,7 @@ type WebSocket = GameSocket;
 import { judgeCards, DECK_FACES, RULES, REACTIONS, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 
-type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; calledGo?:boolean; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
+type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; calledGo?:boolean; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple';appleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = { code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
@@ -335,10 +335,10 @@ export class Game {
   if(!blocked){p.hand=p.hand.filter(c=>c.id!==card.id);p.handVersion++;r.discard.push(card);}p.actionAt=Date.now()+RULES.actionCooldownMs;
   if(card.kind==='get2'||card.kind==='get3'){
    const count=Math.min(r.deck.length,card.kind==='get2'?2:3);
-   for(let i=0;i<count;i++)p.hand.push(r.deck.pop()!);
-   p.handVersion++;r.dealSerial++;if(r.deck.length<r.players.length){r.drawVote=undefined;r.nextDealAt=0;}this.log(r,`${p.name} 님이 GET ${card.kind==='get2'?2:3} 사용 · ${count}장 획득`,p);
+   const gained:Card[]=[];for(let i=0;i<count;i++){const next=r.deck.pop();if(next){p.hand.push(next);gained.push(next);}}
+   p.handVersion++;r.dealSerial++;if(r.deck.length<r.players.length){r.drawVote=undefined;r.nextDealAt=0;}this.log(r,`${p.name} 님이 GET ${card.kind==='get2'?2:3} 사용 · ${count}장 획득`);p.lastAction={id:randomUUID(),text:`GET ${count}로 ${count}장 획득!`,flights:gained.map(card=>({fromId:'deck',toId:p.id,card}))};
   }else if(card.kind==='rob'&&target){
-   if(target.hand.some(c=>c.kind==='protect')){this.log(r,`${p.name} 님의 ROB을 ${target.name} 님의 PROTECT가 막았어요.`,p);target.lastAction={id:randomUUID(),text:`${target.name} 님이 PROTECT로 ROB 방어`};}
+   if(target.hand.some(c=>c.kind==='protect')){this.log(r,`${p.name} 님의 ROB을 ${target.name} 님의 PROTECT가 막았어요.`);p.lastAction={id:randomUUID(),text:'PROTECT에 막혔어요!'};target.lastAction={id:randomUUID(),text:'ROB 방어 성공!'};}
    else{
     let stolen:Card;
     if(msg.stealSource==='field'){
@@ -349,12 +349,12 @@ export class Game {
     }else{stolen=target.hand.splice(target.hand.findIndex(c=>c.id===msg.stealId),1)[0];target.handVersion++;target.draftIds=(target.draftIds??[]).filter(id=>id!==stolen.id);}
     p.hand.push(stolen);p.handVersion++;
     target.robNotices=[...(target.robNotices??[]),{id:randomUUID(),fromId:p.id,fromName:p.name,fromAvatar:p.avatar,card:{...stolen},source:msg.stealSource as "hand"|"field"}].slice(-8);
-    this.log(r,`${p.name} 님이 ${target.name} 님의 ${msg.stealSource==='field'?'필드':'손패'}에서 ${stolen.kind} 카드 1장을 뺏었어요.`,p);
-    target.lastAction={id:randomUUID(),text:`${target.name} 님의 ${msg.stealSource==='field'?'필드':'손패'} 카드 1장 ROB으로 이동`};
+    this.log(r,`${p.name} 님이 ${target.name} 님의 ${msg.stealSource==='field'?'필드':'손패'}에서 ${stolen.kind} 카드 1장을 뺏었어요.`);p.lastAction={id:randomUUID(),text:`${target.name}님의 카드 1장 ROB!`,flights:[{fromId:target.id,toId:p.id,card:stolen}]};
+    target.lastAction={id:randomUUID(),text:'카드를 빼앗겼어요!'};
    }
   }else if(card.kind==='exchange'&&target){
    r.exchange={id:randomUUID(),fromId:p.id,toId:target.id,offerId:String(msg.offerId),wantedId:String(msg.wantedId),expiresAt:Date.now()+15000};
-   this.log(r,`${p.name} 님이 ${target.name} 님에게 교환을 요청했어요.`,p);
+   this.log(r,`${p.name} 님이 ${target.name} 님에게 교환을 요청했어요.`);p.lastAction={id:randomUUID(),text:`${target.name}님에게 교환 요청!`};
   }
   this.audit(p,'special_result','info',{...msg,reason:blocked?'protected':'used'},r,specialCards);
   this.send(p.socket,{type:'ack',requestId:id});this.broadcast(r);
@@ -368,8 +368,8 @@ export class Game {
   if(msg.accept===false&&!EXCHANGE_REPLIES.includes(msg.reason as typeof EXCHANGE_REPLIES[number]))return this.fail(p,'빠른 답장을 선택해 주세요.');
   if(msg.accept===true&&(!sender||!offer||!given||!canTransferCard(offer)||!canTransferCard(given)))return this.fail(p,'선택한 교환 카드가 더 이상 없어요.');
   r.exchange=undefined;
-   if(msg.accept===true&&sender&&offer&&given){this.removeOwnedCard(r,sender,offer.id);this.removeOwnedCard(r,p,given.id);sender.draftIds=(sender.draftIds??[]).filter(id=>id!==offer.id);p.draftIds=(p.draftIds??[]).filter(id=>id!==given.id);sender.hand.push(given);p.hand.push(offer);sender.handVersion++;p.handVersion++;this.log(r,`${sender.name} 님과 ${p.name} 님이 카드를 한 장씩 교환했어요.`,p);sender.lastAction={id:randomUUID(),text:`${sender.name} 님이 카드 교환 완료`};}
-  else {this.log(r,`${p.name} 님이 교환을 거절했어요.`,p);if(sender){const reason=String(msg.reason);this.send(sender.socket,{type:'exchangeResponse',matchId:r.matchId,fromName:p.name,reason});sender.lastAction={id:randomUUID(),text:`${p.name} 님의 답장 · ${reason}`};}}
+   if(msg.accept===true&&sender&&offer&&given){this.removeOwnedCard(r,sender,offer.id);this.removeOwnedCard(r,p,given.id);sender.draftIds=(sender.draftIds??[]).filter(id=>id!==offer.id);p.draftIds=(p.draftIds??[]).filter(id=>id!==given.id);sender.hand.push(given);p.hand.push(offer);sender.handVersion++;p.handVersion++;this.log(r,`${sender.name} 님과 ${p.name} 님이 카드를 한 장씩 교환했어요.`);sender.lastAction={id:randomUUID(),text:`${p.name}님과 교환 완료!`,flights:[{fromId:sender.id,toId:p.id,card:offer}]};p.lastAction={id:randomUUID(),text:`${sender.name}님과 교환 완료!`,flights:[{fromId:p.id,toId:sender.id,card:given}]};}
+  else {this.log(r,`${p.name} 님이 교환을 거절했어요.`);p.lastAction={id:randomUUID(),text:'교환 요청을 거절했어요.'};if(sender){const reason=String(msg.reason);this.send(sender.socket,{type:'exchangeResponse',matchId:r.matchId,fromName:p.name,reason});sender.lastAction={id:randomUUID(),text:`${p.name}님의 답장 · ${reason}`};}}
   this.broadcast(r);
  }
  autoSpecial(r:Room,p:Player){
