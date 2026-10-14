@@ -84,8 +84,8 @@ export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; 
  'adjective-plus3': { kind:'adjective',sheet:5,col:2,row:1,multiply:1,add:3 }
 };
 export const DECK_FACES: Omit<Card,'id'>[] = [
- ...(Object.keys(CATALOG) as Kind[]).filter(kind=>kind!=='very').map(kind=>({kind})),
- ...Object.entries(VARIANTS).filter(([variant,face])=>face.kind!=='very'&&variant!=='to-infinitive-plus3'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant}))
+ ...(Object.keys(CATALOG) as Kind[]).filter(kind=>kind!=='very'&&kind!=='to-infinitive').map(kind=>({kind})),
+ ...Object.entries(VARIANTS).filter(([,face])=>face.kind!=='very'&&face.kind!=='to-infinitive'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant}))
 ];
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }

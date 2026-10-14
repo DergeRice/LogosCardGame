@@ -31,7 +31,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
  }
  for(const [key,json] of records)if(key.startsWith('player:')){
   const p=JSON.parse(json) as StoredPlayer,player={...p,seen:new Set(p.seen)};
-  const keep=(c:typeof p.hand[number])=>cardEffect(c).add!==-2;
+  const keep=(c:typeof p.hand[number])=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2;
   const hand=player.hand.filter(keep);
   if(hand.length!==player.hand.length){player.hand=hand;player.handVersion++;player.draftIds=(player.draftIds??[]).filter(id=>hand.some(c=>c.id===id));}
   const before=(player.playedSentences??[]).flat().length+(player.lastPlayed??[]).length;
@@ -51,8 +51,8 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
   if(r.phase==='battle'&&r.nextDealAt>Date.now()+game.dealMs)r.nextDealAt=Date.now()+game.dealMs;
   if(game.durationMs===0&&['reveal','dealing','battle'].includes(r.phase)){if(!r.finalRound)r.endsAt=0;r.expiresAt=0;}
   if(r.decision&&!players.get(r.decision.playerId)?.ai&&r.decision.expiresAt<=0)r.decision.expiresAt=(r.decision.startedAt||Date.now())+game.humanDecisionMs;
-  r.deck=r.deck.filter(c=>cardEffect(c).add!==-2);
-  r.discard=r.discard.filter(c=>cardEffect(c).add!==-2);
+  r.deck=r.deck.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
+  r.discard=r.discard.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
   if(r.exchange){const owners=[players.get(r.exchange.fromId),players.get(r.exchange.toId)];if(owners.some((p,i)=>!p||![...p.hand,...(p.playedSentences??[]).flat(),...(p.lastPlayed??[])].some(c=>c.id===(i?r.exchange!.wantedId:r.exchange!.offerId))))r.exchange=undefined;}
   game.rooms.set(r.code,{...r,players:r.players.map(id=>players.get(id)!).filter(Boolean)});
  }

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {existsSync} from 'node:fs';
 import {DECK_FACES,cardFace,cardEffect,effectLabel,judgeCards,judge} from '../shared/rules.js';
 
-test('active deck has four supplied To-infinitive faces and no Very cards',()=>{
+test('active deck temporarily excludes To-infinitive and Very cards',()=>{
  const counts:Record<string,number>={};
  const cells=new Set<string>();
  for(const face of DECK_FACES){
@@ -11,11 +11,12 @@ test('active deck has four supplied To-infinitive faces and no Very cards',()=>{
   const art=cardFace({...face,id:''});cells.add(`${art.sheet}/${art.col}/${art.row}`);
   assert.ok(existsSync(`public/cards/${face.variant??face.kind}.webp`));
  }
- assert.deepEqual(counts,{indefinite:2,do:2,modal:2,not:2,frequency:2,adverb:2,preposition:3,'to-infinitive':4,pronoun:5,count:6,mass:6,article:3,possessive:2,verb:6,be:6,adjective:2,get2:1,get3:1,rob:1,exchange:1,protect:1});
- assert.equal(cells.size,60);assert.equal(DECK_FACES.some(c=>cardEffect({...c,id:''}).add===-2),false);
+ assert.deepEqual(counts,{indefinite:2,do:2,modal:2,not:2,frequency:2,adverb:2,preposition:3,pronoun:5,count:6,mass:6,article:3,possessive:2,verb:6,be:6,adjective:2,get2:1,get3:1,rob:1,exchange:1,protect:1});
+ assert.equal(cells.size,56);assert.equal(DECK_FACES.some(c=>cardEffect({...c,id:''}).add===-2),false);
  for(let sheet=1;sheet<=5;sheet++)for(let row=0;row<3;row++)for(let col=0;col<4;col++)if((sheet!==5||row!==2||col<2)&&!(sheet===1&&col===1&&row===0)&&!(sheet===2&&col===3&&row===1))assert.ok(cells.has(`${sheet}/${col}/${row}`));
- for(let col=0;col<4;col++)assert.ok(cells.has(`6/${col}/0`));
- assert.equal(DECK_FACES.some(face=>face.kind==='very'||face.variant==='to-infinitive-plus3'),false);
+ for(let col=0;col<4;col++)assert.equal(cells.has(`6/${col}/0`),false);
+ for(const name of ['to-infinitive','to-infinitive-plus2','to-infinitive-x2','to-infinitive-div2'])assert.ok(existsSync(`public/cards/${name}.webp`));
+ assert.equal(DECK_FACES.some(face=>face.kind==='very'||face.kind==='to-infinitive'),false);
 });
 
 test('the three printed To-infinitive effects score only when recognized',()=>{

@@ -9,6 +9,21 @@ test('cloud snapshots restore deck order, sessions, dedupe, scores and shared pl
  assert.deepEqual(snapshot(fresh),records);const saved=fresh.rooms.get(r.code)!;assert.deepEqual(saved.deck,r.deck);assert.equal(saved.players[0],fresh.sessions.get(a.token));assert.equal(people.get(a.id),saved.players[0]);assert.equal(saved.players[0].socket,undefined);assert.ok(saved.players[0].seen.has('used-request'));assert.deepEqual(saved.players[0].hand,a.hand);
  const resumed=fresh.hello(socket(),a.token,'ignored');assert.equal(resumed.id,a.id);assert.equal(resumed.room,r.code);assert.deepEqual(resumed.hand,a.hand);
 });
+test('restoring an existing match removes temporary To cards without changing earned points',()=>{
+ const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);
+ const room=game.rooms.get(a.room!)!;game.reveal(room);game.deal(room,5);game.begin(room);
+ a.hand=[{id:'to-hand',kind:'to-infinitive',variant:'to-infinitive-x2'},{id:'keep-hand',kind:'verb'}];a.handVersion++;a.draftIds=['to-hand','keep-hand'];a.score=25;
+ a.lastPlayed=[{id:'to-field',kind:'to-infinitive'}];a.playedSentences=[[{id:'to-field',kind:'to-infinitive'}]];
+ room.deck.push({id:'to-deck',kind:'to-infinitive',variant:'to-infinitive-plus2'});
+ room.discard.push({id:'to-discard',kind:'to-infinitive'});
+ const next=new Game({minimumPlayers:2});restore(next,snapshot(game));
+ const saved=next.rooms.get(room.code)!,player=next.sessions.get(a.token)!;
+ assert.deepEqual(player.hand.map(c=>c.id),['keep-hand']);assert.deepEqual(player.draftIds,['keep-hand']);
+ assert.equal(player.lastPlayed?.length,0);assert.equal(player.playedSentences?.length,0);
+ assert.equal(saved.deck.some(c=>c.kind==='to-infinitive'),false);
+ assert.equal(saved.discard.some(c=>c.kind==='to-infinitive'),false);
+ assert.equal(player.score,25);
+});
 test('cloud schedules game deadlines and sleeps when no work remains',t=>{
  let now=100000;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2});assert.equal(nextDeadline(game),null);const a=game.hello(socket(),null,'A');assert.equal(nextDeadline(game),null);game.quick(a);assert.equal(nextDeadline(game),now+6000);
  now+=6000;game.tick();assert.equal(nextDeadline(game),now+3000);now+=3000;game.tick();assert.equal(nextDeadline(game),now+2400);now+=2400;game.tick();assert.ok(nextDeadline(game)!>now);

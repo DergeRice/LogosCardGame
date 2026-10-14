@@ -13,7 +13,7 @@ test('battle To is a bundled verb only after an object, while original Unity ent
  const trailing=judge(['pronoun','verb','pronoun','to-infinitive','verb']);assert.equal(trailing.usedLength,4);assert.equal(trailing.patternType,5);
  assert.equal(judge(['to-infinitive']).valid,false);assert.equal(judge(['to-infinitive','pronoun','verb']).usedStartIndex,1);
  assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.TO_VB,P.VB],false).usedLength,4);
- assert.equal(DECK_FACES.length,60);assert.ok(DECK_FACES.every(c=>cardEffect({...c,id:''}).add!==-2));
+ assert.equal(DECK_FACES.length,56);assert.ok(DECK_FACES.every(c=>cardEffect({...c,id:''}).add!==-2));
  const cards=[{id:'s',kind:'pronoun' as const},{id:'v',kind:'verb' as const},{id:'o',kind:'pronoun' as const},{id:'c',kind:'to-infinitive' as const,variant:'to-infinitive-x2'}];assert.equal(judgeCards(cards).points,8);
 });
 test('rejected submit resynchronizes and may retry same ID; successful submission remains idempotent',()=>{
@@ -30,7 +30,8 @@ test('audit payload excludes secrets and full request objects; administrator req
  const secret='secure-test-admin-credential-32characters';assert.equal(adminAuthorized(null,secret),false);assert.equal(adminAuthorized('Bearer wrong',secret),false);assert.equal(adminAuthorized('Bearer '+secret,secret),true);assert.equal(adminAuthorized('Bearer short','short'),false);
 });
 
-test('AI can use a bundled To in a scoring fifth-pattern candidate',async()=>{
+test('AI can use a bundled To in a scoring fifth-pattern candidate',async t=>{
+ t.mock.method(performance,'now',()=>0);
  const {chooseMove}=await import('../server/ai.js');const hand=[{id:'s',kind:'pronoun' as const,variant:'pronoun-x2'},{id:'v',kind:'verb' as const},{id:'o',kind:'mass' as const},{id:'to',kind:'to-infinitive' as const,variant:'to-infinitive-x2'}];const ids=chooseMove(hand,'hard');assert.ok(ids);const result=judgeCards(ids.map(id=>hand.find(c=>c.id===id)!));assert.equal(result.patternType,5);assert.equal(result.usedLength,4);
 });
 
