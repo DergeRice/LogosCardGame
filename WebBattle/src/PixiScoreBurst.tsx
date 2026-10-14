@@ -20,15 +20,16 @@ export function PixiScoreBurst({beat}:{beat:string}){
     const group=new ParticleContainer({dynamicProperties:{position:true,vertex:true,rotation:true,color:true}}),particles:Particle[]=[];
     for(let i=0;i<(isMobileGraphics()?12:18);i++){const p=new Particle({texture:Texture.WHITE,x:0,y:0,scaleX:2,scaleY:2,rotation:Math.PI/4,tint:i%3===0?0xffdd56:0xffffff,alpha:0});particles.push(p);group.addParticle(p);}
     instance.stage.addChild(group);
-    let started=performance.now();
-    burst.current=()=>{started=performance.now();if(!document.hidden&&node.dataset.pixi==='ready')instance.ticker.start();};
+    let elapsed=0;
+    burst.current=()=>{elapsed=0;if(!document.hidden&&node.dataset.pixi==='ready')instance.ticker.start();};
     let lastWidth=0,lastHeight=0;
     observer=new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(disposed)return;const width=Math.max(1,Math.round(node.clientWidth)),height=Math.max(1,Math.round(node.clientHeight));if(Math.abs(width-lastWidth)<2&&Math.abs(height-lastHeight)<2)return;lastWidth=width;lastHeight=height;instance.renderer.resize(width,height);});});observer.observe(node);
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.pixi='lost';});
     node.append(instance.canvas);node.dataset.pixi='ready';
     instance.ticker.maxFPS=isMobileGraphics()?24:30;
-    instance.ticker.add(()=>{
-     const age=Math.min(1,(performance.now()-started)/650),width=instance.screen.width,height=instance.screen.height;
+    instance.ticker.add(ticker=>{
+     elapsed+=Math.min(ticker.deltaMS,100);
+     const age=Math.min(1,elapsed/650),width=instance.screen.width,height=instance.screen.height;
      for(let i=0;i<particles.length;i++){
       const p=particles[i],angle=i*Math.PI*2/particles.length,distance=(18+i%4*9)*age;
       p.x=width/2+Math.cos(angle)*distance;p.y=height/2+Math.sin(angle)*distance;
@@ -36,7 +37,7 @@ export function PixiScoreBurst({beat}:{beat:string}){
      }
      if(age===1)instance.ticker.stop();
     });
-    visibility=()=>{if(document.hidden)instance.ticker.stop();else if(performance.now()-started<650&&node.dataset.pixi==='ready')instance.ticker.start();};
+    visibility=()=>{if(document.hidden)instance.ticker.stop();else if(elapsed<650&&node.dataset.pixi==='ready')instance.ticker.start();};
     document.addEventListener('visibilitychange',visibility);
     burst.current?.(currentBeat.current);
    }catch{/* CSS sparks remain as a renderer fallback. */}

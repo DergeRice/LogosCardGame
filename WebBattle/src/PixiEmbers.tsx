@@ -23,8 +23,10 @@ export function PixiEmbers({level}:{level:number}){
     const resize=()=>{const width=Math.max(1,Math.round(node.clientWidth)),height=Math.max(1,Math.round(node.clientHeight));if(Math.abs(width-lastWidth)<2&&Math.abs(height-lastHeight)<2)return;lastWidth=width;lastHeight=height;instance.renderer.resize(width,height);};
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.pixi='lost';});
     node.append(instance.canvas);node.dataset.pixi='ready';instance.ticker.maxFPS=isMobileGraphics()?15:20;
-    instance.ticker.add(()=>{
-     const w=instance.screen.width,h=instance.screen.height,time=performance.now()/1000,speed=.28+levelRef.current*.12;
+    let time=0;
+    instance.ticker.add(ticker=>{
+     time+=Math.min(ticker.deltaMS,100)/1000;
+     const w=instance.screen.width,h=instance.screen.height,speed=.28+levelRef.current*.12;
      for(let i=0;i<particles.length;i++){
       const p=particles[i],phase=(time*speed+i*.233)%1;
       p.x=w*((i*.61803398875)%1)+Math.sin(time+i)*w*.018;p.y=h*(1.05-phase*.55);

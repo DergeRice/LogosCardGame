@@ -5,7 +5,7 @@ test('illustrated entry reveals two login choices and retains guest credentials 
  const hello:any[]=[];await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{const msg=JSON.parse(String(raw));if(msg.type==='hello'){hello.push(msg);ws.send(JSON.stringify({type:'session',token:'guest-account-token',name:'게스트 1234',avatar:'pronoun',rating:1000,points:0,account:null}));ws.send(JSON.stringify({type:'home',rating:1000,points:0}))}}));
  await page.goto('/');await expect(page.getByRole('heading',{name:'로고스 카드게임',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/Google로 로그인/})).toBeDisabled();await expect(page.getByRole('button',{name:/Apple ID로 로그인/})).toHaveCount(0);await expect(page.getByText('업데이트 예정',{exact:true})).toHaveCount(1);await expect(page.locator('.entry-login-options button')).toHaveCount(2);await expect(page.locator('.quick-start')).toHaveCount(0);expect(hello.length).toBe(0);
  await expect(page.locator('.landing-art[data-pixi="ready"] canvas')).toBeVisible();
- const timing=await page.locator('.landing-cta').evaluate(el=>parseFloat(getComputedStyle(el).animationDelay));expect(timing).toBe(2.8);
+ const timing=await page.locator('.landing-cta').evaluate(el=>parseFloat(getComputedStyle(el).animationDelay));expect(timing).toBe(1.4);
  await page.waitForTimeout(3400);await page.screenshot({path:'docs/screenshots/login-only.png'});
  await page.setViewportSize({width:667,height:320});const bounds=await page.getByRole('button',{name:/게스트로 로그인/}).boundingBox();expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(320);await page.getByRole('button',{name:/게스트로 로그인/}).click();await expect(page.getByTestId('guest-name')).toHaveText('게스트 1234');await expect(page.locator('.home-profile')).toContainText('포인트 0 P');expect(hello.length).toBe(1);await page.evaluate(()=>sessionStorage.clear());await page.reload();await expect(page.locator('.login-landing')).toBeVisible();await page.getByRole('button',{name:/게스트로 로그인/}).click();await expect(page.getByTestId('guest-name')).toBeVisible();expect(hello.at(-1).token).toBe('guest-account-token');
 });
@@ -42,12 +42,13 @@ test('portrait entry follows a shortened iOS visual viewport without page scroll
 });
 
 test('touch device uses small textures and shows art if WebGL context is lost',async({browser})=>{
- const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,deviceScaleFactor:3});
  const page=await context.newPage(),textures:string[]=[];
  page.on('request',request=>{if(request.url().includes('/landing/'))textures.push(request.url());});
  try{
   await page.goto('/');
   const canvas=page.locator('.landing-art[data-pixi="ready"] canvas');await expect(canvas).toBeVisible();
+  expect(await canvas.evaluate(el=>(el as HTMLCanvasElement).width/el.getBoundingClientRect().width)).toBeGreaterThanOrEqual(1.9);
   expect(textures.some(url=>url.endsWith('/landing/cards-mobile.webp'))).toBe(true);
   expect(textures.some(url=>url.endsWith('/landing/cards.png'))).toBe(false);
   await canvas.evaluate(element=>element.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
@@ -67,13 +68,26 @@ test('reduced motion shows finished artwork without allocating WebGL',async({bro
 });
 
 test('mobile canvas visibly changes during the Pixi intro',async({browser})=>{
- const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,deviceScaleFactor:3});
  try{
   const page=await context.newPage();await page.goto('/');
   const canvas=page.locator('.landing-art[data-pixi="ready"] canvas');await expect(canvas).toBeVisible();
   const first=await canvas.screenshot();await page.waitForTimeout(2500);const last=await canvas.screenshot();
   const a=await sharp(first).ensureAlpha().raw().toBuffer(),b=await sharp(last).ensureAlpha().raw().toBuffer();
   expect(a.length).toBe(b.length);
+  let changed=0;for(let i=0;i<a.length;i+=4)if(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2])+Math.abs(a[i+3]-b[i+3])>80)changed++;
+  expect(changed).toBeGreaterThan(500);
+ }finally{await context.close();}
+});
+
+test('a stalled Safari frame does not skip the whole intro',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,deviceScaleFactor:3});
+ try{
+  const page=await context.newPage();await page.goto('/');
+  const canvas=page.locator('.landing-art[data-pixi="ready"] canvas');await expect(canvas).toBeVisible();
+  await page.evaluate(()=>{const until=performance.now()+2200;while(performance.now()<until){};});
+  const first=await canvas.screenshot();await page.waitForTimeout(450);const last=await canvas.screenshot();
+  const a=await sharp(first).ensureAlpha().raw().toBuffer(),b=await sharp(last).ensureAlpha().raw().toBuffer();
   let changed=0;for(let i=0;i<a.length;i+=4)if(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2])+Math.abs(a[i+3]-b[i+3])>80)changed++;
   expect(changed).toBeGreaterThan(500);
  }finally{await context.close();}

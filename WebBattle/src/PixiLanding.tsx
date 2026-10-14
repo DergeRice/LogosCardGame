@@ -4,8 +4,8 @@ import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js
 
 const desktopAssets=['/landing/cards.png','/landing/title.png','/landing/mascots.png'];
 const mobileAssets=['/landing/cards-mobile.webp','/landing/title-mobile.webp','/landing/mascots-mobile.webp'];
-const easeOut=(t:number)=>1-(1-t)**3;
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
+const spring=(t:number)=>1-Math.exp(-5*t)*Math.cos(2.5*Math.PI*t);
 
 export function PixiLanding({onReady}:{onReady:()=>void}){
  const host=useRef<HTMLDivElement>(null),[fallback,setFallback]=useState(false);
@@ -45,23 +45,24 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
     layout();observer=new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(!cancelled)layout();});});observer.observe(node);
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.pixi='lost';setFallback(true);});
     node.append(instance.canvas);node.dataset.pixi='ready';onReady();
-    let started=performance.now(),hiddenAt:number|null=null;
-    instance.ticker.maxFPS=isMobileGraphics()?24:30;
-    instance.ticker.add(()=>{
-     const time=performance.now()-started,size=instance.screen.width;
-     cards.alpha=clamp((time-300)/850);
-     const titleT=clamp((time-1120)/850),titleEase=easeOut(titleT);
-     title.alpha=titleT;title.y=size*(.18+.31*textures[1].height/textures[1].width)+size*.13*(1-titleEase)-Math.sin(titleT*Math.PI)*size*.018;title.scale.set((size*.62/textures[1].width)*(.72+.28*titleEase));
-     const mascotT=clamp((time-1850)/800),bounce=1+Math.sin(mascotT*Math.PI)*.11;
-     mascots.alpha=mascotT;mascots.scale.set((size*(portrait ? .516 : .43)/textures[2].width)*(.42+.58*easeOut(mascotT))*bounce);
+    let elapsed=0;
+    instance.ticker.maxFPS=30;
+    instance.ticker.add(ticker=>{
+     elapsed+=Math.min(ticker.deltaMS,100);
+     const time=elapsed,size=instance.screen.width;
+     cards.alpha=clamp((time-150)/425);
+     const titleT=clamp((time-560)/425),titlePop=spring(titleT);
+     title.alpha=clamp(titleT*2);title.y=size*(.18+.31*textures[1].height/textures[1].width)+size*.22*(1-titlePop);title.scale.set((size*.62/textures[1].width)*(.45+.55*titlePop));
+     const mascotT=clamp((time-925)/400),mascotPop=spring(mascotT);
+     mascots.alpha=clamp(mascotT*2);mascots.scale.set((size*(portrait ? .516 : .43)/textures[2].width)*(.25+.75*mascotPop));
      for(let i=0;i<particles.length;i++){
-      const p=particles[i],age=clamp((time-550-i*68)/900),angle=i*2.39996;
+      const p=particles[i],age=clamp((time-275-i*34)/450),angle=i*2.39996;
       p.x=size*(.5+Math.cos(angle)*(.16+.24*age));p.y=size*(.48+Math.sin(angle)*(.12+.23*age));
-      p.alpha=age>0&&age<1?Math.sin(age*Math.PI)*.9:0;p.scaleX=p.scaleY=Math.max(1,size*.008*(1-age*.7));p.rotation=angle+age*2;
+      p.alpha=age>0&&age<1?Math.sin(age*Math.PI):0;p.scaleX=p.scaleY=Math.max(1,size*.012*(1-age*.7));p.rotation=angle+age*2;
      }
-     if(time>3900)instance.ticker.stop();
+     if(time>1950)instance.ticker.stop();
     });
-    visibility=()=>{if(document.hidden){hiddenAt=performance.now();instance.ticker.stop();}else{if(hiddenAt!==null)started+=performance.now()-hiddenAt;hiddenAt=null;if(performance.now()-started<3900)instance.ticker.start();}};
+    visibility=()=>{if(document.hidden)instance.ticker.stop();else if(elapsed<1950&&node.dataset.pixi==='ready')instance.ticker.start();};
     document.addEventListener('visibilitychange',visibility);
     if(document.hidden)visibility();else instance.ticker.start();
    }catch{if(!cancelled){setFallback(true);onReady();}}
