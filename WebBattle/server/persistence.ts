@@ -64,7 +64,7 @@ export function nextDeadline(game:Game):number|null{
  for(const r of game.rooms.values()){
   if(r.expiresAt>0)deadlines.push(r.expiresAt);
   if(['reveal','dealing'].includes(r.phase)||(r.phase==='matching'&&r.players.some(p=>!p.ai&&p.socket?.readyState===1)))deadlines.push(r.stageEndsAt);
-  if(['matching','reveal','dealing','battle'].includes(r.phase))for(const p of r.players)if(!p.ai&&p.disconnectedAt)deadlines.push(p.disconnectedAt+game.reconnectMs);
+  if(['lobby','matching','reveal','dealing','battle'].includes(r.phase))for(const p of r.players)if(!p.ai&&p.disconnectedAt)deadlines.push(p.disconnectedAt+game.reconnectMs);
   if(r.phase==='battle'){
    if(r.finalRound&&r.endsAt>0)deadlines.push(r.endsAt);
    if(r.exchange)deadlines.push(r.exchange.expiresAt);

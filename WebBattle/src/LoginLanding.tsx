@@ -2,7 +2,7 @@ import {useCallback,useState} from 'react';
 import {BUILD_VERSION} from './buildVersion.js';
 import {PixiLanding} from './PixiLanding.js';
 
-export function LoginLanding({onGuest}:{onGuest:()=>void}){
+export function LoginLanding({onGuest,preloadPercent=0}:{onGuest:()=>void;preloadPercent?:number}){
  const [ready,setReady]=useState(false),show=useCallback(()=>setReady(true),[]);
  return <main className={`login-landing ${ready?'landing-ready':''}`} aria-label="로고스 카드게임 로그인">
   <div className="landing-background" aria-hidden="true"/>
@@ -17,6 +17,7 @@ export function LoginLanding({onGuest}:{onGuest:()=>void}){
     <small className="landing-note">게스트 포인트와 레이팅은 이 브라우저에서 이어집니다.</small>
    </div>
   </div>
+  <span className="landing-preload" role="status">이미지 준비 {preloadPercent}%</span>
   <span className="build-version">{BUILD_VERSION}</span>
  </main>;
 }

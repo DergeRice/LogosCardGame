@@ -5,13 +5,13 @@ import {fieldCards,canTransferCard} from '../shared/cardViews.js';
 import { randomInt, randomUUID, randomBytes, scryptSync, timingSafeEqual, createHash } from 'node:crypto';
 export interface GameSocket { readonly readyState: number; readonly bufferedAmount: number; send(data: string): void; close(code?: number, reason?: string): void; terminate(): void; }
 type WebSocket = GameSocket;
-import { judgeCards, DECK_FACES, RULES, REACTIONS, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
+import { judgeCards, DECK_FACES, RULES, REACTIONS, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 
 type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; calledGo?:boolean; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
-type Room = { code: string; phase: RoomView['phase']; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
+type Room = { code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
 type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 function shuffle<T>(items: T[]): T[] { for (let i = items.length - 1; i > 0; i--) { const j = randomInt(i + 1); [items[i], items[j]] = [items[j], items[i]]; } return items; }
@@ -43,6 +43,7 @@ export class Game {
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
   this.send(socket, { type: 'session', token: p.token, id: p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, account:p.accountId?{username:p.name}:null });
+  this.sendRoomList(socket);
   const room = p.room && this.rooms.get(p.room);
   if (room) { if (room.phase === 'result' && !room.finalRound && this.allRematch(room)) this.reveal(room); else this.broadcast(room); }
   else {this.send(socket, { type: 'home', rating: p.rating, points: p.points, message: p.resumeNotice??(expired ? '세션이 만료되어 새 게스트로 연결했어요. 임시 레이팅도 초기화됩니다.' : undefined) });p.resumeNotice=undefined;}
@@ -88,13 +89,53 @@ export class Game {
  }
  disconnected(p: Player, socket: WebSocket) { if (p.socket !== socket) return; p.socket = undefined; p.disconnectedAt = Date.now(); const r = p.room && this.rooms.get(p.room); if (r) this.broadcast(r); }
  view(r: Room, p: Player): RoomView {
-  const state:RoomView={ code: r.code, phase: r.phase, matchId: r.matchId, players: r.players.map(x => ({ id: x.id, name: x.name, avatar: x.avatar, rating: x.rating, ratingDelta: x.ratingDelta, points: x.points, reward: x.reward, baseReward:x.baseReward, opponentRating:x.opponentRating,rewardRatio:x.rewardRatio, calledGo:Boolean(x.calledGo), score: x.score, ready: x.ready, rematch: x.rematch, connected: Boolean(x.ai || x.socket?.readyState === 1), handCount: x.hand.length, ai: Boolean(x.ai), disconnectedAt: x.disconnectedAt, lastPlayed:x.lastPlayed, playedSentences:x.playedSentences, lastAction:x.lastAction, reaction:x.reaction&&Date.now()-x.reaction.at<3000?x.reaction:undefined })), hand: ['battle', 'dealing'].includes(r.phase) ? p.hand : [], handVersion: p.handVersion, fieldVersion:p.fieldVersion??0, you: p.id, robNotices:p.robNotices, endsAt: r.endsAt, finalRound:r.finalRound, stageEndsAt: r.stageEndsAt, nextDealAt: r.nextDealAt, dealSerial: r.dealSerial, deckCount: r.deck.length, deckTotal: DECK_FACES.length, usedCards: r.discard, dealIntervalMs: this.dealMs, goCount: r.goCount, multiplier: 1, highScore: r.highScore, leaderId:r.leaderId, drawVote:r.drawVote, testMode:r.testMode, decision: r.decision, exchange:r.exchange?{id:r.exchange.id,fromId:r.exchange.fromId,toId:r.exchange.toId,expiresAt:r.exchange.expiresAt,offer:r.exchange.toId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.fromId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.offerId)})():undefined,wanted:r.exchange.toId===p.id||r.exchange.fromId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.toId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.wantedId)})():undefined}:undefined,serverNow: Date.now(), actionAt: p.actionAt, exchangeAt: p.exchangeAt, reconnectMs: this.reconnectMs, durationMs: this.durationMs, winner: r.winner, reason: r.reason, log: r.log, judgment: p.judgment, expiresAt: r.expiresAt };
+  const state:RoomView={ code: r.code, phase: r.phase, custom:r.custom, name:r.name, hostId:r.hostId, matchId: r.matchId, players: r.players.map(x => ({ id: x.id, name: x.name, avatar: x.avatar, rating: x.rating, ratingDelta: x.ratingDelta, points: x.points, reward: x.reward, baseReward:x.baseReward, opponentRating:x.opponentRating,rewardRatio:x.rewardRatio, calledGo:Boolean(x.calledGo), score: x.score, ready: x.ready, rematch: x.rematch, connected: Boolean(x.ai || x.socket?.readyState === 1), handCount: x.hand.length, ai: Boolean(x.ai), disconnectedAt: x.disconnectedAt, lastPlayed:x.lastPlayed, playedSentences:x.playedSentences, lastAction:x.lastAction, reaction:x.reaction&&Date.now()-x.reaction.at<3000?x.reaction:undefined })), hand: ['battle', 'dealing'].includes(r.phase) ? p.hand : [], handVersion: p.handVersion, fieldVersion:p.fieldVersion??0, you: p.id, robNotices:p.robNotices, endsAt: r.endsAt, finalRound:r.finalRound, stageEndsAt: r.stageEndsAt, nextDealAt: r.nextDealAt, dealSerial: r.dealSerial, deckCount: r.deck.length, deckTotal: DECK_FACES.length, usedCards: r.discard, dealIntervalMs: this.dealMs, goCount: r.goCount, multiplier: 1, highScore: r.highScore, leaderId:r.leaderId, drawVote:r.drawVote, testMode:r.testMode, decision: r.decision, exchange:r.exchange?{id:r.exchange.id,fromId:r.exchange.fromId,toId:r.exchange.toId,expiresAt:r.exchange.expiresAt,offer:r.exchange.toId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.fromId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.offerId)})():undefined,wanted:r.exchange.toId===p.id||r.exchange.fromId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.toId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.wantedId)})():undefined}:undefined,serverNow: Date.now(), actionAt: p.actionAt, exchangeAt: p.exchangeAt, reconnectMs: this.reconnectMs, durationMs: this.durationMs, winner: r.winner, reason: r.reason, log: r.log, judgment: p.judgment, expiresAt: r.expiresAt };
   if(r.phase==='battle'||r.phase==='dealing')state.players.forEach((player,index)=>{const source=r.players[index],draft=new Set(source.draftIds??[]);player.handPreview=source.hand.filter(c=>!draft.has(c.id));player.draftPreview=(source.draftIds??[]).map(id=>source.hand.find(c=>c.id===id)).filter((c):c is Card=>Boolean(c));});
   return state;
  }
  broadcast(r: Room) { for (const p of r.players) if (!p.ai) this.send(p.socket, { type: 'state', room: this.view(r, p) }); }
  log(r: Room, text: string, actor?: Player) { const id=randomUUID(); r.log.unshift({ id, text }); r.log.length = Math.min(r.log.length, 8); if(actor)actor.lastAction={id,text};this.audit(actor,'game_event','info',{reason:text},r); }
  resetPlayer(p: Player) { p.robNotices=[]; p.hand = []; p.handVersion++; p.fieldVersion=0;p.draftIds=[]; p.score = 0; p.calledGo=false; p.ready = true; p.rematch = false; p.judgment = undefined; p.lastPlayed=undefined; p.playedSentences=[]; p.lastAction=undefined; p.reaction=undefined; p.reactionAt=0; p.ratingDelta = 0; p.reward = 0; p.baseReward=0;p.opponentRating=undefined;p.rewardRatio=undefined; p.seen.clear(); }
+ roomList():RoomListing[]{return [...this.rooms.values()].filter(r=>r.custom&&r.phase==='lobby').map(r=>({code:r.code,name:r.name??`${r.players[0]?.name??'플레이어'}님의 방`,hostName:r.players.find(p=>p.id===r.hostId)?.name??'',humans:r.players.filter(p=>!p.ai).length,aiCount:r.players.filter(p=>p.ai).length,maxPlayers:RULES.maxPlayers}));}
+ sendRoomList(socket:WebSocket|undefined){this.send(socket,{type:'roomList',rooms:this.roomList()});}
+ publishRoomList(){const payload={type:'roomList',rooms:this.roomList()};for(const p of this.sessions.values())if(!p.ai)this.send(p.socket,payload);}
+ createRoom(p:Player){
+  if(p.room)return this.fail(p,'먼저 현재 방에서 나가 주세요.');
+  if(this.rooms.size>=500)return this.fail(p,'방이 모두 사용 중입니다. 잠시 후 다시 시도하세요.');
+  let code:string;do{code=String(randomInt(100000,1000000));}while(this.rooms.has(code));
+  this.resetPlayer(p);p.room=code;
+  const r:Room={code,custom:true,name:`${p.name}님의 방`,hostId:p.id,phase:'lobby',matchId:randomUUID(),players:[p],deck:[],discard:[],dealCursor:0,stageEndsAt:0,nextDealAt:0,dealSerial:0,goCount:0,highScore:0,endsAt:0,expiresAt:0,log:[]};
+  this.rooms.set(code,r);this.broadcast(r);this.publishRoomList();
+ }
+ joinRoom(p:Player,code:unknown){
+  if(p.room)return this.fail(p,'먼저 현재 방에서 나가 주세요.');
+  const r=typeof code==='string'?this.rooms.get(code):undefined;
+  if(!r?.custom||r.phase!=='lobby')return this.fail(p,'입장할 수 없는 방이에요.');
+  if(r.players.length>=RULES.maxPlayers)return this.fail(p,'방이 가득 찼어요.');
+  this.resetPlayer(p);p.room=r.code;r.players.push(p);this.broadcast(r);this.publishRoomList();
+ }
+ lobbyRoom(p:Player){const r=p.room?this.rooms.get(p.room):undefined;return r?.custom&&r.phase==='lobby'?r:undefined;}
+ renameRoom(p:Player,name:unknown){
+  const r=this.lobbyRoom(p);if(!r||r.hostId!==p.id)return this.fail(p,'방장만 방 이름을 바꿀 수 있어요.');
+  const clean=typeof name==='string'?name.trim().normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,''):'';
+  if(!clean||clean.length>30)return this.fail(p,'방 이름은 1~30자로 입력해 주세요.');
+  r.name=clean;this.broadcast(r);this.publishRoomList();
+ }
+ addRoomAI(p:Player){
+  const r=this.lobbyRoom(p);if(!r||r.hostId!==p.id)return this.fail(p,'방장만 AI를 추가할 수 있어요.');
+  if(r.players.length>=RULES.maxPlayers)return this.fail(p,'최대 6명까지 입장할 수 있어요.');
+  const bot=this.newPlayer(`로고스 AI ${r.players.filter(x=>x.ai).length+1}`);bot.token='';bot.ai='normal';bot.room=r.code;bot.avatar=avatars[r.players.length%avatars.length];r.players.push(bot);this.broadcast(r);this.publishRoomList();
+ }
+ removeRoomAI(p:Player,id:unknown){
+  const r=this.lobbyRoom(p);if(!r||r.hostId!==p.id)return this.fail(p,'방장만 AI를 제거할 수 있어요.');
+  const bot=r.players.find(x=>x.id===id&&x.ai);if(!bot)return this.fail(p,'제거할 AI가 없어요.');
+  bot.room=undefined;r.players=r.players.filter(x=>x!==bot);this.broadcast(r);this.publishRoomList();
+ }
+ startRoom(p:Player){
+  const r=this.lobbyRoom(p);if(!r||r.hostId!==p.id)return this.fail(p,'방장만 게임을 시작할 수 있어요.');
+  if(r.players.some(x=>!x.ai&&x.socket?.readyState!==1))return this.fail(p,'연결이 끊긴 플레이어가 있어요. 잠시 기다려 주세요.');
+  this.reveal(r);this.publishRoomList();
+ }
  quick(p: Player) {
   if (p.room) return this.fail(p, '이미 매칭 중이거나 대전 중이에요.');
   const open = [...this.rooms.values()].find(r => r.phase === 'matching' && r.players.filter(x => !x.ai).length < RULES.maxPlayers && compatibleRatings(r.players.filter(x=>!x.ai).map(x=>x.rating),p.rating) && r.players.some(x => !x.ai && x.socket?.readyState === 1));
@@ -106,7 +147,7 @@ export class Game {
   this.rooms.set(code, r); this.broadcast(r);
  }
  reveal(r: Room) {
-  while(r.players.length<this.minimumPlayers){
+  while(!r.custom&&r.players.length<this.minimumPlayers){
    const bot=this.newPlayer(`로고스 AI ${r.players.filter(p=>p.ai).length+1}`);
    bot.token='';bot.ai='normal';bot.room=r.code;bot.avatar=avatars[r.players.length%avatars.length];r.players.push(bot);
   }
@@ -170,8 +211,15 @@ export class Game {
  }
  allRematch(r: Room) { return r.players.length >= 2 && r.players.every(p => p.rematch && (p.ai || p.socket?.readyState === 1)); }
  leave(p: Player) {
-  const r = p.room && this.rooms.get(p.room);
-  if (r) { if(r.exchange&&(r.exchange.fromId===p.id||r.exchange.toId===p.id))r.exchange=undefined; r.drawVote=undefined; this.finish(r, `${p.name} 님이 대전을 포기했어요.`, p.id); r.players = r.players.filter(x => x !== p); for (const x of r.players) x.rematch = false; if (!r.players.some(x => !x.ai)) this.rooms.delete(r.code); else { if (r.phase === 'matching' && r.players.length === 1) { const bot = this.newPlayer('로고스 AI'); bot.ai = 'normal'; bot.room = r.code; bot.token = ''; r.players.push(bot); } this.broadcast(r); } }
+  const r = p.room ? this.rooms.get(p.room) : undefined;
+  if(r?.custom&&r.phase==='lobby'){
+   r.players=r.players.filter(x=>x!==p);
+   p.room=undefined;
+   if(!r.players.some(x=>!x.ai)){for(const bot of r.players)bot.room=undefined;this.rooms.delete(r.code);}
+   else{if(r.hostId===p.id)r.hostId=r.players.find(x=>!x.ai)!.id;this.broadcast(r);}
+   this.send(p.socket,{type:'home',rating:p.rating,points:p.points});this.publishRoomList();return;
+  }
+  if (r) { if(r.exchange&&(r.exchange.fromId===p.id||r.exchange.toId===p.id))r.exchange=undefined; r.drawVote=undefined; this.finish(r, `${p.name} 님이 대전을 포기했어요.`, p.id); r.players = r.players.filter(x => x !== p); if(r.custom&&r.hostId===p.id)r.hostId=r.players.find(x=>!x.ai)?.id; for (const x of r.players) x.rematch = false; if (!r.players.some(x => !x.ai)) this.rooms.delete(r.code); else { if (r.phase === 'matching' && r.players.length === 1) { const bot = this.newPlayer('로고스 AI'); bot.ai = 'normal'; bot.room = r.code; bot.token = ''; r.players.push(bot); } this.broadcast(r); } }
   p.room = undefined; this.send(p.socket, { type: 'home', rating: p.rating, points: p.points });
  }
  choice(p: Player, msg: Record<string, unknown>) {
@@ -361,6 +409,13 @@ export class Game {
   if(msg.type==='robNoticeRead'){const room=p.room&&this.rooms.get(p.room);if(room&&msg.matchId===room.matchId&&typeof msg.noticeId==='string'){p.robNotices=(p.robNotices??[]).filter(n=>n.id!==msg.noticeId);this.send(p.socket,{type:'state',room:this.view(room,p)});}return;}
   if (msg.type === 'ping') return this.send(p.socket, { type: 'pong', now: Date.now() });
   if (msg.type === 'quick') return this.quick(p);
+  if (msg.type === 'roomList') return this.sendRoomList(p.socket);
+  if (msg.type === 'createRoom') return this.createRoom(p);
+  if (msg.type === 'joinRoom') return this.joinRoom(p,msg.code);
+  if (msg.type === 'renameRoom') return this.renameRoom(p,msg.name);
+  if (msg.type === 'addRoomAI') return this.addRoomAI(p);
+  if (msg.type === 'removeRoomAI') return this.removeRoomAI(p,msg.id);
+  if (msg.type === 'startRoom') return this.startRoom(p);
   if (msg.type === 'leave') return this.leave(p);
   if (msg.type === 'submit') return this.action(p, msg);
   if (msg.type === 'draft') return this.syncDraft(p,msg);
@@ -382,7 +437,8 @@ export class Game {
   const now = Date.now(); let aiSpent = 0;
   for (const r of this.rooms.values()) {
    if (r.expiresAt > 0 && now >= r.expiresAt) { const message=r.phase==='result'?'경기 결과 보관 시간이 끝났어요. 다시 시작해 주세요.':'방이 만료되었어요.';for (const p of r.players) { p.room = undefined;if(p.ai)continue;p.resumeNotice=message;this.send(p.socket, { type: 'home', message, rating: p.rating, points: p.points });if(p.socket?.readyState===1)p.resumeNotice=undefined; } this.rooms.delete(r.code); continue; }
-   if (r.phase === 'matching') { for (const p of [...r.players]) if (!p.ai && p.disconnectedAt && now - p.disconnectedAt >= this.reconnectMs) this.leave(p); if (this.rooms.has(r.code) && now >= r.stageEndsAt && r.players.some(p => !p.ai && p.socket?.readyState === 1)) this.reveal(r); }
+   if (r.phase === 'lobby') {for(const p of [...r.players])if(!p.ai&&p.disconnectedAt&&now-p.disconnectedAt>=this.reconnectMs)this.leave(p);}
+   else if (r.phase === 'matching') { for (const p of [...r.players]) if (!p.ai && p.disconnectedAt && now - p.disconnectedAt >= this.reconnectMs) this.leave(p); if (this.rooms.has(r.code) && now >= r.stageEndsAt && r.players.some(p => !p.ai && p.socket?.readyState === 1)) this.reveal(r); }
    else if (r.phase === 'reveal' && now >= r.stageEndsAt) { r.phase = 'dealing'; r.stageEndsAt = now + this.dealingMs; this.deal(r, RULES.handSize); this.broadcast(r); }
    else if (r.phase === 'dealing' && now >= r.stageEndsAt) this.begin(r);
    if (['battle', 'reveal', 'dealing'].includes(r.phase)) { const missing = r.players.find(p => !p.ai && p.disconnectedAt && now - p.disconnectedAt >= this.reconnectMs); if (missing){if(r.phase!=='battle'||r.players.filter(p=>!p.ai).every(p=>p.disconnectedAt!==undefined))this.cancel(r,'연결이 끊겨 경기가 취소됐어요. 레이팅과 포인트는 변경되지 않았습니다.');else this.finish(r, `${missing.name} 님의 재접속 유예시간이 끝났어요.`, missing.id);} }
