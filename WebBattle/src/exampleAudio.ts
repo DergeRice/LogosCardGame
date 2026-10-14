@@ -15,6 +15,11 @@ export function preloadExampleAudio(){
  assets??=Promise.all([fetch('/audio/examples/manifest-v1.json'),fetch('/audio/examples/voice-v1.wav')]).then(async([m,a])=>{if(!m.ok||!a.ok)throw Error('음성 파일을 불러오지 못했습니다.');return {manifest:await m.json() as Manifest,bytes:await a.arrayBuffer()};}).catch(error=>{assets=null;throw error});
  return assets;
 }
+export function prepareRecordedExample(){
+ const ctx=unlockGameAudio();if(!ctx)return;
+ decoded??=preloadExampleAudio().then(async({manifest,bytes})=>({manifest,buffer:await ctx.decodeAudioData(bytes.slice(0))})).catch(error=>{decoded=null;throw error});
+ void decoded.catch(()=>{});
+}
 export function playRecordedExample(text:string,onStart:()=>void,onEnd:()=>void){
  let source:AudioBufferSourceNode|null=null,cancelled=false;
  const done=(async()=>{
