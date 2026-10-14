@@ -57,6 +57,7 @@
 
 /* Home: controls stay centered while the card-table artwork belongs to the bottom edge. */
 .shell:has(.quick-home){height:var(--game-height,100dvh);min-height:0}
+.shell:has(.quick-home){max-width:none;padding-left:0;padding-right:0}
 .quick-home.dashboard-home{isolation:isolate;justify-content:flex-start;overflow:hidden}
 .dashboard-actions{position:relative;z-index:2;display:grid;gap:14px;width:min(430px,70vw);margin:auto 0;transform:translateY(-4vh)}
 .dashboard-secondary-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -84,3 +85,11 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
 @media(max-width:1000px){.practice-battle{padding:34px 8px 8px;grid-template-rows:86px 20px 38px minmax(105px,1fr) minmax(118px,24vh);gap:4px}.practice-supply{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.practice-supply-card{padding:3px!important;border-radius:10px;justify-content:center;gap:3px}.practice-supply-card img{width:27px;height:38px}.practice-supply-card span{display:block;min-width:0}.practice-supply-card b{display:block;font-size:8px;letter-spacing:-.7px}.practice-supply-card small{display:none}.practice-supply-card i{font-size:13px;right:2px;bottom:0}.practice-battle .round-strip{font-size:9px}.practice-battle .practice-feedback-row{height:38px}.practice-hand-zone .game-card{flex-basis:76px;width:76px}.practice-example{max-width:calc(100% - 120px);font-size:8px}.practice-battle .sentence-card>b{font-size:8px}}
 @media(orientation:landscape) and (max-height:500px){.practice-battle{padding-top:30px;grid-template-rows:58px 18px 30px minmax(70px,1fr) minmax(85px,25vh);gap:3px}.practice-supply{grid-template-columns:repeat(9,minmax(0,1fr))}.practice-supply-card img{width:22px;height:31px}.practice-battle .practice-feedback-row{height:30px}.practice-battle .sentence-actions .submit{min-height:26px!important}.practice-battle-back{top:5px;font-size:10px;padding:4px 7px}}
 @media(prefers-reduced-motion:reduce){.player-rank-crown{animation:none}}
+
+/* The menu must fit inside its parent shell before artwork is clipped at the bottom. */
+.welcome-profile{border-width:2px;box-shadow:0 3px 0 #3b6e31,0 10px 24px #154c4740}
+.dashboard-home .dashboard-actions .quick-start,.dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{border-width:1px;box-shadow:0 2px 0 #173d27,0 6px 12px #10332322}
+html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.result){height:100%;overflow:hidden;overscroll-behavior:none}
+.shell:has(.match-screen),.shell:has(.result){position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);max-width:none;overflow:hidden}
+@media(orientation:portrait) and (max-width:700px){.dashboard-cards{width:min(510px,100vw)}.battle .field-feedback-wrap .sentence-card{width:clamp(46px,calc((100cqh - 68px)*.62),112px);min-width:46px;touch-action:pan-x}.battle .field-feedback-wrap .sentence-area{touch-action:pan-x}}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){.shell .battle{--hand-stage-height:calc(clamp(52px,16vh,70px)*1.2 + 25px);grid-template-rows:50px 30px minmax(0,1fr) var(--hand-stage-height)}.battle .field-feedback-wrap .sentence-card{width:clamp(38px,calc((100cqh - 14px)*.704),160px)}}

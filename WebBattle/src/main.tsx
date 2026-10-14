@@ -117,6 +117,7 @@ function App() {
  useEffect(()=>{setExample(null);exampleShown.current='';},[room?.matchId,room?.phase]);
  const feedbackTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
  function tone(win = false) { if (!soundRef.current) return; try { const ctx = audioRef.current ??= unlockGameAudio();if(!ctx)return; void ctx.resume(); const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.setValueAtTime(win ? 660 : 440, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(win ? 990 : 660, ctx.currentTime + .12); g.gain.setValueAtTime(.06, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .2); o.start(); o.stop(ctx.currentTime + .21); } catch { /* Audio is optional. */ } }
+ function playSfx(file:string,volume=.42){if(!soundRef.current)return;try{const audio=new Audio(file);audio.preload='auto';audio.volume=volume;void audio.play().catch(()=>{});}catch{/* Audio is optional. */}}
  useEffect(() => { soundRef.current = sound; localStorage.setItem('logos-sound', sound ? 'on' : 'off'); }, [sound]);
  useEffect(()=>{
   const activate=()=>{
@@ -164,7 +165,7 @@ function App() {
      if(r.judgment?.valid&&r.judgment.submissionId===submission.current?.id&&submission.current?.matchId===r.matchId&&r.judgment.submissionId!==previous?.judgment?.submissionId){
       const cards=submission.current.cards,steps=scoreSteps(cards,r.judgment,r.multiplier),duration=Math.min(SCORE_MOTION.totalMs,Math.max(650,steps.length*SCORE_MOTION.stepMaxMs));
       setExample(null);setFailedJudgment(null);setCorrect({id:r.judgment.submissionId!,cards,judgment:r.judgment,steps,previousScore:previous?.players.find(p=>p.id===previous.you)?.score??0,started:performance.now(),duration});
-      clearTimeout(feedbackTimer.current);feedbackTimer.current=setTimeout(()=>setCorrect(null),duration+SCORE_MOTION.holdMs);submission.current=null;tone();
+      clearTimeout(feedbackTimer.current);feedbackTimer.current=setTimeout(()=>setCorrect(null),duration+SCORE_MOTION.holdMs);submission.current=null;
      }
      if(r.judgment&&!r.judgment.valid&&r.judgment.submissionId===submission.current?.id&&r.judgment.submissionId!==previous?.judgment?.submissionId){setExample(null);setCorrect(null);setFailedJudgment({id:r.judgment.submissionId!,reason:r.judgment.reason});clearTimeout(feedbackTimer.current);feedbackTimer.current=setTimeout(()=>setFailedJudgment(null),1800);submission.current=null;}
      const eventId = r.log[0]?.id;
@@ -200,6 +201,9 @@ function App() {
  const locked = scoreProgress.running || !connected || pending || !room || room.phase !== 'battle' || Boolean(room.decision) || now < room.actionAt || Boolean(room?.endsAt && seconds <= 0);
  const hand = room?.hand ?? [], chosen = selected.map(id => hand.find(c => c.id === id)).filter((c): c is Card => Boolean(c));
  const dealt=useDealtHand(room);
+ const dealSfx=useRef(''),scoreSfx=useRef('');
+ useEffect(()=>{if(!room){dealSfx.current='';return;}const key=`${room.matchId}:${room.dealSerial}`;if(dealSfx.current&&dealSfx.current!==key&&room.dealSerial>0)playSfx('/audio/sfx/card-deal.wav',.32);dealSfx.current=key;},[room?.matchId,room?.dealSerial]);
+ useEffect(()=>{if(!correct||!scoreProgress.completed){scoreSfx.current='';return;}const key=`${correct.id}:${scoreProgress.completed}`;if(scoreSfx.current!==key){scoreSfx.current=key;playSfx('/audio/sfx/score-chime.wav',.26);}},[correct?.id,scoreProgress.completed]);
  const remainingHand = hand.filter(c => !selected.includes(c.id)&&dealt.visible.has(c.id));
  const robTarget=robPreview?.players.find(p=>p.id===specialTarget);
  selectedLive.current=selected;uiContext.current={inspectMode,viewingOpponent:Boolean(viewingPlayer),scoreRunning:scoreProgress.running,selected};

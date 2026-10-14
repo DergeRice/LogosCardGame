@@ -2,8 +2,9 @@ import {useEffect,useRef,useState} from 'react';
 import type {RoomView} from '../shared/rules.js';
 
 // Track server-owned cards, not field selections: returning a card never redeals it.
-export function useDealtHand(room:RoomView|null){
+export function useDealtHand(room:RoomView|null,onCardArrival?:()=>void){
  const seen=useRef(new Set<string>()),match=useRef(''),timers=useRef<ReturnType<typeof setTimeout>[]>([]);
+ const onCardArrivalRef=useRef(onCardArrival);onCardArrivalRef.current=onCardArrival;
  const [visible,setVisible]=useState<Set<string>>(new Set()),[arriving,setArriving]=useState<Set<string>>(new Set());
  useEffect(()=>{
   if(!room){timers.current.forEach(clearTimeout);timers.current=[];seen.current.clear();match.current='';setVisible(new Set());setArriving(new Set());return;}
@@ -14,7 +15,7 @@ export function useDealtHand(room:RoomView|null){
   if(changed&&room.phase==='battle'){setVisible(new Set(room.hand.map(c=>c.id)));return;}
   fresh.forEach((card,i)=>{
    timers.current.push(setTimeout(()=>{
-    setVisible(old=>new Set([...old,card.id]));setArriving(old=>new Set([...old,card.id]));
+    setVisible(old=>new Set([...old,card.id]));setArriving(old=>new Set([...old,card.id]));onCardArrivalRef.current?.();
     timers.current.push(setTimeout(()=>setArriving(old=>{const n=new Set(old);n.delete(card.id);return n;}),560));
    },100+i*220));
   });
