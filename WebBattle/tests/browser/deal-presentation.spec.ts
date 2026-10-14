@@ -12,6 +12,11 @@ test('controlled deal fixture: sequential opaque arrivals, 23-card hand, return 
  await expect(page.locator('.game-card')).toHaveCount(5);await expect(page.locator('.card-arriving')).toHaveCount(0);
  room.phase='battle';room.hand=cards;room.handVersion++;room.dealSerial++;room.players[0].handCount=23;room.deckCount=11;
  socket!.send(JSON.stringify({type:'state',room}));await expect(page.locator('.game-card')).toHaveCount(23);await expect(page.locator('.card-arriving')).toHaveCount(0);
+ const gauge=page.locator('.deck-request-fill.gauge-running');await expect(gauge).toBeVisible();
+ const before=await gauge.evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).a);
+ await page.waitForTimeout(450);
+ const after=await gauge.evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).a);
+ expect(after).toBeGreaterThan(before+.015);
  await expect(page.locator('header,footer,.used-cards,.event-log')).toHaveCount(0);
  await expect(page.locator('.character-avatar img').first()).toBeVisible();
  await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();await page.locator('[data-card-id="deal-0"]').click();await page.locator('[data-field-id="deal-0"]').click();await expect(page.locator('[data-card-id="deal-0"]')).not.toHaveClass(/card-arriving/);await expect(page.locator('.game-card')).toHaveCount(23);

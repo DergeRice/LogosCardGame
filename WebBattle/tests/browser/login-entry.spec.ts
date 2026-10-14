@@ -92,3 +92,10 @@ test('a stalled Safari frame does not skip the whole intro',async({browser})=>{
   expect(changed).toBeGreaterThan(500);
  }finally{await context.close();}
 });
+
+test('motion diagnostics reports Safari media preference and active CSS animation',async({page})=>{
+ await page.goto('/?motion-debug=1');
+ await expect(page.getByRole('complementary',{name:'애니메이션 진단'})).toBeVisible();
+ await expect(page.locator('.motion-debug')).toContainText('동작 줄이기 판정: 꺼짐');
+ await expect(page.locator('.motion-debug')).toContainText('CSS 연출: landing-fade');
+});

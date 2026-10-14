@@ -46,6 +46,7 @@ import {useGameViewport} from './useGameViewport.js';
 import {useDealtHand} from './useDealtHand.js';
 import { CARD_FACE_URLS, preloadCardFaces } from './preloadCards.js';
 import {CardViewer} from './CardViewer.js';
+import {MotionDiagnostics} from './MotionDiagnostics.js';
 
 function Illustration({ kind, card, className = '' }: { kind: Kind; card?: Card; className?: string }) {
  const face=card?.variant&&VARIANTS[card.variant]?.kind===kind?card.variant:kind;
@@ -66,7 +67,7 @@ function guestName() {
  return name;
 }
 function ViewportPage({children}:{children:React.ReactNode}){useGameViewport();return children;}
-function GameEntry({practice=false}:{practice?:boolean}){const [entered,setEntered]=useState(()=>sessionStorage.getItem('logos-entry')==='guest'||Boolean(localStorage.getItem('logos-account-token')));return entered?(practice?<ViewportPage><PracticeMode/></ViewportPage>:<App/>):<ViewportPage><LoginLanding onGuest={()=>{sessionStorage.setItem('logos-entry','guest');const saved=localStorage.getItem('logos-guest-name');if(saved)sessionStorage.setItem('logos-name',saved);setEntered(true)}}/></ViewportPage>;}
+function GameEntry({practice=false}:{practice?:boolean}){const [entered,setEntered]=useState(()=>!new URLSearchParams(location.search).has('intro')&&(sessionStorage.getItem('logos-entry')==='guest'||Boolean(localStorage.getItem('logos-account-token'))));return entered?(practice?<ViewportPage><PracticeMode/></ViewportPage>:<App/>):<ViewportPage><LoginLanding onGuest={()=>{sessionStorage.setItem('logos-entry','guest');const saved=localStorage.getItem('logos-guest-name');if(saved)sessionStorage.setItem('logos-name',saved);setEntered(true)}}/></ViewportPage>;}
 function App() {
  const [name, setName] = useState(guestName);
  const [connected, setConnected] = useState(false), [status, setStatus] = useState('연결 준비 중');
@@ -244,7 +245,7 @@ const practiceRoute=location.pathname.replace(/\/$/,'')==='/practice';
 document.documentElement.classList.toggle('practice-route',practiceRoute);
 const cardViewerRoute=location.pathname.replace(/\/$/,'')==='/cards';
 document.documentElement.classList.toggle('card-viewer-route',cardViewerRoute);
-createRoot(document.getElementById('root')!).render(<>{adminRoute?<AdminLogs/>:cardViewerRoute?<CardViewer/>:practiceRoute?<GameEntry practice/>:<GameEntry/>}<QuickTools/></>);
+createRoot(document.getElementById('root')!).render(<>{adminRoute?<AdminLogs/>:cardViewerRoute?<CardViewer/>:practiceRoute?<GameEntry practice/>:<GameEntry/>}<QuickTools/>{new URLSearchParams(location.search).has('motion-debug')&&<MotionDiagnostics/>}</>);
 
 
 

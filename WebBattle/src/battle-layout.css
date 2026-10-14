@@ -13,7 +13,9 @@
 .table-feedback-row .deck-request-button>strong,.table-feedback-row .deck-request-button>span:not(.deck-request-fill):not(.deck-progress),.table-feedback-row .deck-request-button>small{position:relative;inset:auto;z-index:1;line-height:1;font-size:12px;color:inherit;white-space:nowrap}
 .table-feedback-row .deck-request-button>strong{font-size:15px}.table-feedback-row .deck-request-button>small{opacity:.65;font-size:10px}
 .table-feedback-row .deck-request-button:disabled{opacity:1}
-.table-feedback-row .deck-request-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#d4e7c2,#c5dbaf);border-right:2px solid #abc98f;transition:width .2s linear;pointer-events:none}
+.table-feedback-row .deck-request-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(90deg,#d4e7c2,#c5dbaf);border-right:2px solid #abc98f;transform-origin:left;transform:scaleX(var(--gauge-start,0));pointer-events:none}
+.table-feedback-row .deck-request-fill.gauge-running{animation:deck-gauge-fill var(--gauge-duration) linear forwards}
+@keyframes deck-gauge-fill{from{transform:scaleX(var(--gauge-start,0))}to{transform:scaleX(1)}}
 .deck-progress{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .table-feedback-row .leader-deal-button{position:absolute;right:5px;top:50%;transform:translateY(-50%);z-index:2;min-height:24px;padding:4px 8px;font-size:9px;border-radius:8px}
 .table-feedback-row .deal-flight{top:50%;left:50%;z-index:6;pointer-events:none}
