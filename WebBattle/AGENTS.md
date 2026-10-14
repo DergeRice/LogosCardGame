@@ -4,3 +4,4 @@
 - 다음 버전은 `npm run version:next`로 올린 뒤 빌드한다. 재시도 배포에는 같은 버전을 유지한다.
 - 버전은 src/buildVersion.ts가 기준이며 게임 왼쪽 아래에 표시한다.
 - 모바일 검증에는 visualViewport가 innerHeight보다 작은 상황과 상단/하단 시스템 UI가 보이는 상황을 포함한다. 실제 휴대폰 검증 여부를 구분해 보고한다.
+- 새 파티클·스프라이트 연출은 PixiJS v8 컴포넌트로 구현한다. 버튼·입력 같은 접근 가능한 UI는 DOM을 유지하고, WebGL을 쓸 수 없을 때만 CSS 대체 연출을 사용한다. 모바일에서는 해상도·입자 수·FPS를 제한하고, 비활성 탭에서는 ticker를 멈추며, 언마운트 때 renderer를 해제한다. 새 연출은 Chromium과 WebKit의 모바일 크기에서 확인한다.

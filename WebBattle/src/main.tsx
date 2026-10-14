@@ -122,7 +122,7 @@ function App() {
   await enterGameFullscreen();
  }
  useEffect(()=>{let active=true;void Promise.all([preloadProfiles(),preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}),preloadExampleAudio().catch(()=>null)]).then(([, {failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
- useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 200); return () => clearInterval(t); }, []);
+ useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 1000); return () => clearInterval(t); }, []);
  useEffect(() => {
   let stopped = false, retry: ReturnType<typeof setTimeout>, resumeCheck:ReturnType<typeof setTimeout>, attempts = 0, responseSerial=0;
   const heartbeats=new Set<ReturnType<typeof setInterval>>();

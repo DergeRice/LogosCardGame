@@ -1,5 +1,6 @@
 import {useEffect,useRef,useState,type CSSProperties} from 'react';
 import {SCORE_MOTION,type ScoreReveal} from './scoreAnimation.js';
+import {PixiScoreBurst} from './PixiScoreBurst.js';
 export function useReducedMotion(){
  const [reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
  useEffect(()=>{const media=matchMedia('(prefers-reduced-motion: reduce)'),change=()=>setReduced(media.matches);media.addEventListener('change',change);return()=>media.removeEventListener('change',change);},[]);return reduced;
@@ -9,14 +10,18 @@ export function AnimatedNumber({value,duration=SCORE_MOTION.scoreboardMs,classNa
  useEffect(()=>{
   if(reduced||duration===0){current.current=value;setDisplay(value);return;}
   const from=current.current,start=performance.now();let raf=0;
-  const tick=(time:number)=>{const progress=Math.min(1,(time-start)/duration),next=progress===1?value:Math.min(Math.max(from,value),Math.max(Math.min(from,value),Math.round(from+(value-from)*(1-(1-progress)**2))));current.current=next;setDisplay(next);if(progress<1)raf=requestAnimationFrame(tick);};
+  let lastPaint=0;
+  const tick=(time:number)=>{const progress=Math.min(1,(time-start)/duration),next=progress===1?value:Math.min(Math.max(from,value),Math.max(Math.min(from,value),Math.round(from+(value-from)*(1-(1-progress)**2))));if(progress===1||time-lastPaint>=32){lastPaint=time;if(next!==current.current){current.current=next;setDisplay(next);}}if(progress<1)raf=requestAnimationFrame(tick);};
   raf=requestAnimationFrame(tick);return()=>cancelAnimationFrame(raf);
  },[value,duration,reduced]);
  return <span className={`rolling-number ${display!==value?'rolling':''} ${className}`} data-testid={testId} data-target={value}>{display}</span>;
 }
 export function useScoreProgress(reveal:ScoreReveal|null){
  const [clock,setClock]=useState({id:'',elapsed:0}),reduced=useReducedMotion();
- useEffect(()=>{if(!reveal)return;let raf=0;const tick=()=>{const next=performance.now()-reveal.started;setClock({id:reveal.id,elapsed:next});if(next<reveal.duration+SCORE_MOTION.settleMs)raf=requestAnimationFrame(tick);};raf=requestAnimationFrame(tick);return()=>cancelAnimationFrame(raf);},[reveal]);
+ useEffect(()=>{if(!reveal)return;let timer:ReturnType<typeof setTimeout>;const end=reveal.duration+SCORE_MOTION.settleMs,interval=reveal.duration/Math.max(1,reveal.steps.length);
+  const tick=()=>{clearTimeout(timer);const elapsed=Math.min(end,Math.max(0,performance.now()-reveal.started));setClock(old=>old.id===reveal.id&&Math.min(reveal.steps.length,Math.floor(old.elapsed/interval))===Math.min(reveal.steps.length,Math.floor(elapsed/interval))&&old.elapsed<end&&elapsed<end?old:{id:reveal.id,elapsed});if(elapsed>=end)return;const next=elapsed>=reveal.duration?end:Math.min(reveal.duration,(Math.floor(elapsed/interval)+1)*interval);timer=setTimeout(tick,Math.max(16,next-elapsed+2));};
+  tick();document.addEventListener('visibilitychange',tick);return()=>{clearTimeout(timer);document.removeEventListener('visibilitychange',tick);};
+ },[reveal]);
  const elapsed=clock.id===reveal?.id?clock.elapsed:0;
  const count=reveal?.steps.length??0;
  const completed=!reveal?0:reduced?count:Math.min(count,Math.floor(Math.max(0,elapsed)/reveal.duration*count));
@@ -25,5 +30,5 @@ export function useScoreProgress(reveal:ScoreReveal|null){
 export function ScoreCalculation({reveal,completed,running}:{reveal:ScoreReveal;completed:number;running:boolean}){
  const step=reveal.steps[Math.max(0,completed-1)],target=completed?step.value:0;
  const interval=reveal.duration/Math.max(1,reveal.steps.length);
- return <section className={`score-calculation score-only ${reveal.judgment.accepted?'confirmed':''}`} aria-label="문장 점수" data-phase={running?'calculating':'complete'} data-step-kind={step?.kind??'base'} data-beat={completed%2}><span key={`${completed}-${running}`} className={`score-detonation ${running?'building':'finished'}`} aria-hidden="true"><i className="score-shockwave"/>{Array.from({length:16},(_,i)=><i key={i} className="score-spark" style={{'--spark-angle':`${i*22.5}deg`,'--spark-distance':`${24+(i%4)*10}px`} as CSSProperties}/>)}</span><AnimatedNumber value={target} duration={Math.min(interval*.85,350)} testId="sentence-total"/></section>;
+ return <section className={`score-calculation score-only ${reveal.judgment.accepted?'confirmed':''}`} aria-label="문장 점수" data-phase={running?'calculating':'complete'} data-step-kind={step?.kind??'base'} data-beat={completed%2}><span key={`${completed}-${running}`} className={`score-detonation ${running?'building':'finished'}`} aria-hidden="true"><i className="score-shockwave"/>{Array.from({length:16},(_,i)=><i key={i} className="score-spark" style={{'--spark-angle':`${i*22.5}deg`,'--spark-distance':`${24+(i%4)*10}px`} as CSSProperties}/>)}</span><PixiScoreBurst beat={`${completed}-${running}`}/><AnimatedNumber value={target} duration={Math.min(interval*.85,350)} testId="sentence-total"/></section>;
 }

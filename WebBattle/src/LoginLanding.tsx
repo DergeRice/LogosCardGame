@@ -1,14 +1,13 @@
+import {useCallback,useState} from 'react';
 import {BUILD_VERSION} from './buildVersion.js';
+import {PixiLanding} from './PixiLanding.js';
 
 export function LoginLanding({onGuest}:{onGuest:()=>void}){
- return <main className="login-landing" aria-label="로고스 카드게임 로그인">
+ const [ready,setReady]=useState(false),show=useCallback(()=>setReady(true),[]);
+ return <main className={`login-landing ${ready?'landing-ready':''}`} aria-label="로고스 카드게임 로그인">
   <div className="landing-background" aria-hidden="true"/>
   <div className="landing-content">
-   <div className="landing-art" aria-hidden="true">
-    <img className="landing-cards" src="/landing/cards.png" alt="" draggable={false}/>
-    <img className="landing-title" src="/landing/title.png" alt="" draggable={false}/>
-    <img className="landing-mascots" src="/landing/mascots.png" alt="" draggable={false}/>
-   </div>
+   <PixiLanding onReady={show}/>
    <h1 className="landing-visually-hidden">로고스 카드게임</h1>
    <div className="landing-cta">
     <div className="entry-login-options" aria-label="로그인 방식">

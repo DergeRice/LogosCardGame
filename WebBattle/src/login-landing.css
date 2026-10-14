@@ -1,13 +1,15 @@
-.login-landing{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);padding:0;overflow:hidden;background:#a5d9f2;text-align:center;isolation:isolate}
-.landing-background{position:absolute;inset:0;background:#a5d9f2 url('/landing/background.jpg') center center/cover no-repeat;animation:landing-fade .8s ease-out both}
+.login-landing{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);padding:0;overflow:hidden;overscroll-behavior:none;touch-action:none;background:#a5d9f2;text-align:center;isolation:isolate}
+.landing-background{position:absolute;inset:-12%;background:#a5d9f2 url('/landing/background.jpg') center center/cover no-repeat;animation:landing-fade .8s ease-out both}
 .landing-content{position:relative;z-index:1;width:100%;height:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(10px,2.5vh,30px) 16px max(20px,env(safe-area-inset-bottom));gap:0}
 .landing-art{position:relative;flex:none;width:min(calc(100% - 16px),calc(var(--game-height,100dvh) - 190px),790px);aspect-ratio:1;pointer-events:none}
+.landing-art canvas{display:block;width:100%;height:100%;pointer-events:none}
 .landing-art img{position:absolute;display:block;height:auto;pointer-events:none;user-select:none}
 .landing-cards{inset:0;width:100%;animation:landing-fade 1.05s .45s ease-out both}
 .landing-title{width:62%;left:19%;top:18%;transform-origin:center 65%;animation:landing-title-pop .85s 1.2s cubic-bezier(.22,.9,.24,1) both}
 .landing-mascots{width:43%;left:28.5%;top:35%;transform-origin:center center;animation:landing-mascots-pop .8s 1.95s cubic-bezier(.2,.85,.25,1) both}
 .landing-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.landing-cta{position:relative;z-index:2;flex:none;display:flex;flex-direction:column;align-items:center;width:min(430px,100%);animation:landing-fade-up .7s 2.8s ease-out both}
+.landing-cta{position:relative;z-index:2;flex:none;display:flex;flex-direction:column;align-items:center;width:min(430px,100%);opacity:0}
+.landing-ready .landing-cta{animation:landing-fade-up .7s 2.8s ease-out both}
 .login-landing .entry-login-options{width:100%;display:flex;flex-direction:column;gap:10px}
 .login-landing .entry-login-options button{width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:12px;border-radius:18px;border:2px solid #173d27;box-shadow:0 5px 0 #173d27,0 12px 22px #10332335;font-size:clamp(13px,1.7vh,17px);font-weight:900;letter-spacing:-.02em}
 .login-landing .entry-login-options button:hover:not(:disabled){transform:translateY(-2px)}
@@ -32,9 +34,14 @@
  .landing-note{font-size:clamp(8px,2.4vh,11px);margin-top:8px}
 }
 @media(max-width:480px) and (orientation:portrait){
- .landing-content{padding-top:max(10px,env(safe-area-inset-top));padding-bottom:max(28px,env(safe-area-inset-bottom))}
- .landing-art{width:min(100%,calc(var(--game-height,100vh) * .65))}
+ html:has(.login-landing),body:has(.login-landing),body:has(.login-landing) #root{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+ html:has(.login-landing),body:has(.login-landing){background:#62c1f4 url('/landing/background.jpg') center top/cover no-repeat}
+ .landing-content{justify-content:center;padding:max(18px,env(safe-area-inset-top)) 10px max(28px,env(safe-area-inset-bottom))}
+ .landing-art{width:min(100%,calc(var(--game-height,100vh) * .67));max-width:430px}
+ .landing-cta{width:min(70%,301px);margin-top:calc(-1 * min(17vw,66px))}
  .login-landing .entry-login-options{gap:9px}
  .login-landing .entry-login-options button{min-height:52px}
+ .landing-note{font-size:9px;line-height:1.3;margin-top:10px}
+ .landing-mascots{width:51.6%;left:24.2%;top:40.5%}
 }
 @media(prefers-reduced-motion:reduce){.landing-background,.landing-cards,.landing-title,.landing-mascots,.landing-cta{animation:none!important;opacity:1;transform:none}}
