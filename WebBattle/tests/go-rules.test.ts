@@ -37,8 +37,8 @@ test('controlled fixtures: Go authority, pause, ties, cap and one-time settlemen
  const submit=(p:typeof a,mode:20|26|13)=>{p.hand=fixture(mode);p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
  const choice=(p:typeof a,c='go')=>game.choice(p,{matchId:r.matchId,decisionId:r.decision!.id,choice:c});
  submit(a,26);const end=r.endsAt,deal=r.nextDealAt;now+=300;choice(a);assert.equal(r.endsAt,end+300);assert.equal(r.nextDealAt,deal+300);assert.equal(r.leaderId,a.id);assert.equal(r.goCount,1);
- submit(b,13);assert.equal(b.score,26);assert.equal(r.decision,undefined);submit(b,26);assert.equal(b.score,78);assert.equal(r.leaderId,b.id);choice(b);assert.equal(r.goCount,2);
- submit(a,26);assert.equal(a.score,104);choice(a);assert.equal(r.goCount,3);assert.equal(r.phase,'result');assert.equal(r.winner,a.id);assert.equal(a.reward,416);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
+ submit(b,13);assert.equal(b.score,0);assert.equal(r.decision,undefined);submit(b,26);assert.equal(b.score,26);assert.equal(r.decision,undefined);submit(b,26);assert.equal(b.score,52);assert.equal(r.leaderId,b.id);choice(b);assert.equal(r.goCount,2);
+ submit(a,26);assert.equal(a.score,52);assert.equal(r.decision,undefined);submit(a,26);assert.equal(a.score,78);choice(a);assert.equal(r.goCount,3);assert.equal(r.phase,'result');assert.equal(r.winner,a.id);assert.equal(a.reward,156);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
 });
 test('human 20+ score opens a decision that does not auto-stop after ten seconds',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);

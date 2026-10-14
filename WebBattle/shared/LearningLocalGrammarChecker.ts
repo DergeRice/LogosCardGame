@@ -85,8 +85,11 @@ class CheckContext {
    }
   }
   if (seq[start] === P.BE && this.TryParseNP(seq, start + 1, end) === end) return T.Type2;
-  const npEnd = this.TryParseNP(seq, start, end);
+  let npEnd = this.TryParseNP(seq, start, end);
   if (npEnd === null || npEnd >= end) return null;
+  // Battle frequency modifiers belong between the subject and finite verb.
+  // Keep the original Unity Check behavior for callers outside battle rules.
+  if(this.battleAdjectiveChains)while(npEnd<end&&seq[npEnd]===P.RB_FREQ)npEnd++;
   if (seq[npEnd] === P.BE) return this.MatchAfterBe(seq, npEnd + 1, end);
   if (seq[npEnd] === P.DO || seq[npEnd] === P.MODAL) {
    const next = this.SkipAuxiliaryModifiers(seq, npEnd + 1, end);

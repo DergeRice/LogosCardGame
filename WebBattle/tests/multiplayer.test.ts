@@ -11,7 +11,7 @@ test('one to three humans are filled to four; AI consent and five-card initial d
   assert.equal(new Set(room.players.map(p=>p.name)).size,4);
   game.deal(room,RULES.handSize);game.begin(room);
   assert.ok(room.players.every(p=>p.hand.length===5));assert.equal(room.deck.length,DECK_FACES.length-20);
-  assert.equal(room.drawVote?.approved.length,4-humans);
+  assert.equal(room.drawVote?.approved.length,0);
  }
 });
 test('four and five humans wait for the window; sixth starts; seventh gets a new room',()=>{

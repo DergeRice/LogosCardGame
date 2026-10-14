@@ -68,6 +68,7 @@ export function nextDeadline(game:Game):number|null{
    if(r.finalRound&&r.endsAt>0)deadlines.push(r.endsAt);
    if(r.exchange)deadlines.push(r.exchange.expiresAt);
    if(r.nextDealAt>0&&!r.decision)deadlines.push(r.nextDealAt);
+   if(!r.decision&&r.drawVote?.aiApproveAt)for(const [id,at] of Object.entries(r.drawVote.aiApproveAt))if(!r.drawVote.approved.includes(id))deadlines.push(at);
    if(r.decision){if(r.decision.expiresAt>0)deadlines.push(r.decision.expiresAt);if(r.players.find(p=>p.id===r.decision!.playerId)?.ai)deadlines.push(r.decision.startedAt+1801);}
    else{if(r.endsAt>0)deadlines.push(r.endsAt);for(const p of r.players)if(p.ai)deadlines.push(p.nextAI);}
   }

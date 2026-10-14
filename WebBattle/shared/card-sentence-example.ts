@@ -98,7 +98,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
   const c=np(start+1,stop);if(!c||c.end!==stop)return fail('BE 시작 구간을 분석할 수 없습니다.');imperative=true;main=start;put(main,'verb','be','되어라');noun(c,'subjectComplement');
  }else{
   if(seq[start]==='do'||seq[start]==='modal'){question=true;aux=start;subject=np(start+1,stop);if(subject)main=auxSkip(subject.end,stop);}
-  else {subject=np(start,stop);if(subject){main=subject.end;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
+  else {subject=np(start,stop);if(subject){main=subject.end;while(seq[main]==='frequency')main++;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
   if(!subject||main<0||main>=stop)return fail('주어와 동사를 분석할 수 없습니다.');
   noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';
   if(seq[main]==='be'){
