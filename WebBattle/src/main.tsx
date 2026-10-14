@@ -39,6 +39,7 @@ import './multiplayer.css';
 import './player-status.css';
 import './drag-preview.css';
 import './experience.css';
+import './login-landing.css';
 import {BUILD_VERSION} from './buildVersion.js';
 import {useGameViewport} from './useGameViewport.js';
 import {useDealtHand} from './useDealtHand.js';

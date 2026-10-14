@@ -1,4 +1,23 @@
 import {BUILD_VERSION} from './buildVersion.js';
+
 export function LoginLanding({onGuest}:{onGuest:()=>void}){
- return <main className="login-landing"><div className="eyebrow">LOGOS · CARD BATTLE</div><h1>카드 배틀</h1><p>로그인하고 문장 대결을 시작하세요.</p><div className="entry-login-options" aria-label="로그인 방식"><button disabled className="google-login"><b aria-hidden="true">G</b><span>Google로 로그인<small>업데이트 예정</small></span></button><button disabled className="apple-login"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 2c0 2-1 4-3 4 0-2 1-4 3-4ZM18 7c-2-1-3 0-5 0-2 0-3-1-5 0-5 3-2 13 2 14 1 0 2-1 3-1 2 0 2 1 4 1 2-1 3-3 4-5-4-2-5-6-1-8l-2-1Z"/></svg><span>Apple ID로 로그인<small>업데이트 예정</small></span></button><button className="guest-login" onClick={onGuest}>게스트로 로그인 <span aria-hidden="true">→</span></button></div><small>게스트 계정의 포인트와 레이팅은 이 브라우저에서 이어집니다.</small><span className="build-version">{BUILD_VERSION}</span></main>;
+ return <main className="login-landing" aria-label="로고스 카드게임 로그인">
+  <div className="landing-background" aria-hidden="true"/>
+  <div className="landing-content">
+   <div className="landing-art" aria-hidden="true">
+    <img className="landing-cards" src="/landing/cards.png" alt="" draggable={false}/>
+    <img className="landing-title" src="/landing/title.png" alt="" draggable={false}/>
+    <img className="landing-mascots" src="/landing/mascots.png" alt="" draggable={false}/>
+   </div>
+   <h1 className="landing-visually-hidden">로고스 카드게임</h1>
+   <div className="landing-cta">
+    <div className="entry-login-options" aria-label="로그인 방식">
+     <button disabled className="google-login"><b className="google-mark" aria-hidden="true">G</b><span>Google로 로그인<small>업데이트 예정</small></span></button>
+     <button className="guest-login" onClick={onGuest}>게스트로 로그인 <span aria-hidden="true">→</span></button>
+    </div>
+    <small className="landing-note">게스트 포인트와 레이팅은 이 브라우저에서 이어집니다.</small>
+   </div>
+  </div>
+  <span className="build-version">{BUILD_VERSION}</span>
+ </main>;
 }
