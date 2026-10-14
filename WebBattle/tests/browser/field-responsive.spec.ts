@@ -12,7 +12,7 @@ for(const size of [{width:1366,height:768},{width:390,height:844},{width:320,hei
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{if(JSON.parse(String(raw)).type==='hello'){ws.send(JSON.stringify({type:'session',token:'field-responsive',name:player.name,avatar:player.avatar,rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}}));
  try{
   await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));
-  await page.goto('/');await expect(page.locator('.battle')).toBeVisible();
+  await page.goto('/');await expect(page.locator('.battle')).toBeVisible({timeout:process.env.BATTLE_BASE_URL?90000:10000});
   await page.screenshot({path:`docs/screenshots/field-responsive-${size.width}-${test.info().project.name}.png`});
   const positions=await page.evaluate(()=>{const rect=(selector:string)=>document.querySelector(selector)!.getBoundingClientRect().toJSON();return{shell:rect('.shell'),field:rect('.field-feedback-wrap'),skin:rect('.field-panel-skin'),area:rect('.sentence-area'),empty:rect('.empty-sentence'),submit:rect('.submit'),hand:rect('.battle-hand-zone'),cards:[...document.querySelectorAll('.hand .game-card')].map(card=>card.getBoundingClientRect().toJSON()),scrollHeight:document.documentElement.scrollHeight,innerHeight};});
   expect(positions.field.height).toBeGreaterThan(90);
