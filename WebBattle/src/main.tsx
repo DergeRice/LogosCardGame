@@ -50,7 +50,6 @@ import {MotionDiagnostics} from './MotionDiagnostics.js';
 import {RoomBrowser,RoomLobby} from './RoomPanels.js';
 import {AtlasIcon,NineSlicePanel} from './BrandSprites.js';
 import {PixiLoading} from './PixiLoading.js';
-import {prepareAppleSignIn,signInWithApple,openAppleGameSession} from './appleSignIn.js';
 import './brand-ui.css';
 
 function Illustration({ kind, card, className = '' }: { kind: Kind; card?: Card; className?: string }) {
@@ -74,12 +73,11 @@ function guestName() {
 function ViewportPage({children}:{children:React.ReactNode}){useGameViewport();return children;}
 function GameEntry({practice=false}:{practice?:boolean}){
  const [entered,setEntered]=useState(()=>!new URLSearchParams(location.search).has('intro')&&(sessionStorage.getItem('logos-entry')==='guest'||Boolean(localStorage.getItem('logos-account-token'))));
- const [departing,setDeparting]=useState(false),[appleBusy,setAppleBusy]=useState(false),[appleError,setAppleError]=useState('');
- useEffect(()=>{if(practice)return;void preloadProfiles();void preloadCardFaces(()=>{});void prepareAppleSignIn().catch(()=>{});},[practice]);
+ const [departing,setDeparting]=useState(false);
+ useEffect(()=>{if(practice)return;void preloadProfiles();void preloadCardFaces(()=>{});},[practice]);
  const finishEntry=()=>{setDeparting(true);setTimeout(()=>setEntered(true),580);};
  const onGuest=()=>{sessionStorage.setItem('logos-entry','guest');const saved=localStorage.getItem('logos-guest-name');if(saved)sessionStorage.setItem('logos-name',saved);finishEntry();};
- const onApple=async()=>{setAppleBusy(true);setAppleError('');try{const credential=await signInWithApple();await openAppleGameSession(credential);sessionStorage.setItem('logos-entry','guest');finishEntry();}catch(error){setAppleError(error instanceof Error?error.message:'Apple 로그인에 실패했어요.');}finally{setAppleBusy(false);}};
- return entered?(practice?<ViewportPage><PracticeMode/></ViewportPage>:<App/>):<ViewportPage><LoginLanding onGuest={onGuest} onApple={()=>{void onApple();}} appleBusy={appleBusy} appleError={appleError} departing={departing}/></ViewportPage>;
+ return entered?(practice?<ViewportPage><PracticeMode/></ViewportPage>:<App/>):<ViewportPage><LoginLanding onGuest={onGuest} departing={departing}/></ViewportPage>;
 }
 function App() {
  const [name, setName] = useState(guestName);

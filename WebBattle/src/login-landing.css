@@ -1,7 +1,7 @@
 .login-landing{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);padding:0;overflow:hidden;overscroll-behavior:none;touch-action:none;background:#a5d9f2;text-align:center;isolation:isolate}
 .landing-background{position:absolute;inset:-12%;background:#a5d9f2 url('/landing/background.jpg') center center/cover no-repeat;animation:landing-fade .4s ease-out both}
-.landing-content{position:relative;z-index:1;width:100%;height:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(10px,2.5vh,30px) 16px max(20px,env(safe-area-inset-bottom));gap:0}
-.landing-art{position:relative;flex:none;width:min(calc(100% - 16px),calc(var(--game-height,100dvh) - 190px),790px);aspect-ratio:1;pointer-events:none}
+.landing-content{position:relative;z-index:1;width:100%;height:100%;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(8px,2vh,20px) 16px max(47px,env(safe-area-inset-bottom));gap:clamp(3px,1vh,10px)}
+.landing-art{position:relative;flex:none;width:min(calc(100% - 16px),calc(var(--game-height,100dvh) - 285px),790px);aspect-ratio:1;pointer-events:none}
 .landing-art canvas{display:block;width:100%;height:100%;pointer-events:none}
 .landing-art-fallback canvas{display:none}
 .landing-art img{position:absolute;display:block;height:auto;pointer-events:none;user-select:none}
@@ -19,12 +19,11 @@
 .login-landing .entry-login-options .google-login{background:#fffef4;color:#153c27}
 .login-landing .entry-login-options .google-login small{font-size:10px;font-weight:600;color:#557263;margin-top:2px}
 .login-landing .entry-login-options .guest-login{background:#ffda4f;color:#163b27}
-.login-landing .entry-login-options .apple-login{background:#181c19;color:white}.login-landing .entry-login-options .apple-login b{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:27px;line-height:1}
+.login-landing .entry-login-options .apple-login{background:#181c19;color:white}.login-landing .entry-login-options .apple-login b{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:27px;line-height:1}.login-landing .entry-login-options .apple-login small{font-size:10px;color:#d3d8d0}
 .login-landing .entry-login-options .guest-login span{font-size:22px;line-height:1}
 .login-landing .google-mark{font-family:Arial,sans-serif;font-size:25px;line-height:1;font-weight:900;background:conic-gradient(#4285f4 0 28%,#34a853 28% 50%,#fbbc05 50% 72%,#ea4335 72% 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
 .landing-note{margin-top:12px;padding:4px 9px;border-radius:20px;background:#eff9d2d9;color:#21462b;font-size:11px;font-weight:700;line-height:1.4}
-.login-landing>.build-version{position:absolute;z-index:2;left:auto;top:auto;right:8px;bottom:8px;width:auto;color:#173d27;font-size:10px;font-weight:800;text-shadow:0 1px 2px #fff9}
-.landing-copyright{position:absolute;z-index:3;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:95%;font-size:10px;font-weight:800;color:#21452a;text-shadow:0 1px 3px #fffb}.landing-login-error{margin-top:8px;background:#fff4e8e8;color:#9c3c25;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:700}.landing-departing .landing-art,.landing-departing .landing-cta{animation:landing-exit .58s ease-in both}.landing-departing .landing-background{opacity:1}.landing-departing{pointer-events:none;background:transparent}@keyframes landing-exit{to{opacity:0;transform:translateY(-45px) scale(.9)}}
+.landing-footer{position:absolute;z-index:3;left:50%;bottom:max(7px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;width:max-content;max-width:96%;line-height:1.2;color:#21452a;text-shadow:0 1px 3px #fffb}.landing-footer .build-version{position:static;display:block;width:auto;font-size:10px;font-weight:800;color:inherit}.landing-copyright{display:block;font-size:10px;font-weight:800;white-space:nowrap}.landing-departing .landing-art,.landing-departing .landing-cta{animation:landing-exit .58s ease-in both}.landing-departing .landing-background{opacity:1}.landing-departing{pointer-events:none;background:transparent}@keyframes landing-exit{to{opacity:0;transform:translateY(-45px) scale(.9)}}
 @keyframes landing-fade{from{opacity:0}to{opacity:1}}
 @keyframes landing-title-pop{0%{opacity:0;transform:translateY(75%) scale(.45)}55%{opacity:1;transform:translateY(-13%) scale(1.2)}76%{transform:translateY(5%) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes landing-mascots-pop{0%{opacity:0;transform:scale(.25)}58%{opacity:1;transform:scale(1.24)}76%{transform:scale(.93)}100%{opacity:1;transform:scale(1)}}
