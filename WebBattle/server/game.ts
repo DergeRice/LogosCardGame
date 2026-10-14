@@ -1,4 +1,4 @@
-import {completionPoints,compatibleRatings,roomRating,aiDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
+import {victoryPoints,compatibleRatings,roomRating,aiDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {BUILD_VERSION} from '../src/buildVersion.js';
 import {makeAudit,safeDetails,type AuditEvent} from './audit.js';
 import {fieldCards,canTransferCard} from '../shared/cardViews.js';
@@ -136,7 +136,7 @@ export class Game {
    for (const p of r.players) {
     if(r.testMode){p.ratingDelta=0;p.reward=0;p.baseReward=0;continue;}
    let delta = 0; for (const other of r.players) if (other !== p) { const actual = p.id === forfeiter ? 0 : other.id === forfeiter ? 1 : p.score === other.score ? .5 : p.score > other.score ? 1 : 0; const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected; }
-   p.ratingDelta = Math.round(24 * delta / Math.max(1, r.players.length - 1)); p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating); const reward=completionPoints(ratings.get(p.id)!,r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!),Boolean(p.calledGo));p.baseReward=p.id===forfeiter?0:reward.base;p.opponentRating=reward.average;p.rewardRatio=reward.ratio;p.reward=p.id===forfeiter?0:reward.total;p.points+=p.reward;
+   p.ratingDelta = Math.round(24 * delta / Math.max(1, r.players.length - 1)); p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating); const reward=victoryPoints(ratings.get(p.id)!,r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!),Boolean(p.calledGo));p.baseReward=r.winner===p.id&&p.id!==forfeiter?reward.base:0;p.opponentRating=reward.average;p.rewardRatio=reward.ratio;p.reward=r.winner===p.id&&p.id!==forfeiter?reward.total:0;p.points+=p.reward;
    if(p.accountId){const account=[...this.accounts.values()].find(a=>a.id===p.accountId);if(account){account.rating=p.rating;account.points=p.points;}}
   }
   this.log(r, reason); this.broadcast(r);
