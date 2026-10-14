@@ -105,3 +105,31 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
 /* Cards transferred by GET, ROB and EXCHANGE travel between the real profile blocks. */
 .card-transfer-flights{position:fixed;inset:0;z-index:140;pointer-events:none;overflow:hidden}.card-transfer-flight{position:absolute;width:clamp(28px,5vw,56px);height:auto;aspect-ratio:488/693;object-fit:cover;border:2px solid #fff;border-radius:4px;box-shadow:0 6px 12px #18251777;transform:translate(-50%,-50%);animation:card-transfer-flight .78s cubic-bezier(.2,.78,.25,1) both}@keyframes card-transfer-flight{0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-12deg)}12%{opacity:1}72%{opacity:1;transform:translate(-50%,-50%) translate(var(--flight-x),var(--flight-y)) scale(1.05) rotate(10deg)}100%{opacity:0;transform:translate(-50%,-50%) translate(var(--flight-x),var(--flight-y)) scale(.72) rotate(0)}}
 @media(prefers-reduced-motion:reduce){.card-transfer-flight{animation:none;opacity:0}}
+
+/* Home quick entry: supplied illustrated button with the login mascots immediately above it. */
+.dashboard-quick-stack{display:grid;justify-items:center;gap:2px;width:100%}
+.dashboard-quick-stack picture{display:block;line-height:0}
+.dashboard-quick-mascots{display:block;width:clamp(116px,14vw,175px);height:auto;filter:drop-shadow(0 5px 4px #123c2b35)}
+.dashboard-home .dashboard-actions .quick-start.quick-start-art{display:block;min-height:0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;line-height:0;overflow:visible}
+.dashboard-home .quick-start.quick-start-art>img{display:block;width:100%;height:auto;filter:drop-shadow(0 5px 3px #173d2755)}
+.dashboard-home .quick-start.quick-start-art:active:not(:disabled){transform:translateY(2px) scale(.985)}
+.dashboard-home .quick-start.quick-start-art:hover:not(:disabled){transform:translateY(-2px) scale(1.015)}
+.dashboard-actions{transform:translateY(-7vh)}
+@media(max-width:600px){.dashboard-actions{transform:translateY(-5vh)}.dashboard-quick-mascots{width:clamp(122px,39vw,164px)}.dashboard-home .dashboard-actions .quick-start.quick-start-art{width:min(330px,90vw)}}
+@media(orientation:landscape) and (max-height:500px){.dashboard-actions{transform:translateY(-2vh)}.dashboard-quick-mascots{width:clamp(80px,16vh,112px)}.dashboard-home .dashboard-actions .quick-start.quick-start-art{width:min(285px,44vw)}}
+
+/* A touch drag begins only after a hold; before then, the sentence row remains a native horizontal swipe. */
+.pointer-field .sentence-card{transition:transform .14s cubic-bezier(.2,.8,.25,1),box-shadow .14s ease}
+.pointer-field .sentence-card.drag-holding{transform:translateY(-11px) scale(1.055);box-shadow:0 13px 22px #193b2b55;z-index:20}
+@media(orientation:portrait) and (max-width:700px){.battle .field-feedback-wrap .sentence-card.drag-holding{transform:translateY(-9px) scale(1.05)}}
+
+/* Action notices pop in, remain readable, then shrink out after two seconds. */
+.battle .table-player .player-last-action{animation:player-action-bubble 2s cubic-bezier(.18,.82,.25,1) both;transform-origin:18px 100%}
+@keyframes player-action-bubble{0%{opacity:0;transform:translateY(10px) scale(.5)}15%{opacity:1;transform:translateY(-3px) scale(1.13)}29%,77%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(5px) scale(.5)}}
+@media(prefers-reduced-motion:reduce){.battle .table-player .player-last-action{animation:none}}
+
+/* Reactions are deliberately oversized on phones so they remain visible over profile blocks. */
+@media(orientation:portrait) and (max-width:700px){.battle .table-player .reaction-bubble{width:72px!important;height:72px!important;left:calc(50% - 36px)!important;top:calc(50% - 36px)!important;font-size:54px!important}.battle .table-player .reaction-bubble .reaction-image{width:60px!important;height:60px!important}.battle .table-player .reaction-bubble .brand-atlas-icon{font-size:60px!important}}
+@media(orientation:landscape) and (max-height:900px) and (pointer:coarse){.battle .table-player .reaction-bubble{width:58px!important;height:58px!important;left:calc(50% - 29px)!important;top:calc(50% - 29px)!important;font-size:44px!important}.battle .table-player .reaction-bubble .reaction-image{width:48px!important;height:48px!important}.battle .table-player .reaction-bubble .brand-atlas-icon{font-size:48px!important}}
+/* Legacy landscape menu grid rules target generic descendants; reset them inside the dashboard groups. */
+@media(orientation:landscape) and (pointer:coarse){.dashboard-home .dashboard-quick-stack .quick-start,.dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{grid-column:auto;grid-row:auto;margin:0}.dashboard-home .dashboard-actions{grid-column:1 / -1;grid-row:auto}}
