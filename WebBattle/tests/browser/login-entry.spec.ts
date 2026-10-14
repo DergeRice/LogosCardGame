@@ -1,4 +1,5 @@
 import {test,expect} from './fixtures.js';
+import sharp from 'sharp';
 test.use({autoGuest:false});
 test('illustrated entry reveals two login choices and retains guest credentials for return',async({page})=>{
  const hello:any[]=[];await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{const msg=JSON.parse(String(raw));if(msg.type==='hello'){hello.push(msg);ws.send(JSON.stringify({type:'session',token:'guest-account-token',name:'게스트 1234',avatar:'pronoun',rating:1000,points:0,account:null}));ws.send(JSON.stringify({type:'home',rating:1000,points:0}))}}));
@@ -38,4 +39,42 @@ test('portrait entry follows a shortened iOS visual viewport without page scroll
  const bounds=await page.locator('.login-landing,.landing-cta').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom}}));
  expect(bounds[0].top).toBe(42);expect(bounds[0].bottom).toBe(802);expect(bounds[1].top).toBeGreaterThan(42);expect(bounds[1].bottom).toBeLessThan(802);
  await page.evaluate(()=>window.scrollTo(0,300));expect(await page.evaluate(()=>window.scrollY)).toBe(0);
+});
+
+test('touch device uses small textures and shows art if WebGL context is lost',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ const page=await context.newPage(),textures:string[]=[];
+ page.on('request',request=>{if(request.url().includes('/landing/'))textures.push(request.url());});
+ try{
+  await page.goto('/');
+  const canvas=page.locator('.landing-art[data-pixi="ready"] canvas');await expect(canvas).toBeVisible();
+  expect(textures.some(url=>url.endsWith('/landing/cards-mobile.webp'))).toBe(true);
+  expect(textures.some(url=>url.endsWith('/landing/cards.png'))).toBe(false);
+  await canvas.evaluate(element=>element.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
+  await expect(page.locator('.landing-art-fallback .landing-cards')).toBeVisible();
+  await expect(page.locator('.landing-art canvas')).toBeHidden();
+ }finally{await context.close();}
+});
+
+test('reduced motion shows finished artwork without allocating WebGL',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'});
+ try{
+  const page=await context.newPage();await page.goto('/');
+  await expect(page.locator('.landing-art-fallback .landing-title')).toBeVisible();
+  await expect(page.locator('.landing-art canvas')).toHaveCount(0);
+  await expect(page.getByRole('button',{name:/게스트로 로그인/})).toBeVisible();
+ }finally{await context.close();}
+});
+
+test('mobile canvas visibly changes during the Pixi intro',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ try{
+  const page=await context.newPage();await page.goto('/');
+  const canvas=page.locator('.landing-art[data-pixi="ready"] canvas');await expect(canvas).toBeVisible();
+  const first=await canvas.screenshot();await page.waitForTimeout(2500);const last=await canvas.screenshot();
+  const a=await sharp(first).ensureAlpha().raw().toBuffer(),b=await sharp(last).ensureAlpha().raw().toBuffer();
+  expect(a.length).toBe(b.length);
+  let changed=0;for(let i=0;i<a.length;i+=4)if(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2])+Math.abs(a[i+3]-b[i+3])>80)changed++;
+  expect(changed).toBeGreaterThan(500);
+ }finally{await context.close();}
 });

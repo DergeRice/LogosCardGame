@@ -13,11 +13,12 @@ export function preloadCardFaces(onProgress:(done:number,total:number)=>void):Pr
  if(!load){let next=0;
   const worker=async()=>{while(next<CARD_FACE_URLS.length){const url=CARD_FACE_URLS[next++];await new Promise<void>(resolve=>{
    const img=new Image();images.push(img);
-   const finish=(ok:boolean)=>{if(!ok)failed++;completed++;for(const listener of listeners)listener(completed,CARD_FACE_URLS.length);resolve();};
+   const finish=(ok:boolean)=>{if(!ok)failed++;completed++;if(completed%4===0||completed===CARD_FACE_URLS.length)for(const listener of listeners)listener(completed,CARD_FACE_URLS.length);resolve();};
    img.onload=()=>{void img.decode().catch(()=>{}).then(()=>finish(true));};
    img.onerror=()=>finish(false);img.src=url;
   });}};
-  load=Promise.all(Array.from({length:Math.min(4,CARD_FACE_URLS.length)},worker)).then(()=>({failed}));
+  const workers=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches?2:4;
+  load=Promise.all(Array.from({length:Math.min(workers,CARD_FACE_URLS.length)},worker)).then(()=>({failed}));
  }
  return load.finally(()=>listeners.delete(onProgress));
 }
