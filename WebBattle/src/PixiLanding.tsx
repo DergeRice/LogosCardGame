@@ -34,13 +34,13 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
      particles.push(particle);sparks.addParticle(particle);
     }
     instance.stage.addChild(sparks);
-    let lastSize=0,portrait=matchMedia('(max-width:480px) and (orientation:portrait)').matches;
+    let lastSize=0,portrait=matchMedia('(max-width:480px) and (orientation:portrait)').matches,titleWidth=0,titleY=0,mascotWidth=0;
     const layout=()=>{
      const size=Math.max(1,Math.round(node.clientWidth));if(Math.abs(size-lastSize)<2)return;lastSize=size;instance.renderer.resize(size,size);
-     cards.width=size;cards.height=size;cards.position.set(0,0);
-     title.width=size*.62;title.height=title.width*textures[1].height/textures[1].width;title.position.set(size*.5,size*(.18+.31*textures[1].height/textures[1].width));
      portrait=matchMedia('(max-width:480px) and (orientation:portrait)').matches;
-     mascots.width=size*(portrait ? .516 : .43);mascots.height=mascots.width;mascots.position.set(size*.5,size*(portrait ? .663 : .565));
+     const cardSize=size*(portrait?1.1:1);cards.width=cardSize;cards.height=cardSize;cards.position.set((size-cardSize)/2,(size-cardSize)/2);
+     titleWidth=size*.62*(portrait?1.2:1);titleY=size*(portrait?.16:.18)+titleWidth*.5*textures[1].height/textures[1].width;title.width=titleWidth;title.height=titleWidth*textures[1].height/textures[1].width;title.position.set(size*.5,titleY);
+     mascotWidth=size*(portrait?.516*1.1:.43);mascots.width=mascotWidth;mascots.height=mascotWidth;mascots.position.set(size*.5,size*(portrait?.64:.565));
     };
     layout();observer=new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(!cancelled)layout();});});observer.observe(node);
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.pixi='lost';setFallback(true);});
@@ -52,9 +52,9 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
      const time=elapsed,size=instance.screen.width;
      cards.alpha=clamp((time-150)/425);
      const titleT=clamp((time-560)/425),titlePop=spring(titleT);
-     title.alpha=clamp(titleT*2);title.y=size*(.18+.31*textures[1].height/textures[1].width)+size*.22*(1-titlePop);title.scale.set((size*.62/textures[1].width)*(.45+.55*titlePop));
+     title.alpha=clamp(titleT*2);title.y=titleY+size*.22*(1-titlePop);title.scale.set((titleWidth/textures[1].width)*(.45+.55*titlePop));
      const mascotT=clamp((time-925)/400),mascotPop=spring(mascotT);
-     mascots.alpha=clamp(mascotT*2);mascots.scale.set((size*(portrait ? .516 : .43)/textures[2].width)*(.25+.75*mascotPop));
+     mascots.alpha=clamp(mascotT*2);mascots.scale.set((mascotWidth/textures[2].width)*(.25+.75*mascotPop));
      for(let i=0;i<particles.length;i++){
       const p=particles[i],age=clamp((time-275-i*34)/450),angle=i*2.39996;
       p.x=size*(.5+Math.cos(angle)*(.16+.24*age));p.y=size*(.48+Math.sin(angle)*(.12+.23*age));

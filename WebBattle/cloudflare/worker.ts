@@ -3,7 +3,8 @@ import { Game,type GameSocket } from '../server/game.js';
 import { snapshot,restore,nextDeadline } from '../server/persistence.js';
 import {AuditStore} from './audit-store.js';
 import {adminAuthorized} from '../server/audit.js';
-interface Env { BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;ADMIN_LOG_TOKEN?:string }
+import {verifyAppleCode} from '../server/appleAuth.js';
+interface Env { BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
 type Attachment={id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
@@ -60,11 +61,11 @@ export class BattleArena extends DurableObject<Env>{
   a={get readyState(){return ws.readyState;},bufferedAmount:0,send(data){schedule(()=>ws.send(data));},close(code,reason){schedule(()=>ws.close(code,reason));},terminate(){schedule(()=>ws.close(1013,'Slow connection'));}};
   this.adapters.set(ws,a);return a;
  }
- async serial<T>(fn:()=>T):Promise<T>{
+ async serial<T>(fn:()=>T|Promise<T>):Promise<T>{
   const work=this.queue.then(async()=>{
    this.outbox=[];
    try{
-    const result=fn();await this.persist();const pending=this.outbox;this.outbox=null;
+    const result=await fn();await this.persist();const pending=this.outbox;this.outbox=null;
     for(const send of pending)try{send();}catch{/* remote close races are handled by close events */}
     return result;
    }catch(e){this.outbox=null;this.ctx.abort('Game storage commit failed; reconnect to restore committed state.');throw e;}
@@ -106,7 +107,7 @@ export class BattleArena extends DurableObject<Env>{
   });
  }
  async webSocketMessage(ws:WebSocket,raw:string|ArrayBuffer){
-  await this.serial(()=>{
+  await this.serial(async()=>{
    const adapter=this.adapter(ws),a=ws.deserializeAttachment() as Attachment;
    let p:Player|undefined=a.id?[...this.game.sessions.values()].find(p=>p.id===a.id):undefined;
    try{
@@ -115,7 +116,12 @@ export class BattleArena extends DurableObject<Env>{
     if(a.tokens<0){this.game.audit(p,'rate_limit','warn',{code:'RATE_LIMIT'});this.game.send(adapter,{type:'error',message:'요청이 너무 빨라요. 잠시 기다려 주세요.'});if(a.tokens< -20)ws.close(4008,'rate limit');return;}
     const msg=JSON.parse(raw);if(!msg||typeof msg!=='object'||Array.isArray(msg))throw Error('잘못된 메시지예요.');
     if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken);this.game.audit(p,'connected');a.id=p.id;ws.serializeAttachment(a);}
-    else if(p.socket===adapter)this.game.handle(p,msg);
+    else if(p.socket===adapter){
+     if(msg.type==='appleLogin'){
+      const identity=await verifyAppleCode({clientId:this.env.APPLE_CLIENT_ID??'',teamId:this.env.APPLE_TEAM_ID??'',keyId:this.env.APPLE_KEY_ID??'',privateKey:this.env.APPLE_PRIVATE_KEY??'',redirectUri:this.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);
+      if(p.socket===adapter)this.game.loginApple(p,identity,msg.name);
+     }else this.game.handle(p,msg);
+    }
    }catch(e){const message=e instanceof SyntaxError?'읽을 수 없는 요청이에요.':e instanceof Error?e.message:'요청 오류';this.game.audit(p,'server_error','error',{code:'SERVER_ERROR',reason:message});this.game.send(adapter,{type:'error',message});}
   });
  }

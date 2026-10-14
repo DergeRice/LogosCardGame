@@ -33,11 +33,12 @@ test('desktop host and mobile guest share a named room, transfer host and start 
  }finally{await hostContext.close();await guestContextMobile.close();}
 });
 
-test('login page begins loading card images before guest entry and reports a percentage',async({page})=>{
+test('login page begins loading card images before guest entry without showing a percentage',async({page})=>{
+ const cards:string[]=[];page.on('request',request=>{if(request.url().includes('/cards/'))cards.push(request.url());});
  await page.addInitScript(()=>{sessionStorage.removeItem('logos-entry');localStorage.removeItem('logos-account-token');});
  await page.goto('/?intro');
- await expect(page.locator('.landing-preload')).toContainText(/이미지 준비 \d+%/);
- await expect(page.locator('.landing-preload')).toContainText('100%',{timeout:45000});
+ await expect.poll(()=>cards.length).toBeGreaterThan(0);
+ await expect(page.locator('.login-landing')).not.toContainText(/\d+%/);
 });
 
 test('room browser stays inside a short mobile visual viewport',async({browser})=>{

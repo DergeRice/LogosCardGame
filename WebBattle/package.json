@@ -23,6 +23,7 @@
     "version:next": "node scripts/bump-version.mjs"
   },
   "dependencies": {
+    "jose": "^6.2.12",
     "pixi.js": "^8.22.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

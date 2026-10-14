@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import { pathToFileURL } from 'node:url';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { Game } from './game.js';
+import {verifyAppleCode} from './appleAuth.js';
 export function createBattleServer(options: ConstructorParameters<typeof Game>[0] = {}) {
  const game = new Game(options);
  const server = createServer((req, res) => { res.setHeader('Content-Type', 'application/json'); if (req.url === '/health') { res.end(JSON.stringify({ status: 'ok', rooms: game.rooms.size })); } else { res.writeHead(404); res.end('{"error":"not_found"}'); } });
@@ -20,13 +21,18 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
   const helloTimeout = setTimeout(() => { if (!player) ws.close(4000, '세션 인증 시간이 지났어요.'); }, 10_000);
   const heartbeat = setInterval(() => { if (!alive) { ws.terminate(); return; } alive = false; ws.ping(); }, 10_000);
   ws.on('pong', () => { alive = true; });
-  ws.on('message', raw => {
+  ws.on('message', async raw => {
    try {
     const now = Date.now(); tokens = Math.min(20, tokens + (now - at) / 250); at = now;
     if (--tokens < 0) { game.audit(player,'rate_limit','warn',{code:'RATE_LIMIT'});game.send(ws, { type: 'error', message: '요청이 너무 빨라요. 잠시 기다려 주세요.' }); if (tokens < -20) ws.close(4008, 'rate limit'); return; }
     const msg = JSON.parse(raw.toString()); if (!msg || typeof msg !== 'object' || Array.isArray(msg)) throw Error('잘못된 메시지예요.');
     if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken); clearTimeout(helloTimeout);game.audit(player,'connected'); }
-    else if (player.socket === ws) game.handle(player, msg);
+    else if (player.socket === ws){
+     if(msg.type==='appleLogin'){
+      const identity=await verifyAppleCode({clientId:process.env.APPLE_CLIENT_ID??'',teamId:process.env.APPLE_TEAM_ID??'',keyId:process.env.APPLE_KEY_ID??'',privateKey:process.env.APPLE_PRIVATE_KEY??'',redirectUri:process.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);
+      if(player.socket===ws)game.loginApple(player,identity,msg.name);
+     }else game.handle(player,msg);
+    }
    } catch (e) { game.audit(player,'server_error','error',{code:'SERVER_ERROR',reason:e instanceof Error?e.message:'요청 오류'});game.send(ws, { type: 'error', message: e instanceof SyntaxError ? '읽을 수 없는 요청이에요.' : e instanceof Error ? e.message : '요청 오류' }); }
   });
   ws.on('error', () => {});

@@ -8,8 +8,8 @@ type WebSocket = GameSocket;
 import { judgeCards, DECK_FACES, RULES, REACTIONS, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 
-type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; calledGo?:boolean; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
-export type Account = {id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;failedLogins:number;lockedUntil:number};
+type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; calledGo?:boolean; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
+export type Account = {id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple';appleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = { code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
 type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
@@ -30,7 +30,7 @@ export class Game {
   if(this.auditSink)this.auditSink(record);else{this.audits.push(record);if(this.audits.length>5000)this.audits.shift();}
  }
  fail(p: Player, message: string, requestId?: string) { this.audit(p,'rejected','warn',{reason:message,requestId});this.send(p.socket, { type: 'error', message, requestId });const r=p.room&&this.rooms.get(p.room);if(requestId&&r)this.send(p.socket,{type:'state',room:this.view(r,p)}); }
- newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
+ newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, coins:0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
  hello(socket: WebSocket, token: unknown, name: unknown, authToken?:unknown): Player {
   this.tick();
   const auth=typeof authToken==='string'?this.accountSessions.get(createHash('sha256').update(authToken).digest('hex')):undefined;
@@ -38,11 +38,11 @@ export class Game {
   let p=account?[...this.sessions.values()].find(session=>session.accountId===account.id):typeof token === 'string' ? this.sessions.get(token) : undefined;
   if(p?.accountId&&!account)p=undefined;
   const expired = Boolean(token && !p);
-  if(account&&!p){p=this.newPlayer(account.username);p.accountId=account.id;p.rating=account.rating;p.points=account.points;this.sessions.set(p.token,p);}
+  if(account&&!p){p=this.newPlayer(account.username);p.accountId=account.id;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;this.sessions.set(p.token,p);}
   if (!p) { if (this.sessions.size >= 2000) throw Error('서버가 붐빕니다. 잠시 후 다시 시도하세요.'); const cleaned = typeof name === 'string' ? name.trim().replace(/[\u0000-\u001f\u007f]/g, '') : ''; if (!cleaned || cleaned.length > 16) throw Error('닉네임은 1~16자로 입력해 주세요.'); p = this.newPlayer(cleaned); this.sessions.set(p.token, p); }
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
-  this.send(socket, { type: 'session', token: p.token, id: p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, account:p.accountId?{username:p.name}:null });
+  this.send(socket, { type: 'session', token: p.token, id: p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{username:p.name}:null });
   this.sendRoomList(socket);
   const room = p.room && this.rooms.get(p.room);
   if (room) { if (room.phase === 'result' && !room.finalRound && this.allRematch(room)) this.reveal(room); else this.broadcast(room); }
@@ -58,9 +58,9 @@ export class Game {
   if(msg.type==='register'){
    if(p.accountId)return this.fail(p,'이미 계정에 로그인했어요.');
    if(account)return this.fail(p,'이미 사용 중인 아이디예요.');
-   const salt=Buffer.from(randomBytes(16)).toString('hex');account={id:randomUUID(),username,salt,passwordHash:Buffer.from(scryptSync(password,salt,32)).toString('hex'),rating:p.rating,points:p.points,failedLogins:0,lockedUntil:0};this.accounts.set(key,account);
+   const salt=Buffer.from(randomBytes(16)).toString('hex');account={id:randomUUID(),username,salt,passwordHash:Buffer.from(scryptSync(password,salt,32)).toString('hex'),rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};this.accounts.set(key,account);
   }else{
-   if(!account)return this.fail(p,'아이디 또는 비밀번호가 맞지 않아요.');
+   if(!account||account.provider==='apple')return this.fail(p,'아이디 또는 비밀번호가 맞지 않아요.');
    if(account.lockedUntil>Date.now())return this.fail(p,'로그인 시도가 많아요. 잠시 후 다시 시도해 주세요.');
    const actual=scryptSync(password,account.salt,32),expected=Buffer.from(account.passwordHash,'hex');
    if(expected.length!==actual.length||!timingSafeEqual(actual,expected)){
@@ -73,12 +73,33 @@ export class Game {
    if(previous?.room)return this.fail(p,'이 계정은 다른 대전에서 사용 중이에요.');
    if(previous){previous.socket?.close(4001,'다른 창에서 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
    if(p.accountId&&p.accountId!==account.id)return this.fail(p,'현재 계정에서 로그아웃한 뒤 다시 로그인해 주세요.');
-   p.rating=account.rating;p.points=account.points;
+   p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
   p.accountId=account.id;p.name=account.username;
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
-  this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,account:{username:p.name}});
+  this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name}});
+ }
+ loginApple(p:Player,identity:{sub:string;email?:string},suggestedName:unknown){
+  if(p.room)return this.fail(p,'Apple 로그인은 대전이 끝난 뒤 해주세요.');
+  const subHash=createHash('sha256').update(identity.sub).digest('hex'),key=`apple:${subHash}`;
+  let account=this.accounts.get(key);
+  if(p.accountId&&p.accountId!==account?.id)return this.fail(p,'현재 계정에서 로그아웃한 뒤 다시 로그인해 주세요.');
+  if(!account){
+   const clean=typeof suggestedName==='string'?suggestedName.trim().normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,'').slice(0,16):'';
+   account={id:randomUUID(),username:clean||`Apple 사용자 ${subHash.slice(0,4)}`,salt:'',passwordHash:'',provider:'apple',appleSubHash:subHash,rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};
+   this.accounts.set(key,account);
+  }else{
+   const accountId=account.id;
+   const previous=[...this.sessions.values()].find(other=>other!==p&&other.accountId===accountId);
+   if(previous?.room)return this.fail(p,'이 Apple 계정은 다른 대전에서 사용 중이에요.');
+   if(previous){previous.socket?.close(4001,'다른 창에서 Apple 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
+   p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
+  }
+  p.accountId=account.id;p.name=account.username;
+  const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
+  this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name}});
  }
  logout(p:Player){
   if(!p.accountId)return;
@@ -178,7 +199,7 @@ export class Game {
     if(r.testMode){p.ratingDelta=0;p.reward=0;p.baseReward=0;continue;}
    let delta = 0; for (const other of r.players) if (other !== p) { const actual = p.id === forfeiter ? 0 : other.id === forfeiter ? 1 : p.score === other.score ? .5 : p.score > other.score ? 1 : 0; const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected; }
    p.ratingDelta = Math.round(24 * delta / Math.max(1, r.players.length - 1)); p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating); const reward=victoryPoints(ratings.get(p.id)!,r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!),Boolean(p.calledGo));p.baseReward=r.winner===p.id&&p.id!==forfeiter?reward.base:0;p.opponentRating=reward.average;p.rewardRatio=reward.ratio;p.reward=r.winner===p.id&&p.id!==forfeiter?reward.total:0;p.points+=p.reward;
-   if(p.accountId){const account=[...this.accounts.values()].find(a=>a.id===p.accountId);if(account){account.rating=p.rating;account.points=p.points;}}
+   if(p.accountId){const account=[...this.accounts.values()].find(a=>a.id===p.accountId);if(account){account.rating=p.rating;account.points=p.points;account.coins=p.coins??0;}}
   }
   this.log(r, reason); this.broadcast(r);
  }

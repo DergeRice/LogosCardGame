@@ -19,10 +19,12 @@
 .login-landing .entry-login-options .google-login{background:#fffef4;color:#153c27}
 .login-landing .entry-login-options .google-login small{font-size:10px;font-weight:600;color:#557263;margin-top:2px}
 .login-landing .entry-login-options .guest-login{background:#ffda4f;color:#163b27}
+.login-landing .entry-login-options .apple-login{background:#181c19;color:white}.login-landing .entry-login-options .apple-login b{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:27px;line-height:1}
 .login-landing .entry-login-options .guest-login span{font-size:22px;line-height:1}
 .login-landing .google-mark{font-family:Arial,sans-serif;font-size:25px;line-height:1;font-weight:900;background:conic-gradient(#4285f4 0 28%,#34a853 28% 50%,#fbbc05 50% 72%,#ea4335 72% 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
 .landing-note{margin-top:12px;padding:4px 9px;border-radius:20px;background:#eff9d2d9;color:#21462b;font-size:11px;font-weight:700;line-height:1.4}
-.login-landing>.build-version{position:absolute;z-index:2;right:10px;bottom:4px;color:#173d27;font-size:10px;font-weight:800;text-shadow:0 1px 2px #fff9}
+.login-landing>.build-version{position:absolute;z-index:2;left:auto;top:auto;right:8px;bottom:8px;width:auto;color:#173d27;font-size:10px;font-weight:800;text-shadow:0 1px 2px #fff9}
+.landing-copyright{position:absolute;z-index:3;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:95%;font-size:10px;font-weight:800;color:#21452a;text-shadow:0 1px 3px #fffb}.landing-login-error{margin-top:8px;background:#fff4e8e8;color:#9c3c25;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:700}.landing-departing .landing-art,.landing-departing .landing-cta{animation:landing-exit .58s ease-in both}.landing-departing .landing-background{opacity:1}.landing-departing{pointer-events:none;background:transparent}@keyframes landing-exit{to{opacity:0;transform:translateY(-45px) scale(.9)}}
 @keyframes landing-fade{from{opacity:0}to{opacity:1}}
 @keyframes landing-title-pop{0%{opacity:0;transform:translateY(75%) scale(.45)}55%{opacity:1;transform:translateY(-13%) scale(1.2)}76%{transform:translateY(5%) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes landing-mascots-pop{0%{opacity:0;transform:scale(.25)}58%{opacity:1;transform:scale(1.24)}76%{transform:scale(.93)}100%{opacity:1;transform:scale(1)}}
@@ -37,12 +39,13 @@
 @media(max-width:480px) and (orientation:portrait){
  html:has(.login-landing),body:has(.login-landing),body:has(.login-landing) #root{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
  html:has(.login-landing),body:has(.login-landing){background:#62c1f4 url('/landing/background.jpg') center top/cover no-repeat}
- .landing-content{justify-content:center;padding:max(18px,env(safe-area-inset-top)) 10px max(28px,env(safe-area-inset-bottom))}
+ .landing-content{justify-content:center;padding:max(12px,env(safe-area-inset-top)) 10px max(38px,env(safe-area-inset-bottom));transform:translateY(-4vh)}
  .landing-art{width:min(100%,calc(var(--game-height,100vh) * .67));max-width:430px}
- .landing-cta{width:min(70%,301px);margin-top:calc(-1 * min(17vw,66px))}
+ .landing-cta{width:min(70%,301px);margin-top:calc(-1 * min(22vw,86px))}
  .login-landing .entry-login-options{gap:9px}
- .login-landing .entry-login-options button{min-height:52px}
+ .login-landing .entry-login-options button{min-height:clamp(42px,6.3vh,52px)}
  .landing-note{font-size:9px;line-height:1.3;margin-top:10px}
  .landing-mascots{width:51.6%;left:24.2%;top:40.5%}
+ .landing-title{width:74.4%;left:12.8%;top:16%}.landing-mascots{width:56.76%;left:21.62%;top:38%}.landing-cards{width:110%;left:-5%;top:-5%}
 }
 @media(prefers-reduced-motion:reduce){.landing-background,.landing-cards,.landing-title,.landing-mascots,.landing-cta{animation:none!important;opacity:1;transform:none}}

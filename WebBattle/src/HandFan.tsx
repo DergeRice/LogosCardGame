@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import type { Card } from '../shared/rules.js';
+import {AtlasIcon} from './BrandSprites.js';
 
 type Props = { cards: Card[]; renderCard: (card: Card, style?: CSSProperties) => ReactNode; forceExpanded?: boolean; label?:string };
 export function HandFan({ cards, renderCard, forceExpanded=false, label='내 손패' }: Props) {
@@ -24,7 +25,7 @@ export function HandFan({ cards, renderCard, forceExpanded=false, label='내 손
  const radius = edge ? chord / (2 * Math.sin(edge)) : 0;
  const sag = radius * (1 - Math.cos(edge));
  return <div className="hand-container" ref={container} style={{'--mobile-hand-width':`${cardWidth}px`,'--fan-height':`${cardHeight+sag+cardWidth*Math.sin(edge)/2+5}px`} as CSSProperties}>
-  {cards.length > 1 && !forceExpanded && <button className="hand-layout-toggle" aria-label={expanded ? '손패 모아 보기' : '손패 펼쳐 보기'} onClick={() => setExpanded(!expanded)}><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="9" y="5" width="9" height="14" rx="2"/><path d="M7 6 3 8l4 13 4-1M19 7l3 2-3 11"/></svg></button>}
+  {cards.length > 1 && !forceExpanded && <button className="hand-layout-toggle" aria-label={expanded ? '손패 모아 보기' : '손패 펼쳐 보기'} onClick={() => setExpanded(!expanded)}><AtlasIcon icon="cards"/></button>}
   <div className={spread ? 'hand hand-spread' : 'hand hand-fan'} aria-label={label} style={spread ? undefined : { height: cardHeight + sag + 95 }}>
    {cards.map((card, i) => {
     const angle = cards.length > 1 ? -maxAngle + 2 * maxAngle * i / (cards.length - 1) : 0;
