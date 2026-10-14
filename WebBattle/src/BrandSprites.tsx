@@ -17,5 +17,5 @@ const button={x:73,y:198,w:654,h:207,edge:75};
 type PanelKind='field'|'button';
 export function NineSlicePanel({kind='field',className='',children}:{kind?:PanelKind;className?:string;children?:ReactNode}){
  const r=kind==='field'?field:button, xs=[r.x,r.x+r.edge,r.x+r.w-r.edge],ys=[r.y,r.y+r.edge,r.y+r.h-r.edge],ws=[r.edge,r.w-r.edge*2,r.edge],hs=[r.edge,r.h-r.edge*2,r.edge];
- return <span className={`nine-slice nine-slice-${kind} ${className}`} aria-hidden="true">{ys.flatMap((y,row)=>xs.map((x,col)=><svg key={`${row}-${col}`} viewBox={`${x} ${y} ${ws[col]} ${hs[row]}`} preserveAspectRatio="none"><image href="/brand-ui/panels.png" width="1448" height="1086"/></svg>))}{children}</span>;
+ return <span className={`nine-slice nine-slice-${kind} ${className}`} aria-hidden="true">{ys.flatMap((y,row)=>xs.map((x,col)=><span key={`${row}-${col}`} className="nine-slice-piece" style={{backgroundImage:"url('/brand-ui/panels.png')",backgroundSize:`${1448/ws[col]*100}% ${1086/hs[row]*100}%`,backgroundPosition:`${x/(1448-ws[col])*100}% ${y/(1086-hs[row])*100}%`}}/>))}{children}</span>;
 }

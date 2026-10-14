@@ -16,7 +16,7 @@ export function HandFan({ cards, renderCard, forceExpanded=false, label='내 손
  const compactLandscape=typeof window!=='undefined'&&window.matchMedia('(orientation: landscape) and (max-height: 900px) and (pointer: coarse)').matches;
  const landscape=typeof window!=='undefined'&&window.matchMedia('(orientation: landscape)').matches;
  const viewportHeight=typeof window==='undefined'?768:Math.min(window.innerHeight,window.visualViewport?.height??window.innerHeight);
- const cardWidth = compactLandscape ? Math.round(Math.max(60,Math.min(88,viewportHeight*.19))) : landscape ? Math.round(Math.max(80,Math.min(145,viewportHeight*.18))) : width < 600 ? 110 : 145;
+ const cardWidth = compactLandscape ? Math.round(Math.max(60,Math.min(88,viewportHeight*.19))) : landscape ? Math.round(Math.max(80,Math.min(145,viewportHeight*.18))) : width < 600 ? viewportHeight<=650?Math.round(Math.max(72,Math.min(86,viewportHeight*.13))):110 : 145;
  const cardHeight = cardWidth * 693 / 488;
  const maxAngle = Math.min(compactLandscape ? 3 : 8, Math.max(0, cards.length - 1) * 3);
  const edge = maxAngle * Math.PI / 180;
