@@ -7,7 +7,7 @@ const mobileAssets=['/landing/cards-mobile.webp','/landing/title-mobile.webp','/
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const spring=(t:number)=>1-Math.exp(-5*t)*Math.cos(2.5*Math.PI*t);
 
-export function PixiLanding({onReady}:{onReady:()=>void}){
+export function PixiLanding({onReady,showTitle=true}:{onReady:()=>void;showTitle?:boolean}){
  const host=useRef<HTMLDivElement>(null),[fallback,setFallback]=useState(false);
  const assets=isMobileGraphics()?mobileAssets:desktopAssets;
  useEffect(()=>{
@@ -26,7 +26,7 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
     if(cancelled){instance.destroy(true,{children:true});return;}
     const [cards,title,mascots]=textures.map(texture=>new Sprite(texture));
     cards.anchor.set(0);title.anchor.set(.5);mascots.anchor.set(.5);
-    instance.stage.addChild(cards,title,mascots);
+    instance.stage.addChild(cards,...(showTitle?[title]:[]),mascots);
     const sparks=new ParticleContainer({dynamicProperties:{position:true,vertex:true,rotation:true,color:true}});
     const particles:Particle[]=[];
     for(let i=0;i<(isMobileGraphics()?16:24);i++){
@@ -52,7 +52,7 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
      const time=elapsed,size=instance.screen.width;
      cards.alpha=clamp((time-150)/425);
      const titleT=clamp((time-560)/425),titlePop=spring(titleT);
-     title.alpha=clamp(titleT*2);title.y=titleY+size*.22*(1-titlePop);title.scale.set((titleWidth/textures[1].width)*(.45+.55*titlePop));
+     if(showTitle){title.alpha=clamp(titleT*2);title.y=titleY+size*.22*(1-titlePop);title.scale.set((titleWidth/textures[1].width)*(.45+.55*titlePop));}
      const mascotT=clamp((time-925)/400),mascotPop=spring(mascotT);
      mascots.alpha=clamp(mascotT*2);mascots.scale.set((mascotWidth/textures[2].width)*(.25+.75*mascotPop));
      for(let i=0;i<particles.length;i++){
@@ -70,6 +70,6 @@ export function PixiLanding({onReady}:{onReady:()=>void}){
   return()=>{cancelled=true;cancelAnimationFrame(resizeFrame);document.removeEventListener('visibilitychange',visibility);unwatch();observer?.disconnect();app?.destroy(true,{children:true});};
  },[onReady]);
  return <div className={`landing-art ${fallback?'landing-art-fallback':''}`} ref={host} aria-hidden="true">
-  {fallback&&<><img className="landing-cards" src={assets[0]} alt=""/><img className="landing-title" src={assets[1]} alt=""/><img className="landing-mascots" src={assets[2]} alt=""/></>}
+  {fallback&&<><img className="landing-cards" src={assets[0]} alt=""/>{showTitle&&<img className="landing-title" src={assets[1]} alt=""/>}<img className="landing-mascots" src={assets[2]} alt=""/></>}
  </div>;
 }

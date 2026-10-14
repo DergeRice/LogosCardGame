@@ -133,3 +133,19 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
 @media(orientation:landscape) and (max-height:900px) and (pointer:coarse){.battle .table-player .reaction-bubble{width:58px!important;height:58px!important;left:calc(50% - 29px)!important;top:calc(50% - 29px)!important;font-size:44px!important}.battle .table-player .reaction-bubble .reaction-image{width:48px!important;height:48px!important}.battle .table-player .reaction-bubble .brand-atlas-icon{font-size:48px!important}}
 /* Legacy landscape menu grid rules target generic descendants; reset them inside the dashboard groups. */
 @media(orientation:landscape) and (pointer:coarse){.dashboard-home .dashboard-quick-stack .quick-start,.dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{grid-column:auto;grid-row:auto;margin:0}.dashboard-home .dashboard-actions{grid-column:1 / -1;grid-row:auto}}
+
+/* The opponent's card inspector is a foreground panel, never behind the field skin. */
+.battle .field-feedback-wrap>.opponent-field-preview{position:relative;z-index:12}
+
+/* Loading mascot floats softly at 60% of its former size, without a spin. */
+.preload-mascot-fallback img{animation:loading-float 3s ease-in-out infinite}
+@keyframes loading-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* Matching reuses the login arrival art without the logo, under the room status. */
+.match-landing-screen{position:fixed!important;inset:0!important;max-width:none!important;overflow:hidden!important;isolation:isolate;background:#a5d9f2}
+.match-landing-background{position:absolute;inset:-12%;z-index:-2;background:#a5d9f2 url('/landing/background.jpg') center/cover no-repeat}
+.match-landing-art{position:absolute;z-index:-1;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.92}
+.match-landing-art .landing-art{width:min(calc(100% - 16px),calc(var(--game-height,100dvh) - 190px),790px)}
+.match-presentation-content{position:relative;z-index:1;display:flex;flex:1;min-height:0;flex-direction:column;align-items:center;justify-content:center}
+.match-landing-screen .matching-orbit,.match-landing-screen .versus-layout{position:relative;z-index:2}
+@media(orientation:landscape) and (max-height:650px){.match-landing-art{justify-items:start;padding-left:3vw}.match-landing-art .landing-art{width:min(57vw,calc(var(--game-height,100dvh) - 16px))}.match-landing-screen .match-presentation-content{margin-left:34vw}}

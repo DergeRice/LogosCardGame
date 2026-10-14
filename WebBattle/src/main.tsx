@@ -45,6 +45,7 @@ import {BUILD_VERSION} from './buildVersion.js';
 import {useGameViewport} from './useGameViewport.js';
 import {useDealtHand} from './useDealtHand.js';
 import { CARD_FACE_URLS, preloadCardFaces } from './preloadCards.js';
+import {preloadGameAssets} from './preloadGameAssets.js';
 import {CardViewer} from './CardViewer.js';
 import {MotionDiagnostics} from './MotionDiagnostics.js';
 import {RoomBrowser,RoomLobby} from './RoomPanels.js';
@@ -85,7 +86,7 @@ function ViewportPage({children}:{children:React.ReactNode}){useGameViewport();r
 function GameEntry({practice=false}:{practice?:boolean}){
  const [entered,setEntered]=useState(()=>!new URLSearchParams(location.search).has('intro')&&(sessionStorage.getItem('logos-entry')==='guest'||Boolean(localStorage.getItem('logos-account-token'))));
  const [departing,setDeparting]=useState(false);
- useEffect(()=>{if(practice)return;void preloadProfiles();void preloadCardFaces(()=>{});},[practice]);
+ useEffect(()=>{if(practice)return;void preloadProfiles();void preloadGameAssets();void preloadCardFaces(()=>{});},[practice]);
  const finishEntry=()=>{setDeparting(true);setTimeout(()=>setEntered(true),580);};
  const onGuest=()=>{sessionStorage.setItem('logos-entry','guest');const saved=localStorage.getItem('logos-guest-name');if(saved)sessionStorage.setItem('logos-name',saved);finishEntry();};
  return entered?(practice?<ViewportPage><PracticeMode/></ViewportPage>:<App/>):<ViewportPage><LoginLanding onGuest={onGuest} departing={departing}/></ViewportPage>;
@@ -153,7 +154,7 @@ function App() {
   if(document.fullscreenElement||doc.webkitFullscreenElement){try{if(document.exitFullscreen)await document.exitFullscreen();else await doc.webkitExitFullscreen?.();}catch{}return;}
   await enterGameFullscreen();
  }
- useEffect(()=>{let active=true;void preloadChirpManifest();void preloadProfiles();void preloadExampleAudio().catch(()=>null);void preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}).then(({failed})=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;void preloadChirpManifest();void preloadProfiles();void preloadExampleAudio().catch(()=>null);void Promise.all([preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}),preloadGameAssets()]).then(([{failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
  useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 1000); return () => clearInterval(t); }, []);
  useEffect(() => {
   let stopped = false, retry: ReturnType<typeof setTimeout>, resumeCheck:ReturnType<typeof setTimeout>, attempts = 0, responseSerial=0;

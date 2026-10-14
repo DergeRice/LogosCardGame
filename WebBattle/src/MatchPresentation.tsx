@@ -3,6 +3,7 @@ import { CATALOG, RULES, type Kind, type RoomView, type PublicPlayer } from '../
 import {useProfileImage} from './profiles.js';
 import { ART } from './theme.js';
 import {AtlasIcon} from './BrandSprites.js';
+import {PixiLanding} from './PixiLanding.js';
 
 export function Avatar({ kind, className = '' }: { kind: Kind; className?: string }) {
  const safeKind=CATALOG[kind]?kind:'pronoun';
@@ -15,10 +16,13 @@ export function Avatar({ kind, className = '' }: { kind: Kind; className?: strin
 export function Profile({ player, mine = false }: { player: PublicPlayer; mine?: boolean }) {
  return <article className={`match-profile ${mine ? 'mine' : 'rival'}`}><Avatar kind={player.avatar}/><small>{mine ? 'YOU' : player.ai ? 'AI PLAYER' : 'PLAYER'}</small><h3>{player.name}</h3><span>RATING {player.rating}</span></article>;
 }
+const landingReady=()=>{};
+function MatchLanding(){return <><div className="match-landing-background"/><div className="match-landing-art"><PixiLanding showTitle={false} onReady={landingReady}/></div></>;}
+
 export function MatchPresentation({ room, now, cancel }: { room: RoomView; now: number; cancel: () => void }) {
  const me = room.players.find(p => p.id === room.you)!;
- if (room.phase === 'matching') { const humans=room.players.filter(p=>!p.ai);return <main className="match-screen"><div className="eyebrow">FINDING YOUR NEXT MATCH</div><h1>상대를 찾고 있어요<span className="matching-dots">…</span></h1><div className="matching-orbit"><Avatar kind={me.avatar}/></div><strong>{Math.max(0, Math.ceil((room.stageEndsAt - now) / 1000))}초 후 매칭 확정</strong><div className="matching-slots">{Array.from({ length: RULES.maxPlayers }, (_, i) => <span key={i}>{humans[i] ? <Avatar kind={humans[i].avatar}/> : '+'}</span>)}</div><button className="text-button" onClick={cancel}>매칭 취소</button></main>;}
- return <main className="match-screen versus-screen" key={room.matchId}><div className="eyebrow">MATCH FOUND · {room.players.length} PLAYERS</div><h1>매칭 성사!</h1><div className="versus-layout"><Profile player={me} mine/><strong className="vs-mark">VS</strong><div className="rival-profiles">{room.players.filter(p => p.id !== room.you).map((p, i) => <div key={p.id} style={{ '--arrival': `${1 + i * .35}s` } as CSSProperties}><Profile player={p}/></div>)}</div></div><p>하나의 덱. 다섯 장의 시작. 다음 최고점은 누구?</p></main>;
+ if (room.phase === 'matching') { const humans=room.players.filter(p=>!p.ai);return <main className="match-screen match-landing-screen"><MatchLanding/><div className="match-presentation-content"><div className="eyebrow">FINDING YOUR NEXT MATCH</div><h1>상대를 찾고 있어요<span className="matching-dots">…</span></h1><div className="matching-orbit"><Avatar kind={me.avatar}/></div><strong>{Math.max(0, Math.ceil((room.stageEndsAt - now) / 1000))}초 후 매칭 확정</strong><div className="matching-slots">{Array.from({ length: RULES.maxPlayers }, (_, i) => <span key={i}>{humans[i] ? <Avatar kind={humans[i].avatar}/> : '+'}</span>)}</div><button className="text-button" onClick={cancel}>매칭 취소</button></div></main>;}
+ return <main className="match-screen match-landing-screen versus-screen" key={room.matchId}><MatchLanding/><div className="match-presentation-content"><div className="eyebrow">MATCH FOUND · {room.players.length} PLAYERS</div><h1>매칭 성사!</h1><div className="versus-layout"><Profile player={me} mine/><strong className="vs-mark">VS</strong><div className="rival-profiles">{room.players.filter(p => p.id !== room.you).map((p, i) => <div key={p.id} style={{ '--arrival': `${1 + i * .35}s` } as CSSProperties}><Profile player={p}/></div>)}</div></div><p>하나의 덱. 다섯 장의 시작. 다음 최고점은 누구?</p></div></main>;
 }
 export function SharedDeck({ room, now, onApprove }: { room: RoomView; now: number; onApprove: () => void }) {
  const dealing=room.phase==='dealing', exhausted=room.deckCount<room.players.length,vote=room.drawVote;
