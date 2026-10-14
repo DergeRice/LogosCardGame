@@ -39,3 +39,17 @@ test('login page begins loading card images before guest entry and reports a per
  await expect(page.locator('.landing-preload')).toContainText(/이미지 준비 \d+%/);
  await expect(page.locator('.landing-preload')).toContainText('100%',{timeout:45000});
 });
+
+test('room browser stays inside a short mobile visual viewport',async({browser})=>{
+ const context=await guestContext(browser,{viewport:{width:844,height:390},isMobile:true,hasTouch:true});
+ await context.addInitScript(()=>{Object.defineProperty(window.visualViewport,'height',{configurable:true,get:()=>innerHeight-60});});
+ const page=await context.newPage();
+ try{
+  await page.goto('/');
+  await expect(page.getByRole('button',{name:'방 목록 · 방 만들기'})).toBeEnabled({timeout:45000});
+  await page.getByRole('button',{name:'방 목록 · 방 만들기'}).click();
+  const bounds=await page.evaluate(()=>({visualHeight:visualViewport!.height,dialogBottom:document.querySelector('.room-browser')!.getBoundingClientRect().bottom,stageHeight:document.querySelector('.shell')!.getBoundingClientRect().height}));
+  expect(bounds.stageHeight).toBe(bounds.visualHeight);
+  expect(bounds.dialogBottom).toBeLessThanOrEqual(bounds.visualHeight);
+ }finally{await context.close();}
+});
