@@ -29,7 +29,11 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void)
   const key=Array.from(new Uint8Array(digest),v=>v.toString(16).padStart(2,'0')).join('').slice(0,20);
   if(signal.aborted)return;
   const audioUrl=entry?'/audio/sentences/'+entry.file:SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3';
-  const ctx=unlockGameAudio();if(!ctx||ctx.state!=='running')return;
+  const ctx=unlockGameAudio();if(!ctx)return;
+  // Safari/Android may finish resuming asynchronously after a touch or interruption.
+  // The existing startup deadline still cancels a blocked permission request.
+  if(ctx.state!=='running')await ctx.resume();
+  if(signal.aborted||ctx.state!=='running')return;
   const response=await fetch(audioUrl,{signal});if(!response.ok)throw Error('Sentence file unavailable');
   const buffer=await ctx.decodeAudioData(await response.arrayBuffer());if(signal.aborted||ctx.state!=='running')return;
   if(buffer.duration>20)throw Error('Sentence file too long');
