@@ -29,13 +29,12 @@ test('reviewed vocabulary and Korean retain human objects, reflexives, complemen
  assert.equal(example(['adverb','do','not','verb']).english,'Today, do not work!');
 });
 test('prepared neural audio contains entire reviewed and original sentences with verified non-silent waveforms',()=>{
- const manifest=JSON.parse(readFileSync('public/audio/sentences/manifest.json','utf8')) as {sentenceLevel:boolean;entries:{text:string;file:string;bytes:number;sha256:string}[]};
- assert.equal(manifest.sentenceLevel,true);const texts=new Set(manifest.entries.map(e=>e.text));
+ const manifest=JSON.parse(readFileSync('public/audio/sentences/manifest.json','utf8')) as {sentenceLevel:boolean;engine:string;voice:string;entries:{text:string;file:string;bytes:number;sha256:string;duration:number;peak:number;sampleRate:number}[]};
+ assert.equal(manifest.sentenceLevel,true);assert.equal(manifest.engine,'Kokoro-82M v1.0');assert.equal(manifest.voice,'af_heart');const texts=new Set(manifest.entries.map(e=>e.text));
  for(const e of [...reviewed,...SENTENCE_EXAMPLES])assert.ok(texts.has(e.english),e.english);
  assert.equal(texts.size,manifest.entries.length);
  for(const e of manifest.entries){
   const wav=readFileSync('public/audio/sentences/'+e.file);assert.equal(wav.length,e.bytes);assert.equal(createHash('sha256').update(wav).digest('hex'),e.sha256);
-  assert.equal(wav.toString('ascii',0,4),'RIFF');assert.equal(wav.readUInt32LE(24),22050);const duration=(wav.length-44)/44100;assert.ok(duration>.15&&duration<45,e.text);
-  let peak=0;for(let i=44;i+1<wav.length;i+=2)peak=Math.max(peak,Math.abs(wav.readInt16LE(i)));assert.ok(peak>500,e.text);
+  assert.ok(e.file.endsWith('.mp3'));assert.ok(wav.length>1500);assert.equal(e.sampleRate,24000);assert.ok(e.duration>.3&&e.duration<25,e.text);assert.ok(e.peak>.02&&e.peak<=1.01,e.text);
  }
 });

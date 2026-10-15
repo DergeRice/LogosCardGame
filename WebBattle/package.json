@@ -23,7 +23,7 @@
     "audio:chirp": "tsx scripts/generate-chirp-audio.ts",
     "version:next": "node scripts/bump-version.mjs",
     "examples:review": "tsx scripts/build-reviewed-examples.ts",
-    "audio:sentences": "tsx scripts/generate-sentence-voice.ts"
+    "audio:sentences": "python scripts/generate-kokoro.py"
   },
   "dependencies": {
     "@diffusionstudio/vits-web": "1.0.3",

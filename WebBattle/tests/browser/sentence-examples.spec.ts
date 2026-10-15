@@ -5,7 +5,7 @@ import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
 for(const mobile of [false,true])test(`example after score, silent nonblocking field overlay: ${mobile?'landscape reduced viewport':'desktop'}`,async({browser})=>{
  const ctx=await guestContext(browser,{viewport:mobile?{width:900,height:430}:{width:1280,height:900},hasTouch:mobile,isMobile:mobile});
  await ctx.addInitScript(({mobile})=>{
-  (window as any).__spoken=[];
+  localStorage.setItem('logos-example-voice','off');(window as any).__spoken=[];
   Object.defineProperty(window,'speechSynthesis',{value:{getVoices:()=>[],cancel(){},speak(u:any){(window as any).__spoken.push(u.text)}}});
   if(mobile){const vv=Object.assign(new EventTarget(),{width:900,height:370,offsetTop:20,offsetLeft:0,scale:1});Object.defineProperty(window,'visualViewport',{value:vv});}
  },{mobile});
@@ -17,7 +17,7 @@ for(const mobile of [false,true])test(`example after score, silent nonblocking f
  try{
   await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();for(const c of cards)await page.locator(`[data-card-id="${c.id}"]`).click();
   await page.evaluate(()=>{let seen=false;(window as any).__exampleClosedAt=0;new MutationObserver(()=>{if(document.querySelector('.sentence-example-panel'))seen=true;else if(seen&&!(window as any).__exampleClosedAt)(window as any).__exampleClosedAt=performance.now()}).observe(document.body,{childList:true,subtree:true});});const geometry=await page.locator('.field-feedback-wrap').boundingBox();await page.getByRole('button',{name:'문장 제출'}).click();await expect(page.locator('.score-calculation[data-phase="calculating"]')).toBeVisible();await expect(page.locator('.sentence-example-panel')).toHaveCount(0);
-  const panel=page.getByRole('region',{name:'카드에 맞춘 예문'});await expect(panel).toBeVisible();await expect(page.getByTestId('my-score')).toHaveText('26');await expect(panel).not.toContainText('5형식');await expect(panel.locator('.example-english')).toHaveAttribute('aria-label','I make the student ready.');await expect(panel.locator('.role-objectComplement')).toContainText('ready');await expect(panel.getByRole('button',{name:'예문 닫기'})).toBeVisible();await expect(panel.locator('[data-example-card-id]')).toHaveCount(5);await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toHaveCount(0);
+  const panel=page.getByRole('region',{name:'카드에 맞춘 예문'});await expect(panel).toBeVisible();await expect(page.getByTestId('my-score')).toHaveText('26');await expect(panel).not.toContainText('5형식');await expect(panel.locator('.example-english')).toHaveAttribute('aria-label','I make the student ready.');await expect(panel.locator('.role-objectComplement')).toContainText('ready');await expect(panel.getByRole('button',{name:'예문 닫기'})).toBeVisible();await expect(panel.locator('[data-example-card-id]')).toHaveCount(5);await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toBeVisible();
   await expect.poll(async()=>Math.abs((await page.locator('.field-feedback-wrap').boundingBox())!.y-geometry!.y)).toBeLessThan(.5);
   const box=await panel.boundingBox(),field=await page.locator('.field-feedback-wrap').boundingBox();expect(box!.x).toBeGreaterThanOrEqual(field!.x);expect(box!.y).toBeGreaterThanOrEqual(field!.y);expect(box!.y+box!.height).toBeLessThanOrEqual(field!.y+field!.height+1);
   expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight&&document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -26,7 +26,7 @@ for(const mobile of [false,true])test(`example after score, silent nonblocking f
   await expect(panel).toHaveCount(0,{timeout:4500});
   await expect(page.getByRole('dialog',{name:'고 스톱 선택'})).toBeVisible();
   expect(await page.evaluate(()=>(window as any).__spoken.length)).toBe(0);
-  expect(await page.evaluate(()=>performance.getEntriesByType('resource').filter(e=>/audio\/sentences|huggingface|onnx|piper|sentenceVoice/.test(e.name)).map(e=>e.name))).toEqual([]);
+  expect(await page.evaluate(()=>performance.getEntriesByType('resource').filter(e=>/audio\/sentences|huggingface|onnx|piper|sentenceVoice.worker/.test(e.name)).map(e=>e.name))).toEqual([]);
   expect(errors).toEqual([]);
  }finally{await ctx.close();}
 });

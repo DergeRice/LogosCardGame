@@ -2,7 +2,7 @@ import {guestContext} from './fixtures.js';
 import {test,expect,webkit} from './fixtures.js';
 import {judgeCards,type Card,type RoomView} from '../../shared/rules.js';
 import {observeRecordedAudio} from './helpers/audio.js';
-for(const mode of ['mobile-no-tts','webkit-no-tts','desktop-tts-error','mobile-blocked'] as const)test(`whole-sentence file playback: ${mode}`,async({browser,baseURL})=>{
+for(const mode of ['mobile-no-tts','webkit-no-tts','desktop-tts-error','mobile-blocked','mobile-slow','mobile-missing','mobile-network-error'] as const)test(`whole-sentence file playback: ${mode}`,async({browser,baseURL})=>{
  const own=mode==='webkit-no-tts'?await webkit.launch():null,engine=own??browser,mobile=mode!=='desktop-tts-error';
  const ctx=await guestContext(engine,{baseURL,viewport:mobile?{width:900,height:430}:{width:1280,height:900},isMobile:mobile,hasTouch:mobile});
  if(own){const probe=await ctx.newPage();const audio=await probe.evaluate(()=>typeof AudioContext!=='undefined'||typeof (window as any).webkitAudioContext!=='undefined');await probe.close();if(!audio){await ctx.close();await own.close();test.skip(true,'Windows Playwright WebKit has no compiled Web Audio or SpeechSynthesis; not a real iOS audio test.');return;}}
@@ -18,11 +18,18 @@ for(const mode of ['mobile-no-tts','webkit-no-tts','desktop-tts-error','mobile-b
  const page=await ctx.newPage(),errors:string[]=[],audioRequests:string[]=[];page.on('request',request=>{if(request.url().includes('/audio/'))audioRequests.push(request.url())});page.on('pageerror',e=>errors.push(e.message));
  const cards:Card[]=[{id:'one',kind:'pronoun'},{id:'two',kind:'verb'}],me={id:'me',name:'음성 검사',avatar:'pronoun' as const,rating:1000,ratingDelta:0,points:0,reward:0,score:0,ready:true,connected:true,handCount:2,rematch:false,ai:false};
  const room:RoomView={code:'123456',phase:'battle',matchId:'recorded-fixture',players:[me,{...me,id:'other'}],you:'me',hand:cards,handVersion:1,endsAt:0,stageEndsAt:0,nextDealAt:Date.now()+30000,dealSerial:1,deckCount:40,deckTotal:60,usedCards:[],dealIntervalMs:30000,goCount:0,multiplier:1,highScore:0,serverNow:Date.now(),actionAt:0,exchangeAt:0,reconnectMs:30000,durationMs:0,log:[],expiresAt:0};
+ if(mode==='mobile-slow')await page.route('**/audio/sentences/**/*.mp3',async route=>{await new Promise(r=>setTimeout(r,3000));await route.continue().catch(()=>{});});
+ if(mode==='mobile-missing')await page.route('**/audio/sentences/manifest.json',route=>route.fulfill({json:{entries:[]}}));
+ if(mode==='mobile-network-error')await page.route('**/audio/sentences/**/*.mp3',route=>route.fulfill({status:503,body:'Unavailable'}));
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{const m=JSON.parse(String(raw));if(m.type==='hello'){ws.send(JSON.stringify({type:'session',token:'audio-fixture',name:me.name,avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}if(m.type==='submit'){room.judgment={...judgeCards(cards),accepted:false,submissionId:m.requestId};ws.send(JSON.stringify({type:'state',room}));}}));
  try{
   await page.addInitScript(()=>sessionStorage.setItem('logos-entry','guest'));await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();for(const c of cards)await page.locator(`[data-card-id="${c.id}"]`).click();await page.getByRole('button',{name:'문장 제출'}).click();const panel=page.getByRole('region',{name:'카드에 맞춘 예문'});await expect(panel).toBeVisible();await expect(panel.locator('.example-english')).toHaveAttribute('aria-label','I work.');
-  if(mode==='mobile-blocked'){const retry=panel.getByRole('button',{name:'소리 켜고 듣기'});await expect(retry).toBeVisible();await page.waitForTimeout(2300);await expect(panel).toBeVisible();await page.evaluate(()=>(window as any).__allowAudio=true);await retry.tap();await expect(retry).toHaveCount(0);}
+  if(['mobile-blocked','mobile-slow','mobile-missing','mobile-network-error'].includes(mode)){
+   await expect(panel.getByRole('button',{name:'소리 켜고 듣기'})).toHaveCount(0);
+   await expect(panel).toHaveCount(0,{timeout:4500});expect(await page.evaluate(()=>(window as any).__recordedBuffers.length)).toBe(0);expect(errors).toEqual([]);return;
+  }
+  await page.getByRole('button',{name:'모두 되돌리기'}).click();await expect(page.locator('[data-field-id]')).toHaveCount(0);
   await expect.poll(()=>page.evaluate(()=>(window as any).__recordedBuffers.length)).toBe(1);const recording=await page.evaluate(()=>(window as any).__recordedBuffers[0]);expect(recording.peak).toBeGreaterThan(.02);expect(recording.duration).toBeGreaterThan(.4);await expect.poll(()=>page.evaluate(()=>(window as any).__recordedBuffers[0].end),{timeout:15000}).toBeGreaterThan(0);
-  await page.waitForTimeout(1300);await expect(panel).toBeVisible();await expect(panel).toHaveCount(0,{timeout:2000});expect(await page.evaluate(()=>(window as any).__recordedBuffers.length)).toBe(1);expect(errors).toEqual([]);expect(audioRequests.some(url=>/audio\/sentences\/.+\.wav/.test(url))).toBe(true);expect(audioRequests.some(url=>url.includes('/audio/examples/'))).toBe(false);expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
+  await page.waitForTimeout(1300);await expect(panel).toBeVisible();await expect(panel).toHaveCount(0,{timeout:2000});expect(await page.evaluate(()=>(window as any).__recordedBuffers.length)).toBe(1);expect(errors).toEqual([]);expect(audioRequests.some(url=>/audio\/sentences\/.+\.mp3/.test(url))).toBe(true);expect(audioRequests.some(url=>url.includes('/audio/examples/'))).toBe(false);expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
  }finally{await ctx.close();await own?.close();}
 });
