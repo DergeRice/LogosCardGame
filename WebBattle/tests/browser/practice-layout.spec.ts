@@ -18,7 +18,7 @@ for(const size of [{width:667,height:320},{width:844,height:390},{width:1280,hei
   const board=(await page.locator('.field-feedback-wrap').boundingBox())!,hand=(await page.locator('.practice-hand-zone').boundingBox())!;expect(board.y+board.height).toBeLessThanOrEqual(hand.y+1);
   for(const img of await page.locator('.sentence-card img,.hand .game-card img').all())expect(await img.evaluate((e:HTMLImageElement)=>e.complete&&e.naturalWidth>=400)).toBe(true);
   const card=(await page.locator('.sentence-card').first().boundingBox())!;expect(card.height/card.width).toBeGreaterThan(1.35);expect(card.height/card.width).toBeLessThan(1.5);
-  await page.screenshot({path:`.runtime/layout-practice-${browser.browserType().name()}-${size.width}.png`});await page.getByRole('button',{name:'대명사 손패로 되돌리기',exact:true}).click();await expect(page.locator('.hand .game-card')).toHaveCount(2);await page.getByRole('button',{name:'모두 되돌리기',exact:true}).click();await expect(page.locator('.sentence-card')).toHaveCount(0);await expect(page.locator('.hand .game-card')).toHaveCount(3);
+  await page.screenshot({path:`.runtime/layout-practice-${browser.browserType().name()}-${size.width}.png`});await page.getByRole('button',{name:'1번 대명사 카드 손패로 돌리기',exact:true}).click();await expect(page.locator('.hand .game-card')).toHaveCount(2);await page.getByRole('button',{name:'모두 되돌리기',exact:true}).click();await expect(page.locator('.sentence-card')).toHaveCount(0);await expect(page.locator('.hand .game-card')).toHaveCount(3);
   expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight&&document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);
  }finally{await context.close();}
 });

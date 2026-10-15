@@ -196,7 +196,7 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
 .practice-supply-card{padding:6px 11px!important;min-height:30px;border:1px solid #92ac83;border-radius:9px;background:#fffdf3;color:#214529;font-size:12px;line-height:1.2;font-weight:800;white-space:nowrap;box-shadow:0 2px 0 #92ac83}
 .practice-battle>.practice-feedback-row{grid-row:2;height:32px;min-height:0;background:transparent;box-shadow:none}.practice-feedback-row .table-feedback-slot{background:transparent!important}.practice-feedback-row .judgment{padding:3px 12px;min-height:0;height:100%;justify-content:center}.practice-feedback-row .judgment strong{font-size:12px}.practice-feedback-row .judgment small{font-size:10px}
 .practice-battle>.field-feedback-wrap{grid-row:3;min-height:0;height:100%;container-type:size}
-.practice-battle .field-feedback-wrap>.practice-sentence-area{height:100%;min-height:0;padding:12px 16px;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:10px;overflow-x:auto;overflow-y:hidden}
+.practice-battle .field-feedback-wrap>.sentence-area{height:100%;min-height:0;padding:12px 16px;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:10px;overflow-x:auto;overflow-y:hidden}
 .practice-battle .field-feedback-wrap .sentence-card{flex:none;width:clamp(55px,calc((100cqh - 28px)*.704),158px);min-width:55px;max-width:none;padding:0!important;border:0;background:transparent;box-shadow:0 4px 9px #173d2733;border-radius:7px;overflow:hidden}
 .practice-battle .sentence-card .illustration{display:block;width:100%;height:auto;aspect-ratio:488/693;object-fit:contain;border-radius:0}
 .practice-battle>.practice-hand-zone{grid-row:4;position:relative;min-height:0;height:100%;padding:0!important;overflow:visible;background:transparent;border:0}
@@ -209,7 +209,7 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
  .shell>.battle.practice-battle{padding:30px 8px 13px;grid-template-rows:auto 22px minmax(0,1fr) clamp(76px,29vh,125px);gap:4px}
  .practice-battle-back{top:4px;font-size:10px;padding:3px 7px}.practice-battle>.practice-supply{gap:4px;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;padding:0 2px 4px;scrollbar-width:none}.practice-supply-card{font-size:10px;padding:4px 8px!important;min-height:24px}
  .practice-battle>.practice-feedback-row{height:22px}.practice-feedback-row .judgment strong{font-size:10px}.practice-feedback-row .judgment small{font-size:9px}
- .practice-battle .field-feedback-wrap>.practice-sentence-area{padding:6px 12px}.practice-battle .field-feedback-wrap .sentence-card{width:clamp(48px,calc((100cqh - 12px)*.704),150px);min-width:48px}
+ .practice-battle .field-feedback-wrap>.sentence-area{padding:6px 12px}.practice-battle .field-feedback-wrap .sentence-card{width:clamp(48px,calc((100cqh - 12px)*.704),150px);min-width:48px}
  .practice-example{font-size:10px;top:4px}.practice-battle .empty-sentence small{display:none}
 }
 /* Keep the entering profile at the top in landscape; retain the bottom illustration. */
@@ -225,3 +225,32 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
  .dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{min-height:29px;font-size:12px!important;padding:4px 8px!important}
  .dashboard-home .dashboard-cards{display:block;bottom:0;width:min(420px,50vw);height:24%;object-position:center bottom}
 }
+
+/* Shared input surfaces disable the browser's image menu, including iOS touch callouts. */
+.game-card,.sentence-card,.game-card img,.sentence-card img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.game-card img,.sentence-card img{pointer-events:none}
+.shell .settings-trigger,.shell .hand-layout-toggle{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+.shell:has(.room-lobby),.shell:has(.match-screen){background:#f1b773 url('/brand-ui/game-back.png') center/cover no-repeat!important}
+.battle .table-feedback-row .deck-request-button{display:grid!important;grid-template-columns:1fr auto;grid-template-rows:1fr 1fr;gap:0 12px;padding:2px 18px!important;text-align:center}
+.battle .table-feedback-row .deck-request-button>.deck-request-caption{grid-column:1;grid-row:1;justify-self:center;position:relative!important;inset:auto!important;font-size:clamp(16px,2.6vh,24px)!important;line-height:1.1!important;font-weight:900}
+.battle .table-feedback-row .deck-request-button>.consent-people{grid-column:1;grid-row:2;justify-self:center;position:relative!important;inset:auto!important;display:flex;gap:8px;height:14px}
+.battle .table-feedback-row .deck-request-button .consent-person{position:relative!important;inset:auto!important;width:6px!important;height:12px!important;border-radius:3px;background:#8b987b66;border:0;font-size:0;transform:none}
+.battle .table-feedback-row .deck-request-button .consent-person.approved{background:#3b8e4c;box-shadow:0 0 6px #79c97266}
+.battle .table-feedback-row .deck-request-button .consent-person svg{display:none}
+.battle .table-feedback-row .deck-request-button>.deck-seconds{grid-column:2;grid-row:1/3;justify-self:end;position:relative!important;inset:auto!important;font-size:16px!important;line-height:1!important;margin:0;align-self:center}
+.battle .table-feedback-row .deck-request-button>.deck-request-fill{position:absolute!important;inset:0!important}
+.battle .player-rank-crown{width:68px;height:50px;top:-27px;left:78%}
+.battle .table-player .player-profile-details>b{right:26%;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;font-size:12px;line-height:1.1;max-height:2.2em}
+.battle .table-player>strong{left:78%}
+@media(max-width:1000px){.battle .table-player .player-profile-details>b{right:27%;font-size:10px}.battle .player-rank-crown{width:54px;height:40px;top:-23px}}
+@media(orientation:landscape) and (max-height:500px){.battle .player-rank-crown{width:46px;height:34px;top:-22px}.battle .table-feedback-row .deck-request-button>.deck-request-caption{font-size:16px!important}.battle .table-feedback-row .deck-request-button>.consent-people{height:10px}.battle .table-feedback-row .deck-request-button .consent-person{height:9px!important}.battle .table-feedback-row .deck-request-button>.deck-seconds{font-size:13px!important}}
+.home-feature-menu{position:absolute;z-index:5;left:20px;top:185px;display:grid;gap:8px}
+.home-feature-menu button{min-width:88px;padding:9px 14px;border:1px solid #608c44;border-radius:12px;background:#fffdf0ed;box-shadow:0 2px 0 #3b6e31;color:#23482c;font-size:13px;font-weight:900}
+.feature-menu-backdrop{position:fixed;inset:0;z-index:240;display:grid;place-items:center;padding:16px;background:#143d3277;backdrop-filter:blur(4px)}
+.feature-menu-dialog{width:min(440px,94%);max-height:calc(var(--game-height,100dvh) - 32px);overflow:auto;padding:20px;border:2px solid #608c44;border-radius:22px;background:#fffdf3;color:#23482c;box-shadow:0 8px 0 #28582d,0 18px 45px #15352755;text-align:center}
+.feature-menu-dialog header{position:relative;display:flex;align-items:center;justify-content:center}.feature-menu-dialog h2{font-size:23px;margin:0 36px 14px}.feature-menu-dialog header button{position:absolute;right:0;top:-4px;background:transparent;border:0;font-size:28px;color:#23482c}
+.feature-menu-body{display:grid;gap:10px;justify-items:center}.feature-menu-body p{font-size:13px;line-height:1.7;margin:4px 0}.feature-menu-body>button{background:#ffda4f;border:1px solid #4f7e37;border-radius:12px;padding:10px 18px;font-weight:800;min-width:180px}.feature-coming{border-radius:99px;background:#e8eddf;color:#688257;font-size:11px;padding:5px 12px}
+.feature-categories{display:grid;grid-template-columns:repeat(4,1fr);width:100%;gap:7px}.feature-categories>span{display:grid;justify-items:center;align-content:center;gap:8px;min-height:86px;border-radius:12px;background:#f1efdd;font-size:12px}.feature-categories b{font-size:30px;color:#c99128}.feature-categories .character-avatar{--profile-size:36px}.feature-placeholders{display:grid;gap:8px;width:100%;padding:8px 0}.feature-placeholders span{padding:12px;border-radius:12px;background:#f1efdd;font-size:13px;color:#65775c}
+@media(orientation:landscape) and (max-height:500px){.home-feature-menu{top:82px;left:12px;gap:4px}.home-feature-menu button{min-width:72px;padding:5px 10px;min-height:26px;font-size:11px}.feature-menu-dialog{padding:12px 18px}.feature-menu-dialog h2{font-size:18px;margin-bottom:8px}.feature-menu-body{gap:6px}.feature-menu-body p{font-size:11px}.feature-categories>span{min-height:64px;font-size:10px}.feature-menu-body>button{padding:7px 14px}}
+@media(orientation:portrait) and (max-width:700px){.home-feature-menu{top:135px;left:50%;transform:translateX(-50%);display:flex;gap:5px;max-width:96%}.home-feature-menu button{min-width:0;padding:7px 9px;font-size:11px}}
+.battle .table-scoreboard[data-player-count="6"] .player-profile-details>b{font-size:7.3px;right:25%}
