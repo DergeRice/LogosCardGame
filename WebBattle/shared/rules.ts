@@ -1,9 +1,9 @@
 import {cardSentenceExample} from './card-sentence-example.js';
 import { CheckPlayableSegment, LearningPosType, type LearningGrammarCheckResult } from './LearningLocalGrammarChecker.js';
 // Rendering identifiers map explicitly to the original numeric Unity POS enum.
-export type Kind = 'pronoun' | 'proper' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'to-infinitive' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect';
+export type Kind = 'pronoun' | 'proper' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'to-infinitive' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect' | 'nothing';
 export type Card = { id: string; kind: Kind; variant?: string };
-export const CATALOG: Record<Kind, { name: string; symbol: string; example: string; sheet: number; col: number; row: number; tone: string }> = {
+export const CATALOG: Record<Kind, { name: string; symbol: string; example: string; sheet: number; col: number; row: number; tone: string; source?:string }> = {
  indefinite: { name: '부정관사', symbol: 'A', example: 'a · an', sheet: 2, col: 0, row: 2, tone: 'gold' },
  do: { name: 'Do', symbol: 'DO', example: 'do · does · did', sheet: 4, col: 1, row: 0, tone: 'green' },
  modal: { name: '조동사', symbol: 'MD', example: 'shall · will · must · can · may', sheet: 5, col: 1, row: 0, tone: 'green' },
@@ -26,6 +26,7 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  get3: { name: 'Get 3', symbol: '+3', example: '카드 3장 받기', sheet: 4, col: 1, row: 2, tone: 'blue' },
  rob: { name: 'Rob', symbol: 'R', example: '상대 카드 1장 뺏기', sheet: 4, col: 0, row: 2, tone: 'coral' },
  exchange: { name: 'Exchange', symbol: 'E', example: '상대에게 카드 교환 요청', sheet: 4, col: 2, row: 1, tone: 'green' },
+ nothing: {name:'Nothing',symbol:'Ø',example:'꽝 · 문장·득점·교환에 사용할 수 없어요. 아래 쓰레기통으로 버리세요.',sheet:7,col:0,row:0,tone:'gold',source:'public/assets/nothing1.png'},
  protect: { name: 'Protect', symbol: 'S', example: '가지고 있으면 Rob 방어', sheet: 4, col: 3, row: 1, tone: 'gold' }
 };
 export const CARD_POS: Record<Kind, LearningPosType | null> = {
@@ -36,10 +37,12 @@ export const CARD_POS: Record<Kind, LearningPosType | null> = {
  proper: LearningPosType.PROPN,
  mass: LearningPosType.NNU, count: LearningPosType.NNC, article: LearningPosType.DT_THE,
  be: LearningPosType.BE, verb: LearningPosType.VB, adjective: LearningPosType.JJ,
- get2: null, get3: null, rob: null, exchange: null, protect: null
+ get2: null, get3: null, rob: null, exchange: null, protect: null, nothing:null
 };
 // Only effects visibly printed on these exact faces are enabled. Client-supplied effects are never accepted.
-export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; row: number; multiply: number; add: number }> = {
+export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; row: number; multiply: number; add: number; source?:string }> = {
+ 'nothing-twelve':{kind:'nothing',sheet:7,col:1,row:0,multiply:1,add:0,source:'public/assets/nothing2.png'},
+ 'nothing-seven':{kind:'nothing',sheet:7,col:2,row:0,multiply:1,add:0,source:'public/assets/nothing3.png'},
  'possessive-minus2': { kind:'possessive',sheet:1,col:1,row:0,multiply:1,add:-2 },
  'indefinite-x2': { kind:'indefinite',sheet:2,col:2,row:1,multiply:2,add:0 },
  'indefinite-minus2': { kind:'indefinite',sheet:2,col:3,row:1,multiply:1,add:-2 },
@@ -103,6 +106,7 @@ export type Judgment = LearningGrammarCheckResult & { form?: number; label?: str
 export function judge(kinds: Kind[]): Judgment {
  // This is the actual battle entry point. Check() has different semantics.
  const positions=kinds.map(kind => CARD_POS[kind]);
+ if(kinds.includes('nothing'))return {valid:false,patternType:1,message:'Nothing은 꽝 카드라 문장에 사용할 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'Nothing은 아래 쓰레기통으로 버리세요.',spans:[]};
  if(positions.some(pos=>pos===null))return {valid:false,patternType:1,message:'기능 카드는 문장에 넣을 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'기능 카드는 손패에서 사용하세요.',spans:[]};
  let adjectiveRun=0,adverbRun=0;
  for(const kind of kinds){adjectiveRun=kind==='adjective'?adjectiveRun+1:0;adverbRun=['adverb','frequency','very'].includes(kind)?adverbRun+1:0;const message=adjectiveRun>3?'형용사는 연속 3장까지 사용할 수 있습니다.':adverbRun>2?'부사는 연속 2장까지 사용할 수 있습니다.':'';if(message)return {valid:false,patternType:1,message,debugLog:'[BattleSyntax] modifier chain limit',usedStartIndex:0,usedLength:0,points:0,reason:message,spans:[]};}

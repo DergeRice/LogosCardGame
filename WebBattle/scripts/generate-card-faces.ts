@@ -12,6 +12,11 @@ const faces=[...Object.entries(CATALOG),...Object.entries(VARIANTS)].filter(([na
 // Match the printed card outline; remove the JPEG sheet behind its corners.
 const mask=Buffer.from(`<svg width="${ART.crop.width}" height="${ART.crop.height}"><rect width="${ART.crop.width}" height="${ART.crop.height}" rx="44" ry="44" fill="white"/></svg>`);
 for(const [name,face] of faces){
+ if(face.source){
+  // Remove only transparent outer padding; retain the original corners and all printed artwork.
+  await sharp(join(process.cwd(),face.source)).trim({threshold:20}).resize(ART.crop.width,ART.crop.height,{fit:'fill',kernel:'lanczos3'}).webp({lossless:true,effort:5}).toFile(join(output,`${name}.webp`));
+  continue;
+ }
  const source=join(process.cwd(),'assets-source',`CardImage${face.sheet}.jpg`);
  const left=ART.columns[face.col]+ART.crop.x,top=ART.rows[face.row]+ART.crop.y;
  const filename=join(output,`${name}.webp`);

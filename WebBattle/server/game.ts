@@ -295,7 +295,7 @@ export class Game {
   if(!r||r.phase!=='battle'||p.ai||msg.matchId!==r.matchId||msg.handVersion!==p.handVersion)return;
   if(!Array.isArray(msg.cards)||msg.cards.length>RULES.maxSelected||msg.cards.some(id=>typeof id!=='string')||new Set(msg.cards).size!==msg.cards.length)return;
   const ids=msg.cards as string[];
-  if(ids.some(id=>!p.hand.some(c=>c.id===id&&!['get2','get3','rob','exchange','protect'].includes(c.kind))))return;
+  if(ids.some(id=>!p.hand.some(c=>c.id===id&&!['get2','get3','rob','exchange','protect','nothing'].includes(c.kind))))return;
   if(JSON.stringify(p.draftIds??[])===JSON.stringify(ids))return;
   p.draftIds=ids;this.broadcast(r);
  }
@@ -326,8 +326,8 @@ export class Game {
   if(card.kind==='rob'&&(!target||typeof msg.stealId!=='string'||(msg.stealSource!=='hand'&&msg.stealSource!=='field')||(msg.stealSource==='hand'&&(msg.targetHandVersion!==target.handVersion||!target.hand.some(c=>c.id===msg.stealId)))||(msg.stealSource==='field'&&(msg.targetFieldVersion!==(target.fieldVersion??0)||!fieldCards(target).some(c=>c.id===msg.stealId)||!r.discard.some(c=>c.id===msg.stealId)))))return this.fail(p,'상대 카드가 바뀌었어요. ROB 대상을 다시 확인해 주세요.',id);
   if(card.kind==='exchange'&&(typeof msg.offerId!=='string'||msg.offerId===card.id||![...p.hand,...fieldCards(p)].some(c=>c.id===msg.offerId)))return this.fail(p,'교환할 내 카드 한 장을 골라 주세요.',id);
   if(card.kind==='exchange'&&(!target||msg.targetHandVersion!==target.handVersion||(fieldCards(target).some(c=>c.id===msg.wantedId)&&msg.targetFieldVersion!==(target.fieldVersion??0))||typeof msg.wantedId!=='string'||![...target.hand,...fieldCards(target)].some(c=>c.id===msg.wantedId)))return this.fail(p,'상대 카드가 바뀌었어요. 교환할 카드를 다시 확인해 주세요.',id);
-  if(card.kind==='rob'&&target&&!([...target.hand,...fieldCards(target)].some(c=>c.id===msg.stealId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT 카드는 뺏을 수 없어요.',id);
-  if(card.kind==='exchange'&&(![...p.hand,...fieldCards(p)].some(c=>c.id===msg.offerId&&canTransferCard(c))||!target||![...target.hand,...fieldCards(target)].some(c=>c.id===msg.wantedId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT 카드는 교환할 수 없어요.',id);
+  if(card.kind==='rob'&&target&&!([...target.hand,...fieldCards(target)].some(c=>c.id===msg.stealId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT·Nothing 카드는 뺏을 수 없어요.',id);
+  if(card.kind==='exchange'&&(![...p.hand,...fieldCards(p)].some(c=>c.id===msg.offerId&&canTransferCard(c))||!target||![...target.hand,...fieldCards(target)].some(c=>c.id===msg.wantedId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT·Nothing 카드는 교환할 수 없어요.',id);
   if((card.kind==='get2'||card.kind==='get3')&&!r.deck.length)return this.fail(p,'공용 덱이 비었어요.',id);
   const specialCards=[card,...[msg.offerId,msg.wantedId,msg.stealId].flatMap(id=>{const found=r.players.flatMap(x=>[...x.hand,...fieldCards(x)]).find(c=>c.id===id);return found?[found]:[];})];
   p.seen.add(id);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
@@ -374,6 +374,8 @@ export class Game {
  }
  autoSpecial(r:Room,p:Player){
   if(r.exchange?.toId===p.id)return false;
+  const blank=p.hand.find(c=>c.kind==='nothing');
+  if(blank&&Date.now()>=p.actionAt){this.discardCard(p,{matchId:r.matchId,cardId:blank.id,handVersion:p.handVersion,requestId:randomUUID()});return true;}
   const usable=p.hand.find(c=>(c.kind==='get2'||c.kind==='get3')&&r.deck.length);
   const rivals=r.players.filter(x=>x!==p&&[...x.hand,...fieldCards(x)].some(canTransferCard)&&(!x.ai?x.socket?.readyState===1:true));
   const target=rivals[randomInt(Math.max(1,rivals.length))];
@@ -400,7 +402,7 @@ export class Game {
   if (!Array.isArray(msg.cards) || msg.cards.length < 1 || msg.cards.length > RULES.maxSelected || msg.cards.some(id => typeof id !== 'string') || new Set(msg.cards).size !== msg.cards.length) return this.fail(p, '서로 다른 카드 1~15장을 선택해 주세요.', msg.requestId);
   const selected = msg.cards.map(id => p.hand.find(c => c.id === id));
   if(r.exchange?.fromId===p.id&&(msg.cards as string[]).includes(r.exchange.offerId))return this.fail(p,'교환 요청 중인 카드는 문장에 사용할 수 없어요.',String(msg.requestId));
-  if(selected.some(c=>c&&['get2','get3','rob','exchange','protect'].includes(c.kind)))return this.fail(p,'기능 카드는 문장에 넣을 수 없어요.',String(msg.requestId));
+  if(selected.some(c=>c&&['get2','get3','rob','exchange','protect','nothing'].includes(c.kind)))return this.fail(p,'기능 카드는 문장에 넣을 수 없어요.',String(msg.requestId));
   if (selected.some(c => !c)) return this.fail(p, '내 손패에 없는 카드는 사용할 수 없어요.', msg.requestId);
   p.seen.add(msg.requestId);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
   p.draftIds=msg.cards as string[];

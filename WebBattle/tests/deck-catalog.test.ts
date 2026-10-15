@@ -11,8 +11,8 @@ test('active deck temporarily excludes To-infinitive and Very cards',()=>{
   const art=cardFace({...face,id:''});cells.add(`${art.sheet}/${art.col}/${art.row}`);
   assert.ok(existsSync(`public/cards/${face.variant??face.kind}.webp`));
  }
- assert.deepEqual(counts,{indefinite:3,do:2,modal:2,not:2,frequency:2,adverb:3,preposition:4,pronoun:6,count:8,mass:8,article:4,possessive:3,verb:6,be:6,adjective:3,get2:1,get3:2,rob:1,exchange:1,protect:1});
- assert.equal(DECK_FACES.length,68);assert.equal(cells.size,56);assert.equal(DECK_FACES.some(c=>cardEffect({...c,id:''}).add===-2),false);
+ assert.deepEqual(counts,{indefinite:3,do:2,modal:2,not:2,frequency:2,adverb:3,preposition:4,pronoun:6,count:8,mass:8,article:4,possessive:3,verb:6,be:6,adjective:3,get2:1,get3:2,rob:1,exchange:1,protect:1,nothing:3});
+ assert.equal(DECK_FACES.length,71);assert.equal(cells.size,59);assert.equal(DECK_FACES.some(c=>cardEffect({...c,id:''}).add===-2),false);
  for(let sheet=1;sheet<=5;sheet++)for(let row=0;row<3;row++)for(let col=0;col<4;col++)if((sheet!==5||row!==2||col<2)&&!(sheet===1&&col===1&&row===0)&&!(sheet===2&&col===3&&row===1))assert.ok(cells.has(`${sheet}/${col}/${row}`));
  for(let col=0;col<4;col++)assert.equal(cells.has(`6/${col}/0`),false);
  for(const name of ['to-infinitive','to-infinitive-plus2','to-infinitive-x2','to-infinitive-div2'])assert.ok(existsSync(`public/cards/${name}.webp`));

@@ -17,11 +17,11 @@ test('controlled single-recipient fixture: hand retains more than 20 cards witho
  r.players=[p];game.begin(r);game.deal(r,20);const before=p.hand.map(c=>c.id);game.deal(r,3);
  assert.equal(p.hand.length,23);assert.deepEqual(p.hand.slice(0,20).map(c=>c.id),before);assert.equal(game.view(r,p).hand.length,23);assert.equal(r.deck.length,DECK_FACES.length-23);
 });
-test('68 physical cards including requested extra copies, no refill/recycling through exhaustion',()=>{
- assert.equal(DECK_FACES.length,68);assert.equal(new Set(DECK_FACES.map(c=>{const f=cardFace({...c,id:''});return`${f.sheet}/${f.col}/${f.row}`;})).size,56);
+test('71 physical cards including requested extra copies, no refill/recycling through exhaustion',()=>{
+ assert.equal(DECK_FACES.length,71);assert.equal(new Set(DECK_FACES.map(c=>{const f=cardFace({...c,id:''});return`${f.sheet}/${f.col}/${f.row}`;})).size,59);
  const game=new Game({minimumPlayers:2});const people=['A','B','C','D'].map(n=>game.hello(socket(),null,n));for(const p of people)game.quick(p);const r=game.rooms.get(people[0].room!)!;
  game.reveal(r);game.deal(r,5);assert.ok(people.every(p=>p.hand.length===5));assert.equal(r.deck.length,DECK_FACES.length-20);
- game.deal(r,12);assert.equal(r.deck.length,0);const cards=people.flatMap(p=>p.hand);assert.equal(cards.length,68);assert.equal(new Set(cards.map(faceKey)).size,56);assert.equal(new Set(cards.map(c=>c.id)).size,68);const expected=new Map<string,number>();for(const c of DECK_FACES)expected.set(faceKey(c),(expected.get(faceKey(c))??0)+1);const actual=new Map<string,number>();for(const c of cards)actual.set(faceKey(c),(actual.get(faceKey(c))??0)+1);assert.deepEqual(actual,expected);
+ game.deal(r,13);assert.equal(r.deck.length,0);const cards=[...people.flatMap(p=>p.hand),...r.deck];assert.equal(cards.length,71);assert.equal(new Set(cards.map(faceKey)).size,59);assert.equal(new Set(cards.map(c=>c.id)).size,71);const expected=new Map<string,number>();for(const c of DECK_FACES)expected.set(faceKey(c),(expected.get(faceKey(c))??0)+1);const actual=new Map<string,number>();for(const c of cards)actual.set(faceKey(c),(actual.get(faceKey(c))??0)+1);assert.deepEqual(actual,expected);
  const spent=people[0].hand.pop()!;r.discard.push(spent);const serial=r.dealSerial;game.deal(r,1);assert.equal(r.dealSerial,serial);assert.equal(r.deck.length,0);assert.equal(people.flatMap(p=>p.hand).some(c=>c.id===spent.id),false);
 });
 test('controlled fixtures: <=20 retains hand, no score even for repeated new requests; >20 consumes only accepted segment',t=>{
