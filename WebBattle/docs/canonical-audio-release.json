@@ -1,0 +1,220 @@
+{
+  "version": "v0.9.58",
+  "engine": "Kokoro-82M v1.0",
+  "voice": "af_heart",
+  "canonicalIndex": 0,
+  "scope": "Audited structural/exhaustive set realizable from current shared deck; not every possible 15-card array.",
+  "sentences": 24155,
+  "bytes": 548560728,
+  "MiB": 523.15,
+  "minSeconds": 0.768,
+  "maxSeconds": 6.144,
+  "localSha256Verified": 24155,
+  "r2InventoryVerified": 24155,
+  "publicDecodedSamples": 33,
+  "catalogSha256": "1c7a29d505ab24fa07b1b4d638342ab2d06aaffadc1b809a05636345a1ca84ac",
+  "manifestSha256": "02fbed30f4c4a4f577e72252522089eb1af3f402668438fe7a7991644954c5ef",
+  "origin": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev",
+  "verifiedAt": "2026-10-15T12:37:46.619Z",
+  "verification": "Mobile viewport Chromium, real R2 MP3 downloads; not physical handset speaker listening.",
+  "samples": [
+    {
+      "file": "kokoro-afheart-v1/e435e3f37c20730c9318.mp3",
+      "duration": 0.768,
+      "peak": 0.45151737332344055,
+      "ms": 477
+    },
+    {
+      "file": "kokoro-afheart-v1/c5f1f4ec53f35fb54b75.mp3",
+      "duration": 3.2,
+      "peak": 0.44818994402885437,
+      "ms": 476
+    },
+    {
+      "file": "kokoro-afheart-v1/c0e175bd98bdd0ac5a16.mp3",
+      "duration": 0.9813333333333333,
+      "peak": 0.38292956352233887,
+      "ms": 474
+    },
+    {
+      "file": "kokoro-afheart-v1/2d76534c4748cc0568f8.mp3",
+      "duration": 4.928,
+      "peak": 0.38908103108406067,
+      "ms": 445
+    },
+    {
+      "file": "kokoro-afheart-v1/4eb29700048e32e35522.mp3",
+      "duration": 0.9813333333333333,
+      "peak": 0.38820958137512207,
+      "ms": 294
+    },
+    {
+      "file": "kokoro-afheart-v1/e09891423d74ba1b229b.mp3",
+      "duration": 4.672,
+      "peak": 0.3731141984462738,
+      "ms": 280
+    },
+    {
+      "file": "kokoro-afheart-v1/d4bbc4a89e589a6dafa8.mp3",
+      "duration": 1.1093333333333333,
+      "peak": 0.36717522144317627,
+      "ms": 306
+    },
+    {
+      "file": "kokoro-afheart-v1/390d15aad56f561a5b67.mp3",
+      "duration": 5.9093333333333335,
+      "peak": 0.3423759341239929,
+      "ms": 298
+    },
+    {
+      "file": "kokoro-afheart-v1/2d8da5c24fc5ee229b5d.mp3",
+      "duration": 1.152,
+      "peak": 0.3215692639350891,
+      "ms": 524
+    },
+    {
+      "file": "kokoro-afheart-v1/03b338e3babe25c28fc4.mp3",
+      "duration": 6.144,
+      "peak": 0.35803359746932983,
+      "ms": 325
+    },
+    {
+      "file": "kokoro-afheart-v1/65f9701a914a552e2c4a.mp3",
+      "duration": 1.3226666666666667,
+      "peak": 0.41409775614738464,
+      "ms": 661
+    },
+    {
+      "file": "kokoro-afheart-v1/ea576516280aa5c900af.mp3",
+      "duration": 1.7066666666666668,
+      "peak": 0.36859098076820374,
+      "ms": 343
+    },
+    {
+      "file": "kokoro-afheart-v1/6d5993fd5055aadc2b3a.mp3",
+      "duration": 2.026666666666667,
+      "peak": 0.31711146235466003,
+      "ms": 293
+    },
+    {
+      "file": "kokoro-afheart-v1/988ec5516a5dd759888c.mp3",
+      "duration": 1.4933333333333334,
+      "peak": 0.4833306074142456,
+      "ms": 298
+    },
+    {
+      "file": "kokoro-afheart-v1/70cdb13bd98004cdd40c.mp3",
+      "duration": 2.3466666666666667,
+      "peak": 0.4444996118545532,
+      "ms": 532
+    },
+    {
+      "file": "kokoro-afheart-v1/b1d223b0b9f4c5a0f232.mp3",
+      "duration": 2.624,
+      "peak": 0.3328830301761627,
+      "ms": 233
+    },
+    {
+      "file": "kokoro-afheart-v1/a0710eba7c7fd02fac28.mp3",
+      "duration": 2.1333333333333333,
+      "peak": 0.34149420261383057,
+      "ms": 249
+    },
+    {
+      "file": "kokoro-afheart-v1/9472ab4b2bebbc8193c1.mp3",
+      "duration": 1.664,
+      "peak": 0.3034938871860504,
+      "ms": 437
+    },
+    {
+      "file": "kokoro-afheart-v1/be05c1ca736ab8cbfd49.mp3",
+      "duration": 3.84,
+      "peak": 0.3391062617301941,
+      "ms": 240
+    },
+    {
+      "file": "kokoro-afheart-v1/78384f2d3deb35077981.mp3",
+      "duration": 3.541333333333333,
+      "peak": 0.3585042357444763,
+      "ms": 248
+    },
+    {
+      "file": "kokoro-afheart-v1/5ddff7690f6488b9b4c3.mp3",
+      "duration": 3.7333333333333334,
+      "peak": 0.34682419896125793,
+      "ms": 235
+    },
+    {
+      "file": "kokoro-afheart-v1/eeae6324642f7ab10479.mp3",
+      "duration": 2.24,
+      "peak": 0.3148517906665802,
+      "ms": 364
+    },
+    {
+      "file": "kokoro-afheart-v1/d9f4e6a16661a418a02c.mp3",
+      "duration": 2.3893333333333335,
+      "peak": 0.3582994341850281,
+      "ms": 243
+    },
+    {
+      "file": "kokoro-afheart-v1/2822f278675441b8fca8.mp3",
+      "duration": 2.026666666666667,
+      "peak": 0.3356575071811676,
+      "ms": 238
+    },
+    {
+      "file": "kokoro-afheart-v1/985da62dc5c268350c0d.mp3",
+      "duration": 2.176,
+      "peak": 0.28711551427841187,
+      "ms": 342
+    },
+    {
+      "file": "kokoro-afheart-v1/93dd3da53b6b83a14dc5.mp3",
+      "duration": 3.8826666666666667,
+      "peak": 0.4753113389015198,
+      "ms": 245
+    },
+    {
+      "file": "kokoro-afheart-v1/7607de06fd352280925d.mp3",
+      "duration": 3.072,
+      "peak": 0.4015890657901764,
+      "ms": 234
+    },
+    {
+      "file": "kokoro-afheart-v1/fe7d18ad7e0ffcd556c4.mp3",
+      "duration": 4.757333333333333,
+      "peak": 0.36240091919898987,
+      "ms": 301
+    },
+    {
+      "file": "kokoro-afheart-v1/eae2f4529aee4210215a.mp3",
+      "duration": 2.965333333333333,
+      "peak": 0.35589471459388733,
+      "ms": 265
+    },
+    {
+      "file": "kokoro-afheart-v1/16c312d50f5e3c7b6cd7.mp3",
+      "duration": 2.5813333333333333,
+      "peak": 0.4713800251483917,
+      "ms": 318
+    },
+    {
+      "file": "kokoro-afheart-v1/71039195cd385e7c5eae.mp3",
+      "duration": 3.6693333333333333,
+      "peak": 0.4600113034248352,
+      "ms": 223
+    },
+    {
+      "file": "kokoro-afheart-v1/8ff4cdf5cc5302ccc721.mp3",
+      "duration": 3.2213333333333334,
+      "peak": 0.3614220917224884,
+      "ms": 306
+    },
+    {
+      "file": "kokoro-afheart-v1/52a4aae6e5ef3b3cf822.mp3",
+      "duration": 3.050666666666667,
+      "peak": 0.3054828643798828,
+      "ms": 317
+    }
+  ]
+}

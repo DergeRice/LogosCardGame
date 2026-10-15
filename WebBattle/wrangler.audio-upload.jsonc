@@ -1,0 +1,10 @@
+{
+ "$schema":"node_modules/wrangler/config-schema.json",
+ "name":"logos-card-audio-upload",
+ "main":"cloudflare/audio-upload-worker.ts",
+ "compatibility_date":"2026-09-01",
+ "workers_dev":true,
+ "preview_urls":false,
+ "r2_buckets":[{"binding":"AUDIO","bucket_name":"logos-card-audio"}],
+ "observability":{"enabled":false}
+}

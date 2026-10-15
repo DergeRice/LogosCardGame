@@ -1,6 +1,7 @@
 import {unlockGameAudio} from './exampleAudio.js';
 import {normalizeSpeechText} from '../shared/chirp-audio.js';
 type Entry={text:string;file:string;duration:number};
+export const SENTENCE_AUDIO_ORIGIN=(import.meta.env.VITE_SENTENCE_AUDIO_ORIGIN??'https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev').replace(/\/$/,'');
 let manifest:Promise<Map<string,Entry>>|undefined;
 /** Optional metadata only. Never part of game readiness. */
 export function preloadSentenceVoice(){
@@ -22,9 +23,14 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void)
   // Hard deadline includes manifest lookup, download, decoding and autoplay permission.
   startup=setTimeout(stop,1500);
   const entries=await preloadSentenceVoice();if(signal.aborted)return;
-  const entry=entries.get(normalizeSpeechText(text));if(!entry)return;
+  const normalized=normalizeSpeechText(text),entry=entries.get(normalized);
+  // Identical text/voice/speed hash to the offline generator; no 24k-row manifest download.
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('kokoro-v1.0/af_heart/1.0/'+normalized));
+  const key=Array.from(new Uint8Array(digest),v=>v.toString(16).padStart(2,'0')).join('').slice(0,20);
+  if(signal.aborted)return;
+  const audioUrl=entry?'/audio/sentences/'+entry.file:SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3';
   const ctx=unlockGameAudio();if(!ctx||ctx.state!=='running')return;
-  const response=await fetch('/audio/sentences/'+entry.file,{signal});if(!response.ok)throw Error('Sentence file unavailable');
+  const response=await fetch(audioUrl,{signal});if(!response.ok)throw Error('Sentence file unavailable');
   const buffer=await ctx.decodeAudioData(await response.arrayBuffer());if(signal.aborted||ctx.state!=='running')return;
   if(buffer.duration>20)throw Error('Sentence file too long');
   await new Promise<void>((resolve,reject)=>{
