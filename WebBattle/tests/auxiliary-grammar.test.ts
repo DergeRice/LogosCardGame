@@ -14,7 +14,7 @@ test('DO and MODAL affirmative/negative statements and questions cover all five 
 });
 test('modal BE statements and questions and DO NOT BE imperatives accept complements',()=>{
  for(const tail of [['adjective'],['article','count'],['preposition','pronoun']] as Kind[][])for(const neg of [[],['not']] as Kind[][]){check(['pronoun','modal',...neg,'be',...tail]);check(['modal','pronoun',...neg,'be',...tail]);check(['be','pronoun',...neg,...tail]);check(['do','not','be',...tail]);}
- assert.equal(check(['pronoun','modal','not','be','adjective']).english,'I can not be happy.');assert.equal(check(['do','pronoun','not','verb']).english,'Do I not work?');assert.equal(check(['do','not','be','adjective']).english,'Do not be happy!');
+ assert.equal(check(['pronoun','modal','not','be','adjective']).english,'I can not be happy.');assert.equal(check(['do','pronoun','not','verb']).english,'Do I not work?');assert.equal(check(['do','not','be','adjective']).english,'Do not be afraid!');
  assert.equal(check(['be','pronoun','preposition','pronoun']).english,'Am I near them?');
 });
 test('imperative objects, complements and adjuncts are fully counted; invalid auxiliary structures are not fully counted',()=>{

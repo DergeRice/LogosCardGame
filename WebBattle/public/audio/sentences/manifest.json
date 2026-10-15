@@ -1,0 +1,3290 @@
+{
+  "version": 1,
+  "engine": "Piper VITS",
+  "voice": "en_US-ljspeech-medium",
+  "sentenceLevel": true,
+  "entries": [
+    {
+      "text": "Run!",
+      "file": "cd6317b826072e61.wav",
+      "bytes": 23596,
+      "sha256": "ac170b8baa5130d4c4fb6cd6c8951eba9146127cd5843e55d0ad3d8b3f3362a5"
+    },
+    {
+      "text": "Always work!",
+      "file": "cd75837ef61a9763.wav",
+      "bytes": 44588,
+      "sha256": "d5fdf69da8039ce9350d2038ca7711acb735beab511a85118eeb4291d8ae7f7b"
+    },
+    {
+      "text": "Work today!",
+      "file": "1bc819c4d91c97fc.wav",
+      "bytes": 39468,
+      "sha256": "0afa59a77b9269099d5c6a1bda06cc8e51186146ffe969f62e52845899744833"
+    },
+    {
+      "text": "Do work!",
+      "file": "cbfe9a8bc5db0369.wav",
+      "bytes": 27180,
+      "sha256": "65bd296422441b0e4fb90dee7bf14156b1c859cdd8a6ec6ebf38846edd22b64e"
+    },
+    {
+      "text": "Always do work!",
+      "file": "2e7a08c068d6c876.wav",
+      "bytes": 55340,
+      "sha256": "c9829b749f853021c760df7a1b65c74bdac2725a0ec633c3c46b19ee9ca0f48e"
+    },
+    {
+      "text": "Do work today!",
+      "file": "57aec09b056ab996.wav",
+      "bytes": 50220,
+      "sha256": "1e7df99acd38d0d9d4a3f0440d7281455a242e82a2105c264c5b427be0514e43"
+    },
+    {
+      "text": "I work.",
+      "file": "8d5f134af698cf6b.wav",
+      "bytes": 28204,
+      "sha256": "32e070adfce3827230d4d50c8cacb739183e081ff1184241735f93f2122aa08b"
+    },
+    {
+      "text": "We work.",
+      "file": "8aba5d490cf87e77.wav",
+      "bytes": 31276,
+      "sha256": "dd4d2e4e87f86929e83b765cd8f7086148938585a5961111d384684443b46132"
+    },
+    {
+      "text": "She works.",
+      "file": "083887f9232ac1be.wav",
+      "bytes": 42540,
+      "sha256": "164cc0e3c19f5144164087f16defcb40ae6d40907588cc41b35c883106ce1baa"
+    },
+    {
+      "text": "Read the book!",
+      "file": "0299b4147b71857c.wav",
+      "bytes": 35884,
+      "sha256": "22753818d39e4c03684d59fc1e67e52effb6a9214bab57a8feda638614ef58d2"
+    },
+    {
+      "text": "Always read the book!",
+      "file": "53aa0a682f8af37d.wav",
+      "bytes": 56876,
+      "sha256": "512b6d3446881dadbdf29f53ccb70543ecce71cf500485fc37c7ca7728b5f556"
+    },
+    {
+      "text": "Read the book today!",
+      "file": "33ad77248717baf8.wav",
+      "bytes": 51756,
+      "sha256": "78247a507f8b422eaa6cc0f0474da1f4f3ffb93c18b030a965dfc3d106651eb7"
+    },
+    {
+      "text": "Look happy!",
+      "file": "d308ab4819764640.wav",
+      "bytes": 35372,
+      "sha256": "99fb07f8f839df8269890312b6f7615298051d0826be30ead12ed0db3712729b"
+    },
+    {
+      "text": "Always look happy!",
+      "file": "d15c9520962f04ae.wav",
+      "bytes": 50220,
+      "sha256": "5ad38aa98624296ae32de7d2ba0d797ecae68308844d99a0408824c1e92492a2"
+    },
+    {
+      "text": "Look happy today!",
+      "file": "19c897b91d478f0f.wav",
+      "bytes": 53292,
+      "sha256": "e8df92c75f8b8e8d8f8d61adc52dbc9cf8e808e8b862f36ee50403819a20987a"
+    },
+    {
+      "text": "Be happy!",
+      "file": "f2e066dd2935a440.wav",
+      "bytes": 34860,
+      "sha256": "60fa03f79b81412836f68cac172b4d34b2e9947dfcc74e3501d3b0e112812e47"
+    },
+    {
+      "text": "Always be happy!",
+      "file": "5cc2f3964e7a2332.wav",
+      "bytes": 52780,
+      "sha256": "febce7f7fc5a50975ab4d81f5f7e789f1359bae0de762669fb76b257b508e374"
+    },
+    {
+      "text": "Be happy today!",
+      "file": "2d872e44aaca5f4f.wav",
+      "bytes": 45100,
+      "sha256": "8240e89fc3c5c4a30916127a96c517184422a3c5275535af28bcd45e993f51e3"
+    },
+    {
+      "text": "Do not work!",
+      "file": "cc243b2d391a5d33.wav",
+      "bytes": 35372,
+      "sha256": "a063c398d2fd6206508c197bce047dffabbcc1e1ef3ed8e913f43ecd626d2e56"
+    },
+    {
+      "text": "Today, do not work!",
+      "file": "09f36e0af2da5b3c.wav",
+      "bytes": 56876,
+      "sha256": "092626273036ff740c0e7bacdce11efc189153135e418dda888dfe83f3b45f7c"
+    },
+    {
+      "text": "Do not work today!",
+      "file": "466c6451d493470a.wav",
+      "bytes": 51244,
+      "sha256": "dd1428376c0027d6284a324e0e51821195378d0cc7640c14d693f9fa6618c8f4"
+    },
+    {
+      "text": "Do I work?",
+      "file": "7560501a27c46cca.wav",
+      "bytes": 32812,
+      "sha256": "733745aa8b2dd9fc00b9916048f6857ed5d37f036831d7c84b8bc282ab03315d"
+    },
+    {
+      "text": "Do we work?",
+      "file": "550182f35385792d.wav",
+      "bytes": 35372,
+      "sha256": "fae822a9c2cb5347bef1e7ce526d34019be477043c697d8411bed0cb0568c744"
+    },
+    {
+      "text": "Does she work?",
+      "file": "21040b3d0bb849e4.wav",
+      "bytes": 42540,
+      "sha256": "c38aa945c1fa3c3ccbf72fe5827c1fcae0ece9afadef2f28a461bfdaaecdc815"
+    },
+    {
+      "text": "Do read the book!",
+      "file": "16416b7fc98e81ab.wav",
+      "bytes": 46124,
+      "sha256": "a6e4d4cae5f73a3da007f90aaa29e7f9121ec4522ff9101e82e6c093dce0712b"
+    },
+    {
+      "text": "Always do read the book!",
+      "file": "ed8fb9835db7373c.wav",
+      "bytes": 67628,
+      "sha256": "7cfb5a2c8f77bfd41e8f92e5458ac06f78cc5bd0134f4a48250fd085d0d66eae"
+    },
+    {
+      "text": "Do read the book today!",
+      "file": "4b7eb5ecd367f486.wav",
+      "bytes": 57900,
+      "sha256": "38918656303ce181337fa4fc9bed10cd7ddc3a29a9cc6db3f4edc1a8a85265ff"
+    },
+    {
+      "text": "Do look happy!",
+      "file": "cb72b1c86fe499f2.wav",
+      "bytes": 45100,
+      "sha256": "723be68e4fe971c166b4f08c3a7b1d90e9150a263b3ee2a4ea717325ac638b5d"
+    },
+    {
+      "text": "Always do look happy!",
+      "file": "61793a40c8b53cc4.wav",
+      "bytes": 64556,
+      "sha256": "08f5c022d4b406e7d29fff5c0495cef3f54de723d486840844c6214c2c26cc33"
+    },
+    {
+      "text": "Do look happy today!",
+      "file": "d3af1bee7d984f5f.wav",
+      "bytes": 61484,
+      "sha256": "0f09af39e6c4974ebb4d6bf76bf8c617a6131e092cd98675bcdddb4e3c90ee8d"
+    },
+    {
+      "text": "Do be happy!",
+      "file": "04384f5ba1bb735e.wav",
+      "bytes": 43052,
+      "sha256": "70d6405094bbeab7f6363da79b53e40b5a886b5481a827c8607df821c8694fdf"
+    },
+    {
+      "text": "Always do be happy!",
+      "file": "ae114f8d46b060bc.wav",
+      "bytes": 62508,
+      "sha256": "ba499270bf1308b83550918031e272fc949b27723942c5f6d23d444cb12e30c8"
+    },
+    {
+      "text": "Do be happy today!",
+      "file": "6c6126340a8be676.wav",
+      "bytes": 58924,
+      "sha256": "306cb8d4daf656e8b75fc8787be37a58ce241ed5b2a07d39eda213d62e9220c0"
+    },
+    {
+      "text": "Can I work?",
+      "file": "9ba46872588d2ae6.wav",
+      "bytes": 36908,
+      "sha256": "94082ee81b6a106d7fee4a8784a29ea8d506fa062e7c52467f2850657a9d4b68"
+    },
+    {
+      "text": "Can we work?",
+      "file": "7907935d17026bd3.wav",
+      "bytes": 36396,
+      "sha256": "c463237aa1cd3351558cb8c1defdcc638555ceccca87b65a899a4223cfb3347d"
+    },
+    {
+      "text": "Can she work?",
+      "file": "bcdbeee3cf1617ba.wav",
+      "bytes": 41516,
+      "sha256": "d30731fa290bdcc746c60214edb32a5ff22de7a47d1955816ef30d8c8da6152d"
+    },
+    {
+      "text": "I do work.",
+      "file": "92d40e29e3e74e45.wav",
+      "bytes": 39980,
+      "sha256": "c53431f30033337507dabe0894a25dd559efa598320e0b89be8404c50a7a1f04"
+    },
+    {
+      "text": "We do work.",
+      "file": "acf7c88d0c597f64.wav",
+      "bytes": 35884,
+      "sha256": "4cc77cf09fcab0b3eadce7e37a70cea480423bc8280e013c292fb25e21dd72fe"
+    },
+    {
+      "text": "She does work.",
+      "file": "de38d13d871ce65f.wav",
+      "bytes": 46636,
+      "sha256": "07a8d35cb0db6357208faeb118a555184f808079fdfb26a480c10f67ae4adaf0"
+    },
+    {
+      "text": "I can work.",
+      "file": "46c3f2dec7ce907f.wav",
+      "bytes": 35884,
+      "sha256": "a87a4760fbab6a67e04c70257207c2dd33405c29f6134a6b196d6d1dd5a06bd1"
+    },
+    {
+      "text": "We can work.",
+      "file": "59db4d367a54e262.wav",
+      "bytes": 37420,
+      "sha256": "71f4c9e312b4a4189a37e048bc489c6858bd3f1cf436ff6ee45146cf26ab5f3e"
+    },
+    {
+      "text": "She can work.",
+      "file": "4e9f5d5c15cbe039.wav",
+      "bytes": 38956,
+      "sha256": "72d2031c27f5b322783f285b0ea8626bff574df8c97f04f60ad43aaa0894e77f"
+    },
+    {
+      "text": "I need the book.",
+      "file": "d77c9af34b1e0016.wav",
+      "bytes": 48684,
+      "sha256": "c3b9cd541dfa4f57b67d7437309a15e6c9a9c40b589435b54d354cebbd4d93be"
+    },
+    {
+      "text": "We need the letter.",
+      "file": "6db1827c491f99a2.wav",
+      "bytes": 46124,
+      "sha256": "bc160d5ff290a5ca6df8b56ea160bc7ca7092c0ba6d75e90d08404b0901d6e9d"
+    },
+    {
+      "text": "She needs the story.",
+      "file": "062a4f3f148590e3.wav",
+      "bytes": 61996,
+      "sha256": "3e966308447d51948486812a5a02170d8e2f21ce0e489656e70dcd4e81190160"
+    },
+    {
+      "text": "I look happy.",
+      "file": "2bb7c83c15d86026.wav",
+      "bytes": 41516,
+      "sha256": "58932850885b7aede8702b2299fef613bb18c6f2d332c9ce59d2f1c6b98d29b5"
+    },
+    {
+      "text": "We look happy.",
+      "file": "3720a05c1ef43b0d.wav",
+      "bytes": 41516,
+      "sha256": "e8512da81c1958bf2243190df11eff7533bfd25875e598562beb29e74d79cce2"
+    },
+    {
+      "text": "She looks happy.",
+      "file": "5ab053c2dc1ebaf1.wav",
+      "bytes": 46636,
+      "sha256": "ee219e114fa19ad5281e83f53c081d27489993f11cc5c2dee5b650b85a5c2a83"
+    },
+    {
+      "text": "I am happy.",
+      "file": "e4383618e44faf25.wav",
+      "bytes": 39468,
+      "sha256": "f759837fb34ae4c01edce9f53ca90445b9fcf1533113f432799f070567d3047d"
+    },
+    {
+      "text": "We are happy.",
+      "file": "080244a28a9b7763.wav",
+      "bytes": 44588,
+      "sha256": "dd9ccee8a7ec0c9d88a1037d1da5ebedd2c508c524367c872a8595800a0c188e"
+    },
+    {
+      "text": "She is happy.",
+      "file": "75d376b907447dcd.wav",
+      "bytes": 48172,
+      "sha256": "a30cc644b51db96af88017f1b50c5156330f7969096e46758bba6b722191ad24"
+    },
+    {
+      "text": "Give them the book!",
+      "file": "c36dd5c2de979ce0.wav",
+      "bytes": 43052,
+      "sha256": "141a9a1c1619c69a91d454533f2a7389c45d437d2950ac58248b692c52783484"
+    },
+    {
+      "text": "Always give them the book!",
+      "file": "99d4de3a28dd6898.wav",
+      "bytes": 65580,
+      "sha256": "0bcc9a94c36dfa015dfdce5cf27b386dfdee36b85263f91c16a8957a7becd498"
+    },
+    {
+      "text": "Give them the book today!",
+      "file": "28fa4066204ad925.wav",
+      "bytes": 59948,
+      "sha256": "f5bf1c1064283321cdcbd334691981e73c36344bbff1bdaba46c7f2401c91274"
+    },
+    {
+      "text": "Make them ready!",
+      "file": "9befc07e4a841e6e.wav",
+      "bytes": 41516,
+      "sha256": "178660d736f16b20dca999619740e0a4df509b0679bb09675cdfb34652422ea0"
+    },
+    {
+      "text": "Always make them ready!",
+      "file": "369e3f95f0ea83d7.wav",
+      "bytes": 59436,
+      "sha256": "60dd8effe7914a1df33ec518b5d775cc8d09801e0fca9e0509dbf63fcdc35787"
+    },
+    {
+      "text": "Make them ready today!",
+      "file": "4dcd73b1ca95b0a9.wav",
+      "bytes": 59436,
+      "sha256": "4925c1c03f8d6db0846144b914bf34e0d6df5a54a4a70b3e187cc68fec777380"
+    },
+    {
+      "text": "Be not afraid!",
+      "file": "c040b3a2d3288f3f.wav",
+      "bytes": 41516,
+      "sha256": "95a85d9e70b363fac50ba61385b5bc70c14dad32bbc9b4ecb4e6292843fefeb5"
+    },
+    {
+      "text": "Today, be not afraid!",
+      "file": "7bc3abe785217f92.wav",
+      "bytes": 62508,
+      "sha256": "b8b92942e287247e74d741505852ff96c0b9b722be5e13e33c94586e03438fc1"
+    },
+    {
+      "text": "Be not afraid today!",
+      "file": "b4798f30adfd2277.wav",
+      "bytes": 60972,
+      "sha256": "a6886be758f3f45e383c738ad5fb8760f78de962355c7bd83a0d60a4daa514fa"
+    },
+    {
+      "text": "Am I happy?",
+      "file": "741e1dc0da3cf83f.wav",
+      "bytes": 42540,
+      "sha256": "84614e735a9ca47ea4263daf9dd012ad11f771236e0512e2523d0bf44bfea869"
+    },
+    {
+      "text": "Are we happy?",
+      "file": "75508aa3b4d16373.wav",
+      "bytes": 42028,
+      "sha256": "5aebea39366f9164a6310c1c33eebd7c555d597ff551fe7b4725e83103d499c0"
+    },
+    {
+      "text": "Is she happy?",
+      "file": "af631dac13465242.wav",
+      "bytes": 42028,
+      "sha256": "92c26d03fe50e57e36b3d8ecdae76af52e918b3f92a1c9df3f9bef9282ff2d1f"
+    },
+    {
+      "text": "Do not read the book!",
+      "file": "635ecd3cc7a95afb.wav",
+      "bytes": 49196,
+      "sha256": "23ecf803b328a4dbed46d52ad5f1023e2c659c2514fc02ee999a46ce4a8c8bc3"
+    },
+    {
+      "text": "Today, do not read the book!",
+      "file": "819f7dde10951e20.wav",
+      "bytes": 72236,
+      "sha256": "bd21973595e16ea68400c52505fe0a9a07de557fc4c50b5795eaf2889856c61c"
+    },
+    {
+      "text": "Do not read the book today!",
+      "file": "9f14a4f591420d7a.wav",
+      "bytes": 68652,
+      "sha256": "634f4331873a54776b3b05b1d55f586d7462eadcfff7dbba363464e1a160e9d7"
+    },
+    {
+      "text": "Do not look happy!",
+      "file": "a23dbf685f7d4593.wav",
+      "bytes": 49196,
+      "sha256": "8e24e8ea73208915cb51ac5979db2a5ae2163fbd29b1e57451106c6e6862ed0d"
+    },
+    {
+      "text": "Today, do not look happy!",
+      "file": "9a4cfae57fb40fbd.wav",
+      "bytes": 67628,
+      "sha256": "f2ba4b19328c56999f1265e58c599cec7079adbc68547a42557523e866b3d550"
+    },
+    {
+      "text": "Do not look happy today!",
+      "file": "561872747b0098cc.wav",
+      "bytes": 66604,
+      "sha256": "fb3e1e7b3ccd95b34e3db8aafbbd26aca5b691fdc94da0796a84b0eb54d3ebee"
+    },
+    {
+      "text": "Do not be afraid!",
+      "file": "221cee577e46136e.wav",
+      "bytes": 59436,
+      "sha256": "80352e6e8b4a1f98d3fe4671ede894a59cc90212bf727ecd0f2c22b554c68d98"
+    },
+    {
+      "text": "Today, do not be afraid!",
+      "file": "d58af9799e471a7e.wav",
+      "bytes": 73772,
+      "sha256": "122115067385c1731f520feae36a7e1cd5b6e382dacd459028116ea3a8f5a7e5"
+    },
+    {
+      "text": "Do not be afraid today!",
+      "file": "d8d62fa2d4b5412f.wav",
+      "bytes": 71212,
+      "sha256": "8889f8eeef871ccf3ba4a38b2f403f0ff7a021aee2cf6532fcce3cb53ccc9b97"
+    },
+    {
+      "text": "Do I not work?",
+      "file": "1ebe9c77621d6326.wav",
+      "bytes": 43052,
+      "sha256": "f03080298ed057ca303858f8bbbebc6db9c4f2f1fe1dd74f48654cf7d3f79bf7"
+    },
+    {
+      "text": "Do we not work?",
+      "file": "c093714d8ab68843.wav",
+      "bytes": 46124,
+      "sha256": "1a9922012bfd22ef9e9ff407bd76ced1c0cb5e40b860d3c4bffbf17dc43f8bb8"
+    },
+    {
+      "text": "Does she not work?",
+      "file": "d0f18b0a5b6ab97d.wav",
+      "bytes": 52268,
+      "sha256": "6f84249ed1fefc7be9ffc3375cc8e9ad7016f15fc623a5881b4b3d432626f770"
+    },
+    {
+      "text": "Do I need the book?",
+      "file": "b3a4481a5c00b4e0.wav",
+      "bytes": 54828,
+      "sha256": "9466d7cc8c27ddbe3b81e6191b8e37ad1b3adf86f9195fb77a1aa7a176740307"
+    },
+    {
+      "text": "Do we need the letter?",
+      "file": "3f8e61d397114107.wav",
+      "bytes": 48684,
+      "sha256": "ad06adade586f24fceb6964d805d3d6e262c93e85f0f54a35f315038e8eceef5"
+    },
+    {
+      "text": "Does she need the story?",
+      "file": "3dc869be4efece5a.wav",
+      "bytes": 70188,
+      "sha256": "9444f1ca8a4cc92b316366d74ef2e591fb9926e073cda0ddcb50fd4992dad341"
+    },
+    {
+      "text": "Do I look happy?",
+      "file": "6c10b00f96209a8b.wav",
+      "bytes": 49708,
+      "sha256": "60d2a1fff71f276dc6e160d0cb894a603ab6912c1bdeda39ae7e472eb547430b"
+    },
+    {
+      "text": "Do we look happy?",
+      "file": "aaa66c670ebf4e7b.wav",
+      "bytes": 52780,
+      "sha256": "957010dce5237a81def51e1a5c0089fc070a505fd416f528738248c62295aa4e"
+    },
+    {
+      "text": "Does she look happy?",
+      "file": "0594951d9030a0dd.wav",
+      "bytes": 56876,
+      "sha256": "9b1a074c8e80b06f37c4b324eecb6ff9f811c0d539398781a0b347f72ebac24e"
+    },
+    {
+      "text": "Do give them the book!",
+      "file": "ba09312cf3e84eaa.wav",
+      "bytes": 54316,
+      "sha256": "681df0c985b920479db6fbef39233641b667622bf4908b6d712144650b021ee8"
+    },
+    {
+      "text": "Always do give them the book!",
+      "file": "d2a963bd5a2eb31e.wav",
+      "bytes": 76332,
+      "sha256": "3a95e2e0f5aa32b10e89576253b5e3d72a8550d6dd4bd561f74bc2872c92c34f"
+    },
+    {
+      "text": "Do give them the book today!",
+      "file": "3d5ed326e8f72a3e.wav",
+      "bytes": 72748,
+      "sha256": "73ae95120a94582d5ac845b8c78b4b72bca0bcac8925bf9bd1e0eaa2f0556790"
+    },
+    {
+      "text": "Do make them ready!",
+      "file": "3d8ce523944a4abd.wav",
+      "bytes": 47660,
+      "sha256": "e63ecd545f3716a271b543d0c43d4c5c1892ac9246292039191cecfb45764492"
+    },
+    {
+      "text": "Always do make them ready!",
+      "file": "38d51f3d680d229f.wav",
+      "bytes": 66092,
+      "sha256": "df19c040e951f43c771aa9fd91a3698858a9c06dd833cc3f7477bb13006f01fc"
+    },
+    {
+      "text": "Do make them ready today!",
+      "file": "599e36613a440bf0.wav",
+      "bytes": 65580,
+      "sha256": "e2f3c86c34d1d963992322099946c78ebd0cb48cdd56e054b711eb8532ab3156"
+    },
+    {
+      "text": "Can I not work?",
+      "file": "109c3e7267651346.wav",
+      "bytes": 46124,
+      "sha256": "a45819394f5250c9781fc279491131fa55a775b41293fd28c1700fbd2e0a75e7"
+    },
+    {
+      "text": "Can we not work?",
+      "file": "baed69ec59ae37e2.wav",
+      "bytes": 46124,
+      "sha256": "a047a0e61b31a7bfdb422331c23f30445a3844687f6dd2f066688e875bcccdaf"
+    },
+    {
+      "text": "Can she not work?",
+      "file": "51d4c70f9b1dd554.wav",
+      "bytes": 50220,
+      "sha256": "19e00c7dea0dce3d2afd8a5e17b68de1c06fea7bdca96ed67085137050a7b93e"
+    },
+    {
+      "text": "Can I read the book?",
+      "file": "11721aa36aca8e2f.wav",
+      "bytes": 57388,
+      "sha256": "210c307cc3eb9cf390332114a3b969c62009f6c87b0fcbe8b421f25da2f24346"
+    },
+    {
+      "text": "Can we read the letter?",
+      "file": "d165f098f586b3da.wav",
+      "bytes": 55852,
+      "sha256": "cb890fc59a5f265a3e8644e40ce708ec47861a3cc27cc36e24ba6c322a05ca21"
+    },
+    {
+      "text": "Can she read the story?",
+      "file": "17f17a1130bc20eb.wav",
+      "bytes": 65068,
+      "sha256": "30f319609d5003672e7f4fb5a10fc05e0fcd412416e4834b23c38bfa8043e3dc"
+    },
+    {
+      "text": "Can I look happy?",
+      "file": "fee3decd1c8174fd.wav",
+      "bytes": 45100,
+      "sha256": "5f390d5c82f385b5e9e45bc6ac59aec1ea920fb081430a328bace2f49646d002"
+    },
+    {
+      "text": "Can we look happy?",
+      "file": "8204cf97eca35ab8.wav",
+      "bytes": 50732,
+      "sha256": "085bb2e3d08085c3a521888b3630d1d4e66ce6e4057c30c17e619d5452860746"
+    },
+    {
+      "text": "Can she look happy?",
+      "file": "06f03bc586bb9630.wav",
+      "bytes": 50732,
+      "sha256": "7b78a5cd75f53bbcd8e1d15b066a6b0f3e5edecbaea13ebe5583fe22e58131d3"
+    },
+    {
+      "text": "Can I be happy?",
+      "file": "48dfc9fcd0853717.wav",
+      "bytes": 44588,
+      "sha256": "7fe14bb85850ad4c7c13f89db9d60435df086b982db2f6c5d010242de70a2f15"
+    },
+    {
+      "text": "Can we be happy?",
+      "file": "ba7a5f7242431c86.wav",
+      "bytes": 47660,
+      "sha256": "33156a3244ec53baae8a1e2b54aa5eee3503958f17fb0f5785b3af1e42563101"
+    },
+    {
+      "text": "Can she be happy?",
+      "file": "a18dce9fdf1bc522.wav",
+      "bytes": 49196,
+      "sha256": "a0447e0af859452b99fdc4e1902b42555fdc09560de3df196eccc7c27bfccb19"
+    },
+    {
+      "text": "I do not work.",
+      "file": "bade3f27862afbfc.wav",
+      "bytes": 50220,
+      "sha256": "bf3dcf9f40cb8e2895eab148f3a1fdd7b712f0c999be589a1c40d29beed59f0c"
+    },
+    {
+      "text": "We do not work.",
+      "file": "c31c569eba4ee283.wav",
+      "bytes": 45612,
+      "sha256": "41fb9dfae37345b7b4e321a31dbcd683a57852ff944f8b25326fe45c31d637da"
+    },
+    {
+      "text": "She does not work.",
+      "file": "3f42708b8eb92237.wav",
+      "bytes": 45612,
+      "sha256": "4887f3d300ccadd0c8ca9312c9e4f835a35152a8df1f18535347001165b48f61"
+    },
+    {
+      "text": "I do need the book.",
+      "file": "681eb79959ed2a97.wav",
+      "bytes": 54828,
+      "sha256": "58d7b42b9417a00e35423c19c049269a226e63797f9a5363339ce403286a4798"
+    },
+    {
+      "text": "We do need the letter.",
+      "file": "228c3aa5c6a4b012.wav",
+      "bytes": 51756,
+      "sha256": "5e1ea893aa7f7724fed9c987ee40ba30df4e8ddac838d8f9f0cb747325c2d57f"
+    },
+    {
+      "text": "She does need the story.",
+      "file": "acd7dd41e023193a.wav",
+      "bytes": 60460,
+      "sha256": "7a71400efef8ab8f0438c871e80f23b2fc3159dc362d29ceee16d4b29fdccc6a"
+    },
+    {
+      "text": "I do look happy.",
+      "file": "4fcd6cdf0e18debf.wav",
+      "bytes": 49708,
+      "sha256": "64664a81564d2ff9c296c114662dee1a4e15a229b22358a5c4ea87274268b9e6"
+    },
+    {
+      "text": "We do look happy.",
+      "file": "e2a55e7b5d424124.wav",
+      "bytes": 55340,
+      "sha256": "f7ed3d11d155fef3cf96961281a00fe70032b60f1c5215021454386272483767"
+    },
+    {
+      "text": "She does look happy.",
+      "file": "220319def8896e04.wav",
+      "bytes": 56876,
+      "sha256": "c1f14da6d012a29cf299ef62b93fc990e2ed42402a398a65cb1a1ffa1aa2a8c1"
+    },
+    {
+      "text": "I can not work.",
+      "file": "51167e8bec902488.wav",
+      "bytes": 49196,
+      "sha256": "7bb1cf1b94451c5350bc4b7765424a9ae5fde60c8b7895931579801160401248"
+    },
+    {
+      "text": "We can not work.",
+      "file": "cd30794cf4f336c6.wav",
+      "bytes": 50732,
+      "sha256": "10e00b15dd54273b27afd5c75b9651241dd17f92af3cac173db3320a8e1f9c04"
+    },
+    {
+      "text": "She can not work.",
+      "file": "bea3933482c8100e.wav",
+      "bytes": 48172,
+      "sha256": "11a429521addcb10757218b01985628d1ad17c75445f014dc148bb30f240743b"
+    },
+    {
+      "text": "I can read the book.",
+      "file": "2de7e5256f8df60b.wav",
+      "bytes": 54828,
+      "sha256": "96991f6d22206a11e5273a739f037b8c633c3f9def81ae52763ed25cae01e417"
+    },
+    {
+      "text": "We can read the letter.",
+      "file": "b6c6918a892947f2.wav",
+      "bytes": 54828,
+      "sha256": "1d80501140757aa9a6caca5a6ec961a68bc4abf5eb9ef12fc3b13e386d62933b"
+    },
+    {
+      "text": "She can read the story.",
+      "file": "e28b525fdf567b7f.wav",
+      "bytes": 63532,
+      "sha256": "786b5c717cb099c5da310bed685a96045b2ec8aa1691db294d2912fdf2d03bc9"
+    },
+    {
+      "text": "I can look happy.",
+      "file": "92f015154e4c3031.wav",
+      "bytes": 50220,
+      "sha256": "d1ed069003bc87b322f3dff561490b0ac5297e987219be7c5b9b751550d3489c"
+    },
+    {
+      "text": "We can look happy.",
+      "file": "df467b34a1c7c9e9.wav",
+      "bytes": 50220,
+      "sha256": "f9893278c549da0f4b250314da03bc4d631887bf419c76be48eddf598945c08c"
+    },
+    {
+      "text": "She can look happy.",
+      "file": "9a89282247677097.wav",
+      "bytes": 51244,
+      "sha256": "222e47583575e6c6537e840ea36dc739b7a7b69fe7de140c90091cf871624476"
+    },
+    {
+      "text": "I can be happy.",
+      "file": "67dfa99c98427a5f.wav",
+      "bytes": 49708,
+      "sha256": "0aeeb23aeb33f7bd266fda39bfff5cbc1fc884f7e49303eeec172b37933d2809"
+    },
+    {
+      "text": "We can be happy.",
+      "file": "dc8f47c45dc71467.wav",
+      "bytes": 49708,
+      "sha256": "455e98d5fc51b81e078bd9eeb8b768b0baee5004cd99f5c944be54746df2be62"
+    },
+    {
+      "text": "She can be happy.",
+      "file": "086ed37e58218bb3.wav",
+      "bytes": 50732,
+      "sha256": "2aec18b323f80257bcd71e354402b2fd7ff1eb7be5ce0f04a269d96388810a24"
+    },
+    {
+      "text": "I give them the book.",
+      "file": "c350b64402d430f3.wav",
+      "bytes": 52780,
+      "sha256": "54fd9b975b43fc4babe2c634c7dd6a2dd4dca76229f8dd79660743f1e3d8d2b3"
+    },
+    {
+      "text": "We give them the letter.",
+      "file": "53214f3a6dfa28e7.wav",
+      "bytes": 51244,
+      "sha256": "94c3ae7045d3d3347dfb97547aa222987cebab0028d44e43d5fc5a393a704f72"
+    },
+    {
+      "text": "She gives them the gift.",
+      "file": "2579c59051923ca5.wav",
+      "bytes": 65068,
+      "sha256": "f0e5a049d13536fadbb89f35b8c68ce8e74d07851a27491b264334054e573347"
+    },
+    {
+      "text": "I make them ready.",
+      "file": "4421965a3e5311c7.wav",
+      "bytes": 50220,
+      "sha256": "b95d0df3e57ebe48f78d23e168e1065772b2d57e12955319c127d60af807f225"
+    },
+    {
+      "text": "We make them ready.",
+      "file": "807d51232136ff21.wav",
+      "bytes": 51756,
+      "sha256": "2d4d1474dde3b367112c1942c3d9f7db2e8fc328b5a23a6a69f12ed5c91ee8a0"
+    },
+    {
+      "text": "She makes them ready.",
+      "file": "d462ceb8cd931137.wav",
+      "bytes": 57388,
+      "sha256": "7e386e7116e36b8d027986d274125b2dcf6fd3d27adaf321b76e35725352487d"
+    },
+    {
+      "text": "I am not happy.",
+      "file": "2fa3326652cc918a.wav",
+      "bytes": 48684,
+      "sha256": "c35ebc8e5520ef78cb718358b84c5fe7736618883e296d62d8bdd5f08c771df0"
+    },
+    {
+      "text": "We are not happy.",
+      "file": "8ea7bc60b9aa5366.wav",
+      "bytes": 48172,
+      "sha256": "75212888bfc57bfd2a84350b1b118130e2b3b6be970f60d69d7ba82a8f0b8b83"
+    },
+    {
+      "text": "She is not happy.",
+      "file": "2f614bff837d6bd2.wav",
+      "bytes": 56876,
+      "sha256": "58076538c0b181215759f3c8e7c6df4417c8ebc7c047408ce046a2eaa03fc84f"
+    },
+    {
+      "text": "Am I not happy?",
+      "file": "c8aa980a8cb3e617.wav",
+      "bytes": 48684,
+      "sha256": "932ea5186a4749ecf0c91c71d264bcda56a55674d43a29f741563573786ce1ac"
+    },
+    {
+      "text": "Are we not happy?",
+      "file": "013a2ebdee49d5d8.wav",
+      "bytes": 46636,
+      "sha256": "e201a319e9ba0280621281acbf0df0470f6e78190f217d93fe63fe6540aa318d"
+    },
+    {
+      "text": "Is she not happy?",
+      "file": "11d65306e9917f7c.wav",
+      "bytes": 53292,
+      "sha256": "e5ce6461c670400e4ec1e3f9b363783cba2ef85ef9538ce8032cfd8fe541d9a2"
+    },
+    {
+      "text": "Do not give them the book!",
+      "file": "d9163f423c8ea290.wav",
+      "bytes": 59436,
+      "sha256": "4a03c9f03bf04f3b7318015afbd028eddbfcc4408d0ea1bdd0f87a7aa6017cd4"
+    },
+    {
+      "text": "Today, do not give them the book!",
+      "file": "3ca55eec38fb7f2f.wav",
+      "bytes": 91180,
+      "sha256": "a84f760d4891e9e72903348abde74c77a761bd969f188bb40c2f2958e5583cc2"
+    },
+    {
+      "text": "Do not give them the book today!",
+      "file": "22d636314ef67c16.wav",
+      "bytes": 75820,
+      "sha256": "4680b37d2ebe8668e84fc4fcb05bad1ef69fd344313f109c4fad24d4d2deb278"
+    },
+    {
+      "text": "Do not make them ready!",
+      "file": "0ae1c5470e116188.wav",
+      "bytes": 56364,
+      "sha256": "111bc3a5be65ae5a4529ccb14e0e7f21525b5c2b3cab7aca0d6d12e4dbf79b54"
+    },
+    {
+      "text": "Today, do not make them ready!",
+      "file": "2cc0756c0d10630c.wav",
+      "bytes": 69676,
+      "sha256": "565630480aa3c29f0fe262c628f4e6804987be97213abcdf6ba6da6c8f2b880c"
+    },
+    {
+      "text": "Do not make them ready today!",
+      "file": "25e07c0627f9edc8.wav",
+      "bytes": 74284,
+      "sha256": "95d6ca4474e2cd42af68e6736e46be7efa3f7570c28aec613f4299a07492c5db"
+    },
+    {
+      "text": "Do I not need the book?",
+      "file": "c4c8e2d9fb8a5179.wav",
+      "bytes": 65068,
+      "sha256": "f08c1ec95b924fa2a73d0145b558396301eecbff08c8d8915517c1c87451fc1e"
+    },
+    {
+      "text": "Do we not need the letter?",
+      "file": "90d0118d10745136.wav",
+      "bytes": 57388,
+      "sha256": "7a47ab446bd70cb63edeadaf0fe62a3cefc6ed5d72edec86f1a240f789cb0921"
+    },
+    {
+      "text": "Does she not need the story?",
+      "file": "f2698612e5b35ab1.wav",
+      "bytes": 74284,
+      "sha256": "0505c277b6781fca6c3dc4a8652508eb0fa708d8f91dbc0559921eaab3217af4"
+    },
+    {
+      "text": "Do I not look happy?",
+      "file": "d5b630400276fb76.wav",
+      "bytes": 58412,
+      "sha256": "1ac27f1efcee80c4d21b230d7b9528ef863b618ad6cd09310dc4a89b5477fc77"
+    },
+    {
+      "text": "Do we not look happy?",
+      "file": "16176446c079218d.wav",
+      "bytes": 56364,
+      "sha256": "a69a8fa7c42006253dd39e8e993c76f630309137d78eedf5075d5f15f46e0134"
+    },
+    {
+      "text": "Does she not look happy?",
+      "file": "9cda5b17b52be7ae.wav",
+      "bytes": 66604,
+      "sha256": "23a4808e58210b8765c6be9b217cc83c4aa08536125c47f9fba825d2e3e4f474"
+    },
+    {
+      "text": "Do I give them the book?",
+      "file": "1ae53544af38d034.wav",
+      "bytes": 61996,
+      "sha256": "66338f11789383d460768c15241fd6655dad1c9ac584a51ea4264e0411cb44b8"
+    },
+    {
+      "text": "Do we give them the letter?",
+      "file": "42f2b5aa8415e252.wav",
+      "bytes": 58924,
+      "sha256": "9b7af4c1e337538c65b0168f49c3ab76018f02dceac217020fb064c0a7430f57"
+    },
+    {
+      "text": "Does she give them the gift?",
+      "file": "081fa7f7b96176e6.wav",
+      "bytes": 82988,
+      "sha256": "d7e4428a39ede22b86a088e2e0c1044885f6301a47b20485292223d6a6fb73e3"
+    },
+    {
+      "text": "Do I make them ready?",
+      "file": "d8d282440104c336.wav",
+      "bytes": 54828,
+      "sha256": "8d7d7e2bb1c01e0d7f0ac0c9b927ffa078f95ce3e4ef4e74651db319ec647df9"
+    },
+    {
+      "text": "Do we make them ready?",
+      "file": "2dad7c7b5e85e8ec.wav",
+      "bytes": 54316,
+      "sha256": "b3fbd14b0ae4dff74422137698428f3ad704423028d41f3db87ad01d9689873d"
+    },
+    {
+      "text": "Does she make them ready?",
+      "file": "34f0a24b06c21b60.wav",
+      "bytes": 59436,
+      "sha256": "434d203984027e25ce5a1f69f81f4eaa7f484caf677d054597a57bfc9d66791a"
+    },
+    {
+      "text": "Can I not read the book?",
+      "file": "d709c924a48252e7.wav",
+      "bytes": 61996,
+      "sha256": "4e8cc033a94dc45a365822ca5039e3b8ded622b1807a78451758ce4ea75ca267"
+    },
+    {
+      "text": "Can we not read the letter?",
+      "file": "daa94367bd65adbd.wav",
+      "bytes": 62508,
+      "sha256": "698cd9a4c42b557894048b929bfe604acdd3750c01a38fb8f30e85b113b4cfbd"
+    },
+    {
+      "text": "Can she not read the story?",
+      "file": "b646a026d11efa6b.wav",
+      "bytes": 71212,
+      "sha256": "67e2eccfd4e8d4adf4226298853a8f5d65deca3ce5476618cf48dfb92b4358e8"
+    },
+    {
+      "text": "Can I not look happy?",
+      "file": "e6303e9a60bb6624.wav",
+      "bytes": 55340,
+      "sha256": "2a428d88bb944e31087aaf6489aa4221acffca1d9bc386d3cb26881c93100594"
+    },
+    {
+      "text": "Can we not look happy?",
+      "file": "432d77942ea2c60f.wav",
+      "bytes": 58924,
+      "sha256": "46dfa87a576742965926d8e8cbe36a46077a3795f4a133c6c864e7d499f9e787"
+    },
+    {
+      "text": "Can she not look happy?",
+      "file": "9065e06a2588545d.wav",
+      "bytes": 60972,
+      "sha256": "4371a511c42a98388a7989a6771fdfeff88acbe439eb55fe4a92606aa1bb7fec"
+    },
+    {
+      "text": "Can I not be happy?",
+      "file": "1988c08cb22e17e6.wav",
+      "bytes": 59436,
+      "sha256": "70eb8b9248e22b56bb783f148cc568dd6379d4dd88c7ab3e9cb175e259ce4f93"
+    },
+    {
+      "text": "Can we not be happy?",
+      "file": "d23c0ce5971bfec3.wav",
+      "bytes": 57900,
+      "sha256": "a2d12e242ac016c0509502bf49273d364b57d0ce7360e257c4a07c70a523297e"
+    },
+    {
+      "text": "Can she not be happy?",
+      "file": "bc1e583e7aaf7abe.wav",
+      "bytes": 58924,
+      "sha256": "ec355f32b8cb0fbf81af756a547bddb53bfb427f51cde4e63dea229edbeb12de"
+    },
+    {
+      "text": "Can I give them the book?",
+      "file": "f64eb31027c82b4c.wav",
+      "bytes": 60460,
+      "sha256": "ce53cf505eadc9a472def24a7f13464239e1ebb916103742aebeb9cbe2d20587"
+    },
+    {
+      "text": "Can we give them the letter?",
+      "file": "dfb6a196cdcddd31.wav",
+      "bytes": 63020,
+      "sha256": "e4d1d17057877f12bb5748e3c03266efed3ca7ef912b5bd48980157afbc53d0c"
+    },
+    {
+      "text": "Can she give them the gift?",
+      "file": "19eda2a160ac2bd5.wav",
+      "bytes": 72748,
+      "sha256": "18621055997aa6a4bdd49b5dc49689380c16a5ebf5421569a912b65ae6b03f50"
+    },
+    {
+      "text": "Can I make them ready?",
+      "file": "ff1df710cb9d24bc.wav",
+      "bytes": 55852,
+      "sha256": "3709affa6f68d22c2caaa909e08f2eecb35562c1d9e3de9501746d8d75e65dbe"
+    },
+    {
+      "text": "Can we make them ready?",
+      "file": "b8fb6725caaa5d05.wav",
+      "bytes": 60460,
+      "sha256": "24ba7409b560ea3b258fbb464aeb2d5c432964ebaa2655c9863fcefe8fb77047"
+    },
+    {
+      "text": "Can she make them ready?",
+      "file": "4bfebadded18dfc0.wav",
+      "bytes": 54828,
+      "sha256": "e1b719a99542b70f12720b6b2b6b35c824e00c775489a28fdc87959aec324e0e"
+    },
+    {
+      "text": "I do not need the book.",
+      "file": "0649c0fad4d4f1df.wav",
+      "bytes": 73260,
+      "sha256": "f4d5f51a6b1ed6c3700b992da3a1c12bd95d780a111b1e669f8d909a9b163663"
+    },
+    {
+      "text": "We do not need the letter.",
+      "file": "09c2468981b013a0.wav",
+      "bytes": 65068,
+      "sha256": "59e1b2e9191d414d44000e6b294da2fe0678becc8d81f5969dd0f8430532f071"
+    },
+    {
+      "text": "She does not need the story.",
+      "file": "d9cfdcbc4d1ed819.wav",
+      "bytes": 69164,
+      "sha256": "a927afe2e72267d34e8da0f6b2c410c33b63e0f6ac6f62e06ddbe233ac3a8bac"
+    },
+    {
+      "text": "I do not look happy.",
+      "file": "fb27518476559785.wav",
+      "bytes": 58412,
+      "sha256": "1d5af2879e8580aad621d18316ca66dbde0fcd84f7dde143d37f9b259c4f9877"
+    },
+    {
+      "text": "We do not look happy.",
+      "file": "b2b9aceab29a9d7a.wav",
+      "bytes": 58412,
+      "sha256": "19a89a749e4a4a23882aa175f4716b3a196adeedd8ec0e6d5da42ae71e84a473"
+    },
+    {
+      "text": "She does not look happy.",
+      "file": "06e925aebb3b20ab.wav",
+      "bytes": 58924,
+      "sha256": "3a82932c695261340ec5b01793c28de531125df635064cecff01005d87c4d3f2"
+    },
+    {
+      "text": "I do give them the book.",
+      "file": "3662efca66b3a2f2.wav",
+      "bytes": 65580,
+      "sha256": "74ab590587b1db445ba60cbbb5ede8d4e4f7a52215411e61e05f1e3b9d233a34"
+    },
+    {
+      "text": "We do give them the letter.",
+      "file": "2b8eb7f5a5180d9c.wav",
+      "bytes": 57388,
+      "sha256": "22f82f541037e542f3c6545865bf0853ec49562cb7f03b464df1c5a2356e6fb6"
+    },
+    {
+      "text": "She does give them the gift.",
+      "file": "ef06abedb9f71e8a.wav",
+      "bytes": 76844,
+      "sha256": "e95f72ebbbe1b0b3924fdd9898da2244bd47105d89fb1bb3d76b2381cc3b2804"
+    },
+    {
+      "text": "I do make them ready.",
+      "file": "101c331f8fcc1c12.wav",
+      "bytes": 57900,
+      "sha256": "64ce35c8170bbcef7e30167d7dd0c45e26a551565078bba4383a6d6ea143342d"
+    },
+    {
+      "text": "We do make them ready.",
+      "file": "136d4a378f4ab0b8.wav",
+      "bytes": 62508,
+      "sha256": "fadd4bcc3c74b312f1110dffdf2a8e49d0bc85986d16d8a8600975e8593c00a0"
+    },
+    {
+      "text": "She does make them ready.",
+      "file": "8f36472276ca8332.wav",
+      "bytes": 60460,
+      "sha256": "d8829b8a2ea7ea181308e0c1143c997c29ddfd1433d445cf613153193050fa99"
+    },
+    {
+      "text": "I can not read the book.",
+      "file": "665a93f1d875a0ee.wav",
+      "bytes": 62508,
+      "sha256": "9e37a6a5187e5562379e3117825dd5f6f1431cb5380d0659b1cc6316a92706f3"
+    },
+    {
+      "text": "We can not read the letter.",
+      "file": "d5015529606b741f.wav",
+      "bytes": 61996,
+      "sha256": "a66095cf44f3a5e88aadcac0f8825a976dbcb2d2aaf3ffbc59f9cf8724cc6034"
+    },
+    {
+      "text": "She can not read the story.",
+      "file": "90f8c5dfe079962f.wav",
+      "bytes": 70188,
+      "sha256": "589ee4bac9bf6934c7479290dc626a477a871b0a4f2aff39c8e98c32c67d5ca1"
+    },
+    {
+      "text": "I can not look happy.",
+      "file": "c1eb1ede148096a3.wav",
+      "bytes": 64044,
+      "sha256": "cb1a842194bf63550c57a9d17c8116d482077815df1b6e3cfdded4d7e423bf62"
+    },
+    {
+      "text": "We can not look happy.",
+      "file": "6ef46df997b9db13.wav",
+      "bytes": 63532,
+      "sha256": "e23582e5d4137640cc9a7602febecb4014c46527a0ade692254b9775774c83f2"
+    },
+    {
+      "text": "She can not look happy.",
+      "file": "03b5e83bf96f0edc.wav",
+      "bytes": 61996,
+      "sha256": "4c084f6a157703e886a99257ef25524733f411505bd3f8633fdbfa20e15f1218"
+    },
+    {
+      "text": "I can not be happy.",
+      "file": "58cff9b2c7b57d61.wav",
+      "bytes": 57388,
+      "sha256": "b959938755f3b0caf199b0d84a1461192eaabe3dcaab5fc877ce53c62bd4baef"
+    },
+    {
+      "text": "We can not be happy.",
+      "file": "38c470c9a283cad5.wav",
+      "bytes": 59948,
+      "sha256": "f27008fe0f44aa44c30c03b95a1ccd151ff228c5a41a1cb49a707412f71a1186"
+    },
+    {
+      "text": "She can not be happy.",
+      "file": "af3b961c12ffd36d.wav",
+      "bytes": 56364,
+      "sha256": "53c1adb997948e328547854f4a625170ce9324c9fea1fc34bd4c89228ead940d"
+    },
+    {
+      "text": "I can give them the book.",
+      "file": "a5f62cc1a56602a2.wav",
+      "bytes": 72748,
+      "sha256": "0c863ae945d55f717535be18da0658f65d05f9ab42d3359a0758fdaf56779ec0"
+    },
+    {
+      "text": "We can give them the letter.",
+      "file": "784c0b50d3b835ee.wav",
+      "bytes": 60460,
+      "sha256": "d3918d2f54538e87cfb8a9e639a31888472944299f2bd8c8f5ca50a0df5c8af3"
+    },
+    {
+      "text": "She can give them the gift.",
+      "file": "a29b321bb50de5ff.wav",
+      "bytes": 73772,
+      "sha256": "30e7d97e0fe6d09858e64def360afa6363d71dd78255a17361ad840617412199"
+    },
+    {
+      "text": "I can make them ready.",
+      "file": "540349543ca19c44.wav",
+      "bytes": 54828,
+      "sha256": "285075766c40c966da539e217395b40d6bad4f858f847ae13b58c209abad4147"
+    },
+    {
+      "text": "We can make them ready.",
+      "file": "c02025221685b68e.wav",
+      "bytes": 60972,
+      "sha256": "62b8e02799bf7d68fe01745fcd69aff56d290a3413994495ac5e6078fbed2c73"
+    },
+    {
+      "text": "She can make them ready.",
+      "file": "1241a6b07bd3cf35.wav",
+      "bytes": 56364,
+      "sha256": "73486f03321239899dd17e26d2a679b3e1697eafa720667a9b7582a86be26077"
+    },
+    {
+      "text": "I do not give them the book.",
+      "file": "8acecfdc38cc04ed.wav",
+      "bytes": 84012,
+      "sha256": "66c885f23f33cf490cd1d0d783aed870f0952e25d98347eda92f61a5a1a5434d"
+    },
+    {
+      "text": "We do not give them the letter.",
+      "file": "6d48eb6543194016.wav",
+      "bytes": 67116,
+      "sha256": "0b1a7b4dc2d1a89b9ce10e5538b18480652267f07bf00fa06311ff35ef2c707d"
+    },
+    {
+      "text": "She does not give them the gift.",
+      "file": "8ce0c4c2772370a9.wav",
+      "bytes": 84012,
+      "sha256": "059c8e64e32c7d000e1c09538ee0207de9ee6d3be0c059c69ab4f5d44cd068fb"
+    },
+    {
+      "text": "Do I not give them the book?",
+      "file": "ac36d6023cd87ec0.wav",
+      "bytes": 71724,
+      "sha256": "e59b77a8411b8c86b41ab27e8b658e2b08bf919409399af9500a01084f1d05f4"
+    },
+    {
+      "text": "Do we not give them the letter?",
+      "file": "f4c2e73973dd6848.wav",
+      "bytes": 64556,
+      "sha256": "a22721f0ea305feb40aed4f805c1b41fb51e0378c8e8c1f1a9e64b08fdc2a39b"
+    },
+    {
+      "text": "Does she not give them the gift?",
+      "file": "670086402a129227.wav",
+      "bytes": 89132,
+      "sha256": "aa889cd2f91e2ae48426557ff0ee54ec8cd91297595d57ef931a630df312aa1d"
+    },
+    {
+      "text": "I can not give them the book.",
+      "file": "a619c6a9cf116087.wav",
+      "bytes": 76844,
+      "sha256": "8dd78d68b7fe33e4bf5024ff1397e530c6caac7158c1983108abf09f6142437d"
+    },
+    {
+      "text": "We can not give them the letter.",
+      "file": "49f58e4a29b9fac6.wav",
+      "bytes": 67628,
+      "sha256": "606394bdcfffa5c01f13fded39da36f5c993c4120bfa0fe52d6c812693813b0a"
+    },
+    {
+      "text": "She can not give them the gift.",
+      "file": "0bd82365eb0d2cd3.wav",
+      "bytes": 78892,
+      "sha256": "5c6b49b06785fc6d1f1c38c67f001335d3d70675b020b45f905043f185bad879"
+    },
+    {
+      "text": "Can I not give them the book?",
+      "file": "fe102f06b27b2738.wav",
+      "bytes": 72748,
+      "sha256": "39c5446b7e42fa2c6014e7ef3a3a44021e12d4dcbbce26cab624c8794c055593"
+    },
+    {
+      "text": "Can we not give them the letter?",
+      "file": "ba897ba7c9ce9a64.wav",
+      "bytes": 69164,
+      "sha256": "05f39ee126f6f9fd1f9cb53f040de8d88aa220f7644c123dfec7760b55f1becb"
+    },
+    {
+      "text": "Can she not give them the gift?",
+      "file": "efc7744f2c49808a.wav",
+      "bytes": 82476,
+      "sha256": "38301b107909b0c8542fed623b8e3a294eefb8534dd21cd694e1a5cf9ed008df"
+    },
+    {
+      "text": "I do not make them ready.",
+      "file": "8928a6a102a6278f.wav",
+      "bytes": 68140,
+      "sha256": "cde5cca18bcf419c88f1cdcdb5ae4efd77f4ec0c8803b2e623497872401999c4"
+    },
+    {
+      "text": "We do not make them ready.",
+      "file": "7ae25c081a24a883.wav",
+      "bytes": 70188,
+      "sha256": "be46c6a6da89f2e3ed0ae098ec4a72a7b0123c849046832f7314b0b76b84296a"
+    },
+    {
+      "text": "She does not make them ready.",
+      "file": "4e9aecde6b782c0f.wav",
+      "bytes": 71724,
+      "sha256": "84d3f45dfcf86b937357926c4f3583b1103ffaa0cbdbf4c2842c40d661094728"
+    },
+    {
+      "text": "Do I not make them ready?",
+      "file": "b521b7ce51b56c3a.wav",
+      "bytes": 58412,
+      "sha256": "907ddd76da0ae26ee3197ab67635aa14e88a36d262f3f1b141a9383b41831d9f"
+    },
+    {
+      "text": "Do we not make them ready?",
+      "file": "1ae37e14dad8fde4.wav",
+      "bytes": 63532,
+      "sha256": "e589fbe8793ed05cbe13671e4c7ddb68f179c6a60163ee64f2c37da6dcd03190"
+    },
+    {
+      "text": "Does she not make them ready?",
+      "file": "fc91afd2a4ffb338.wav",
+      "bytes": 68140,
+      "sha256": "a71aded9ba2a22465158a15427d881a1801d96a9d6b7ccb09d94629bc69ae96a"
+    },
+    {
+      "text": "I can not make them ready.",
+      "file": "11be3696626b8259.wav",
+      "bytes": 73260,
+      "sha256": "23585f8e3ac9923cc6e4f347158fe9ad612393d382fe351f0ac70f1b91618f16"
+    },
+    {
+      "text": "We can not make them ready.",
+      "file": "23b8b18f1b0c579f.wav",
+      "bytes": 70700,
+      "sha256": "485718cef656033709efbef67804dea6b2555cc42fc8e4b02f6049b1cc2fba23"
+    },
+    {
+      "text": "She can not make them ready.",
+      "file": "eecc4c29562b479c.wav",
+      "bytes": 64044,
+      "sha256": "2e87283dddeeaf7b8406df7052b84fd2034272e10d3042eb5697a7a20ecb7887"
+    },
+    {
+      "text": "Can I not make them ready?",
+      "file": "fcd61d9371a9731d.wav",
+      "bytes": 65068,
+      "sha256": "81deb589ddc5638abfe52e64e902565851c956097c6bcbf3f3ec2ecec6a68137"
+    },
+    {
+      "text": "Can we not make them ready?",
+      "file": "4722230687c661e5.wav",
+      "bytes": 64556,
+      "sha256": "e9263adaba2d323ffd75213ff17e508db02834089e527dc473c42db4105a0a88"
+    },
+    {
+      "text": "Can she not make them ready?",
+      "file": "a51cbb81ed48ca64.wav",
+      "bytes": 61996,
+      "sha256": "f6e3b6baf9a806e17ead23c1e2f3892e618c906d15113622927bc977dba9d5a5"
+    },
+    {
+      "text": "I run.",
+      "file": "4702e5a54e694a44.wav",
+      "bytes": 33836,
+      "sha256": "ca741da7142bf9729b6e0c18da314c92385fe369bdef321cb1ef76dd8d0066dd"
+    },
+    {
+      "text": "I run quickly.",
+      "file": "080e238617ee076a.wav",
+      "bytes": 47148,
+      "sha256": "f91922d32c4c1d3a5785e57970bd4bd4d46cb91f9619e8411c8371a923e33db4"
+    },
+    {
+      "text": "I run in the park.",
+      "file": "1fa099db603ffad8.wav",
+      "bytes": 55340,
+      "sha256": "98310f6dda29259b933846b0a8ed9da6b5e99f7b7db7575628a6f5ec1ffd6c6f"
+    },
+    {
+      "text": "I run quickly in the park.",
+      "file": "b75946f9b9307474.wav",
+      "bytes": 73260,
+      "sha256": "b3c308b5db2f5b0b01d0998949c94ad6902e3ec368e9659c0878f56fe1a7bc78"
+    },
+    {
+      "text": "I run every morning.",
+      "file": "0911beb6155922c0.wav",
+      "bytes": 69164,
+      "sha256": "0a1b90494bd974029acc7d0f1ddbc8b77a531f066a655e30bb00f4091a375c93"
+    },
+    {
+      "text": "I run quickly every morning.",
+      "file": "be0ee3be3f1e3256.wav",
+      "bytes": 79404,
+      "sha256": "df3fd43a67e9de4c61b31b132f706688d35457dc77e00eac3e9122ce814f1a16"
+    },
+    {
+      "text": "I run in the park every morning.",
+      "file": "aa31b2f3442e3605.wav",
+      "bytes": 96812,
+      "sha256": "e2290ddb3f83ade5a1de325a1d870607053cdac2bdccc11f613f4c8e5b99bac1"
+    },
+    {
+      "text": "I run quickly in the park every morning.",
+      "file": "7403307301b9f9b9.wav",
+      "bytes": 101932,
+      "sha256": "5597cf4e1f01cf8ee376df45812de2f136182b669f4fb8bbac83340d9d94d2f8"
+    },
+    {
+      "text": "I run after school.",
+      "file": "fcbde4013685d75f.wav",
+      "bytes": 59436,
+      "sha256": "5c21309264196f9161980e236a84f558c76caab0d9221baeef44f91c4f4834c2"
+    },
+    {
+      "text": "I run along the river.",
+      "file": "6799c1d64c7995f5.wav",
+      "bytes": 57900,
+      "sha256": "09accb14a2295fa67431d7efbbfb5aa4a3a2375303a4c0f5e22c923830a722d1"
+    },
+    {
+      "text": "Birds fly.",
+      "file": "f8c8402f08e6f75b.wav",
+      "bytes": 43564,
+      "sha256": "151fa509fca8c978f2d901474efb97efdcacf6b9c83e894fc54720b940e427a5"
+    },
+    {
+      "text": "Birds fly gracefully.",
+      "file": "5f343b2cc61faf05.wav",
+      "bytes": 69164,
+      "sha256": "6dfbe300eec815c77178f0275c21b146bfab172a5948c9f2e7e26e45030ed0e9"
+    },
+    {
+      "text": "Birds fly over the forest.",
+      "file": "952f0bf2b9da958c.wav",
+      "bytes": 78380,
+      "sha256": "de89a706ad99d3c80598ceeeb5ca3e795604e6c50589abb4cb3f708e6be9dffc"
+    },
+    {
+      "text": "Birds fly gracefully over the forest.",
+      "file": "7599cba5bc328e2e.wav",
+      "bytes": 110636,
+      "sha256": "c90138e34aafd4382ce37409ab56437726a2d4256f6ac927051fc955ae0ff1a2"
+    },
+    {
+      "text": "Birds fly at dawn.",
+      "file": "025c19421114cec6.wav",
+      "bytes": 64556,
+      "sha256": "c1152721f33707bfd23fe7c399226293ba94ad8b042e0f3f1b050ac7c3cadacf"
+    },
+    {
+      "text": "Birds fly gracefully at dawn.",
+      "file": "48b597fb79226088.wav",
+      "bytes": 93740,
+      "sha256": "c982ec7c27bb58995fad81df231e1d91fb11db94f11adb208d256bbfad28bdc5"
+    },
+    {
+      "text": "Birds fly over the forest at dawn.",
+      "file": "1e82df1c779916bb.wav",
+      "bytes": 97836,
+      "sha256": "13f18339461072597d9eca0cf681b83c5f9d12405e2da8470a210d8275e6a38d"
+    },
+    {
+      "text": "Birds fly gracefully over the forest at dawn.",
+      "file": "382ff6b520b8606d.wav",
+      "bytes": 128556,
+      "sha256": "3263e140254b8b252dd5d9c714062dab02eda3610c25d02fa2ef418cf334a36b"
+    },
+    {
+      "text": "Birds fly in the morning.",
+      "file": "b946ce04090422f6.wav",
+      "bytes": 67116,
+      "sha256": "48769d49fb6fac5bb3487d9eda8ff824580c4a53a54647a50bc5fdab979cf77d"
+    },
+    {
+      "text": "Birds fly above the lake.",
+      "file": "41fad97b4883b869.wav",
+      "bytes": 74796,
+      "sha256": "86fa3b15b706db5e76ed51af97fda56421c44f6163c3e2b0a1ac3ea253da5291"
+    },
+    {
+      "text": "The baby sleeps.",
+      "file": "d4f69c49543b1b84.wav",
+      "bytes": 54316,
+      "sha256": "efab6915fd13e8519292e9a6cd4c9e9f4811d6e22285912ce125ec744d59988e"
+    },
+    {
+      "text": "The baby sleeps peacefully.",
+      "file": "8bfbddfa07a9b106.wav",
+      "bytes": 71724,
+      "sha256": "cfa69c62bc36774f6c39c9fa49381ad4feaf90b0da24b1b844427a141d44d8bb"
+    },
+    {
+      "text": "The baby sleeps in the bedroom.",
+      "file": "ec666d459909d27d.wav",
+      "bytes": 80428,
+      "sha256": "7a5e0a8fb0dfda568b3f4f96afa9acce590dbd3a5815c050d479d8acee75dc26"
+    },
+    {
+      "text": "The baby sleeps peacefully in the bedroom.",
+      "file": "ea0366df1523fec8.wav",
+      "bytes": 102444,
+      "sha256": "ba1240a8e5a0b3668cb7bf6ee26d4d5798f409f824666f8885d76c519513fd6a"
+    },
+    {
+      "text": "The baby sleeps at night.",
+      "file": "072cf2e2ffaa68f0.wav",
+      "bytes": 74284,
+      "sha256": "8924bfeb53863cc2cad0ac318f0e16b1856fb63b25df967d6e883a5ef1f481ae"
+    },
+    {
+      "text": "The baby sleeps peacefully at night.",
+      "file": "c8bc1ae799878f4f.wav",
+      "bytes": 98860,
+      "sha256": "2e706683aab8161812bfbd6ab6ec9c2bd6ac023ff047bb427cc96225478c8a78"
+    },
+    {
+      "text": "The baby sleeps in the bedroom at night.",
+      "file": "f0a5522622bdfe36.wav",
+      "bytes": 102956,
+      "sha256": "0f4ca9831bf43f533a668e86cbbe45425ac7b49541df60f7566515af109e91c8"
+    },
+    {
+      "text": "The baby sleeps peacefully in the bedroom at night.",
+      "file": "7805a7c0046f3c04.wav",
+      "bytes": 128556,
+      "sha256": "00031474f885bee28bef6790c26ce89bf619e31f3243bce1c099f1f6fb25eecd"
+    },
+    {
+      "text": "The baby sleeps after lunch.",
+      "file": "cff0cb52a9ec908b.wav",
+      "bytes": 81452,
+      "sha256": "d40ffab182e266a1c2eedbbd9419181cbeb25c89dba7e8342c431d81bc44f7de"
+    },
+    {
+      "text": "The baby sleeps in the crib.",
+      "file": "1c8616adb2fe9640.wav",
+      "bytes": 74284,
+      "sha256": "d0c4c8abd4130a795383e674cf565465baae5966442eccf3ed197a0cfa5144b5"
+    },
+    {
+      "text": "She is kind.",
+      "file": "2cdee54d9626ff95.wav",
+      "bytes": 50732,
+      "sha256": "c911a638c55a0483139b421f17dcd6758d73ef597289fb643eb95c5a9521ff79"
+    },
+    {
+      "text": "She is kind to everyone.",
+      "file": "0a0615b74db2f7b8.wav",
+      "bytes": 85036,
+      "sha256": "11cd45028f3d65a71aa605a564eb9054161ffae242cf82c235cc1522abe450d0"
+    },
+    {
+      "text": "She is kind at school.",
+      "file": "32956a36b261fa8c.wav",
+      "bytes": 67628,
+      "sha256": "f2c75e9608b81865d081ce16d871cdd9aa5c0dcfd1f4b8c861a706e86e97380f"
+    },
+    {
+      "text": "She is kind to everyone at school.",
+      "file": "c930e181ec3cf4b5.wav",
+      "bytes": 103468,
+      "sha256": "892156dec77f1dd32e70dc8cb9555f120a4722c1cd73215a3467b2593926f047"
+    },
+    {
+      "text": "She is kind every day.",
+      "file": "1a23fe21e8616e23.wav",
+      "bytes": 79404,
+      "sha256": "23a1647df68b78107ac0e33c9d45858ef0c4fccbfa4052ea17f0109c6d6752d4"
+    },
+    {
+      "text": "She is kind to everyone every day.",
+      "file": "e9e03e5ee317c3b1.wav",
+      "bytes": 122412,
+      "sha256": "de9fab2d6996906376bece676f73c64e86f218e61867d93fa879160496556bda"
+    },
+    {
+      "text": "She is kind at school every day.",
+      "file": "a2e79a897f143a2c.wav",
+      "bytes": 96300,
+      "sha256": "7556b6afe2aed1a546a7bb97caa8ce5f0748e0e0448b7f4025028c4afbb7459b"
+    },
+    {
+      "text": "She is kind to everyone at school every day.",
+      "file": "71c680e088959f80.wav",
+      "bytes": 129068,
+      "sha256": "f511960b30616e64506be85943f1e6240fcd6a6a2d3de1e4054a05a783de7ab1"
+    },
+    {
+      "text": "She is kind even on busy days.",
+      "file": "4f0ad2991610aba6.wav",
+      "bytes": 99884,
+      "sha256": "b251df07729514ad1cf13988fac8f464d746098e21dd8358b6c16c15d3032d8c"
+    },
+    {
+      "text": "She is kind at work.",
+      "file": "71927a7847328f79.wav",
+      "bytes": 64044,
+      "sha256": "e13abaa88299eae0c5715bec30ad7cef066824464ef05d56fcd28fd6db3393ec"
+    },
+    {
+      "text": "He becomes a teacher.",
+      "file": "3dcbcb20c355008b.wav",
+      "bytes": 51756,
+      "sha256": "ed3d2c0397811cd5231c433744de718b1360f886d6dde2def91b00dbe68d7c67"
+    },
+    {
+      "text": "He becomes a teacher through hard work.",
+      "file": "0b9063af3dd14479.wav",
+      "bytes": 90668,
+      "sha256": "aa663d92eb95675f6ccad863b8f519bd3a9dfd6ec35d67c7b87b31905599157e"
+    },
+    {
+      "text": "He becomes a teacher in Seoul.",
+      "file": "222fb3171e7f3531.wav",
+      "bytes": 75308,
+      "sha256": "0fbda00d0a2765950981693923998567790543157d0c6655bc812e5e53f98122"
+    },
+    {
+      "text": "He becomes a teacher through hard work in Seoul.",
+      "file": "bcee777dd7ec5fe1.wav",
+      "bytes": 118316,
+      "sha256": "d4dd45e41ec8e9e2477627b6c6336727134354a539d3625feff442e4f460260b"
+    },
+    {
+      "text": "He becomes a teacher after graduation.",
+      "file": "a51ba573794047ee.wav",
+      "bytes": 102444,
+      "sha256": "256cbbdb7c093a13543ee1c2d2ce966b51452cd71f9b80534c188d6949f90b8b"
+    },
+    {
+      "text": "He becomes a teacher through hard work after graduation.",
+      "file": "661fe8c49c8acbab.wav",
+      "bytes": 138284,
+      "sha256": "cb97bfae993a3777e4214664d96cae7ae60c403f384e8fa50f0bf9992b521ef8"
+    },
+    {
+      "text": "He becomes a teacher in Seoul after graduation.",
+      "file": "85e8eb139b0f7e8a.wav",
+      "bytes": 137260,
+      "sha256": "34570189bb0102259c5ea8c5610968bf05a488c2428b815a9cd5c147cf513a88"
+    },
+    {
+      "text": "He becomes a teacher through hard work in Seoul after graduation.",
+      "file": "4aa0e0cf6a032868.wav",
+      "bytes": 170540,
+      "sha256": "abfb10c2fc6c60a0bf87e85e07e07653c7e8ea23cec962ebc6c623d04116a5f9"
+    },
+    {
+      "text": "He becomes a teacher after years of study.",
+      "file": "41880d52a605efef.wav",
+      "bytes": 112684,
+      "sha256": "471347e88ff9dd1567ad836834edbfe46c09011f1e413191bc109435aa8f1f21"
+    },
+    {
+      "text": "He becomes a teacher at a local school.",
+      "file": "7ad327d4845567c2.wav",
+      "bytes": 104492,
+      "sha256": "e21512b378aa167abc19003b9e49413aa0cfb9890d30895c84080a151d52eb70"
+    },
+    {
+      "text": "The soup tastes good.",
+      "file": "c02f374907b647a2.wav",
+      "bytes": 63532,
+      "sha256": "8f5f1de650a5251a7534fcaede48a9811802ff663a0b579fcaaccdfc1dd12507"
+    },
+    {
+      "text": "The soup tastes good with fresh bread.",
+      "file": "8d8bfd573561dfc2.wav",
+      "bytes": 103468,
+      "sha256": "bb66f89c7877984c4b3002edd644ac196b342b82133136bf42b22c3851e1e017"
+    },
+    {
+      "text": "The soup tastes good at this restaurant.",
+      "file": "53a3a876bb398981.wav",
+      "bytes": 103980,
+      "sha256": "86d994187fd47129569a8bca1330c47a46481f3554ad4f808ae92bf7ee1e939b"
+    },
+    {
+      "text": "The soup tastes good with fresh bread at this restaurant.",
+      "file": "7aedf00a3147686e.wav",
+      "bytes": 144428,
+      "sha256": "3c77fb18691fc8209a39335669a634a7a64965a4ff6ae3cf1ffa335f7641f57c"
+    },
+    {
+      "text": "The soup tastes good on cold days.",
+      "file": "42f4607a45ff5c6c.wav",
+      "bytes": 116268,
+      "sha256": "c8daee40cd99618882efaf0203d1a8374619f04e5052c50116b2d3282ce71374"
+    },
+    {
+      "text": "The soup tastes good with fresh bread on cold days.",
+      "file": "c88444735114fad6.wav",
+      "bytes": 144940,
+      "sha256": "e120c7d077501f123ebcdb50537129916d8312e26cad25578463004c4a846e0a"
+    },
+    {
+      "text": "The soup tastes good at this restaurant on cold days.",
+      "file": "7cf0a5e5323a61b7.wav",
+      "bytes": 145452,
+      "sha256": "2746619dc94623fb370d9578ce47ba26e292c36fbf34ddadd494328c1912e298"
+    },
+    {
+      "text": "The soup tastes good with fresh bread at this restaurant on cold days.",
+      "file": "00d1f5d50a1a0062.wav",
+      "bytes": 179756,
+      "sha256": "053cb3fe71b7e9909bb049d83f5903144b44c1a9331de84a58ee3e285d8a379a"
+    },
+    {
+      "text": "The soup tastes good in winter.",
+      "file": "56d9dc3e5f85e64b.wav",
+      "bytes": 85036,
+      "sha256": "e5b7866922b2ecd1119e328e0399c6ce623fd62f7c43a9329da1c37b6d595612"
+    },
+    {
+      "text": "The soup tastes good at home.",
+      "file": "d9a36a4db4e166de.wav",
+      "bytes": 87084,
+      "sha256": "b02511e34a4ce292de2102d378c1e6ebfa380b0bc5294ae30ab55709c503838f"
+    },
+    {
+      "text": "I like music.",
+      "file": "22c43790596c1da3.wav",
+      "bytes": 48172,
+      "sha256": "cfb31bc73a3e8402815a6a0320c2150855eb174d37c50b98bdec20f6d51826b7"
+    },
+    {
+      "text": "I like music very much.",
+      "file": "61368c18efa7ad5d.wav",
+      "bytes": 87084,
+      "sha256": "0f335fea9d872da5c344814e2388675087946aa4871017a4bea09c9976e85fc3"
+    },
+    {
+      "text": "I like music at home.",
+      "file": "c1150d5e8fab75c2.wav",
+      "bytes": 68140,
+      "sha256": "8b1cc3c1a5fc5d040d4d82d4b000c24b8e7899b1144ab129325b61b450c66f56"
+    },
+    {
+      "text": "I like music very much at home.",
+      "file": "774c007e0000ec56.wav",
+      "bytes": 96300,
+      "sha256": "5c74ea5af474592bb028af20aa01b056cb4151234fdfdbf65c94921ae54efd98"
+    },
+    {
+      "text": "I like music every day.",
+      "file": "9b947929a9c2fb31.wav",
+      "bytes": 79916,
+      "sha256": "2d20f10be0d8c06a844a0ef1aa066bf3f230ab41cf766e4fcd890976ad1415e8"
+    },
+    {
+      "text": "I like music very much every day.",
+      "file": "78e4c5ad1fe068a9.wav",
+      "bytes": 107564,
+      "sha256": "d17c8ab2f0b4038da6b96b6486f04beb781ab501a863e3a2a88cddbf2ca72530"
+    },
+    {
+      "text": "I like music at home every day.",
+      "file": "d365d32bfee2b814.wav",
+      "bytes": 109612,
+      "sha256": "e5b23e143b600f25f31a7c5ff56e6bcb32b1d49d291feccddb764481c43e011a"
+    },
+    {
+      "text": "I like music very much at home every day.",
+      "file": "7204b187eb58e285.wav",
+      "bytes": 121388,
+      "sha256": "11541861db9f2c963ed5f14e7a720d0881a93b5373a282d50eeed03b996bcfab"
+    },
+    {
+      "text": "I like music even on busy days.",
+      "file": "941431211a531d4f.wav",
+      "bytes": 111148,
+      "sha256": "58e23127c91ac4b466489683d8b182937824c8b5269a54e87c7daa63bee9c847"
+    },
+    {
+      "text": "I like music at school.",
+      "file": "abcbf1e80c918301.wav",
+      "bytes": 71724,
+      "sha256": "1acbad82b747612b6f56fa2e0b3048585a935a0a72f4e90b3a8fa7af37a5c29b"
+    },
+    {
+      "text": "She reads a book.",
+      "file": "0151e555f9696cfe.wav",
+      "bytes": 51756,
+      "sha256": "bc6754297cca0f7987ebcabce8ce89ce2cee6a9661ac0bb0a2403c526e53c97d"
+    },
+    {
+      "text": "She reads a book quietly.",
+      "file": "e87a1ae09e7b93d7.wav",
+      "bytes": 71212,
+      "sha256": "8687b8e5d5be78e86e8bec32193d2b1a847438b0162ecea008fc9d852f8b711a"
+    },
+    {
+      "text": "She reads a book in the library.",
+      "file": "59cd21531ae2db6a.wav",
+      "bytes": 86060,
+      "sha256": "587dd6106ad4f3fe65f571735e55be0435f1dc6429fba3c483f52252c8f9cb72"
+    },
+    {
+      "text": "She reads a book quietly in the library.",
+      "file": "b7a11b11fae40b19.wav",
+      "bytes": 106540,
+      "sha256": "e8fd4de11d9d4bf75390608c1753af3b48498ab467e0531ed81a8c7c5155b69a"
+    },
+    {
+      "text": "She reads a book every afternoon.",
+      "file": "8385e71faadf354c.wav",
+      "bytes": 94764,
+      "sha256": "a246273f24de6419b439458f9ecb09e3443856d7a3d21fafb74fbac4d749488d"
+    },
+    {
+      "text": "She reads a book quietly every afternoon.",
+      "file": "5e1969c8b6577faa.wav",
+      "bytes": 116268,
+      "sha256": "f3003a5197bd9e4db408af83bcbd9847f5a2f2f6e5be383f2fe640ca363e7d72"
+    },
+    {
+      "text": "She reads a book in the library every afternoon.",
+      "file": "c9fae369316a262c.wav",
+      "bytes": 135212,
+      "sha256": "7b307242b3ebac086b35b6fe80fb27fa42aaedd6536fe5bd6a485b566546ac62"
+    },
+    {
+      "text": "She reads a book quietly in the library every afternoon.",
+      "file": "6a6d28156f4b214f.wav",
+      "bytes": 157228,
+      "sha256": "d00c658766318096d7e86829712c186fc0356bd763d1d4c0c270406c8018b2e1"
+    },
+    {
+      "text": "She reads a book before bed.",
+      "file": "47b7f420ce003468.wav",
+      "bytes": 83500,
+      "sha256": "c57852ae4e437a6a5fdd16f3055d1523b9116e4f37fd836d7bb174ca718002e4"
+    },
+    {
+      "text": "She reads a book on the train.",
+      "file": "c4b4c2ce3085a14d.wav",
+      "bytes": 75820,
+      "sha256": "6acf5d738475ebcd65bc1a8d08757760dbcc30c3e0611fefa3990001106cd6f2"
+    },
+    {
+      "text": "We drink water.",
+      "file": "b6fa9cd8d19f7249.wav",
+      "bytes": 44588,
+      "sha256": "39e39554123b66a44509ca72ee9a874d5d975276139e5a3684c1b07095aa5a15"
+    },
+    {
+      "text": "We drink water slowly.",
+      "file": "63a8202d2544ae95.wav",
+      "bytes": 61996,
+      "sha256": "191817c39e588a09bcb77a2356c053f2f2546fa656c9a7f78403564cbbbd6b3f"
+    },
+    {
+      "text": "We drink water at home.",
+      "file": "679ca975927ff896.wav",
+      "bytes": 76844,
+      "sha256": "9914b72231cbdf8cf909839cce269186b4b6ee8c26ecfd14b540ba0e56f30dc0"
+    },
+    {
+      "text": "We drink water slowly at home.",
+      "file": "cf8ba0253670aaac.wav",
+      "bytes": 87596,
+      "sha256": "5f08526a09b745eca6e84a25f335682894081d519fe5af820df73ba99c6e03bc"
+    },
+    {
+      "text": "We drink water after exercise.",
+      "file": "a8b2ac3513c75c6e.wav",
+      "bytes": 113708,
+      "sha256": "6ceda62eee98fb261f19b20f111d607a90a1f75ea4fb2b00e54d4c56db100bcb"
+    },
+    {
+      "text": "We drink water slowly after exercise.",
+      "file": "79c9d1bb92c0f609.wav",
+      "bytes": 113196,
+      "sha256": "80983533c898551d3edaf6d408b1f8aea417b13cc7703b9a08bc80ed7005de87"
+    },
+    {
+      "text": "We drink water at home after exercise.",
+      "file": "61f32f72cc5be850.wav",
+      "bytes": 130092,
+      "sha256": "a8986adcefaec6e42d4f0b713ef67bfa4c349480a83bd5739ab74cc1e3c95394"
+    },
+    {
+      "text": "We drink water slowly at home after exercise.",
+      "file": "e92b8e668fb7cd37.wav",
+      "bytes": 131116,
+      "sha256": "482e2451167b2b7502d4c2eaaa27580e26a83918e1c9649c3603173fb34e704a"
+    },
+    {
+      "text": "We drink water every morning.",
+      "file": "cd374972c83a6892.wav",
+      "bytes": 102956,
+      "sha256": "d0cceb158d14091b434de73914d4ff05dc87a6fd0435231462bce179ceb31565"
+    },
+    {
+      "text": "We drink water in the kitchen.",
+      "file": "5a162cc5ea7921f0.wav",
+      "bytes": 89132,
+      "sha256": "3886d6346ea79f23a9a8df90b19341da589577a5f3fa66af9de59076a267fa06"
+    },
+    {
+      "text": "He gives me a book.",
+      "file": "796aa8ece62e6617.wav",
+      "bytes": 47660,
+      "sha256": "6f82ebb6fe756da94781d58a558a77a3af100f486387b9b955f8e56d4c3eb963"
+    },
+    {
+      "text": "He gives me a book with a smile.",
+      "file": "b7128a1bc3434ce1.wav",
+      "bytes": 71724,
+      "sha256": "6f573ca2a5ce796db3199a0333aac6c72d1ced52672320766812ecb568c69553"
+    },
+    {
+      "text": "He gives me a book at school.",
+      "file": "542306d502718ff7.wav",
+      "bytes": 72748,
+      "sha256": "281150070d22466c0ff3e29abd78a73dffc0e02f54d18217079687c99e4595e0"
+    },
+    {
+      "text": "He gives me a book with a smile at school.",
+      "file": "84c98bf10390cd12.wav",
+      "bytes": 92716,
+      "sha256": "cd927bdac1227b086e076b4fc7d2d241a6943b1ceb1923ac69a0b8f168f52e61"
+    },
+    {
+      "text": "He gives me a book every Friday.",
+      "file": "4e83d1e9c6df293b.wav",
+      "bytes": 90156,
+      "sha256": "de749fa599c91a274a23a0fa27fd597d97837d3ee837c32afa79d4ee27d603b9"
+    },
+    {
+      "text": "He gives me a book with a smile every Friday.",
+      "file": "67cb336a9ccdf745.wav",
+      "bytes": 115244,
+      "sha256": "7ee640de47c0ffc82aaf94154ab38504eba8d9c4ee08b4abbc1e737b28664eaa"
+    },
+    {
+      "text": "He gives me a book at school every Friday.",
+      "file": "cf0f9be17fa6070b.wav",
+      "bytes": 112684,
+      "sha256": "3309e06e9a7345cbf278d94e6a26c75a80e4e91b5b08d093b47a40badc6de020"
+    },
+    {
+      "text": "He gives me a book with a smile at school every Friday.",
+      "file": "eef4fc3f4dee0cde.wav",
+      "bytes": 135212,
+      "sha256": "c8eca41508bea6f2e083262110cde84795731fa1cd0318942ffd265fc02ae4cc"
+    },
+    {
+      "text": "He gives me a book on my birthday.",
+      "file": "93730ace107e4492.wav",
+      "bytes": 87596,
+      "sha256": "dc871d234d80226387a08fb7cb6a81484b614e9a6ef1e56b9e9f21371d597771"
+    },
+    {
+      "text": "He gives me a book in the library.",
+      "file": "016f3e4e63c848e0.wav",
+      "bytes": 87084,
+      "sha256": "6303751317c06dd426d47fd13d3648d975d7f8229422a1e574d1ef22d0c99184"
+    },
+    {
+      "text": "She teaches us English.",
+      "file": "c63f92b684ab065e.wav",
+      "bytes": 77868,
+      "sha256": "32e854202a45ce131d1c219edd4d18ceda320ce498a405c38d8fb2fb00a66a9e"
+    },
+    {
+      "text": "She teaches us English patiently.",
+      "file": "fbca4c945ab3b248.wav",
+      "bytes": 90156,
+      "sha256": "08a359200a17af51abb2c931414b22025ff6fdc6f61874615515d262db96deb4"
+    },
+    {
+      "text": "She teaches us English in the classroom.",
+      "file": "b19aece23efbf793.wav",
+      "bytes": 106028,
+      "sha256": "eb71b00e5825e1353edf3240d22d743c21a1d32e1045a69927844594c50182e3"
+    },
+    {
+      "text": "She teaches us English patiently in the classroom.",
+      "file": "d54a59b673b6a32b.wav",
+      "bytes": 130092,
+      "sha256": "518a719cebf79f943df03ddd6bd30e888832dc15a0f672ac244d6060398a7705"
+    },
+    {
+      "text": "She teaches us English every morning.",
+      "file": "fec5709c6b53bc34.wav",
+      "bytes": 95276,
+      "sha256": "fcb63846f9cb6b50e8745f3d2ea51bbac228559b95efa9b232e001e5bbd4fb7a"
+    },
+    {
+      "text": "She teaches us English patiently every morning.",
+      "file": "e0ffbe4a76bfd890.wav",
+      "bytes": 128556,
+      "sha256": "01877f612518a66dea04379926c71b77bc53e6b666c19d2c08141a8f6f5cb8f7"
+    },
+    {
+      "text": "She teaches us English in the classroom every morning.",
+      "file": "c12e93eaba457dc2.wav",
+      "bytes": 135212,
+      "sha256": "07332b4b1dc372a99f9c0464c6e644dfa7c70ffdfae8e88c798a7e3fe573be08"
+    },
+    {
+      "text": "She teaches us English patiently in the classroom every morning.",
+      "file": "ac04b23183a4c70f.wav",
+      "bytes": 163884,
+      "sha256": "8815d7e77a2cf40e8aa3ca43505704797963fd6f7864241b93d357f7f225f8e1"
+    },
+    {
+      "text": "She teaches us English after lunch.",
+      "file": "e659741fb2e59d84.wav",
+      "bytes": 107052,
+      "sha256": "29cf943abbee82b968333294cd3f28f27c6676d08acbfd02cda658bb07863606"
+    },
+    {
+      "text": "She teaches us English at the community center.",
+      "file": "4119abfb514b5951.wav",
+      "bytes": 122924,
+      "sha256": "ce8dc0f0640266eee8796b67326b6cf4f4200188b53f356650c4cb0d0c47c7b6"
+    },
+    {
+      "text": "I send him a letter.",
+      "file": "ce1dbb7f28a85bee.wav",
+      "bytes": 51244,
+      "sha256": "55ff3db5da68fbd1ac509662728a211dbb50cd8e1b76938ae70cb2e1a50be819"
+    },
+    {
+      "text": "I send him a letter by mail.",
+      "file": "df1c8a56dca8dc9e.wav",
+      "bytes": 71212,
+      "sha256": "86a45c35da4d1f7f3d8baf8949873f5fc3c1cf0fb759793e07c7a7ced166a9e5"
+    },
+    {
+      "text": "I send him a letter from Seoul.",
+      "file": "7d2e84195ebadedd.wav",
+      "bytes": 77868,
+      "sha256": "a88d4854550b6206c74f4539f4abf74d04cce2e59dac3a022db441edc478128d"
+    },
+    {
+      "text": "I send him a letter by mail from Seoul.",
+      "file": "186b6da7ee346b1b.wav",
+      "bytes": 96300,
+      "sha256": "9cc13b407697f2ec06a6afc6d5fdd43c7fe021b208c0f53b09fdeb0beef20f5f"
+    },
+    {
+      "text": "I send him a letter every month.",
+      "file": "2bd288f5c3e61026.wav",
+      "bytes": 78380,
+      "sha256": "9ca2ab677cab69ff43fa34fc7c9c639c6b64fb573aada432aa19925a8e4797c1"
+    },
+    {
+      "text": "I send him a letter by mail every month.",
+      "file": "42659ca3e8ab4f0a.wav",
+      "bytes": 99372,
+      "sha256": "241bceefcb62b558494ca7c53bfc4a984e92f928aaa070a7a36c90f3ce62aa94"
+    },
+    {
+      "text": "I send him a letter from Seoul every month.",
+      "file": "e9fa9989d8cd5801.wav",
+      "bytes": 101420,
+      "sha256": "3183b25fab438c4bb755ef7d2cb927e439417ee475b9e411f439121d11e82d53"
+    },
+    {
+      "text": "I send him a letter by mail from Seoul every month.",
+      "file": "e6d766910ad79913.wav",
+      "bytes": 123948,
+      "sha256": "95cd02416ae38e4f556e904f60917bba60a50d64442646e4b1524131f90c1924"
+    },
+    {
+      "text": "I send him a letter on his birthday.",
+      "file": "9c2734456166bf4a.wav",
+      "bytes": 83500,
+      "sha256": "c8a8452ad9fe0c89c08ef0740c1a0cbb79f5efdd50439946688c66fe6c66cb70"
+    },
+    {
+      "text": "I send him a letter from home.",
+      "file": "8e283c34c760c7bb.wav",
+      "bytes": 72236,
+      "sha256": "245fedc8f8f858359566a8e8e1c73a204017b3821352fdda2706d509161ca5d8"
+    },
+    {
+      "text": "The news makes me happy.",
+      "file": "db28c9895e070398.wav",
+      "bytes": 65068,
+      "sha256": "dbc5161d5c7c6c628ad0115cba1a0828b7902d1a35c2f9c17fe3bde73363566b"
+    },
+    {
+      "text": "The news makes me happy without fail.",
+      "file": "003d8dedf5d6475f.wav",
+      "bytes": 97836,
+      "sha256": "5c8f1a75632be454fff0cd37b4b243a88c884d68f5135a256a7847948c5c551b"
+    },
+    {
+      "text": "The news makes me happy at work.",
+      "file": "6c80e645c88d3210.wav",
+      "bytes": 94252,
+      "sha256": "fe8af2577d28235942377418b21afd1b93f6c9ab3fc5342271d2f4853e115bfb"
+    },
+    {
+      "text": "The news makes me happy without fail at work.",
+      "file": "2fd630459f463337.wav",
+      "bytes": 113708,
+      "sha256": "5796a4ebe7ce3eee9bc29a7bebe8b19283b64b04b878e6ed0c1c8c6f215903a3"
+    },
+    {
+      "text": "The news makes me happy every day.",
+      "file": "75a2248fe906e997.wav",
+      "bytes": 99372,
+      "sha256": "8ca52b6be893be4c154a5d73246f247815a3906c9cf33d50c2856086995796d1"
+    },
+    {
+      "text": "The news makes me happy without fail every day.",
+      "file": "75dd1c1e6dcbea24.wav",
+      "bytes": 128556,
+      "sha256": "eb8f07255b994fc27f7a0eaf2ec2052d95e2533ef43947362f6ff158e0e00a38"
+    },
+    {
+      "text": "The news makes me happy at work every day.",
+      "file": "bbf70cc7e245c020.wav",
+      "bytes": 125996,
+      "sha256": "ef514c41fc45d8a4d222a1570c34ab8e82b6efe959dcb16ab7b0c2f5b210dcdd"
+    },
+    {
+      "text": "The news makes me happy without fail at work every day.",
+      "file": "f169b3f1ffbe591e.wav",
+      "bytes": 143404,
+      "sha256": "f316cc592b4edb56851cac44ed4541966e5a9bf51662a98fdee36d3ca22c486b"
+    },
+    {
+      "text": "The news makes me happy in the morning.",
+      "file": "1e147616650da3b5.wav",
+      "bytes": 84524,
+      "sha256": "f99136603ada815ae0b9b63fa35602dbb06e1c984cdaf88000b981f9cba758a9"
+    },
+    {
+      "text": "The news makes me happy at home.",
+      "file": "2e1ad7c8e3c847de.wav",
+      "bytes": 84012,
+      "sha256": "b9f50584af906959196b7bb8d0b0f6db9f062651ed9a9c9337dd6b11be6b71e4"
+    },
+    {
+      "text": "We call him a genius.",
+      "file": "ab116212e76f52d7.wav",
+      "bytes": 77356,
+      "sha256": "4e526b6ff0551592bb5151c7625b340583765ba7c24037f26bf3588e283480cf"
+    },
+    {
+      "text": "We call him a genius with admiration.",
+      "file": "a09a4385d8a9395f.wav",
+      "bytes": 104492,
+      "sha256": "62b70e6fe6e5298d5575da478813fc40b9f347c5cc1bdc09ce3a63f17c82763d"
+    },
+    {
+      "text": "We call him a genius at school.",
+      "file": "432f0fedc7943ad3.wav",
+      "bytes": 89132,
+      "sha256": "5f2ac80f839b765ca161df52e2198d1103aa14088e289f45163009872074cac5"
+    },
+    {
+      "text": "We call him a genius with admiration at school.",
+      "file": "81a2bf912e4fa89d.wav",
+      "bytes": 127020,
+      "sha256": "b9d6658744c06dc2fd3d189433bdec11688e0513fc0924b0b3b6340634d7e2ae"
+    },
+    {
+      "text": "We call him a genius after every game.",
+      "file": "acfa6244e21c2b38.wav",
+      "bytes": 109100,
+      "sha256": "3d15b293fa485335c8a5ae96481a9301b6fd15670b612ce3960d841bd236d7af"
+    },
+    {
+      "text": "We call him a genius with admiration after every game.",
+      "file": "00c42662e5e90e5b.wav",
+      "bytes": 155692,
+      "sha256": "2c9b9ccf66db6045712d63ef568fb2577b69dd459b7450e9326172b5e1ec2145"
+    },
+    {
+      "text": "We call him a genius at school after every game.",
+      "file": "289488b8fc9ae30a.wav",
+      "bytes": 135212,
+      "sha256": "f07da3e475c7278c74b92fa81edb03f2fb6d97758b6ac4b4a5c8e2e1b3bb33b9"
+    },
+    {
+      "text": "We call him a genius with admiration at school after every game.",
+      "file": "54bb4e8c3a340332.wav",
+      "bytes": 171564,
+      "sha256": "6f881662a67e0f0f9a543186ae3f6184053df64551c77d63e85880cc3d634ea3"
+    },
+    {
+      "text": "We call him a genius after class.",
+      "file": "2f43285583e5f90f.wav",
+      "bytes": 107052,
+      "sha256": "b2a19b01c5e95c9dcfa736d1bcb93a3b646f4fb197f13a3df76f0a5e221d8fd3"
+    },
+    {
+      "text": "We call him a genius in our club.",
+      "file": "3b371ddede80491c.wav",
+      "bytes": 102444,
+      "sha256": "add7a74effa87893e7e838fea22adf33f065467b52cab118d425764cab81bc58"
+    },
+    {
+      "text": "I want you to study.",
+      "file": "85021f9a9ee488e1.wav",
+      "bytes": 56876,
+      "sha256": "ae4597fb34cb533ea70ca6c126ed4a323e969da94495f752a780599f672e8c6b"
+    },
+    {
+      "text": "I want you to study carefully.",
+      "file": "0a01551a1af99426.wav",
+      "bytes": 88620,
+      "sha256": "70e12b77ef9c2147ce2f615c1c22502d1eee67161ceb710ee957985e1da951e8"
+    },
+    {
+      "text": "I want you to study in the library.",
+      "file": "b9383ae70de65a27.wav",
+      "bytes": 98860,
+      "sha256": "96b37449d2cfd343e094704e63f4c9dd49219295da5f69ba1464fab651b335dd"
+    },
+    {
+      "text": "I want you to study carefully in the library.",
+      "file": "39e07a59e8328197.wav",
+      "bytes": 137260,
+      "sha256": "f04dcaf7d1830486b53819ed7f6d32f080624d80d66383e01a477e1a8768c228"
+    },
+    {
+      "text": "I want you to study every afternoon.",
+      "file": "f8643a390cd9d7fd.wav",
+      "bytes": 105004,
+      "sha256": "4d8e24887f62442b0892e59af11777736a7a323f3e27976f1ab2d910b16b14b0"
+    },
+    {
+      "text": "I want you to study carefully every afternoon.",
+      "file": "e938de8583d2e4d4.wav",
+      "bytes": 133676,
+      "sha256": "e551674e852093d10834104f038ed8d054761e9776b930b0c666b72443e38a07"
+    },
+    {
+      "text": "I want you to study in the library every afternoon.",
+      "file": "78ba39ed41ad2e1b.wav",
+      "bytes": 170028,
+      "sha256": "91b79266cf40dcee10037e683224aa40d798b7ead50e0b6c56272375556cfbe0"
+    },
+    {
+      "text": "I want you to study carefully in the library every afternoon.",
+      "file": "8de854ccf46f3fb5.wav",
+      "bytes": 196652,
+      "sha256": "fa1df945856671f2ff08dc79d9ea173eee7b8b8f805a5a5c9d38260feb3f2c80"
+    },
+    {
+      "text": "I want you to study after school.",
+      "file": "924b62928400d2f0.wav",
+      "bytes": 86572,
+      "sha256": "8c028961a08a56ebeeb904b661af11be6f4caa540eee5d687fc7dd07e07ecb63"
+    },
+    {
+      "text": "I want you to study at home.",
+      "file": "1c3ea87b73b94b6a.wav",
+      "bytes": 73772,
+      "sha256": "ddb8a45ec1d8abad874b4b3cf5a5823dcd69f6aa67cc6ffe3823e34e53bc928d"
+    },
+    {
+      "text": "Traffic can often flow near them.",
+      "file": "de655205cac1a0d3.wav",
+      "bytes": 81964,
+      "sha256": "54eb7c92aea17776a2efca6ed0f0dc0449758057e16bc06711435c1995324979"
+    },
+    {
+      "text": "Be our guide!",
+      "file": "30bb0249429d21f7.wav",
+      "bytes": 48172,
+      "sha256": "ea87e6ae426fc254d59523ac6d85617ff10ce073737d08271e7997b469e38a50"
+    },
+    {
+      "text": "Be our helper!",
+      "file": "12b27d2af57f66e8.wav",
+      "bytes": 45100,
+      "sha256": "0746dca116acc0dcb60066eff387c240d47b57a00ddeb6d1638c00063b24d03c"
+    },
+    {
+      "text": "Be our friend!",
+      "file": "450cb3256c48e9dc.wav",
+      "bytes": 45612,
+      "sha256": "5828b7127a7fcd027d59bce710368ce1425b42914b7215ab6720f9e7b410fb99"
+    },
+    {
+      "text": "A teacher gives management helpful advice.",
+      "file": "720e0fda8b15b301.wav",
+      "bytes": 124460,
+      "sha256": "2ca9dda35fd1fe915a692d3d61d2682857ebf3956c6903552805e04b1179b350"
+    },
+    {
+      "text": "A student gives management useful advice.",
+      "file": "ab7cefde3ad4e164.wav",
+      "bytes": 127532,
+      "sha256": "d8f36cacb014483ccf81fb3e5a6780f324d19b8d9ed2c20b7e50b85fa4cf60ed"
+    },
+    {
+      "text": "A guide gives management good advice.",
+      "file": "b70061c7f8156f1d.wav",
+      "bytes": 119340,
+      "sha256": "b79ea2371e0391ecb0de9416e0b0da82c4702043f213db0b98cd8f7e98b9998f"
+    },
+    {
+      "text": "Traffic can often flow.",
+      "file": "3df560b081344502.wav",
+      "bytes": 66604,
+      "sha256": "be1bfad1dbb6e1f7db018931f1b6a1235e2c9a3ba2637230f047550014bf79f8"
+    },
+    {
+      "text": "Traffic flows near water.",
+      "file": "44f8190af3f9c4a8.wav",
+      "bytes": 68652,
+      "sha256": "584436f840f6c5db5f015e9b97bdf062791822b4117416cc123bd6fb75b3e895"
+    },
+    {
+      "text": "Management gives management advice.",
+      "file": "c4c58d278f64b6b1.wav",
+      "bytes": 108588,
+      "sha256": "590fa41f0a59614d7f1d3d50209bb81909b57d968a6dd5cf1fb39124afe88f9d"
+    },
+    {
+      "text": "I do not work near the fresh water.",
+      "file": "2449d3c7950faa63.wav",
+      "bytes": 93228,
+      "sha256": "cdbc3d452d0415d1bb1abe74fce77a85f8a45d7fe69e80ebdf5b9c0aec774314"
+    },
+    {
+      "text": "We do not work near the cool water.",
+      "file": "4cacb778820df477.wav",
+      "bytes": 99372,
+      "sha256": "3f727a9127b17e045f9c3e403346ac5a9e6257143779697c8818f3a2569fd00c"
+    },
+    {
+      "text": "She does not work near the clean water.",
+      "file": "23f7eada0c66bbeb.wav",
+      "bytes": 95276,
+      "sha256": "fe82daefca850327a95fa5ca28924b5db6976c1fb71e8d8a665e2a0e420b7b90"
+    },
+    {
+      "text": "I give them our advice.",
+      "file": "3e806f51e8e26c97.wav",
+      "bytes": 72748,
+      "sha256": "da65733655a60a4a4d4236396766ac05aaa7a793364092038b14856276088676"
+    },
+    {
+      "text": "We give them our advice.",
+      "file": "f710d3de99349c38.wav",
+      "bytes": 84012,
+      "sha256": "ac2647833050c57aed535dff851ab2256dc148ab4e9df4236f4d1a4dc2c46b25"
+    },
+    {
+      "text": "She gives them our advice.",
+      "file": "f34c3441adb5eabe.wav",
+      "bytes": 78892,
+      "sha256": "2c8fcbb055beb47a2ec6909e19c3566e3cf2643a1abf2a24452de550f724c924"
+    },
+    {
+      "text": "My teacher can give them the advice.",
+      "file": "b38eab5d66612440.wav",
+      "bytes": 103468,
+      "sha256": "3da61edab897747d7e8ac42e514623e42376c1dd96ec63ad08b9db8c57961fb7"
+    },
+    {
+      "text": "My student can give them the advice.",
+      "file": "488cc8a2aecff911.wav",
+      "bytes": 101932,
+      "sha256": "dce1195c39ef9e37657ef8df68ceb67153786b872bda28dde0071b3ae8077fcd"
+    },
+    {
+      "text": "My guide can give them the advice.",
+      "file": "1be05749c14d2287.wav",
+      "bytes": 107564,
+      "sha256": "524706a60728c0f01d1e386a941df87131c35c12daf6ef55f3f9385dfee00b6e"
+    },
+    {
+      "text": "Be our support!",
+      "file": "4abb8533d9ec3ec4.wav",
+      "bytes": 53804,
+      "sha256": "db1372c8df7148f2a89f383e18711af336f584ee5afb1445ad0d073159579a9d"
+    },
+    {
+      "text": "Does traffic flow?",
+      "file": "ed743023c0830e8e.wav",
+      "bytes": 55340,
+      "sha256": "ab7f6c38708b1b4a832d6c7cf1b77750cc97b5ff0196b825050d20b36208d087"
+    },
+    {
+      "text": "Do I work near water today?",
+      "file": "78fb3dbdcabf7dfc.wav",
+      "bytes": 84524,
+      "sha256": "cd6c741af5ccbc6521e18dccc7a071e9631c47245170f9da4ecaa04ec3f7f9be"
+    },
+    {
+      "text": "Do we work near water today?",
+      "file": "8514a512770984f3.wav",
+      "bytes": 78380,
+      "sha256": "e37c337e88a8ddfa4106543fd3a6633d7cb27eb43a889110994dfa7f1a9404ef"
+    },
+    {
+      "text": "Does she work near water today?",
+      "file": "35e5f039ccc37065.wav",
+      "bytes": 90668,
+      "sha256": "06ad5125d022bf501730c966002f93e99077666e21af96dc70b924462dfff526"
+    },
+    {
+      "text": "Do I help them near water today?",
+      "file": "95316617ac9e3013.wav",
+      "bytes": 79404,
+      "sha256": "e2df8528b0094d982d7e29fb3567284dc0085b9bdcc0b8239341c5b2e3810c34"
+    },
+    {
+      "text": "Do we help them near water today?",
+      "file": "2b9bdd8d0d6fd215.wav",
+      "bytes": 77356,
+      "sha256": "045cd8a4b72aa999bc80b67e507af7ed10abeec32563893bb1c5d9556e4dc915"
+    },
+    {
+      "text": "Does she help them near water today?",
+      "file": "002a716b24cfabd9.wav",
+      "bytes": 85548,
+      "sha256": "cca3d50837e8d48c2e03b3da81dab5fcd7c0142e9d93bdc3cc1c1d50ec84e422"
+    },
+    {
+      "text": "A teacher is a guide today.",
+      "file": "5cdfd6deb78d3325.wav",
+      "bytes": 77868,
+      "sha256": "0e164f495a7c1ddac28dced37d44bd971e67c2b8a160a320c04241aa2f601ddc"
+    },
+    {
+      "text": "A student is a helper today.",
+      "file": "d0cbd0c658fb3d43.wav",
+      "bytes": 84012,
+      "sha256": "90facb4d8e41c4d5b08844c0ffefb9d60543432e477a23fa120bd798c67b5b31"
+    },
+    {
+      "text": "A guide is a friend today.",
+      "file": "03fa30158c0ba47d.wav",
+      "bytes": 80940,
+      "sha256": "4f7bd8c8126bb295f6bc81ec6d04000a7066f6bff90268c78a9813484002ca6f"
+    },
+    {
+      "text": "A teacher gives a student helpful advice.",
+      "file": "94c1c54286c66e86.wav",
+      "bytes": 116268,
+      "sha256": "8fd09a5d1144cee9e244c0fc3528ecf72ecc3979944879add5c1af38e6a09e55"
+    },
+    {
+      "text": "A student gives a child useful advice.",
+      "file": "475100b85a11f737.wav",
+      "bytes": 119340,
+      "sha256": "522310d3b845507130ce37e2f4cce6b5a87cc37f93b2a5e3e14a74de952c2401"
+    },
+    {
+      "text": "A guide gives a visitor good advice.",
+      "file": "9c578aa223cf04ab.wav",
+      "bytes": 100396,
+      "sha256": "92dc7cc7f42618ea175224b8432e4aa4c8de5cb3b4e22cbd0ed2bcea13eebe49"
+    },
+    {
+      "text": "A teacher wants a student to work.",
+      "file": "63142ee218bb4278.wav",
+      "bytes": 87596,
+      "sha256": "a86edd9d0366bc55e39486b8a90664142b5754892c408ac2a5a15d0b4a867b38"
+    },
+    {
+      "text": "A student wants a child to work.",
+      "file": "1a9aa8ab6d8502c7.wav",
+      "bytes": 92204,
+      "sha256": "8a58bd9637717dc9bbcb3154e6fe102d23cae01e02bedd4ed3b9b172def1a94a"
+    },
+    {
+      "text": "A guide wants a visitor to work.",
+      "file": "9c98b3d0888f9921.wav",
+      "bytes": 81964,
+      "sha256": "5aa8e9ca7b151b9a676820e073e04dba5fc1acb1d615b5459611172217674ee7"
+    },
+    {
+      "text": "A teacher gives the student helpful advice near them.",
+      "file": "e21f6d5cf4532a1e.wav",
+      "bytes": 132140,
+      "sha256": "e31bbdc00251a1a95bbc440c2f11e9ff782393c63ff5e7540d8c5f87e53e46a3"
+    },
+    {
+      "text": "A student gives the child useful advice near them.",
+      "file": "196d4fbd2c113b43.wav",
+      "bytes": 143916,
+      "sha256": "17566d785437d3b14d3ee397fca8d578be947a403bccb4e3350c4eceb116a201"
+    },
+    {
+      "text": "A guide gives the visitor good advice near them.",
+      "file": "f2e3c762a5a8ed5b.wav",
+      "bytes": 115244,
+      "sha256": "0289012862138eb3c1d1bb4401349adf676433c5c494ebb4dd3fe1217e2e0477"
+    },
+    {
+      "text": "A teacher works near them.",
+      "file": "7aacfaf28ba86b92.wav",
+      "bytes": 70188,
+      "sha256": "c9c52dd2696cb1b4347047205f1479bfe8e45fbedef4c60efbb35128894a6292"
+    },
+    {
+      "text": "A student works near them.",
+      "file": "6b289ea4775a777c.wav",
+      "bytes": 72236,
+      "sha256": "3d980a65d9d45064c5708770bea20055337052627a9c811102307d0de1b12102"
+    },
+    {
+      "text": "A guide works near them.",
+      "file": "29cab9a09ebc4812.wav",
+      "bytes": 65580,
+      "sha256": "655710dbd1ca990a6ab891f933cb9bff80a51f59feccd3d8ccd453df12933844"
+    },
+    {
+      "text": "A teacher wants our student to work.",
+      "file": "a57dc19757bce693.wav",
+      "bytes": 100908,
+      "sha256": "710e9639d092530e7705fec2a51f5cef17470ff1f28df2b5702160d3528ffa24"
+    },
+    {
+      "text": "A student wants our child to work.",
+      "file": "9466a10a734e1d7b.wav",
+      "bytes": 96812,
+      "sha256": "76a2432b33325dfa43e199e9dc0ad491b1a7c5fd5a227eacae92883f6f115a05"
+    },
+    {
+      "text": "A guide wants our visitor to work.",
+      "file": "116221d53b6249b9.wav",
+      "bytes": 87596,
+      "sha256": "432febe784a56b349c09cbd14af0f3865cc37a30d3a4b642cb1c2e1cee026589"
+    },
+    {
+      "text": "The young teacher is happy today.",
+      "file": "ed4b6c556ad4b365.wav",
+      "bytes": 84524,
+      "sha256": "7148f65378999212c02f7d0a5f075abf4961db709a02f3b901fda38d9ff3fa3c"
+    },
+    {
+      "text": "The helpful student is happy today.",
+      "file": "5bf16dd74a9c4835.wav",
+      "bytes": 94252,
+      "sha256": "81d741282ed5d2e5e4afb5553affebd1daedb9f926f221f3a15bfc7212ce0da9"
+    },
+    {
+      "text": "The kind guide is happy today.",
+      "file": "0069fff382ef5af9.wav",
+      "bytes": 87596,
+      "sha256": "d28e47a53e1585be11a13c2edea9a0ba6255019e0014097cf395af10957e6a78"
+    },
+    {
+      "text": "The teacher is the guide.",
+      "file": "d63c020d82775086.wav",
+      "bytes": 68140,
+      "sha256": "42e17b103c8ee5118355cdec8fdbfc83a183e6757b40137fc92f8b906360ba34"
+    },
+    {
+      "text": "The student is the helper.",
+      "file": "3c62d8fdd3d086b1.wav",
+      "bytes": 64556,
+      "sha256": "511da8a4c58633fb2567fdec3f8e7d4e9baacd20e6160cba82c5e2bd02fdb592"
+    },
+    {
+      "text": "The guide is the friend.",
+      "file": "c61df9b5bca743f3.wav",
+      "bytes": 58412,
+      "sha256": "dc8ac1d76d3165967663073bc6e7c06929872dfe4db87f84151508b30eb9237e"
+    },
+    {
+      "text": "The teacher is support near the friend.",
+      "file": "a702d1f5f31317d8.wav",
+      "bytes": 98860,
+      "sha256": "27fe776aab042ffbb9d86196870639b3b8ce8881bc594a2e2b8ed3788d137ccb"
+    },
+    {
+      "text": "The student is support near the guide.",
+      "file": "7fa09166de360ee4.wav",
+      "bytes": 98348,
+      "sha256": "5e8618ca6608574c3c039419dc31913853d9ef4478663525b2827b6c0fa5309d"
+    },
+    {
+      "text": "The guide is support near the teacher.",
+      "file": "abbbe20cc6f7ef16.wav",
+      "bytes": 84524,
+      "sha256": "90dbf463d366692f8b3de132aef80d21493fce97d0ec912e44f03c69feb26eda"
+    },
+    {
+      "text": "The teacher is your support today.",
+      "file": "2a4a2cc932a839bd.wav",
+      "bytes": 84524,
+      "sha256": "5407f8ab542164b99d6a39e7ee4069d1eddd24ef9e78c1d2a62cf78f8ea2594c"
+    },
+    {
+      "text": "The student is your support today.",
+      "file": "501ef28262257efd.wav",
+      "bytes": 85548,
+      "sha256": "dbb3155bb775acb64bb60acaee9182b90d4fba3f029eeb449d5ba84d089dbb92"
+    },
+    {
+      "text": "The guide is your support today.",
+      "file": "30533ad888b1d4c3.wav",
+      "bytes": 83500,
+      "sha256": "fe3c0a39f768ddcc8e57cdaaa1737f7f9ad17393c3375fe4fa80bb93e6451224"
+    },
+    {
+      "text": "The teacher does not work.",
+      "file": "95c844f3c1ef2b53.wav",
+      "bytes": 64044,
+      "sha256": "45af581ba150a836885b2f96123a6c8042dfdea80a71f91021f480e530c8572e"
+    },
+    {
+      "text": "The student does not work.",
+      "file": "1d92f1bf56bb90dd.wav",
+      "bytes": 66604,
+      "sha256": "8ec111e44f67ef9c44bddf98dc37ab46b9f8e3d54b18bad573f5e022059e50fe"
+    },
+    {
+      "text": "The guide does not work.",
+      "file": "47cc10ed119fcbcd.wav",
+      "bytes": 62508,
+      "sha256": "8131d8ed85b3ed0daedc4792538e158176946e9f34939f1f2cdf6dd7f99f1960"
+    },
+    {
+      "text": "The teacher can work.",
+      "file": "6f7e054a486218f7.wav",
+      "bytes": 53804,
+      "sha256": "ac6163be1a2bd91b80e54a8758fa1277c98ce16588f03f01efca97aee9f0b934"
+    },
+    {
+      "text": "The student can work.",
+      "file": "ffa70e712f187813.wav",
+      "bytes": 51756,
+      "sha256": "5d4e69a6a58080a736c59af53755da8611efb1f13ea5cb413dea1a185725eae5"
+    },
+    {
+      "text": "The guide can work.",
+      "file": "bccf884f96cb256f.wav",
+      "bytes": 51244,
+      "sha256": "1d726834a792350651a1863c67f6a700af0030e14910ce8d6e3469da4d638349"
+    },
+    {
+      "text": "The teacher wants our young student to work.",
+      "file": "2854b3238ab4763f.wav",
+      "bytes": 112172,
+      "sha256": "5dc44e5b41395386ba724ddbc287f573627b2fa59c4c9f1ae52dba11e961ea0d"
+    },
+    {
+      "text": "The student wants our helpful child to work.",
+      "file": "c3af2b1175ed567d.wav",
+      "bytes": 121388,
+      "sha256": "cdc47be1fda599947592cdb2ec604fb84fc69f9a78f8a93d32732d30599415b9"
+    },
+    {
+      "text": "The guide wants our kind visitor to work.",
+      "file": "14b0f0ac9d2edddb.wav",
+      "bytes": 107052,
+      "sha256": "1ed1b406aa258a99369172377b5e0d30b5f9a4ab4a3e437d49021508850449e7"
+    },
+    {
+      "text": "The education is the guide.",
+      "file": "7661cd44e95f1737.wav",
+      "bytes": 84012,
+      "sha256": "2b53a70c9c6a55bc2a90817488db4d2140fd826d64773fb39a8b850e34227c01"
+    },
+    {
+      "text": "The education is the helper.",
+      "file": "687e8b8efdc5afcd.wav",
+      "bytes": 76844,
+      "sha256": "d7a9f182d0f1b4e582390e9bbbd458f62ef16d869d46fc5a165c01eb93026581"
+    },
+    {
+      "text": "The education is the friend.",
+      "file": "45d422c79274976a.wav",
+      "bytes": 75820,
+      "sha256": "0a4c0e8ef8b2c5c8be7b7c1724d4843a907722f9992f983105af3b7f84865106"
+    },
+    {
+      "text": "The education is near the friend.",
+      "file": "7fe687803e763b2b.wav",
+      "bytes": 86060,
+      "sha256": "dfcbe503c3a10dca57f4dcbbc61b74d504ae601eb4f0263f0ef3de76c0263b39"
+    },
+    {
+      "text": "The education is near the guide.",
+      "file": "fdd954be40a5ab24.wav",
+      "bytes": 86572,
+      "sha256": "696d4ba5f3eea5349062214a8fcf5c20e1b6d4bba024c7c6e4db38efb29c10c8"
+    },
+    {
+      "text": "The education is near the teacher.",
+      "file": "7d157032fb4cedae.wav",
+      "bytes": 81452,
+      "sha256": "7d30f643475e4a7da7f1c39a0d0667111b45e8f3d0336bc93b291c292838e0f3"
+    },
+    {
+      "text": "The education is not important.",
+      "file": "5f4e00152b6b0a89.wav",
+      "bytes": 85548,
+      "sha256": "e3c3722ba133dd80812c28c7b07a6feb8fae3dbdd4895441e63a96ae97c06c64"
+    },
+    {
+      "text": "Education is important today.",
+      "file": "52a5b8901c68b95a.wav",
+      "bytes": 88108,
+      "sha256": "cfe3c26cbe30371c71dc0c54ac417f9c5b77a804fa704c623a88d34dcac47354"
+    },
+    {
+      "text": "Traffic can often flow near a friend.",
+      "file": "15dcb7f838f7ff00.wav",
+      "bytes": 94764,
+      "sha256": "bafddba49ffb08256f012b6b66a9fd54e0bb835d43fb0e87fcbb3568a81a82f7"
+    },
+    {
+      "text": "Traffic can often flow near a guide.",
+      "file": "4b0c0607307b1bf2.wav",
+      "bytes": 99372,
+      "sha256": "b9b0d8d79fb17e51b72ead98cfac1b00d6ab71976ff2c9f5a8499732f440c2e5"
+    },
+    {
+      "text": "Traffic can often flow near a teacher.",
+      "file": "fa571a511ae74f5e.wav",
+      "bytes": 95276,
+      "sha256": "286583477efeacf66a5ebbc733d04a240afd029feb4ac3f61eae4f96815a26bc"
+    },
+    {
+      "text": "Management gives management the book near water today.",
+      "file": "fcc31f26eff94fcc.wav",
+      "bytes": 139820,
+      "sha256": "8a7bfab79a7f127714b41be3de2bb7bca24c80b9b02cbe07d0de2428148366ec"
+    },
+    {
+      "text": "Management gives management the letter near water today.",
+      "file": "a02068f0b1577725.wav",
+      "bytes": 141868,
+      "sha256": "0d4de3faca07a5b659e9034fa7ca7ac314f2d0653bafeed26d085c88c3f8f076"
+    },
+    {
+      "text": "Management gives management the gift near water today.",
+      "file": "dc4bcaf257155dbf.wav",
+      "bytes": 140332,
+      "sha256": "be2b803f24baa2f5a0ea3a2186407539a6c59957f5324f9ccd773a11522a9cc2"
+    },
+    {
+      "text": "I am a guide near water.",
+      "file": "6a5d78b008121a6c.wav",
+      "bytes": 66092,
+      "sha256": "93a2f06950d88e14bd995b0a293d28af8d7a0a3f301a0c035150800892f62f40"
+    },
+    {
+      "text": "We are a helper near water.",
+      "file": "73214a400dd5501d.wav",
+      "bytes": 65580,
+      "sha256": "1d7d1c31b8cad4abc9f36456b649d960d734b37e8cd348b3e7dcafd25af17a67"
+    },
+    {
+      "text": "She is a friend near water.",
+      "file": "8a611886ff6851c6.wav",
+      "bytes": 71212,
+      "sha256": "c1c822f0e19deff3d342710edbb288daddea97cd31cf757e29b5e65633afdbac"
+    },
+    {
+      "text": "I am a guide today.",
+      "file": "af39d562e676973e.wav",
+      "bytes": 54316,
+      "sha256": "6d963aeaa9ea9c088510c73be4a3ab6ea2245fb17ec0b3d1e18f4a2964111982"
+    },
+    {
+      "text": "We are a helper today.",
+      "file": "342cb0f95e55b947.wav",
+      "bytes": 59436,
+      "sha256": "03b9663e0bd023b41055d9b3979c698fdd47d47750edb7094ad6476fb5c4c08e"
+    },
+    {
+      "text": "She is a friend today.",
+      "file": "b2388d9508aa9c66.wav",
+      "bytes": 68140,
+      "sha256": "181c47f9d76de48d2df13442a516382cb85b2c1aa0c510f5c0833728b9a734db"
+    },
+    {
+      "text": "I am the young guide.",
+      "file": "adc0d7d18a961176.wav",
+      "bytes": 50732,
+      "sha256": "d747ee67c870a39809e7df16658ea230e85c1571775648a68a79fab7e39862a2"
+    },
+    {
+      "text": "We are the helpful helper.",
+      "file": "8bd79d55e7706e86.wav",
+      "bytes": 62508,
+      "sha256": "0518866044b54ddeb54d74a4c3c16fbb9c1382f8c80c470bc361f128429de94b"
+    },
+    {
+      "text": "She is the kind friend.",
+      "file": "926bd401d6060555.wav",
+      "bytes": 65068,
+      "sha256": "2e6fb5c2fe58c5c90054b2797bf55db730f1601152c2db04e58a8e169da4dc54"
+    },
+    {
+      "text": "I am the useful support near water.",
+      "file": "7b733472bb42488c.wav",
+      "bytes": 90668,
+      "sha256": "22b1fa633c84783f1ee884497b7119d828e6274163dde9604195c5938bf0f5d4"
+    },
+    {
+      "text": "We are the good support near water.",
+      "file": "7264fe5e517c759c.wav",
+      "bytes": 79404,
+      "sha256": "08924eb7bd5beac845719afba1c59ed244d216543328bff86a25cd283b3faf2d"
+    },
+    {
+      "text": "She is the helpful support near water.",
+      "file": "1c2f6e01dd17026f.wav",
+      "bytes": 90156,
+      "sha256": "36087a9e930ad7345e4ba3bde823050aa7c0283369ed9f9af064a897dcd6d26d"
+    },
+    {
+      "text": "I am happy today.",
+      "file": "348c72aee55c182c.wav",
+      "bytes": 52268,
+      "sha256": "73c25cfb75fc9f1d3cc542b15ab2708e69a55b4ffd61c9d933030bec4ef8fce0"
+    },
+    {
+      "text": "We are happy today.",
+      "file": "2b82936115b9d8af.wav",
+      "bytes": 56364,
+      "sha256": "1cf44a7cc70f1b2bb359b0f3bf5528a057a0d5ca1c4be4a35b755f46de7896f3"
+    },
+    {
+      "text": "She is happy today.",
+      "file": "607cffe631f2898d.wav",
+      "bytes": 61996,
+      "sha256": "5afd59a5f85e0686775691d8ab61d8c5ae93977ea149c8933c0750d763e2e2a1"
+    },
+    {
+      "text": "I am your support.",
+      "file": "bfc3a4ac8439fd95.wav",
+      "bytes": 53804,
+      "sha256": "efa5b2890a5c65763b9f67ad9a7949f0a61879d7b005d8e286e15dfcf7a1b8c7"
+    },
+    {
+      "text": "We are your support.",
+      "file": "6bedaf02a874ee7d.wav",
+      "bytes": 58412,
+      "sha256": "84996378bf1f176a2335a342fa5be9e4811f00639fef3beee1ab9d2677f512db"
+    },
+    {
+      "text": "She is your support.",
+      "file": "f105c2400c4ea779.wav",
+      "bytes": 63532,
+      "sha256": "ea39fec9d61df3625aee6c83e800cba8f61a8fca38c23ace10091a4c4823d8d3"
+    },
+    {
+      "text": "I am not a guide.",
+      "file": "c4cd73d481a6c3ad.wav",
+      "bytes": 56364,
+      "sha256": "4ef2ce563d1f56442bc7bd55790fbe6e879a234fad39b05904c635c262d88364"
+    },
+    {
+      "text": "We are not a helper.",
+      "file": "77d88ccdd3fbb286.wav",
+      "bytes": 52780,
+      "sha256": "c8b1b4faac75fd7bf7b378f1bb3085da9258c4d960a365183d48d32da7db949d"
+    },
+    {
+      "text": "She is not a friend.",
+      "file": "e62cd88a3b85e0d5.wav",
+      "bytes": 56364,
+      "sha256": "2b32406ee7540dd72f8c377d507bc183c95eeb1b68a9700a564cfe8831477ee8"
+    },
+    {
+      "text": "I do not give management the advice.",
+      "file": "71dab847ebae1baa.wav",
+      "bytes": 117804,
+      "sha256": "a89b092fd9940ef8fa3b748b79a3da3c8574f96995b90ce214be534cb711eca1"
+    },
+    {
+      "text": "We do not give management the advice.",
+      "file": "b57cb295a5623241.wav",
+      "bytes": 128044,
+      "sha256": "78f47fb5992617644ce86f11859fbf6768f21ad3f227c7c1ef4248de65e73aa5"
+    },
+    {
+      "text": "She does not give management the advice.",
+      "file": "c85c871ded4ce516.wav",
+      "bytes": 122412,
+      "sha256": "baf1840b2b997997f7e6f32a12afd95a44291e75bfe498f277b9f644560131aa"
+    },
+    {
+      "text": "I do not want them to work.",
+      "file": "e610775a355eb444.wav",
+      "bytes": 76844,
+      "sha256": "6950bd5d20081cef5a4de8a5f84e314366271414c065257cf6d8dd350f56833c"
+    },
+    {
+      "text": "We do not want them to work.",
+      "file": "78234e94f5f657f5.wav",
+      "bytes": 75820,
+      "sha256": "41d984c1da8744468954b74f983b73402935f0904110facd414f5dc52030c821"
+    },
+    {
+      "text": "She does not want them to work.",
+      "file": "056156465bda326a.wav",
+      "bytes": 71724,
+      "sha256": "d26e7541822a1b1ca13345dc82d5f5982ca6e46f44a589c8757ffbc2825453d5"
+    },
+    {
+      "text": "I do not want our management to work.",
+      "file": "ae720c898721ec66.wav",
+      "bytes": 114732,
+      "sha256": "bec7718272006ab648219a56214e943525f6d3b45601bfb5290b5045648f430d"
+    },
+    {
+      "text": "We do not want our management to work.",
+      "file": "ffbfb60f9a02316a.wav",
+      "bytes": 109100,
+      "sha256": "c1095ba3c5248188edd689713b71191ffd1ccaa196a17c4565bc13aa8b11b902"
+    },
+    {
+      "text": "She does not want our management to work.",
+      "file": "a810844194d8ace0.wav",
+      "bytes": 118828,
+      "sha256": "0e1285ac9cae1669ba6ff77a2d30a408e3256e7144e4bdfbf7fb3e4dae08b183"
+    },
+    {
+      "text": "I can often give the management a book today.",
+      "file": "bb62c7d06bb61ff1.wav",
+      "bytes": 130604,
+      "sha256": "33be22e10d941ea059f7a973932a4c433e68ca8c82365506fd82f80cd6e1e687"
+    },
+    {
+      "text": "We can often give the management a letter today.",
+      "file": "dcbf09b9dd52df9a.wav",
+      "bytes": 125484,
+      "sha256": "2d3a3245ce2417a23c7f16aa0d8ff7b18765ac0fd11e4e587c50d952590ef05f"
+    },
+    {
+      "text": "She can often give the management a gift today.",
+      "file": "13443921ca57f871.wav",
+      "bytes": 127532,
+      "sha256": "1bbbe2e546c317b7afdb92a532b61fe3645d4911b0933964d9d2fee9986cf2de"
+    },
+    {
+      "text": "I can make work easy.",
+      "file": "2c888dc702bd2a41.wav",
+      "bytes": 67116,
+      "sha256": "34d8027d1a5d41cbe1cf595f92cc2b96aeffc1b44a042039b3c1a5a40fc0ee09"
+    },
+    {
+      "text": "We can make work easy.",
+      "file": "c9cfa2daa9b1f28c.wav",
+      "bytes": 67628,
+      "sha256": "bbce29714e7a56c8c81a9e4c91354a82d68b39b5d80f9d0942c488dd6d0da0b7"
+    },
+    {
+      "text": "She can make work easy.",
+      "file": "ddd8f6cf6c19a7c2.wav",
+      "bytes": 61996,
+      "sha256": "b93bc3971494ce2a36339436aad1d71326155ffc198c8a3dcbec0f84f24c5454"
+    },
+    {
+      "text": "I give a student our advice.",
+      "file": "fcf27e47d3deb1f6.wav",
+      "bytes": 84524,
+      "sha256": "b8aa9bdf57861e8a34dce7c1b19864573eeb6237925e2d386af898e692755e26"
+    },
+    {
+      "text": "We give a child our advice.",
+      "file": "48d2c32e94538c7c.wav",
+      "bytes": 80940,
+      "sha256": "c504e80b6a926165be42d27fbcf8e0e76b1bfb8f49cbc9f9c91161847e36e6ba"
+    },
+    {
+      "text": "She gives a visitor our advice.",
+      "file": "39fb629b589e00c1.wav",
+      "bytes": 90668,
+      "sha256": "2721df54734f2b5f671f9ab3b2be0a6278ea5530431be4963ebd76589fb8573c"
+    },
+    {
+      "text": "I work near water.",
+      "file": "887d203527161650.wav",
+      "bytes": 51244,
+      "sha256": "e5ed9050fc3adadddc6dbc1ae320a153e23dc6a0f85e29dd9484f71060249cf3"
+    },
+    {
+      "text": "We work near water.",
+      "file": "138582d2e59b61a1.wav",
+      "bytes": 51244,
+      "sha256": "6d9d6409fa520a0ee11fc713b28b6d058ba597618e6cc2e0d9df02eab03c06a9"
+    },
+    {
+      "text": "She works near water.",
+      "file": "b09874e6b6afd091.wav",
+      "bytes": 58412,
+      "sha256": "a8fe02a5efc7228815a4f439a881e33f18665764c96b4730f951041caf90a229"
+    },
+    {
+      "text": "I work near water today.",
+      "file": "2cf52970361e33cb.wav",
+      "bytes": 73260,
+      "sha256": "19b8b3b34039874efb5c0f37dd3c20be9d7eb2f4846dad243597d0e0407fb90f"
+    },
+    {
+      "text": "We work near water today.",
+      "file": "f48cbe2d21388c7a.wav",
+      "bytes": 71212,
+      "sha256": "c10dfaf5ac6c85b9c9a194b40691a244e9db9e7df9051cff7991934c90d6ffb9"
+    },
+    {
+      "text": "She works near water today.",
+      "file": "3d0ae666737107a7.wav",
+      "bytes": 80428,
+      "sha256": "de7c202e18d31bccbb5f84de9d35d57bd263622b53a8c49a8a58d255173e9f7f"
+    },
+    {
+      "text": "I work near them.",
+      "file": "852e79f5b231b266.wav",
+      "bytes": 50220,
+      "sha256": "39cf767e9bf227d056d4c870d94f7b75f85a94f7384ad80cf807aba13596efbf"
+    },
+    {
+      "text": "We work near them.",
+      "file": "86d91cd7c42065bc.wav",
+      "bytes": 48172,
+      "sha256": "7dd0eae9fe0f9b1b6eef8233b7091239f5cc58b979bcacd5caf99e4ecc185409"
+    },
+    {
+      "text": "She works near them.",
+      "file": "87ed5178cb6c30f7.wav",
+      "bytes": 52268,
+      "sha256": "03d0671cd227c519767e9519ebb8b8581926f9b6a36137d76d0a4066207741ec"
+    },
+    {
+      "text": "I give management a book.",
+      "file": "f866ad7a56c1c30f.wav",
+      "bytes": 74796,
+      "sha256": "3180a515e26d306b0c95cecc036ca0327e1ba1ad81c05c027398b93a2b88c67e"
+    },
+    {
+      "text": "We give management a letter.",
+      "file": "c55aa879813b7464.wav",
+      "bytes": 68652,
+      "sha256": "45453fb73b7202f3725ee280226b35d6e37b9c4b7e77fa1efe6b264ad6fb2d1f"
+    },
+    {
+      "text": "She gives management a gift.",
+      "file": "21cc2e1f0d685331.wav",
+      "bytes": 77868,
+      "sha256": "e36682b3db2d206485df0efc50dea8358f8ba7504f02112a4b3c002f3aac52aa"
+    },
+    {
+      "text": "I give management advice.",
+      "file": "2bb3c0a196eb04e0.wav",
+      "bytes": 84012,
+      "sha256": "2e15f2b840dcd7fc658a00c22abbe1952e55d9e45c4590cae3505d4cf7370b8a"
+    },
+    {
+      "text": "We give management advice.",
+      "file": "c41ab486a45eb61d.wav",
+      "bytes": 81452,
+      "sha256": "0e5c1de62df68fd8df2acbbbfa5c4208ad71a5e3e9b5da845f5dcbf4c88ecacf"
+    },
+    {
+      "text": "She gives management advice.",
+      "file": "b845e13135a56359.wav",
+      "bytes": 84012,
+      "sha256": "3cf5016d23a30eab2f01461b177054d32a86441fb84ad01a24bed86e76bee0d8"
+    },
+    {
+      "text": "I give them advice near water.",
+      "file": "b3b9065c80418428.wav",
+      "bytes": 77356,
+      "sha256": "db437cdc0f1fe28f4b0d31df187849795174a20600cc374e7e52397fb8f73f7d"
+    },
+    {
+      "text": "We give them advice near water.",
+      "file": "45116fd5d34be05f.wav",
+      "bytes": 77868,
+      "sha256": "c0399e4356e72755fb21c19a8bc4888d13f14bf4650acc9af4bb3fdd614da8d0"
+    },
+    {
+      "text": "She gives them advice near water.",
+      "file": "258a14586ddd9758.wav",
+      "bytes": 77356,
+      "sha256": "067690103abdaaaa9cefaf11b409a117a7a1e788d0d450e128429cb2f8e91b72"
+    },
+    {
+      "text": "I want our student to work.",
+      "file": "e3f0c15f8d3812e2.wav",
+      "bytes": 82988,
+      "sha256": "f13a8b9ef298baefd62d7ada465a2ea188b6e6ff26f708c2a0db35d6807de0d5"
+    },
+    {
+      "text": "We want our child to work.",
+      "file": "bdbeae9e8e69790a.wav",
+      "bytes": 87084,
+      "sha256": "dbd504fe6154d6ed350cd3d4ba5cf6e328c4ebb2bfc361af7aca03efb82ba2de"
+    },
+    {
+      "text": "She wants our visitor to work.",
+      "file": "645e84d42df9e76f.wav",
+      "bytes": 76844,
+      "sha256": "7d5b4eea71e028302f1fb1195ad6719c8b5ff8b5bd7f6dde286ebccf3302a2c2"
+    },
+    {
+      "text": "I give our management advice.",
+      "file": "5c752f530d85425d.wav",
+      "bytes": 96300,
+      "sha256": "4299567158518d6745b229102e4dce13cf28a42d51dc19296bc52446ead3378b"
+    },
+    {
+      "text": "We give our management advice.",
+      "file": "dac7cb17ad125e58.wav",
+      "bytes": 89644,
+      "sha256": "15dbf9c4cadd101dcbd05223eabff086b99a64c7433493a906c26c426b2e336b"
+    },
+    {
+      "text": "She gives our management advice.",
+      "file": "400a96aad2ff691b.wav",
+      "bytes": 95276,
+      "sha256": "e50541ad209f64c3172f0b953bc333a866a74dfa1a46d09fac878297bf1d4dc9"
+    },
+    {
+      "text": "My young teacher works near water.",
+      "file": "25c5bd09e4fbab5c.wav",
+      "bytes": 84524,
+      "sha256": "e2938e8370ab45f668a33ecf9e82f847f0823f302acb506369495683eef9f883"
+    },
+    {
+      "text": "My helpful student works near water.",
+      "file": "fb92370a6b13879c.wav",
+      "bytes": 110636,
+      "sha256": "43dea3cd0a2f8664c1b62e760654a48323aa828682a355da29aa0309e8f80dcd"
+    },
+    {
+      "text": "My kind guide works near water.",
+      "file": "e6dae5a5d5ca30a7.wav",
+      "bytes": 91692,
+      "sha256": "3d7de5e6da492490c96cdb43037cc5a3b17a3735e3d8a7ed9ebe051b130b9343"
+    },
+    {
+      "text": "My teacher can often work near the water today.",
+      "file": "6b50d7039319a47c.wav",
+      "bytes": 125484,
+      "sha256": "379b78b2b0644b0691062a06e3f3054ae177a17ac152274e2b1354ecb9c6f458"
+    },
+    {
+      "text": "My student can often work near the water today.",
+      "file": "a9530ed7ebfaa5a1.wav",
+      "bytes": 130604,
+      "sha256": "f9dcec2e5241ca0e2d10f01a816b76e7665d15540dc53f2fb67f9275479d30d9"
+    },
+    {
+      "text": "My guide can often work near the water today.",
+      "file": "e60f2ea177fda6a0.wav",
+      "bytes": 115756,
+      "sha256": "c4abfca5a1ea007b9a3fc0e13479a5c2918b0b4ef13c7ae2131a954b5478a327"
+    },
+    {
+      "text": "My teacher enjoys the music.",
+      "file": "fce59d497fb39de6.wav",
+      "bytes": 99372,
+      "sha256": "3bb000b799389789ecd9718283487a27f59e388031a8066eccf7f3e68e3e093e"
+    },
+    {
+      "text": "My student enjoys the music.",
+      "file": "1d0e51b003e3668c.wav",
+      "bytes": 94764,
+      "sha256": "b071daaa59d24281c42b2a5d3af82bd6da7d92056bbc118a9ea8a74ee3c7166a"
+    },
+    {
+      "text": "My guide enjoys the music.",
+      "file": "5cfe872bceedfd64.wav",
+      "bytes": 82476,
+      "sha256": "20faf2d59ad906790de3fd16f629eaa411a7d01db475c035833f6e291957b52c"
+    },
+    {
+      "text": "My teacher wants our management to work.",
+      "file": "bdd81cbd9dd7a622.wav",
+      "bytes": 120364,
+      "sha256": "f51ac05a6e9406026fc7ddea457eeb63c7d2bdc62060cdb4b6bc072b9220209a"
+    },
+    {
+      "text": "My student wants our management to work.",
+      "file": "a5e80ef3bd5e90c1.wav",
+      "bytes": 127020,
+      "sha256": "ec73ae5a7cdf214f443afe45179d51cb140f4deebf7c036dd9e31db4dfe3bd7c"
+    },
+    {
+      "text": "My guide wants our management to work.",
+      "file": "a5cc5eb812a56b2a.wav",
+      "bytes": 110124,
+      "sha256": "f8ee1f900fdb466dd2e8e1d64b8cab48e6f18a76ef6c0ed0617800cb570465df"
+    },
+    {
+      "text": "Always be a guide!",
+      "file": "2067ef822f40fb96.wav",
+      "bytes": 60972,
+      "sha256": "f1436ca57c5ec66caa286aae40dd3ced936dd36ee0c92a9189b3308aa3295f02"
+    },
+    {
+      "text": "Always be a helper!",
+      "file": "2b44b0bfcba72b9c.wav",
+      "bytes": 55852,
+      "sha256": "bb73ae2fc1848621030ebe162683510d0c3a5b13d5276f1ed76e02f7d2697f72"
+    },
+    {
+      "text": "Always be a friend!",
+      "file": "80b5aee4c52649e9.wav",
+      "bytes": 59948,
+      "sha256": "9dff210d2dbae94823f14dd1f9e57bc0b02d8858e8cb1b04ace02bf183b1bfb9"
+    },
+    {
+      "text": "Always be the support today!",
+      "file": "6086607e6a8bc1c5.wav",
+      "bytes": 75820,
+      "sha256": "312ccad66cf347a80e2881a9a2948fff62564c2c06b29d687089fe3b1ed45f7e"
+    },
+    {
+      "text": "Always be our guide!",
+      "file": "3d3b3a2d7b4b7172.wav",
+      "bytes": 73260,
+      "sha256": "c1fa218c35d314523466cbf9ddf2290cb15abd53c24886a4177ca1b6543ab6c6"
+    },
+    {
+      "text": "Always be our helper!",
+      "file": "a42d73611917bd2a.wav",
+      "bytes": 67116,
+      "sha256": "2f17c7c26b6a68a5bd4ccf94a8c4754bbf0dbfc44b2708aac9e9c46b446725e8"
+    },
+    {
+      "text": "Always be our friend!",
+      "file": "7c627cbd40ede9fc.wav",
+      "bytes": 69676,
+      "sha256": "f7ad61bff2d0a346d134624d07a4dc4adc3f3996152a6ec95d7e8bac5e25010a"
+    },
+    {
+      "text": "Sometimes I work.",
+      "file": "c184f2a161b15f3a.wav",
+      "bytes": 54828,
+      "sha256": "cbae439912e922a26ae0a4b8a3cc6ad26ae335484487c46083bb19c66c21f548"
+    },
+    {
+      "text": "Sometimes we work.",
+      "file": "5e208551a62e4f26.wav",
+      "bytes": 60460,
+      "sha256": "966878e150b5cffea25487023f1e03fa972b187bcdb93068534e8034a500b0da"
+    },
+    {
+      "text": "Sometimes she works.",
+      "file": "de077d1a450f527d.wav",
+      "bytes": 70700,
+      "sha256": "b69a8b385f3db6e0dbbdbea30afaa051d4431fa1301c64eee3295969bf915c09"
+    },
+    {
+      "text": "I make the student ready.",
+      "file": "b9f560e8cdda43bc.wav",
+      "bytes": 67628,
+      "sha256": "6f7ab5c46842e175caba9084f81311c6b5025dd33ee54938f34bece92bae3373"
+    },
+    {
+      "text": "We make the child ready.",
+      "file": "dc99b3c8b0a2c895.wav",
+      "bytes": 61996,
+      "sha256": "69705060140b6a51329f04ef285783a0a9e103f6cb16339f5a625bd5c3ddde22"
+    },
+    {
+      "text": "She makes the visitor ready.",
+      "file": "db334e6147cb4798.wav",
+      "bytes": 69676,
+      "sha256": "db867ce2ea1a686ba22d17ec929c98d8955d3cf7421c6bda40d3f5d35cf547c0"
+    },
+    {
+      "text": "I am really very happy.",
+      "file": "77134db9dd7ec609.wav",
+      "bytes": 71724,
+      "sha256": "ede86ad4cb108612c02388b905e82c3032346b2e0de555ca0fe2f85c4435efdc"
+    },
+    {
+      "text": "We are really very happy.",
+      "file": "e91c6294145d27c5.wav",
+      "bytes": 65580,
+      "sha256": "effc28804d8416e75851fd7261c157d5ba37131984b115daabe6d6ee81f91bb6"
+    },
+    {
+      "text": "She is really very happy.",
+      "file": "80a7c5840ddb91c1.wav",
+      "bytes": 67116,
+      "sha256": "91de08c2640fc9282c497d1f6256f6d66f97d1a16e728a232fd9464ae06db6d8"
+    },
+    {
+      "text": "I can regularly and often work.",
+      "file": "fd95697367dd4027.wav",
+      "bytes": 91692,
+      "sha256": "a3ae9a7a09cf076e6312f60bc9ac28fbacf8f4e319f36d2727a5c0a490c2611a"
+    },
+    {
+      "text": "We can regularly and often work.",
+      "file": "31d4bdd8ac59d191.wav",
+      "bytes": 105516,
+      "sha256": "03a4a4fb09a2b6a5a84e3af7a61357c6df3f0c2019338fe913a94c005ee2aa1c"
+    },
+    {
+      "text": "She can regularly and often work.",
+      "file": "19c93447d0aba3f6.wav",
+      "bytes": 93228,
+      "sha256": "0eb3163f8699617b8f024f0931c5823bce4096eb50a2691f9a9e72c915d98921"
+    },
+    {
+      "text": "I am happy, calm, and confident.",
+      "file": "0b0f225cbb00bb40.wav",
+      "bytes": 107052,
+      "sha256": "98d70f5e48f2fa561fea1e156bc8e89b4732d59f35f2765863c3335cfc51a7e6"
+    },
+    {
+      "text": "We are happy, calm, and confident.",
+      "file": "c1c37d2503a58a35.wav",
+      "bytes": 118316,
+      "sha256": "9322de7db0ff5495f00e6b244482e69a1b2b794f274ef68bc5215447fae2c9aa"
+    },
+    {
+      "text": "She is happy, calm, and confident.",
+      "file": "04cce9d519e27e5a.wav",
+      "bytes": 130092,
+      "sha256": "5d016371a34070e80660a60d455cb3991de027ddd297205065f4df6f3b5c8c0f"
+    },
+    {
+      "text": "Always look happy today!",
+      "file": "946996ed00af9ac5.wav",
+      "bytes": 69164,
+      "sha256": "53848e9bced9d8fd2163bcac58a7448f1cb57500a4e2c01778123aef2a5d8238"
+    },
+    {
+      "text": "Naro works.",
+      "file": "56e8ec27c2d3d371.wav",
+      "bytes": 46124,
+      "sha256": "c4bd6174131d4b3491ad27a85bb567dda4387e6debdaebcb9709cd3fcc8312f4"
+    },
+    {
+      "text": "Naro is happy.",
+      "file": "12973223c63d244c.wav",
+      "bytes": 55340,
+      "sha256": "d6fb978ed5ef07b6d257d68ab180c63f050ca1b380af59b1a918ef47cfa04ed4"
+    },
+    {
+      "text": "Naro does not work.",
+      "file": "da6aa8c58725a037.wav",
+      "bytes": 59436,
+      "sha256": "18e928d1adca3d120c24d28dc965a27e6f823bd186496e91b8f4b33cd680385a"
+    }
+  ]
+}

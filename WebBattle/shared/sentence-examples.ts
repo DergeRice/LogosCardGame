@@ -17,7 +17,7 @@ const seeds:Seed[]=[
  {patternType:2,core:[p('subject','She'),p('verb','is'),p('subjectComplement','kind')],ko:'그녀는 친절하다',modifiers:[m('target','to everyone','모두에게'),m('place','at school','학교에서'),m('time','every day','매일')],alternatives:[m('time','even on busy days','바쁜 날에도'),m('place','at work','직장에서')]},
  {patternType:2,core:[p('subject','He'),p('verb','becomes'),p('subjectComplement','a teacher')],ko:'그는 선생님이 된다',modifiers:[m('manner','through hard work','노력을 통해'),m('place','in Seoul','서울에서'),m('time','after graduation','졸업 후에')],alternatives:[m('time','after years of study','오랜 공부 끝에'),m('place','at a local school','지역 학교에서')]},
  {patternType:2,core:[p('subject','The soup'),p('verb','tastes'),p('subjectComplement','good')],ko:'수프는 맛이 좋다',modifiers:[m('accompaniment','with fresh bread','갓 구운 빵과 함께 먹으면'),m('place','at this restaurant','이 식당에서'),m('time','on cold days','추운 날에')],alternatives:[m('time','in winter','겨울에'),m('place','at home','집에서')]},
- {patternType:3,core:[p('subject','I'),p('verb','like'),p('object','music')],ko:'나는 음악을 좋아한다',modifiers:[m('manner','without reservation','아낌없이'),m('place','in any setting','어떤 환경에서든'),m('time','at any time','언제든')],alternatives:[m('time','even on busy days','바쁜 날에도'),m('place','at home','집에서')]},
+ {patternType:3,core:[p('subject','I'),p('verb','like'),p('object','music')],ko:'나는 음악을 좋아한다',modifiers:[m('manner','very much','매우'),m('place','at home','집에서'),m('time','every day','매일')],alternatives:[m('time','even on busy days','바쁜 날에도'),m('place','at school','학교에서')]},
  {patternType:3,core:[p('subject','She'),p('verb','reads'),p('object','a book')],ko:'그녀는 책을 읽는다',modifiers:[m('manner','quietly','조용히'),m('place','in the library','도서관에서'),m('time','every afternoon','매일 오후에')],alternatives:[m('time','before bed','잠자리에 들기 전에'),m('place','on the train','기차에서')]},
  {patternType:3,core:[p('subject','We'),p('verb','drink'),p('object','water')],ko:'우리는 물을 마신다',modifiers:[m('manner','slowly','천천히'),m('place','at home','집에서'),m('time','after exercise','운동 후에')],alternatives:[m('time','every morning','매일 아침'),m('place','in the kitchen','부엌에서')]},
  {patternType:4,core:[p('subject','He'),p('verb','gives'),p('indirect','me'),p('direct','a book')],ko:'그는 나에게 책을 준다',modifiers:[m('manner','with a smile','미소를 지으며'),m('place','at school','학교에서'),m('time','every Friday','매주 금요일에')],alternatives:[m('time','on my birthday','내 생일에'),m('place','in the library','도서관에서')]},
@@ -35,7 +35,8 @@ function build(seed:Seed,index:number):SentenceExample[]{
   const ordered=[...mods].sort((a,b)=>(a.role==='time'?0:a.role==='place'?1:2)-(b.role==='time'?0:b.role==='place'?1:2));
   let korean=seed.ko;
   if(seed.patternType===5&&index===14)korean=`나는 네가 ${ordered.map(x=>x.ko).join(' ')}${mods.length?' ':''}공부하기를 원한다`;
-  else korean=`${ordered.map(x=>x.ko).join(' ')}${mods.length?' ':''}${seed.ko}`;
+  else if(seed.patternType===3&&index===6){const other=ordered.filter(m=>m.role!=='manner').map(m=>m.ko).join(' '),manner=ordered.filter(m=>m.role==='manner').map(m=>m.ko).join(' ');korean=`나는 ${other?other+' ':''}음악을 ${manner?manner+' ':''}좋아한다`;}
+  else {const space=seed.ko.indexOf(' ');korean=seed.ko.slice(0,space)+' '+ordered.map(x=>x.ko+' ').join('')+seed.ko.slice(space+1);}
   return {id:`form-${seed.patternType}-${index%3+1}-${v+1}`,patternType:seed.patternType,parts,english:parts.map(x=>x.text).join(' ')+'.',korean:korean+'.'};
  });
 }

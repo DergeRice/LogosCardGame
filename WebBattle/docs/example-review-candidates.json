@@ -23,31 +23,6 @@
     "patternType": 1,
     "parts": [
       {
-        "text": "Today",
-        "role": "manner",
-        "kind": "adverb",
-        "cardId": "0",
-        "gloss": "오늘"
-      },
-      {
-        "text": "work",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "1",
-        "gloss": "일하다"
-      }
-    ],
-    "english": "Today work!",
-    "korean": "오늘 일해라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "1/imperative/none/VB/positive",
-    "id": "cards-0-1-0",
-    "patternType": 1,
-    "parts": [
-      {
         "text": "Work",
         "role": "verb",
         "kind": "verb",
@@ -64,6 +39,31 @@
     ],
     "english": "Work often!",
     "korean": "자주 일해라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "1/imperative/none/VB/positive",
+    "id": "cards-0-1-0",
+    "patternType": 1,
+    "parts": [
+      {
+        "text": "Work",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "0",
+        "gloss": "일하다"
+      },
+      {
+        "text": "today",
+        "role": "manner",
+        "kind": "adverb",
+        "cardId": "1",
+        "gloss": "오늘"
+      }
+    ],
+    "english": "Work today!",
+    "korean": "오늘 일해라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -137,22 +137,22 @@
         "gloss": "한다"
       },
       {
-        "text": "today",
-        "role": "manner",
-        "kind": "adverb",
-        "cardId": "1",
-        "gloss": "오늘"
-      },
-      {
         "text": "work",
         "role": "verb",
         "kind": "verb",
-        "cardId": "2",
+        "cardId": "1",
         "gloss": "일하다"
+      },
+      {
+        "text": "often",
+        "role": "time",
+        "kind": "frequency",
+        "cardId": "2",
+        "gloss": "자주"
       }
     ],
-    "english": "Do today work!",
-    "korean": "오늘 일해라!",
+    "english": "Do work often!",
+    "korean": "자주 일해라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -237,11 +237,11 @@
     "patternType": 3,
     "parts": [
       {
-        "text": "Read",
+        "text": "Help",
         "role": "verb",
         "kind": "verb",
         "cardId": "0",
-        "gloss": "읽다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -251,8 +251,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Read them!",
-    "korean": "그들을 읽어라!",
+    "english": "Help them!",
+    "korean": "그들을 도와라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -262,11 +262,11 @@
     "patternType": 3,
     "parts": [
       {
-        "text": "Read",
+        "text": "Help",
         "role": "verb",
         "kind": "verb",
         "cardId": "0",
-        "gloss": "읽다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -276,8 +276,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Read Naro!",
-    "korean": "나로를 읽어라!",
+    "english": "Help Naro!",
+    "korean": "나로를 도와라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -287,11 +287,11 @@
     "patternType": 3,
     "parts": [
       {
-        "text": "Read",
+        "text": "Enjoy",
         "role": "verb",
         "kind": "verb",
         "cardId": "0",
-        "gloss": "읽다"
+        "gloss": "즐기다"
       },
       {
         "text": "music",
@@ -301,8 +301,8 @@
         "gloss": "음악"
       }
     ],
-    "english": "Read music!",
-    "korean": "음악을 읽어라!",
+    "english": "Enjoy music!",
+    "korean": "음악을 즐겨라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -369,18 +369,18 @@
     "patternType": 2,
     "parts": [
       {
-        "text": "Today",
-        "role": "manner",
-        "kind": "adverb",
-        "cardId": "0",
-        "gloss": "오늘"
-      },
-      {
-        "text": "look",
+        "text": "Look",
         "role": "verb",
         "kind": "verb",
-        "cardId": "1",
+        "cardId": "0",
         "gloss": "보이다"
+      },
+      {
+        "text": "often",
+        "role": "time",
+        "kind": "frequency",
+        "cardId": "1",
+        "gloss": "자주"
       },
       {
         "text": "happy",
@@ -390,33 +390,8 @@
         "gloss": "행복한"
       }
     ],
-    "english": "Today look happy!",
-    "korean": "오늘 행복해 보여라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "2/imperative/none/BE/positive",
-    "id": "cards-0-1-0",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "0",
-        "gloss": "되어라"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "나"
-      }
-    ],
-    "english": "Be me!",
-    "korean": "나가 되어라!",
+    "english": "Look often happy!",
+    "korean": "자주 행복해 보여라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -467,6 +442,31 @@
     ],
     "english": "Be happy!",
     "korean": "행복해라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "2/imperative/none/BE/positive",
+    "id": "cards-0-1-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "0",
+        "gloss": "되어라"
+      },
+      {
+        "text": "support",
+        "role": "subjectComplement",
+        "kind": "mass",
+        "cardId": "1",
+        "gloss": "지원"
+      }
+    ],
+    "english": "Be support!",
+    "korean": "지원이 되어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -561,22 +561,22 @@
         "gloss": "않다"
       },
       {
-        "text": "today",
-        "role": "manner",
-        "kind": "adverb",
-        "cardId": "2",
-        "gloss": "오늘"
-      },
-      {
         "text": "work",
         "role": "verb",
         "kind": "verb",
-        "cardId": "3",
+        "cardId": "2",
         "gloss": "일하다"
+      },
+      {
+        "text": "often",
+        "role": "time",
+        "kind": "frequency",
+        "cardId": "3",
+        "gloss": "자주"
       }
     ],
-    "english": "Do not today work!",
-    "korean": "오늘 일하지 마라!",
+    "english": "Do not work often!",
+    "korean": "자주 일하지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -689,11 +689,11 @@
         "gloss": "한다"
       },
       {
-        "text": "read",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "읽다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -703,8 +703,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Do read them!",
-    "korean": "그들을 읽어라!",
+    "english": "Do help them!",
+    "korean": "그들을 도와라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -721,11 +721,11 @@
         "gloss": "한다"
       },
       {
-        "text": "read",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "읽다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -735,8 +735,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do read Naro!",
-    "korean": "나로를 읽어라!",
+    "english": "Do help Naro!",
+    "korean": "나로를 도와라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -753,11 +753,11 @@
         "gloss": "한다"
       },
       {
-        "text": "read",
+        "text": "enjoy",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "읽다"
+        "gloss": "즐기다"
       },
       {
         "text": "music",
@@ -767,8 +767,8 @@
         "gloss": "음악"
       }
     ],
-    "english": "Do read music!",
-    "korean": "음악을 읽어라!",
+    "english": "Do enjoy music!",
+    "korean": "음악을 즐겨라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -902,38 +902,6 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "2",
-        "gloss": "나"
-      }
-    ],
-    "english": "Do be me!",
-    "korean": "나이 되어라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "2/imperative/DO/BE/positive",
-    "id": "cards-0-1-2-0",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "1",
-        "gloss": "이다"
-      },
-      {
         "text": "Naro",
         "role": "subjectComplement",
         "kind": "proper",
@@ -942,7 +910,7 @@
       }
     ],
     "english": "Do be Naro!",
-    "korean": "나로이 되어라!",
+    "korean": "나로가 되어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -975,6 +943,38 @@
     ],
     "english": "Do be happy!",
     "korean": "행복해라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "2/imperative/DO/BE/positive",
+    "id": "cards-0-1-2-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "1",
+        "gloss": "이다"
+      },
+      {
+        "text": "support",
+        "role": "subjectComplement",
+        "kind": "mass",
+        "cardId": "2",
+        "gloss": "지원"
+      }
+    ],
+    "english": "Do be support!",
+    "korean": "지원이 되어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1279,11 +1279,11 @@
         "gloss": "나"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -1293,8 +1293,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "I need them.",
-    "korean": "나는 그들을 필요로 한다.",
+    "english": "I help them.",
+    "korean": "나는 그들을 돕는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -1311,11 +1311,11 @@
         "gloss": "나"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -1325,8 +1325,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "I need Naro.",
-    "korean": "나는 나로를 필요로 한다.",
+    "english": "I help Naro.",
+    "korean": "나는 나로를 돕는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -1343,11 +1343,11 @@
         "gloss": "우리"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -1357,8 +1357,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "We need them.",
-    "korean": "우리는 그들을 필요로 한다.",
+    "english": "We help them.",
+    "korean": "우리는 그들을 돕는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -1478,79 +1478,79 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "2",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "I am me.",
-    "korean": "나는 나이다.",
+    "english": "I am Naro.",
+    "korean": "나는 나로이다.",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/statement/none/BE/positive",
-    "id": "cards-0-1-2-1",
+    "id": "cards-0-1-2-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "We",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "0",
-        "gloss": "우리"
+        "gloss": "나"
       },
       {
-        "text": "are",
+        "text": "am",
         "role": "verb",
         "kind": "be",
         "cardId": "1",
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "happy",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "adjective",
         "cardId": "2",
-        "gloss": "나"
+        "gloss": "행복한"
       }
     ],
-    "english": "We are me.",
-    "korean": "우리는 나이다.",
+    "english": "I am happy.",
+    "korean": "나는 행복하다.",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/statement/none/BE/positive",
-    "id": "cards-0-1-2-2",
+    "id": "cards-0-1-2-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "She",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "0",
-        "gloss": "그녀"
+        "gloss": "나"
       },
       {
-        "text": "is",
+        "text": "am",
         "role": "verb",
         "kind": "be",
         "cardId": "1",
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "myself",
         "role": "subjectComplement",
         "kind": "pronoun",
         "cardId": "2",
-        "gloss": "나"
+        "gloss": "나 자신"
       }
     ],
-    "english": "She is me.",
-    "korean": "그녀는 나이다.",
+    "english": "I am myself.",
+    "korean": "나는 나 자신이다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -1560,50 +1560,18 @@
     "patternType": 4,
     "parts": [
       {
-        "text": "Give",
+        "text": "Show",
         "role": "verb",
         "kind": "verb",
         "cardId": "0",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "2",
-        "gloss": "그들"
-      }
-    ],
-    "english": "Give us them!",
-    "korean": "우리에게 그들을 줘라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "4/imperative/none/VB/positive",
-    "id": "cards-0-1-2-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "0",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "1",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -1613,8 +1581,40 @@
         "gloss": "나로"
       }
     ],
-    "english": "Give us Naro!",
-    "korean": "우리에게 나로를 줘라!",
+    "english": "Show them Naro!",
+    "korean": "그들에게 나로를 보여줘라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "4/imperative/none/VB/positive",
+    "id": "cards-0-1-2-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "0",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "1",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "2",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Show Naro Naro!",
+    "korean": "나로에게 나로를 보여줘라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1631,11 +1631,11 @@
         "gloss": "주다"
       },
       {
-        "text": "us",
+        "text": "them",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "1",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "advice",
@@ -1645,8 +1645,8 @@
         "gloss": "조언"
       }
     ],
-    "english": "Give us advice!",
-    "korean": "우리에게 조언을 줘라!",
+    "english": "Give them advice!",
+    "korean": "그들에게 조언을 줘라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1678,7 +1678,7 @@
       }
     ],
     "english": "Make them work!",
-    "korean": "그들을 일하게 만들어라!",
+    "korean": "그들이 일하게 만들어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1742,39 +1742,7 @@
       }
     ],
     "english": "Make Naro work!",
-    "korean": "나로를 일하게 만들어라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "2/imperative/none/BE/negative",
-    "id": "cards-0-1-2-0",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "0",
-        "gloss": "이다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "1",
-        "gloss": "않다"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "2",
-        "gloss": "나"
-      }
-    ],
-    "english": "Be not me!",
-    "korean": "나이 되지 마라!",
+    "korean": "나로가 일하게 만들어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1806,7 +1774,7 @@
       }
     ],
     "english": "Be not Naro!",
-    "korean": "나로이 되지 마라!",
+    "korean": "나로가 되지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1830,15 +1798,47 @@
         "gloss": "않다"
       },
       {
-        "text": "happy",
+        "text": "afraid",
         "role": "subjectComplement",
         "kind": "adjective",
         "cardId": "2",
-        "gloss": "행복한"
+        "gloss": "두려운"
       }
     ],
-    "english": "Be not happy!",
-    "korean": "행복하지 마라!",
+    "english": "Be not afraid!",
+    "korean": "두려워하지 마라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "2/imperative/none/BE/negative",
+    "id": "cards-0-1-2-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "0",
+        "gloss": "이다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "1",
+        "gloss": "않다"
+      },
+      {
+        "text": "support",
+        "role": "subjectComplement",
+        "kind": "mass",
+        "cardId": "2",
+        "gloss": "지원"
+      }
+    ],
+    "english": "Be not support!",
+    "korean": "지원이 되지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1862,79 +1862,79 @@
         "gloss": "나"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "2",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "Am I me?",
-    "korean": "나는 나인가요?",
+    "english": "Am I Naro?",
+    "korean": "나는 나로인가요?",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/question/none/BE/positive",
-    "id": "cards-0-1-2-1",
+    "id": "cards-0-1-2-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "Are",
+        "text": "Am",
         "role": "verb",
         "kind": "be",
         "cardId": "0",
         "gloss": "이다"
       },
       {
-        "text": "we",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "1",
-        "gloss": "우리"
+        "gloss": "나"
       },
       {
-        "text": "me",
+        "text": "happy",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "adjective",
         "cardId": "2",
-        "gloss": "나"
+        "gloss": "행복한"
       }
     ],
-    "english": "Are we me?",
-    "korean": "우리는 나인가요?",
+    "english": "Am I happy?",
+    "korean": "나는 행복한가요?",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/question/none/BE/positive",
-    "id": "cards-0-1-2-2",
+    "id": "cards-0-1-2-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "Is",
+        "text": "Am",
         "role": "verb",
         "kind": "be",
         "cardId": "0",
         "gloss": "이다"
       },
       {
-        "text": "she",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "1",
-        "gloss": "그녀"
+        "gloss": "나"
       },
       {
-        "text": "me",
+        "text": "myself",
         "role": "subjectComplement",
         "kind": "pronoun",
         "cardId": "2",
-        "gloss": "나"
+        "gloss": "나 자신"
       }
     ],
-    "english": "Is she me?",
-    "korean": "그녀는 나인가요?",
+    "english": "Am I myself?",
+    "korean": "나는 나 자신인가요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -1958,11 +1958,11 @@
         "gloss": "않다"
       },
       {
-        "text": "read",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "읽다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -1972,8 +1972,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Do not read them!",
-    "korean": "그들을 읽지 마라!",
+    "english": "Do not help them!",
+    "korean": "그들을 돕지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -1997,11 +1997,11 @@
         "gloss": "않다"
       },
       {
-        "text": "read",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "읽다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -2011,8 +2011,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do not read Naro!",
-    "korean": "나로를 읽지 마라!",
+    "english": "Do not help Naro!",
+    "korean": "나로를 돕지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -2036,11 +2036,11 @@
         "gloss": "않다"
       },
       {
-        "text": "read",
+        "text": "enjoy",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "읽다"
+        "gloss": "즐기다"
       },
       {
         "text": "music",
@@ -2050,8 +2050,8 @@
         "gloss": "음악"
       }
     ],
-    "english": "Do not read music!",
-    "korean": "음악을 읽지 마라!",
+    "english": "Do not enjoy music!",
+    "korean": "음악을 즐기지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -2213,84 +2213,6 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "나"
-      }
-    ],
-    "english": "Do not be me!",
-    "korean": "나이 되지 마라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "2/imperative/DO/BE/negative",
-    "id": "cards-0-1-2-3-0",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "1",
-        "gloss": "이다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "나"
-      }
-    ],
-    "english": "Do be not me!",
-    "korean": "나이 되지 마라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "2/imperative/DO/BE/negative",
-    "id": "cards-0-1-2-3-0",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "1",
-        "gloss": "않다"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "2",
-        "gloss": "이다"
-      },
-      {
         "text": "Naro",
         "role": "subjectComplement",
         "kind": "proper",
@@ -2299,7 +2221,85 @@
       }
     ],
     "english": "Do not be Naro!",
-    "korean": "나로이 되지 마라!",
+    "korean": "나로가 되지 마라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "2/imperative/DO/BE/negative",
+    "id": "cards-0-1-2-3-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "1",
+        "gloss": "않다"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "2",
+        "gloss": "이다"
+      },
+      {
+        "text": "afraid",
+        "role": "subjectComplement",
+        "kind": "adjective",
+        "cardId": "3",
+        "gloss": "두려운"
+      }
+    ],
+    "english": "Do not be afraid!",
+    "korean": "두려워하지 마라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "2/imperative/DO/BE/negative",
+    "id": "cards-0-1-2-3-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "1",
+        "gloss": "이다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "afraid",
+        "role": "subjectComplement",
+        "kind": "adjective",
+        "cardId": "3",
+        "gloss": "두려운"
+      }
+    ],
+    "english": "Do be not afraid!",
+    "korean": "두려워하지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -2440,11 +2440,11 @@
         "gloss": "나"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -2454,8 +2454,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Do I need them?",
-    "korean": "나는 그들을 필요로 하나요?",
+    "english": "Do I help them?",
+    "korean": "나는 그들을 돕나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -2479,11 +2479,11 @@
         "gloss": "나"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -2493,8 +2493,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do I need Naro?",
-    "korean": "나는 나로를 필요로 하나요?",
+    "english": "Do I help Naro?",
+    "korean": "나는 나로를 돕나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -2518,11 +2518,11 @@
         "gloss": "우리"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -2532,8 +2532,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Do we need them?",
-    "korean": "우리는 그들을 필요로 하나요?",
+    "english": "Do we help them?",
+    "korean": "우리는 그들을 돕나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -2572,7 +2572,7 @@
       }
     ],
     "english": "Do I look happy?",
-    "korean": "나는 행복해 보인다?",
+    "korean": "나는 행복해 보이나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -2611,7 +2611,7 @@
       }
     ],
     "english": "Do we look happy?",
-    "korean": "우리는 행복해 보인다?",
+    "korean": "우리는 행복해 보이나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -2650,7 +2650,7 @@
       }
     ],
     "english": "Does she look happy?",
-    "korean": "그녀는 행복해 보인다?",
+    "korean": "그녀는 행복해 보이나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -2667,57 +2667,18 @@
         "gloss": "한다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "2",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "그들"
-      }
-    ],
-    "english": "Do give us them!",
-    "korean": "우리에게 그들을 줘라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "4/imperative/DO/VB/positive",
-    "id": "cards-0-1-2-3-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "1",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "2",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -2727,8 +2688,47 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do give us Naro!",
-    "korean": "우리에게 나로를 줘라!",
+    "english": "Do show them Naro!",
+    "korean": "그들에게 나로를 보여줘라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "4/imperative/DO/VB/positive",
+    "id": "cards-0-1-2-3-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "1",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "2",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "3",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Do show Naro Naro!",
+    "korean": "나로에게 나로를 보여줘라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -2752,11 +2752,11 @@
         "gloss": "주다"
       },
       {
-        "text": "us",
+        "text": "them",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "2",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "advice",
@@ -2766,8 +2766,8 @@
         "gloss": "조언"
       }
     ],
-    "english": "Do give us advice!",
-    "korean": "우리에게 조언을 줘라!",
+    "english": "Do give them advice!",
+    "korean": "그들에게 조언을 줘라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -2806,7 +2806,7 @@
       }
     ],
     "english": "Do make them work!",
-    "korean": "그들을 일하게 만들어라!",
+    "korean": "그들이 일하게 만들어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -2884,7 +2884,7 @@
       }
     ],
     "english": "Do make Naro work!",
-    "korean": "나로를 일하게 만들어라!",
+    "korean": "나로가 일하게 만들어라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -3025,11 +3025,11 @@
         "gloss": "나"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -3039,8 +3039,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Can I need them?",
-    "korean": "나는 그들을 필요로 할 수 있나요?",
+    "english": "Can I help them?",
+    "korean": "나는 그들을 도울 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -3064,11 +3064,11 @@
         "gloss": "나"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -3078,8 +3078,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Can I need Naro?",
-    "korean": "나는 나로를 필요로 할 수 있나요?",
+    "english": "Can I help Naro?",
+    "korean": "나는 나로를 도울 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -3103,11 +3103,11 @@
         "gloss": "우리"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -3117,8 +3117,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Can we need them?",
-    "korean": "우리는 그들을 필요로 할 수 있나요?",
+    "english": "Can we help them?",
+    "korean": "우리는 그들을 도울 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -3266,15 +3266,54 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "Can I be me?",
-    "korean": "나는 나일 수 있나요?",
+    "english": "Can I be Naro?",
+    "korean": "나는 나로일 수 있나요?",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "2/question/MODAL/BE/positive",
+    "id": "cards-0-1-2-3-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "0",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "2",
+        "gloss": "이다"
+      },
+      {
+        "text": "happy",
+        "role": "subjectComplement",
+        "kind": "adjective",
+        "cardId": "3",
+        "gloss": "행복한"
+      }
+    ],
+    "english": "Can I be happy?",
+    "korean": "나는 행복할 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -3305,54 +3344,15 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "Can we be me?",
-    "korean": "우리는 나일 수 있나요?",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "2/question/MODAL/BE/positive",
-    "id": "cards-0-1-2-3-2",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "0",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "she",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "그녀"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "2",
-        "gloss": "이다"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "나"
-      }
-    ],
-    "english": "Can she be me?",
-    "korean": "그녀는 나일 수 있나요?",
+    "english": "Can we be Naro?",
+    "korean": "우리는 나로일 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -3493,11 +3493,11 @@
         "gloss": "한다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -3507,8 +3507,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "I do need them.",
-    "korean": "나는 그들을 필요로 한다.",
+    "english": "I do help them.",
+    "korean": "나는 그들을 돕는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -3532,11 +3532,11 @@
         "gloss": "한다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -3546,8 +3546,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "I do need Naro.",
-    "korean": "나는 나로를 필요로 한다.",
+    "english": "I do help Naro.",
+    "korean": "나는 나로를 돕는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -3571,11 +3571,11 @@
         "gloss": "한다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -3585,8 +3585,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "We do need them.",
-    "korean": "우리는 그들을 필요로 한다.",
+    "english": "We do help them.",
+    "korean": "우리는 그들을 돕는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -3844,11 +3844,11 @@
         "gloss": "할 수 있다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -3858,8 +3858,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "I can need them.",
-    "korean": "나는 그들을 필요로 할 수 있다.",
+    "english": "I can help them.",
+    "korean": "나는 그들을 도울 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -3883,11 +3883,11 @@
         "gloss": "할 수 있다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -3897,8 +3897,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "I can need Naro.",
-    "korean": "나는 나로를 필요로 할 수 있다.",
+    "english": "I can help Naro.",
+    "korean": "나는 나로를 도울 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -3922,11 +3922,11 @@
         "gloss": "할 수 있다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -3936,8 +3936,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "We can need them.",
-    "korean": "우리는 그들을 필요로 할 수 있다.",
+    "english": "We can help them.",
+    "korean": "우리는 그들을 도울 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4085,15 +4085,54 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "I can be me.",
-    "korean": "나는 나일 수 있다.",
+    "english": "I can be Naro.",
+    "korean": "나는 나로일 수 있다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "2/statement/MODAL/BE/positive",
+    "id": "cards-0-1-2-3-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "1",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "2",
+        "gloss": "이다"
+      },
+      {
+        "text": "happy",
+        "role": "subjectComplement",
+        "kind": "adjective",
+        "cardId": "3",
+        "gloss": "행복한"
+      }
+    ],
+    "english": "I can be happy.",
+    "korean": "나는 행복할 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4124,54 +4163,15 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "We can be me.",
-    "korean": "우리는 나일 수 있다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "2/statement/MODAL/BE/positive",
-    "id": "cards-0-1-2-3-2",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "She",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "그녀"
-      },
-      {
-        "text": "can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "1",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "2",
-        "gloss": "이다"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "나"
-      }
-    ],
-    "english": "She can be me.",
-    "korean": "그녀는 나일 수 있다.",
+    "english": "We can be Naro.",
+    "korean": "우리는 나로일 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4188,57 +4188,18 @@
         "gloss": "나"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "2",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "그들"
-      }
-    ],
-    "english": "I give us them.",
-    "korean": "나는 우리에게 그들을 준다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/statement/none/VB/positive",
-    "id": "cards-0-1-2-3-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "나"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "1",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "2",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -4248,8 +4209,47 @@
         "gloss": "나로"
       }
     ],
-    "english": "I give us Naro.",
-    "korean": "나는 우리에게 나로를 준다.",
+    "english": "I show them Naro.",
+    "korean": "나는 그들에게 나로를 보여준다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/statement/none/VB/positive",
+    "id": "cards-0-1-2-3-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "1",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "2",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "3",
+        "gloss": "나로"
+      }
+    ],
+    "english": "I show Naro Naro.",
+    "korean": "나는 나로에게 나로를 보여준다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4266,29 +4266,29 @@
         "gloss": "우리"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "1",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "2",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "3",
+        "cardId": "2",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "3",
+        "gloss": "나로"
       }
     ],
-    "english": "We give us them.",
-    "korean": "우리는 우리에게 그들을 준다.",
+    "english": "We show them Naro.",
+    "korean": "우리는 그들에게 나로를 보여준다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4327,7 +4327,7 @@
       }
     ],
     "english": "I make them work.",
-    "korean": "나는 그들을 일하게 만든다.",
+    "korean": "나는 그들이 일하게 만든다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4405,7 +4405,7 @@
       }
     ],
     "english": "I make Naro work.",
-    "korean": "나는 나로를 일하게 만든다.",
+    "korean": "나는 나로가 일하게 만든다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4436,32 +4436,32 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "I am not me.",
-    "korean": "나는 나이 아니다.",
+    "english": "I am not Naro.",
+    "korean": "나는 나로가 아니다.",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/statement/none/BE/negative",
-    "id": "cards-0-1-2-3-1",
+    "id": "cards-0-1-2-3-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "We",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "0",
-        "gloss": "우리"
+        "gloss": "나"
       },
       {
-        "text": "are",
+        "text": "am",
         "role": "verb",
         "kind": "be",
         "cardId": "1",
@@ -4475,32 +4475,32 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "happy",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "adjective",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "행복한"
       }
     ],
-    "english": "We are not me.",
-    "korean": "우리는 나이 아니다.",
+    "english": "I am not happy.",
+    "korean": "나는 행복하지 않다.",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/statement/none/BE/negative",
-    "id": "cards-0-1-2-3-2",
+    "id": "cards-0-1-2-3-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "She",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "0",
-        "gloss": "그녀"
+        "gloss": "나"
       },
       {
-        "text": "is",
+        "text": "am",
         "role": "verb",
         "kind": "be",
         "cardId": "1",
@@ -4514,15 +4514,15 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "myself",
         "role": "subjectComplement",
         "kind": "pronoun",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나 자신"
       }
     ],
-    "english": "She is not me.",
-    "korean": "그녀는 나이 아니다.",
+    "english": "I am not myself.",
+    "korean": "나는 나 자신이 아니다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -4553,36 +4553,36 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "Am I not me?",
-    "korean": "나는 나이 아니다?",
+    "english": "Am I not Naro?",
+    "korean": "나는 나로가 아닌가요?",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/question/none/BE/negative",
-    "id": "cards-0-1-2-3-1",
+    "id": "cards-0-1-2-3-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "Are",
+        "text": "Am",
         "role": "verb",
         "kind": "be",
         "cardId": "0",
         "gloss": "이다"
       },
       {
-        "text": "we",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "1",
-        "gloss": "우리"
+        "gloss": "나"
       },
       {
         "text": "not",
@@ -4592,36 +4592,36 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "happy",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "adjective",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "행복한"
       }
     ],
-    "english": "Are we not me?",
-    "korean": "우리는 나이 아니다?",
+    "english": "Am I not happy?",
+    "korean": "나는 행복하지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
   {
     "family": "2/question/none/BE/negative",
-    "id": "cards-0-1-2-3-2",
+    "id": "cards-0-1-2-3-0",
     "patternType": 2,
     "parts": [
       {
-        "text": "Is",
+        "text": "Am",
         "role": "verb",
         "kind": "be",
         "cardId": "0",
         "gloss": "이다"
       },
       {
-        "text": "she",
+        "text": "I",
         "role": "subject",
         "kind": "pronoun",
         "cardId": "1",
-        "gloss": "그녀"
+        "gloss": "나"
       },
       {
         "text": "not",
@@ -4631,15 +4631,15 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "myself",
         "role": "subjectComplement",
         "kind": "pronoun",
         "cardId": "3",
-        "gloss": "나"
+        "gloss": "나 자신"
       }
     ],
-    "english": "Is she not me?",
-    "korean": "그녀는 나이 아니다?",
+    "english": "Am I not myself?",
+    "korean": "나는 나 자신이 아닌가요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -4663,64 +4663,18 @@
         "gloss": "않다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "그들"
-      }
-    ],
-    "english": "Do not give us them!",
-    "korean": "우리에게 그들을 주지 마라!",
-    "imperative": true,
-    "cardAligned": true
-  },
-  {
-    "family": "4/imperative/DO/VB/negative",
-    "id": "cards-0-1-2-3-4-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "1",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "3",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -4730,8 +4684,54 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do not give us Naro!",
-    "korean": "우리에게 나로를 주지 마라!",
+    "english": "Do not show them Naro!",
+    "korean": "그들에게 나로를 보여주지 마라!",
+    "imperative": true,
+    "cardAligned": true
+  },
+  {
+    "family": "4/imperative/DO/VB/negative",
+    "id": "cards-0-1-2-3-4-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "1",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "2",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "3",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Do not show Naro Naro!",
+    "korean": "나로에게 나로를 보여주지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -4762,11 +4762,11 @@
         "gloss": "주다"
       },
       {
-        "text": "us",
+        "text": "them",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "3",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "advice",
@@ -4776,8 +4776,8 @@
         "gloss": "조언"
       }
     ],
-    "english": "Do not give us advice!",
-    "korean": "우리에게 조언을 주지 마라!",
+    "english": "Do not give them advice!",
+    "korean": "그들에게 조언을 주지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -4823,7 +4823,7 @@
       }
     ],
     "english": "Do not make them work!",
-    "korean": "그들을 일하게 만들지 마라!",
+    "korean": "그들이 일하게 만들지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -4915,7 +4915,7 @@
       }
     ],
     "english": "Do not make Naro work!",
-    "korean": "나로를 일하게 만들지 마라!",
+    "korean": "나로가 일하게 만들지 마라!",
     "imperative": true,
     "cardAligned": true
   },
@@ -4946,11 +4946,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -4960,8 +4960,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Do I not need them?",
-    "korean": "나는 그들을 필요로 하지 않나요?",
+    "english": "Do I not help them?",
+    "korean": "나는 그들을 돕지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -4992,11 +4992,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -5006,8 +5006,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do I not need Naro?",
-    "korean": "나는 나로를 필요로 하지 않나요?",
+    "english": "Do I not help Naro?",
+    "korean": "나는 나로를 돕지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5038,11 +5038,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -5052,8 +5052,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Do we not need them?",
-    "korean": "우리는 그들을 필요로 하지 않나요?",
+    "english": "Do we not help them?",
+    "korean": "우리는 그들을 돕지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5215,29 +5215,29 @@
         "gloss": "나"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "4",
+        "cardId": "3",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
       }
     ],
-    "english": "Do I give us them?",
-    "korean": "나는 우리에게 그들을 주나요?",
+    "english": "Do I show them Naro?",
+    "korean": "나는 그들에게 나로를 보여주나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5261,18 +5261,18 @@
         "gloss": "나"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
+        "gloss": "보여주다"
       },
       {
-        "text": "us",
+        "text": "Naro",
         "role": "indirect",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "우리"
+        "gloss": "나로"
       },
       {
         "text": "Naro",
@@ -5282,8 +5282,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do I give us Naro?",
-    "korean": "나는 우리에게 나로를 주나요?",
+    "english": "Do I show Naro Naro?",
+    "korean": "나는 나로에게 나로를 보여주나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5307,29 +5307,29 @@
         "gloss": "우리"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "4",
+        "cardId": "3",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
       }
     ],
-    "english": "Do we give us them?",
-    "korean": "우리는 우리에게 그들을 주나요?",
+    "english": "Do we show them Naro?",
+    "korean": "우리는 그들에게 나로를 보여주나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5375,7 +5375,7 @@
       }
     ],
     "english": "Do I make them work?",
-    "korean": "나는 그들을 일하게 만든다?",
+    "korean": "나는 그들이 일하게 만드나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5421,7 +5421,7 @@
       }
     ],
     "english": "Do I make work easy?",
-    "korean": "나는 일을 쉽게 만든다?",
+    "korean": "나는 일을 쉽게 만드나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5467,7 +5467,7 @@
       }
     ],
     "english": "Do I make Naro work?",
-    "korean": "나는 나로를 일하게 만든다?",
+    "korean": "나는 나로가 일하게 만드나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5498,11 +5498,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -5512,8 +5512,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Can I not need them?",
-    "korean": "나는 그들을 필요로 할 수 없나요?",
+    "english": "Can I not help them?",
+    "korean": "나는 그들을 도울 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5544,11 +5544,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -5558,8 +5558,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "Can I not need Naro?",
-    "korean": "나는 나로를 필요로 할 수 없나요?",
+    "english": "Can I not help Naro?",
+    "korean": "나는 나로를 도울 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5590,11 +5590,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -5604,8 +5604,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "Can we not need them?",
-    "korean": "우리는 그들을 필요로 할 수 없나요?",
+    "english": "Can we not help them?",
+    "korean": "우리는 그들을 도울 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5781,15 +5781,61 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "4",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "Can I not be me?",
-    "korean": "나는 나일 수 없나요?",
+    "english": "Can I not be Naro?",
+    "korean": "나는 나로일 수 없나요?",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "2/question/MODAL/BE/negative",
+    "id": "cards-0-1-2-3-4-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "Can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "0",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "3",
+        "gloss": "이다"
+      },
+      {
+        "text": "happy",
+        "role": "subjectComplement",
+        "kind": "adjective",
+        "cardId": "4",
+        "gloss": "행복한"
+      }
+    ],
+    "english": "Can I not be happy?",
+    "korean": "나는 행복할 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5827,61 +5873,15 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "happy",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "adjective",
         "cardId": "4",
-        "gloss": "나"
+        "gloss": "행복한"
       }
     ],
-    "english": "Can I be not me?",
-    "korean": "나는 나일 수 없나요?",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "2/question/MODAL/BE/negative",
-    "id": "cards-0-1-2-3-4-1",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "Can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "0",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "we",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "우리"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "3",
-        "gloss": "이다"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "나"
-      }
-    ],
-    "english": "Can we not be me?",
-    "korean": "우리는 나일 수 없나요?",
+    "english": "Can I be not happy?",
+    "korean": "나는 행복할 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5905,64 +5905,18 @@
         "gloss": "나"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "그들"
-      }
-    ],
-    "english": "Can I give us them?",
-    "korean": "나는 우리에게 그들을 줄 수 있나요?",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/question/MODAL/VB/positive",
-    "id": "cards-0-1-2-3-4-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "0",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "나"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "3",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -5972,8 +5926,54 @@
         "gloss": "나로"
       }
     ],
-    "english": "Can I give us Naro?",
-    "korean": "나는 우리에게 나로를 줄 수 있나요?",
+    "english": "Can I show them Naro?",
+    "korean": "나는 그들에게 나로를 보여줄 수 있나요?",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/question/MODAL/VB/positive",
+    "id": "cards-0-1-2-3-4-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "0",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "2",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "3",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Can I show Naro Naro?",
+    "korean": "나는 나로에게 나로를 보여줄 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -5997,29 +5997,29 @@
         "gloss": "우리"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "4",
+        "cardId": "3",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
       }
     ],
-    "english": "Can we give us them?",
-    "korean": "우리는 우리에게 그들을 줄 수 있나요?",
+    "english": "Can we show them Naro?",
+    "korean": "우리는 그들에게 나로를 보여줄 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -6065,7 +6065,7 @@
       }
     ],
     "english": "Can I make them work?",
-    "korean": "나는 그들을 만들 수 있나요?",
+    "korean": "나는 그들이 일하게 만들 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -6157,7 +6157,7 @@
       }
     ],
     "english": "Can I make Naro work?",
-    "korean": "나는 나로를 만들 수 있나요?",
+    "korean": "나는 나로가 일하게 만들 수 있나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -6188,11 +6188,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -6202,8 +6202,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "I do not need them.",
-    "korean": "나는 그들을 필요로 하지 않는다.",
+    "english": "I do not help them.",
+    "korean": "나는 그들을 돕지 않는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6234,11 +6234,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -6248,8 +6248,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "I do not need Naro.",
-    "korean": "나는 나로를 필요로 하지 않는다.",
+    "english": "I do not help Naro.",
+    "korean": "나는 나로를 돕지 않는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6280,11 +6280,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -6294,8 +6294,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "We do not need them.",
-    "korean": "우리는 그들을 필요로 하지 않는다.",
+    "english": "We do not help them.",
+    "korean": "우리는 그들을 돕지 않는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6457,29 +6457,29 @@
         "gloss": "한다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "4",
+        "cardId": "3",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
       }
     ],
-    "english": "I do give us them.",
-    "korean": "나는 우리에게 그들을 준다.",
+    "english": "I do show them Naro.",
+    "korean": "나는 그들에게 나로를 보여준다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6503,18 +6503,18 @@
         "gloss": "한다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
+        "gloss": "보여주다"
       },
       {
-        "text": "us",
+        "text": "Naro",
         "role": "indirect",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "3",
-        "gloss": "우리"
+        "gloss": "나로"
       },
       {
         "text": "Naro",
@@ -6524,8 +6524,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "I do give us Naro.",
-    "korean": "나는 우리에게 나로를 준다.",
+    "english": "I do show Naro Naro.",
+    "korean": "나는 나로에게 나로를 보여준다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6549,29 +6549,29 @@
         "gloss": "한다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "4",
+        "cardId": "3",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
       }
     ],
-    "english": "We do give us them.",
-    "korean": "우리는 우리에게 그들을 준다.",
+    "english": "We do show them Naro.",
+    "korean": "우리는 그들에게 나로를 보여준다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6617,7 +6617,7 @@
       }
     ],
     "english": "I do make them work.",
-    "korean": "나는 그들을 일하게 만든다.",
+    "korean": "나는 그들이 일하게 만든다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6709,7 +6709,7 @@
       }
     ],
     "english": "I do make Naro work.",
-    "korean": "나는 나로를 일하게 만든다.",
+    "korean": "나는 나로가 일하게 만든다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6740,11 +6740,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -6754,8 +6754,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "I can not need them.",
-    "korean": "나는 그들을 필요로 할 수 없다.",
+    "english": "I can not help them.",
+    "korean": "나는 그들을 도울 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6786,11 +6786,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "Naro",
@@ -6800,8 +6800,8 @@
         "gloss": "나로"
       }
     ],
-    "english": "I can not need Naro.",
-    "korean": "나는 나로를 필요로 할 수 없다.",
+    "english": "I can not help Naro.",
+    "korean": "나는 나로를 도울 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -6832,11 +6832,11 @@
         "gloss": "않다"
       },
       {
-        "text": "need",
+        "text": "help",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "필요로 하다"
+        "gloss": "돕다"
       },
       {
         "text": "them",
@@ -6846,8 +6846,8 @@
         "gloss": "그들"
       }
     ],
-    "english": "We can not need them.",
-    "korean": "우리는 그들을 필요로 할 수 없다.",
+    "english": "We can not help them.",
+    "korean": "우리는 그들을 도울 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7023,15 +7023,61 @@
         "gloss": "이다"
       },
       {
-        "text": "me",
+        "text": "Naro",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "proper",
         "cardId": "4",
-        "gloss": "나"
+        "gloss": "나로"
       }
     ],
-    "english": "I can not be me.",
-    "korean": "나는 나일 수 없다.",
+    "english": "I can not be Naro.",
+    "korean": "나는 나로일 수 없다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "2/statement/MODAL/BE/negative",
+    "id": "cards-0-1-2-3-4-0",
+    "patternType": 2,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "1",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "be",
+        "role": "verb",
+        "kind": "be",
+        "cardId": "3",
+        "gloss": "이다"
+      },
+      {
+        "text": "happy",
+        "role": "subjectComplement",
+        "kind": "adjective",
+        "cardId": "4",
+        "gloss": "행복한"
+      }
+    ],
+    "english": "I can not be happy.",
+    "korean": "나는 행복할 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7069,61 +7115,15 @@
         "gloss": "않다"
       },
       {
-        "text": "me",
+        "text": "happy",
         "role": "subjectComplement",
-        "kind": "pronoun",
+        "kind": "adjective",
         "cardId": "4",
-        "gloss": "나"
+        "gloss": "행복한"
       }
     ],
-    "english": "I can be not me.",
-    "korean": "나는 나일 수 없다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "2/statement/MODAL/BE/negative",
-    "id": "cards-0-1-2-3-4-1",
-    "patternType": 2,
-    "parts": [
-      {
-        "text": "We",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "우리"
-      },
-      {
-        "text": "can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "1",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "be",
-        "role": "verb",
-        "kind": "be",
-        "cardId": "3",
-        "gloss": "이다"
-      },
-      {
-        "text": "me",
-        "role": "subjectComplement",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "나"
-      }
-    ],
-    "english": "We can not be me.",
-    "korean": "우리는 나일 수 없다.",
+    "english": "I can be not happy.",
+    "korean": "나는 행복할 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7147,64 +7147,18 @@
         "gloss": "할 수 있다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "그들"
-      }
-    ],
-    "english": "I can give us them.",
-    "korean": "나는 우리에게 그들을 줄 수 있다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/statement/MODAL/VB/positive",
-    "id": "cards-0-1-2-3-4-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "나"
-      },
-      {
-        "text": "can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "1",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "3",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -7214,8 +7168,54 @@
         "gloss": "나로"
       }
     ],
-    "english": "I can give us Naro.",
-    "korean": "나는 우리에게 나로를 줄 수 있다.",
+    "english": "I can show them Naro.",
+    "korean": "나는 그들에게 나로를 보여줄 수 있다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/statement/MODAL/VB/positive",
+    "id": "cards-0-1-2-3-4-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "1",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "2",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "3",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      }
+    ],
+    "english": "I can show Naro Naro.",
+    "korean": "나는 나로에게 나로를 보여줄 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7239,29 +7239,29 @@
         "gloss": "할 수 있다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "2",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "3",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "4",
+        "cardId": "3",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
       }
     ],
-    "english": "We can give us them.",
-    "korean": "우리는 우리에게 그들을 줄 수 있다.",
+    "english": "We can show them Naro.",
+    "korean": "우리는 그들에게 나로를 보여줄 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7307,7 +7307,7 @@
       }
     ],
     "english": "I can make them work.",
-    "korean": "나는 그들을 만들 수 있다.",
+    "korean": "나는 그들이 일하게 만들 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7399,7 +7399,7 @@
       }
     ],
     "english": "I can make Naro work.",
-    "korean": "나는 나로를 만들 수 있다.",
+    "korean": "나는 나로가 일하게 만들 수 있다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7430,71 +7430,18 @@
         "gloss": "않다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
-        "gloss": "그들"
-      }
-    ],
-    "english": "I do not give us them.",
-    "korean": "나는 우리에게 그들을 주지 않는다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/statement/DO/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "나"
-      },
-      {
-        "text": "do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "1",
-        "gloss": "한다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "4",
-        "gloss": "우리"
+        "gloss": "그들"
       },
       {
         "text": "Naro",
@@ -7504,8 +7451,61 @@
         "gloss": "나로"
       }
     ],
-    "english": "I do not give us Naro.",
-    "korean": "나는 우리에게 나로를 주지 않는다.",
+    "english": "I do not show them Naro.",
+    "korean": "나는 그들에게 나로를 보여주지 않는다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/statement/DO/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "1",
+        "gloss": "한다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "I do not show Naro Naro.",
+    "korean": "나는 나로에게 나로를 보여주지 않는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7536,124 +7536,18 @@
         "gloss": "않다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
-        "gloss": "그들"
-      }
-    ],
-    "english": "We do not give us them.",
-    "korean": "우리는 우리에게 그들을 주지 않는다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/question/DO/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "나"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "4",
-        "gloss": "우리"
-      },
-      {
-        "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
         "gloss": "그들"
-      }
-    ],
-    "english": "Do I not give us them?",
-    "korean": "나는 우리에게 그들을 주지 않나요?",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/question/DO/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Do",
-        "role": "verb",
-        "kind": "do",
-        "cardId": "0",
-        "gloss": "한다"
-      },
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "나"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
       },
       {
         "text": "Naro",
@@ -7663,8 +7557,114 @@
         "gloss": "나로"
       }
     ],
-    "english": "Do I not give us Naro?",
-    "korean": "나는 우리에게 나로를 주지 않나요?",
+    "english": "We do not show them Naro.",
+    "korean": "우리는 그들에게 나로를 보여주지 않는다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/question/DO/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "them",
+        "role": "indirect",
+        "kind": "pronoun",
+        "cardId": "4",
+        "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Do I not show them Naro?",
+    "korean": "나는 그들에게 나로를 보여주지 않나요?",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/question/DO/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Do",
+        "role": "verb",
+        "kind": "do",
+        "cardId": "0",
+        "gloss": "한다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Do I not show Naro Naro?",
+    "korean": "나는 나로에게 나로를 보여주지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -7695,124 +7695,18 @@
         "gloss": "않다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
-        "gloss": "그들"
-      }
-    ],
-    "english": "Do we not give us them?",
-    "korean": "우리는 우리에게 그들을 주지 않나요?",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/statement/MODAL/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "나"
-      },
-      {
-        "text": "can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "1",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "4",
-        "gloss": "우리"
-      },
-      {
-        "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
         "gloss": "그들"
-      }
-    ],
-    "english": "I can not give us them.",
-    "korean": "나는 우리에게 그들을 줄 수 없다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/statement/MODAL/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "0",
-        "gloss": "나"
-      },
-      {
-        "text": "can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "1",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
       },
       {
         "text": "Naro",
@@ -7822,8 +7716,114 @@
         "gloss": "나로"
       }
     ],
-    "english": "I can not give us Naro.",
-    "korean": "나는 우리에게 나로를 줄 수 없다.",
+    "english": "Do we not show them Naro?",
+    "korean": "우리는 그들에게 나로를 보여주지 않나요?",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/statement/MODAL/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "1",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "them",
+        "role": "indirect",
+        "kind": "pronoun",
+        "cardId": "4",
+        "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "I can not show them Naro.",
+    "korean": "나는 그들에게 나로를 보여줄 수 없다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/statement/MODAL/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "0",
+        "gloss": "나"
+      },
+      {
+        "text": "can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "1",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "I can not show Naro Naro.",
+    "korean": "나는 나로에게 나로를 보여줄 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -7854,124 +7854,18 @@
         "gloss": "않다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
-        "gloss": "그들"
-      }
-    ],
-    "english": "We can not give us them.",
-    "korean": "우리는 우리에게 그들을 줄 수 없다.",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/question/MODAL/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "0",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "나"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
         "role": "indirect",
         "kind": "pronoun",
         "cardId": "4",
-        "gloss": "우리"
-      },
-      {
-        "text": "them",
-        "role": "direct",
-        "kind": "pronoun",
-        "cardId": "5",
         "gloss": "그들"
-      }
-    ],
-    "english": "Can I not give us them?",
-    "korean": "나는 우리에게 그들을 줄 수 없나요?",
-    "imperative": false,
-    "cardAligned": true
-  },
-  {
-    "family": "4/question/MODAL/VB/negative",
-    "id": "cards-0-1-2-3-4-5-0",
-    "patternType": 4,
-    "parts": [
-      {
-        "text": "Can",
-        "role": "verb",
-        "kind": "modal",
-        "cardId": "0",
-        "gloss": "할 수 있다"
-      },
-      {
-        "text": "I",
-        "role": "subject",
-        "kind": "pronoun",
-        "cardId": "1",
-        "gloss": "나"
-      },
-      {
-        "text": "not",
-        "role": "manner",
-        "kind": "not",
-        "cardId": "2",
-        "gloss": "않다"
-      },
-      {
-        "text": "give",
-        "role": "verb",
-        "kind": "verb",
-        "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
       },
       {
         "text": "Naro",
@@ -7981,8 +7875,114 @@
         "gloss": "나로"
       }
     ],
-    "english": "Can I not give us Naro?",
-    "korean": "나는 우리에게 나로를 줄 수 없나요?",
+    "english": "We can not show them Naro.",
+    "korean": "우리는 그들에게 나로를 보여줄 수 없다.",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/question/MODAL/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "0",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "them",
+        "role": "indirect",
+        "kind": "pronoun",
+        "cardId": "4",
+        "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Can I not show them Naro?",
+    "korean": "나는 그들에게 나로를 보여줄 수 없나요?",
+    "imperative": false,
+    "cardAligned": true
+  },
+  {
+    "family": "4/question/MODAL/VB/negative",
+    "id": "cards-0-1-2-3-4-5-0",
+    "patternType": 4,
+    "parts": [
+      {
+        "text": "Can",
+        "role": "verb",
+        "kind": "modal",
+        "cardId": "0",
+        "gloss": "할 수 있다"
+      },
+      {
+        "text": "I",
+        "role": "subject",
+        "kind": "pronoun",
+        "cardId": "1",
+        "gloss": "나"
+      },
+      {
+        "text": "not",
+        "role": "manner",
+        "kind": "not",
+        "cardId": "2",
+        "gloss": "않다"
+      },
+      {
+        "text": "show",
+        "role": "verb",
+        "kind": "verb",
+        "cardId": "3",
+        "gloss": "보여주다"
+      },
+      {
+        "text": "Naro",
+        "role": "indirect",
+        "kind": "proper",
+        "cardId": "4",
+        "gloss": "나로"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
+      }
+    ],
+    "english": "Can I not show Naro Naro?",
+    "korean": "나는 나로에게 나로를 보여줄 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -8013,29 +8013,29 @@
         "gloss": "않다"
       },
       {
-        "text": "give",
+        "text": "show",
         "role": "verb",
         "kind": "verb",
         "cardId": "3",
-        "gloss": "주다"
-      },
-      {
-        "text": "us",
-        "role": "indirect",
-        "kind": "pronoun",
-        "cardId": "4",
-        "gloss": "우리"
+        "gloss": "보여주다"
       },
       {
         "text": "them",
-        "role": "direct",
+        "role": "indirect",
         "kind": "pronoun",
-        "cardId": "5",
+        "cardId": "4",
         "gloss": "그들"
+      },
+      {
+        "text": "Naro",
+        "role": "direct",
+        "kind": "proper",
+        "cardId": "5",
+        "gloss": "나로"
       }
     ],
-    "english": "Can we not give us them?",
-    "korean": "우리는 우리에게 그들을 줄 수 없나요?",
+    "english": "Can we not show them Naro?",
+    "korean": "우리는 그들에게 나로를 보여줄 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -8088,7 +8088,7 @@
       }
     ],
     "english": "I do not make them work.",
-    "korean": "나는 그들을 일하게 만들지 않는다.",
+    "korean": "나는 그들이 일하게 만들지 않는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -8194,7 +8194,7 @@
       }
     ],
     "english": "I do not make Naro work.",
-    "korean": "나는 나로를 일하게 만들지 않는다.",
+    "korean": "나는 나로가 일하게 만들지 않는다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -8247,7 +8247,7 @@
       }
     ],
     "english": "Do I not make them work?",
-    "korean": "나는 그들을 일하게 만들지 않나요?",
+    "korean": "나는 그들이 일하게 만들지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -8353,7 +8353,7 @@
       }
     ],
     "english": "Do I not make Naro work?",
-    "korean": "나는 나로를 일하게 만들지 않나요?",
+    "korean": "나는 나로가 일하게 만들지 않나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -8406,7 +8406,7 @@
       }
     ],
     "english": "I can not make them work.",
-    "korean": "나는 그들을 만들 수 없다.",
+    "korean": "나는 그들이 일하게 만들 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -8512,7 +8512,7 @@
       }
     ],
     "english": "I can not make Naro work.",
-    "korean": "나는 나로를 만들 수 없다.",
+    "korean": "나는 나로가 일하게 만들 수 없다.",
     "imperative": false,
     "cardAligned": true
   },
@@ -8565,7 +8565,7 @@
       }
     ],
     "english": "Can I not make them work?",
-    "korean": "나는 그들을 만들 수 없나요?",
+    "korean": "나는 그들이 일하게 만들 수 없나요?",
     "imperative": false,
     "cardAligned": true
   },
@@ -8671,7 +8671,7 @@
       }
     ],
     "english": "Can I not make Naro work?",
-    "korean": "나는 나로를 만들 수 없나요?",
+    "korean": "나는 나로가 일하게 만들 수 없나요?",
     "imperative": false,
     "cardAligned": true
   }

@@ -45,27 +45,27 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  let singular=true,person1=false,question=false,imperative=false,main=-1,pattern=judgment.patternType;
  const put=(at:number,role:ExampleRole,text:string,ko:string)=>{roles[at]=role;words[at]=text;gloss[at]=ko};
  function adverbWord(i:number):[string,string]{
-  if(subject&&i>=subject.end&&i<main&&seq[i]==='adverb')return seq[i-1]==='adverb'?['quietly','조용히']:['really','정말'];
-  if(seq[i]==='frequency')return seq[i+1]==='frequency'?['almost','거의']:seq[i-1]==='frequency'?['always','항상']:['often','자주'];
+  if(i>start&&i<main&&seq[i]==='adverb')return seq[i-1]==='adverb'?['quietly','조용히']:['really','정말'];
+  if(seq[i]==='frequency')return seq[i+1]==='frequency'?['regularly','정기적으로']:seq[i-1]==='frequency'?['and often','그리고 자주']:['often','자주'];
   if(seq[i+1]==='adverb')return i<start?['today,','오늘']:seq[i+2]==='adjective'?['really','정말']:['very','아주'];
   if(seq[i-1]==='adverb')return seq[i+1]==='adjective'?['very','매우']:i<start?['quietly','조용히']:['well','잘'];
-  return seq[i+1]==='adjective'?['very','매우']:seq[i+1]==='not'?['really','정말']:i>main&&i<stop&&result?.object?['only','오직']:['today','오늘'];
+  return i<start?['today,','오늘']:seq[i+1]==='adjective'?['very','매우']:seq[i+1]==='not'?['really','정말']:i>main&&i<stop&&result?.object?['only','오직']:['today','오늘'];
  }
  function noun(n:NP,role:ExampleRole,place=false){
   nounRanges.push(n);const k=seq[n.head];let text='',ko='';
   if(k==='proper'){text='Naro';ko='나로';}
-  else if(k==='pronoun'){text=role==='subject'?cycle(['I','we','she']):role==='indirect'?'us':role==='subjectComplement'?'me':'them';ko=role==='subject'?cycle(['나','우리','그녀']):role==='indirect'?'우리':role==='subjectComplement'?'나': '그들';}
+  else if(k==='pronoun'){text=role==='subject'?cycle(['I','we','she']):role==='indirect'?'them':role==='direct'?'something':role==='subjectComplement'?(imperative?'yourself':words[subject?.head??-1]==='we'?'ourselves':words[subject?.head??-1]==='she'?'herself':'myself'):'them';ko=role==='subject'?cycle(['나','우리','그녀']):role==='indirect'?'그들':role==='direct'?'무언가':role==='subjectComplement'?(imperative?'너 자신':words[subject?.head??-1]==='we'?'우리 자신':words[subject?.head??-1]==='she'?'그녀 자신':'나 자신'): '그들';}
   else if(k==='count'){
-   const sets=place?['friend','guide','teacher']:role==='subject'?['teacher','student','guide']:role==='indirect'?['student','child','visitor']:role==='subjectComplement'?['guide','helper','friend']:pattern===5?['student','child','visitor']:['book','letter','gift'];
-   text=cycle(sets);const translations:Record<string,string>={friend:'친구',helper:'도우미',guide:'안내자',teacher:'선생님',student:'학생',child:'아이',visitor:'방문객',book:'책',letter:'편지',gift:'선물'};ko=translations[text];
+   const sets=place?['friend','guide','teacher']:role==='subject'?['teacher','student','guide']:role==='indirect'?['student','child','visitor']:role==='subjectComplement'?['guide','helper','friend']:pattern===5?['student','child','visitor']:pattern===3?['book','letter','story']:['book','letter','gift'];
+   text=cycle(sets);const translations:Record<string,string>={friend:'친구',helper:'도우미',guide:'안내자',teacher:'선생님',student:'학생',child:'아이',visitor:'방문객',book:'책',letter:'편지',gift:'선물',story:'이야기'};ko=translations[text];
   }else{
-   text=place?'water':role==='subject'?(pattern===1?'traffic':pattern===2?'education':'management'):role==='indirect'?'staff':role==='subjectComplement'?'support':pattern===5?(result?.complement?.kind==='to'||result?.vp?'staff':'work'):pattern===4?'advice':'music';
+   text=place?'water':role==='subject'?(pattern===1?'traffic':pattern===2?'education':'management'):role==='indirect'?'management':role==='subjectComplement'?'support':pattern===5?(result?.complement?.kind==='to'||result?.vp?'management':'work'):pattern===4?'advice':'music';
    ko=({water:'물',traffic:'교통',education:'교육',management:'경영진',staff:'직원들',support:'지원',work:'일',advice:'조언',music:'음악'} as Record<string,string>)[text];
   }
   put(n.head,role,text,ko);
   for(let i=n.start;i<n.head;i++){
    if(seq[i]==='article')put(i,role,'the','그');else if(seq[i]==='indefinite')put(i,role,'a','한');else if(seq[i]==='possessive')put(i,role,role==='subject'?'my':role==='subjectComplement'&&!imperative?'your':'our',role==='subject'?'나의':role==='subjectComplement'&&!imperative?'너의':'우리의');
-   else if(seq[i]==='adjective'){const human=seq[n.head]==='count'&&(role!=='direct'&&pattern!==3);const options=text==='water'?[['clean','깨끗한'],['fresh','신선한'],['cool','시원한']]:human?[['kind','친절한'],['young','젊은'],['helpful','도움이 되는']]:[['helpful','도움이 되는'],['useful','유용한'],['good','좋은']];const option=options[(Math.floor(index)+i-n.start)%options.length];put(i,role,option[0],option[1]);}
+   else if(seq[i]==='adjective'){const human=seq[n.head]==='proper'||seq[n.head]==='pronoun'||seq[n.head]==='count'&&(role!=='direct'&&pattern!==3);const options=text==='water'?[['clean','깨끗한'],['fresh','신선한'],['cool','시원한']]:human?[['kind','친절한'],['young','젊은'],['helpful','도움이 되는']]:[['helpful','도움이 되는'],['useful','유용한'],['good','좋은']];const option=options[(Math.floor(index)+i-n.start)%options.length];put(i,role,option[0],option[1]);}
    else if(adv(seq[i])){const w=seq[i-1]==='adverb'||seq[i+1]==='adverb'?adverbWord(i):seq[i]==='adverb'?['very','매우']:['often','자주'];put(i,role,w[0],w[1]);}
   }
   for(const p of n.pps)placePhrase(p);
@@ -76,7 +76,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
   for(let i=c.start;i<c.end;i++){
    if(seq[i]==='adjective'){
     const options=role==='objectComplement'?(seq[result?.object?.head??-1]==='mass'?[['easy','쉬운'],['useful','유용한'],['important','중요한']]:[['ready','준비된'],['confident','자신 있는'],['happy','행복한']]):seq[subject?.head??-1]==='mass'?[['important','중요한'],['useful','유용한'],['valuable','가치 있는']]:[['happy','행복한'],['calm','차분한'],['confident','자신 있는']];
-    const option=options[adjectiveIndex];put(i,role,option[0]+(adjectiveIndex<adjectiveCount-1?',':''),option[1]);adjectiveIndex++;
+    const option=seq[main]==='be'&&imperative&&seq.includes('not')&&adjectiveCount===1?['afraid','두려운']:options[adjectiveIndex];put(i,role,(adjectiveCount>1&&adjectiveIndex===adjectiveCount-1?'and ':'')+option[0]+(adjectiveCount>2&&adjectiveIndex<adjectiveCount-1?',':''),option[1]);adjectiveIndex++;
    }
    else if(adv(seq[i])){const w=adverbWord(i);put(i,role,w[0],w[1]);}
    else if(seq[i]==='to-infinitive')put(i,role,'to work','일하기');
@@ -85,10 +85,10 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function tail(t:Tail,verb:number,finite:boolean,embedded=false):string|null{
   if(t.legacy)return t.legacy;
   if(t.complement?.kind==='modal'||t.complement?.kind==='verb')return '원본이 허용하는 일반동사·조동사 주격 보어 조합';
-  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(embedded||imperative?'read':'need'):t.pattern===4?'give':t.complement?.kind==='to'?'want':t.vp?'make':'make';
+  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(seq[t.object?.head??-1]==='pronoun'||seq[t.object?.head??-1]==='proper'?'help':seq[t.object?.head??-1]==='mass'?'enjoy':embedded||imperative||aux>=0&&seq[aux]==='modal'?'read':'need'):t.pattern===4?(seq[t.second?.head??-1]==='proper'?'show':'give'):t.complement?.kind==='to'?'want':t.vp?'make':'make';
   if(seq[verb]==='be')stem='be';
   const verbWord=stem==='be'?(imperative||!finite?'be':person1?'am':singular?'is':'are'):finite&&singular?stem+'s':stem;
-  put(verb,'verb',verbWord,({flow:'흐르다',work:'일하다',look:'보이다',need:'필요로 하다',give:'주다',want:'원하다',make:'만들다',be:'이다',read:'읽다'} as Record<string,string>)[stem]);
+  put(verb,'verb',verbWord,({flow:'흐르다',work:'일하다',look:'보이다',need:'필요로 하다',give:'주다',want:'원하다',make:'만들다',be:'이다',read:'읽다',help:'돕다',enjoy:'즐기다',show:'보여주다'} as Record<string,string>)[stem]);
   if(t.object)noun(t.object,t.pattern===4?'indirect':'object');if(t.second)noun(t.second,'direct');if(t.complement)complement(t.complement,t.pattern===5?'objectComplement':'subjectComplement');if(t.pp)placePhrase(t.pp);
   if(t.vp){const reason=tail(t.vp.tail,t.vp.start,false,true);if(reason)return reason;roles[t.vp.start]='objectComplement';}
   return null;
@@ -134,39 +134,56 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  const particle=(text:string,yes:string,no:string)=>{const code=text.charCodeAt(text.length-1)-0xac00;return text+(code>=0&&code<11172&&code%28!==0?yes:no)};
  function koNP(n:NP):string{const base=gloss.slice(n.start,n.baseEnd).join(' ');return n.pps.map(p=>koNP(p.np)+' 근처에 있는 ').join('')+base;}
  function koAdjectives(c:Complement):string{return seq.slice(c.start,c.end).flatMap((kind,i)=>kind==='adjective'?[gloss[c.start+i]]:[]).join(', ');}
- function koTail(t:Tail):string{
-  const obj=t.object?koNP(t.object):'',second=t.second?koNP(t.second):'';
-  if(t.pattern===1)return (t.pp?koNP(t.pp.np)+' 근처에서 ':'')+(words[main].startsWith('flow')?'흐른다':'일한다');
-  if(t.pattern===2){if(t.complement){if(seq.slice(t.complement.start,t.complement.end).filter(k=>k==='adjective').length>1)return koAdjectives(t.complement)+' 상태로 보인다';const adjective=gloss[t.complement.end-1];return adjective==='행복한'?'행복해 보인다':'중요해 보인다';}return '이다';}
-  if(t.pattern===3)return particle(obj,'을','를')+(words[main]?.startsWith('read')?' 읽는다':' 필요로 한다');
-  if(t.pattern===4)return obj+'에게 '+particle(second,'을','를')+' 준다';
-  if(t.complement?.kind==='to'){const inner=seq.flatMap((k,i)=>i>t.complement!.start&&(k==='frequency'||k==='adverb')?[gloss[i]]:[]).join(' ');return particle(obj,'이','가')+' '+(inner?inner+' ':'')+'일하기를 원한다';}
-  if(t.vp)return particle(obj,'을','를')+' '+(t.vp.tail.pattern===1?'일하게':t.vp.tail.object?particle(koNP(t.vp.tail.object),'을','를')+' 읽게':'일하게')+' 만든다';
-  return particle(obj,'을','를')+' '+(t.complement&&seq.slice(t.complement.start,t.complement.end).filter(k=>k==='adjective').length>1?koAdjectives(t.complement)+' 상태로':t.complement&&gloss[t.complement.end-1]==='쉬운'?'쉽게':'준비된 상태로')+' 만든다';
+ // Inflect Korean from the parsed predicate, not English word endings.
+ type KoAction={plain:string;negative:string;command:string;prohibition:string;ability:string;question:string;negativeQuestion:string};
+ const actions:Record<string,KoAction>={
+  work:{plain:'일한다',negative:'일하지 않는다',command:'일해라',prohibition:'일하지 마라',ability:'일할',question:'일하나요',negativeQuestion:'일하지 않나요'},
+  run:{plain:'달린다',negative:'달리지 않는다',command:'달려라',prohibition:'달리지 마라',ability:'달릴',question:'달리나요',negativeQuestion:'달리지 않나요'},
+  flow:{plain:'흐른다',negative:'흐르지 않는다',command:'흘러라',prohibition:'흐르지 마라',ability:'흐를',question:'흐르나요',negativeQuestion:'흐르지 않나요'},
+  read:{plain:'읽는다',negative:'읽지 않는다',command:'읽어라',prohibition:'읽지 마라',ability:'읽을',question:'읽나요',negativeQuestion:'읽지 않나요'},
+  need:{plain:'필요로 한다',negative:'필요로 하지 않는다',command:'필요로 해라',prohibition:'필요로 하지 마라',ability:'필요로 할',question:'필요로 하나요',negativeQuestion:'필요로 하지 않나요'},
+  help:{plain:'돕는다',negative:'돕지 않는다',command:'도와라',prohibition:'돕지 마라',ability:'도울',question:'돕나요',negativeQuestion:'돕지 않나요'},
+  enjoy:{plain:'즐긴다',negative:'즐기지 않는다',command:'즐겨라',prohibition:'즐기지 마라',ability:'즐길',question:'즐기나요',negativeQuestion:'즐기지 않나요'},
+  give:{plain:'준다',negative:'주지 않는다',command:'줘라',prohibition:'주지 마라',ability:'줄',question:'주나요',negativeQuestion:'주지 않나요'},
+  show:{plain:'보여준다',negative:'보여주지 않는다',command:'보여줘라',prohibition:'보여주지 마라',ability:'보여줄',question:'보여주나요',negativeQuestion:'보여주지 않나요'},
+  make:{plain:'만든다',negative:'만들지 않는다',command:'만들어라',prohibition:'만들지 마라',ability:'만들',question:'만드나요',negativeQuestion:'만들지 않나요'},
+  want:{plain:'원한다',negative:'원하지 않는다',command:'원해라',prohibition:'원하지 마라',ability:'원할',question:'원하나요',negativeQuestion:'원하지 않나요'},
+  look:{plain:'보인다',negative:'보이지 않는다',command:'보여라',prohibition:'보이지 마라',ability:'보일',question:'보이나요',negativeQuestion:'보이지 않나요'},
+  exist:{plain:'있다',negative:'있지 않다',command:'있어라',prohibition:'있지 마라',ability:'있을',question:'있나요',negativeQuestion:'있지 않나요'},
+ };
+ const copula=(text:string):KoAction=>({plain:text+'이다',negative:particle(text,'이','가')+' 아니다',command:particle(text,'이','가')+' 되어라',prohibition:particle(text,'이','가')+' 되지 마라',ability:text+'일',question:text+'인가요',negativeQuestion:particle(text,'이','가')+' 아닌가요'});
+ const adjStates:Record<string,[string,string,string,string]>={afraid:['두려워한다','두려워하지','두려워해라','두려워할'],happy:['행복하다','행복하지','행복해라','행복할'],calm:['차분하다','차분하지','차분해라','차분할'],confident:['자신 있다','자신 있지','자신 있어라','자신 있을'],important:['중요하다','중요하지','중요해라','중요할'],useful:['유용하다','유용하지','유용해라','유용할'],valuable:['가치 있다','가치 있지','가치 있어라','가치 있을'],ready:['준비되다','준비되지','준비되어라','준비될'],easy:['쉽다','쉽지','쉬워져라','쉬울']};
+ function adjectiveState(c:Complement):KoAction{
+  const ids=seq.flatMap((kind,i)=>i>=c.start&&i<c.end&&kind==='adjective'?[i]:[]);
+  if(ids.length>1){const label=koAdjectives(c)+' 상태';return copula(label);}
+  const state=adjStates[words[ids[0]]?.replace(/,$/,'')]??adjStates.happy;
+  return {plain:state[0],negative:state[1]+' 않다',command:state[2],prohibition:state[1]+' 마라',ability:state[3],question:state[0].endsWith('있다')?state[0].slice(0,-2)+'있나요':state[0].endsWith('하다')?state[0].slice(0,-2)+'한가요':state[0].endsWith('쉽다')?'쉬운가요':state[0].slice(0,-1)+'나요',negativeQuestion:state[1]+' 않나요'};
+ }
+ const adjectiveManner=(c:Complement)=>{const ids=seq.flatMap((k,i)=>i>=c.start&&i<c.end&&k==='adjective'?[i]:[]);if(ids.length>1)return koAdjectives(c)+' 상태로';const forms:Record<string,string>={happy:'행복해',calm:'차분해',confident:'자신 있어',important:'중요해',useful:'유용해',valuable:'가치 있어',ready:'준비된 상태로',easy:'쉽게'};return forms[words[ids[0]]?.replace(/,$/,'')]??'행복해'};
+ function predicate(t:Tail|undefined,at:number):{prefix:string;action:KoAction}{
+  const stem=words[at].replace(/s$/,'');
+  if(seq[at]==='be'){
+   const n=nounRanges.find(n=>roles[n.head]==='subjectComplement');
+   if(n)return {prefix:'',action:copula(koNP(n))};
+   if(t?.pp)return {prefix:koNP(t.pp.np)+' 근처에 ',action:actions.exist};
+   if(t?.complement)return {prefix:'',action:adjectiveState(t.complement)};
+  }
+  if(!t)return {prefix:'',action:actions.work};
+  const obj=t.object?koNP(t.object):'';
+  if(t.pattern===1)return {prefix:t.pp?koNP(t.pp.np)+' 근처에서 ':'',action:actions[stem]??actions.work};
+  if(t.pattern===2)return {prefix:t.complement?adjectiveManner(t.complement)+' ':'',action:actions.look};
+  if(t.pattern===3)return {prefix:particle(obj,'을','를')+' '+(t.pp?koNP(t.pp.np)+' 근처에서 ':''),action:actions[stem]??actions.need};
+  if(t.pattern===4)return {prefix:obj+'에게 '+particle(koNP(t.second!),'을','를')+' ',action:actions[stem]??actions.give};
+  if(t.complement?.kind==='to')return {prefix:particle(obj,'이','가')+' 일하기를 ',action:actions.want};
+  if(t.vp){const embedded=predicate(t.vp.tail,t.vp.start);const infinitive:Record<string,string>={work:'일하게',flow:'흐르게',read:'읽게',help:'돕게',enjoy:'즐기게',need:'필요로 하게',look:'보이게',give:'주게',make:'만들게'};return {prefix:particle(obj,'이','가')+' '+embedded.prefix+(infinitive[words[t.vp.start]]??'일하게')+' ',action:actions.make};}
+  return {prefix:particle(obj,'을','를')+' '+(t.complement?adjectiveManner(t.complement)+' ':''),action:actions.make};
  }
  function koreanSentence():string{
-  const modifiers=seq.flatMap((k,i)=>result?.complement?.kind==='to'&&i>result.complement.start?[]:k==='frequency'?[gloss[i]]:k==='adverb'&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
-  let predicate='';
-  if(imperative&&main===0&&end===1)predicate='달려!';
-  else if(seq[main]==='be'){
-   const c=nounRanges.find(n=>roles[n.head]==='subjectComplement');
-   if(c)predicate=koNP(c)+'이다';else if(result?.pp)predicate=koNP(result.pp.np)+' 근처에 있다';else if(result?.complement&&seq.slice(result.complement.start,result.complement.end).filter(k=>k==='adjective').length>1)predicate=koAdjectives(result.complement)+' 상태이다';else predicate=result?.complement&&gloss[result.complement.end-1]==='중요한'?'중요하다':'행복하다';
-  }else predicate=result?koTail(result):'';
-  if(imperative&&!(main===0&&end===1)){
-   if(!result&&nounRanges[0])predicate=particle(koNP(nounRanges[0]),'이','가')+' 되어라';
-   const replacements=seq.includes('not')?[['흐른다','흐르지 마라'],['일한다','일하지 마라'],['읽는다','읽지 마라'],['보인다','보이지 마라'],['준다','주지 마라'],['만든다','만들지 마라'],['원한다','원하지 마라'],['한다','하지 마라'],['하다','하지 마라'],['이다','이 되지 마라']]:[['흐른다','흘러라'],['일한다','일해라'],['읽는다','읽어라'],['보인다','보여라'],['준다','줘라'],['만든다','만들어라'],['원한다','원해라'],['한다','해라'],['하다','해라'],['이다','이 되어라']];
-   for(const [ending,replacement] of replacements)if(predicate.endsWith(ending)){predicate=predicate.slice(0,-ending.length)+replacement;break;}predicate+='!';
-  }
-  if(!imperative&&seq.includes('not'))predicate=predicate.endsWith('흐른다')?predicate.slice(0,-3)+'흐르지 않는다':predicate.endsWith('이다')?predicate.slice(0,-2)+'이 아니다':predicate.endsWith('한다')?predicate.slice(0,-2)+'하지 않는다':predicate.endsWith('준다')?predicate.slice(0,-2)+'주지 않는다':predicate.endsWith('원한다')?predicate.slice(0,-3)+'원하지 않는다':predicate.endsWith('만든다')?predicate.slice(0,-3)+'만들지 않는다':predicate.endsWith('있다')?predicate.slice(0,-2)+'있지 않다':predicate.endsWith('보인다')?predicate.slice(0,-3)+'보이지 않는다':predicate.endsWith('하다')?predicate.slice(0,-2)+'하지 않다':predicate;
-  if(aux>=0&&seq[aux]==='modal'){
-   const positive=seq[main]==='be'?(predicate.includes('근처')?'있을 수':predicate.includes('행복')?'행복할 수':predicate.includes('중요')?'중요할 수':predicate.replace(/이 아니다$|이다$/,'')+'일 수'):result?.pattern===1?(words[main].startsWith('flow')?'흐를 수':'일할 수'):result?.pattern===2?'보일 수':result?.pattern===3?'필요로 할 수':result?.pattern===4?'줄 수':result?.complement?.kind==='to'?'원할 수':'만들 수';
-   const base=result?.pattern===1&&result.pp?koNP(result.pp.np)+' 근처에서 ':seq[main]==='be'?predicate.includes('근처')?predicate.slice(0,predicate.lastIndexOf('근처')+2)+'에 ':'':result?.object?(result.pattern===4?koNP(result.object)+'에게 '+particle(koNP(result.second!),'을','를')+' ':result.pattern===5&&result.complement?.kind==='to'?particle(koNP(result.object),'이','가')+' 일하기를 ':particle(koNP(result.object),'을','를')+' '+(result.pattern===5&&result.complement?(gloss[result.complement.end-1]==='쉬운'?'쉽게 ':'준비된 상태로 '):'')):result?.pattern===2&&result.complement?(gloss[result.complement.end-1]==='행복한'?'행복해 ':'중요해 '):'';
-   predicate=base+positive+(seq.includes('not')?' 없다':' 있다');
-  }
-  let text=(subject?particle(koNP(subject),'은','는')+' ':'')+(modifiers?modifiers+' ':'')+predicate;
-  if(question)text=text.endsWith('않는다')?text.slice(0,-3)+'않나요?':text.endsWith('없다')?text.slice(0,-2)+'없나요?':text.endsWith('흐른다')?text.slice(0,-3)+'흐르나요?':text.endsWith('읽는다')?text.slice(0,-3)+'읽나요?':text.endsWith('한다')?text.slice(0,-2)+'하나요?':text.endsWith('준다')?text.slice(0,-2)+'주나요?':text.endsWith('이다')?text.slice(0,-2)+'인가요?':text.endsWith('있다')?text.slice(0,-2)+'있나요?':text.endsWith('하다')?text.slice(0,-2)+'한가요?':text+'?';
-  else if(!imperative)text+='.';
-  return text;
+  if(imperative&&main===0&&end===1)return '달려!';
+  const modifiers=seq.flatMap((k,i)=>(k==='frequency'||k==='adverb')&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
+  const {prefix,action}=predicate(result??undefined,main),negative=seq.includes('not'),modal=aux>=0&&seq[aux]==='modal';
+  const endText=modal?action.ability+' 수 '+(negative?(question?'없나요':'없다'):(question?'있나요':'있다')):imperative?(negative?action.prohibition:action.command):question?(negative?action.negativeQuestion:action.question):(negative?action.negative:action.plain);
+  return (subject?particle(koNP(subject),'은','는')+' ':'')+(modifiers?modifiers+' ':'')+prefix+endText+(question?'?':imperative?'!':'.');
  }
  for(let i=0;i<end;i++)if(words[i]==='a'&&/^[aeiou]/i.test(words[i+1]??''))words[i]='an';
  const parts=used.map((c,i)=>({text:i===0?words[i][0].toUpperCase()+words[i].slice(1):words[i],role:roles[i],kind:c.kind,cardId:c.id,gloss:gloss[i]}));

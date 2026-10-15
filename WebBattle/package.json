@@ -21,9 +21,12 @@
     "audio:build": "tsx scripts/generate-example-audio.ts",
     "audit:examples": "tsx scripts/audit-example-coverage.ts",
     "audio:chirp": "tsx scripts/generate-chirp-audio.ts",
-    "version:next": "node scripts/bump-version.mjs"
+    "version:next": "node scripts/bump-version.mjs",
+    "examples:review": "tsx scripts/build-reviewed-examples.ts",
+    "audio:sentences": "tsx scripts/generate-sentence-voice.ts"
   },
   "dependencies": {
+    "@diffusionstudio/vits-web": "1.0.3",
     "jose": "^6.2.12",
     "pixi.js": "^8.22.0",
     "react": "^19.1.0",

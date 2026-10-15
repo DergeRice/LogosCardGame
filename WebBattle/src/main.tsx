@@ -25,8 +25,8 @@ import {type SentenceExample} from '../shared/sentence-examples.js';
 import {cardSentenceExample} from '../shared/card-sentence-example.js';
 import {SentenceExamplePanel} from './SentenceExamplePanel.js';
 import {primeSpeech} from './speech.js';
-import {preloadExampleAudio,prepareRecordedExample,unlockGameAudio} from './exampleAudio.js';
-import {preloadChirpManifest} from './chirpAudio.js';
+import {unlockGameAudio} from './exampleAudio.js';
+import {preloadSentenceVoice} from './sentenceVoice.js';
 import './score-presentation.css';
 import './game-stage.css';
 import './special-cards.css';
@@ -133,7 +133,7 @@ function App() {
  useEffect(() => { soundRef.current = sound; localStorage.setItem('logos-sound', sound ? 'on' : 'off'); }, [sound]);
  useEffect(()=>{
   const activate=()=>{
-   primeSpeech();audioRef.current=unlockGameAudio();prepareRecordedExample();
+   primeSpeech();audioRef.current=unlockGameAudio();
    const music=bgmRef.current;
    if(localStorage.getItem('logos-bgm')!=='off'&&music?.paused)void music.play().catch(()=>{});
   };
@@ -159,7 +159,7 @@ function App() {
   if(document.fullscreenElement||doc.webkitFullscreenElement){await exitGameFullscreen();return;}
   await enterGameFullscreen();
  }
- useEffect(()=>{let active=true;void preloadChirpManifest();void preloadProfiles();void preloadExampleAudio().catch(()=>null);void Promise.all([preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}),preloadGameAssets()]).then(([{failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;void preloadProfiles();void preloadSentenceVoice();void Promise.all([preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}),preloadGameAssets()]).then(([{failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
  useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 1000); return () => clearInterval(t); }, []);
  useEffect(() => {
   let stopped = false, retry: ReturnType<typeof setTimeout>, resumeCheck:ReturnType<typeof setTimeout>, attempts = 0, responseSerial=0;
