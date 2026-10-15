@@ -83,7 +83,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function tail(t:Tail,verb:number,finite:boolean,embedded=false):string|null{
   if(t.legacy)return t.legacy;
   if(t.complement?.kind==='modal'||t.complement?.kind==='verb')return '원본이 허용하는 일반동사·조동사 주격 보어 조합';
-  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(embedded?'read':'need'):t.pattern===4?'give':t.complement?.kind==='to'?'want':t.vp?'make':'make';
+  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(embedded||imperative?'read':'need'):t.pattern===4?'give':t.complement?.kind==='to'?'want':t.vp?'make':'make';
   if(seq[verb]==='be')stem='be';
   const verbWord=stem==='be'?(imperative||!finite?'be':person1?'am':singular?'is':'are'):finite&&singular?stem+'s':stem;
   put(verb,'verb',verbWord,({flow:'흐르다',work:'일하다',look:'보이다',need:'필요로 하다',give:'주다',want:'원하다',make:'만들다',be:'이다',read:'읽다'} as Record<string,string>)[stem]);
@@ -93,14 +93,17 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  }
  let start=skip(0,end),stop=end;while(stop>start&&adv(seq[stop-1]))stop--;
  let subject:NP|null=null,result:Tail|null=null,aux=-1;
- if(end===1&&seq[0]==='verb'){imperative=true;main=0;put(0,'verb','run','달려');}
+ if(seq[start]==='verb'){imperative=true;main=start;result=afterVerb(main+1,stop);if(!result)return fail('명령문 동사 뒤 구성을 분석할 수 없습니다.');pattern=result.pattern;const reason=tail(result,main,false);if(reason)return fail(reason);if(end===1){put(main,'verb','run','달려');}}
  else if(seq[start]==='be'){
-  const c=np(start+1,stop);if(!c||c.end!==stop)return fail('BE 시작 구간을 분석할 수 없습니다.');imperative=true;main=start;put(main,'verb','be','되어라');noun(c,'subjectComplement');
+  const parsed=np(start+1,stop),c=parsed?.pps.length?{...parsed,end:parsed.baseEnd,pps:[]}:parsed;if(!c)return fail('BE 시작 구간을 분석할 수 없습니다.');main=start;
+  if(c.end===stop){imperative=true;put(main,'verb','be','되어라');noun(c,'subjectComplement');}
+  else{question=true;subject=c;noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';let s=skip(c.end,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};if(!result)return fail('BE 의문문 보어를 분석할 수 없습니다.');const reason=tail(result,main,true);if(reason)return fail(reason);}
  }else{
   if(seq[start]==='do'&&seq[start+1]==='not'){imperative=true;aux=start;main=auxSkip(start+1,stop);}
   else if(seq[start]==='do'||seq[start]==='modal'){question=true;aux=start;subject=np(start+1,stop);if(subject)main=auxSkip(subject.end,stop);}
   else {subject=np(start,stop);if(subject){main=subject.end;while(seq[main]==='frequency')main++;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
   if((!imperative&&!subject)||main<0||main>=stop)return fail('주어와 동사를 분석할 수 없습니다.');
+  if(aux>=0&&seq[aux]==='do'&&seq[main]==='be'&&!imperative)return fail('DO 뒤 BE는 부정 명령문에서만 사용합니다.');
   if(subject){noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';}
   if(seq[main]==='be'){
    let s=skip(main+1,stop);if(seq[s]==='not')s=skip(s+1,stop);
@@ -132,7 +135,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
   const obj=t.object?koNP(t.object):'',second=t.second?koNP(t.second):'';
   if(t.pattern===1)return (t.pp?koNP(t.pp.np)+' 근처에서 ':'')+(words[main].startsWith('flow')?'흐른다':'일한다');
   if(t.pattern===2){if(t.complement){if(seq.slice(t.complement.start,t.complement.end).filter(k=>k==='adjective').length>1)return koAdjectives(t.complement)+' 상태로 보인다';const adjective=gloss[t.complement.end-1];return adjective==='행복한'?'행복해 보인다':'중요해 보인다';}return '이다';}
-  if(t.pattern===3)return particle(obj,'을','를')+' 필요로 한다';
+  if(t.pattern===3)return particle(obj,'을','를')+(words[main]?.startsWith('read')?' 읽는다':' 필요로 한다');
   if(t.pattern===4)return obj+'에게 '+particle(second,'을','를')+' 준다';
   if(t.complement?.kind==='to'){const inner=seq.flatMap((k,i)=>i>t.complement!.start&&(k==='frequency'||k==='adverb')?[gloss[i]]:[]).join(' ');return particle(obj,'이','가')+' '+(inner?inner+' ':'')+'일하기를 원한다';}
   if(t.vp)return particle(obj,'을','를')+' '+(t.vp.tail.pattern===1?'일하게':t.vp.tail.object?particle(koNP(t.vp.tail.object),'을','를')+' 읽게':'일하게')+' 만든다';
@@ -141,11 +144,16 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function koreanSentence():string{
   const modifiers=seq.flatMap((k,i)=>result?.complement?.kind==='to'&&i>result.complement.start?[]:k==='frequency'?[gloss[i]]:k==='adverb'&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
   let predicate='';
-  if(imperative)predicate=seq[0]==='do'&&seq[1]==='not'?'하지 마!':main===0&&end===1?'달려!':(nounRanges[0]?particle(koNP(nounRanges[0]),'이','가')+' 되어라!':'되어라!');
+  if(imperative&&main===0&&end===1)predicate='달려!';
   else if(seq[main]==='be'){
    const c=nounRanges.find(n=>roles[n.head]==='subjectComplement');
    if(c)predicate=koNP(c)+'이다';else if(result?.pp)predicate=koNP(result.pp.np)+' 근처에 있다';else if(result?.complement&&seq.slice(result.complement.start,result.complement.end).filter(k=>k==='adjective').length>1)predicate=koAdjectives(result.complement)+' 상태이다';else predicate=result?.complement&&gloss[result.complement.end-1]==='중요한'?'중요하다':'행복하다';
   }else predicate=result?koTail(result):'';
+  if(imperative&&!(main===0&&end===1)){
+   if(!result&&nounRanges[0])predicate=particle(koNP(nounRanges[0]),'이','가')+' 되어라';
+   const replacements=seq.includes('not')?[['흐른다','흐르지 마라'],['일한다','일하지 마라'],['읽는다','읽지 마라'],['보인다','보이지 마라'],['준다','주지 마라'],['만든다','만들지 마라'],['원한다','원하지 마라'],['한다','하지 마라'],['하다','하지 마라'],['이다','이 되지 마라']]:[['흐른다','흘러라'],['일한다','일해라'],['읽는다','읽어라'],['보인다','보여라'],['준다','줘라'],['만든다','만들어라'],['원한다','원해라'],['한다','해라'],['하다','해라'],['이다','이 되어라']];
+   for(const [ending,replacement] of replacements)if(predicate.endsWith(ending)){predicate=predicate.slice(0,-ending.length)+replacement;break;}predicate+='!';
+  }
   if(!imperative&&seq.includes('not'))predicate=predicate.endsWith('흐른다')?predicate.slice(0,-3)+'흐르지 않는다':predicate.endsWith('이다')?predicate.slice(0,-2)+'이 아니다':predicate.endsWith('한다')?predicate.slice(0,-2)+'하지 않는다':predicate.endsWith('준다')?predicate.slice(0,-2)+'주지 않는다':predicate.endsWith('원한다')?predicate.slice(0,-3)+'원하지 않는다':predicate.endsWith('만든다')?predicate.slice(0,-3)+'만들지 않는다':predicate.endsWith('있다')?predicate.slice(0,-2)+'있지 않다':predicate.endsWith('보인다')?predicate.slice(0,-3)+'보이지 않는다':predicate.endsWith('하다')?predicate.slice(0,-2)+'하지 않다':predicate;
   if(aux>=0&&seq[aux]==='modal'){
    const positive=seq[main]==='be'?(predicate.includes('근처')?'있을 수':predicate.includes('행복')?'행복할 수':predicate.includes('중요')?'중요할 수':predicate.replace(/이 아니다$|이다$/,'')+'일 수'):result?.pattern===1?(words[main].startsWith('flow')?'흐를 수':'일할 수'):result?.pattern===2?'보일 수':result?.pattern===3?'필요로 할 수':result?.pattern===4?'줄 수':result?.complement?.kind==='to'?'원할 수':'만들 수';
@@ -153,7 +161,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
    predicate=base+positive+(seq.includes('not')?' 없다':' 있다');
   }
   let text=(subject?particle(koNP(subject),'은','는')+' ':'')+(modifiers?modifiers+' ':'')+predicate;
-  if(question)text=text.endsWith('흐른다')?text.slice(0,-3)+'흐르나요?':text.endsWith('한다')?text.slice(0,-2)+'하나요?':text.endsWith('준다')?text.slice(0,-2)+'주나요?':text.endsWith('이다')?text.slice(0,-2)+'인가요?':text.endsWith('있다')?text.slice(0,-2)+'있나요?':text+'?';
+  if(question)text=text.endsWith('않는다')?text.slice(0,-3)+'않나요?':text.endsWith('없다')?text.slice(0,-2)+'없나요?':text.endsWith('흐른다')?text.slice(0,-3)+'흐르나요?':text.endsWith('읽는다')?text.slice(0,-3)+'읽나요?':text.endsWith('한다')?text.slice(0,-2)+'하나요?':text.endsWith('준다')?text.slice(0,-2)+'주나요?':text.endsWith('이다')?text.slice(0,-2)+'인가요?':text.endsWith('있다')?text.slice(0,-2)+'있나요?':text.endsWith('하다')?text.slice(0,-2)+'한가요?':text+'?';
   else if(!imperative)text+='.';
   return text;
  }

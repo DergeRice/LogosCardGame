@@ -70,11 +70,13 @@ class CheckContext {
  private TryMatchClause(seq: Sequence, start: number, end: number): SentencePatternType | null {
   while (start < end && this.IsAdverb(seq[start])) start++;
   while (end > start && this.IsAdverb(seq[end - 1])) end--;
+  // An imperative may reduce to a single VB after stripping its adjuncts.
+  if(this.battleAdjectiveChains&&start<end&&seq[start]===P.VB)return this.MatchAfterVerb(seq,start+1,end);
   if (end - start < 2) return null;
   if (seq[start] === P.WH) return this.TryMatchClause(seq, start + 1, end);
   if (seq[start] === P.DO) {
    // Imperative negative: DO + NOT + base verb (for example, “Do not run.”).
-   if (seq[start + 1] === P.RB_NOT) { const verbIndex = this.SkipAuxiliaryModifiers(seq, start + 2, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end); }
+   if (seq[start + 1] === P.RB_NOT) { const verbIndex = this.SkipAuxiliaryModifiers(seq, start + 2, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end);if(this.battleAdjectiveChains&&verbIndex<end&&seq[verbIndex]===P.BE)return this.MatchAfterBe(seq,verbIndex+1,end); }
    const doNpEnd = this.TryParseNP(seq, start + 1, end);
    if (doNpEnd !== null) { const verbIndex = this.SkipAuxiliaryModifiers(seq, doNpEnd, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end); }
   }
@@ -87,6 +89,7 @@ class CheckContext {
    }
   }
   if (seq[start] === P.BE && this.TryParseNP(seq, start + 1, end) === end) return T.Type2;
+  if(this.battleAdjectiveChains&&seq[start]===P.BE){const subjectEnd=this.TryParseNP(seq,start+1,end);if(subjectEnd!==null&&subjectEnd<end)return this.MatchAfterBe(seq,subjectEnd,end);}
   let npEnd = this.TryParseNP(seq, start, end);
   if (npEnd === null || npEnd >= end) return null;
   // Battle frequency modifiers belong between the subject and finite verb.
@@ -96,6 +99,7 @@ class CheckContext {
   if (seq[npEnd] === P.DO || seq[npEnd] === P.MODAL) {
    const next = this.SkipAuxiliaryModifiers(seq, npEnd + 1, end);
    if (next < end && seq[next] === P.VB) return this.MatchAfterVerb(seq, next + 1, end);
+   if(this.battleAdjectiveChains&&seq[npEnd]===P.MODAL&&next<end&&seq[next]===P.BE)return this.MatchAfterBe(seq,next+1,end);
   }
   if (seq[npEnd] === P.VB) return this.MatchAfterVerb(seq, npEnd + 1, end);
   return null;

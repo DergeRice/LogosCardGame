@@ -10,7 +10,7 @@ test('multiple multipliers multiply together; multiple additions sum, then Go mu
  const hand=cards([['pronoun','pronoun-x2'],['verb'],['article','article-x2'],['count','count-plus3'],['adjective','adjective-plus3']]);assert.equal(judgeCards(hand).points,26);assert.equal(judgeCards(hand,3).points,78);
 });
 test('effects outside recognized segment never count',()=>{
- const r=judgeCards(cards([['adjective','adjective-plus3'],['verb'],['adjective','adjective-plus3']]));assert.equal(r.usedStartIndex,1);assert.equal(r.usedLength,1);assert.equal(r.points,1);
+ const r=judgeCards(cards([['adjective','adjective-plus3'],['verb'],['adjective','adjective-plus3']]));assert.equal(r.usedStartIndex,1);assert.equal(r.usedLength,2);assert.equal(r.points,5); // Only the accepted final adjective contributes +3.
 });
 test('invalid grammar and forged/mismatched variant do not grant effects',()=>{
  assert.equal(judgeCards(cards([['adjective','adjective-plus3']])).points,0);assert.equal(judgeCards(cards([['verb','pronoun-x2']])).points,1);assert.equal(judgeCards(cards([['verb','made-up-x999']])).points,1);

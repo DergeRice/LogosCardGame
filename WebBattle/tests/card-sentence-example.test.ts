@@ -19,7 +19,7 @@ test('pronoun and noun agreement, auxiliaries and one-card To complements are re
  assert.equal(realize(['pronoun','be','adjective']), 'I am happy.');assert.equal(realize(['pronoun','be','adjective'],1),'We are happy.');assert.equal(realize(['pronoun','be','adjective'],2),'She is happy.');
  assert.equal(realize(['article','count','verb']),'The teacher works.');assert.equal(realize(['mass','verb']),'Traffic flows.');assert.equal(realize(['pronoun','do','not','verb']),'I do not work.');
  assert.equal(realize(['pronoun','verb','pronoun','to-infinitive']),'I want them to work.');assert.equal(realize(['pronoun','verb','mass','adjective']),'I make work easy.');
- const partial=make(['adjective','verb','adjective']);const r=judgeCards(partial),e=cardSentenceExample(partial,r).example!;assert.equal(e.english,'Run!');assert.deepEqual(e.parts.map(p=>p.cardId),['c1']);
+ const partial=make(['adjective','verb','adjective']);const r=judgeCards(partial),e=cardSentenceExample(partial,r).example!;assert.equal(e.english,'Look happy!');assert.deepEqual(e.parts.map(p=>p.cardId),['c1','c2']);
 });
 test('new battle rejects nonstandard legacy structures while the Unity reference entry remains intact',()=>{
  for(const seq of [['pronoun','verb','modal'],['pronoun','verb','verb'],['indefinite','mass','verb'],['article','adverb','count','verb']] as Kind[][]){assert.equal(judge(seq).valid,false,seq.join(' '));assert.match(judge(seq).reason,/비표준/);}

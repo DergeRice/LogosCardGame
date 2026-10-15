@@ -33,7 +33,7 @@ test('segment window stops at first 15; no false rejection of a valid shorter se
  const r=CheckPlayableSegment([...Array<P>(14).fill(P.JJ),P.VB,P.PRP]);assert.equal(r.usedStartIndex,14);assert.equal(r.usedLength,1);
 });
 test('points use only recognized cards, including single-card commands',()=>{
- const partial=judge(['adjective','verb','adjective']);assert.equal(partial.points,1);assert.equal(partial.usedStartIndex,1);assert.equal(partial.usedLength,1);assert.equal(partial.message,'명령문');assert.equal(judge(['verb']).points,1);
+ const partial=judge(['adjective','verb','adjective']);assert.equal(partial.points,2);assert.equal(partial.usedStartIndex,1);assert.equal(partial.usedLength,2);assert.equal(partial.patternType,2);assert.equal(judge(['verb']).points,1);
  assert.equal(judge(['pronoun','verb','adjective']).patternType,2); // Deliberately allowed in source.
 });
 test('to-infinitive participates in a playable clause with a base verb',()=>{
