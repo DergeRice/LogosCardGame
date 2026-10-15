@@ -13,7 +13,7 @@ test('battle To is a bundled verb only after an object, while original Unity ent
  const trailing=judge(['pronoun','verb','pronoun','to-infinitive','verb']);assert.equal(trailing.usedLength,4);assert.equal(trailing.patternType,5);
  assert.equal(judge(['to-infinitive']).valid,false);assert.equal(judge(['to-infinitive','pronoun','verb']).usedStartIndex,1);
  assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.TO_VB,P.VB],false).usedLength,4);
- assert.equal(DECK_FACES.length,56);assert.ok(DECK_FACES.every(c=>cardEffect({...c,id:''}).add!==-2));
+ assert.equal(DECK_FACES.length,68);assert.ok(DECK_FACES.every(c=>cardEffect({...c,id:''}).add!==-2));
  const cards=[{id:'s',kind:'pronoun' as const},{id:'v',kind:'verb' as const},{id:'o',kind:'pronoun' as const},{id:'c',kind:'to-infinitive' as const,variant:'to-infinitive-x2'}];assert.equal(judgeCards(cards).points,8);
 });
 test('rejected submit resynchronizes and may retry same ID; successful submission remains idempotent',()=>{

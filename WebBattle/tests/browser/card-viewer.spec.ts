@@ -4,7 +4,7 @@ import {test,expect} from './fixtures.js';
 test('card viewer lists the active deck without temporarily removed grammar cards',async({page})=>{
  await page.goto('/cards');
  await expect(page.getByRole('heading',{name:'카드 뷰어'})).toBeVisible();
- await expect(page.locator('.viewer-tile')).toHaveCount(56);
+ await expect(page.locator('.viewer-tile')).toHaveCount(68);
  await expect(page.getByRole('button',{name:/Very 카드 보기/})).toHaveCount(0);
  await page.getByRole('searchbox',{name:'카드 검색'}).fill('to부정사');
  await expect(page.locator('.viewer-tile')).toHaveCount(0);
@@ -22,7 +22,7 @@ test('card viewer works in a narrow phone viewport',async({page})=>{
  await page.addStyleTag({content:'body::before,body::after{content:"";position:fixed;left:0;right:0;z-index:2000;background:#18271c;pointer-events:none}body::before{top:0;height:24px}body::after{bottom:0;height:56px}'});
  await expect(page.getByRole('heading',{name:'카드 뷰어'})).toBeVisible();
  await page.getByRole('button',{name:'기능',exact:true}).click();
- await expect(page.locator('.viewer-tile')).toHaveCount(5);
+ await expect(page.locator('.viewer-tile')).toHaveCount(6);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
@@ -31,7 +31,7 @@ test('card viewer scrolls through the full deck in landscape',async({browser})=>
  const phone=await context.newPage();
  try{
   await phone.goto('/cards');
-   await expect(phone.locator('.viewer-tile')).toHaveCount(56);
+   await expect(phone.locator('.viewer-tile')).toHaveCount(68);
   const before=await phone.evaluate(()=>({height:document.scrollingElement!.scrollHeight,top:scrollY,visible:innerHeight}));
   expect(before.height).toBeGreaterThan(before.visible);
   await phone.mouse.move(400,220);

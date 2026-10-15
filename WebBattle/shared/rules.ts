@@ -85,9 +85,15 @@ export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; 
  'be-plus3': { kind:'be',sheet:3,col:3,row:1,multiply:1,add:3 },
  'adjective-plus3': { kind:'adjective',sheet:5,col:2,row:1,multiply:1,add:3 }
 };
+// Additional physical copies share their printed face but receive unique IDs per match.
+export const EXTRA_DECK_COPIES: Partial<Record<Kind,number>> = {
+ mass:2,count:2,pronoun:1,indefinite:1,article:1,possessive:1,
+ adjective:1,adverb:1,preposition:1,get3:1
+};
 export const DECK_FACES: Omit<Card,'id'>[] = [
  ...(Object.keys(CATALOG) as Kind[]).filter(kind=>kind!=='very'&&kind!=='to-infinitive'&&kind!=='proper').map(kind=>({kind})),
- ...Object.entries(VARIANTS).filter(([,face])=>face.kind!=='very'&&face.kind!=='to-infinitive'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant}))
+ ...Object.entries(VARIANTS).filter(([,face])=>face.kind!=='very'&&face.kind!=='to-infinitive'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant})),
+ ...Object.entries(EXTRA_DECK_COPIES).flatMap(([kind,count])=>Array.from({length:count!},()=>({kind:kind as Kind})))
 ];
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }

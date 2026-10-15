@@ -26,7 +26,7 @@ try{
  for(const c of clients){c.send('quick');await c.until(()=>!!c.room);}
  for(const c of clients)await c.until(()=>c.room?.phase==='battle');
  assert.ok(clients.every(c=>c.room.endsAt===0&&c.room.expiresAt===0));assert.equal(new Set(clients.map(c=>c.room.code)).size,1);assert.ok(clients.every(c=>c.room.hand.length===5));
- const faces=clients.flatMap(c=>c.room.hand).map(c=>c.kind+':'+(c.variant||'base'));assert.equal(new Set(faces).size,20);
+ const faces=clients.flatMap(c=>c.room.hand).map(c=>c.id);assert.equal(new Set(faces).size,20);
  let actor=clients.find(c=>c.room.hand.some(x=>x.kind==='verb'));
  for(let i=0;!actor&&i<3&&clients[0].room.deckCount>=8;i++){
   const voteId=clients[0].room.drawVote.id,before=clients[0].room.deckCount;
