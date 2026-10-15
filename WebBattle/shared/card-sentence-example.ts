@@ -18,9 +18,9 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  const auxSkip=(s:number,e:number)=>{while(s<e&&(adv(seq[s])||seq[s]==='not'))s++;return s};
  function np(s:number,e:number):NP|null{
   const start=s;if(s>=e)return null;let head=-1;
-  if(seq[s]==='pronoun'||seq[s]==='mass')head=s;
+  if(seq[s]==='pronoun'||seq[s]==='mass'||seq[s]==='proper')head=s;
   else if(['article','indefinite','possessive'].includes(seq[s])){s++;while(s<e&&(seq[s]==='adjective'||adv(seq[s])))s++;if(s<e&&(seq[s]==='count'||seq[s]==='mass'))head=s;}
-  else if(seq[s]==='adjective'){s++;while(s<e&&seq[s]==='adjective')s++;if(s<e&&seq[s]==='mass')head=s;}
+  else if(seq[s]==='adjective'){s++;while(s<e&&seq[s]==='adjective')s++;if(s<e&&(seq[s]==='mass'||seq[s]==='proper'))head=s;}
   if(head<0)return null;const baseEnd=head+1,pps:PP[]=[];let next=baseEnd,p:PP|null;
   while((p=pp(next,e))&&p.end>next){pps.push(p);next=p.end;}
   return {start,end:next,head,baseEnd,pps};
@@ -45,6 +45,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  let singular=true,person1=false,question=false,imperative=false,main=-1,pattern=judgment.patternType;
  const put=(at:number,role:ExampleRole,text:string,ko:string)=>{roles[at]=role;words[at]=text;gloss[at]=ko};
  function adverbWord(i:number):[string,string]{
+  if(subject&&i>=subject.end&&i<main&&seq[i]==='adverb')return seq[i-1]==='adverb'?['quietly','조용히']:['really','정말'];
   if(seq[i]==='frequency')return seq[i+1]==='frequency'?['almost','거의']:seq[i-1]==='frequency'?['always','항상']:['often','자주'];
   if(seq[i+1]==='adverb')return i<start?['today,','오늘']:seq[i+2]==='adjective'?['really','정말']:['very','아주'];
   if(seq[i-1]==='adverb')return seq[i+1]==='adjective'?['very','매우']:i<start?['quietly','조용히']:['well','잘'];
@@ -52,7 +53,8 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  }
  function noun(n:NP,role:ExampleRole,place=false){
   nounRanges.push(n);const k=seq[n.head];let text='',ko='';
-  if(k==='pronoun'){text=role==='subject'?cycle(['I','we','she']):role==='indirect'?'us':role==='subjectComplement'?'me':'them';ko=role==='subject'?cycle(['나','우리','그녀']):role==='indirect'?'우리':role==='subjectComplement'?'나': '그들';}
+  if(k==='proper'){text='Naro';ko='나로';}
+  else if(k==='pronoun'){text=role==='subject'?cycle(['I','we','she']):role==='indirect'?'us':role==='subjectComplement'?'me':'them';ko=role==='subject'?cycle(['나','우리','그녀']):role==='indirect'?'우리':role==='subjectComplement'?'나': '그들';}
   else if(k==='count'){
    const sets=place?['friend','guide','teacher']:role==='subject'?['teacher','student','guide']:role==='indirect'?['student','child','visitor']:role==='subjectComplement'?['guide','helper','friend']:pattern===5?['student','child','visitor']:['book','letter','gift'];
    text=cycle(sets);const translations:Record<string,string>={friend:'친구',helper:'도우미',guide:'안내자',teacher:'선생님',student:'학생',child:'아이',visitor:'방문객',book:'책',letter:'편지',gift:'선물'};ko=translations[text];
@@ -95,13 +97,14 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  let subject:NP|null=null,result:Tail|null=null,aux=-1;
  if(seq[start]==='verb'){imperative=true;main=start;result=afterVerb(main+1,stop);if(!result)return fail('명령문 동사 뒤 구성을 분석할 수 없습니다.');pattern=result.pattern;const reason=tail(result,main,false);if(reason)return fail(reason);if(end===1){put(main,'verb','run','달려');}}
  else if(seq[start]==='be'){
-  const parsed=np(start+1,stop),c=parsed?.pps.length?{...parsed,end:parsed.baseEnd,pps:[]}:parsed;if(!c)return fail('BE 시작 구간을 분석할 수 없습니다.');main=start;
-  if(c.end===stop){imperative=true;put(main,'verb','be','되어라');noun(c,'subjectComplement');}
+  const parsed=np(start+1,stop),c=parsed?.pps.length&&parsed.end===stop?{...parsed,end:parsed.baseEnd,pps:[]}:parsed;main=start;
+  if(!c){imperative=true;let s=skip(start+1,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};if(!result)return fail('BE 명령문 보어를 분석할 수 없습니다.');const reason=tail(result,main,false);if(reason)return fail(reason);}
+  else if(c.end===stop){imperative=true;put(main,'verb','be','되어라');noun(c,'subjectComplement');}
   else{question=true;subject=c;noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';let s=skip(c.end,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};if(!result)return fail('BE 의문문 보어를 분석할 수 없습니다.');const reason=tail(result,main,true);if(reason)return fail(reason);}
  }else{
-  if(seq[start]==='do'&&seq[start+1]==='not'){imperative=true;aux=start;main=auxSkip(start+1,stop);}
+  if(seq[start]==='do'&&['verb','be'].includes(seq[auxSkip(start+1,stop)])){imperative=true;aux=start;main=auxSkip(start+1,stop);}
   else if(seq[start]==='do'||seq[start]==='modal'){question=true;aux=start;subject=np(start+1,stop);if(subject)main=auxSkip(subject.end,stop);}
-  else {subject=np(start,stop);if(subject){main=subject.end;while(seq[main]==='frequency')main++;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
+  else {subject=np(start,stop);if(subject){main=subject.end;while(adv(seq[main]))main++;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
   if((!imperative&&!subject)||main<0||main>=stop)return fail('주어와 동사를 분석할 수 없습니다.');
   if(aux>=0&&seq[aux]==='do'&&seq[main]==='be'&&!imperative)return fail('DO 뒤 BE는 부정 명령문에서만 사용합니다.');
   if(subject){noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';}

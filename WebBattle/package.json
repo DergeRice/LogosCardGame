@@ -19,6 +19,7 @@
     "profile-editor": "tsx scripts/profile-editor.ts",
     "cards:build": "tsx scripts/generate-card-faces.ts",
     "audio:build": "tsx scripts/generate-example-audio.ts",
+    "audit:examples": "tsx scripts/audit-example-coverage.ts",
     "audio:chirp": "tsx scripts/generate-chirp-audio.ts",
     "version:next": "node scripts/bump-version.mjs"
   },

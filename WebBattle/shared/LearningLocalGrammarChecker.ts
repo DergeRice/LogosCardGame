@@ -75,6 +75,7 @@ class CheckContext {
   if (end - start < 2) return null;
   if (seq[start] === P.WH) return this.TryMatchClause(seq, start + 1, end);
   if (seq[start] === P.DO) {
+   if(this.battleAdjectiveChains){const verbIndex=this.SkipAuxiliaryModifiers(seq,start+1,end);if(seq[verbIndex]===P.VB)return this.MatchAfterVerb(seq,verbIndex+1,end);if(seq[verbIndex]===P.BE)return this.MatchAfterBe(seq,verbIndex+1,end);}
    // Imperative negative: DO + NOT + base verb (for example, “Do not run.”).
    if (seq[start + 1] === P.RB_NOT) { const verbIndex = this.SkipAuxiliaryModifiers(seq, start + 2, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end);if(this.battleAdjectiveChains&&verbIndex<end&&seq[verbIndex]===P.BE)return this.MatchAfterBe(seq,verbIndex+1,end); }
    const doNpEnd = this.TryParseNP(seq, start + 1, end);
@@ -90,11 +91,12 @@ class CheckContext {
   }
   if (seq[start] === P.BE && this.TryParseNP(seq, start + 1, end) === end) return T.Type2;
   if(this.battleAdjectiveChains&&seq[start]===P.BE){const subjectEnd=this.TryParseNP(seq,start+1,end);if(subjectEnd!==null&&subjectEnd<end)return this.MatchAfterBe(seq,subjectEnd,end);}
+  if(this.battleAdjectiveChains&&seq[start]===P.BE)return this.MatchAfterBe(seq,start+1,end);
   let npEnd = this.TryParseNP(seq, start, end);
   if (npEnd === null || npEnd >= end) return null;
   // Battle frequency modifiers belong between the subject and finite verb.
   // Keep the original Unity Check behavior for callers outside battle rules.
-  if(this.battleAdjectiveChains)while(npEnd<end&&seq[npEnd]===P.RB_FREQ)npEnd++;
+  if(this.battleAdjectiveChains)while(npEnd<end&&this.IsAdverb(seq[npEnd]))npEnd++;
   if (seq[npEnd] === P.BE) return this.MatchAfterBe(seq, npEnd + 1, end);
   if (seq[npEnd] === P.DO || seq[npEnd] === P.MODAL) {
    const next = this.SkipAuxiliaryModifiers(seq, npEnd + 1, end);

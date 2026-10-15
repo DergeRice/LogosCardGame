@@ -1,7 +1,7 @@
 import {cardSentenceExample} from './card-sentence-example.js';
 import { CheckPlayableSegment, LearningPosType, type LearningGrammarCheckResult } from './LearningLocalGrammarChecker.js';
 // Rendering identifiers map explicitly to the original numeric Unity POS enum.
-export type Kind = 'pronoun' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'to-infinitive' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect';
+export type Kind = 'pronoun' | 'proper' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'to-infinitive' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect';
 export type Card = { id: string; kind: Kind; variant?: string };
 export const CATALOG: Record<Kind, { name: string; symbol: string; example: string; sheet: number; col: number; row: number; tone: string }> = {
  indefinite: { name: '부정관사', symbol: 'A', example: 'a · an', sheet: 2, col: 0, row: 2, tone: 'gold' },
@@ -14,6 +14,7 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  very: { name: 'Very', symbol: 'VERY', example: 'very', sheet: 5, col: 3, row: 2, tone: 'pink' },
  'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to + 동사 포함 · 5형식 목적격 보어 전용', sheet: 6, col: 0, row: 0, tone: 'green' },
  pronoun: { name: '대명사', symbol: 'P', example: 'I · you · we', sheet: 1, col: 2, row: 0, tone: 'coral' },
+ proper: { name: '고유명사', symbol: 'PROPN', example: 'Naro', sheet: 2, col: 2, row: 0, tone: 'blue' },
  count: { name: '셀 수 있는 명사', symbol: 'N', example: 'book · cat', sheet: 2, col: 2, row: 0, tone: 'blue' },
  mass: { name: '셀 수 없는 명사', symbol: 'N', example: 'water · milk', sheet: 1, col: 2, row: 2, tone: 'blue' },
  article: { name: '정관사', symbol: 'A', example: 'the', sheet: 2, col: 3, row: 2, tone: 'gold' },
@@ -32,6 +33,7 @@ export const CARD_POS: Record<Kind, LearningPosType | null> = {
  not: LearningPosType.RB_NOT, frequency: LearningPosType.RB_FREQ, adverb: LearningPosType.RB,
  preposition: LearningPosType.IN, very: LearningPosType.RB, 'to-infinitive': LearningPosType.TO_VB,
  pronoun: LearningPosType.PRP, possessive: LearningPosType.PRP_POS,
+ proper: LearningPosType.PROPN,
  mass: LearningPosType.NNU, count: LearningPosType.NNC, article: LearningPosType.DT_THE,
  be: LearningPosType.BE, verb: LearningPosType.VB, adjective: LearningPosType.JJ,
  get2: null, get3: null, rob: null, exchange: null, protect: null
@@ -84,7 +86,7 @@ export const VARIANTS: Record<string, { kind: Kind; sheet: number; col: number; 
  'adjective-plus3': { kind:'adjective',sheet:5,col:2,row:1,multiply:1,add:3 }
 };
 export const DECK_FACES: Omit<Card,'id'>[] = [
- ...(Object.keys(CATALOG) as Kind[]).filter(kind=>kind!=='very'&&kind!=='to-infinitive').map(kind=>({kind})),
+ ...(Object.keys(CATALOG) as Kind[]).filter(kind=>kind!=='very'&&kind!=='to-infinitive'&&kind!=='proper').map(kind=>({kind})),
  ...Object.entries(VARIANTS).filter(([,face])=>face.kind!=='very'&&face.kind!=='to-infinitive'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant}))
 ];
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
