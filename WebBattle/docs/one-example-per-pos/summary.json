@@ -1,0 +1,28 @@
+{
+  "scope": "Length 1–5 exhaustive plus structural sequences up to 15; not all possible 15-card arrays. POS/effect duplicates merged; English variation 0 only. Automatically generated, not human-reviewed.",
+  "posCombinations": 45890,
+  "distinctEnglish": 45890,
+  "currentDeckCombinations": 24155,
+  "currentDeckDistinctEnglish": 24155,
+  "existingKokoroSentencesMatched": 143,
+  "totalCharacters": 2289248,
+  "totalWords": 407875,
+  "forms": {
+    "1": 1718,
+    "2": 4457,
+    "3": 3017,
+    "4": 28184,
+    "5": 8514
+  },
+  "estimate": {
+    "basis": "Linear extrapolation from existing 547 Kokoro MP3 recordings by text length; longer sentences can differ.",
+    "observedRecordings": 547,
+    "observedBytes": 7707528,
+    "observedSeconds": 914.5609999999992,
+    "bytes": 1178889761,
+    "hours": 38.86,
+    "currentDeckBytes": 576561408
+  },
+  "inputsChecked": 813615,
+  "structuralChecked": 39193
+}
