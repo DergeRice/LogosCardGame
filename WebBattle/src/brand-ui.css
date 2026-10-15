@@ -73,17 +73,6 @@
 @media(max-width:600px){.quick-home.dashboard-home{padding:12px 8px}.dashboard-actions{width:min(340px,calc(100vw - 34px));gap:10px;transform:translateY(-2vh)}.dashboard-home .dashboard-actions .quick-start{min-height:76px}.dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{min-height:45px}.dashboard-cards{bottom:max(-.5vh,env(safe-area-inset-bottom));width:min(510px,130vw);height:34vh}}
 @media(orientation:portrait) and (max-width:700px){html:has(.battle),body:has(.battle),html:has(.practice-battle),body:has(.practice-battle),body:has(.practice-battle) #root{height:100%;overflow:hidden;overscroll-behavior:none}.shell:has(.match-screen),.shell:has(.result){overflow:hidden}.player-rank-crown{top:calc(50% - 28px);width:25px;height:18px}}
 
-/* Practice uses the battle table, with grammar cards where rival profiles would be. */
-.practice-shell{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);max-width:none;overflow:hidden}
-html.practice-route,html.practice-route body,html.practice-route #root{height:100%!important;overflow:hidden!important}
-.practice-battle-back{position:absolute;z-index:40;left:12px;top:max(10px,env(safe-area-inset-top));padding:7px 10px;border-radius:11px;background:#fffdf0dd;color:#214529;font-size:12px;font-weight:900;text-decoration:none}
-.practice-battle{height:100%;min-height:0;padding:36px 12px 12px;display:grid;grid-template-rows:minmax(78px,auto) 24px 44px minmax(120px,1fr) minmax(132px,25vh);gap:6px;overflow:hidden}
-.practice-supply{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:7px;min-height:0;overflow:hidden}
-.practice-supply-card{position:relative;display:flex;align-items:center;gap:7px;min-width:0;padding:5px 8px!important;border:2px solid #24482a;border-radius:14px;background:#fffdf3;box-shadow:0 3px 0 #24482a;color:#1b4027;text-align:left;overflow:hidden}
-.practice-supply-card img{width:42px;height:58px;flex:none;object-fit:cover;border-radius:4px}.practice-supply-card span{display:grid;gap:3px;min-width:0}.practice-supply-card b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.practice-supply-card small{font-size:8px;line-height:1.1;color:#516c53;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.practice-supply-card i{position:absolute;right:4px;bottom:2px;font-size:18px;font-style:normal;color:#28733a}.practice-supply-card:active{transform:translateY(2px);box-shadow:0 1px 0 #24482a}
-.practice-battle .practice-feedback-row{height:44px;min-height:0}.practice-battle .practice-feedback-row .table-feedback-slot{width:100%;height:100%}.practice-battle .practice-feedback-row .judgment{height:100%;box-sizing:border-box;justify-content:center;padding:4px 10px}.practice-battle .practice-sentence-area{padding-bottom:52px}.practice-example{position:absolute;left:14px;right:14px;bottom:8px;z-index:5;display:flex;gap:8px;max-width:calc(100% - 150px);padding:5px 9px;border-radius:9px;background:#fffdf4e8;color:#315337;font-size:10px;overflow:hidden}.practice-example b,.practice-example span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.practice-hand-zone{min-height:0!important;height:100%;padding:0!important;overflow:hidden!important}.practice-hand-zone .hand-container{height:100%;min-height:0}.practice-hand-zone .hand-spread{height:100%;padding:0;display:flex;align-items:flex-end;gap:7px;overflow-x:auto;overflow-y:hidden}.practice-hand-zone .game-card{flex:0 0 min(116px,15vw);width:min(116px,15vw);height:100%;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}.practice-hand-zone .game-card .illustration{width:100%;height:auto;aspect-ratio:1/.704;object-fit:cover}.practice-hand-zone .game-card>b{font-size:10px;margin-top:4px}.practice-hand-zone .game-card>small{font-size:8px}.practice-hand-empty{align-self:center;width:100%;text-align:center;color:#4b6c47;font-size:13px}.practice-battle .sentence-card{padding:4px;display:flex;flex-direction:column;align-items:center}.practice-battle .sentence-card .illustration{width:100%;height:auto;aspect-ratio:1/.704;object-fit:cover}.practice-battle .sentence-card>b{font-size:10px}.practice-battle .sentence-card>small{font-size:7px}
-@media(max-width:1000px){.practice-battle{padding:34px 8px 8px;grid-template-rows:86px 20px 38px minmax(105px,1fr) minmax(118px,24vh);gap:4px}.practice-supply{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.practice-supply-card{padding:3px!important;border-radius:10px;justify-content:center;gap:3px}.practice-supply-card img{width:27px;height:38px}.practice-supply-card span{display:block;min-width:0}.practice-supply-card b{display:block;font-size:8px;letter-spacing:-.7px}.practice-supply-card small{display:none}.practice-supply-card i{font-size:13px;right:2px;bottom:0}.practice-battle .round-strip{font-size:9px}.practice-battle .practice-feedback-row{height:38px}.practice-hand-zone .game-card{flex-basis:76px;width:76px}.practice-example{max-width:calc(100% - 120px);font-size:8px}.practice-battle .sentence-card>b{font-size:8px}}
-@media(orientation:landscape) and (max-height:500px){.practice-battle{padding-top:30px;grid-template-rows:58px 18px 30px minmax(70px,1fr) minmax(85px,25vh);gap:3px}.practice-supply{grid-template-columns:repeat(9,minmax(0,1fr))}.practice-supply-card img{width:22px;height:31px}.practice-battle .practice-feedback-row{height:30px}.practice-battle .sentence-actions .submit{min-height:26px!important}.practice-battle-back{top:5px;font-size:10px;padding:4px 7px}}
 @media(prefers-reduced-motion:reduce){.player-rank-crown{animation:none}}
 
 /* The menu must fit inside its parent shell before artwork is clipped at the bottom. */
@@ -196,4 +185,43 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
  .opponent-preview-heading{min-height:40px;padding:7px 48px 7px 10px}
  .opponent-preview-heading button{position:absolute;right:9px;width:30px;height:30px;font-size:21px}
  .opponent-preview-scroll{padding-top:4px}
+}
+
+/* Practice shares the real hand fan and full card faces with battle. */
+.practice-shell{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);max-width:none;overflow:hidden;padding:0!important}
+html.practice-route,html.practice-route body,html.practice-route #root{height:100%!important;overflow:hidden!important}
+.practice-battle-back{position:absolute;z-index:40;left:12px;top:8px;padding:5px 9px;border-radius:10px;background:#fffdf0ee;color:#214529;font-size:12px;font-weight:900;text-decoration:none}
+.shell>.battle.practice-battle{height:100%;min-height:0;padding:40px 12px 16px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 32px minmax(0,1fr) clamp(125px,27vh,235px);gap:7px;overflow:hidden}
+.practice-battle>.practice-supply{grid-row:1;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:6px;min-height:0}
+.practice-supply-card{padding:6px 11px!important;min-height:30px;border:1px solid #92ac83;border-radius:9px;background:#fffdf3;color:#214529;font-size:12px;line-height:1.2;font-weight:800;white-space:nowrap;box-shadow:0 2px 0 #92ac83}
+.practice-battle>.practice-feedback-row{grid-row:2;height:32px;min-height:0;background:transparent;box-shadow:none}.practice-feedback-row .table-feedback-slot{background:transparent!important}.practice-feedback-row .judgment{padding:3px 12px;min-height:0;height:100%;justify-content:center}.practice-feedback-row .judgment strong{font-size:12px}.practice-feedback-row .judgment small{font-size:10px}
+.practice-battle>.field-feedback-wrap{grid-row:3;min-height:0;height:100%;container-type:size}
+.practice-battle .field-feedback-wrap>.practice-sentence-area{height:100%;min-height:0;padding:12px 16px;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:10px;overflow-x:auto;overflow-y:hidden}
+.practice-battle .field-feedback-wrap .sentence-card{flex:none;width:clamp(55px,calc((100cqh - 28px)*.704),158px);min-width:55px;max-width:none;padding:0!important;border:0;background:transparent;box-shadow:0 4px 9px #173d2733;border-radius:7px;overflow:hidden}
+.practice-battle .sentence-card .illustration{display:block;width:100%;height:auto;aspect-ratio:488/693;object-fit:contain;border-radius:0}
+.practice-battle>.practice-hand-zone{grid-row:4;position:relative;min-height:0;height:100%;padding:0!important;overflow:visible;background:transparent;border:0}
+.practice-hand-zone .hand-container{position:relative!important;inset:auto!important;height:100%!important;min-height:0}
+.practice-hand-zone .hand.hand-fan{position:absolute;left:0;right:0;bottom:5px;height:var(--fan-height)!important}.practice-hand-zone .hand.hand-fan .game-card{top:0}
+.practice-hand-zone .hand.hand-spread{height:100%;padding:3px 40px 0 4px;align-items:flex-end;overflow-x:auto;overflow-y:hidden}.practice-hand-zone .hand-spread .game-card{flex:0 0 var(--mobile-hand-width);width:var(--mobile-hand-width)}
+.practice-hand-empty{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:#385d3d;font-size:12px;pointer-events:none}
+.practice-example{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:3;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;width:max-content;max-width:85%;padding:5px 12px;border-radius:12px;background:#fffdf4ed;color:#315337;font-size:12px;text-align:center}
+@media(orientation:landscape) and (max-height:500px){
+ .shell>.battle.practice-battle{padding:30px 8px 13px;grid-template-rows:auto 22px minmax(0,1fr) clamp(76px,29vh,125px);gap:4px}
+ .practice-battle-back{top:4px;font-size:10px;padding:3px 7px}.practice-battle>.practice-supply{gap:4px;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;padding:0 2px 4px;scrollbar-width:none}.practice-supply-card{font-size:10px;padding:4px 8px!important;min-height:24px}
+ .practice-battle>.practice-feedback-row{height:22px}.practice-feedback-row .judgment strong{font-size:10px}.practice-feedback-row .judgment small{font-size:9px}
+ .practice-battle .field-feedback-wrap>.practice-sentence-area{padding:6px 12px}.practice-battle .field-feedback-wrap .sentence-card{width:clamp(48px,calc((100cqh - 12px)*.704),150px);min-width:48px}
+ .practice-example{font-size:10px;top:4px}.practice-battle .empty-sentence small{display:none}
+}
+/* Keep the entering profile at the top in landscape; retain the bottom illustration. */
+@media(orientation:landscape) and (max-height:500px) and (pointer:coarse){
+ .quick-home.dashboard-home{justify-content:flex-start;padding:10px 12px 0;gap:0}
+ .dashboard-home .welcome-profile{align-self:center;width:min(650px,86%);min-height:54px;height:54px;padding:5px 12px;box-sizing:border-box}
+ .dashboard-home .welcome-profile .character-avatar{--profile-size:36px}
+ .dashboard-home .welcome-profile-copy small{font-size:9px}.dashboard-home .welcome-profile-copy b{font-size:16px}.dashboard-home .welcome-profile-copy>span{font-size:10px;margin-top:1px}
+ .dashboard-home .welcome-coins{padding:4px 8px;font-size:16px}.dashboard-home .welcome-coins>span{width:23px;height:23px}
+ .dashboard-home .dashboard-actions{width:min(290px,43vw);top:52%;transform:translate(-50%,-50%);gap:4px}
+ .dashboard-home .dashboard-quick-stack .quick-start.quick-start-art{width:100%}
+ .dashboard-home .dashboard-secondary-actions{padding:0 10px;gap:6px}
+ .dashboard-home .dashboard-secondary-actions .room-open-button,.dashboard-home .dashboard-secondary-actions .practice-entry{min-height:29px;font-size:12px!important;padding:4px 8px!important}
+ .dashboard-home .dashboard-cards{display:block;bottom:0;width:min(420px,50vw);height:24%;object-position:center bottom}
 }
