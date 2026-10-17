@@ -6,7 +6,7 @@ let decoded:Promise<{manifest:Manifest;buffer:AudioBuffer}>|null=null;
 export function unlockGameAudio():AudioContext|null{
  try{
   const Constructor=window.AudioContext??(window as Window & {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;
-  if(!Constructor)return null;context??=new Constructor();void context.resume().catch(()=>{});
+  if(!Constructor)return null;context??=new Constructor({latencyHint:'interactive'});void context.resume().catch(()=>{});
   if(!warmed){const source=context.createBufferSource();source.buffer=context.createBuffer(1,1,context.sampleRate);source.connect(context.destination);source.start();warmed=true;}
   return context;
  }catch{return null;}

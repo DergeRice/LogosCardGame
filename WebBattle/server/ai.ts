@@ -44,5 +44,5 @@ export function chooseMove(hand: Card[], difficulty: Difficulty): string[] | nul
  }
  return best;
 }
-export const thinkMs = (d: Difficulty) => ({ easy: 6500, normal: 4300, hard: 2600 }[d]);
+export const thinkMs = (d: Difficulty) => ({ easy: 9000, normal: 6500, hard: 4200 }[d]);
 

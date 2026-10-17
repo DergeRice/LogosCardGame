@@ -11,4 +11,4 @@ export function roomRating(ratings:readonly number[]){return ratings.reduce((sum
 export function compatibleRatings(ratings:readonly number[],joining:number){
  return ratings.every(r=>Math.abs(r-joining)<=Math.max(50,Math.max(r,joining)*.1));
 }
-export function aiDifficulty(rating:number):Difficulty{return rating<900?'easy':rating<1300?'normal':'hard'}
+export function aiDifficulty(rating:number):Difficulty{return rating<975?'easy':rating<1300?'normal':'hard'}
