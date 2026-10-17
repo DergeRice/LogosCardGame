@@ -456,6 +456,14 @@
     {
       "english": "I can work near our friends.",
       "key": "reported-exact-plural"
+    },
+    {
+      "english": "Does the teacher give them the book very well?",
+      "key": "observed do article count verb pronoun article count adverb adverb"
+    },
+    {
+      "english": "Does the teacher need the book very well?",
+      "key": "observed do article count verb article count adverb adverb"
     }
   ]
 }

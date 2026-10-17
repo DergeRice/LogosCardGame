@@ -5953,6 +5953,24 @@
       "duration": 2.688,
       "peak": 0.3393,
       "sampleRate": 24000
+    },
+    {
+      "text": "Does the teacher give them the book very well?",
+      "file": "kokoro-afheart-v1/6dd182a01ddf9dc0c674.mp3",
+      "bytes": 19344,
+      "sha256": "61d094d3f917c41b02a130b07f2610b6a976e9438add77dddd3a52324f7369eb",
+      "duration": 2.283,
+      "peak": 0.326,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the teacher need the book very well?",
+      "file": "kokoro-afheart-v1/852d8b2bef4008a5fcc1.mp3",
+      "bytes": 17184,
+      "sha256": "bee13cba6f12079d9f103a8ae2959484fc0e8caf46bca714b492a61607890988",
+      "duration": 2.069,
+      "peak": 0.3256,
+      "sampleRate": 24000
     }
   ]
 }
