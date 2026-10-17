@@ -6,43 +6,52 @@ let manifest:Promise<Map<string,Entry>>|undefined;
 /** Optional metadata only. Never part of game readiness. */
 export function preloadSentenceVoice(){
  if(manifest)return manifest;
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),1500);
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6000);
  return manifest=fetch('/audio/sentences/manifest.json',{signal:controller.signal}).then(async r=>{
   if(!r.ok)throw Error('Sentence manifest unavailable');
   const data=await r.json() as {entries:Entry[]};
   return new Map(data.entries.map(e=>[normalizeSpeechText(e.text),e]));
  }).catch(()=>{manifest=undefined;return new Map<string,Entry>()}).finally(()=>clearTimeout(timer));
 }
-/** Static whole-sentence files only. No model, system TTS, or word stitching fallback. */
-export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void){
- const controller=new AbortController(),{signal}=controller;
- let source:AudioBufferSourceNode|null=null;
- let startup:ReturnType<typeof setTimeout>|undefined;
- const stop=()=>{controller.abort();clearTimeout(startup);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}};
+export type VoiceCode='loading'|'playing'|'ended'|'blocked'|'missing'|'network'|'decode'|'unsupported'|'timeout'|'cancelled';
+export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number};
+const files=new Map<string,Promise<{bytes:ArrayBuffer;url:string}>>();
+class VoiceError extends Error{constructor(public code:VoiceCode,public http?:number){super(code)}}
+async function sentenceFile(text:string){
+ const normalized=normalizeSpeechText(text),entries=await preloadSentenceVoice(),entry=entries.get(normalized);
+ const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('kokoro-v1.0/af_heart/1.0/'+normalized));
+ const key=Array.from(new Uint8Array(digest),v=>v.toString(16).padStart(2,'0')).join('').slice(0,20);
+ return entry?'/audio/sentences/'+entry.file:SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3';
+}
+export function prefetchSentenceAudio(text:string){
+ const key=normalizeSpeechText(text);let task=files.get(key);if(task)return task;
+ task=(async()=>{const url=await sentenceFile(text),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+ try{const response=await fetch(url,{signal:controller.signal});if(!response.ok)throw new VoiceError(response.status===404?'missing':'network',response.status);const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw new VoiceError('decode');return {bytes,url};}
+ catch(error){if(error instanceof VoiceError)throw error;throw new VoiceError(controller.signal.aborted?'timeout':'network');}finally{clearTimeout(timer)}
+ })().catch(error=>{files.delete(key);throw error});files.set(key,task);if(files.size>24)files.delete(files.keys().next().value!);return task;
+}
+/** One complete recorded sentence; no synthetic/word-splicing fallback. */
+export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,onStatus?:(state:VoiceStatus)=>void){
+ let watchdog:ReturnType<typeof setTimeout>|undefined;let source:AudioBufferSourceNode|null=null,cancelled=false,settle:(()=>void)|undefined;
+ const started=performance.now(),ctx=unlockGameAudio(); // Synchronously inside a replay tap when permission is needed.
+ const report=(code:VoiceCode,details:Partial<VoiceStatus>={})=>{if(!cancelled){const state={code,context:ctx?.state,elapsedMs:Math.round(performance.now()-started),...details};onStatus?.(state);window.dispatchEvent(new CustomEvent('logos-voice-status',{detail:state}));}};
  const done=(async()=>{
-  // Hard deadline includes manifest lookup, download, decoding and autoplay permission.
-  startup=setTimeout(stop,1500);
-  const entries=await preloadSentenceVoice();if(signal.aborted)return;
-  const normalized=normalizeSpeechText(text),entry=entries.get(normalized);
-  // Identical text/voice/speed hash to the offline generator; no 24k-row manifest download.
-  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('kokoro-v1.0/af_heart/1.0/'+normalized));
-  const key=Array.from(new Uint8Array(digest),v=>v.toString(16).padStart(2,'0')).join('').slice(0,20);
-  if(signal.aborted)return;
-  const audioUrl=entry?'/audio/sentences/'+entry.file:SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3';
-  const ctx=unlockGameAudio();if(!ctx)return;
-  // Safari/Android may finish resuming asynchronously after a touch or interruption.
-  // The existing startup deadline still cancels a blocked permission request.
-  if(ctx.state!=='running')await ctx.resume();
-  if(signal.aborted||ctx.state!=='running')return;
-  const response=await fetch(audioUrl,{signal});if(!response.ok)throw Error('Sentence file unavailable');
-  const buffer=await ctx.decodeAudioData(await response.arrayBuffer());if(signal.aborted||ctx.state!=='running')return;
-  if(buffer.duration>20)throw Error('Sentence file too long');
+ try{
+  report('loading');if(!ctx)throw new VoiceError('unsupported');
+  const file=await prefetchSentenceAudio(text);if(cancelled)return;
+  if(ctx.state!=='running'){void ctx.resume().catch(()=>{});await Promise.race([new Promise<void>(resolve=>{const check=()=>{if(ctx.state==='running'){ctx.removeEventListener('statechange',check);resolve()}};ctx.addEventListener('statechange',check);setTimeout(()=>{ctx.removeEventListener('statechange',check);resolve()},1200);check()}),new Promise<void>(resolve=>setTimeout(resolve,1300))]);}
+  if(cancelled)return;if(ctx.state!=='running')throw new VoiceError('blocked');
+  let buffer:AudioBuffer;try{buffer=await ctx.decodeAudioData(file.bytes.slice(0))}catch{throw new VoiceError('decode')}
+  if(cancelled)return;if(ctx.state!=='running')throw new VoiceError('blocked');
+  if(buffer.duration>30||buffer.duration<=0)throw new VoiceError('decode');
+  let peak=0;for(const sample of buffer.getChannelData(0))peak=Math.max(peak,Math.abs(sample));if(peak<.001)throw new VoiceError('decode');
   await new Promise<void>((resolve,reject)=>{
-   source=ctx.createBufferSource();source.buffer=buffer;source.connect(ctx.destination);
-   const abort=()=>reject(new DOMException('Aborted','AbortError'));signal.addEventListener('abort',abort,{once:true});
-   source.onended=()=>{signal.removeEventListener('abort',abort);source?.disconnect();if(!signal.aborted)onEnd();resolve()};
-   source.start();clearTimeout(startup);onStart();
+   settle=resolve;source=ctx.createBufferSource();source.buffer=buffer;source.connect(ctx.destination);
+   const timeout=watchdog=setTimeout(()=>{if(source)source.onended=null;try{source?.stop();source?.disconnect()}catch{}reject(new VoiceError(ctx.state==='running'?'timeout':'blocked'))},buffer.duration*1000+5000);
+   source.onended=()=>{clearTimeout(timeout);source?.disconnect();if(!cancelled){report('ended',{url:file.url,duration:buffer.duration,peak});onEnd()}resolve()};
+   try{source.start();report('playing',{url:file.url,duration:buffer.duration,peak});onStart()}catch{clearTimeout(timeout);reject(new VoiceError('blocked'))}
   });
- })().finally(()=>clearTimeout(startup));
- return {done,stop};
+ }catch(error){if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined});throw error;}
+ })();
+ return {done,stop(){cancelled=true;clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
 }

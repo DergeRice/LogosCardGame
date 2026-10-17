@@ -1,5 +1,5 @@
 import {useEffect,useRef} from 'react';
-import type {Application,Particle} from 'pixi.js';
+import type {Application,Particle,Texture} from 'pixi.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
 
 export function PixiEmbers({level}:{level:number}){
@@ -7,7 +7,7 @@ export function PixiEmbers({level}:{level:number}){
  useEffect(()=>{
   const node=host.current;if(!node)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  let disposed=false,app:Application|undefined,observer:ResizeObserver|undefined,cleanupVisibility=()=>{},unwatch=()=>{},resizeFrame=0;
+  let ownedTexture:Texture|undefined;let disposed=false,app:Application|undefined,observer:ResizeObserver|undefined,cleanupVisibility=()=>{},unwatch=()=>{},resizeFrame=0;
   void (async()=>{
    try{
     const {Application,Particle,ParticleContainer,Texture}=await import('pixi.js');
@@ -16,8 +16,10 @@ export function PixiEmbers({level}:{level:number}){
     await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:false,autoDensity:true,resolution:pixiResolution(),preference:'webgl',powerPreference:'low-power'});
     if(disposed){instance.destroy(true,{children:true});return;}
     instance.ticker.stop();
-    const group=new ParticleContainer({dynamicProperties:{position:true,vertex:true,color:true}}),particles:Particle[]=[];
-    for(let i=0;i<(isMobileGraphics()?8:12);i++){const p=new Particle({texture:Texture.WHITE,x:0,y:0,scaleX:2,scaleY:2,rotation:Math.PI/4,tint:i%3===0?0xffd05e:0xff7938,alpha:0});particles.push(p);group.addParticle(p);}
+    const glow=document.createElement('canvas');glow.width=32;glow.height=64;const painter=glow.getContext('2d')!;
+    painter.scale(1,2);const gradient=painter.createRadialGradient(16,22,0,16,18,17);gradient.addColorStop(0,'#fff5aaff');gradient.addColorStop(.25,'#ffd24ce0');gradient.addColorStop(.6,'#ff6a2470');gradient.addColorStop(1,'#ff320000');painter.fillStyle=gradient;painter.fillRect(0,0,32,32);
+    const flameTexture=ownedTexture=Texture.from(glow),group=new ParticleContainer({dynamicProperties:{position:true,vertex:true,color:true}}),particles:Particle[]=[];
+    for(let i=0;i<(isMobileGraphics()?14:28);i++){const p=new Particle({texture:flameTexture,x:0,y:0,scaleX:.5,scaleY:.5,alpha:0});particles.push(p);group.addParticle(p);}
     instance.stage.addChild(group);
     let lastWidth=0,lastHeight=0;
     const resize=()=>{const width=Math.max(1,Math.round(node.clientWidth)),height=Math.max(1,Math.round(node.clientHeight));if(Math.abs(width-lastWidth)<2&&Math.abs(height-lastHeight)<2)return;lastWidth=width;lastHeight=height;instance.renderer.resize(width,height);};
@@ -29,9 +31,9 @@ export function PixiEmbers({level}:{level:number}){
      const w=instance.screen.width,h=instance.screen.height,speed=.28+levelRef.current*.12;
      for(let i=0;i<particles.length;i++){
       const p=particles[i],phase=(time*speed+i*.233)%1;
-      p.x=w*((i*.61803398875)%1)+Math.sin(time+i)*w*.018;p.y=h*(1.05-phase*.55);
-      p.alpha=Math.sin(phase*Math.PI)*(.25+levelRef.current*.16);
-      p.scaleX=p.scaleY=1.5+(i%3)+phase*1.3;
+      p.x=w*((i*.61803398875)%1)+Math.sin(time+i)*w*.018;p.y=h*(1.05-phase*.95);
+      p.alpha=Math.sin(phase*Math.PI)*(.3+levelRef.current*.2);
+      p.scaleX=.35+(i%3)*.15+phase*.2;p.scaleY=.6+(i%4)*.2+phase*.3;
      }
     });
     const visibility=()=>{if(document.hidden)instance.ticker.stop();else if(node.dataset.pixi==='ready')instance.ticker.start();};document.addEventListener('visibilitychange',visibility);
@@ -40,7 +42,7 @@ export function PixiEmbers({level}:{level:number}){
     cleanupVisibility=()=>document.removeEventListener('visibilitychange',visibility);
    }catch{/* Static CSS background remains available when WebGL is unavailable. */}
   })();
-  return()=>{disposed=true;cancelAnimationFrame(resizeFrame);cleanupVisibility();unwatch();observer?.disconnect();app?.destroy(true,{children:true});};
+  return()=>{disposed=true;cancelAnimationFrame(resizeFrame);cleanupVisibility();unwatch();observer?.disconnect();app?.destroy(true,{children:true});ownedTexture?.destroy(true);};
  },[]);
  return <span className="pixi-embers" ref={host} aria-hidden="true"/>;
 }

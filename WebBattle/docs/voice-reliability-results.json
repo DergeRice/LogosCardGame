@@ -1,0 +1,303 @@
+{
+  "version": "v0.9.63",
+  "startedAt": "2026-10-17T14:53:37.885Z",
+  "stats": {
+    "startTime": "2026-10-17T14:53:37.885Z",
+    "duration": 127539.012,
+    "expected": 12,
+    "skipped": 4,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "physicalHandsets": false,
+  "iosAudioVerified": false,
+  "iosLimitation": "Windows Playwright WebKit has no Web Audio API. UI tests only; no physical iOS Chrome playback claim.",
+  "canonicalTextsCompared": 24155,
+  "unrecordedInAuditedSet": 0,
+  "tests": [
+    {
+      "project": "windows-chromium",
+      "test": "production local and R2 sentences play non-silent samples to completion; replay and resume",
+      "status": "passed"
+    },
+    {
+      "project": "windows-chromium",
+      "test": "slow download exceeds previous 1.5 second cutoff and still plays; cancel never starts stale playback",
+      "status": "passed"
+    },
+    {
+      "project": "windows-chromium",
+      "test": "blocked autoplay is visible and a tap retries; HTTP missing and network errors are distinguishable",
+      "status": "passed"
+    },
+    {
+      "project": "windows-chromium",
+      "test": "public catalog: audited long and short sentences decode with matching duration and non-silent waveform",
+      "status": "passed"
+    },
+    {
+      "project": "windows-installed-chrome",
+      "test": "production local and R2 sentences play non-silent samples to completion; replay and resume",
+      "status": "passed"
+    },
+    {
+      "project": "windows-installed-chrome",
+      "test": "slow download exceeds previous 1.5 second cutoff and still plays; cancel never starts stale playback",
+      "status": "passed"
+    },
+    {
+      "project": "windows-installed-chrome",
+      "test": "blocked autoplay is visible and a tap retries; HTTP missing and network errors are distinguishable",
+      "status": "passed"
+    },
+    {
+      "project": "windows-installed-chrome",
+      "test": "public catalog: audited long and short sentences decode with matching duration and non-silent waveform",
+      "status": "passed"
+    },
+    {
+      "project": "android-chromium-emulated",
+      "test": "production local and R2 sentences play non-silent samples to completion; replay and resume",
+      "status": "passed"
+    },
+    {
+      "project": "android-chromium-emulated",
+      "test": "slow download exceeds previous 1.5 second cutoff and still plays; cancel never starts stale playback",
+      "status": "passed"
+    },
+    {
+      "project": "android-chromium-emulated",
+      "test": "blocked autoplay is visible and a tap retries; HTTP missing and network errors are distinguishable",
+      "status": "passed"
+    },
+    {
+      "project": "android-chromium-emulated",
+      "test": "public catalog: audited long and short sentences decode with matching duration and non-silent waveform",
+      "status": "passed"
+    },
+    {
+      "project": "ios-webkit-emulated",
+      "test": "production local and R2 sentences play non-silent samples to completion; replay and resume",
+      "status": "skipped"
+    },
+    {
+      "project": "ios-webkit-emulated",
+      "test": "slow download exceeds previous 1.5 second cutoff and still plays; cancel never starts stale playback",
+      "status": "skipped"
+    },
+    {
+      "project": "ios-webkit-emulated",
+      "test": "blocked autoplay is visible and a tap retries; HTTP missing and network errors are distinguishable",
+      "status": "skipped"
+    },
+    {
+      "project": "ios-webkit-emulated",
+      "test": "public catalog: audited long and short sentences decode with matching duration and non-silent waveform",
+      "status": "skipped"
+    }
+  ],
+  "publicSamples": [
+    {
+      "file": "kokoro-afheart-v1/e435e3f37c20730c9318.mp3",
+      "duration": 0.7679818594104308,
+      "peak": 0.45178183913230896,
+      "ms": 1427
+    },
+    {
+      "file": "kokoro-afheart-v1/c5f1f4ec53f35fb54b75.mp3",
+      "duration": 3.2,
+      "peak": 0.44798657298088074,
+      "ms": 1620
+    },
+    {
+      "file": "kokoro-afheart-v1/c0e175bd98bdd0ac5a16.mp3",
+      "duration": 0.9813151927437642,
+      "peak": 0.38212820887565613,
+      "ms": 270
+    },
+    {
+      "file": "kokoro-afheart-v1/2d76534c4748cc0568f8.mp3",
+      "duration": 4.927981859410431,
+      "peak": 0.38964197039604187,
+      "ms": 310
+    },
+    {
+      "file": "kokoro-afheart-v1/4eb29700048e32e35522.mp3",
+      "duration": 0.9813151927437642,
+      "peak": 0.388281911611557,
+      "ms": 238
+    },
+    {
+      "file": "kokoro-afheart-v1/e09891423d74ba1b229b.mp3",
+      "duration": 4.671995464852608,
+      "peak": 0.37338316440582275,
+      "ms": 545
+    },
+    {
+      "file": "kokoro-afheart-v1/d4bbc4a89e589a6dafa8.mp3",
+      "duration": 1.1093197278911564,
+      "peak": 0.3667180836200714,
+      "ms": 253
+    },
+    {
+      "file": "kokoro-afheart-v1/390d15aad56f561a5b67.mp3",
+      "duration": 5.909319727891156,
+      "peak": 0.3428072929382324,
+      "ms": 353
+    },
+    {
+      "file": "kokoro-afheart-v1/2d8da5c24fc5ee229b5d.mp3",
+      "duration": 1.1519954648526076,
+      "peak": 0.3215877115726471,
+      "ms": 260
+    },
+    {
+      "file": "kokoro-afheart-v1/03b338e3babe25c28fc4.mp3",
+      "duration": 6.1439909297052155,
+      "peak": 0.3575253188610077,
+      "ms": 342
+    },
+    {
+      "file": "kokoro-afheart-v1/65f9701a914a552e2c4a.mp3",
+      "duration": 1.3226530612244898,
+      "peak": 0.4140918552875519,
+      "ms": 238
+    },
+    {
+      "file": "kokoro-afheart-v1/ea576516280aa5c900af.mp3",
+      "duration": 1.7066666666666668,
+      "peak": 0.36859768629074097,
+      "ms": 269
+    },
+    {
+      "file": "kokoro-afheart-v1/6d5993fd5055aadc2b3a.mp3",
+      "duration": 2.0266439909297054,
+      "peak": 0.3171166479587555,
+      "ms": 260
+    },
+    {
+      "file": "kokoro-afheart-v1/988ec5516a5dd759888c.mp3",
+      "duration": 1.4933333333333334,
+      "peak": 0.47980839014053345,
+      "ms": 271
+    },
+    {
+      "file": "kokoro-afheart-v1/70cdb13bd98004cdd40c.mp3",
+      "duration": 2.346643990929705,
+      "peak": 0.44303619861602783,
+      "ms": 737
+    },
+    {
+      "file": "kokoro-afheart-v1/b1d223b0b9f4c5a0f232.mp3",
+      "duration": 2.6239909297052155,
+      "peak": 0.3328239619731903,
+      "ms": 284
+    },
+    {
+      "file": "kokoro-afheart-v1/a0710eba7c7fd02fac28.mp3",
+      "duration": 2.133310657596372,
+      "peak": 0.34153836965560913,
+      "ms": 263
+    },
+    {
+      "file": "kokoro-afheart-v1/9472ab4b2bebbc8193c1.mp3",
+      "duration": 1.6639909297052153,
+      "peak": 0.30402883887290955,
+      "ms": 264
+    },
+    {
+      "file": "kokoro-afheart-v1/be05c1ca736ab8cbfd49.mp3",
+      "duration": 3.8399773242630384,
+      "peak": 0.33886292576789856,
+      "ms": 298
+    },
+    {
+      "file": "kokoro-afheart-v1/78384f2d3deb35077981.mp3",
+      "duration": 3.541315192743764,
+      "peak": 0.3588672876358032,
+      "ms": 729
+    },
+    {
+      "file": "kokoro-afheart-v1/5ddff7690f6488b9b4c3.mp3",
+      "duration": 3.733310657596372,
+      "peak": 0.3475220799446106,
+      "ms": 294
+    },
+    {
+      "file": "kokoro-afheart-v1/eeae6324642f7ab10479.mp3",
+      "duration": 2.2399773242630387,
+      "peak": 0.3146432042121887,
+      "ms": 284
+    },
+    {
+      "file": "kokoro-afheart-v1/d9f4e6a16661a418a02c.mp3",
+      "duration": 2.3893197278911567,
+      "peak": 0.3557599186897278,
+      "ms": 234
+    },
+    {
+      "file": "kokoro-afheart-v1/2822f278675441b8fca8.mp3",
+      "duration": 2.0266439909297054,
+      "peak": 0.3343586325645447,
+      "ms": 228
+    },
+    {
+      "file": "kokoro-afheart-v1/985da62dc5c268350c0d.mp3",
+      "duration": 2.1759863945578233,
+      "peak": 0.2898634672164917,
+      "ms": 260
+    },
+    {
+      "file": "kokoro-afheart-v1/93dd3da53b6b83a14dc5.mp3",
+      "duration": 3.88265306122449,
+      "peak": 0.47541049122810364,
+      "ms": 473
+    },
+    {
+      "file": "kokoro-afheart-v1/7607de06fd352280925d.mp3",
+      "duration": 3.0719954648526078,
+      "peak": 0.40199053287506104,
+      "ms": 235
+    },
+    {
+      "file": "kokoro-afheart-v1/fe7d18ad7e0ffcd556c4.mp3",
+      "duration": 4.757324263038549,
+      "peak": 0.3625568449497223,
+      "ms": 297
+    },
+    {
+      "file": "kokoro-afheart-v1/eae2f4529aee4210215a.mp3",
+      "duration": 2.965328798185941,
+      "peak": 0.35581129789352417,
+      "ms": 281
+    },
+    {
+      "file": "kokoro-afheart-v1/16c312d50f5e3c7b6cd7.mp3",
+      "duration": 2.581315192743764,
+      "peak": 0.4705299139022827,
+      "ms": 263
+    },
+    {
+      "file": "kokoro-afheart-v1/71039195cd385e7c5eae.mp3",
+      "duration": 3.6693197278911565,
+      "peak": 0.45870521664619446,
+      "ms": 278
+    },
+    {
+      "file": "kokoro-afheart-v1/8ff4cdf5cc5302ccc721.mp3",
+      "duration": 3.221315192743764,
+      "peak": 0.36133599281311035,
+      "ms": 279
+    },
+    {
+      "file": "kokoro-afheart-v1/52a4aae6e5ef3b3cf822.mp3",
+      "duration": 3.0506575963718823,
+      "peak": 0.30594292283058167,
+      "ms": 286
+    }
+  ],
+  "browserVersions": {
+    "windowsChromium": "153.0.8010.12",
+    "windowsInstalledChrome": "85.0.4183.121"
+  }
+}
