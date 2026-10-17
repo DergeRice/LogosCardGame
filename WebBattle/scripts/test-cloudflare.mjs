@@ -38,9 +38,10 @@ try{
  const message={requestId:randomUUID(),handVersion:actor.room.handVersion,cards:[played.id]};actor.send('submit',message);actor.send('submit',message);
  await actor.until(()=>actor.room.judgment?.submissionId===message.requestId);if(naturalCorrect)assert.equal(actor.room.judgment.valid,true);assert.equal(actor.room.judgment.accepted,false);assert.equal(actor.room.players.find(p=>p.id===actor.room.you).score,0);assert.ok(actor.room.hand.some(c=>c.id===played.id));await actor.until(()=>actor.messages.some(m=>m.duplicate));
  const adminHeaders={Authorization:'Bearer test-admin-secret-32-characters-long',Origin:'https://logos-card-battle.netlify.app'};
- assert.equal((await mf.dispatchFetch('http://localhost/admin/logs')).status,401);
- assert.equal((await mf.dispatchFetch('http://localhost/admin/logs',{headers:{Authorization:'Bearer wrong'}})).status,401);
+ assert.equal((await mf.dispatchFetch('http://localhost/admin/logs')).status,200);
+ assert.equal((await mf.dispatchFetch('http://localhost/admin/logs',{headers:{Authorization:'Bearer wrong'}})).status,200);
  assert.equal((await mf.dispatchFetch('http://localhost/admin/logs/access/bootstrap',{method:'POST'})).status,401);
+ assert.equal((await mf.dispatchFetch('http://localhost/admin/logs/unknown',{method:'POST',body:'{}'})).status,401);
  const bootstrap=await (await mf.dispatchFetch('http://localhost/admin/logs/access/bootstrap',{method:'POST',headers:adminHeaders})).json();
  const session=await (await mf.dispatchFetch('http://localhost/admin/logs/access/redeem',{method:'POST',headers:{Origin:'https://logos-card-battle.netlify.app'},body:JSON.stringify({code:bootstrap.token})})).json();
  const sessionHeaders={Origin:'https://logos-card-battle.netlify.app',Authorization:'Bearer '+session.token};

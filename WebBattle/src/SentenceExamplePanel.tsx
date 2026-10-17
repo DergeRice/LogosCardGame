@@ -4,7 +4,7 @@ import {CATALOG} from '../shared/rules.js';
 import './sentence-examples.css';
 import {playSentenceExample,type VoiceCode} from './sentenceVoice.js';
 import {unlockGameAudio} from './exampleAudio.js';
-const voiceLabels:Partial<Record<VoiceCode,string>>={loading:'음성 준비 중…',playing:'문장 읽는 중',ended:'다시 듣기',blocked:'눌러서 음성 켜기',missing:'이 문장 음성 준비 중',network:'음성 연결 실패 · 다시 듣기',decode:'음성 파일 오류 · 다시 듣기',unsupported:'음성 재생 미지원',timeout:'음성 지연 · 다시 듣기'};
+const voiceLabels:Partial<Record<VoiceCode,string>>={loading:'음성 불러오는 중…',playing:'문장 읽는 중',ended:'다시 듣기',blocked:'눌러서 음성 켜기',missing:'이 문장 음원 없음 · 다시 확인',network:'음성 연결 실패 · 다시 듣기',decode:'음성 파일 오류 · 다시 듣기',unsupported:'음성 재생 미지원',timeout:'음성 지연 · 다시 듣기'};
 export function SentenceExamplePanel({example,onClose,voice=true}:{example:SentenceExample;onClose:()=>void;voice?:boolean}){
  const closeRef=useRef(onClose);closeRef.current=onClose;
  const [attempt,setAttempt]=useState(0),[status,setStatus]=useState<VoiceCode>('loading');

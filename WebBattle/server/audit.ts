@@ -1,6 +1,6 @@
 import {randomUUID,timingSafeEqual} from 'node:crypto';
 export type AuditEvent={id:string;time:number;level:'info'|'warn'|'error';event:string;action:string;player:string;playerId:string;room:string;matchId:string;requestId:string;details:Record<string,unknown>;status?:string;note?:string};
-const fields=['type','requestId','matchId','handVersion','cardId','cards','targetId','offerId','wantedId','stealId','stealSource','choice','approve','reason','decisionId','voteId','exchangeId','event','code','build','connected','pending','phase','selected','events','inspectMode','viewingOpponent','scoreRunning','file','line','column','durationMs','points','patternType','valid','accepted','usedStartIndex','usedLength'];
+const fields=['type','requestId','matchId','handVersion','cardId','cards','targetId','offerId','wantedId','stealId','stealSource','choice','approve','reason','decisionId','voteId','exchangeId','event','code','build','connected','pending','phase','selected','events','inspectMode','viewingOpponent','scoreRunning','file','line','column','durationMs','sentence','points','patternType','valid','accepted','usedStartIndex','usedLength'];
 const redact=(value:string)=>value.replace(/(?:ghp_|github_pat_|Bearer\s+)\S+/gi,'[redacted]').replace(/[a-f0-9]{48,}/gi,'[redacted]').replace(/(password|authToken|token|authorization)["']?\s*[:=]\s*["']?[^"',\s}]+/gi,'$1=[redacted]');
 export function safeDetails(input:Record<string,unknown>):Record<string,unknown>{
  const out:Record<string,unknown>={};

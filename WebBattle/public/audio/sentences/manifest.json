@@ -4927,6 +4927,1032 @@
       "duration": 1.365,
       "peak": 0.262,
       "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our friends.",
+      "file": "kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "bytes": 13224,
+      "sha256": "0ed646adbacedcf03b7c92c20bb2a543a57cfa21cd32111f10d00c2f5d7ca6c0",
+      "duration": 1.579,
+      "peak": 0.4407,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near them.",
+      "file": "kokoro-afheart-v1/44ab5814cde3fab534fc.mp3",
+      "bytes": 14112,
+      "sha256": "1cca134eabbc54d3113e4e917598e4f201701bd6a398097e1ac9cf1bd584ab52",
+      "duration": 1.557,
+      "peak": 0.5567,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near them.",
+      "file": "kokoro-afheart-v1/96697713fe338f8b40dc.mp3",
+      "bytes": 14208,
+      "sha256": "74223772e1a0498dfc33eed5ff424d898025ed108c523b2d8fd2cb8e7ed51a6c",
+      "duration": 1.557,
+      "peak": 0.4754,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near them today.",
+      "file": "kokoro-afheart-v1/7804a13f1b5caf9b46b8.mp3",
+      "bytes": 14808,
+      "sha256": "5583a5a69b16daa565115c77573119206d5814e0006418de3ac8191d46d1a1c8",
+      "duration": 1.579,
+      "peak": 0.4873,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near them often.",
+      "file": "kokoro-afheart-v1/d099a45f12e66d50cc2d.mp3",
+      "bytes": 13728,
+      "sha256": "0de4c69bbad108270161a8ce03c7fc62d7426d9a0cf8f591297edcc15a53e807",
+      "duration": 1.579,
+      "peak": 0.4451,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near water.",
+      "file": "kokoro-afheart-v1/b78c3a15df63a8a4edd1.mp3",
+      "bytes": 14904,
+      "sha256": "2a138cfccc43c24b1ec3a1f36d62f5e90defca63b4795adf18bc88600ee6cd44",
+      "duration": 1.728,
+      "peak": 0.4067,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near water.",
+      "file": "kokoro-afheart-v1/41490e407899bf61b429.mp3",
+      "bytes": 14088,
+      "sha256": "6fa09ccee6f55a2308d2dbe9296dd41f2fce5602a0a59584bb6e2a100e0cae02",
+      "duration": 1.728,
+      "peak": 0.4081,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near water today.",
+      "file": "kokoro-afheart-v1/516c52ef13595a5273b1.mp3",
+      "bytes": 15528,
+      "sha256": "5da45122e2c90fc56b39b96862a7cfdada718a09cba7044ad24465bafa1c4d2b",
+      "duration": 1.771,
+      "peak": 0.4314,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near water often.",
+      "file": "kokoro-afheart-v1/9e43fc3c0ea4cf416637.mp3",
+      "bytes": 15480,
+      "sha256": "d5f55be6262afb001afbc5f9128615d23b82ec0250b1c4a78f654383187f6f13",
+      "duration": 1.771,
+      "peak": 0.3283,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near Naro.",
+      "file": "kokoro-afheart-v1/0289f974b0e042a68ea0.mp3",
+      "bytes": 12144,
+      "sha256": "9422538e40a64eb25abc5d1f6ea954489d97053dfcfb980348e33b633e8f43b7",
+      "duration": 1.451,
+      "peak": 0.3618,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near Naro.",
+      "file": "kokoro-afheart-v1/8470b4f92a5073537a30.mp3",
+      "bytes": 14568,
+      "sha256": "e24f8ccc5286e67d0275533c3966a9fcbc51b0fc45339d39b63cd00674a5c60e",
+      "duration": 1.664,
+      "peak": 0.4828,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near Naro.",
+      "file": "kokoro-afheart-v1/4c63696625054f9bd8fc.mp3",
+      "bytes": 15000,
+      "sha256": "b38245142f5a7ba1ee58a89e08b45b44825f16afd6bec700d8dcf6790d9ed205",
+      "duration": 1.707,
+      "peak": 0.386,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near Naro today.",
+      "file": "kokoro-afheart-v1/b0364c4f6ce1a6316295.mp3",
+      "bytes": 15552,
+      "sha256": "190fdfc9c51050bc3d84c06988705f79558687f7bea2f4d7219595044e50b766",
+      "duration": 1.771,
+      "peak": 0.4555,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near Naro often.",
+      "file": "kokoro-afheart-v1/599558ca58fc91d88729.mp3",
+      "bytes": 15144,
+      "sha256": "138860dfb712cba9ff12d787cf5e6fa4382545e18e53d6483ae56908d3f72558",
+      "duration": 1.771,
+      "peak": 0.309,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the friend.",
+      "file": "kokoro-afheart-v1/5abfd8c469454599f91c.mp3",
+      "bytes": 13104,
+      "sha256": "ae1fec776770442b3ac307d21489602d206b2e399a59c863d92a7c826dcfe9c5",
+      "duration": 1.557,
+      "peak": 0.3852,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the friend.",
+      "file": "kokoro-afheart-v1/e0d45fbcbd66ceefffc2.mp3",
+      "bytes": 14376,
+      "sha256": "24ab20823094f28901e9cd78166020231d1bae56926c5f5f2235a485176b303d",
+      "duration": 1.728,
+      "peak": 0.3898,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the friend.",
+      "file": "kokoro-afheart-v1/3123621e63522c6b6c25.mp3",
+      "bytes": 14736,
+      "sha256": "2515fcda9b7d391f385849ab69da22b22c419a8ac66d40ca3f2adbb4e8c6912f",
+      "duration": 1.792,
+      "peak": 0.4282,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the friend today.",
+      "file": "kokoro-afheart-v1/bfbfbe360bf32e65f32a.mp3",
+      "bytes": 14616,
+      "sha256": "7149e6333eec7bc4e46a1c6b65bd0f3447b70435d462713f48ec1cc496200a36",
+      "duration": 1.685,
+      "peak": 0.5334,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the friend often.",
+      "file": "kokoro-afheart-v1/97878428486e8f024929.mp3",
+      "bytes": 16560,
+      "sha256": "72db5210b685248310aad8c7d2b675e05d58b99952f71a1f35644cebc901e454",
+      "duration": 1.835,
+      "peak": 0.3662,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young friend.",
+      "file": "kokoro-afheart-v1/81e505e6256c8ff1ace3.mp3",
+      "bytes": 15432,
+      "sha256": "4b84fb18d28a77c30e4fef63dc486a51b083fd869653bafe51768ef6e4d0916b",
+      "duration": 1.749,
+      "peak": 0.4204,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the young friend.",
+      "file": "kokoro-afheart-v1/88378dab25e187c62213.mp3",
+      "bytes": 16872,
+      "sha256": "da91fe9202c15dfd9700a6776003574ddc0e5e10eac56048aa2efbb1b6471d8c",
+      "duration": 1.92,
+      "peak": 0.4012,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the young friend.",
+      "file": "kokoro-afheart-v1/4c82eeeb7fa144d37365.mp3",
+      "bytes": 16440,
+      "sha256": "6780322c14048fba984363523bc1025f52ce8a6b0ace47cf7ae02e0863e12822",
+      "duration": 1.963,
+      "peak": 0.403,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young friend today.",
+      "file": "kokoro-afheart-v1/97f851cfd874d1e27ea4.mp3",
+      "bytes": 17784,
+      "sha256": "c369507d41f61f4f957f371ac838537ab6494ae1fe5b9d0e45a477047a511111",
+      "duration": 1.941,
+      "peak": 0.3756,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young friend often.",
+      "file": "kokoro-afheart-v1/d22f7a6b51d1dd0622e8.mp3",
+      "bytes": 17712,
+      "sha256": "7001b98678ec5c60ee91a6351c0896f3ec5138f4a0607db4c5366303e5bbd86b",
+      "duration": 2.027,
+      "peak": 0.3464,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young helpful friend.",
+      "file": "kokoro-afheart-v1/b3712e613a65a4271e75.mp3",
+      "bytes": 18768,
+      "sha256": "ebc3f3af2cf839feb754652c64f53eaffbb89ba4c358c1f2f3d5fda0322e3c3f",
+      "duration": 2.155,
+      "peak": 0.3368,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the young helpful friend.",
+      "file": "kokoro-afheart-v1/92a48c5bf238b9feed1e.mp3",
+      "bytes": 21264,
+      "sha256": "63c6416371a6ce14c8ffbf38565c1e26ef041eb3144fd38f8dfb66b5549f0f9a",
+      "duration": 2.517,
+      "peak": 0.4507,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the young helpful friend.",
+      "file": "kokoro-afheart-v1/d8ad9d1d5fd4fbd73038.mp3",
+      "bytes": 21024,
+      "sha256": "e84e3fec6f1b2d60ed12606ef8b1e5550f1eff1300570d41c23f6aa8bde6053d",
+      "duration": 2.475,
+      "peak": 0.3729,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young helpful friend today.",
+      "file": "kokoro-afheart-v1/96a286f605e1d6e0143f.mp3",
+      "bytes": 21048,
+      "sha256": "5e5ac7eecf443d95d111e36934964d7aba93967fd60bbed8c541df043462d009",
+      "duration": 2.475,
+      "peak": 0.3934,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young helpful friend often.",
+      "file": "kokoro-afheart-v1/2412a64523fe22a2ffff.mp3",
+      "bytes": 22128,
+      "sha256": "b0a3ce2e2c4302c0229212a9510f030f633d735e673e11a6a3fbe2246ec49620",
+      "duration": 2.539,
+      "peak": 0.354,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young helpful kind friend.",
+      "file": "kokoro-afheart-v1/c6366e19eedb0395e554.mp3",
+      "bytes": 20568,
+      "sha256": "33fd1d14e3d9c72538f59943d53e778b7885f571dc9d17ed3d291c5c3e3324bd",
+      "duration": 2.496,
+      "peak": 0.3708,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the young helpful kind friend.",
+      "file": "kokoro-afheart-v1/5ed7564238c0b75f7503.mp3",
+      "bytes": 23784,
+      "sha256": "6c5d2d913e4be078af8d01679ba942f2f4aa785876cea7d3d39e64a5f59af9ad",
+      "duration": 2.901,
+      "peak": 0.4753,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the young helpful kind friend.",
+      "file": "kokoro-afheart-v1/485a16d877466f2f6ad7.mp3",
+      "bytes": 25032,
+      "sha256": "c4f3bea0bbafc2163a380c329c4da8634db40d2d5d0e05f7e366ca21712297f3",
+      "duration": 2.88,
+      "peak": 0.4305,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young helpful kind friend today.",
+      "file": "kokoro-afheart-v1/d24873ab58aa1b43a143.mp3",
+      "bytes": 23064,
+      "sha256": "8ebc5d85dc4b442fdef1d29952eea818b156f83beafb89ba9f0ca0aeb602f50f",
+      "duration": 2.773,
+      "peak": 0.4651,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the young helpful kind friend often.",
+      "file": "kokoro-afheart-v1/25c39579e225dd3df6aa.mp3",
+      "bytes": 24744,
+      "sha256": "cf7c8ac29f5f810a17606add134bce8a773d8188e89c15ee68d805798fea4a15",
+      "duration": 2.901,
+      "peak": 0.3681,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the water.",
+      "file": "kokoro-afheart-v1/7b2d18c01e72ecfddfa6.mp3",
+      "bytes": 13080,
+      "sha256": "431c852b3c908adbde1739aac74276083207fdde629bd20cce81b9eac36bd8f6",
+      "duration": 1.515,
+      "peak": 0.3381,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the water.",
+      "file": "kokoro-afheart-v1/8bd283f8d758118c3381.mp3",
+      "bytes": 15240,
+      "sha256": "694414113027ede84ac1dbf398fa9f82816cae3ecaca60c9c48b67f36cdc64dc",
+      "duration": 1.749,
+      "peak": 0.4684,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the water.",
+      "file": "kokoro-afheart-v1/824bdf0194faf0e42c77.mp3",
+      "bytes": 15048,
+      "sha256": "03c767409519bb269edbcfddc99475d0cf9ba5024857e3a632a33aed34a8e756",
+      "duration": 1.771,
+      "peak": 0.3293,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the water today.",
+      "file": "kokoro-afheart-v1/23652d7632830a3ab865.mp3",
+      "bytes": 16392,
+      "sha256": "280efea4be700784aab8923db42ba8bfa0df2e9c6b0ef026eb0c98adcf7fb0de",
+      "duration": 1.749,
+      "peak": 0.4175,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the water often.",
+      "file": "kokoro-afheart-v1/725b1b9d5c255d9867de.mp3",
+      "bytes": 16104,
+      "sha256": "d2d5490b419395eacca1480ee082db439570bde17cf64352790a59c9dc28dcfb",
+      "duration": 1.835,
+      "peak": 0.4032,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh water.",
+      "file": "kokoro-afheart-v1/bef8433f4ea29abad9bc.mp3",
+      "bytes": 15600,
+      "sha256": "5aa1088552c27e911f45d1634a3f19d57ec161c9206d5552cdebd83db31a27be",
+      "duration": 1.749,
+      "peak": 0.4255,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the fresh water.",
+      "file": "kokoro-afheart-v1/57bded374f8d6ddae08d.mp3",
+      "bytes": 16680,
+      "sha256": "b6d49bd98da5ed69dfea5db3de2b0a501fd5a9fbe8f51f54fa96ed24d81996f8",
+      "duration": 1.963,
+      "peak": 0.435,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the fresh water.",
+      "file": "kokoro-afheart-v1/9a848494e021ec4ef491.mp3",
+      "bytes": 17016,
+      "sha256": "dc07c083ebdb8163b68561a947927a192237d10b823243c3af45ef4daa991241",
+      "duration": 1.984,
+      "peak": 0.4016,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh water today.",
+      "file": "kokoro-afheart-v1/73dde7b27461f13407d3.mp3",
+      "bytes": 18408,
+      "sha256": "7808922a0085d5c819b5fdc22f3029f35580178fb05356997ed19f95f45b482f",
+      "duration": 2.048,
+      "peak": 0.3805,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh water often.",
+      "file": "kokoro-afheart-v1/f893430c5f1f3498aae6.mp3",
+      "bytes": 17928,
+      "sha256": "43ec0e3a3cd561ba7d81b48a8087ed816d8532559a67ce4a35d3ac92d76b7551",
+      "duration": 2.112,
+      "peak": 0.3584,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh cool water.",
+      "file": "kokoro-afheart-v1/bf5395e98099116f168f.mp3",
+      "bytes": 16728,
+      "sha256": "e1f749614e886406a628ee997563cf9a265784a642d00295103fbe6d3894ad73",
+      "duration": 1.92,
+      "peak": 0.5145,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the fresh cool water.",
+      "file": "kokoro-afheart-v1/0c7dac612bd9997ee370.mp3",
+      "bytes": 18792,
+      "sha256": "b7d4ddc91bcb93dd88cabf2236edf8d8ae935886ec50f6bce8d4206a88e71c22",
+      "duration": 2.197,
+      "peak": 0.4352,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the fresh cool water.",
+      "file": "kokoro-afheart-v1/3be781e169b1db8c17fa.mp3",
+      "bytes": 19944,
+      "sha256": "072d14727a0c08f6287ef65a4d5fe1b86bf0abce445f0656eefbeda8c62f1108",
+      "duration": 2.24,
+      "peak": 0.3938,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh cool water today.",
+      "file": "kokoro-afheart-v1/46b3d6f1a430c8308d6d.mp3",
+      "bytes": 19536,
+      "sha256": "60c5a2c44b3fefdc63f9623facca49ed359656a6ec5c76bd00d094092e7a87f3",
+      "duration": 2.304,
+      "peak": 0.3847,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh cool water often.",
+      "file": "kokoro-afheart-v1/a14ec3f7c82fe617c509.mp3",
+      "bytes": 20112,
+      "sha256": "430915378d55d505c3ea7802671f9f89e8cd5df4360de474150096b94b9de03f",
+      "duration": 2.368,
+      "peak": 0.3384,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh cool clean water.",
+      "file": "kokoro-afheart-v1/cbbe70307b581480d78e.mp3",
+      "bytes": 19056,
+      "sha256": "7412f394a188dbe64a5a7c3db75b408296e968a402606b9bf523abac001992cf",
+      "duration": 2.24,
+      "peak": 0.3957,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near the fresh cool clean water.",
+      "file": "kokoro-afheart-v1/2ab43b818f19033df483.mp3",
+      "bytes": 22392,
+      "sha256": "5143bfb96ce4174dad976e9e3167354fb8bd7f56a5617df74b291acb6f89f854",
+      "duration": 2.56,
+      "peak": 0.4223,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near the fresh cool clean water.",
+      "file": "kokoro-afheart-v1/4f982f877a9c1beaa98f.mp3",
+      "bytes": 21888,
+      "sha256": "08ecaa986758f99b15ed34c9b5dd14303006ff1c57c1b2f31d9917e6fbe33718",
+      "duration": 2.56,
+      "peak": 0.4999,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh cool clean water today.",
+      "file": "kokoro-afheart-v1/ceb0f59b64ee8531da79.mp3",
+      "bytes": 23304,
+      "sha256": "55bc4b25d186e5c645469cbe3d8e0b3dbdb15e5df5f493e7d8ce36f6472e1bd0",
+      "duration": 2.645,
+      "peak": 0.3996,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the fresh cool clean water often.",
+      "file": "kokoro-afheart-v1/abe9ae566d693c41b0ab.mp3",
+      "bytes": 23304,
+      "sha256": "f3a45bfde3c421e839da672b3f6c046fd09f9dfccede43095b7ccfced7162b10",
+      "duration": 2.731,
+      "peak": 0.3827,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a friend.",
+      "file": "kokoro-afheart-v1/dfb6c745fad64c35cccd.mp3",
+      "bytes": 12888,
+      "sha256": "4d0f4eb7b41731770786f8002733dfabceb2b911e04645233dc68e7439368948",
+      "duration": 1.472,
+      "peak": 0.3604,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near a friend.",
+      "file": "kokoro-afheart-v1/d0a0a0853641e81be250.mp3",
+      "bytes": 14352,
+      "sha256": "1859d01c2eff389ac2617cef1cdee12273b5662a10f1ef06b4d883ab2fe9254f",
+      "duration": 1.728,
+      "peak": 0.4502,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near a friend.",
+      "file": "kokoro-afheart-v1/97a67471cf3bf3e5f9b5.mp3",
+      "bytes": 14880,
+      "sha256": "28bdba74e1759ba9df9e4ae371431d3bcf2cd409e2e50cd6baa4630d4634e3ca",
+      "duration": 1.749,
+      "peak": 0.3968,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a friend today.",
+      "file": "kokoro-afheart-v1/9c292c46dd25070dc510.mp3",
+      "bytes": 14592,
+      "sha256": "87e9864b0c45d13d4e7c6ac0b121fc8ceed8c91c55b343b25adb9403d474418b",
+      "duration": 1.685,
+      "peak": 0.4652,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a friend often.",
+      "file": "kokoro-afheart-v1/a094fb77f05cf1f7ed3e.mp3",
+      "bytes": 14856,
+      "sha256": "eddcf6ec53660c32a5c5388fd50f9780afcedb0addab421c35cfeefac6fc63e7",
+      "duration": 1.728,
+      "peak": 0.3646,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young friend.",
+      "file": "kokoro-afheart-v1/a6c54b07c83b6f71a5fb.mp3",
+      "bytes": 13680,
+      "sha256": "b92609ed4b04e7feb8f390a8db86deaaa5a57f67fdb7620a6fa804bb2992c6f6",
+      "duration": 1.579,
+      "peak": 0.4183,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near a young friend.",
+      "file": "kokoro-afheart-v1/5fe16cb99deec839c18f.mp3",
+      "bytes": 16056,
+      "sha256": "c17665b9d7f83349e01df355c97111247056d5298cdee90664cbb65e696220d2",
+      "duration": 1.92,
+      "peak": 0.3917,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near a young friend.",
+      "file": "kokoro-afheart-v1/976e49e865586ae15caa.mp3",
+      "bytes": 15768,
+      "sha256": "05a569fccb9911ab950df5c8f51f74a4e21dc7130ecbd64034883690df360b4e",
+      "duration": 1.92,
+      "peak": 0.3675,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young friend today.",
+      "file": "kokoro-afheart-v1/6d81ba5d12e4b1a8bf92.mp3",
+      "bytes": 17424,
+      "sha256": "c819f6575386c2f7a23f35166f12664e75436c01c56b25999a071c971d8ee167",
+      "duration": 1.92,
+      "peak": 0.3684,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young friend often.",
+      "file": "kokoro-afheart-v1/b85c01bc9a0b35f504ac.mp3",
+      "bytes": 17088,
+      "sha256": "a316837ab08edb9e1f6ab1ebc164aa09f728e8baa74c771469f468dc1af591a0",
+      "duration": 2.005,
+      "peak": 0.3408,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young helpful friend.",
+      "file": "kokoro-afheart-v1/4be400f9ba8f5234298b.mp3",
+      "bytes": 18528,
+      "sha256": "cc7607735a3cc665afe717d87a115e1534e99ffa3ec0b0a6ba28683f16dd4334",
+      "duration": 2.176,
+      "peak": 0.3876,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near a young helpful friend.",
+      "file": "kokoro-afheart-v1/a9efe96caa75df2e2255.mp3",
+      "bytes": 20544,
+      "sha256": "085bde4d9471002c25a1b60c6e995ecb0de378b12a64d09d0c0f5df529b73356",
+      "duration": 2.411,
+      "peak": 0.3798,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near a young helpful friend.",
+      "file": "kokoro-afheart-v1/b6222014dd72b0095f94.mp3",
+      "bytes": 20736,
+      "sha256": "d8ca1c1da4a0f5585f5368273045a9770e67f840b7d100302d7e5cb122afb67a",
+      "duration": 2.432,
+      "peak": 0.4922,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young helpful friend today.",
+      "file": "kokoro-afheart-v1/5a1c1b0f7fefdcee1302.mp3",
+      "bytes": 21432,
+      "sha256": "8f0b26976d07102127f75cccbb5b224d52185d860f759c9af0f94f2fcb2ae4ff",
+      "duration": 2.453,
+      "peak": 0.4303,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young helpful friend often.",
+      "file": "kokoro-afheart-v1/4bb6854f8d04bd5416df.mp3",
+      "bytes": 21168,
+      "sha256": "2648661c405f6bdb8c3bfcfad84140246db70f8fd36f1431d7cab8e395640a44",
+      "duration": 2.581,
+      "peak": 0.3911,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young helpful kind friend.",
+      "file": "kokoro-afheart-v1/e3e2dace15e314efba6c.mp3",
+      "bytes": 21792,
+      "sha256": "eb61b98a19194206a89497b4982a170b7e97e541cd1111a0f94529cfa585fbef",
+      "duration": 2.539,
+      "peak": 0.4209,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near a young helpful kind friend.",
+      "file": "kokoro-afheart-v1/e5b2f83f4841490f04d9.mp3",
+      "bytes": 24408,
+      "sha256": "bcf8bd554e92425910970fa95392cca293b83f47000f140deec4a4b1a89357b7",
+      "duration": 2.859,
+      "peak": 0.4112,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near a young helpful kind friend.",
+      "file": "kokoro-afheart-v1/632fde5bef847ebe5067.mp3",
+      "bytes": 24048,
+      "sha256": "925660ffc8f27d706496b5c2aba17eb8c70ed1a341cb8f07d269fce3d7dbfc6d",
+      "duration": 2.88,
+      "peak": 0.4775,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young helpful kind friend today.",
+      "file": "kokoro-afheart-v1/b5e83ae57ffad269338d.mp3",
+      "bytes": 23184,
+      "sha256": "e75703474c3ffaaa7b236357758e43b4dd0558435c99adf976f6d40f12e1b1c7",
+      "duration": 2.795,
+      "peak": 0.4872,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a young helpful kind friend often.",
+      "file": "kokoro-afheart-v1/db5e09c59df622500205.mp3",
+      "bytes": 24312,
+      "sha256": "f3958c9d772eae99b0fd57d00045876226f1b31b4c45da6facac0ed551a00b0c",
+      "duration": 2.965,
+      "peak": 0.4175,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our friend.",
+      "file": "kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "bytes": 13560,
+      "sha256": "4376b44d3fd88375b2bf3e79a72eed6d64b88a2affb2366f4287d9d855ed8921",
+      "duration": 1.557,
+      "peak": 0.3847,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our friend.",
+      "file": "kokoro-afheart-v1/72208d2f51c5fd4479d0.mp3",
+      "bytes": 14544,
+      "sha256": "91d84c57740b1b1dae9bbb2dae51a6a6733fb80892da38d916f10f9f7062106f",
+      "duration": 1.771,
+      "peak": 0.3682,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our friend.",
+      "file": "kokoro-afheart-v1/c807930be22352ec25d3.mp3",
+      "bytes": 14952,
+      "sha256": "2a549c27791c232268058a6b22970cfad7081701f11393d4c7dc1d5693541c5a",
+      "duration": 1.813,
+      "peak": 0.3705,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our friend today.",
+      "file": "kokoro-afheart-v1/9cf38e4fd5a9a94c34f6.mp3",
+      "bytes": 14760,
+      "sha256": "86a9aa264ee5618b25c315333b98b1c14a8adbd1112b8df73597e0ec68a2f1c1",
+      "duration": 1.749,
+      "peak": 0.3855,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our friend often.",
+      "file": "kokoro-afheart-v1/6f7305cd258f82bad3c7.mp3",
+      "bytes": 15744,
+      "sha256": "9bbf0252a8365e4283a92e8fcc0981c3309a0b3b8bcb18602f603e972d3e3bb8",
+      "duration": 1.835,
+      "peak": 0.3505,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young friend.",
+      "file": "kokoro-afheart-v1/07da2f2d641e576eb9e9.mp3",
+      "bytes": 14904,
+      "sha256": "93bc62d77db1df70bd398b040b79a483ef2fd3e1a56249087917cbeafb65378a",
+      "duration": 1.749,
+      "peak": 0.3651,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our young friend.",
+      "file": "kokoro-afheart-v1/eafece0bfa26fe6bb40f.mp3",
+      "bytes": 16104,
+      "sha256": "23f715a3a7303d9a7618cd8f273cfbbf042751e13b074b14cc24feb4a1a011d3",
+      "duration": 1.941,
+      "peak": 0.4352,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our young friend.",
+      "file": "kokoro-afheart-v1/535fe30f8f6d1645ad1a.mp3",
+      "bytes": 16752,
+      "sha256": "de0ef2a9efe55331ead47517fe0d06a0c5793227076cc39dbb392aa84e96488c",
+      "duration": 1.984,
+      "peak": 0.3829,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young friend today.",
+      "file": "kokoro-afheart-v1/549fc1017575df869a10.mp3",
+      "bytes": 16560,
+      "sha256": "19d5818beb48e1c935bba362462bd28835bb3bced375715b9d34f9b48ea3e3f9",
+      "duration": 1.941,
+      "peak": 0.4066,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young friend often.",
+      "file": "kokoro-afheart-v1/90eccd2991330875956a.mp3",
+      "bytes": 17064,
+      "sha256": "83e052fd1c9eb32333a9cf69810c5eaccb1372d731fa5cf8fa90d5a2f46de4df",
+      "duration": 2.048,
+      "peak": 0.3441,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young helpful friend.",
+      "file": "kokoro-afheart-v1/d68d734a980e0191487c.mp3",
+      "bytes": 17616,
+      "sha256": "fd50d353685409d3c7897a84e49e0fbe1c47c3ddb2acc25567cf80d2c9099e4d",
+      "duration": 2.133,
+      "peak": 0.332,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our young helpful friend.",
+      "file": "kokoro-afheart-v1/273305317249fcbdbdb9.mp3",
+      "bytes": 20376,
+      "sha256": "9f83f667fe01b13de3210b9dcb996261e929b3ae0eeec2ab617fedd83b64c5d1",
+      "duration": 2.603,
+      "peak": 0.4154,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our young helpful friend.",
+      "file": "kokoro-afheart-v1/2e10fe733ddb9a62823a.mp3",
+      "bytes": 20184,
+      "sha256": "0d26fb6c5763a40565d98db1512d3e01ed7957a5873ac87477c1564c93ad1594",
+      "duration": 2.453,
+      "peak": 0.372,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young helpful friend today.",
+      "file": "kokoro-afheart-v1/f956aa879c25813fcc8b.mp3",
+      "bytes": 19824,
+      "sha256": "bd6470438c75b27b45c161f4c6e643a9ca03e9356c85f0d917a4a16b14950d9c",
+      "duration": 2.432,
+      "peak": 0.3696,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young helpful friend often.",
+      "file": "kokoro-afheart-v1/f1d9a85f9e7f53ab962c.mp3",
+      "bytes": 20616,
+      "sha256": "b13d2fa317cfc20c2de63605f8945b93b130a55f7fa316a138001b00072121f9",
+      "duration": 2.453,
+      "peak": 0.3401,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young helpful kind friend.",
+      "file": "kokoro-afheart-v1/190822a1da31ebf9aad1.mp3",
+      "bytes": 21072,
+      "sha256": "b270e6247aab9471995fa1ec8b82383321b2d312cc133f4efe1841ba8b1a9aa5",
+      "duration": 2.56,
+      "peak": 0.4079,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our young helpful kind friend.",
+      "file": "kokoro-afheart-v1/d3dfc1dc777e4e7372b3.mp3",
+      "bytes": 23880,
+      "sha256": "0500307b06ce04d5c50923d2f08849acb999fb7175a020c33596a6e01fce6df0",
+      "duration": 2.965,
+      "peak": 0.4259,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our young helpful kind friend.",
+      "file": "kokoro-afheart-v1/ffc15d9a4161d9cb5612.mp3",
+      "bytes": 23592,
+      "sha256": "ac63bdaa1c7daeee65f8230cc10be7e0fd2c12998c9908d26399c5d1be9042ae",
+      "duration": 2.837,
+      "peak": 0.3571,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young helpful kind friend today.",
+      "file": "kokoro-afheart-v1/0877c4b85f45d84b08a7.mp3",
+      "bytes": 23232,
+      "sha256": "f0075198019e8d4bfa6419a0186537a4d028324c877aedd38ab5a90df6d945ac",
+      "duration": 2.795,
+      "peak": 0.4054,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our young helpful kind friend often.",
+      "file": "kokoro-afheart-v1/2a6bf215b60ac1ca60a1.mp3",
+      "bytes": 23976,
+      "sha256": "73863859fea8c620ff68d12f1cd891d91bce65db0580bf4c80b13bd517a19595",
+      "duration": 2.88,
+      "peak": 0.336,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our water.",
+      "file": "kokoro-afheart-v1/f4a21e8d26131d855332.mp3",
+      "bytes": 13056,
+      "sha256": "b13a2098f94cee83e894948cb7e334269cc68ef636d6900a585a7af86fc434c0",
+      "duration": 1.557,
+      "peak": 0.4231,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our water.",
+      "file": "kokoro-afheart-v1/f8689f5ae1dd7680fb5d.mp3",
+      "bytes": 15528,
+      "sha256": "6af0c854b6506dca67cb3b05e334779ba5010518c6ffa4518f43d0a6c114cafd",
+      "duration": 1.813,
+      "peak": 0.4621,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our water.",
+      "file": "kokoro-afheart-v1/346f0f0090879b87404f.mp3",
+      "bytes": 15000,
+      "sha256": "34cad6a4635049f9dc0434fa6ec98b8b5ff8ac7ef8ae1234000a27eec93534a6",
+      "duration": 1.813,
+      "peak": 0.3863,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our water today.",
+      "file": "kokoro-afheart-v1/16e48ec0f6c78599a44f.mp3",
+      "bytes": 15984,
+      "sha256": "fe3670850ea329fdc101bcf9276443de69930cb7ac213f8f118d4a078fafad9c",
+      "duration": 1.877,
+      "peak": 0.3756,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our water often.",
+      "file": "kokoro-afheart-v1/838754092ac1da467525.mp3",
+      "bytes": 16032,
+      "sha256": "fa16251ae87e22e7a123bd851bc86e343484065582753f4806d698c117a77a00",
+      "duration": 1.899,
+      "peak": 0.3072,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh water.",
+      "file": "kokoro-afheart-v1/fd716901cb3b341e126c.mp3",
+      "bytes": 14832,
+      "sha256": "c1da1337e341f3a16a18097760c06f592e71bbfbb25d5de178230a9b2ffc9cd7",
+      "duration": 1.813,
+      "peak": 0.3641,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our fresh water.",
+      "file": "kokoro-afheart-v1/9da9d48993004ca4c133.mp3",
+      "bytes": 16584,
+      "sha256": "6bc61442681b4d47a478b323ee08c19e1f1665011ea0339551d24930100b03f8",
+      "duration": 2.005,
+      "peak": 0.4406,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our fresh water.",
+      "file": "kokoro-afheart-v1/3b5af833d5ab7da3a982.mp3",
+      "bytes": 16968,
+      "sha256": "0ee2bf917c77f28a8e08e48b08de72ab631a8b9fab8ffc74084f31cea174fc03",
+      "duration": 2.027,
+      "peak": 0.4183,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh water today.",
+      "file": "kokoro-afheart-v1/52f832d872b5b01a1f91.mp3",
+      "bytes": 18072,
+      "sha256": "c47eceadd505e2744d2d2b7969a8453afff64b2933ec2531b63877a1b59d4a5c",
+      "duration": 2.027,
+      "peak": 0.3654,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh water often.",
+      "file": "kokoro-afheart-v1/58f64438a95479d29b7d.mp3",
+      "bytes": 18240,
+      "sha256": "ab1e8d21d11487a0b44ccc2f397f92edfa730020925852de03fd39cf15a95f5c",
+      "duration": 2.048,
+      "peak": 0.3311,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh cool water.",
+      "file": "kokoro-afheart-v1/e99b653379e5cd10cb1c.mp3",
+      "bytes": 16464,
+      "sha256": "1e6b6f0951d23da80cdd69f06eff92aaf4cf13fbef49834d0690b8b3cd3191ff",
+      "duration": 1.941,
+      "peak": 0.4627,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our fresh cool water.",
+      "file": "kokoro-afheart-v1/4af809d9016ff604d840.mp3",
+      "bytes": 19008,
+      "sha256": "64ea46efc2e5fbbbde3c74d805d609277f33b3fca8e83ba43a2286ca1aaeff58",
+      "duration": 2.219,
+      "peak": 0.3483,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our fresh cool water.",
+      "file": "kokoro-afheart-v1/c22824a6e4b5b574db1c.mp3",
+      "bytes": 19656,
+      "sha256": "333b84d29d5601c0019224d582f9b9666a69d0a7e3474e6871a2f7629f083c19",
+      "duration": 2.197,
+      "peak": 0.4501,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh cool water today.",
+      "file": "kokoro-afheart-v1/d06c721f25743e09bdbe.mp3",
+      "bytes": 19200,
+      "sha256": "b7288e269f29f227ceb9d145ca85dba10211626db07ff98ed5296ec8b752f188",
+      "duration": 2.283,
+      "peak": 0.3414,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh cool water often.",
+      "file": "kokoro-afheart-v1/70dcd7643604f51d27b6.mp3",
+      "bytes": 20160,
+      "sha256": "8ebbbb100e848de94cfec1eeb2adaaf743ea62b85be43f5de2d3ef8ae5393017",
+      "duration": 2.347,
+      "peak": 0.3452,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh cool clean water.",
+      "file": "kokoro-afheart-v1/f2c2ff6ad728d87c278d.mp3",
+      "bytes": 19320,
+      "sha256": "08d16c57a1a7874681c37a1da04c6a91ba06655c8ade899e51927d539689619b",
+      "duration": 2.261,
+      "peak": 0.3603,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work today near our fresh cool clean water.",
+      "file": "kokoro-afheart-v1/fcd58b6a91f5dfc857ff.mp3",
+      "bytes": 21720,
+      "sha256": "ae7cf54f9d7bc666744e25cfab593ac2db4d92eacf1209798194623f19e9d741",
+      "duration": 2.56,
+      "peak": 0.394,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work often near our fresh cool clean water.",
+      "file": "kokoro-afheart-v1/661e8a565114214f53f3.mp3",
+      "bytes": 22152,
+      "sha256": "c2ff3cffe8046148227c7641b6a62793aca75e417783156833601019867d2750",
+      "duration": 2.517,
+      "peak": 0.3504,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh cool clean water today.",
+      "file": "kokoro-afheart-v1/f3bd1e18c17b15d6d3ce.mp3",
+      "bytes": 22368,
+      "sha256": "249124c8b9f6d28a9086be28edf0741edf807b6245f1e951523cd60b8b01d44e",
+      "duration": 2.581,
+      "peak": 0.4075,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near our fresh cool clean water often.",
+      "file": "kokoro-afheart-v1/78cf73838eabad0385dd.mp3",
+      "bytes": 22536,
+      "sha256": "d74be6246493a549a828f54873df95ea3d498643293c2e366d522e0cc44ceeb2",
+      "duration": 2.688,
+      "peak": 0.3393,
+      "sampleRate": 24000
     }
   ]
 }

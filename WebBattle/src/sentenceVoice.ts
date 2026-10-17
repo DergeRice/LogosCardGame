@@ -7,16 +7,16 @@ let manifest:Promise<Map<string,Entry>>|undefined;
 export function preloadSentenceVoice(){
  if(manifest)return manifest;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6000);
- return manifest=fetch('/audio/sentences/manifest.json',{signal:controller.signal}).then(async r=>{
+ return manifest=fetch('/audio/sentences/manifest.json',{signal:controller.signal,cache:'no-cache'}).then(async r=>{
   if(!r.ok)throw Error('Sentence manifest unavailable');
   const data=await r.json() as {entries:Entry[]};
   return new Map(data.entries.map(e=>[normalizeSpeechText(e.text),e]));
  }).catch(()=>{manifest=undefined;return new Map<string,Entry>()}).finally(()=>clearTimeout(timer));
 }
 export type VoiceCode='loading'|'playing'|'ended'|'blocked'|'missing'|'network'|'decode'|'unsupported'|'timeout'|'cancelled';
-export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number};
+export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number;sentence?:string;stage?:string};
 const files=new Map<string,Promise<{bytes:ArrayBuffer;url:string}>>();
-class VoiceError extends Error{constructor(public code:VoiceCode,public http?:number){super(code)}}
+class VoiceError extends Error{constructor(public code:VoiceCode,public http?:number,public url?:string){super(code)}}
 async function sentenceFile(text:string){
  const normalized=normalizeSpeechText(text),entries=await preloadSentenceVoice(),entry=entries.get(normalized);
  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('kokoro-v1.0/af_heart/1.0/'+normalized));
@@ -25,8 +25,8 @@ async function sentenceFile(text:string){
 }
 export function prefetchSentenceAudio(text:string){
  const key=normalizeSpeechText(text);let task=files.get(key);if(task)return task;
- task=(async()=>{const url=await sentenceFile(text),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
- try{const response=await fetch(url,{signal:controller.signal});if(!response.ok)throw new VoiceError(response.status===404?'missing':'network',response.status);const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw new VoiceError('decode');return {bytes,url};}
+ task=(async()=>{let url=await sentenceFile(text);const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+ try{let response=await fetch(url,{signal:controller.signal});if(response.status===404){manifest=undefined;const refreshed=await sentenceFile(text);if(refreshed!==url){url=refreshed;response=await fetch(url,{signal:controller.signal});}}if(!response.ok)throw new VoiceError(response.status===404?'missing':'network',response.status,url);const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw new VoiceError('decode');return {bytes,url};}
  catch(error){if(error instanceof VoiceError)throw error;throw new VoiceError(controller.signal.aborted?'timeout':'network');}finally{clearTimeout(timer)}
  })().catch(error=>{files.delete(key);throw error});files.set(key,task);if(files.size>24)files.delete(files.keys().next().value!);return task;
 }
@@ -34,14 +34,14 @@ export function prefetchSentenceAudio(text:string){
 export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,onStatus?:(state:VoiceStatus)=>void){
  let watchdog:ReturnType<typeof setTimeout>|undefined;let source:AudioBufferSourceNode|null=null,cancelled=false,settle:(()=>void)|undefined;
  const started=performance.now(),ctx=unlockGameAudio(); // Synchronously inside a replay tap when permission is needed.
- const report=(code:VoiceCode,details:Partial<VoiceStatus>={})=>{if(!cancelled){const state={code,context:ctx?.state,elapsedMs:Math.round(performance.now()-started),...details};onStatus?.(state);window.dispatchEvent(new CustomEvent('logos-voice-status',{detail:state}));}};
+ const report=(code:VoiceCode,details:Partial<VoiceStatus>={})=>{if(!cancelled){const state={code,sentence:normalizeSpeechText(text),context:ctx?.state,elapsedMs:Math.round(performance.now()-started),...details};onStatus?.(state);window.dispatchEvent(new CustomEvent('logos-voice-status',{detail:state}));}};
  const done=(async()=>{
  try{
   report('loading');if(!ctx)throw new VoiceError('unsupported');
   const file=await prefetchSentenceAudio(text);if(cancelled)return;
   if(ctx.state!=='running'){void ctx.resume().catch(()=>{});await Promise.race([new Promise<void>(resolve=>{const check=()=>{if(ctx.state==='running'){ctx.removeEventListener('statechange',check);resolve()}};ctx.addEventListener('statechange',check);setTimeout(()=>{ctx.removeEventListener('statechange',check);resolve()},1200);check()}),new Promise<void>(resolve=>setTimeout(resolve,1300))]);}
   if(cancelled)return;if(ctx.state!=='running')throw new VoiceError('blocked');
-  let buffer:AudioBuffer;try{buffer=await ctx.decodeAudioData(file.bytes.slice(0))}catch{throw new VoiceError('decode')}
+  let buffer:AudioBuffer;try{buffer=await new Promise<AudioBuffer>((resolve,reject)=>{const timer=setTimeout(()=>reject(new VoiceError('timeout',undefined,file.url)),5000);ctx.decodeAudioData(file.bytes.slice(0)).then(value=>{clearTimeout(timer);resolve(value)},()=>{clearTimeout(timer);reject(new VoiceError('decode',undefined,file.url))});})}catch(error){throw error instanceof VoiceError?error:new VoiceError('decode',undefined,file.url)}
   if(cancelled)return;if(ctx.state!=='running')throw new VoiceError('blocked');
   if(buffer.duration>30||buffer.duration<=0)throw new VoiceError('decode');
   let peak=0;for(const sample of buffer.getChannelData(0))peak=Math.max(peak,Math.abs(sample));if(peak<.001)throw new VoiceError('decode');
@@ -51,7 +51,7 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
    source.onended=()=>{clearTimeout(timeout);source?.disconnect();if(!cancelled){report('ended',{url:file.url,duration:buffer.duration,peak});onEnd()}resolve()};
    try{source.start();report('playing',{url:file.url,duration:buffer.duration,peak});onStart()}catch{clearTimeout(timeout);reject(new VoiceError('blocked'))}
   });
- }catch(error){if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined});throw error;}
+ }catch(error){if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined,url:error instanceof VoiceError?error.url:undefined});throw error;}
  })();
  return {done,stop(){cancelled=true;clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
 }

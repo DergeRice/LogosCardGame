@@ -87,8 +87,8 @@ export class BattleArena extends DurableObject<Env>{
  async fetch(request:Request):Promise<Response>{
   if(new URL(request.url).pathname.startsWith('/admin/logs')){
    const path=new URL(request.url).pathname,header=request.headers.get('Authorization');
-   const redeem=path==='/admin/logs/access/redeem';
-   if(!redeem&&!adminAuthorized(header,this.env.ADMIN_LOG_TOKEN)&&!this.audit.authorized(header))return Response.json({error:'관리자 접속 인증이 필요합니다.'},{status:401});
+   const redeem=path==='/admin/logs/access/redeem',publicRead=request.method==='GET'&&(path==='/admin/logs'||path==='/admin/logs/sentences');
+   if(!publicRead&&!redeem&&!adminAuthorized(header,this.env.ADMIN_LOG_TOKEN)&&!this.audit.authorized(header))return Response.json({error:'관리자 접속 인증이 필요합니다.'},{status:401});
    return path.startsWith('/admin/logs/access/')?this.audit.access(request):this.audit.handle(request);
   }
   return this.serial(()=>{

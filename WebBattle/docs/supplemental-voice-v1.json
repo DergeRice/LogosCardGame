@@ -1,0 +1,461 @@
+{
+  "scope": "Reported I can work near NP family; full recognized sequences; not an exhaustive language catalog",
+  "entries": [
+    {
+      "english": "I can work today near them.",
+      "key": "pronoun modal verb adverb preposition pronoun"
+    },
+    {
+      "english": "I can work often near them.",
+      "key": "pronoun modal verb frequency preposition pronoun"
+    },
+    {
+      "english": "I can work near them today.",
+      "key": "pronoun modal verb preposition pronoun adverb"
+    },
+    {
+      "english": "I can work near them often.",
+      "key": "pronoun modal verb preposition pronoun frequency"
+    },
+    {
+      "english": "I can work today near water.",
+      "key": "pronoun modal verb adverb preposition mass"
+    },
+    {
+      "english": "I can work often near water.",
+      "key": "pronoun modal verb frequency preposition mass"
+    },
+    {
+      "english": "I can work near water today.",
+      "key": "pronoun modal verb preposition mass adverb"
+    },
+    {
+      "english": "I can work near water often.",
+      "key": "pronoun modal verb preposition mass frequency"
+    },
+    {
+      "english": "I can work near Naro.",
+      "key": "pronoun modal verb preposition proper"
+    },
+    {
+      "english": "I can work today near Naro.",
+      "key": "pronoun modal verb adverb preposition proper"
+    },
+    {
+      "english": "I can work often near Naro.",
+      "key": "pronoun modal verb frequency preposition proper"
+    },
+    {
+      "english": "I can work near Naro today.",
+      "key": "pronoun modal verb preposition proper adverb"
+    },
+    {
+      "english": "I can work near Naro often.",
+      "key": "pronoun modal verb preposition proper frequency"
+    },
+    {
+      "english": "I can work near the friend.",
+      "key": "pronoun modal verb preposition article count"
+    },
+    {
+      "english": "I can work today near the friend.",
+      "key": "pronoun modal verb adverb preposition article count"
+    },
+    {
+      "english": "I can work often near the friend.",
+      "key": "pronoun modal verb frequency preposition article count"
+    },
+    {
+      "english": "I can work near the friend today.",
+      "key": "pronoun modal verb preposition article count adverb"
+    },
+    {
+      "english": "I can work near the friend often.",
+      "key": "pronoun modal verb preposition article count frequency"
+    },
+    {
+      "english": "I can work near the young friend.",
+      "key": "pronoun modal verb preposition article adjective count"
+    },
+    {
+      "english": "I can work today near the young friend.",
+      "key": "pronoun modal verb adverb preposition article adjective count"
+    },
+    {
+      "english": "I can work often near the young friend.",
+      "key": "pronoun modal verb frequency preposition article adjective count"
+    },
+    {
+      "english": "I can work near the young friend today.",
+      "key": "pronoun modal verb preposition article adjective count adverb"
+    },
+    {
+      "english": "I can work near the young friend often.",
+      "key": "pronoun modal verb preposition article adjective count frequency"
+    },
+    {
+      "english": "I can work near the young helpful friend.",
+      "key": "pronoun modal verb preposition article adjective adjective count"
+    },
+    {
+      "english": "I can work today near the young helpful friend.",
+      "key": "pronoun modal verb adverb preposition article adjective adjective count"
+    },
+    {
+      "english": "I can work often near the young helpful friend.",
+      "key": "pronoun modal verb frequency preposition article adjective adjective count"
+    },
+    {
+      "english": "I can work near the young helpful friend today.",
+      "key": "pronoun modal verb preposition article adjective adjective count adverb"
+    },
+    {
+      "english": "I can work near the young helpful friend often.",
+      "key": "pronoun modal verb preposition article adjective adjective count frequency"
+    },
+    {
+      "english": "I can work near the young helpful kind friend.",
+      "key": "pronoun modal verb preposition article adjective adjective adjective count"
+    },
+    {
+      "english": "I can work today near the young helpful kind friend.",
+      "key": "pronoun modal verb adverb preposition article adjective adjective adjective count"
+    },
+    {
+      "english": "I can work often near the young helpful kind friend.",
+      "key": "pronoun modal verb frequency preposition article adjective adjective adjective count"
+    },
+    {
+      "english": "I can work near the young helpful kind friend today.",
+      "key": "pronoun modal verb preposition article adjective adjective adjective count adverb"
+    },
+    {
+      "english": "I can work near the young helpful kind friend often.",
+      "key": "pronoun modal verb preposition article adjective adjective adjective count frequency"
+    },
+    {
+      "english": "I can work near the water.",
+      "key": "pronoun modal verb preposition article mass"
+    },
+    {
+      "english": "I can work today near the water.",
+      "key": "pronoun modal verb adverb preposition article mass"
+    },
+    {
+      "english": "I can work often near the water.",
+      "key": "pronoun modal verb frequency preposition article mass"
+    },
+    {
+      "english": "I can work near the water today.",
+      "key": "pronoun modal verb preposition article mass adverb"
+    },
+    {
+      "english": "I can work near the water often.",
+      "key": "pronoun modal verb preposition article mass frequency"
+    },
+    {
+      "english": "I can work near the fresh water.",
+      "key": "pronoun modal verb preposition article adjective mass"
+    },
+    {
+      "english": "I can work today near the fresh water.",
+      "key": "pronoun modal verb adverb preposition article adjective mass"
+    },
+    {
+      "english": "I can work often near the fresh water.",
+      "key": "pronoun modal verb frequency preposition article adjective mass"
+    },
+    {
+      "english": "I can work near the fresh water today.",
+      "key": "pronoun modal verb preposition article adjective mass adverb"
+    },
+    {
+      "english": "I can work near the fresh water often.",
+      "key": "pronoun modal verb preposition article adjective mass frequency"
+    },
+    {
+      "english": "I can work near the fresh cool water.",
+      "key": "pronoun modal verb preposition article adjective adjective mass"
+    },
+    {
+      "english": "I can work today near the fresh cool water.",
+      "key": "pronoun modal verb adverb preposition article adjective adjective mass"
+    },
+    {
+      "english": "I can work often near the fresh cool water.",
+      "key": "pronoun modal verb frequency preposition article adjective adjective mass"
+    },
+    {
+      "english": "I can work near the fresh cool water today.",
+      "key": "pronoun modal verb preposition article adjective adjective mass adverb"
+    },
+    {
+      "english": "I can work near the fresh cool water often.",
+      "key": "pronoun modal verb preposition article adjective adjective mass frequency"
+    },
+    {
+      "english": "I can work near the fresh cool clean water.",
+      "key": "pronoun modal verb preposition article adjective adjective adjective mass"
+    },
+    {
+      "english": "I can work today near the fresh cool clean water.",
+      "key": "pronoun modal verb adverb preposition article adjective adjective adjective mass"
+    },
+    {
+      "english": "I can work often near the fresh cool clean water.",
+      "key": "pronoun modal verb frequency preposition article adjective adjective adjective mass"
+    },
+    {
+      "english": "I can work near the fresh cool clean water today.",
+      "key": "pronoun modal verb preposition article adjective adjective adjective mass adverb"
+    },
+    {
+      "english": "I can work near the fresh cool clean water often.",
+      "key": "pronoun modal verb preposition article adjective adjective adjective mass frequency"
+    },
+    {
+      "english": "I can work near a friend.",
+      "key": "pronoun modal verb preposition indefinite count"
+    },
+    {
+      "english": "I can work today near a friend.",
+      "key": "pronoun modal verb adverb preposition indefinite count"
+    },
+    {
+      "english": "I can work often near a friend.",
+      "key": "pronoun modal verb frequency preposition indefinite count"
+    },
+    {
+      "english": "I can work near a friend today.",
+      "key": "pronoun modal verb preposition indefinite count adverb"
+    },
+    {
+      "english": "I can work near a friend often.",
+      "key": "pronoun modal verb preposition indefinite count frequency"
+    },
+    {
+      "english": "I can work near a young friend.",
+      "key": "pronoun modal verb preposition indefinite adjective count"
+    },
+    {
+      "english": "I can work today near a young friend.",
+      "key": "pronoun modal verb adverb preposition indefinite adjective count"
+    },
+    {
+      "english": "I can work often near a young friend.",
+      "key": "pronoun modal verb frequency preposition indefinite adjective count"
+    },
+    {
+      "english": "I can work near a young friend today.",
+      "key": "pronoun modal verb preposition indefinite adjective count adverb"
+    },
+    {
+      "english": "I can work near a young friend often.",
+      "key": "pronoun modal verb preposition indefinite adjective count frequency"
+    },
+    {
+      "english": "I can work near a young helpful friend.",
+      "key": "pronoun modal verb preposition indefinite adjective adjective count"
+    },
+    {
+      "english": "I can work today near a young helpful friend.",
+      "key": "pronoun modal verb adverb preposition indefinite adjective adjective count"
+    },
+    {
+      "english": "I can work often near a young helpful friend.",
+      "key": "pronoun modal verb frequency preposition indefinite adjective adjective count"
+    },
+    {
+      "english": "I can work near a young helpful friend today.",
+      "key": "pronoun modal verb preposition indefinite adjective adjective count adverb"
+    },
+    {
+      "english": "I can work near a young helpful friend often.",
+      "key": "pronoun modal verb preposition indefinite adjective adjective count frequency"
+    },
+    {
+      "english": "I can work near a young helpful kind friend.",
+      "key": "pronoun modal verb preposition indefinite adjective adjective adjective count"
+    },
+    {
+      "english": "I can work today near a young helpful kind friend.",
+      "key": "pronoun modal verb adverb preposition indefinite adjective adjective adjective count"
+    },
+    {
+      "english": "I can work often near a young helpful kind friend.",
+      "key": "pronoun modal verb frequency preposition indefinite adjective adjective adjective count"
+    },
+    {
+      "english": "I can work near a young helpful kind friend today.",
+      "key": "pronoun modal verb preposition indefinite adjective adjective adjective count adverb"
+    },
+    {
+      "english": "I can work near a young helpful kind friend often.",
+      "key": "pronoun modal verb preposition indefinite adjective adjective adjective count frequency"
+    },
+    {
+      "english": "I can work near our friend.",
+      "key": "pronoun modal verb preposition possessive count"
+    },
+    {
+      "english": "I can work today near our friend.",
+      "key": "pronoun modal verb adverb preposition possessive count"
+    },
+    {
+      "english": "I can work often near our friend.",
+      "key": "pronoun modal verb frequency preposition possessive count"
+    },
+    {
+      "english": "I can work near our friend today.",
+      "key": "pronoun modal verb preposition possessive count adverb"
+    },
+    {
+      "english": "I can work near our friend often.",
+      "key": "pronoun modal verb preposition possessive count frequency"
+    },
+    {
+      "english": "I can work near our young friend.",
+      "key": "pronoun modal verb preposition possessive adjective count"
+    },
+    {
+      "english": "I can work today near our young friend.",
+      "key": "pronoun modal verb adverb preposition possessive adjective count"
+    },
+    {
+      "english": "I can work often near our young friend.",
+      "key": "pronoun modal verb frequency preposition possessive adjective count"
+    },
+    {
+      "english": "I can work near our young friend today.",
+      "key": "pronoun modal verb preposition possessive adjective count adverb"
+    },
+    {
+      "english": "I can work near our young friend often.",
+      "key": "pronoun modal verb preposition possessive adjective count frequency"
+    },
+    {
+      "english": "I can work near our young helpful friend.",
+      "key": "pronoun modal verb preposition possessive adjective adjective count"
+    },
+    {
+      "english": "I can work today near our young helpful friend.",
+      "key": "pronoun modal verb adverb preposition possessive adjective adjective count"
+    },
+    {
+      "english": "I can work often near our young helpful friend.",
+      "key": "pronoun modal verb frequency preposition possessive adjective adjective count"
+    },
+    {
+      "english": "I can work near our young helpful friend today.",
+      "key": "pronoun modal verb preposition possessive adjective adjective count adverb"
+    },
+    {
+      "english": "I can work near our young helpful friend often.",
+      "key": "pronoun modal verb preposition possessive adjective adjective count frequency"
+    },
+    {
+      "english": "I can work near our young helpful kind friend.",
+      "key": "pronoun modal verb preposition possessive adjective adjective adjective count"
+    },
+    {
+      "english": "I can work today near our young helpful kind friend.",
+      "key": "pronoun modal verb adverb preposition possessive adjective adjective adjective count"
+    },
+    {
+      "english": "I can work often near our young helpful kind friend.",
+      "key": "pronoun modal verb frequency preposition possessive adjective adjective adjective count"
+    },
+    {
+      "english": "I can work near our young helpful kind friend today.",
+      "key": "pronoun modal verb preposition possessive adjective adjective adjective count adverb"
+    },
+    {
+      "english": "I can work near our young helpful kind friend often.",
+      "key": "pronoun modal verb preposition possessive adjective adjective adjective count frequency"
+    },
+    {
+      "english": "I can work near our water.",
+      "key": "pronoun modal verb preposition possessive mass"
+    },
+    {
+      "english": "I can work today near our water.",
+      "key": "pronoun modal verb adverb preposition possessive mass"
+    },
+    {
+      "english": "I can work often near our water.",
+      "key": "pronoun modal verb frequency preposition possessive mass"
+    },
+    {
+      "english": "I can work near our water today.",
+      "key": "pronoun modal verb preposition possessive mass adverb"
+    },
+    {
+      "english": "I can work near our water often.",
+      "key": "pronoun modal verb preposition possessive mass frequency"
+    },
+    {
+      "english": "I can work near our fresh water.",
+      "key": "pronoun modal verb preposition possessive adjective mass"
+    },
+    {
+      "english": "I can work today near our fresh water.",
+      "key": "pronoun modal verb adverb preposition possessive adjective mass"
+    },
+    {
+      "english": "I can work often near our fresh water.",
+      "key": "pronoun modal verb frequency preposition possessive adjective mass"
+    },
+    {
+      "english": "I can work near our fresh water today.",
+      "key": "pronoun modal verb preposition possessive adjective mass adverb"
+    },
+    {
+      "english": "I can work near our fresh water often.",
+      "key": "pronoun modal verb preposition possessive adjective mass frequency"
+    },
+    {
+      "english": "I can work near our fresh cool water.",
+      "key": "pronoun modal verb preposition possessive adjective adjective mass"
+    },
+    {
+      "english": "I can work today near our fresh cool water.",
+      "key": "pronoun modal verb adverb preposition possessive adjective adjective mass"
+    },
+    {
+      "english": "I can work often near our fresh cool water.",
+      "key": "pronoun modal verb frequency preposition possessive adjective adjective mass"
+    },
+    {
+      "english": "I can work near our fresh cool water today.",
+      "key": "pronoun modal verb preposition possessive adjective adjective mass adverb"
+    },
+    {
+      "english": "I can work near our fresh cool water often.",
+      "key": "pronoun modal verb preposition possessive adjective adjective mass frequency"
+    },
+    {
+      "english": "I can work near our fresh cool clean water.",
+      "key": "pronoun modal verb preposition possessive adjective adjective adjective mass"
+    },
+    {
+      "english": "I can work today near our fresh cool clean water.",
+      "key": "pronoun modal verb adverb preposition possessive adjective adjective adjective mass"
+    },
+    {
+      "english": "I can work often near our fresh cool clean water.",
+      "key": "pronoun modal verb frequency preposition possessive adjective adjective adjective mass"
+    },
+    {
+      "english": "I can work near our fresh cool clean water today.",
+      "key": "pronoun modal verb preposition possessive adjective adjective adjective mass adverb"
+    },
+    {
+      "english": "I can work near our fresh cool clean water often.",
+      "key": "pronoun modal verb preposition possessive adjective adjective adjective mass frequency"
+    },
+    {
+      "english": "I can work near our friends.",
+      "key": "reported-exact-plural"
+    }
+  ]
+}

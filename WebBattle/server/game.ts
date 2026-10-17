@@ -442,7 +442,7 @@ export class Game {
  }
  handle(p: Player, msg: Record<string, unknown>) {
   p.touchedAt = Date.now(); this.tick();
-  if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'?'warn':'info',msg);}return;}
+  if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'||msg.code==='AUDIO_FAILURE'?'warn':'info',msg);}return;}
   if(msg.type!=='ping')this.audit(p,'request','info',msg);
   if(msg.type==='register'||msg.type==='login')return this.authenticate(p,msg);
   if(msg.type==='logout')return this.logout(p);
