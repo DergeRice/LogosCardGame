@@ -299,5 +299,89 @@
   "browserVersions": {
     "windowsChromium": "153.0.8010.12",
     "windowsInstalledChrome": "85.0.4183.121"
+  },
+  "productionSmoke": {
+    "at": "2026-10-17T15:08:25.728Z",
+    "physicalHandsets": false,
+    "results": [
+      {
+        "mode": "windows-chromium",
+        "version": "153.0.8010.12",
+        "text": "I work.",
+        "state": {
+          "code": "ended",
+          "context": "running",
+          "elapsedMs": "1902",
+          "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+          "duration": "0.9599773242630385",
+          "peak": "0.3958498537540436"
+        }
+      },
+      {
+        "mode": "windows-chromium",
+        "version": "153.0.8010.12",
+        "text": "A teacher can work.",
+        "state": {
+          "code": "ended",
+          "context": "running",
+          "elapsedMs": "2055",
+          "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+          "duration": "1.365328798185941",
+          "peak": "0.35637161135673523"
+        }
+      },
+      {
+        "mode": "windows-installed-chrome",
+        "version": "85.0.4183.121",
+        "text": "I work.",
+        "state": {
+          "code": "ended",
+          "context": "running",
+          "elapsedMs": "1795",
+          "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+          "duration": "0.9599773242630385",
+          "peak": "0.39586177468299866"
+        }
+      },
+      {
+        "mode": "windows-installed-chrome",
+        "version": "85.0.4183.121",
+        "text": "A teacher can work.",
+        "state": {
+          "code": "ended",
+          "context": "running",
+          "elapsedMs": "1955",
+          "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+          "duration": "1.365328798185941",
+          "peak": "0.35637953877449036"
+        }
+      },
+      {
+        "mode": "android-chromium-emulated",
+        "version": "153.0.8010.12",
+        "text": "I work.",
+        "state": {
+          "code": "ended",
+          "context": "running",
+          "elapsedMs": "1575",
+          "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+          "duration": "0.9599773242630385",
+          "peak": "0.3958498537540436"
+        }
+      },
+      {
+        "mode": "android-chromium-emulated",
+        "version": "153.0.8010.12",
+        "text": "A teacher can work.",
+        "state": {
+          "code": "ended",
+          "context": "running",
+          "elapsedMs": "2719",
+          "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+          "duration": "1.365328798185941",
+          "peak": "0.35637161135673523"
+        }
+      }
+    ]
   }
 }

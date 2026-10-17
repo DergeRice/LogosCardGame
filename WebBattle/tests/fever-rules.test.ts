@@ -6,6 +6,16 @@ import {snapshot,restore} from '../server/persistence.js';
 import {matchGold} from '../shared/matchRewards.js';
 import {type Card} from '../shared/rules.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}});
+test('fever counts before the scoring threshold for human and AI, including the final score',()=>{
+ for(const ai of [false,true]){const game=new Game({minimumPlayers:2}),p=game.hello(socket(),null,'A'),other=game.hello(socket(),null,'B');game.quick(p);game.quick(other);const r=game.rooms.get(p.room!)!;game.reveal(r);game.begin(r);r.goCount=2;r.highScore=100;other.score=100;
+  p.hand=[{id:'p',kind:'pronoun',variant:'pronoun-x2'},{id:'v',kind:'verb'},{id:'a',kind:'article'},{id:'n',kind:'count',variant:'count-plus3'},{id:'j',kind:'adjective'}];p.handVersion++;p.nextAI=0;
+  if(ai){p.ai='normal';game.tick()}else game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});
+  assert.equal(p.judgment!.accepted,true);assert.equal(p.score,26);assert.equal(r.phase,'battle');
+  p.actionAt=0;r.goCount=3;p.hand=[{id:'p2',kind:'pronoun',variant:'pronoun-x2'},{id:'v2',kind:'verb'},{id:'a2',kind:'article'},{id:'n2',kind:'count',variant:'count-plus3'},{id:'j2',kind:'adjective'}];p.handVersion++;p.nextAI=0;
+  if(ai)game.tick();else game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});
+  assert.equal(p.score,65);assert.equal(r.phase,'result');assert.equal(r.winner,other.id);
+ }
+});
 test('lead changes hands, buffs apply to every player, third Go waits across restart and next score settles once',t=>{
  let now=100000;t.mock.method(Date,'now',()=>now);
  for(const finisher of ['caller','rival','trailing'] as const)for(const bots of [false,true]){
