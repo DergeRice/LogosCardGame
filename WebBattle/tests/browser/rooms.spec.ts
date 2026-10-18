@@ -8,7 +8,9 @@ test('desktop host and mobile guest share a named room, transfer host and start 
  try{
   await Promise.all([host.goto('/'),guest.goto('/')]);
   await expect(host.getByRole('button',{name:'＋ 방 만들기'})).toBeEnabled({timeout:45000});
-  await expect(guest.getByRole('button',{name:'＋ 방 만들기'})).toBeEnabled({timeout:45000});
+  await expect(guest.getByRole('button',{name:'방 목록',exact:true})).toBeEnabled({timeout:45000});
+  await expect(guest.locator('.hub-rooms')).toHaveCount(0);
+  await guest.getByRole('button',{name:'방 목록',exact:true}).tap();
   const nickname=await host.getByTestId('guest-name').textContent();
   await host.getByRole('button',{name:'＋ 방 만들기'}).click();
   await expect(host.locator('.room-lobby h1')).toHaveText(`${nickname}님의 방`);
@@ -45,8 +47,10 @@ test('room browser stays inside a short mobile visual viewport',async({browser})
  const page=await context.newPage();
  try{
   await page.goto('/');
-  await expect(page.getByRole('button',{name:'＋ 방 만들기'})).toBeEnabled({timeout:45000});
-  const bounds=await page.evaluate(()=>({visualHeight:visualViewport!.height,dialogBottom:document.querySelector('.game-hub')!.getBoundingClientRect().bottom,stageHeight:document.querySelector('.shell')!.getBoundingClientRect().height}));
+  await expect(page.getByRole('button',{name:'방 목록',exact:true})).toBeEnabled({timeout:45000});
+  await expect(page.locator('.hub-rooms')).toHaveCount(0);
+  await page.getByRole('button',{name:'방 목록',exact:true}).click();
+  const bounds=await page.evaluate(()=>({visualHeight:visualViewport!.height,dialogBottom:document.querySelector('.hub-mobile-room-window')!.getBoundingClientRect().bottom,stageHeight:document.querySelector('.shell')!.getBoundingClientRect().height}));
   expect(bounds.stageHeight).toBe(bounds.visualHeight);
   expect(bounds.dialogBottom).toBeLessThanOrEqual(bounds.visualHeight);
  }finally{await context.close();}
