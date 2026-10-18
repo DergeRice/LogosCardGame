@@ -25,7 +25,7 @@ for(const mobile of [false,true])test(`score presentation fixture: ${mobile?'mob
   await expect.poll(()=>p.locator('.sentence-area').evaluate(el=>el.getBoundingClientRect().top+scrollY)).toBeCloseTo(beforeTop,0);
   const values=await p.evaluate(()=>(window as typeof window&{__scoreValues:string[]}).__scoreValues);
   expect(values.every(v=>/^\d+$/.test(v))).toBe(true);expect(values.some(v=>Number(v)>0&&Number(v)<30)).toBe(true);
-  await expect(p.getByTestId('my-score')).toHaveText('30');await p.screenshot({path:'docs/screenshots/v0901-score-'+(mobile?'mobile':'desktop')+'.png'});await expect(p.locator('.sentence-card')).toHaveCount(5);await expect(p.locator('[data-field-id="a"]')).toBeDisabled();await expect(p.locator('.table-feedback-row')).not.toHaveClass(/feedback-active/);await expect(p.locator('.table-player').nth(1).locator('.mini-hand-preview .status-card-block')).toHaveCount(2);await expect(p.locator('.table-player').nth(1).locator('.player-last-action')).toContainText('GET 2 사용');
+  await expect(p.getByTestId('my-score')).toHaveText('30');await p.screenshot({path:'docs/screenshots/v0901-score-'+(mobile?'mobile':'desktop')+'.png'});await expect(p.locator('.sentence-card')).toHaveCount(5);await expect(p.locator('[data-field-id="a"]')).toBeEnabled();await expect(p.locator('.table-feedback-row')).not.toHaveClass(/feedback-active/);await expect(p.locator('.table-player').nth(1).locator('.mini-hand-preview .status-card-block')).toHaveCount(2);await expect(p.locator('.table-player').nth(1).locator('.player-last-action')).toContainText('GET 2 사용');
   expect(errors).toEqual([]);expect(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  }finally{await ctx.close();}
 });

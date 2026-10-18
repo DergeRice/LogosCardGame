@@ -1,0 +1,35 @@
+{
+  "version": "v0.9.71",
+  "staticManifestEntries": 1081,
+  "newRecordings": [
+    {
+      "text": "Does management give the management something?",
+      "file": "kokoro-afheart-v1/37f1029aedf1c57f9344.mp3",
+      "bytes": 24072,
+      "sha256": "da6152687dfd97251d081e63102e8b9b2f58e3dd0f5a6b73587e516f886a3d73",
+      "duration": 2.56,
+      "peak": 0.3653,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the management make them enjoy our management?",
+      "file": "kokoro-afheart-v1/2053dfabb04875e85579.mp3",
+      "bytes": 24720,
+      "sha256": "311734a1312f02cb5edc0c54fc75825394715cb021abf9a343db6a62a9f50f61",
+      "duration": 2.923,
+      "peak": 0.366,
+      "sampleRate": 24000
+    }
+  ],
+  "newFailures": 0,
+  "unitTests": 151,
+  "unitFailures": 0,
+  "finalChromiumBrowserTests": 9,
+  "finalChromiumFailures": 0,
+  "mobileAudioLifecycleTests": 4,
+  "mobileAudioLifecycleFailures": 0,
+  "cloudflareRuntime": "4 real WebSockets, shared deck, dedupe, discard, SQLite restart, consent, forfeit, rematch, rejected origin",
+  "serverVersion": "3c2314d4-eec6-45f8-a50f-7f13ccc7d8ed",
+  "physicalHandsetVerified": false,
+  "fieldScenario": "Two real browser contexts and local WebSocket server, controlled card fixtures; not naturally dealt score proof"
+}

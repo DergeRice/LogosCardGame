@@ -57,7 +57,7 @@ test('opponent field preview follows validated draft order and excludes those ca
  game.syncDraft(a,{matchId:r.matchId,handVersion:a.handVersion,cards:a.hand.map(c=>c.id)});
  game.action(a,{matchId:r.matchId,requestId:randomUUID(),handVersion:a.handVersion,cards:a.hand.map(c=>c.id)});
  publicA=game.view(r,b).players.find(p=>p.id===a.id)!;
- assert.equal(publicA.draftPreview?.length,0);
+ assert.deepEqual(publicA.draftPreview?.map(c=>c.id),cards.map(c=>c.id));
  assert.equal(publicA.playedSentences?.length,1);
 });
 

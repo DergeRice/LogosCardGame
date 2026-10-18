@@ -1,3 +1,4 @@
+import {judgeCards} from '../shared/rules.js';
 import {GUEST_RETENTION_MS} from '../shared/progression.js';
 import {cardEffect} from '../shared/rules.js';
 import { randomUUID } from 'node:crypto';
@@ -37,6 +38,8 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
   const before=(player.playedSentences??[]).flat().length+(player.lastPlayed??[]).length;
   player.lastPlayed=player.lastPlayed?.filter(keep);player.playedSentences=player.playedSentences?.map(s=>s.filter(keep)).filter(s=>s.length);
   if(before!==(player.playedSentences??[]).flat().length+(player.lastPlayed??[]).length)player.fieldVersion=(player.fieldVersion??0)+1;
+  // Seed the credit ledger for already-running rooms before unlocking their field.
+  player.scoreClaims??=(player.playedSentences??(player.lastPlayed?[player.lastPlayed]:[])).map(cards=>({ids:cards.map(c=>c.id),points:judgeCards(cards).points}));
   players.set(player.id,player);if(!player.ai)game.sessions.set(player.token,player);
  }
  for(const [key,json] of records)if(key.startsWith('room:')){

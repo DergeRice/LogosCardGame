@@ -9715,6 +9715,24 @@
       "duration": 1.728,
       "peak": 0.3037,
       "sampleRate": 24000
+    },
+    {
+      "text": "Does management give the management something?",
+      "file": "kokoro-afheart-v1/37f1029aedf1c57f9344.mp3",
+      "bytes": 24072,
+      "sha256": "da6152687dfd97251d081e63102e8b9b2f58e3dd0f5a6b73587e516f886a3d73",
+      "duration": 2.56,
+      "peak": 0.3653,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the management make them enjoy our management?",
+      "file": "kokoro-afheart-v1/2053dfabb04875e85579.mp3",
+      "bytes": 24720,
+      "sha256": "311734a1312f02cb5edc0c54fc75825394715cb021abf9a343db6a62a9f50f61",
+      "duration": 2.923,
+      "peak": 0.366,
+      "sampleRate": 24000
     }
   ],
   "fallbackSources": {}

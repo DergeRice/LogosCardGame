@@ -6,6 +6,15 @@ test('reported enjoy sentence plays the actual natural Kokoro MP3',async({page})
 test('HTTP 200 HTML is rejected as audio, never reported playing',async({page})=>{
  await page.route('**/audio/sentences/**/*.mp3',r=>r.fulfill({contentType:'text/html',body:'<!doctype html>app shell'}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html>app shell'}));await supported(page);await page.getByRole('combobox').selectOption('I work.');await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('decode',{timeout:15000});
 });
-test('device fallback cancels previous utterance on replay (API wiring mock, not audible-output verification)',async({page})=>{
- await page.addInitScript(()=>{(window as any).__voiceEvents=[];window.addEventListener('logos-voice-status',event=>(window as any).__voiceEvents.push((event as CustomEvent).detail));(window as any).__cancel=0;(window as any).SpeechSynthesisUtterance=class{onstart:any;onend:any;onerror:any;constructor(public text:string){}};Object.defineProperty(window,'speechSynthesis',{value:{cancel(){(window as any).__cancel++},resume(){},speak(u:any){setTimeout(()=>u.onstart?.(),10)}}});});await page.route('**/audio/sentences/manifest.json',r=>r.fulfill({json:{entries:[]}}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({status:404}));await supported(page);await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('playing');await expect(page.locator('dl')).toContainText('device_english_fallback');expect(await page.evaluate(()=>(window as any).__voiceEvents.some((e:any)=>e.stage==='recorded_file_unavailable'))).toBe(true);await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect.poll(()=>page.evaluate(()=>(window as any).__cancel)).toBeGreaterThanOrEqual(3);
+test('missing Kokoro never silently switches the game to a system voice',async({page})=>{
+ await page.addInitScript(()=>{(window as any).__spoken=0;Object.defineProperty(window,'speechSynthesis',{value:{cancel(){},resume(){},speak(){(window as any).__spoken++}}});});
+ await page.route('**/audio/sentences/manifest.json',r=>r.fulfill({json:{entries:[]}}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({status:404}));await supported(page);
+ await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('missing');expect(await page.evaluate(()=>(window as any).__spoken)).toBe(0);
+});
+
+for(const [text,hash] of [
+ ['Does management give the management something?','37f1029aedf1c57f9344'],
+ ['Does the management make them enjoy our management?','2053dfabb04875e85579'],
+])test(`reported question plays Kokoro to completion: ${hash}`,async({page})=>{
+ await supported(page);await page.getByLabel('직접 검사할 문장').fill(text);await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('ended',{timeout:20000});await expect(page.locator('dl')).toContainText(`/audio/sentences/kokoro-afheart-v1/${hash}.mp3`);
 });
