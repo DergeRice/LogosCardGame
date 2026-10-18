@@ -21,7 +21,7 @@ test('desktop host and mobile guest share a named room, transfer host and start 
   await host.getByRole('textbox',{name:'방 이름'}).fill('오늘의 대전');
   await host.getByRole('button',{name:'저장'}).click();
   await expect(guest.locator('.room-lobby h1')).toHaveText('오늘의 대전');
-  await host.getByRole('button',{name:'＋ AI 추가'}).click();
+  await host.locator('.lobby-empty').first().click();await host.getByRole('button',{name:'AI 추가 · 중급',exact:true}).click();
   await expect(guest.locator('.room-player')).toHaveCount(3);
   await host.getByRole('button',{name:'방 나가기'}).click();
   await expect(guest.locator('.room-player')).toHaveCount(2);

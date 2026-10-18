@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k \"tsx watch --env-file-if-exists=.env server/index.ts\" \"vite --host 0.0.0.0\"",
-    "prebuild": "npm run cards:build",
+    "prebuild": "npm run cosmetics:build && npm run cards:build",
     "build": "tsc --noEmit && vite build && tsc -p tsconfig.server.json",
     "build:server": "tsc -p tsconfig.server.json",
     "check:cloudflare": "tsc -p tsconfig.cloudflare.json",
     "dev:cloudflare": "wrangler dev --port 8787",
-    "deploy:cloudflare": "npm run check:cloudflare && wrangler deploy",
+    "deploy:cloudflare": "npm run cosmetics:build && npm run check:cloudflare && wrangler deploy",
     "test:cloudflare": "npm run check:cloudflare && wrangler deploy --dry-run --outdir .runtime/cloudflare-build && node scripts/test-cloudflare.mjs",
     "start": "node --env-file-if-exists=.env dist-server/server/index.js",
     "test": "tsx --test tests/*.test.ts",
@@ -23,7 +23,8 @@
     "audio:chirp": "tsx scripts/generate-chirp-audio.ts",
     "version:next": "node scripts/bump-version.mjs",
     "examples:review": "tsx scripts/build-reviewed-examples.ts",
-    "audio:sentences": "python scripts/generate-kokoro.py"
+    "audio:sentences": "python scripts/generate-kokoro.py",
+    "cosmetics:build": "node scripts/generate-cosmetic-resources.mjs"
   },
   "dependencies": {
     "@diffusionstudio/vits-web": "1.0.3",

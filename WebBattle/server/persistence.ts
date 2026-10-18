@@ -1,3 +1,4 @@
+import type {CommunityRecord,CommunityInvite} from './community.js';
 import {judgeCards} from '../shared/rules.js';
 import {GUEST_RETENTION_MS} from '../shared/progression.js';
 import {cardEffect} from '../shared/rules.js';
@@ -22,11 +23,15 @@ export function snapshot(game:Game):Map<string,string>{
  }
  for(const [key,account] of game.accounts)records.set('account:'+key,JSON.stringify(account));
  for(const [hash,session] of game.accountSessions)records.set('auth:'+hash,JSON.stringify(session));
+ for(const [id,invite]of game.community.invites)if(invite.expiresAt>Date.now())records.set('invite:'+id,JSON.stringify(invite));
+ for(const [id,r]of game.community.records)records.set('community:'+id,JSON.stringify(r));
  return records;
 }
 export function restore(game:Game,records:Map<string,string>):Map<string,Player>{
- game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();const players=new Map<string,Player>();
+ game.community.records.clear();game.community.invites.clear();game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();const players=new Map<string,Player>();
  for(const [key,json] of records){
+  if(key.startsWith('invite:')){const invite=JSON.parse(json) as CommunityInvite;if(invite.expiresAt>Date.now())game.community.invites.set(key.slice(7),invite);}
+  if(key.startsWith('community:'))game.community.records.set(key.slice(10),JSON.parse(json) as CommunityRecord);
   if(key.startsWith('account:'))game.accounts.set(key.slice(8),JSON.parse(json));
   if(key.startsWith('auth:'))game.accountSessions.set(key.slice(5),JSON.parse(json));
  }
@@ -63,7 +68,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
 }
 // Schedule only actual game deadlines; no always-running polling loop in the cloud.
 export function nextDeadline(game:Game):number|null{
- const deadlines:number[]=[];
+ const deadlines:number[]=[...game.community.invites.values()].map(i=>i.expiresAt);
  for(const r of game.rooms.values()){
   if(r.expiresAt>0)deadlines.push(r.expiresAt);
   if(['reveal','dealing'].includes(r.phase)||(r.phase==='matching'&&r.players.some(p=>!p.ai&&p.socket?.readyState===1)))deadlines.push(r.stageEndsAt);

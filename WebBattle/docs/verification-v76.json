@@ -1,0 +1,261 @@
+{
+  "version": "v0.9.76",
+  "scope": "Local Chromium and Windows WebKit; includes real two-client WebSocket friendship, invitation and timed match. Shop and drag layout use documented fixtures.",
+  "tests": [
+    {
+      "project": "chromium",
+      "file": "community-store.spec.ts",
+      "title": "store offers gem blocks dust and sequential card reveal landscape visualViewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "community-store.spec.ts",
+      "title": "store offers gem blocks dust and sequential card reveal portrait",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "community-store.spec.ts",
+      "title": "two real clients finish timed game request accept friendship invite join and control individual bots",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "community-store.spec.ts",
+      "title": "store offers gem blocks dust and sequential card reveal landscape visualViewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "community-store.spec.ts",
+      "title": "store offers gem blocks dust and sequential card reveal portrait",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "community-store.spec.ts",
+      "title": "two real clients finish timed game request accept friendship invite join and control individual bots",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "drag-preview.spec.ts",
+      "title": "stable card-size insertion preview and field reorder (desktop)",
+      "status": "passed",
+      "evidence": "v76-drag-final"
+    },
+    {
+      "project": "chromium",
+      "file": "drag-preview.spec.ts",
+      "title": "stable card-size insertion preview and field reorder (phone landscape)",
+      "status": "passed",
+      "evidence": "v76-drag-final"
+    },
+    {
+      "project": "webkit",
+      "file": "drag-preview.spec.ts",
+      "title": "stable card-size insertion preview and field reorder (desktop)",
+      "status": "passed",
+      "evidence": "v76-drag-final"
+    },
+    {
+      "project": "webkit",
+      "file": "drag-preview.spec.ts",
+      "title": "stable card-size insertion preview and field reorder (phone landscape)",
+      "status": "passed",
+      "evidence": "v76-drag-final"
+    },
+    {
+      "project": "chromium",
+      "file": "field-swipe.spec.ts",
+      "title": "field swipe scrolls without removing cards and 140ms touch hold reorders",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "field-swipe.spec.ts",
+      "title": "field swipe scrolls without removing cards and 140ms touch hold reorders",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "game-hub.spec.ts",
+      "title": "hub tabs rooms paging tutorial and demo shop desktop",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "game-hub.spec.ts",
+      "title": "hub tabs rooms paging tutorial and demo shop landscape visualViewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "game-hub.spec.ts",
+      "title": "real two-session room listing join and server profile update",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "game-hub.spec.ts",
+      "title": "hub tabs rooms paging tutorial and demo shop desktop",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "game-hub.spec.ts",
+      "title": "hub tabs rooms paging tutorial and demo shop landscape visualViewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "game-hub.spec.ts",
+      "title": "real two-session room listing join and server profile update",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "home-scene.spec.ts",
+      "title": "mobile portrait rooms stay closed until tap and close on return",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "home-scene.spec.ts",
+      "title": "mobile landscape rooms stay closed until tap and close on return",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "home-scene.spec.ts",
+      "title": "mobile portrait rooms stay closed until tap and close on return",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "home-scene.spec.ts",
+      "title": "mobile landscape rooms stay closed until tap and close on return",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "rooms.spec.ts",
+      "title": "desktop host and mobile guest share a named room, transfer host and start together",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "rooms.spec.ts",
+      "title": "login page begins loading card images before guest entry without showing a percentage",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "rooms.spec.ts",
+      "title": "room browser stays inside a short mobile visual viewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "rooms.spec.ts",
+      "title": "desktop host and mobile guest share a named room, transfer host and start together",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "rooms.spec.ts",
+      "title": "login page begins loading card images before guest entry without showing a percentage",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "rooms.spec.ts",
+      "title": "room browser stays inside a short mobile visual viewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "settings-profile.spec.ts",
+      "title": "settings UUID volume example switch and cosmetic categories desktop",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "settings-profile.spec.ts",
+      "title": "settings UUID volume example switch and cosmetic categories mobile visualViewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "settings-profile.spec.ts",
+      "title": "admin page owns diagnostics links and verified Apple metadata shows linked state",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "settings-profile.spec.ts",
+      "title": "real guest sessions have distinct readable names and stable UUID after refresh",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "settings-profile.spec.ts",
+      "title": "settings UUID volume example switch and cosmetic categories desktop",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "settings-profile.spec.ts",
+      "title": "settings UUID volume example switch and cosmetic categories mobile visualViewport",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "settings-profile.spec.ts",
+      "title": "admin page owns diagnostics links and verified Apple metadata shows linked state",
+      "status": "passed",
+      "evidence": "v76-release"
+    },
+    {
+      "project": "webkit",
+      "file": "settings-profile.spec.ts",
+      "title": "real guest sessions have distinct readable names and stable UUID after refresh",
+      "status": "passed",
+      "evidence": "v76-release"
+    }
+  ],
+  "passed": 36,
+  "failed": 0,
+  "initialFailure": "Field entry scale animation caused 2.3px insertion-preview mismatch; disabled field entry scale and all 4 drag regression tests passed."
+}
