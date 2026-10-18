@@ -12,7 +12,7 @@ export default {
   const cached=await cache.match(cacheKey);
   if(cached){const result=new Response(request.method==='HEAD'?null:cached.body,cached);for(const [k,v] of h)result.headers.set(k,v);result.headers.set('X-Audio-Cache','HIT');return result;}
   const object=await env.AUDIO.get(key);
-  if(!object)return new Response(null,{status:404,headers:h});
+  if(!object){h.set('Cache-Control','no-store');return new Response(null,{status:404,headers:h});}
   object.writeHttpMetadata(h);h.set('Content-Type','audio/mpeg');h.set('Cache-Control','public, max-age=31536000, immutable');h.set('Content-Length',String(object.size));h.set('ETag',object.httpEtag);h.set('X-Audio-Cache','MISS');
   const response=new Response(object.body,{headers:h});
   ctx.waitUntil(cache.put(cacheKey,response.clone()));

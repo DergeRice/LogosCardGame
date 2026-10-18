@@ -1,0 +1,53 @@
+{
+  "verifiedAt": "2026-10-18T09:10:08.773Z",
+  "engine": "Kokoro-82M v1.0",
+  "voice": "af_heart",
+  "speed": 1,
+  "paidTtsRequests": 0,
+  "expanded": {
+    "manifestEntries": 18709,
+    "actualMp3": 18709,
+    "uploadReceipts": 18709,
+    "sha256Verified": 18709,
+    "bytes": 427696488,
+    "characters": 841475,
+    "finalMissingOrCorrupt": 0
+  },
+  "newDistinctRecordings": {
+    "expanded": 18709,
+    "historicalTo": 17,
+    "reportedNatural": 1,
+    "total": 18727,
+    "characters": 842118,
+    "note": "398 static additions are also in the expanded R2 pack and are not counted twice."
+  },
+  "static": {
+    "manifestEntries": 1079,
+    "actualMp3": 1079
+  },
+  "r2": {
+    "verifiedAt": "2026-10-18T09:09:13.725Z",
+    "source": "Fresh authenticated R2 list via temporary read-only Worker; not /health or old receipts",
+    "objects": 42864,
+    "bytes": 976257216,
+    "expectedEntries": 42864,
+    "matched": 42864,
+    "unexpectedObjects": 0,
+    "mismatches": []
+  },
+  "observedPos": {
+    "snapshot": 829,
+    "currentSupported": 827,
+    "missing": 0,
+    "noLongerAccepted": 2
+  },
+  "productionPlayback": {
+    "firstPass": 96,
+    "expandedPass": 34,
+    "total": 130,
+    "uniqueTexts": 60,
+    "errors": 0,
+    "physicalHandsetVerified": false
+  },
+  "scope": "Observed supported combinations plus deterministic modifier/determiner/adjective expansions, not every possible 15-card combination."
+}

@@ -1,5 +1,7 @@
-import {readFileSync,writeFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';import {createHash} from 'node:crypto';
 import {CATALOG,DECK_FACES,judgeCards,type Kind} from '../shared/rules.js';import {cardSentenceExample} from '../shared/card-sentence-example.js';
+if(!process.argv.includes('--refresh')){const raw=gunzipSync(readFileSync('docs/audio-audit/kokoro-expanded-input.json.gz')),snapshot=JSON.parse(raw.toString());mkdirSync('.runtime',{recursive:true});writeFileSync('.runtime/kokoro-missing-sentences.json',raw);console.log(JSON.stringify({source:'Frozen audited input; use --refresh to recompute the supplied snapshots',targets:snapshot.rows.length,characters:snapshot.characters}));process.exit(0);}
 const known=new Set<string>();for(const p of ['public/audio/sentences/manifest.json','.runtime/kokoro-catalog/manifest.json'])for(const e of JSON.parse(readFileSync(p,'utf8')).entries)known.add(e.text);
 const observed=JSON.parse(readFileSync('docs/audio-audit/played-pos-snapshot.json','utf8')) as {key:string;kinds:Kind[]}[],reported=JSON.parse(readFileSync('docs/audio-audit/reported-sentences.json','utf8')) as string[];
 const texts=new Map<string,{english:string;key:string;source:string}>(),checked=new Set<string>();const stock=new Map<Kind,number>();for(const c of DECK_FACES)stock.set(c.kind,(stock.get(c.kind)??0)+1);

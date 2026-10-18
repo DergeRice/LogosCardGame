@@ -1,0 +1,1778 @@
+{
+  "verifiedAt": "2026-10-18T08:53:01.229Z",
+  "base": "https://logos-card-battle.netlify.app",
+  "expandedOnly": false,
+  "catalogSentences": 24155,
+  "randomIndices": [
+    22712,
+    4094,
+    22732,
+    12121,
+    11102,
+    18086,
+    12476,
+    9121,
+    6468,
+    23839,
+    2607,
+    13074
+  ],
+  "samplesPerDevice": 48,
+  "realBufferPlayback": 96,
+  "errors": [],
+  "physicalHandsetVerified": false,
+  "results": [
+    {
+      "device": "PC Chromium",
+      "text": "Management near them near water really gives them our book.",
+      "source": "random-current-deck",
+      "index": 22712,
+      "code": "ended",
+      "sentence": "Management near them near water really gives them our book.",
+      "context": "running",
+      "elapsedMs": "5162",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d58d0fa19ba4d7c72981.mp3",
+      "duration": "3.3066666666666666",
+      "peak": "0.2924516499042511",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I do work often today.",
+      "source": "random-current-deck",
+      "index": 4094,
+      "code": "ended",
+      "sentence": "I do work often today.",
+      "context": "running",
+      "elapsedMs": "1949",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/4a6e121c5cafd9def383.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.40479448437690735",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Management near them near water really gives them helpful advice.",
+      "source": "random-current-deck",
+      "index": 22732,
+      "code": "ended",
+      "sentence": "Management near them near water really gives them helpful advice.",
+      "context": "running",
+      "elapsedMs": "4016",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/ff735701ac4e7244f473.mp3",
+      "duration": "3.776",
+      "peak": "0.32784271240234375",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My teacher can not give the young student our book.",
+      "source": "random-current-deck",
+      "index": 12121,
+      "code": "ended",
+      "sentence": "My teacher can not give the young student our book.",
+      "context": "running",
+      "elapsedMs": "2919",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d96bf5064fb39ffc1fc1.mp3",
+      "duration": "2.7093333333333334",
+      "peak": "0.309482604265213",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can give the young student something near them.",
+      "source": "random-current-deck",
+      "index": 11102,
+      "code": "ended",
+      "sentence": "A teacher can give the young student something near them.",
+      "context": "running",
+      "elapsedMs": "3144",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/752f238039a0e9723a6b.mp3",
+      "duration": "2.8373333333333335",
+      "peak": "0.43824321031570435",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher does not give the young helpful kind student advice near them near water.",
+      "source": "random-current-deck",
+      "index": 18086,
+      "code": "ended",
+      "sentence": "A teacher does not give the young helpful kind student advice near them near water.",
+      "context": "running",
+      "elapsedMs": "5268",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/dafc6f8c09c1ffd503c0.mp3",
+      "duration": "5.077333333333334",
+      "peak": "0.485507071018219",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Can my teacher make our student ready?",
+      "source": "random-current-deck",
+      "index": 12476,
+      "code": "ended",
+      "sentence": "Can my teacher make our student ready?",
+      "context": "running",
+      "elapsedMs": "2366",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/ff05ea11306482afe4f3.mp3",
+      "duration": "2.1333333333333333",
+      "peak": "0.45387229323387146",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Can management not give helpful management something near them?",
+      "source": "random-current-deck",
+      "index": 9121,
+      "code": "ended",
+      "sentence": "Can management not give helpful management something near them?",
+      "context": "running",
+      "elapsedMs": "3773",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/a6f9de474281cba9b5a3.mp3",
+      "duration": "3.6053333333333333",
+      "peak": "0.3766403794288635",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Make our management enjoy management!",
+      "source": "random-current-deck",
+      "index": 6468,
+      "code": "ended",
+      "sentence": "Make our management enjoy management!",
+      "context": "running",
+      "elapsedMs": "2504",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/526e6b825d7b1c87839c.mp3",
+      "duration": "2.3466666666666667",
+      "peak": "0.37896907329559326",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does management near them near water not make a student ready?",
+      "source": "random-current-deck",
+      "index": 23839,
+      "code": "ended",
+      "sentence": "Does management near them near water not make a student ready?",
+      "context": "running",
+      "elapsedMs": "3753",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/cbd2e1179dd8cf3dff7c.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.2956296503543854",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Sometimes I am often support.",
+      "source": "random-current-deck",
+      "index": 2607,
+      "code": "ended",
+      "sentence": "Sometimes I am often support.",
+      "context": "running",
+      "elapsedMs": "2179",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/cb81bef04fd18081ffd6.mp3",
+      "duration": "1.8986666666666667",
+      "peak": "0.3302949070930481",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The young teacher does not give our student advice.",
+      "source": "random-current-deck",
+      "index": 13074,
+      "code": "ended",
+      "sentence": "The young teacher does not give our student advice.",
+      "context": "running",
+      "elapsedMs": "2939",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/e1cc42dfea7c67159aa4.mp3",
+      "duration": "2.7946666666666666",
+      "peak": "0.43481990694999695",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can enjoy music near a useful friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can enjoy music near a useful friend.",
+      "context": "running",
+      "elapsedMs": "3704",
+      "url": "/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "duration": "2.688",
+      "peak": "0.3552902340888977",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near our friends.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friends.",
+      "context": "running",
+      "elapsedMs": "1940",
+      "url": "/audio/sentences/kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.45095527172088623",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near our friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friend.",
+      "context": "running",
+      "elapsedMs": "1929",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.38532754778862",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I work.",
+      "context": "running",
+      "elapsedMs": "1256",
+      "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+      "duration": "0.96",
+      "peak": "0.3957744240760803",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "A teacher can work.",
+      "context": "running",
+      "elapsedMs": "1523",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+      "duration": "1.3653333333333333",
+      "peak": "0.35644879937171936",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Do I give a student the book very well?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I give a student the book very well?",
+      "context": "running",
+      "elapsedMs": "2406",
+      "url": "/audio/sentences/kokoro-afheart-v1/aca2011ba5614f6dda02.mp3",
+      "duration": "2.026666666666667",
+      "peak": "0.3216593861579895",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can enjoy music near an useful friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I can enjoy music near an useful friend.",
+      "context": "running",
+      "elapsedMs": "3324",
+      "url": "/audio/sentences/kokoro-afheart-v1/4a0a12efa70e7b67e75b.mp3",
+      "duration": "2.7306666666666666",
+      "peak": "0.3880937099456787",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Is a teacher very well the guide?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Is a teacher very well the guide?",
+      "context": "running",
+      "elapsedMs": "2302",
+      "url": "/audio/sentences/kokoro-afheart-v1/f7197f297b820de5d277.mp3",
+      "duration": "1.92",
+      "peak": "0.359004408121109",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am a guide very well.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am a guide very well.",
+      "context": "running",
+      "elapsedMs": "1926",
+      "url": "/audio/sentences/kokoro-afheart-v1/4b5602a19e50c8310fcb.mp3",
+      "duration": "1.472",
+      "peak": "0.3243270814418793",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not be the support near water today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "A teacher can not be the support near water today.",
+      "context": "running",
+      "elapsedMs": "3188",
+      "url": "/audio/sentences/kokoro-afheart-v1/5663c0a7f298ec7b6e5c.mp3",
+      "duration": "2.816",
+      "peak": "0.35497698187828064",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not give the management advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "A teacher can not give the management advice today.",
+      "context": "running",
+      "elapsedMs": "3503",
+      "url": "/audio/sentences/kokoro-afheart-v1/59b6424ad44245464a7c.mp3",
+      "duration": "2.9226666666666667",
+      "peak": "0.33177170157432556",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My useful management gives the management advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful management gives the management advice today.",
+      "context": "running",
+      "elapsedMs": "3667",
+      "url": "/audio/sentences/kokoro-afheart-v1/88cbfd7e4be9ccae4643.mp3",
+      "duration": "3.3066666666666666",
+      "peak": "0.42111238837242126",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Do I often give the management a book today?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I often give the management a book today?",
+      "context": "running",
+      "elapsedMs": "2771",
+      "url": "/audio/sentences/kokoro-afheart-v1/a16927710fd95f7488de.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.38748449087142944",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am not your support today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am not your support today.",
+      "context": "running",
+      "elapsedMs": "2085",
+      "url": "/audio/sentences/kokoro-afheart-v1/1e20d5a10f0f59977c44.mp3",
+      "duration": "1.7066666666666668",
+      "peak": "0.35855159163475037",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Do I often give management a book today?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I often give management a book today?",
+      "context": "running",
+      "elapsedMs": "2774",
+      "url": "/audio/sentences/kokoro-afheart-v1/b21de17b03d717a15b75.mp3",
+      "duration": "2.304",
+      "peak": "0.3413700461387634",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My management gives them advice near the friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My management gives them advice near the friend.",
+      "context": "running",
+      "elapsedMs": "3213",
+      "url": "/audio/sentences/kokoro-afheart-v1/71876ffe3498635eb911.mp3",
+      "duration": "2.8373333333333335",
+      "peak": "0.3872658610343933",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Do I often enjoy music today?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I often enjoy music today?",
+      "context": "running",
+      "elapsedMs": "2377",
+      "url": "/audio/sentences/kokoro-afheart-v1/4357dcdb482ccb4abc47.mp3",
+      "duration": "2.005333333333333",
+      "peak": "0.3339092433452606",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A young teacher works near the fresh water today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "A young teacher works near the fresh water today.",
+      "context": "running",
+      "elapsedMs": "2980",
+      "url": "/audio/sentences/kokoro-afheart-v1/c9286c955ff597f4a2c1.mp3",
+      "duration": "2.6026666666666665",
+      "peak": "0.41869133710861206",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The education is near a friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "The education is near a friend.",
+      "context": "running",
+      "elapsedMs": "2551",
+      "url": "/audio/sentences/kokoro-afheart-v1/19cb0aa1c4ad7e9be4f9.mp3",
+      "duration": "1.9626666666666666",
+      "peak": "0.3659188151359558",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My useful education can be the guide.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful education can be the guide.",
+      "context": "running",
+      "elapsedMs": "2760",
+      "url": "/audio/sentences/kokoro-afheart-v1/e84f37fbfcbef5583275.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.3584762513637543",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My useful education can be myself.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful education can be myself.",
+      "context": "running",
+      "elapsedMs": "2752",
+      "url": "/audio/sentences/kokoro-afheart-v1/544bc01c70a61bce479c.mp3",
+      "duration": "2.368",
+      "peak": "0.3335171043872833",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My young teacher gives them advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My young teacher gives them advice today.",
+      "context": "running",
+      "elapsedMs": "3123",
+      "url": "/audio/sentences/kokoro-afheart-v1/37ee169f9ff771c2e266.mp3",
+      "duration": "2.453333333333333",
+      "peak": "0.420180082321167",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My teacher gives them advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My teacher gives them advice today.",
+      "context": "running",
+      "elapsedMs": "2430",
+      "url": "/audio/sentences/kokoro-afheart-v1/d6df0457ac6da0e5cbe8.mp3",
+      "duration": "2.0693333333333332",
+      "peak": "0.42504459619522095",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am not the guide near our water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am not the guide near our water.",
+      "context": "running",
+      "elapsedMs": "2289",
+      "url": "/audio/sentences/kokoro-afheart-v1/bc526835dc5511401669.mp3",
+      "duration": "1.92",
+      "peak": "0.4946764409542084",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can give them helpful advice near the friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I can give them helpful advice near the friend.",
+      "context": "running",
+      "elapsedMs": "3050",
+      "url": "/audio/sentences/kokoro-afheart-v1/9123890eb19592569ff6.mp3",
+      "duration": "2.6666666666666665",
+      "peak": "0.35715705156326294",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can give them advice near the friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I can give them advice near the friend.",
+      "context": "running",
+      "elapsedMs": "2497",
+      "url": "/audio/sentences/kokoro-afheart-v1/5d300435a00d0369ae21.mp3",
+      "duration": "2.1333333333333333",
+      "peak": "0.3551027178764343",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Can a teacher often give them something near our water?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Can a teacher often give them something near our water?",
+      "context": "running",
+      "elapsedMs": "3358",
+      "url": "/audio/sentences/kokoro-afheart-v1/4494e2e0abd4e430cfe3.mp3",
+      "duration": "2.986666666666667",
+      "peak": "0.4455476403236389",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Can a teacher often help them?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Can a teacher often help them?",
+      "context": "running",
+      "elapsedMs": "2137",
+      "url": "/audio/sentences/kokoro-afheart-v1/d5b68ee2e50f199f56b9.mp3",
+      "duration": "1.6853333333333333",
+      "peak": "0.36216917634010315",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Can a teacher often give them our advice?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Can a teacher often give them our advice?",
+      "context": "running",
+      "elapsedMs": "2762",
+      "url": "/audio/sentences/kokoro-afheart-v1/7d74a32d57f013a4e280.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.39200761914253235",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The education is not the guide today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "The education is not the guide today.",
+      "context": "running",
+      "elapsedMs": "2773",
+      "url": "/audio/sentences/kokoro-afheart-v1/d16eed0da7c8ed2d57ff.mp3",
+      "duration": "2.4106666666666667",
+      "peak": "0.3827662467956543",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My useful traffic flows near them.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful traffic flows near them.",
+      "context": "running",
+      "elapsedMs": "2406",
+      "url": "/audio/sentences/kokoro-afheart-v1/592cdd94bea2b530e2a6.mp3",
+      "duration": "2.026666666666667",
+      "peak": "0.3812989294528961",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My management can give them an useful book.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My management can give them an useful book.",
+      "context": "running",
+      "elapsedMs": "3310",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1c9e8a3630b9f98f15e.mp3",
+      "duration": "2.6453333333333333",
+      "peak": "0.3443591594696045",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am myself near water near our fresh water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am myself near water near our fresh water.",
+      "context": "running",
+      "elapsedMs": "3149",
+      "url": "/audio/sentences/kokoro-afheart-v1/6e078de8e6451a4b1ccc.mp3",
+      "duration": "2.688",
+      "peak": "0.35392335057258606",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am near water near our fresh water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am near water near our fresh water.",
+      "context": "running",
+      "elapsedMs": "2572",
+      "url": "/audio/sentences/kokoro-afheart-v1/b542a67d35abcd0a9612.mp3",
+      "duration": "2.112",
+      "peak": "0.41695553064346313",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am near our fresh water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am near our fresh water.",
+      "context": "running",
+      "elapsedMs": "1940",
+      "url": "/audio/sentences/kokoro-afheart-v1/38bef5f3552e4555a410.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.38182955980300903",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Do I help them near water?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I help them near water?",
+      "context": "running",
+      "elapsedMs": "1869",
+      "url": "/audio/sentences/kokoro-afheart-v1/202469b47143df3a4a66.mp3",
+      "duration": "1.4933333333333334",
+      "peak": "0.30410826206207275",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Management near them near water really gives them our book.",
+      "source": "random-current-deck",
+      "index": 22712,
+      "code": "ended",
+      "sentence": "Management near them near water really gives them our book.",
+      "context": "running",
+      "elapsedMs": "4221",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d58d0fa19ba4d7c72981.mp3",
+      "duration": "3.3066666666666666",
+      "peak": "0.2924516499042511",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I do work often today.",
+      "source": "random-current-deck",
+      "index": 4094,
+      "code": "ended",
+      "sentence": "I do work often today.",
+      "context": "running",
+      "elapsedMs": "1642",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/4a6e121c5cafd9def383.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.40479448437690735",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Management near them near water really gives them helpful advice.",
+      "source": "random-current-deck",
+      "index": 22732,
+      "code": "ended",
+      "sentence": "Management near them near water really gives them helpful advice.",
+      "context": "running",
+      "elapsedMs": "4022",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/ff735701ac4e7244f473.mp3",
+      "duration": "3.776",
+      "peak": "0.32784271240234375",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My teacher can not give the young student our book.",
+      "source": "random-current-deck",
+      "index": 12121,
+      "code": "ended",
+      "sentence": "My teacher can not give the young student our book.",
+      "context": "running",
+      "elapsedMs": "2911",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d96bf5064fb39ffc1fc1.mp3",
+      "duration": "2.7093333333333334",
+      "peak": "0.309482604265213",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can give the young student something near them.",
+      "source": "random-current-deck",
+      "index": 11102,
+      "code": "ended",
+      "sentence": "A teacher can give the young student something near them.",
+      "context": "running",
+      "elapsedMs": "3038",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/752f238039a0e9723a6b.mp3",
+      "duration": "2.8373333333333335",
+      "peak": "0.43824321031570435",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher does not give the young helpful kind student advice near them near water.",
+      "source": "random-current-deck",
+      "index": 18086,
+      "code": "ended",
+      "sentence": "A teacher does not give the young helpful kind student advice near them near water.",
+      "context": "running",
+      "elapsedMs": "5286",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/dafc6f8c09c1ffd503c0.mp3",
+      "duration": "5.077333333333334",
+      "peak": "0.485507071018219",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Can my teacher make our student ready?",
+      "source": "random-current-deck",
+      "index": 12476,
+      "code": "ended",
+      "sentence": "Can my teacher make our student ready?",
+      "context": "running",
+      "elapsedMs": "2332",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/ff05ea11306482afe4f3.mp3",
+      "duration": "2.1333333333333333",
+      "peak": "0.45387229323387146",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Can management not give helpful management something near them?",
+      "source": "random-current-deck",
+      "index": 9121,
+      "code": "ended",
+      "sentence": "Can management not give helpful management something near them?",
+      "context": "running",
+      "elapsedMs": "3886",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/a6f9de474281cba9b5a3.mp3",
+      "duration": "3.6053333333333333",
+      "peak": "0.3766403794288635",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Make our management enjoy management!",
+      "source": "random-current-deck",
+      "index": 6468,
+      "code": "ended",
+      "sentence": "Make our management enjoy management!",
+      "context": "running",
+      "elapsedMs": "2552",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/526e6b825d7b1c87839c.mp3",
+      "duration": "2.3466666666666667",
+      "peak": "0.37896907329559326",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does management near them near water not make a student ready?",
+      "source": "random-current-deck",
+      "index": 23839,
+      "code": "ended",
+      "sentence": "Does management near them near water not make a student ready?",
+      "context": "running",
+      "elapsedMs": "3797",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/cbd2e1179dd8cf3dff7c.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.2956296503543854",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Sometimes I am often support.",
+      "source": "random-current-deck",
+      "index": 2607,
+      "code": "ended",
+      "sentence": "Sometimes I am often support.",
+      "context": "running",
+      "elapsedMs": "2091",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/cb81bef04fd18081ffd6.mp3",
+      "duration": "1.8986666666666667",
+      "peak": "0.3302949070930481",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The young teacher does not give our student advice.",
+      "source": "random-current-deck",
+      "index": 13074,
+      "code": "ended",
+      "sentence": "The young teacher does not give our student advice.",
+      "context": "running",
+      "elapsedMs": "2991",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/e1cc42dfea7c67159aa4.mp3",
+      "duration": "2.7946666666666666",
+      "peak": "0.43481990694999695",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can enjoy music near a useful friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can enjoy music near a useful friend.",
+      "context": "running",
+      "elapsedMs": "3473",
+      "url": "/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "duration": "2.688",
+      "peak": "0.3552902340888977",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near our friends.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friends.",
+      "context": "running",
+      "elapsedMs": "2148",
+      "url": "/audio/sentences/kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.45095527172088623",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near our friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friend.",
+      "context": "running",
+      "elapsedMs": "1923",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.38532754778862",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I work.",
+      "context": "running",
+      "elapsedMs": "1477",
+      "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+      "duration": "0.96",
+      "peak": "0.3957744240760803",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "A teacher can work.",
+      "context": "running",
+      "elapsedMs": "1431",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+      "duration": "1.3653333333333333",
+      "peak": "0.35644879937171936",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Do I give a student the book very well?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I give a student the book very well?",
+      "context": "running",
+      "elapsedMs": "2399",
+      "url": "/audio/sentences/kokoro-afheart-v1/aca2011ba5614f6dda02.mp3",
+      "duration": "2.026666666666667",
+      "peak": "0.3216593861579895",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can enjoy music near an useful friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I can enjoy music near an useful friend.",
+      "context": "running",
+      "elapsedMs": "3345",
+      "url": "/audio/sentences/kokoro-afheart-v1/4a0a12efa70e7b67e75b.mp3",
+      "duration": "2.7306666666666666",
+      "peak": "0.3880937099456787",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Is a teacher very well the guide?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Is a teacher very well the guide?",
+      "context": "running",
+      "elapsedMs": "2382",
+      "url": "/audio/sentences/kokoro-afheart-v1/f7197f297b820de5d277.mp3",
+      "duration": "1.92",
+      "peak": "0.359004408121109",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am a guide very well.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am a guide very well.",
+      "context": "running",
+      "elapsedMs": "1837",
+      "url": "/audio/sentences/kokoro-afheart-v1/4b5602a19e50c8310fcb.mp3",
+      "duration": "1.472",
+      "peak": "0.3243270814418793",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not be the support near water today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "A teacher can not be the support near water today.",
+      "context": "running",
+      "elapsedMs": "3401",
+      "url": "/audio/sentences/kokoro-afheart-v1/5663c0a7f298ec7b6e5c.mp3",
+      "duration": "2.816",
+      "peak": "0.35497698187828064",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not give the management advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "A teacher can not give the management advice today.",
+      "context": "running",
+      "elapsedMs": "3293",
+      "url": "/audio/sentences/kokoro-afheart-v1/59b6424ad44245464a7c.mp3",
+      "duration": "2.9226666666666667",
+      "peak": "0.33177170157432556",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My useful management gives the management advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful management gives the management advice today.",
+      "context": "running",
+      "elapsedMs": "3680",
+      "url": "/audio/sentences/kokoro-afheart-v1/88cbfd7e4be9ccae4643.mp3",
+      "duration": "3.3066666666666666",
+      "peak": "0.42111238837242126",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Do I often give the management a book today?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I often give the management a book today?",
+      "context": "running",
+      "elapsedMs": "2967",
+      "url": "/audio/sentences/kokoro-afheart-v1/a16927710fd95f7488de.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.38748449087142944",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am not your support today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am not your support today.",
+      "context": "running",
+      "elapsedMs": "2161",
+      "url": "/audio/sentences/kokoro-afheart-v1/1e20d5a10f0f59977c44.mp3",
+      "duration": "1.7066666666666668",
+      "peak": "0.35855159163475037",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Do I often give management a book today?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I often give management a book today?",
+      "context": "running",
+      "elapsedMs": "2680",
+      "url": "/audio/sentences/kokoro-afheart-v1/b21de17b03d717a15b75.mp3",
+      "duration": "2.304",
+      "peak": "0.3413700461387634",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My management gives them advice near the friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My management gives them advice near the friend.",
+      "context": "running",
+      "elapsedMs": "3211",
+      "url": "/audio/sentences/kokoro-afheart-v1/71876ffe3498635eb911.mp3",
+      "duration": "2.8373333333333335",
+      "peak": "0.3872658610343933",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Do I often enjoy music today?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I often enjoy music today?",
+      "context": "running",
+      "elapsedMs": "2391",
+      "url": "/audio/sentences/kokoro-afheart-v1/4357dcdb482ccb4abc47.mp3",
+      "duration": "2.005333333333333",
+      "peak": "0.3339092433452606",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A young teacher works near the fresh water today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "A young teacher works near the fresh water today.",
+      "context": "running",
+      "elapsedMs": "3184",
+      "url": "/audio/sentences/kokoro-afheart-v1/c9286c955ff597f4a2c1.mp3",
+      "duration": "2.6026666666666665",
+      "peak": "0.41869133710861206",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The education is near a friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "The education is near a friend.",
+      "context": "running",
+      "elapsedMs": "2327",
+      "url": "/audio/sentences/kokoro-afheart-v1/19cb0aa1c4ad7e9be4f9.mp3",
+      "duration": "1.9626666666666666",
+      "peak": "0.3659188151359558",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My useful education can be the guide.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful education can be the guide.",
+      "context": "running",
+      "elapsedMs": "2834",
+      "url": "/audio/sentences/kokoro-afheart-v1/e84f37fbfcbef5583275.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.3584762513637543",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My useful education can be myself.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful education can be myself.",
+      "context": "running",
+      "elapsedMs": "2738",
+      "url": "/audio/sentences/kokoro-afheart-v1/544bc01c70a61bce479c.mp3",
+      "duration": "2.368",
+      "peak": "0.3335171043872833",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My young teacher gives them advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My young teacher gives them advice today.",
+      "context": "running",
+      "elapsedMs": "3044",
+      "url": "/audio/sentences/kokoro-afheart-v1/37ee169f9ff771c2e266.mp3",
+      "duration": "2.453333333333333",
+      "peak": "0.420180082321167",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My teacher gives them advice today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My teacher gives them advice today.",
+      "context": "running",
+      "elapsedMs": "2658",
+      "url": "/audio/sentences/kokoro-afheart-v1/d6df0457ac6da0e5cbe8.mp3",
+      "duration": "2.0693333333333332",
+      "peak": "0.42504459619522095",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am not the guide near our water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am not the guide near our water.",
+      "context": "running",
+      "elapsedMs": "2290",
+      "url": "/audio/sentences/kokoro-afheart-v1/bc526835dc5511401669.mp3",
+      "duration": "1.92",
+      "peak": "0.4946764409542084",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can give them helpful advice near the friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I can give them helpful advice near the friend.",
+      "context": "running",
+      "elapsedMs": "3024",
+      "url": "/audio/sentences/kokoro-afheart-v1/9123890eb19592569ff6.mp3",
+      "duration": "2.6666666666666665",
+      "peak": "0.35715705156326294",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can give them advice near the friend.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I can give them advice near the friend.",
+      "context": "running",
+      "elapsedMs": "2611",
+      "url": "/audio/sentences/kokoro-afheart-v1/5d300435a00d0369ae21.mp3",
+      "duration": "2.1333333333333333",
+      "peak": "0.3551027178764343",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Can a teacher often give them something near our water?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Can a teacher often give them something near our water?",
+      "context": "running",
+      "elapsedMs": "3364",
+      "url": "/audio/sentences/kokoro-afheart-v1/4494e2e0abd4e430cfe3.mp3",
+      "duration": "2.986666666666667",
+      "peak": "0.4455476403236389",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Can a teacher often help them?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Can a teacher often help them?",
+      "context": "running",
+      "elapsedMs": "2055",
+      "url": "/audio/sentences/kokoro-afheart-v1/d5b68ee2e50f199f56b9.mp3",
+      "duration": "1.6853333333333333",
+      "peak": "0.36216917634010315",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Can a teacher often give them our advice?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Can a teacher often give them our advice?",
+      "context": "running",
+      "elapsedMs": "2762",
+      "url": "/audio/sentences/kokoro-afheart-v1/7d74a32d57f013a4e280.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.39200761914253235",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The education is not the guide today.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "The education is not the guide today.",
+      "context": "running",
+      "elapsedMs": "2806",
+      "url": "/audio/sentences/kokoro-afheart-v1/d16eed0da7c8ed2d57ff.mp3",
+      "duration": "2.4106666666666667",
+      "peak": "0.3827662467956543",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My useful traffic flows near them.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My useful traffic flows near them.",
+      "context": "running",
+      "elapsedMs": "2382",
+      "url": "/audio/sentences/kokoro-afheart-v1/592cdd94bea2b530e2a6.mp3",
+      "duration": "2.026666666666667",
+      "peak": "0.3812989294528961",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My management can give them an useful book.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "My management can give them an useful book.",
+      "context": "running",
+      "elapsedMs": "3017",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1c9e8a3630b9f98f15e.mp3",
+      "duration": "2.6453333333333333",
+      "peak": "0.3443591594696045",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am myself near water near our fresh water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am myself near water near our fresh water.",
+      "context": "running",
+      "elapsedMs": "3143",
+      "url": "/audio/sentences/kokoro-afheart-v1/6e078de8e6451a4b1ccc.mp3",
+      "duration": "2.688",
+      "peak": "0.35392335057258606",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am near water near our fresh water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am near water near our fresh water.",
+      "context": "running",
+      "elapsedMs": "2481",
+      "url": "/audio/sentences/kokoro-afheart-v1/b542a67d35abcd0a9612.mp3",
+      "duration": "2.112",
+      "peak": "0.41695553064346313",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am near our fresh water.",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "I am near our fresh water.",
+      "context": "running",
+      "elapsedMs": "1933",
+      "url": "/audio/sentences/kokoro-afheart-v1/38bef5f3552e4555a410.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.38182955980300903",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Do I help them near water?",
+      "source": "actual-reported-failure",
+      "code": "ended",
+      "sentence": "Do I help them near water?",
+      "context": "running",
+      "elapsedMs": "1861",
+      "url": "/audio/sentences/kokoro-afheart-v1/202469b47143df3a4a66.mp3",
+      "duration": "1.4933333333333334",
+      "peak": "0.30410826206207275",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    }
+  ]
+}

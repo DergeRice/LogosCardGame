@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-18T08:36:21.227Z",
+  "verifiedAt": "2026-10-18T09:10:10.336Z",
   "local": {
     "sentences": {
       "manifestEntries": 1079,
@@ -29,15 +29,16 @@
     }
   },
   "r2": {
-    "verifiedAt": "2026-10-18T08:17:52.776Z",
+    "verifiedAt": "2026-10-18T09:09:13.725Z",
     "source": "Fresh authenticated R2 list via temporary read-only Worker; not /health or old receipts",
-    "objects": 24155,
-    "bytes": 548560728,
-    "expectedEntries": 24155,
-    "matched": 24155,
+    "objects": 42864,
+    "bytes": 976257216,
+    "expectedEntries": 42864,
+    "matched": 42864,
+    "unexpectedObjects": 0,
     "mismatches": [],
     "archive": "docs/audio-audit/r2-inventory-2026-10-18.json.gz",
-    "archiveSha256": "81f291565b5e355c5fc38db2efc961ef658d594c40c6ad86ffc9677ca8df20bc"
+    "archiveSha256": "5befc452034a43861a3a146af6db878426d9af652c36c2f6b01ad054377f55b9"
   },
   "newlyGenerated": {
     "engine": "Kokoro-82M v1.0 af_heart",
@@ -45,10 +46,10 @@
     "observedSupplement": 398,
     "historicalTo": 17,
     "expandedProgress": {
-      "done": 3100,
+      "done": 18709,
       "total": 18709,
-      "elapsedSeconds": 363.1,
-      "bytes": 66416976,
+      "elapsedSeconds": 2195.3,
+      "bytes": 427696488,
       "failures": 0
     }
   },

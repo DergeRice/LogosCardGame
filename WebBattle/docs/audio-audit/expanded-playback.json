@@ -1,0 +1,662 @@
+{
+  "verifiedAt": "2026-10-18T09:09:17.365Z",
+  "base": "https://logos-card-battle.netlify.app",
+  "expandedOnly": true,
+  "catalogSentences": 18709,
+  "randomIndices": [
+    5048,
+    13380,
+    16093,
+    18654,
+    4871,
+    15432,
+    3015,
+    17925,
+    14708,
+    12524,
+    3389,
+    5128
+  ],
+  "samplesPerDevice": 17,
+  "realBufferPlayback": 34,
+  "errors": [],
+  "physicalHandsetVerified": false,
+  "results": [
+    {
+      "device": "PC Chromium",
+      "text": "I am often not near the friend.",
+      "source": "random-current-deck",
+      "index": 5048,
+      "code": "ended",
+      "sentence": "I am often not near the friend.",
+      "context": "running",
+      "elapsedMs": "3064",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/b9fa5f5c3fd249b27df0.mp3",
+      "duration": "1.792",
+      "peak": "0.3300955295562744",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Sometimes a teacher can be often happy.",
+      "source": "random-current-deck",
+      "index": 13380,
+      "code": "ended",
+      "sentence": "Sometimes a teacher can be often happy.",
+      "context": "running",
+      "elapsedMs": "2645",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/3f2978ffb14f7de9f80c.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.3793982267379761",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The traffic can really quietly flow often near them.",
+      "source": "random-current-deck",
+      "index": 16093,
+      "code": "ended",
+      "sentence": "The traffic can really quietly flow often near them.",
+      "context": "running",
+      "elapsedMs": "4642",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/81e674080b5ed1572ce4.mp3",
+      "duration": "2.944",
+      "peak": "0.3512078523635864",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Traffic flows today near clean water.",
+      "source": "random-current-deck",
+      "index": 18654,
+      "code": "ended",
+      "sentence": "Traffic flows today near clean water.",
+      "context": "running",
+      "elapsedMs": "3019",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/887344cf0a3fa9a0e430.mp3",
+      "duration": "2.1546666666666665",
+      "peak": "0.40794000029563904",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am not the guide near our water regularly and often.",
+      "source": "random-current-deck",
+      "index": 4871,
+      "code": "ended",
+      "sentence": "I am not the guide near our water regularly and often.",
+      "context": "running",
+      "elapsedMs": "4385",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/fcf418834ee623fbc968.mp3",
+      "duration": "3.072",
+      "peak": "0.3886357545852661",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The teacher is not often your really very helpful support near a young friend today.",
+      "source": "random-current-deck",
+      "index": 15432,
+      "code": "ended",
+      "sentence": "The teacher is not often your really very helpful support near a young friend today.",
+      "context": "running",
+      "elapsedMs": "5703",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/197b9c079bed7d88b8de.mp3",
+      "duration": "4.778666666666667",
+      "peak": "0.40391936898231506",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Do not be very well our guide!",
+      "source": "random-current-deck",
+      "index": 3015,
+      "code": "ended",
+      "sentence": "Do not be very well our guide!",
+      "context": "running",
+      "elapsedMs": "2580",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/c9215a15882a152c73f2.mp3",
+      "duration": "1.6426666666666667",
+      "peak": "0.30785292387008667",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Today, sometimes I give them our advice.",
+      "source": "random-current-deck",
+      "index": 17925,
+      "code": "ended",
+      "sentence": "Today, sometimes I give them our advice.",
+      "context": "running",
+      "elapsedMs": "3244",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/040bbdf0797f5a0ad3f8.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.36496701836586",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The education is regularly and often not important.",
+      "source": "random-current-deck",
+      "index": 14708,
+      "code": "ended",
+      "sentence": "The education is regularly and often not important.",
+      "context": "running",
+      "elapsedMs": "4280",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/2f8b5b99c0fdfe232bba.mp3",
+      "duration": "3.392",
+      "peak": "0.5773209929466248",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Read our book near water very well!",
+      "source": "random-current-deck",
+      "index": 12524,
+      "code": "ended",
+      "sentence": "Read our book near water very well!",
+      "context": "running",
+      "elapsedMs": "2825",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/cd93cf6db571bbbdf487.mp3",
+      "duration": "1.9413333333333334",
+      "peak": "0.31939977407455444",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does management often give our young student only often something today?",
+      "source": "random-current-deck",
+      "index": 3389,
+      "code": "ended",
+      "sentence": "Does management often give our young student only often something today?",
+      "context": "running",
+      "elapsedMs": "5083",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/4c44aeda06f99218f8db.mp3",
+      "duration": "4.2026666666666666",
+      "peak": "0.41260915994644165",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I am often support near our really very kind friend near our friend.",
+      "source": "random-current-deck",
+      "index": 5128,
+      "code": "ended",
+      "sentence": "I am often support near our really very kind friend near our friend.",
+      "context": "running",
+      "elapsedMs": "4751",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/db8ae6097fb8f08b14e7.mp3",
+      "duration": "3.8186666666666667",
+      "peak": "0.4324586093425751",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can enjoy music near a useful friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can enjoy music near a useful friend.",
+      "context": "running",
+      "elapsedMs": "3728",
+      "url": "/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "duration": "2.688",
+      "peak": "0.3552902340888977",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near our friends.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friends.",
+      "context": "running",
+      "elapsedMs": "2055",
+      "url": "/audio/sentences/kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.45095527172088623",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near our friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friend.",
+      "context": "running",
+      "elapsedMs": "2048",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.38532754778862",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I work.",
+      "context": "running",
+      "elapsedMs": "1382",
+      "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+      "duration": "0.96",
+      "peak": "0.3957744240760803",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "A teacher can work.",
+      "context": "running",
+      "elapsedMs": "2225",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+      "duration": "1.3653333333333333",
+      "peak": "0.35644879937171936",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am often not near the friend.",
+      "source": "random-current-deck",
+      "index": 5048,
+      "code": "ended",
+      "sentence": "I am often not near the friend.",
+      "context": "running",
+      "elapsedMs": "3061",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/b9fa5f5c3fd249b27df0.mp3",
+      "duration": "1.792",
+      "peak": "0.3300955295562744",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Sometimes a teacher can be often happy.",
+      "source": "random-current-deck",
+      "index": 13380,
+      "code": "ended",
+      "sentence": "Sometimes a teacher can be often happy.",
+      "context": "running",
+      "elapsedMs": "3166",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/3f2978ffb14f7de9f80c.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.3793982267379761",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The traffic can really quietly flow often near them.",
+      "source": "random-current-deck",
+      "index": 16093,
+      "code": "ended",
+      "sentence": "The traffic can really quietly flow often near them.",
+      "context": "running",
+      "elapsedMs": "3526",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/81e674080b5ed1572ce4.mp3",
+      "duration": "2.944",
+      "peak": "0.3512078523635864",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Traffic flows today near clean water.",
+      "source": "random-current-deck",
+      "index": 18654,
+      "code": "ended",
+      "sentence": "Traffic flows today near clean water.",
+      "context": "running",
+      "elapsedMs": "2756",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/887344cf0a3fa9a0e430.mp3",
+      "duration": "2.1546666666666665",
+      "peak": "0.40794000029563904",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am not the guide near our water regularly and often.",
+      "source": "random-current-deck",
+      "index": 4871,
+      "code": "ended",
+      "sentence": "I am not the guide near our water regularly and often.",
+      "context": "running",
+      "elapsedMs": "3617",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/fcf418834ee623fbc968.mp3",
+      "duration": "3.072",
+      "peak": "0.3886357545852661",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The teacher is not often your really very helpful support near a young friend today.",
+      "source": "random-current-deck",
+      "index": 15432,
+      "code": "ended",
+      "sentence": "The teacher is not often your really very helpful support near a young friend today.",
+      "context": "running",
+      "elapsedMs": "5387",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/197b9c079bed7d88b8de.mp3",
+      "duration": "4.778666666666667",
+      "peak": "0.40391936898231506",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Do not be very well our guide!",
+      "source": "random-current-deck",
+      "index": 3015,
+      "code": "ended",
+      "sentence": "Do not be very well our guide!",
+      "context": "running",
+      "elapsedMs": "2197",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/c9215a15882a152c73f2.mp3",
+      "duration": "1.6426666666666667",
+      "peak": "0.30785292387008667",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Today, sometimes I give them our advice.",
+      "source": "random-current-deck",
+      "index": 17925,
+      "code": "ended",
+      "sentence": "Today, sometimes I give them our advice.",
+      "context": "running",
+      "elapsedMs": "2964",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/040bbdf0797f5a0ad3f8.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.36496701836586",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The education is regularly and often not important.",
+      "source": "random-current-deck",
+      "index": 14708,
+      "code": "ended",
+      "sentence": "The education is regularly and often not important.",
+      "context": "running",
+      "elapsedMs": "3931",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/2f8b5b99c0fdfe232bba.mp3",
+      "duration": "3.392",
+      "peak": "0.5773209929466248",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Read our book near water very well!",
+      "source": "random-current-deck",
+      "index": 12524,
+      "code": "ended",
+      "sentence": "Read our book near water very well!",
+      "context": "running",
+      "elapsedMs": "2482",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/cd93cf6db571bbbdf487.mp3",
+      "duration": "1.9413333333333334",
+      "peak": "0.31939977407455444",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does management often give our young student only often something today?",
+      "source": "random-current-deck",
+      "index": 3389,
+      "code": "ended",
+      "sentence": "Does management often give our young student only often something today?",
+      "context": "running",
+      "elapsedMs": "4778",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/4c44aeda06f99218f8db.mp3",
+      "duration": "4.2026666666666666",
+      "peak": "0.41260915994644165",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I am often support near our really very kind friend near our friend.",
+      "source": "random-current-deck",
+      "index": 5128,
+      "code": "ended",
+      "sentence": "I am often support near our really very kind friend near our friend.",
+      "context": "running",
+      "elapsedMs": "4398",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/db8ae6097fb8f08b14e7.mp3",
+      "duration": "3.8186666666666667",
+      "peak": "0.4324586093425751",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can enjoy music near a useful friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can enjoy music near a useful friend.",
+      "context": "running",
+      "elapsedMs": "3279",
+      "url": "/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "duration": "2.688",
+      "peak": "0.3552902340888977",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near our friends.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friends.",
+      "context": "running",
+      "elapsedMs": "1939",
+      "url": "/audio/sentences/kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.45095527172088623",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near our friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friend.",
+      "context": "running",
+      "elapsedMs": "2126",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.38532754778862",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I work.",
+      "context": "running",
+      "elapsedMs": "1272",
+      "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+      "duration": "0.96",
+      "peak": "0.3957744240760803",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "A teacher can work.",
+      "context": "running",
+      "elapsedMs": "1760",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+      "duration": "1.3653333333333333",
+      "peak": "0.35644879937171936",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    }
+  ]
+}

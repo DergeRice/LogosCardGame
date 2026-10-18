@@ -16,7 +16,7 @@ export function preloadSentenceVoice(){
 export type VoiceCode='loading'|'playing'|'ended'|'blocked'|'missing'|'network'|'decode'|'unsupported'|'timeout'|'cancelled';
 export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number;sentence?:string;stage?:string};
 const files=new Map<string,Promise<{bytes:ArrayBuffer;url:string}>>();
-/** The static pack is preferred. A device English voice keeps an uncovered sentence audible until its Chirp file is added. */
+/** The static pack is preferred. A device English voice keeps an uncovered sentence audible until its Kokoro file is added. */
 function speakDeviceFallback(text:string,onStart:()=>void,onEnd:()=>void,report:(code:VoiceCode,details?:Partial<VoiceStatus>)=>void,signal:AbortSignal){
  return new Promise<void>((resolve,reject)=>{
   if(typeof speechSynthesis==='undefined'||typeof SpeechSynthesisUtterance==='undefined')return reject(new VoiceError('missing'));
@@ -85,6 +85,7 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
  }catch(error){
   // A generated sentence can fall outside the static catalog. Keep the game audible instead of presenting a dead replay button.
   if(!cancelled&&error instanceof VoiceError&&(error.code==='missing'||error.code==='network'||error.code==='timeout'||error.code==='unsupported')){
+   report(error.code,{stage:'recorded_file_unavailable',http:error.http,url:error.url});
    try{return await speakDeviceFallback(normalizeSpeechText(text),onStart,onEnd,report,controller.signal)}catch(fallbackError){if(fallbackError instanceof VoiceError&&fallbackError.code!=='missing')error=fallbackError;}
   }
   if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined,url:error instanceof VoiceError?error.url:undefined});throw error;
