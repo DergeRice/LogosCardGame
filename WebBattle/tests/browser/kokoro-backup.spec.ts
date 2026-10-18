@@ -13,6 +13,9 @@ for(const mobile of [false,true])test(`real Kokoro WASM backup and cache, ${mobi
  await expect(page.getByRole('status')).toHaveText('ended',{timeout:110000});await expect(page.locator('dl')).toContainText('kokoro-generated:');
  const recordings=await page.evaluate(()=>(window as any).__recordedBuffers);expect(recordings).toHaveLength(1);expect(recordings[0].peak).toBeGreaterThan(.02);expect(recordings[0].end).toBeGreaterThan(recordings[0].start);expect(recordings[0].duration).toBeGreaterThan(2);
  await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect.poll(()=>page.evaluate(()=>(window as any).__recordedBuffers.length),{timeout:10000}).toBe(2);await expect(page.getByRole('status')).toHaveText('ended',{timeout:20000});await expect(page.locator('dl')).toContainText('kokoro-cache:');expect(errors).toEqual([]);
+ const burst=['The kind teacher can work quietly.','Our friendly guide can work today.','A useful book can help our friend.','The young student can read our story today.'];
+ for(const sentence of burst){await page.getByLabel('직접 검사할 문장').fill(sentence);await page.getByRole('button',{name:'문장 재생',exact:true}).click();}
+ await expect(page.getByRole('status')).toHaveText('ended',{timeout:60000});const latest=await page.evaluate(()=>(window as any).__voiceEvents.filter((e:any)=>e.code==='ended').at(-1));expect(latest.sentence).toBe(burst.at(-1));expect(latest.url).toContain('kokoro-generated:');expect(errors).toEqual([]);
  const evidence=await page.evaluate(()=>(window as any).__voiceEvents.filter((e:any)=>e.code==='ended'));await test.info().attach('kokoro-backup-real-playback',{body:JSON.stringify({mobile,evidence,recordings}),contentType:'application/json'});
  }finally{await ctx.close();}
 });

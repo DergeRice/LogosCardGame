@@ -8,7 +8,7 @@ export function SentenceExamplePanel({example,onClose,voice=true}:{example:Sente
  useEffect(()=>{
   let alive=true;
   const enabled=voice;
-  let timer=setTimeout(()=>closeRef.current(),enabled?12000:3000);
+  let timer=setTimeout(()=>closeRef.current(),enabled?25000:3000);
   const playback=enabled?playSentenceExample(example.english,()=>{if(alive){clearTimeout(timer);timer=setTimeout(()=>closeRef.current(),32000)}},()=>{if(alive){clearTimeout(timer);timer=setTimeout(()=>closeRef.current(),2000)}},state=>{if(alive&&state.code==='generating'){clearTimeout(timer);timer=setTimeout(()=>closeRef.current(),95000);}if(alive&&!['loading','generating','playing','ended'].includes(state.code)){clearTimeout(timer);timer=setTimeout(()=>closeRef.current(),2500)}}):null;
   void playback?.done.catch(()=>{if(alive){clearTimeout(timer);timer=setTimeout(()=>closeRef.current(),2500)}}); // Failure never blocks input or retains this panel.
   const esc=(event:KeyboardEvent)=>{if(event.key==='Escape')closeRef.current()};document.addEventListener('keydown',esc);

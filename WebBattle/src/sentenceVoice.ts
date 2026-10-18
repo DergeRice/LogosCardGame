@@ -1,3 +1,4 @@
+import {kokoroObjectKey} from '../shared/kokoro-audio.js';
 import {unlockGameAudio} from './exampleAudio.js';
 import {normalizeSpeechText} from '../shared/chirp-audio.js';
 type Entry={text:string;file:string;duration:number};
@@ -20,10 +21,9 @@ class VoiceError extends Error{constructor(public code:VoiceCode,public http?:nu
 async function sentenceFiles(text:string){
  const normalized=normalizeSpeechText(text);
  const entries=await preloadSentenceVoice();
- const digest=async(value:string)=>(Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),v=>v.toString(16).padStart(2,'0')).join(''));
  const entry=entries.get(normalized);
- const key=(await digest('kokoro-v1.0/af_heart/1.0/'+normalized)).slice(0,20);
- return [...(entry?['/audio/sentences/'+entry.file]:[]),SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3'];
+ const key=await kokoroObjectKey(normalized);
+ return [...(entry?['/audio/sentences/'+entry.file]:[]),SENTENCE_AUDIO_ORIGIN+'/'+key];
 }
 function prefetchRecordedAudio(text:string){
  const key=normalizeSpeechText(text);let task=files.get(key);if(task)return task;
@@ -48,7 +48,7 @@ export async function prefetchSentenceAudio(text:string,onGenerating?:()=>void){
   if(!(error instanceof VoiceError)||!['missing','network','timeout'].includes(error.code))throw error;
   onGenerating?.();
   const {generateKokoroAudio}=await import('./kokoroClient.js');
-  try{return await generateKokoroAudio(text);}catch{throw new VoiceError('network');}
+  try{return await generateKokoroAudio(text);}catch{throw new VoiceError('network',undefined,'kokoro-worker');}
  }
 }
 /** Whole-sentence Kokoro recording or same-voice worker generation; never native TTS. */

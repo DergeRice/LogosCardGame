@@ -9733,6 +9733,78 @@
       "duration": 2.923,
       "peak": 0.366,
       "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can not often be near the fresh water near the fresh water.",
+      "file": "kokoro-afheart-v1/30ba0baa9de1b27149da.mp3",
+      "bytes": 31152,
+      "sha256": "2df39c8c37f37382e17d962c5f8ec08d863ac93dd8b51c09da3da4ec6be7f9e6",
+      "duration": 3.691,
+      "peak": 0.3944,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can not often be near clean water near the fresh water.",
+      "file": "kokoro-afheart-v1/8e7c26e52f701e880182.mp3",
+      "bytes": 31128,
+      "sha256": "2077d296c1b40fd2f9759d55f35aeb9c4adf5cc6ff707265e3ffc031a1ee9573",
+      "duration": 3.648,
+      "peak": 0.4049,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can not often be near water near the fresh water.",
+      "file": "kokoro-afheart-v1/978adc12a2daf5426ebe.mp3",
+      "bytes": 27528,
+      "sha256": "da711a4b04ec3f1accae9ea4f27c78cc370bf4bbd3aa51cca569680ff29ccdd6",
+      "duration": 3.328,
+      "peak": 0.3838,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can not often be support near the fresh water.",
+      "file": "kokoro-afheart-v1/cc4491e3847b3af16036.mp3",
+      "bytes": 26112,
+      "sha256": "2fd8328ccbe59b065fbcd1eecadfefde083b9e8579da70baa6ceaf697579cd62",
+      "duration": 3.157,
+      "peak": 0.4137,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can often work near a friend near the friend.",
+      "file": "kokoro-afheart-v1/405c476d4396b1ea191b.mp3",
+      "bytes": 20616,
+      "sha256": "2ddbaa0afb96a6953c34d9dc60c8dc7cc02ca57160ac175a8216271000c65fb8",
+      "duration": 2.389,
+      "peak": 0.3859,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not often help them near a friend near the friend.",
+      "file": "kokoro-afheart-v1/f0cad048aaa4da08963a.mp3",
+      "bytes": 23424,
+      "sha256": "81b3b898b15d617b2baa1addba24a766cc7ad7e79bb8a1c12b47693a72be99b0",
+      "duration": 2.731,
+      "peak": 0.4064,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near a friend near the friend.",
+      "file": "kokoro-afheart-v1/546e545fe4af850ebed1.mp3",
+      "bytes": 17976,
+      "sha256": "a03343c47a823175da4aede0325d9e8ab2477579ba38fe1970df796d17374269",
+      "duration": 1.984,
+      "peak": 0.4199,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Give management our advice very well!",
+      "file": "kokoro-afheart-v1/fd39040cd5e61bd01787.mp3",
+      "bytes": 19488,
+      "sha256": "75a60e82775c6cab6cccf775913b8b7cb6c5559ee546349781603fdda6511e5d",
+      "duration": 2.325,
+      "peak": 0.3346,
+      "sampleRate": 24000
     }
   ],
   "fallbackSources": {}
