@@ -12,3 +12,15 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
 
 /* Reorder geometry must stay fixed even immediately after a card enters the field. */
 .pointer-field .sentence-card{animation:none!important}
+
+/* Older RoomPanels CSS is loaded later in production. Scope the replacement above it. */
+.room-lobby.modern-lobby{height:var(--game-height,100dvh);width:var(--game-width,100vw);min-height:0;overflow:hidden;padding:20px}
+.modern-lobby>.room-lobby-card{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+.modern-lobby .lobby-six-slots{min-height:0;overflow:auto;overscroll-behavior:contain}
+.modern-lobby .lobby-seat{gap:5px;padding:12px;flex-direction:column}
+.modern-lobby .lobby-seat .character-avatar{--profile-size:45px}
+.modern-lobby .lobby-seat small{margin-top:0}
+@media(max-width:650px){.room-lobby.modern-lobby{padding:12px}.modern-lobby .lobby-seat{padding:9px}}
+@media(orientation:landscape) and (max-height:540px){.room-lobby.modern-lobby{padding:8px 18px}.modern-lobby .lobby-seat{padding:6px;gap:2px;min-height:88px}.modern-lobby .lobby-seat .character-avatar{--profile-size:28px}.modern-lobby .lobby-seat>b{font-size:11px}.modern-lobby .lobby-seat small{font-size:9px}}
+
+@media(orientation:landscape) and (max-height:540px){.modern-lobby .room-lobby-heading h1{font-size:21px;line-height:1.2;margin:0}.modern-lobby .room-lobby-heading>small{font-size:10px;line-height:1.4}.modern-lobby .room-lobby-actions button{font-size:12px;line-height:1.2;padding:6px 13px;min-height:30px}}

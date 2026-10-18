@@ -1,0 +1,27 @@
+{
+  "version": "v0.9.76",
+  "server": "wss://logos-card-battle-server.jesus-and-children-ranking-worker.workers.dev/socket",
+  "forcedScore": false,
+  "forcedWallet": false,
+  "checks": [
+    {
+      "normalSubmission": true,
+      "cards": 6,
+      "score": 21,
+      "duplicateSubmissionAppliedOnce": true
+    },
+    {
+      "normalStopResult": true,
+      "friendRequest": true,
+      "mutualFriendship": true
+    },
+    {
+      "onlineFriendInvite": true,
+      "sameRoom": true,
+      "individualAIDifficulty": true,
+      "removeAI": true
+    }
+  ],
+  "errorCount": 0,
+  "success": true
+}

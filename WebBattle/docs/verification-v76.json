@@ -21,7 +21,7 @@
       "file": "community-store.spec.ts",
       "title": "two real clients finish timed game request accept friendship invite join and control individual bots",
       "status": "passed",
-      "evidence": "v76-release"
+      "evidence": "v76-community-final"
     },
     {
       "project": "webkit",
@@ -42,7 +42,7 @@
       "file": "community-store.spec.ts",
       "title": "two real clients finish timed game request accept friendship invite join and control individual bots",
       "status": "passed",
-      "evidence": "v76-release"
+      "evidence": "v76-community-final"
     },
     {
       "project": "chromium",
@@ -253,9 +253,23 @@
       "title": "real guest sessions have distinct readable names and stable UUID after refresh",
       "status": "passed",
       "evidence": "v76-release"
+    },
+    {
+      "project": "chromium",
+      "file": "live-community-ui.spec.ts",
+      "title": "live shop prices and two-session six-slot lobby stay inside mobile visual viewport",
+      "status": "passed",
+      "evidence": "v76-community-final"
+    },
+    {
+      "project": "webkit",
+      "file": "live-community-ui.spec.ts",
+      "title": "live shop prices and two-session six-slot lobby stay inside mobile visual viewport",
+      "status": "passed",
+      "evidence": "v76-community-final"
     }
   ],
-  "passed": 36,
+  "passed": 38,
   "failed": 0,
   "initialFailure": "Field entry scale animation caused 2.3px insertion-preview mismatch; disabled field entry scale and all 4 drag regression tests passed."
 }
