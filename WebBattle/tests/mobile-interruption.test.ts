@@ -31,11 +31,11 @@ test('a long disconnected battle settles once and still shows the result on retu
  const game=new Game({minimumPlayers:2,dealMs:999_999}),{a,b,room}=match(game),token=a.token;
  game.disconnected(a,a.socket!);now+=RULES.reconnectSeconds*1000+1;game.tick();
  assert.equal(room.phase,'result');assert.equal(room.winner,b.id);
- assert.equal(a.reward,0);assert.equal(b.reward,300);assert.equal(a.points,0);assert.equal(b.points,300);
+ assert.equal(a.reward,0);assert.equal(b.reward,50);assert.equal(a.points,0);assert.equal(b.points,50);
  assert.equal(room.expiresAt,now+game.resultMs);
  const client=socket();game.hello(client,token,'돌아옴');
  assert.equal(client.messages.at(-1)?.type,'state');assert.equal(client.messages.at(-1)?.room.phase,'result');
- game.tick();assert.equal(b.points,300);
+ game.tick();assert.equal(b.points,50);
 });
 
 test('disconnect before cards are played cancels the match without phantom 300P rewards',t=>{

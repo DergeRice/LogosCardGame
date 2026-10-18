@@ -8,9 +8,9 @@ const socket=()=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){
 test('frequency in ordinary verb, Be and auxiliary positions counts fully and produces aligned words',()=>{
  for(const kinds of [['pronoun','frequency','verb'],['pronoun','frequency','verb','mass'],['pronoun','be','frequency','adjective'],['pronoun','frequency','be','adjective'],['pronoun','modal','frequency','verb'],['pronoun','do','not','frequency','verb'],['pronoun','verb','frequency']] as Kind[][]){const cards=kinds.map((kind,i)=>({kind,id:String(i)})),j=judgeCards(cards);assert.equal(j.valid,true,kinds.join(' '));assert.equal(j.usedLength,cards.length,kinds.join(' '));assert.deepEqual(cardSentenceExample(cards,j).example?.parts.map(p=>p.kind),kinds);}
 });
-test('second Go multiplies all rating changes and retains accumulated score',()=>{
- const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);a.score=40;b.score=30;r.goCount=2;a.calledGo=true;
- game.finish(r,'Stop');assert.equal(a.reward,300);assert.equal(b.reward,0);assert.equal(a.score,40);assert.equal(b.score,30);assert.equal(a.ratingDelta,24);assert.equal(b.ratingDelta,-24);assert.equal(game.view(r,a).multiplier,2);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
+test('second Go gives fixed rank points without multiplying rating changes',()=>{
+ const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);a.score=40;b.score=30;r.leaderId=a.id;r.goCount=2;a.calledGo=true;
+ game.finish(r,'Stop');assert.equal(a.reward,100);assert.equal(b.reward,0);assert.equal(a.score,40);assert.equal(b.score,30);assert.equal(a.ratingDelta,12);assert.equal(b.ratingDelta,-12);const points=a.points;game.finish(r,'duplicate');assert.equal(a.points,points);
 });
 test('AI approvals happen at separate persisted deadlines and unanimous consent distributes once',t=>{
  let now=100000;t.mock.method(Date,'now',()=>now);const game=new Game(),a=game.hello(socket(),null,'A');game.quick(a);const r=game.rooms.get(a.room!)!;game.reveal(r);game.deal(r,5);game.begin(r);r.players.filter(p=>p.ai).forEach((p,i)=>{p.nextAI=now+60000;r.drawVote!.aiApproveAt![p.id]=now+(i+1)*2000});const voteId=r.drawVote!.id,deck=r.deck.length;

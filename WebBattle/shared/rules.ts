@@ -102,7 +102,7 @@ export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.va
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }
 export function cardFace(card: Card) { const variant = card.variant ? VARIANTS[card.variant] : undefined; return variant?.kind === card.kind ? { ...CATALOG[card.kind], ...variant } : CATALOG[card.kind]; }
 export function effectLabel(card: Card) { const e=cardEffect(card); return e.multiply!==1 ? e.multiply<1 ? `÷${1/e.multiply}` : `×${e.multiply}` : e.add ? e.add<0 ? `−${-e.add}` : `+${e.add}` : ''; }
-export type Judgment = LearningGrammarCheckResult & { form?: number; label?: string; points: number; formula?: string; reason: string; accepted?: boolean; submissionId?: string; spans: { start: number; end: number; role: string }[] };
+export type Judgment = LearningGrammarCheckResult & { form?: number; label?: string; points: number; formula?: string; reason: string; accepted?: boolean; submissionId?: string; goBonus?:number;goMultiplier?:number; spans: { start: number; end: number; role: string }[] };
 export function judge(kinds: Kind[]): Judgment {
  // This is the actual battle entry point. Check() has different semantics.
  const positions=kinds.map(kind => CARD_POS[kind]);
