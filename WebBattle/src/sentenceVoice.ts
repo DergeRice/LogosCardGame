@@ -54,7 +54,9 @@ export async function prefetchSentenceAudio(text:string,onGenerating?:()=>void,s
  }
 }
 /** Whole-sentence Kokoro recording or same-voice worker generation; never native TTS. */
+let activePlayback:{stop:()=>void}|undefined;
 export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,onStatus?:(state:VoiceStatus)=>void){
+ activePlayback?.stop();
  let watchdog:ReturnType<typeof setTimeout>|undefined;let source:AudioBufferSourceNode|null=null,cancelled=false,settle:(()=>void)|undefined;
  const started=performance.now(),ctx=unlockGameAudio(); // Synchronously inside a replay tap when permission is needed.
  const report=(code:VoiceCode,details:Partial<VoiceStatus>={})=>{if(!cancelled){const state={code,sentence:normalizeSpeechText(text),context:ctx?.state,elapsedMs:Math.round(performance.now()-started),...details};onStatus?.(state);window.dispatchEvent(new CustomEvent('logos-voice-status',{detail:state}));}};
@@ -78,5 +80,6 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
   if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined,url:error instanceof VoiceError?error.url:undefined});throw error;
  }
  })();
- return {done,stop(){cancelled=true;clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
+ const playback={done,stop(){cancelled=true;clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
+ activePlayback=playback;void done.finally(()=>{if(activePlayback===playback)activePlayback=undefined}).catch(()=>{});return playback;
 }

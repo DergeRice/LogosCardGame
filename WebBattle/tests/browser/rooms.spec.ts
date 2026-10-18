@@ -7,14 +7,12 @@ test('desktop host and mobile guest share a named room, transfer host and start 
  for(const page of [host,guest])page.on('pageerror',error=>errors.push(error.message));
  try{
   await Promise.all([host.goto('/'),guest.goto('/')]);
-  await expect(host.getByRole('button',{name:'방 목록 · 방 만들기'})).toBeEnabled({timeout:45000});
-  await expect(guest.getByRole('button',{name:'방 목록 · 방 만들기'})).toBeEnabled({timeout:45000});
+  await expect(host.getByRole('button',{name:'＋ 방 만들기'})).toBeEnabled({timeout:45000});
+  await expect(guest.getByRole('button',{name:'＋ 방 만들기'})).toBeEnabled({timeout:45000});
   const nickname=await host.getByTestId('guest-name').textContent();
-  await host.getByRole('button',{name:'방 목록 · 방 만들기'}).click();
   await host.getByRole('button',{name:'＋ 방 만들기'}).click();
   await expect(host.locator('.room-lobby h1')).toHaveText(`${nickname}님의 방`);
-  await guest.getByRole('button',{name:'방 목록 · 방 만들기'}).tap();
-  await expect(guest.locator('.room-list-item')).toHaveCount(1);
+  await expect(guest.locator('.hub-rooms article')).toHaveCount(1);
   await guest.getByRole('button',{name:'입장'}).tap();
   await expect(host.locator('.room-player')).toHaveCount(2);
   await host.getByRole('button',{name:'방 이름 편집'}).click();
@@ -47,9 +45,8 @@ test('room browser stays inside a short mobile visual viewport',async({browser})
  const page=await context.newPage();
  try{
   await page.goto('/');
-  await expect(page.getByRole('button',{name:'방 목록 · 방 만들기'})).toBeEnabled({timeout:45000});
-  await page.getByRole('button',{name:'방 목록 · 방 만들기'}).click();
-  const bounds=await page.evaluate(()=>({visualHeight:visualViewport!.height,dialogBottom:document.querySelector('.room-browser')!.getBoundingClientRect().bottom,stageHeight:document.querySelector('.shell')!.getBoundingClientRect().height}));
+  await expect(page.getByRole('button',{name:'＋ 방 만들기'})).toBeEnabled({timeout:45000});
+  const bounds=await page.evaluate(()=>({visualHeight:visualViewport!.height,dialogBottom:document.querySelector('.game-hub')!.getBoundingClientRect().bottom,stageHeight:document.querySelector('.shell')!.getBoundingClientRect().height}));
   expect(bounds.stageHeight).toBe(bounds.visualHeight);
   expect(bounds.dialogBottom).toBeLessThanOrEqual(bounds.visualHeight);
  }finally{await context.close();}

@@ -8,3 +8,4 @@
 .example-voice-status{position:absolute;left:8px;right:8px;bottom:4px;margin:0;font-size:clamp(9px,2cqh,12px);line-height:1.2;color:#887493;text-align:center;pointer-events:none}
 
 .sentence-example-panel{pointer-events:none}.sentence-example-panel .example-dismiss{position:absolute;right:7px;top:5px;pointer-events:auto;font-size:22px;line-height:1;padding:3px 8px}
+.sentence-example-panel.example-auto{pointer-events:auto;cursor:pointer}.sentence-example-panel.example-auto:focus-visible{outline:3px solid #b6a069;outline-offset:-4px}
