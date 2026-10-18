@@ -16,6 +16,20 @@ export function preloadSentenceVoice(){
 export type VoiceCode='loading'|'playing'|'ended'|'blocked'|'missing'|'network'|'decode'|'unsupported'|'timeout'|'cancelled';
 export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number;sentence?:string;stage?:string};
 const files=new Map<string,Promise<{bytes:ArrayBuffer;url:string}>>();
+/** The static pack is preferred. A device English voice keeps an uncovered sentence audible until its Chirp file is added. */
+function speakDeviceFallback(text:string,onStart:()=>void,onEnd:()=>void,report:(code:VoiceCode,details?:Partial<VoiceStatus>)=>void,cancelled:()=>boolean){
+ return new Promise<void>((resolve,reject)=>{
+  if(typeof speechSynthesis==='undefined'||typeof SpeechSynthesisUtterance==='undefined')return reject(new VoiceError('missing'));
+  try{
+   const utterance=new SpeechSynthesisUtterance(text);utterance.lang='en-US';utterance.rate=.9;utterance.pitch=1;
+   const timer=setTimeout(()=>{speechSynthesis.cancel();reject(new VoiceError('timeout'));},35000);
+   utterance.onstart=()=>{if(cancelled())return;speechSynthesis.resume();report('playing',{context:'device_english_fallback'});onStart();};
+   utterance.onend=()=>{clearTimeout(timer);if(!cancelled()){report('ended',{context:'device_english_fallback'});onEnd();}resolve();};
+   utterance.onerror=()=>{clearTimeout(timer);reject(new VoiceError('missing'));};
+   speechSynthesis.cancel();speechSynthesis.speak(utterance);
+  }catch{reject(new VoiceError('missing'));}
+ });
+}
 class VoiceError extends Error{constructor(public code:VoiceCode,public http?:number,public url?:string){super(code)}}
 async function sentenceFile(text:string){
  const normalized=normalizeSpeechText(text),entries=await preloadSentenceVoice(),entry=entries.get(normalized);
@@ -51,7 +65,13 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
    source.onended=()=>{clearTimeout(timeout);source?.disconnect();if(!cancelled){report('ended',{url:file.url,duration:buffer.duration,peak});onEnd()}resolve()};
    try{source.start();report('playing',{url:file.url,duration:buffer.duration,peak});onStart()}catch{clearTimeout(timeout);reject(new VoiceError('blocked'))}
   });
- }catch(error){if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined,url:error instanceof VoiceError?error.url:undefined});throw error;}
+ }catch(error){
+  // A generated sentence can fall outside the static catalog. Keep the game audible instead of presenting a dead replay button.
+  if(!cancelled&&error instanceof VoiceError&&(error.code==='missing'||error.code==='network'||error.code==='timeout')){
+   try{return await speakDeviceFallback(normalizeSpeechText(text),onStart,onEnd,report,()=>cancelled)}catch(fallbackError){error=fallbackError;}
+  }
+  if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined,url:error instanceof VoiceError?error.url:undefined});throw error;
+ }
  })();
  return {done,stop(){cancelled=true;clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
 }

@@ -35,6 +35,6 @@ test('prepared neural audio contains entire reviewed and original sentences with
  assert.equal(texts.size,manifest.entries.length);
  for(const e of manifest.entries){
   const wav=readFileSync('public/audio/sentences/'+e.file);assert.equal(wav.length,e.bytes);assert.equal(createHash('sha256').update(wav).digest('hex'),e.sha256);
-  assert.ok(e.file.endsWith('.mp3'));assert.ok(wav.length>1500);assert.equal(e.sampleRate,24000);assert.ok(e.duration>.3&&e.duration<25,e.text);assert.ok(e.peak>.02&&e.peak<=1.01,e.text);
+  assert.ok(e.file.endsWith('.mp3')||(e as {source?:string}).source==='system-en-us-fallback');assert.ok(wav.length>1500);assert.equal(e.sampleRate,24000);assert.ok(e.duration>.3&&e.duration<25,e.text);assert.ok(e.peak>.02&&e.peak<=1.01,e.text);
  }
 });

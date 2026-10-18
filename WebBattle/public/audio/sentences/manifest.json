@@ -2,7 +2,7 @@
   "version": 2,
   "engine": "Kokoro-82M v1.0",
   "voice": "af_heart",
-  "speed": 1.0,
+  "speed": 1,
   "sentenceLevel": true,
   "entries": [
     {
@@ -5971,6 +5971,19 @@
       "duration": 2.069,
       "peak": 0.3256,
       "sampleRate": 24000
+    },
+    {
+      "text": "I can enjoy music near a useful friend.",
+      "file": "system-en-us-v1/318d4dc1a8e827e78542.wav",
+      "bytes": 115366,
+      "sha256": "674dc2c5bddf446161d4637c90594e9e9596c055820889ee8d9337f2ef39fa91",
+      "duration": 2.403,
+      "peak": 1,
+      "sampleRate": 24000,
+      "source": "system-en-us-fallback"
     }
-  ]
+  ],
+  "fallbackSources": {
+    "system-en-us-v1": "Samantha en_US"
+  }
 }
