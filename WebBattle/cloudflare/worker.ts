@@ -115,7 +115,7 @@ export class BattleArena extends DurableObject<Env>{
     const now=Date.now();a.tokens=Math.min(20,a.tokens+(now-a.at)/250)-1;a.at=now;ws.serializeAttachment(a);
     if(a.tokens<0){this.game.audit(p,'rate_limit','warn',{code:'RATE_LIMIT'});this.game.send(adapter,{type:'error',message:'요청이 너무 빨라요. 잠시 기다려 주세요.'});if(a.tokens< -20)ws.close(4008,'rate limit');return;}
     const msg=JSON.parse(raw);if(!msg||typeof msg!=='object'||Array.isArray(msg))throw Error('잘못된 메시지예요.');
-    if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken);this.game.audit(p,'connected');a.id=p.id;ws.serializeAttachment(a);}
+    if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken,msg.readableGuest);this.game.audit(p,'connected');a.id=p.id;ws.serializeAttachment(a);}
     else if(p.socket===adapter){
      if(msg.type==='appleLogin'){
       const identity=await verifyAppleCode({clientId:this.env.APPLE_CLIENT_ID??'',teamId:this.env.APPLE_TEAM_ID??'',keyId:this.env.APPLE_KEY_ID??'',privateKey:this.env.APPLE_PRIVATE_KEY??'',redirectUri:this.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);

@@ -1,3 +1,4 @@
+import {availableGuestName,GUEST_NAME_COUNT} from '../shared/guestNames.js';
 import {matchGold} from '../shared/matchRewards.js';
 import {BASIC_SUPPLY_KINDS,BASIC_SUPPLY_COOLDOWN_MS} from '../shared/basicSupply.js';
 import {aiGoChoice} from './aiStrategy.js';
@@ -43,7 +44,7 @@ export class Game {
  }
  fail(p: Player, message: string, requestId?: string) { this.audit(p,'rejected','warn',{reason:message,requestId});this.send(p.socket, { type: 'error', message, requestId });const r=p.room&&this.rooms.get(p.room);if(requestId&&r)this.send(p.socket,{type:'state',room:this.view(r,p)}); }
  newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, coins:0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
- hello(socket: WebSocket, token: unknown, name: unknown, authToken?:unknown): Player {
+ hello(socket: WebSocket, token: unknown, name: unknown, authToken?:unknown,readableGuest?:unknown): Player {
   this.tick();
   const auth=typeof authToken==='string'?this.accountSessions.get(createHash('sha256').update(authToken).digest('hex')):undefined;
   const account=auth&&auth.expiresAt>Date.now()?[...this.accounts.values()].find(a=>a.id===auth.accountId):undefined;
@@ -51,10 +52,11 @@ export class Game {
   if(p?.accountId&&!account)p=undefined;
   const expired = Boolean(token && !p);
   if(account&&!p){p=this.newPlayer(account.username);p.accountId=account.id;p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;this.sessions.set(p.token,p);}
-  if (!p) { if (this.sessions.size >= 2000) throw Error('서버가 붐빕니다. 잠시 후 다시 시도하세요.'); const cleaned = typeof name === 'string' ? name.trim().replace(/[\u0000-\u001f\u007f]/g, '') : ''; if (!cleaned || cleaned.length > 16) throw Error('닉네임은 1~16자로 입력해 주세요.'); p = this.newPlayer(cleaned); this.sessions.set(p.token, p); }
+  if (!p) { if (this.sessions.size >= 2000) throw Error('서버가 붐빕니다. 잠시 후 다시 시도하세요.'); const cleaned = readableGuest===true?availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].map(p=>p.name))):typeof name === 'string' ? name.trim().replace(/[\u0000-\u001f\u007f]/g, '') : ''; if (!cleaned || cleaned.length > 16) throw Error('닉네임은 1~16자로 입력해 주세요.'); p = this.newPlayer(cleaned); this.sessions.set(p.token, p); }
+  if(readableGuest===true&&!p.accountId&&/^게스트\s*\d+$/.test(p.name))p.name=availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].filter(x=>x!==p).map(x=>x.name)));
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
-  this.send(socket, { type: 'session', token: p.token, id: p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{username:p.name}:null });
+  this.send(socket, { type: 'session', token: p.token, id: p.id, uuid:p.accountId??p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{username:p.name,provider:account?.provider??'password'}:null });
   this.sendRoomList(socket);
   const room = p.room && this.rooms.get(p.room);
   if (room) { if (room.phase === 'result' && !room.finalRound && this.allRematch(room)) this.reveal(room); else this.broadcast(room); }
@@ -90,7 +92,7 @@ export class Game {
   p.accountId=account.id;p.name=account.username;
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:account.provider??'password'}});
  }
  loginApple(p:Player,identity:{sub:string;email?:string},suggestedName:unknown){
   if(p.room)return this.fail(p,'Apple 로그인은 대전이 끝난 뒤 해주세요.');
@@ -111,7 +113,7 @@ export class Game {
   p.accountId=account.id;p.name=account.username;
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:account.provider??'password'}});
  }
  logout(p:Player){
   if(!p.accountId)return;

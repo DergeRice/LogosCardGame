@@ -26,7 +26,7 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
     const now = Date.now(); tokens = Math.min(20, tokens + (now - at) / 250); at = now;
     if (--tokens < 0) { game.audit(player,'rate_limit','warn',{code:'RATE_LIMIT'});game.send(ws, { type: 'error', message: '요청이 너무 빨라요. 잠시 기다려 주세요.' }); if (tokens < -20) ws.close(4008, 'rate limit'); return; }
     const msg = JSON.parse(raw.toString()); if (!msg || typeof msg !== 'object' || Array.isArray(msg)) throw Error('잘못된 메시지예요.');
-    if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken); clearTimeout(helloTimeout);game.audit(player,'connected'); }
+    if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken,msg.readableGuest); clearTimeout(helloTimeout);game.audit(player,'connected'); }
     else if (player.socket === ws){
      if(msg.type==='appleLogin'){
       const identity=await verifyAppleCode({clientId:process.env.APPLE_CLIENT_ID??'',teamId:process.env.APPLE_TEAM_ID??'',keyId:process.env.APPLE_KEY_ID??'',privateKey:process.env.APPLE_PRIVATE_KEY??'',redirectUri:process.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);
