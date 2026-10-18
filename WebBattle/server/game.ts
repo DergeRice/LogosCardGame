@@ -425,7 +425,7 @@ export class Game {
   p.draftIds=msg.cards as string[];
   p.actionAt = Date.now() + RULES.actionCooldownMs; p.judgment = judgeCards(selected as Card[],feverMultiplier(r.goCount));
   this.audit(p,'judgment','info',{...msg,reason:p.judgment.message});
-  p.judgment.submissionId=msg.requestId; p.judgment.accepted=p.judgment.valid && p.judgment.points>RULES.goThreshold;
+  p.judgment.submissionId=msg.requestId; p.judgment.accepted=p.judgment.valid && p.judgment.points>=RULES.goThreshold;
   if (p.judgment.accepted) {
    p.score += p.judgment.points;
    const accepted = new Set((msg.cards as string[]).slice(p.judgment.usedStartIndex, p.judgment.usedStartIndex + p.judgment.usedLength));
@@ -496,7 +496,7 @@ export class Game {
    if (r.endsAt > 0 && now >= r.endsAt) { this.finish(r, r.finalRound?'마지막 5분이 끝났어요. 최종 점수로 정산합니다.':'경기 시간이 끝났어요. 현재 점수로 정산합니다.'); continue; }
    if(!r.decision&&r.drawVote){let changed=false;for(const p of r.players)if(p.ai&&!r.drawVote.approved.includes(p.id)&&now>=(r.drawVote.aiApproveAt?.[p.id]??now)){r.drawVote.approved.push(p.id);changed=true;}if(r.drawVote.approved.length===r.players.length){this.distribute(r,'unanimous');continue;}if(changed)this.broadcast(r);}
    if(r.nextDealAt>0&&now>=r.nextDealAt){this.distribute(r,'automatic');continue;}
-   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!),feverMultiplier(r.goCount)).points>RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); else if(r.deck.length<r.players.length&&now>=(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});} }
+   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!),feverMultiplier(r.goCount)).points>=RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); else if(r.deck.length<r.players.length&&now>=(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});} }
   }
   for (const [token, p] of this.sessions) if (!p.room && !p.socket && now - p.touchedAt > GUEST_RETENTION_MS) this.sessions.delete(token);
   for(const [hash,session] of this.accountSessions)if(session.expiresAt<=now)this.accountSessions.delete(hash);
