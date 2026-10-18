@@ -27,7 +27,9 @@
   },
   "dependencies": {
     "@diffusionstudio/vits-web": "1.0.3",
+    "@huggingface/transformers": "3.8.1",
     "jose": "^6.2.12",
+    "kokoro-js": "1.2.1",
     "pixi.js": "^8.22.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -6,10 +6,10 @@ test('reported enjoy sentence plays the actual natural Kokoro MP3',async({page})
 test('HTTP 200 HTML is rejected as audio, never reported playing',async({page})=>{
  await page.route('**/audio/sentences/**/*.mp3',r=>r.fulfill({contentType:'text/html',body:'<!doctype html>app shell'}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html>app shell'}));await supported(page);await page.getByRole('combobox').selectOption('I work.');await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('decode',{timeout:15000});
 });
-test('missing Kokoro never silently switches the game to a system voice',async({page})=>{
+test('failed Kokoro backup never silently switches to a system voice',async({page})=>{
  await page.addInitScript(()=>{(window as any).__spoken=0;Object.defineProperty(window,'speechSynthesis',{value:{cancel(){},resume(){},speak(){(window as any).__spoken++}}});});
- await page.route('**/audio/sentences/manifest.json',r=>r.fulfill({json:{entries:[]}}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({status:404}));await supported(page);
- await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('missing');expect(await page.evaluate(()=>(window as any).__spoken)).toBe(0);
+ await page.route('**/*kokoro.worker*',r=>r.fulfill({contentType:'application/javascript',body:'throw Error("Worker failure fixture")'}));await page.route('**/audio/sentences/manifest.json',r=>r.fulfill({json:{entries:[]}}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({status:404}));await supported(page);
+ await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('network');expect(await page.evaluate(()=>(window as any).__spoken)).toBe(0);
 });
 
 for(const [text,hash] of [

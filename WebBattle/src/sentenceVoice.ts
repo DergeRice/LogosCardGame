@@ -13,7 +13,7 @@ export function preloadSentenceVoice(){
   return new Map(data.entries.map(e=>[normalizeSpeechText(e.text),e]));
  }).catch(()=>{manifest=undefined;return new Map<string,Entry>()}).finally(()=>clearTimeout(timer));
 }
-export type VoiceCode='loading'|'playing'|'ended'|'blocked'|'missing'|'network'|'decode'|'unsupported'|'timeout'|'cancelled';
+export type VoiceCode='loading'|'generating'|'playing'|'ended'|'blocked'|'missing'|'network'|'decode'|'unsupported'|'timeout'|'cancelled';
 export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number;sentence?:string;stage?:string};
 const files=new Map<string,Promise<{bytes:ArrayBuffer;url:string}>>();
 class VoiceError extends Error{constructor(public code:VoiceCode,public http?:number,public url?:string){super(code)}}
@@ -25,7 +25,7 @@ async function sentenceFiles(text:string){
  const key=(await digest('kokoro-v1.0/af_heart/1.0/'+normalized)).slice(0,20);
  return [...(entry?['/audio/sentences/'+entry.file]:[]),SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3'];
 }
-export function prefetchSentenceAudio(text:string){
+function prefetchRecordedAudio(text:string){
  const key=normalizeSpeechText(text);let task=files.get(key);if(task)return task;
  task=(async()=>{let failure:VoiceError|undefined;
   for(let round=0;round<2;round++){
@@ -42,7 +42,16 @@ export function prefetchSentenceAudio(text:string){
   throw failure??new VoiceError('missing');
  })().catch(error=>{files.delete(key);throw error});files.set(key,task);if(files.size>24)files.delete(files.keys().next().value!);return task;
 }
-/** Whole-sentence Kokoro static/R2 recordings, only. Missing recordings are reported; the game never substitutes a system voice. */
+/** Recorded packs first; an uncatalogued sentence is still synthesized as one whole Kokoro utterance. */
+export async function prefetchSentenceAudio(text:string,onGenerating?:()=>void){
+ try{return await prefetchRecordedAudio(text);}catch(error){
+  if(!(error instanceof VoiceError)||!['missing','network','timeout'].includes(error.code))throw error;
+  onGenerating?.();
+  const {generateKokoroAudio}=await import('./kokoroClient.js');
+  try{return await generateKokoroAudio(text);}catch{throw new VoiceError('network');}
+ }
+}
+/** Whole-sentence Kokoro recording or same-voice worker generation; never native TTS. */
 export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,onStatus?:(state:VoiceStatus)=>void){
  let watchdog:ReturnType<typeof setTimeout>|undefined;let source:AudioBufferSourceNode|null=null,cancelled=false,settle:(()=>void)|undefined;
  const started=performance.now(),ctx=unlockGameAudio(); // Synchronously inside a replay tap when permission is needed.
@@ -50,7 +59,7 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
  const done=(async()=>{
  try{
   report('loading');if(!ctx)throw new VoiceError('unsupported');
-  const file=await prefetchSentenceAudio(text);if(cancelled)return;
+  const file=await prefetchSentenceAudio(text,()=>report('generating',{stage:'kokoro_generation'}));if(cancelled)return;
   if(ctx.state!=='running'){void ctx.resume().catch(()=>{});await Promise.race([new Promise<void>(resolve=>{const check=()=>{if(ctx.state==='running'){ctx.removeEventListener('statechange',check);resolve()}};ctx.addEventListener('statechange',check);setTimeout(()=>{ctx.removeEventListener('statechange',check);resolve()},1200);check()}),new Promise<void>(resolve=>setTimeout(resolve,1300))]);}
   if(cancelled)return;if(ctx.state!=='running')throw new VoiceError('blocked');
   let buffer:AudioBuffer;try{buffer=await new Promise<AudioBuffer>((resolve,reject)=>{const timer=setTimeout(()=>reject(new VoiceError('timeout',undefined,file.url)),5000);ctx.decodeAudioData(file.bytes.slice(0)).then(value=>{clearTimeout(timer);resolve(value)},()=>{clearTimeout(timer);reject(new VoiceError('decode',undefined,file.url))});})}catch(error){throw error instanceof VoiceError?error:new VoiceError('decode',undefined,file.url)}
