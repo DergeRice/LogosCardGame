@@ -2,7 +2,7 @@
 
 > **작업 지시 프롬프트**
 >
-> 먼저 `git pull --ff-only origin web-battle`로 최신화한 뒤 이 README와 `AGENTS.md`를 끝까지 읽어라. 이전 작업자의 완료 보고를 사실로 가정하지 말고, 파일 수·manifest·운영 URL·재생 결과를 직접 검증하라. 특히 문장 음성은 `public/audio/sentences/manifest.json`, `public/audio/chirp/manifest.json`, 실제 배포 파일 HTTP 응답을 함께 확인한 뒤에만 완료라고 보고한다. 검증 없이 “전부 만들었다”, “5만 개 처리했다”, “Chirp 생성 완료”라고 말하는 것은 허위 완료 보고다. 사용자가 재현한 누락을 다시 사용자에게 떠넘기지 말고, 누락 문장을 추가하거나 즉시 동작하는 대체 재생 경로를 구현하고 테스트·커밋·푸시·운영 배포 확인까지 끝낸다.
+> 먼저 `git pull --ff-only origin web-battle`로 최신화한 뒤 이 README와 `AGENTS.md`를 끝까지 읽어라. 이전 작업자의 완료 보고를 사실로 가정하지 말고, 파일 수·manifest·운영 URL·재생 결과를 직접 검증하라. 특히 문장 음성은 `public/audio/sentences/manifest.json`, `public/audio/chirp/manifest.json`, 실제 배포 파일 HTTP 응답을 함께 확인한 뒤에만 완료라고 보고한다. 검증 없이 “전부 만들었다”, “5만 개 처리했다”, “Chirp 생성 완료”라고 말하는 것은 허위 완료 보고다. 사용자가 재현한 누락을 다시 사용자에게 떠넘기지 말고, 누락 문장을 추가하거나 즉시 동작하는 대체 재생 경로를 구현하고 테스트·커밋·푸시·운영 배포 확인까지 끝낸다. 거짓 완료 보고를 또 하면 개판 난다. 숫자와 실제 파일을 확인하지 않았으면 완료라고 쓰지 마라.
 
 ## 음성 생성 사고 기록과 현재 사실
 
