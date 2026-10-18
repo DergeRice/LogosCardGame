@@ -1,0 +1,62 @@
+{
+  "verifiedAt": "2026-10-18T08:36:21.227Z",
+  "local": {
+    "sentences": {
+      "manifestEntries": 1079,
+      "manifestIds": 0,
+      "referencedFiles": 1079,
+      "referencedMp3": 1079,
+      "referencedWav": 0,
+      "actualMp3": 1079,
+      "actualWav": 548,
+      "referencedBytes": 17769144,
+      "referencedCharacters": 35213,
+      "manifestSha256": "713726031a7986a47b3fbba85a6533fc50227181d10a9b2eefcff1958520b6ce",
+      "issues": []
+    },
+    "chirp": {
+      "manifestEntries": 0,
+      "manifestIds": 0,
+      "referencedFiles": 0,
+      "referencedMp3": 0,
+      "referencedWav": 0,
+      "actualMp3": 0,
+      "actualWav": 0,
+      "referencedBytes": 0,
+      "referencedCharacters": 0,
+      "manifestSha256": "4cefae0311749a0618ba5f5a43a7409e0b772aafb92b3ea3728bf3fb1776f6de",
+      "issues": []
+    }
+  },
+  "r2": {
+    "verifiedAt": "2026-10-18T08:17:52.776Z",
+    "source": "Fresh authenticated R2 list via temporary read-only Worker; not /health or old receipts",
+    "objects": 24155,
+    "bytes": 548560728,
+    "expectedEntries": 24155,
+    "matched": 24155,
+    "mismatches": [],
+    "archive": "docs/audio-audit/r2-inventory-2026-10-18.json.gz",
+    "archiveSha256": "81f291565b5e355c5fc38db2efc961ef658d594c40c6ad86ffc9677ca8df20bc"
+  },
+  "newlyGenerated": {
+    "engine": "Kokoro-82M v1.0 af_heart",
+    "reportedNaturalMp3": 1,
+    "observedSupplement": 398,
+    "historicalTo": 17,
+    "expandedProgress": {
+      "done": 3100,
+      "total": 18709,
+      "elapsedSeconds": 363.1,
+      "bytes": 66416976,
+      "failures": 0
+    }
+  },
+  "chirpExecution": {
+    "executed": false,
+    "reason": "Latest user instruction selects free Kokoro; Chirp is not used",
+    "apiRequests": 0,
+    "generated": 0
+  },
+  "scope": "No claim of 50,000 sentences or of all possible grammatical arrays. R2 is separate from the Netlify static pack."
+}

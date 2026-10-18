@@ -1,0 +1,177 @@
+{
+  "generated": 17,
+  "characters": 604,
+  "failures": 0,
+  "entries": [
+    {
+      "posKey": "NNU VB DT_AN NNC TO_VB",
+      "text": "Management wants a student to work.",
+      "file": "kokoro-afheart-v1/c8025ffdf3f40cb6109c.mp3",
+      "bytes": 16920,
+      "sha256": "29cb40b3b1984efea7583c63558bdbd2bc0e41572b1737818f6c84c64df31c5b",
+      "duration": 2.048,
+      "peak": 0.3496,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP MODAL VB PRP TO_VB",
+      "text": "I can want them to work.",
+      "file": "kokoro-afheart-v1/28e72759883bb06947fd.mp3",
+      "bytes": 12696,
+      "sha256": "0aea2c404d9fdf8c5ed086e95631eeedb5fc53bceefa4acdab787e533c07d813",
+      "duration": 1.472,
+      "peak": 0.368,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "DO PRP VB PRP TO_VB",
+      "text": "Do I want them to work?",
+      "file": "kokoro-afheart-v1/62268d013584650ff7d6.mp3",
+      "bytes": 11568,
+      "sha256": "49d7b201c3fa48e60b41ee2a9392a50e14092ad4934ac20b1c3f51f3aa817d1b",
+      "duration": 1.408,
+      "peak": 0.264,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "DO PRP VB PRP_POS NNU IN DT_THE NNC TO_VB",
+      "text": "Do I want our management near the friend to work?",
+      "file": "kokoro-afheart-v1/f8c38f20b68d0747b184.mp3",
+      "bytes": 22416,
+      "sha256": "426429ef258536a6ee3ed156de473b519b2accbf0fdaf32546ea86f15241e810",
+      "duration": 2.688,
+      "peak": 0.3892,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "DT_AN NNC VB DT_AN JJ NNC TO_VB",
+      "text": "A teacher wants a young student to work.",
+      "file": "kokoro-afheart-v1/c6a60132c46a4f9bf05b.mp3",
+      "bytes": 17976,
+      "sha256": "20b9af31b928c943714878c2f2f7aceef8650e1e61da93529dd13b169db1f3de",
+      "duration": 2.197,
+      "peak": 0.3335,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "DT_AN NNC VB PRP_POS NNU TO_VB",
+      "text": "A teacher wants our management to work.",
+      "file": "kokoro-afheart-v1/b85a016546c7108f802f.mp3",
+      "bytes": 20472,
+      "sha256": "c3753c9e142bc85c18922177191a89c122e1995e026c05862222dc9a5b58c379",
+      "duration": 2.368,
+      "peak": 0.3386,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "DT_THE NNC VB DT_THE NNU TO_VB",
+      "text": "The teacher wants the management to work.",
+      "file": "kokoro-afheart-v1/04f822c3554d146033e0.mp3",
+      "bytes": 19512,
+      "sha256": "193b281b58a03c3b71d3c34bbab079ea3402198f89baf1c5f35bb50f7a6fadbf",
+      "duration": 2.304,
+      "peak": 0.3653,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "NNU DO RB_NOT VB NNU TO_VB",
+      "text": "Management does not want management to work.",
+      "file": "kokoro-afheart-v1/50feb74a47027af4c006.mp3",
+      "bytes": 21936,
+      "sha256": "e5b6e21e07e5a3ca6e4c5123d1245f5eec735309f41a6d36b502b6a6c04f4d58",
+      "duration": 2.56,
+      "peak": 0.3036,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "NNU MODAL VB NNU TO_VB",
+      "text": "Management can want management to work.",
+      "file": "kokoro-afheart-v1/1bbd6388b9d9e40d7426.mp3",
+      "bytes": 20544,
+      "sha256": "1f40df42b6ebdd23dd103aac012a68f7988dcb831f03225a0c23632fb300fc25",
+      "duration": 2.325,
+      "peak": 0.3808,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "NNU VB DT_THE NNC TO_VB",
+      "text": "Management wants the student to work.",
+      "file": "kokoro-afheart-v1/acf20c19f8898441d54a.mp3",
+      "bytes": 17520,
+      "sha256": "596ccefeff7f9b1b54ec2510daac81f4b6e41e58e0630141503db3b8cf471327",
+      "duration": 2.133,
+      "peak": 0.34,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP MODAL VB DT_THE JJ NNU TO_VB",
+      "text": "I can want the useful management to work.",
+      "file": "kokoro-afheart-v1/00ccd1bc9aac8eec2a5f.mp3",
+      "bytes": 20280,
+      "sha256": "18dd2bbe32da2b9d5d599a267f075b911c4a894aaab8ab18444c01cbf66466b2",
+      "duration": 2.368,
+      "peak": 0.3037,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP MODAL VB NNU TO_VB",
+      "text": "I can want management to work.",
+      "file": "kokoro-afheart-v1/9636a1aea843f39b6e4c.mp3",
+      "bytes": 15024,
+      "sha256": "847f7c639aaf8a1d349ecb5859900710ed84e4fa56e222700616834b2fb377c9",
+      "duration": 1.792,
+      "peak": 0.4309,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP MODAL VB PRP_POS NNC TO_VB",
+      "text": "I can want our student to work.",
+      "file": "kokoro-afheart-v1/701b306371cb0e1fd2b8.mp3",
+      "bytes": 14976,
+      "sha256": "c9480a3abad5e363a729ff18866a1df72e529824a357e8228bb0566d79801491",
+      "duration": 1.749,
+      "peak": 0.3418,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP VB DT_AN JJ NNC TO_VB",
+      "text": "I want a young student to work.",
+      "file": "kokoro-afheart-v1/5fceb0635cfc82d52932.mp3",
+      "bytes": 13704,
+      "sha256": "34313c6b1e29146e04487bb6cc061f304aba471fce27ed95fa91da449f95f802",
+      "duration": 1.728,
+      "peak": 0.4031,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP VB DT_THE JJ NNC TO_VB",
+      "text": "I want the young student to work.",
+      "file": "kokoro-afheart-v1/6f28cfbbc1dda77198cc.mp3",
+      "bytes": 14568,
+      "sha256": "cad7ac22bd51088ff3cb8cd732d56b28fefc1762232791c4929c8b5962a55181",
+      "duration": 1.728,
+      "peak": 0.3339,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP VB DT_THE JJ NNU TO_VB",
+      "text": "I want the useful management to work.",
+      "file": "kokoro-afheart-v1/012a9539304632d95cc1.mp3",
+      "bytes": 18456,
+      "sha256": "64bd528e2b9a6d05af0458336fd36480c5212d0501b364f19285ef0ef3fbccd7",
+      "duration": 2.133,
+      "peak": 0.4038,
+      "sampleRate": 24000
+    },
+    {
+      "posKey": "PRP VB PRP_POS NNU TO_VB",
+      "text": "I want our management to work.",
+      "file": "kokoro-afheart-v1/5b10b2afb77e812ae7a9.mp3",
+      "bytes": 14784,
+      "sha256": "8067a537029f74638ddd198f05f702f23368562f913432951abef43cc71c4aea",
+      "duration": 1.728,
+      "peak": 0.3037,
+      "sampleRate": 24000
+    }
+  ]
+}

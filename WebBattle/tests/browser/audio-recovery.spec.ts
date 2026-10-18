@@ -1,0 +1,11 @@
+import {test,expect} from './fixtures.js';
+async function supported(page:import('@playwright/test').Page){await page.goto('/audio-check');test.skip(!await page.evaluate(()=>typeof AudioContext!=='undefined'),'Windows WebKit lacks Web Audio; no physical iOS claim');}
+test('reported enjoy sentence plays the actual natural Kokoro MP3',async({page})=>{
+ await supported(page);await page.getByRole('combobox').selectOption('I can enjoy music near a useful friend.');await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('ended',{timeout:20000});await expect(page.locator('dl')).toContainText('/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3');
+});
+test('HTTP 200 HTML is rejected as audio, never reported playing',async({page})=>{
+ await page.route('**/audio/sentences/**/*.mp3',r=>r.fulfill({contentType:'text/html',body:'<!doctype html>app shell'}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html>app shell'}));await supported(page);await page.getByRole('combobox').selectOption('I work.');await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('decode',{timeout:15000});
+});
+test('device fallback cancels previous utterance on replay (API wiring mock, not audible-output verification)',async({page})=>{
+ await page.addInitScript(()=>{(window as any).__cancel=0;(window as any).SpeechSynthesisUtterance=class{onstart:any;onend:any;onerror:any;constructor(public text:string){}};Object.defineProperty(window,'speechSynthesis',{value:{cancel(){(window as any).__cancel++},resume(){},speak(u:any){setTimeout(()=>u.onstart?.(),10)}}});});await page.route('**/audio/sentences/manifest.json',r=>r.fulfill({json:{entries:[]}}));await page.route('https://logos-card-audio.*.workers.dev/**',r=>r.fulfill({status:404}));await supported(page);await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect(page.getByRole('status')).toHaveText('playing');await expect(page.locator('dl')).toContainText('device_english_fallback');await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect.poll(()=>page.evaluate(()=>(window as any).__cancel)).toBeGreaterThanOrEqual(3);
+});

@@ -1,0 +1,17 @@
+{
+  "observedCombinations": 829,
+  "matched": 827,
+  "noCurrentExample": 2,
+  "missing": 0,
+  "missingRows": [],
+  "rejectedRows": [
+    {
+      "key": "PRP VB DT_AN NNU IN PRP",
+      "reason": "비표준 문장 조합: 부정관사와 불가산명사를 함께 허용한 원본 조합"
+    },
+    {
+      "key": "PRP VB PRP DT_AN NNU",
+      "reason": "비표준 문장 조합: 부정관사와 불가산명사를 함께 허용한 원본 조합"
+    }
+  ]
+}

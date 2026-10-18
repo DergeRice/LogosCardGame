@@ -1,3 +1,34 @@
+## 현재 음성 엔진: 무료 Kokoro — v0.9.70
+
+최신 사용자 지시는 GitHub의 **Kokoro-82M v1.0 / af_heart**로 예문 전체를 자연스럽게 읽는 것입니다. 아래 과거 Chirp 관련 기록은 현재 실행 계획이 아닙니다. Google 서비스 계정·유료 API는 사용하지 않습니다.
+
+- 정적 목록 밖의 문장이 새로 만들어지는 것이 누락의 원인이었습니다. 운영 오류 로그에서 31개 정확한 실패 문장, 누적 통계에서 829개 품사 조합을 수집했습니다. 닉네임·계정 정보는 보충 입력에 포함하지 않습니다.
+- 우선 실제 플레이에서 빠진 398개 예문을 같은 Kokoro 목소리로 생성해 정적 manifest에 추가했습니다. 제보된 `I can enjoy music near a useful friend.`도 시스템 WAV 대신 새 Kokoro MP3로 교체했습니다.
+- 현재 덱에서 빠진 To 카드가 포함된 과거 플레이 17개도 별도로 보충합니다. 이전 규칙에서 허용했던 부정관사+불가산명사 조합 2개는 현재 판정에서 오답이므로 음성을 만들기 위해 정답으로 바꾸지 않습니다.
+- 실제 조합을 바탕으로 부사 위치·연속 부사·관사 교체·형용사 연속 사용을 확장해 **40,537개 후보를 검사**했고, 기존 파일이 없는 **18,709개 보충 대상**을 추출했습니다. 생성·업로드의 실제 진행 상태와 완료 여부는 `docs/audio-audit/`의 새 결과를 확인합니다. 목표 수를 생성 완료 수로 읽으면 안 됩니다.
+- 기존 R2 24,155개는 2026-10-18 인증된 새 inventory와 로컬 파일 SHA-256으로 대조했습니다. `/health`의 고정 숫자는 증거로 사용하지 않으며 해당 고정 수치도 제거했습니다.
+- 재생은 정적 Kokoro MP3 → R2의 동일 문장 Kokoro MP3입니다. 양쪽 실패 시 기기 영어 음성이 마지막 대체 경로로 남아 있지만 이는 Kokoro 생성 완료로 계산하지 않습니다. HTTP 200 HTML은 음원 성공으로 간주하지 않습니다. 취소 시 기기 TTS도 중단합니다.
+- 모든 가능한 15장 품사 배열 전체를 전수 생성했다는 주장은 하지 않습니다. 실제 확인 범위, 파일 수, 실패 수, 재생 표본을 분리해 기록합니다. 실제 Android/iPhone 스피커 검증과 브라우저 에뮬레이션도 구분합니다.
+
+재현 도구:
+
+```powershell
+npx tsx scripts/prepare-kokoro-missing.ts
+# 로컬 ONNX 모델/기존 Python GPU 패키지가 준비된 개발 PC에서만 오프라인 생성
+python scripts/generate-kokoro-expanded.py
+# Wrangler 로그인 필요. 임시 업로드 서버는 완료/오류 시 자동 삭제
+node scripts/upload-kokoro-expanded.mjs
+node scripts/audit-r2-inventory.mjs
+npx tsx scripts/audit-audio-inventory.ts
+npx tsx scripts/audit-played-voice.ts
+$env:BATTLE_VERIFY_BASE='https://logos-card-battle.netlify.app'
+node scripts/verify-production-audio.mjs
+```
+
+모델·임시 업로드 토큰은 `.runtime/`에만 두며 Git/프런트엔드에 포함하지 않습니다. 게임 서버가 개발 PC에서 음성을 생성하는 구조가 아니며, 생성한 파일은 Netlify/R2에서 제공합니다.
+
+---
+
 # LOGOS WebBattle — 작업 시작 전 필독
 
 > **작업 지시 프롬프트**

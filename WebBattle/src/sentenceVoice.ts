@@ -17,35 +17,52 @@ export type VoiceCode='loading'|'playing'|'ended'|'blocked'|'missing'|'network'|
 export type VoiceStatus={code:VoiceCode;url?:string;http?:number;context?:string;duration?:number;peak?:number;elapsedMs?:number;sentence?:string;stage?:string};
 const files=new Map<string,Promise<{bytes:ArrayBuffer;url:string}>>();
 /** The static pack is preferred. A device English voice keeps an uncovered sentence audible until its Chirp file is added. */
-function speakDeviceFallback(text:string,onStart:()=>void,onEnd:()=>void,report:(code:VoiceCode,details?:Partial<VoiceStatus>)=>void,cancelled:()=>boolean){
+function speakDeviceFallback(text:string,onStart:()=>void,onEnd:()=>void,report:(code:VoiceCode,details?:Partial<VoiceStatus>)=>void,signal:AbortSignal){
  return new Promise<void>((resolve,reject)=>{
   if(typeof speechSynthesis==='undefined'||typeof SpeechSynthesisUtterance==='undefined')return reject(new VoiceError('missing'));
+  if(signal.aborted)return resolve();
   try{
    const utterance=new SpeechSynthesisUtterance(text);utterance.lang='en-US';utterance.rate=.9;utterance.pitch=1;
-   const timer=setTimeout(()=>{speechSynthesis.cancel();reject(new VoiceError('timeout'));},35000);
-   utterance.onstart=()=>{if(cancelled())return;speechSynthesis.resume();report('playing',{context:'device_english_fallback'});onStart();};
-   utterance.onend=()=>{clearTimeout(timer);if(!cancelled()){report('ended',{context:'device_english_fallback'});onEnd();}resolve();};
-   utterance.onerror=()=>{clearTimeout(timer);reject(new VoiceError('missing'));};
+   const cleanup=()=>{clearTimeout(timer);signal.removeEventListener('abort',abort)};
+   const abort=()=>{cleanup();utterance.onstart=null;utterance.onend=null;utterance.onerror=null;speechSynthesis.cancel();resolve()};
+   const timer=setTimeout(()=>{cleanup();speechSynthesis.cancel();reject(new VoiceError('timeout'));},35000);
+   signal.addEventListener('abort',abort,{once:true});
+   utterance.onstart=()=>{if(signal.aborted)return;speechSynthesis.resume();report('playing',{context:'device_english_fallback'});onStart();};
+   utterance.onend=()=>{cleanup();if(!signal.aborted){report('ended',{context:'device_english_fallback'});onEnd();}resolve();};
+   utterance.onerror=(event)=>{cleanup();reject(new VoiceError(event.error==='not-allowed'?'blocked':'missing'));};
    speechSynthesis.cancel();speechSynthesis.speak(utterance);
   }catch{reject(new VoiceError('missing'));}
  });
 }
 class VoiceError extends Error{constructor(public code:VoiceCode,public http?:number,public url?:string){super(code)}}
-async function sentenceFile(text:string){
- const normalized=normalizeSpeechText(text),entries=await preloadSentenceVoice(),entry=entries.get(normalized);
- const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('kokoro-v1.0/af_heart/1.0/'+normalized));
- const key=Array.from(new Uint8Array(digest),v=>v.toString(16).padStart(2,'0')).join('').slice(0,20);
- return entry?'/audio/sentences/'+entry.file:SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3';
+async function sentenceFiles(text:string){
+ const normalized=normalizeSpeechText(text);
+ const entries=await preloadSentenceVoice();
+ const digest=async(value:string)=>(Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),v=>v.toString(16).padStart(2,'0')).join(''));
+ const entry=entries.get(normalized);
+ const key=(await digest('kokoro-v1.0/af_heart/1.0/'+normalized)).slice(0,20);
+ return [...(entry?['/audio/sentences/'+entry.file]:[]),SENTENCE_AUDIO_ORIGIN+'/kokoro-afheart-v1/'+key+'.mp3'];
 }
 export function prefetchSentenceAudio(text:string){
  const key=normalizeSpeechText(text);let task=files.get(key);if(task)return task;
- task=(async()=>{let url=await sentenceFile(text);const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
- try{let response=await fetch(url,{signal:controller.signal});if(response.status===404){manifest=undefined;const refreshed=await sentenceFile(text);if(refreshed!==url){url=refreshed;response=await fetch(url,{signal:controller.signal});}}if(!response.ok)throw new VoiceError(response.status===404?'missing':'network',response.status,url);const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw new VoiceError('decode');return {bytes,url};}
- catch(error){if(error instanceof VoiceError)throw error;throw new VoiceError(controller.signal.aborted?'timeout':'network');}finally{clearTimeout(timer)}
+ task=(async()=>{let failure:VoiceError|undefined;
+  for(let round=0;round<2;round++){
+   const urls=await sentenceFiles(text);
+   for(const url of urls){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6000);
+    try{const response=await fetch(url,{signal:controller.signal});if(!response.ok)throw new VoiceError(response.status===404?'missing':'network',response.status,url);
+     const type=response.headers.get('Content-Type')??'';if(!type.startsWith('audio/'))throw new VoiceError('decode',response.status,url);
+     const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw new VoiceError('decode',response.status,url);return {bytes,url};
+    }catch(error){failure=error instanceof VoiceError?error:new VoiceError(controller.signal.aborted?'timeout':'network',undefined,url)}finally{clearTimeout(timer)}
+   }
+   // Only retry once with refreshed metadata; stale deploys may introduce a local supplement.
+   if(round===0&&failure?.code==='missing'){manifest=undefined;continue;}break;
+  }
+  throw failure??new VoiceError('missing');
  })().catch(error=>{files.delete(key);throw error});files.set(key,task);if(files.size>24)files.delete(files.keys().next().value!);return task;
 }
-/** One complete recorded sentence; no synthetic/word-splicing fallback. */
+/** Whole-sentence Kokoro static/R2 recordings, then a cancellable device-voice fallback. */
 export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,onStatus?:(state:VoiceStatus)=>void){
+ const controller=new AbortController();
  let watchdog:ReturnType<typeof setTimeout>|undefined;let source:AudioBufferSourceNode|null=null,cancelled=false,settle:(()=>void)|undefined;
  const started=performance.now(),ctx=unlockGameAudio(); // Synchronously inside a replay tap when permission is needed.
  const report=(code:VoiceCode,details:Partial<VoiceStatus>={})=>{if(!cancelled){const state={code,sentence:normalizeSpeechText(text),context:ctx?.state,elapsedMs:Math.round(performance.now()-started),...details};onStatus?.(state);window.dispatchEvent(new CustomEvent('logos-voice-status',{detail:state}));}};
@@ -67,11 +84,11 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
   });
  }catch(error){
   // A generated sentence can fall outside the static catalog. Keep the game audible instead of presenting a dead replay button.
-  if(!cancelled&&error instanceof VoiceError&&(error.code==='missing'||error.code==='network'||error.code==='timeout')){
-   try{return await speakDeviceFallback(normalizeSpeechText(text),onStart,onEnd,report,()=>cancelled)}catch(fallbackError){error=fallbackError;}
+  if(!cancelled&&error instanceof VoiceError&&(error.code==='missing'||error.code==='network'||error.code==='timeout'||error.code==='unsupported')){
+   try{return await speakDeviceFallback(normalizeSpeechText(text),onStart,onEnd,report,controller.signal)}catch(fallbackError){if(fallbackError instanceof VoiceError&&fallbackError.code!=='missing')error=fallbackError;}
   }
   if(!cancelled)report(error instanceof VoiceError?error.code:'network',{http:error instanceof VoiceError?error.http:undefined,url:error instanceof VoiceError?error.url:undefined});throw error;
  }
  })();
- return {done,stop(){cancelled=true;clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
+ return {done,stop(){cancelled=true;controller.abort();clearTimeout(watchdog);if(source){source.onended=null;try{source.stop();source.disconnect()}catch{}}settle?.()}};
 }

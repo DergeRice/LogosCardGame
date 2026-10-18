@@ -5974,16 +5974,3748 @@
     },
     {
       "text": "I can enjoy music near a useful friend.",
-      "file": "system-en-us-v1/318d4dc1a8e827e78542.wav",
-      "bytes": 115366,
-      "sha256": "674dc2c5bddf446161d4637c90594e9e9596c055820889ee8d9337f2ef39fa91",
-      "duration": 2.403,
-      "peak": 1,
-      "sampleRate": 24000,
-      "source": "system-en-us-fallback"
+      "file": "kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "bytes": 22224,
+      "sha256": "1c260939f43860b00d257c120d620ad869bbbc6de8b5b5131ce290853f5d816a",
+      "duration": 2.688,
+      "peak": 0.3536,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can be a guide.",
+      "file": "kokoro-afheart-v1/4a6d1b77b5025cdbf34b.mp3",
+      "bytes": 12000,
+      "sha256": "33aa10cecc1cded86882841600621821fe312981aff928c23cb36571bf160688",
+      "duration": 1.472,
+      "peak": 0.4577,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can be often happy.",
+      "file": "kokoro-afheart-v1/32a9d0c26b28507fb7fe.mp3",
+      "bytes": 14832,
+      "sha256": "01565a1497f885b498932a45db887f7a06e93b43614af0bc2eae8f3776f9f017",
+      "duration": 1.792,
+      "peak": 0.3661,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can be the support near water near water today.",
+      "file": "kokoro-afheart-v1/764536423d0759f4ba9e.mp3",
+      "bytes": 27864,
+      "sha256": "c2e64829ae25a7afe3e6e9fd5e1bc55f349da4fee91223e84868f3c5df38e0a3",
+      "duration": 3.157,
+      "peak": 0.3284,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can be your support.",
+      "file": "kokoro-afheart-v1/718c38dd69351b5f38aa.mp3",
+      "bytes": 15840,
+      "sha256": "1b1efe55d48a8d080088978dada954858ae69ebfb44221c5a7868fa31da9e728",
+      "duration": 1.813,
+      "peak": 0.4137,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can enjoy our music near water today.",
+      "file": "kokoro-afheart-v1/d3148fb3dd7a56177b25.mp3",
+      "bytes": 25032,
+      "sha256": "c5b721701d4defb536e3d07298898683db18ecb4a0ede5bd3a607201e72ba8f6",
+      "duration": 2.944,
+      "peak": 0.3198,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can give management a book today.",
+      "file": "kokoro-afheart-v1/48d32aca8ea9d2897458.mp3",
+      "bytes": 22824,
+      "sha256": "afe945589284e43f40ec0a1ba40b9f077fd4010e1f8ab5dbff4141f5fd53b4af",
+      "duration": 2.56,
+      "peak": 0.3544,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can give our management advice today.",
+      "file": "kokoro-afheart-v1/b3c0e1d2fd922e95fa85.mp3",
+      "bytes": 24480,
+      "sha256": "382247f8d5307a462385d716dc0418935236e52bed5d1f5883fb24abcec2c52b",
+      "duration": 2.731,
+      "peak": 0.4378,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can not be the support near water today.",
+      "file": "kokoro-afheart-v1/5663c0a7f298ec7b6e5c.mp3",
+      "bytes": 23376,
+      "sha256": "f3290012cdbed42d2d96ab96910c231b9fcb9c02d93e9eee83eb158cbc3f76e9",
+      "duration": 2.816,
+      "peak": 0.3539,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can not give the management advice today.",
+      "file": "kokoro-afheart-v1/59b6424ad44245464a7c.mp3",
+      "bytes": 26400,
+      "sha256": "d53d3fca494cb4f91c91e182c7996eb221f6a44f39e54d97d549cdf31aeb3b20",
+      "duration": 2.923,
+      "peak": 0.3319,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can often give them the book.",
+      "file": "kokoro-afheart-v1/5766ba8dcf8d88425d0c.mp3",
+      "bytes": 18072,
+      "sha256": "84ca298efd26ec3baaf938e1144dd54b5b82f3d36e0db4c54da37965f0dbaf4a",
+      "duration": 2.133,
+      "peak": 0.3316,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can often work near them today.",
+      "file": "kokoro-afheart-v1/be466d462e5e3dd8e10a.mp3",
+      "bytes": 20472,
+      "sha256": "c35f4605f4a2cb17280325ec505039c8896dc0b85e48e726567ad02253e0fc6b",
+      "duration": 2.411,
+      "peak": 0.3657,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher can work often today.",
+      "file": "kokoro-afheart-v1/9f2a7575dbe6399e258a.mp3",
+      "bytes": 15864,
+      "sha256": "1621d3e528d72a1aca50737c64d7c42e102bac4cc9f8c8bc893e9c4053649cfd",
+      "duration": 1.877,
+      "peak": 0.4007,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher enjoys the useful music today.",
+      "file": "kokoro-afheart-v1/904690b7a73b65f08401.mp3",
+      "bytes": 23664,
+      "sha256": "fd5549aa2bdbb3ae938dc5f9032cb5e4fdc476ad17affe7b940102ca7ba3f3ba",
+      "duration": 2.837,
+      "peak": 0.4086,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher gives helpful management advice today.",
+      "file": "kokoro-afheart-v1/96024c571020b9359299.mp3",
+      "bytes": 26184,
+      "sha256": "9e156def8ed30e7733814b314bae6b5dd496c19c7c18135c2ceb618ab54e8776",
+      "duration": 2.987,
+      "peak": 0.3786,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher gives our management something today.",
+      "file": "kokoro-afheart-v1/b28de3636a20e6558545.mp3",
+      "bytes": 22776,
+      "sha256": "7192dabc2f04c706e15d2f2b8f3e34e78f072366bcfe1f8661af87d793947ad9",
+      "duration": 2.667,
+      "peak": 0.5351,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher gives our useful management advice today.",
+      "file": "kokoro-afheart-v1/dbe439eb5db9a949291d.mp3",
+      "bytes": 27000,
+      "sha256": "0c62d046fd4d146c2a7a72a590442beeaec68409873f6409fa7232ae575c8d8c",
+      "duration": 3.093,
+      "peak": 0.4733,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is a guide near a friend.",
+      "file": "kokoro-afheart-v1/de1fd571eb519cc12b0d.mp3",
+      "bytes": 16392,
+      "sha256": "41f39945a4b897b2b701c410c9b88bb218538aa3d5cd50fd4d5e797219928a8b",
+      "duration": 2.048,
+      "peak": 0.3245,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is near the friend.",
+      "file": "kokoro-afheart-v1/0ac8777f4327ddc58bef.mp3",
+      "bytes": 14424,
+      "sha256": "c1ca9789ee4e238a8c9ee6595448837057f5a9cb7a8867d09ff530e4eeb0c28a",
+      "duration": 1.664,
+      "peak": 0.3854,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is not happy today.",
+      "file": "kokoro-afheart-v1/70ed1fbd7f6c2aadc638.mp3",
+      "bytes": 15504,
+      "sha256": "de21fd11305a4d65fdd446f68f12e2305570ecfa957bbbf3a8f1f903eead9c15",
+      "duration": 1.877,
+      "peak": 0.3746,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is not your support.",
+      "file": "kokoro-afheart-v1/926b7ea58fa8c9811fc1.mp3",
+      "bytes": 15408,
+      "sha256": "96385ddc9b7b9e0b70115d874327d0fdd9eb4d1ea476bcc9c7ef6613c8bacda5",
+      "duration": 1.856,
+      "peak": 0.3435,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is often near our water.",
+      "file": "kokoro-afheart-v1/846ca921494fc5d31104.mp3",
+      "bytes": 18048,
+      "sha256": "e350d21af8a3cf987e1f0326837abce07600759a0c291d2eb55b33ff9b6ccc58",
+      "duration": 2.069,
+      "peak": 0.316,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is often near water.",
+      "file": "kokoro-afheart-v1/5157bd3d69bb2dbb8ade.mp3",
+      "bytes": 16632,
+      "sha256": "3e3f138f54d66c547e22df80faf47ed258b1283a8500381b58727e17fb360ff4",
+      "duration": 1.941,
+      "peak": 0.3092,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is often not happy.",
+      "file": "kokoro-afheart-v1/fd9719c7a97f989fb226.mp3",
+      "bytes": 16464,
+      "sha256": "7b7a092e358b65ec3ee9e4e26aedea4e851d098103696c224952f559ac1aa461",
+      "duration": 1.899,
+      "peak": 0.3537,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is your guide near them.",
+      "file": "kokoro-afheart-v1/ddd8f01deee2d915c7e8.mp3",
+      "bytes": 15432,
+      "sha256": "4d10ac2306f15e65d48bf9302f16a08ae32a86383abf2f3e33484677615b5e8c",
+      "duration": 1.941,
+      "peak": 0.3462,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is your guide near water.",
+      "file": "kokoro-afheart-v1/3fe60448d08f5ae627ac.mp3",
+      "bytes": 17352,
+      "sha256": "c2d9e98140d619a9b20a3d5bf33431cec79b3a99a19f384176226b1f3e3f947b",
+      "duration": 2.133,
+      "peak": 0.3298,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher is your guide today.",
+      "file": "kokoro-afheart-v1/473a22a245ac0879bb69.mp3",
+      "bytes": 14784,
+      "sha256": "ea4c081be904728d4ad5c294661f37fadd021e9534b50199668d64458d9acdc9",
+      "duration": 1.835,
+      "peak": 0.3636,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher needs the book today.",
+      "file": "kokoro-afheart-v1/95f3779258eaf268f915.mp3",
+      "bytes": 16224,
+      "sha256": "7b6e0ebe3e16b97b4dcfa1e8700daca0b8b81593607e984bcd4002ca74559d5f",
+      "duration": 1.877,
+      "peak": 0.3754,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher often enjoys the music.",
+      "file": "kokoro-afheart-v1/3ff58fd5b376b72c4725.mp3",
+      "bytes": 18816,
+      "sha256": "cda75d05ffc40f39846303308e0d070d77243d04c079cb2f370c135d60ff0ab4",
+      "duration": 2.261,
+      "peak": 0.3962,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher often gives the management advice.",
+      "file": "kokoro-afheart-v1/af04eb4790e1e590c77a.mp3",
+      "bytes": 23664,
+      "sha256": "8b03f5919a1eb939be7ee2f2fdd2b5d77588b0584bea9d8fdfbd83e265c3e203",
+      "duration": 2.688,
+      "peak": 0.4046,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher often gives them our advice today.",
+      "file": "kokoro-afheart-v1/15b36058a8820984d247.mp3",
+      "bytes": 22008,
+      "sha256": "f6823b5f654f5667bf29935ba57ff6e3bddc5efb956e45baa48cf275b29fdb40",
+      "duration": 2.645,
+      "peak": 0.4252,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher can not often work today.",
+      "file": "kokoro-afheart-v1/7b7e067d97c6e3c14ed6.mp3",
+      "bytes": 20208,
+      "sha256": "7344f3d45e33bfd16367c8af772118aca9ab682d9b51df6ca4339e6f792d1050",
+      "duration": 2.475,
+      "peak": 0.3892,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher does not work.",
+      "file": "kokoro-afheart-v1/256791c6e969c00ae6a7.mp3",
+      "bytes": 14712,
+      "sha256": "996416509e872feaceabd0798ca75728a5fdbb3fd93cbce31a6d49768431db6f",
+      "duration": 1.813,
+      "peak": 0.3417,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher is often your young guide.",
+      "file": "kokoro-afheart-v1/a809a7fcdaeaf73b62d3.mp3",
+      "bytes": 18216,
+      "sha256": "767bbe4414646584cb4838b20a7e199a11b50d3231abe45028468379e9b49725",
+      "duration": 2.24,
+      "peak": 0.3744,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher works near the fresh water today.",
+      "file": "kokoro-afheart-v1/c9286c955ff597f4a2c1.mp3",
+      "bytes": 22464,
+      "sha256": "74e9d26ad24cfc8655ec81a606a7f92622417bf05d869120d630b7a9c7b9aef6",
+      "duration": 2.603,
+      "peak": 0.4188,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher works near them today.",
+      "file": "kokoro-afheart-v1/317d3f47b2288b042594.mp3",
+      "bytes": 17136,
+      "sha256": "00c1a48b4946f022dc0f8dc5ce46faf4597281c768a855d32aa4c6c9ac6dfe7d",
+      "duration": 2.048,
+      "peak": 0.3613,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher works near them.",
+      "file": "kokoro-afheart-v1/64510d9b448ff3b4ac0f.mp3",
+      "bytes": 14856,
+      "sha256": "8df4a0f2f587bbc8eb359f7f3f44a8cf579a0a402d56566088a9042e0d36587b",
+      "duration": 1.813,
+      "peak": 0.4123,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A young teacher works near water.",
+      "file": "kokoro-afheart-v1/a0db2c55581f402ee543.mp3",
+      "bytes": 16032,
+      "sha256": "175da72efdeb609f6dea7d12b921fa114099d681a221f7098ff3a2f5f83fa6b3",
+      "duration": 1.941,
+      "peak": 0.3624,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Always give our student something near water!",
+      "file": "kokoro-afheart-v1/ba43757e910fa1b8b348.mp3",
+      "bytes": 20112,
+      "sha256": "294a194e0800bcaaf1b33064e73eb6447a12ce64e2ec8b5c8eba71e4656849ce",
+      "duration": 2.411,
+      "peak": 0.4101,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Am I the support near water?",
+      "file": "kokoro-afheart-v1/1e1ab510f814965af3fa.mp3",
+      "bytes": 13920,
+      "sha256": "abd5d251dbcdfea6ac271353a72823cdd1a72eec9cc6e2d3da7b8a092299929f",
+      "duration": 1.643,
+      "peak": 0.3393,
+      "sampleRate": 24000
+    },
+    {
+      "text": "An useful teacher enjoys helpful music near them today.",
+      "file": "kokoro-afheart-v1/3eb5e278b7b3e50ec0c2.mp3",
+      "bytes": 30384,
+      "sha256": "be7c8390b24e4ff98487661d749284ad861924bea737eddca3f001b2bb3ffbf2",
+      "duration": 3.648,
+      "peak": 0.4186,
+      "sampleRate": 24000
+    },
+    {
+      "text": "An useful teacher needs the book today.",
+      "file": "kokoro-afheart-v1/8af949d9d3274c7afbcb.mp3",
+      "bytes": 20616,
+      "sha256": "c369c800d6def95bfe17b92ca6e0fece3dd4755d45809c93a0ed564929443781",
+      "duration": 2.475,
+      "peak": 0.4057,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Be near the young friend today!",
+      "file": "kokoro-afheart-v1/3fab19b184b6997f4d20.mp3",
+      "bytes": 13560,
+      "sha256": "d06db043b74141fb47ecb92660af16aa605330bf263bccc2daf22c0118404a72",
+      "duration": 1.643,
+      "peak": 0.379,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Can a teacher often give them our advice?",
+      "file": "kokoro-afheart-v1/7d74a32d57f013a4e280.mp3",
+      "bytes": 19608,
+      "sha256": "5c07c8a8d7ef94579d08f40f5eb52eedf494c1f0113dcd420e184e4fa09e7256",
+      "duration": 2.389,
+      "peak": 0.392,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Can a teacher often give them something near our water?",
+      "file": "kokoro-afheart-v1/4494e2e0abd4e430cfe3.mp3",
+      "bytes": 24696,
+      "sha256": "a02c408573222f3d99b74111b6950114c4cd36ef09ef2f29b8dc9137df19a195",
+      "duration": 2.987,
+      "peak": 0.4427,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Can a teacher often help them?",
+      "file": "kokoro-afheart-v1/d5b68ee2e50f199f56b9.mp3",
+      "bytes": 14136,
+      "sha256": "976bbac7b02a9e2ab644d1be33ce7fc91a83a66f74e1553edea4bdf7297112c7",
+      "duration": 1.685,
+      "peak": 0.3622,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I enjoy music near our friend?",
+      "file": "kokoro-afheart-v1/be56c4c36f2f463ee79b.mp3",
+      "bytes": 17376,
+      "sha256": "e9004c7a681f7f2d79a2f09c0826155fe5d28ba3f01888e1b70fecfeb09667fc",
+      "duration": 2.091,
+      "peak": 0.2816,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I enjoy music near the water today?",
+      "file": "kokoro-afheart-v1/9bfdac02165fc1ba4dff.mp3",
+      "bytes": 20160,
+      "sha256": "36ed54456828d7930e826c386548d9644117c44034f148a5239142596f10df75",
+      "duration": 2.325,
+      "peak": 0.2886,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I enjoy our music near our friend?",
+      "file": "kokoro-afheart-v1/428e983a551f6e7a35ea.mp3",
+      "bytes": 18360,
+      "sha256": "49f70bda203ad3a3ea04547ce3584e58a07cb80ff40ee95451e2df34e561890d",
+      "duration": 2.133,
+      "peak": 0.3144,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I enjoy our music near the friend?",
+      "file": "kokoro-afheart-v1/3619902ca918dc2837f2.mp3",
+      "bytes": 17880,
+      "sha256": "3e169b5ab6c0fc34b2fa8eeaab39622fc8cb7150b359ae17e3ea49c4744add4f",
+      "duration": 2.176,
+      "peak": 0.3311,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I enjoy our music near them?",
+      "file": "kokoro-afheart-v1/f1ecb60a44c9ceca9883.mp3",
+      "bytes": 15768,
+      "sha256": "a6f30e9f6815f74d24480044f47f1a7bb8ff9493af5a31a902e875044ad25165",
+      "duration": 1.877,
+      "peak": 0.3144,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give a student the book very well?",
+      "file": "kokoro-afheart-v1/aca2011ba5614f6dda02.mp3",
+      "bytes": 16416,
+      "sha256": "057e138df71234920f1927d2c14e5be2aeab987fbcd820075d5f3a705b0dc51a",
+      "duration": 2.027,
+      "peak": 0.3211,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give management a book near the water today?",
+      "file": "kokoro-afheart-v1/a5e93c379916485e7884.mp3",
+      "bytes": 23520,
+      "sha256": "c02d8bf95ca2c71ea5e27a47bc99865c48c63f1c51be46fc25fdc69f0b0019d8",
+      "duration": 2.603,
+      "peak": 0.3185,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give management advice near a friend today?",
+      "file": "kokoro-afheart-v1/c6d6ddf376b38a81fe13.mp3",
+      "bytes": 24240,
+      "sha256": "6181319d4874c02b8780c5160be8d87f0aceefb1ac172e3eeb7073149c7ded0e",
+      "duration": 2.837,
+      "peak": 0.4302,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give management our book near the friend?",
+      "file": "kokoro-afheart-v1/2522e90aaf0428b3ec77.mp3",
+      "bytes": 20736,
+      "sha256": "de541ec28b40237de0582c3eca5f52399e0baef352b4fbf811c7cab1ed9b55d2",
+      "duration": 2.389,
+      "peak": 0.3393,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give our management the book?",
+      "file": "kokoro-afheart-v1/f0db0094098bac9b9a53.mp3",
+      "bytes": 15600,
+      "sha256": "d8a780f53cf19825ddff90eb9b6545a321747c964776d209c6bd42ba689246d1",
+      "duration": 1.813,
+      "peak": 0.3983,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give our student the advice near a friend?",
+      "file": "kokoro-afheart-v1/c362b38e9b9817a9e4f6.mp3",
+      "bytes": 20688,
+      "sha256": "3e40bf86f26c0adeb8c1135bfd8dca2be420a2b0a09beb7c4405b6eb3b24e219",
+      "duration": 2.603,
+      "peak": 0.3766,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I give them our advice today?",
+      "file": "kokoro-afheart-v1/bf93b39cb2d52b6577bb.mp3",
+      "bytes": 15888,
+      "sha256": "88b32b2a509f8df8c922a71357b77a20f77d1e472cdcc270cb0b43f4e8a4fd11",
+      "duration": 1.835,
+      "peak": 0.3212,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I help them near water?",
+      "file": "kokoro-afheart-v1/202469b47143df3a4a66.mp3",
+      "bytes": 12048,
+      "sha256": "da3e7120ca2cdd095f7b84e48eeb543be2769305acc8d68ff6336bcd623acb50",
+      "duration": 1.493,
+      "peak": 0.2954,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I need an useful book near clean water?",
+      "file": "kokoro-afheart-v1/2d252fbb16d75d6efe03.mp3",
+      "bytes": 20040,
+      "sha256": "564e91d27c72367330fa5b01762c1734b8348d4bc99483d94c92c4c4be7d3623",
+      "duration": 2.432,
+      "peak": 0.3231,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I need the useful book near our water today?",
+      "file": "kokoro-afheart-v1/390a737faaeb996b698d.mp3",
+      "bytes": 22464,
+      "sha256": "e603f29deb9e3b7d3c76d965656db7318f3fab5291933d753ffe37f1e0c954f7",
+      "duration": 2.56,
+      "peak": 0.3074,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I need the useful book near the friend?",
+      "file": "kokoro-afheart-v1/03fe4b7a0e76c388d79c.mp3",
+      "bytes": 18768,
+      "sha256": "9423f322059d2ec4a2d7f13a23e8813bb57c3989471e0b7c5445f345c60bccf1",
+      "duration": 2.219,
+      "peak": 0.3656,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I not enjoy our music?",
+      "file": "kokoro-afheart-v1/c37319925def888a4abd.mp3",
+      "bytes": 13968,
+      "sha256": "5557344a9989750521a28f67e42edacaf5328b062054d8b28242990b973361be",
+      "duration": 1.643,
+      "peak": 0.3343,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I not often enjoy our music?",
+      "file": "kokoro-afheart-v1/6f98404d457fa3882ffa.mp3",
+      "bytes": 16704,
+      "sha256": "c97e1ce08c499b32797ffda25345ebed82ff9d61cecfa1259e62841c731339ee",
+      "duration": 1.984,
+      "peak": 0.3286,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I not often give them our advice?",
+      "file": "kokoro-afheart-v1/5babf3a06c83202c9604.mp3",
+      "bytes": 17256,
+      "sha256": "85cf9dc2223c944814da062578d0ba31d66412f67cc90a41f37dd508d0554fbe",
+      "duration": 2.027,
+      "peak": 0.3053,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often enjoy helpful music today?",
+      "file": "kokoro-afheart-v1/32748dcd4e0f5208de3a.mp3",
+      "bytes": 20544,
+      "sha256": "314de397febb3715582226642f8feacdc601280206d7ef554677b4b39691e1e9",
+      "duration": 2.432,
+      "peak": 0.413,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often enjoy music today?",
+      "file": "kokoro-afheart-v1/4357dcdb482ccb4abc47.mp3",
+      "bytes": 17640,
+      "sha256": "1b8b3cce00953b0cb5c3f303c8b853cb252135596488d668d0da357f46f92182",
+      "duration": 2.005,
+      "peak": 0.3321,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often enjoy our useful music?",
+      "file": "kokoro-afheart-v1/f6371b7f119e88195f83.mp3",
+      "bytes": 19128,
+      "sha256": "57678620cbd1034b9c4917b58580fb63d67309f415340135145db990bd579e1a",
+      "duration": 2.24,
+      "peak": 0.3475,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often give a student advice?",
+      "file": "kokoro-afheart-v1/91710b716c48a93a8723.mp3",
+      "bytes": 17376,
+      "sha256": "3981a8423ebf0a0a27f2d3d8624b3365a4146eddda048fcea2f5f1698236b3da",
+      "duration": 1.941,
+      "peak": 0.3451,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often give helpful management advice today?",
+      "file": "kokoro-afheart-v1/e8647218edecdf363b40.mp3",
+      "bytes": 25320,
+      "sha256": "fd98b1d13dde440bb398f4a3c826b9c63b0865566cee3cc27236b7e4ea808c6c",
+      "duration": 2.859,
+      "peak": 0.3456,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often give management a book today?",
+      "file": "kokoro-afheart-v1/b21de17b03d717a15b75.mp3",
+      "bytes": 19848,
+      "sha256": "c76060bec5d7e80aa9eafc2715cb00ef1a6d1f5cbdf405271bd31a829e54d27c",
+      "duration": 2.304,
+      "peak": 0.3409,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often give management a book?",
+      "file": "kokoro-afheart-v1/cf48f1610cf6e169e41d.mp3",
+      "bytes": 17784,
+      "sha256": "c89dcc1b52d189149c40a98a3706ddb4f2dd9740859c7300bc4a0256531ee420",
+      "duration": 2.048,
+      "peak": 0.3583,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often give our student advice today?",
+      "file": "kokoro-afheart-v1/6d662c326bda09652a66.mp3",
+      "bytes": 19632,
+      "sha256": "4e4f7c77ac939da03a2cb11f3ba59c1e69bb72546728300dd0ade3fe380bdc87",
+      "duration": 2.304,
+      "peak": 0.3448,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often give the management a book today?",
+      "file": "kokoro-afheart-v1/a16927710fd95f7488de.mp3",
+      "bytes": 20664,
+      "sha256": "cc5ccf799524bec46a513e7d21c75d32dbb69c7d543b8c1bef8a1265c25627f4",
+      "duration": 2.389,
+      "peak": 0.3837,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often make our work easy?",
+      "file": "kokoro-afheart-v1/d7b0a09187b5d366d8bc.mp3",
+      "bytes": 15792,
+      "sha256": "d134d305a11a9dbdae9222f76922fe3ac7c8f5d49fa9331fc85d4dff0af9eaf9",
+      "duration": 1.856,
+      "peak": 0.3472,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often need a book?",
+      "file": "kokoro-afheart-v1/eb14fcc6abefa30f4978.mp3",
+      "bytes": 12216,
+      "sha256": "26c1229ed2b8efade2cf99351b5951f18947fb5ac79b2e3acbdc9d766ee80990",
+      "duration": 1.451,
+      "peak": 0.3256,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often need our useful book today?",
+      "file": "kokoro-afheart-v1/bffd347fd8ce454c9489.mp3",
+      "bytes": 19176,
+      "sha256": "d408bdf9d3fb13a802fab4ad8c32b964d3323b84d2e1b1c5898b830245a138bd",
+      "duration": 2.24,
+      "peak": 0.3497,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I often work near water?",
+      "file": "kokoro-afheart-v1/1f5571373888a3be7738.mp3",
+      "bytes": 14544,
+      "sha256": "895ecf6b604955ca58cefef14df72096cfa6758ff97df2047b01f95bd9f12a37",
+      "duration": 1.771,
+      "peak": 0.3661,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I work near our friend?",
+      "file": "kokoro-afheart-v1/12383436ed4b50c2b73f.mp3",
+      "bytes": 11640,
+      "sha256": "41346bdd7cfed59ced3a60493c8d4c913ea1892ddbef7ddb7a408a002dd041f7",
+      "duration": 1.472,
+      "peak": 0.3645,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I work near the water?",
+      "file": "kokoro-afheart-v1/6fe3e42abb12f38ac7d0.mp3",
+      "bytes": 12504,
+      "sha256": "15c8f205f5f1c1878edbfd85ca89bb28f53a62fb88889e437a0701482d7d647c",
+      "duration": 1.472,
+      "peak": 0.3375,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do give management a book near the water today!",
+      "file": "kokoro-afheart-v1/e53ba241cf4bec8d6cc7.mp3",
+      "bytes": 23760,
+      "sha256": "2b1a2bb5409435e3c9302407720b445c47531d00e674e10b62b3d4ca9cffb199",
+      "duration": 2.581,
+      "peak": 0.3229,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do read a book near the water today!",
+      "file": "kokoro-afheart-v1/6b0adfe523e74d19ba85.mp3",
+      "bytes": 18816,
+      "sha256": "3e72c6a39142f8a914f2cb05664c979ac04dc1ad98553ed4f4ad2fa23616309f",
+      "duration": 1.941,
+      "peak": 0.3719,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does a teacher help them very well?",
+      "file": "kokoro-afheart-v1/549387a438b994770503.mp3",
+      "bytes": 15672,
+      "sha256": "694c438b3a56480b17ccbb2b6abbd3f54163c853d592c761c3a15439155039d4",
+      "duration": 1.941,
+      "peak": 0.3382,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does a teacher not help them today?",
+      "file": "kokoro-afheart-v1/de69d5975bfd17782d5c.mp3",
+      "bytes": 15864,
+      "sha256": "ac4402970c4b001f3bccafdbdd2eff0218ebcfe85af0831243a373cba25ebd8a",
+      "duration": 1.963,
+      "peak": 0.3322,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does helpful management give them helpful advice near water?",
+      "file": "kokoro-afheart-v1/e49da3266972534c1398.mp3",
+      "bytes": 29760,
+      "sha256": "3eef3221a75a0c6bcb947b7ed56ed6016788aa10eaed3bc321c5e00ef9adfc98",
+      "duration": 3.648,
+      "peak": 0.4449,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does helpful management give them the useful advice?",
+      "file": "kokoro-afheart-v1/cd661eb0bada782f405a.mp3",
+      "bytes": 27096,
+      "sha256": "29ccf7b3c7ceee0ceda15ccec5b498a9974a74a3b5633e41e5420b3c1a4d4663",
+      "duration": 3.093,
+      "peak": 0.4195,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management enjoy music near the friend?",
+      "file": "kokoro-afheart-v1/d3509ce686b144041ee1.mp3",
+      "bytes": 23208,
+      "sha256": "3b9a7e9a7b455e46209f3ee3c18dd5dff59e638df1e3131fac6b6647815310c1",
+      "duration": 2.795,
+      "peak": 0.3478,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management give them often a book?",
+      "file": "kokoro-afheart-v1/27fe49ded64e1d426f9e.mp3",
+      "bytes": 18600,
+      "sha256": "30f806428cbc9e0b38d778d361d4a80244cbc6794c4ce22390db900612423532",
+      "duration": 2.24,
+      "peak": 0.3494,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management give them often an useful book today?",
+      "file": "kokoro-afheart-v1/a712ba066ea8448d2815.mp3",
+      "bytes": 27696,
+      "sha256": "96b137f9170b3f2507df2eff36d7013fcb5d4494e7f631c9bd00b13214820886",
+      "duration": 3.179,
+      "peak": 0.3578,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management make the management often work?",
+      "file": "kokoro-afheart-v1/8c33507817b73b98c8d1.mp3",
+      "bytes": 24144,
+      "sha256": "0501536e3fae32603c0ccb03764cdcccd1a726d2425e83c48009554ca01cbf13",
+      "duration": 2.795,
+      "peak": 0.3678,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management not enjoy the useful music?",
+      "file": "kokoro-afheart-v1/8baa7bc8c18217ae9708.mp3",
+      "bytes": 23976,
+      "sha256": "6fd81b0d317883504637c5c3c2a0c7855c4248fb6a000d78bd618102beb04ee4",
+      "duration": 2.859,
+      "peak": 0.3631,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management often give our young student something today?",
+      "file": "kokoro-afheart-v1/0e1a537189133abb4bfc.mp3",
+      "bytes": 27576,
+      "sha256": "d689ed7080d057882a7e1ad145dc0d172df54fa67c24329b2f306cb664d99b48",
+      "duration": 3.243,
+      "peak": 0.4227,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does management often give them advice?",
+      "file": "kokoro-afheart-v1/c16f32f7f7c748d4246c.mp3",
+      "bytes": 20280,
+      "sha256": "707079f00ae40f44e17bc417336b31de4faf7d24d634d06fe77baf6efa389639",
+      "duration": 2.347,
+      "peak": 0.3581,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does my teacher work near a friend?",
+      "file": "kokoro-afheart-v1/f04efef8ad120af31ca0.mp3",
+      "bytes": 15720,
+      "sha256": "91a13a274a7383d06b87b8d357c206f8c714c04eaadce0ab90402bb0d6a22a34",
+      "duration": 1.92,
+      "peak": 0.386,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does my useful traffic flow near them very well?",
+      "file": "kokoro-afheart-v1/09634faafe24ce1fb68e.mp3",
+      "bytes": 23784,
+      "sha256": "d0971eb729dba49823a7c536e6b7da7f65343fe2ce82ffecab0fbdbd4ef3490b",
+      "duration": 2.837,
+      "peak": 0.364,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does my useful traffic flow today?",
+      "file": "kokoro-afheart-v1/60451a7b269e22da7d4a.mp3",
+      "bytes": 18240,
+      "sha256": "cb89c9acdcdb964bb3d7a64a9b44b1dc0e080cb0b4b09b3f95864507068dca29",
+      "duration": 2.112,
+      "peak": 0.382,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the management give management an useful book?",
+      "file": "kokoro-afheart-v1/89da93b39b4fd95f81a7.mp3",
+      "bytes": 25224,
+      "sha256": "5622250a41103a381922b18860b92034d5d2ed564e4a4dc68359242ad41cd58b",
+      "duration": 3.008,
+      "peak": 0.3634,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the management make work easy?",
+      "file": "kokoro-afheart-v1/765f81d0477247a7f83a.mp3",
+      "bytes": 18120,
+      "sha256": "0e3e61e69522c9a43356edca0a8764fb60b54c6a2ac30789f50d776b7b375bfd",
+      "duration": 2.048,
+      "peak": 0.3688,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the management often enjoy only music?",
+      "file": "kokoro-afheart-v1/8ca698cc84e57e329333.mp3",
+      "bytes": 23976,
+      "sha256": "aaac1a17ca63ba7820cd5ea7cef3f706dc75d866fbf113b0f714ea2183f78bf9",
+      "duration": 2.837,
+      "peak": 0.4102,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does the teacher give them the advice today?",
+      "file": "kokoro-afheart-v1/c6dccc69b8e37d96d689.mp3",
+      "bytes": 19584,
+      "sha256": "d0a9751d42aa598394f5600f0619cebf0107e58e66b4143fb742f853b6291a96",
+      "duration": 2.389,
+      "peak": 0.4262,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does traffic flow near a young friend today?",
+      "file": "kokoro-afheart-v1/c866e5d55213562a23fa.mp3",
+      "bytes": 19032,
+      "sha256": "6e70e3be2dd5c0399ce717981ea964d129d4304d9959991b9ef578fc63933850",
+      "duration": 2.24,
+      "peak": 0.3489,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Does traffic flow near a young friend?",
+      "file": "kokoro-afheart-v1/88e74fee11148c676ce9.mp3",
+      "bytes": 16608,
+      "sha256": "57a0f18214e9eab360ae8045a27f9b20984a973f7d9f0ad4fe2f268caeffe156",
+      "duration": 1.984,
+      "peak": 0.3308,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education can be near the friend.",
+      "file": "kokoro-afheart-v1/51e0f118bded392013a1.mp3",
+      "bytes": 16416,
+      "sha256": "1824f98b9a2f75d9a815a3ed2d4885782a2d51846a79214094fbdf132e4fd69e",
+      "duration": 1.984,
+      "peak": 0.4004,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is near the water near the friend.",
+      "file": "kokoro-afheart-v1/2f0fa1bb307a3b931cc4.mp3",
+      "bytes": 23328,
+      "sha256": "f6140393bbb13058eefccc393654cabfe1812cb9186a658b44d2bb6a240bf243",
+      "duration": 2.709,
+      "peak": 0.3803,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is not a young guide.",
+      "file": "kokoro-afheart-v1/ca4d250781dd2418e1cc.mp3",
+      "bytes": 17328,
+      "sha256": "cba87c037d8904c132d45165c6ca690d0f4b0646e3d2f4a7c8b082beffce06f4",
+      "duration": 2.091,
+      "peak": 0.3909,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is not myself near clean water.",
+      "file": "kokoro-afheart-v1/39bc1e6b258c6a64426f.mp3",
+      "bytes": 24192,
+      "sha256": "afd85f46c2e301ee4b8a52be263196d9518a2bcbcf2abd893b76d53960783916",
+      "duration": 2.901,
+      "peak": 0.3376,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is not myself near water.",
+      "file": "kokoro-afheart-v1/8e5f5416ada567b4d26b.mp3",
+      "bytes": 21912,
+      "sha256": "203b24f303858e659139c093c051bd389b5dcc9a7a989b03771e844ecfbe0a8e",
+      "duration": 2.603,
+      "peak": 0.3781,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is not the support today.",
+      "file": "kokoro-afheart-v1/dc4f7e6450edce10abdf.mp3",
+      "bytes": 18456,
+      "sha256": "8050fd53b0f008128f4fdfcdb1c2c1fdab2fa4c288ed139bb7133cb4a7d17c34",
+      "duration": 2.347,
+      "peak": 0.4233,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is not your young guide.",
+      "file": "kokoro-afheart-v1/2154fc3e27e9cbe614e4.mp3",
+      "bytes": 18048,
+      "sha256": "b0fab3a7df342c55b1c1c46eecd56f2ac73d521ca09e8fefc33a1298eab945cd",
+      "duration": 2.219,
+      "peak": 0.339,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is often a guide today.",
+      "file": "kokoro-afheart-v1/ec6cfbed145a3a7a9c4d.mp3",
+      "bytes": 18648,
+      "sha256": "f0a3e474cf086a08addbfa066060f57b2527103ef691d598eb1102308caeef73",
+      "duration": 2.304,
+      "peak": 0.3921,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is often near our water.",
+      "file": "kokoro-afheart-v1/8dac07c7f362f21dab02.mp3",
+      "bytes": 19464,
+      "sha256": "35910806f3bff57ace8292b87e12eea8edad04f79f5b6b816aecde7d10180943",
+      "duration": 2.347,
+      "peak": 0.3611,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is the guide near them today.",
+      "file": "kokoro-afheart-v1/cb3bc7f6d2aeb9cf1fd1.mp3",
+      "bytes": 20952,
+      "sha256": "09ffd88a4e2fa6b9d4baf9f139ad236e02f2c08c817d38fe4efbad528816422e",
+      "duration": 2.581,
+      "peak": 0.4446,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is the guide near water.",
+      "file": "kokoro-afheart-v1/54ef0c417f54ec5bc810.mp3",
+      "bytes": 18936,
+      "sha256": "ce9fdf3984a523644882b2c64a8976cea86aac67a71f5aa3c7cd40ee753e089d",
+      "duration": 2.389,
+      "peak": 0.4195,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is the useful support today.",
+      "file": "kokoro-afheart-v1/ea9b43d9cbfab11a9462.mp3",
+      "bytes": 22824,
+      "sha256": "b3088580293f92d29647472a99e8e61b0cc7e120a766039d2717f38fbc82a268",
+      "duration": 2.688,
+      "peak": 0.5046,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is the young guide near water.",
+      "file": "kokoro-afheart-v1/baee0b0c9f5c83bac607.mp3",
+      "bytes": 21552,
+      "sha256": "13c4f17cbd1c8ca38bcf97142c2de2e1bd394d5999db3d66a4e1b46b1f44cbdc",
+      "duration": 2.624,
+      "peak": 0.3514,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Education is your young guide near water.",
+      "file": "kokoro-afheart-v1/53e5cf5ecf3566ed8a64.mp3",
+      "bytes": 21120,
+      "sha256": "f599314ce13f381566e0fcc272d3bff5ad24791d9479d58405c5f6a4460e25fb",
+      "duration": 2.603,
+      "peak": 0.3608,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Give our student helpful advice today!",
+      "file": "kokoro-afheart-v1/730ff8b66da023e337f1.mp3",
+      "bytes": 18864,
+      "sha256": "bce5fa6537d795f5e2d34b3ed08c7d47c5e90b90840f3ba3279686b58006e7c9",
+      "duration": 2.219,
+      "peak": 0.3788,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Help them near the friend today!",
+      "file": "kokoro-afheart-v1/04bdcda838ab5f3825dd.mp3",
+      "bytes": 15312,
+      "sha256": "a8aa04cbeb7ec97accbb9845beb763ecc72d086e070c761c6869624ced68b791",
+      "duration": 1.664,
+      "peak": 0.3631,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful education is not a guide.",
+      "file": "kokoro-afheart-v1/b59e91d2d630f6e3326e.mp3",
+      "bytes": 19272,
+      "sha256": "700d7ba6c9f0c47fe42ff4e9ba635f75a254f1b29c161c99554bb5554bfe18f4",
+      "duration": 2.304,
+      "peak": 0.3555,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful management can enjoy the music.",
+      "file": "kokoro-afheart-v1/adffb545e978bc54c313.mp3",
+      "bytes": 21384,
+      "sha256": "47d86eaf586da918f8041a207fc03442231394adf6d382c3fb3db247f0ee8bd5",
+      "duration": 2.496,
+      "peak": 0.3682,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful management can often enjoy the music.",
+      "file": "kokoro-afheart-v1/48e4be95c5a638824097.mp3",
+      "bytes": 25056,
+      "sha256": "b898cdbc58a2e33b60f06ed12be5bced4910f98589d48efc763a4e817e6817c2",
+      "duration": 2.923,
+      "peak": 0.3546,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful management enjoys music near water today.",
+      "file": "kokoro-afheart-v1/0bce7b50dcc6048dc27e.mp3",
+      "bytes": 27768,
+      "sha256": "e131486951151dbc08903a63770df300092ac5ef2fcccaae3ebfee3b9a4b0ffb",
+      "duration": 3.264,
+      "peak": 0.3715,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful traffic can not often flow near the water today.",
+      "file": "kokoro-afheart-v1/c4b673bb7d9d540ce688.mp3",
+      "bytes": 28824,
+      "sha256": "5750f36d4aeb35764815f472b2021a6e295fc800aba27baf65e1208f19ad6440",
+      "duration": 3.221,
+      "peak": 0.3323,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful traffic can often flow near the water.",
+      "file": "kokoro-afheart-v1/ba158e74015a26cfc0d6.mp3",
+      "bytes": 23232,
+      "sha256": "94c80916dad321de2d621431ec33b28fe9da460854e27fd4530ca92c6f0feb0c",
+      "duration": 2.624,
+      "peak": 0.3723,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Helpful traffic often flows near our water near the friend.",
+      "file": "kokoro-afheart-v1/01b72bdf5b5d7508978e.mp3",
+      "bytes": 28272,
+      "sha256": "305cf6856354d9015a8a0cab8ff627a32b031e8553251202e21844838631721b",
+      "duration": 3.307,
+      "peak": 0.4065,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am a guide near clean water.",
+      "file": "kokoro-afheart-v1/5ee8929ec1764f86859b.mp3",
+      "bytes": 15072,
+      "sha256": "6662678ea902b7e93d97ae9414e112b89a2a20aa6a8414eac43dea855bcab852",
+      "duration": 1.877,
+      "peak": 0.4408,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am a guide near them.",
+      "file": "kokoro-afheart-v1/f506c58b286601007127.mp3",
+      "bytes": 12096,
+      "sha256": "69d3df8e6b7982addcdb940230ea0eee5aab35628590330167fa1b65f3f53b4c",
+      "duration": 1.408,
+      "peak": 0.4232,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am a guide very well.",
+      "file": "kokoro-afheart-v1/4b5602a19e50c8310fcb.mp3",
+      "bytes": 11976,
+      "sha256": "3606b6daff139ae4bf36e9a06939734e47d2143bbacfe27f67e4a46d0487234e",
+      "duration": 1.472,
+      "peak": 0.3149,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am helpful support near a friend today.",
+      "file": "kokoro-afheart-v1/3469498dc3de16cab54f.mp3",
+      "bytes": 19152,
+      "sha256": "c9cd0f5e84560938f17def70d8ea3dc11bfb8001881d96dca3f0f0f5c43e93be",
+      "duration": 2.325,
+      "peak": 0.4487,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am helpful support near water.",
+      "file": "kokoro-afheart-v1/4b7377567ea72662efb8.mp3",
+      "bytes": 16536,
+      "sha256": "e9966e047a4e2936be7ee34185e9ea088cda782533f5e7cec8b5dda559ab61d5",
+      "duration": 1.963,
+      "peak": 0.3961,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am myself near a friend.",
+      "file": "kokoro-afheart-v1/057949df93efcb4ffa89.mp3",
+      "bytes": 14424,
+      "sha256": "d356b5f219b4f582295dd36b314029f59dd4e0aa8af6a1c256b2b01be1015079",
+      "duration": 1.664,
+      "peak": 0.3841,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am myself near our young friend today.",
+      "file": "kokoro-afheart-v1/944cd4c0144bdcd337f3.mp3",
+      "bytes": 18672,
+      "sha256": "bad0df73e0b0f55ed1aa53b1b3bc330a006220db5a35427db9ee5d5a33a63199",
+      "duration": 2.368,
+      "peak": 0.3797,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am myself near water near our fresh water.",
+      "file": "kokoro-afheart-v1/6e078de8e6451a4b1ccc.mp3",
+      "bytes": 22440,
+      "sha256": "8ba27191af86a1dd4c97497716921780a75b121a47c271d5e0501ff84c6f2254",
+      "duration": 2.688,
+      "peak": 0.3535,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am near a friend today.",
+      "file": "kokoro-afheart-v1/6aac641668464be34f4b.mp3",
+      "bytes": 12816,
+      "sha256": "f5fbe399fed1518aad11fb76d95145ffc8fed79800b333b165bd6274839bef65",
+      "duration": 1.557,
+      "peak": 0.414,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am near our fresh water.",
+      "file": "kokoro-afheart-v1/38bef5f3552e4555a410.mp3",
+      "bytes": 12864,
+      "sha256": "48460fc43109ecdc686d738d62b681d90cf29bc80a9fa14fc25f1e6c15b617b5",
+      "duration": 1.579,
+      "peak": 0.3818,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am near our friend today.",
+      "file": "kokoro-afheart-v1/64f1566b8b5838f247fe.mp3",
+      "bytes": 13248,
+      "sha256": "e347a93d21cee4942d0fd1b866ee94d9b6768c02e6f7506266c00f5a9befc69a",
+      "duration": 1.621,
+      "peak": 0.4248,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am near water near our fresh water.",
+      "file": "kokoro-afheart-v1/b542a67d35abcd0a9612.mp3",
+      "bytes": 17520,
+      "sha256": "b652b694908ae4b1feb630e82cdd8d2c159328ee41f8d274b92c31659d8c9809",
+      "duration": 2.112,
+      "peak": 0.415,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not a guide near clean water.",
+      "file": "kokoro-afheart-v1/8a8c62c5a83761032142.mp3",
+      "bytes": 17256,
+      "sha256": "e1b7475f51cb072ca92f270e60e59b0eed3323bc7d15da37bd228e58f16adf72",
+      "duration": 2.112,
+      "peak": 0.4251,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not helpful support near them today.",
+      "file": "kokoro-afheart-v1/84b8a48f613902e5e92f.mp3",
+      "bytes": 21576,
+      "sha256": "dbd3f5342129c994ca535bcb4845fa5269a64f2e7aef12b5e6bb708d6222eaad",
+      "duration": 2.475,
+      "peak": 0.4841,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not helpful useful support.",
+      "file": "kokoro-afheart-v1/9ee35eec628388172842.mp3",
+      "bytes": 18168,
+      "sha256": "51edc597010ae4e57faa44391ddf0c887d6646fa8c27e5f34d3bf794e05e2459",
+      "duration": 2.176,
+      "peak": 0.4182,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not near clean water.",
+      "file": "kokoro-afheart-v1/1593b616c41ad42ce79b.mp3",
+      "bytes": 13488,
+      "sha256": "5a2cc964a02f4aee5811b8ba8a12ad9ec28d85917a6ce4b6e4d010c4a64290e5",
+      "duration": 1.6,
+      "peak": 0.3672,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not near the friend.",
+      "file": "kokoro-afheart-v1/bd72d51ce9571db22884.mp3",
+      "bytes": 12936,
+      "sha256": "2f8d4ee495ffe4ec1931729028b66266fd8eee5d23efc78a861b2d8982d19089",
+      "duration": 1.536,
+      "peak": 0.2994,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not near the young friend.",
+      "file": "kokoro-afheart-v1/562916836154ff119715.mp3",
+      "bytes": 14592,
+      "sha256": "098020ff9004bc81f1a9ad4368e2bcd912f5102040ea884b12bb1b15da864fca",
+      "duration": 1.728,
+      "peak": 0.352,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not often a guide today.",
+      "file": "kokoro-afheart-v1/753e0585c71ae4e81624.mp3",
+      "bytes": 16512,
+      "sha256": "9dba82b1709bd1f238419f2f4ec80579f16888d7d24ed4655e4f4bc20a985d21",
+      "duration": 1.835,
+      "peak": 0.3576,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not often the guide today.",
+      "file": "kokoro-afheart-v1/d6ca7b5e6c72118d882c.mp3",
+      "bytes": 16344,
+      "sha256": "60660a9d23cad2c638efd00e73616c5425b2d6980333055c767c2b795bce1b89",
+      "duration": 1.877,
+      "peak": 0.3079,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not support near the friend.",
+      "file": "kokoro-afheart-v1/2d013aca39fbf6b34771.mp3",
+      "bytes": 15360,
+      "sha256": "e6b5960100d5898fb8cc51ad8a49602f8ad8505016cf2f2fc339ab719466297b",
+      "duration": 1.813,
+      "peak": 0.3693,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not the guide near our water.",
+      "file": "kokoro-afheart-v1/bc526835dc5511401669.mp3",
+      "bytes": 15216,
+      "sha256": "930100d20acac797b16b2ab00fe247f6b7afe377e0569730d10aef29e59879ea",
+      "duration": 1.92,
+      "peak": 0.493,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not the support today.",
+      "file": "kokoro-afheart-v1/6bc2053852626705b983.mp3",
+      "bytes": 14592,
+      "sha256": "6809a6618f775f9a9437bcb08a2849d6f8a13af290ad9a87fe38c6654a0bb0a9",
+      "duration": 1.685,
+      "peak": 0.3425,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not the young guide.",
+      "file": "kokoro-afheart-v1/eb1459a960c7323d284a.mp3",
+      "bytes": 11544,
+      "sha256": "e8d07bd163c9147a621ada1ea4d3932f87fa76e8cea067aba441333b1ea3e29b",
+      "duration": 1.472,
+      "peak": 0.3751,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am not your support today.",
+      "file": "kokoro-afheart-v1/1e20d5a10f0f59977c44.mp3",
+      "bytes": 15264,
+      "sha256": "c3eebfab6698bf4172d0ebc27ba5c5ee2e9c124573ef1db99094734e21830969",
+      "duration": 1.707,
+      "peak": 0.3591,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often a guide today.",
+      "file": "kokoro-afheart-v1/fcae26a9724f4f7d74e3.mp3",
+      "bytes": 13032,
+      "sha256": "6a02c7c7e3ed69ccf1a1aadfd0aabda9f5339dc77848cc846a6a4c53eed1bd56",
+      "duration": 1.6,
+      "peak": 0.2993,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often near clean water.",
+      "file": "kokoro-afheart-v1/ae9d4952382f0cf34d35.mp3",
+      "bytes": 15408,
+      "sha256": "522a58d777af9f3179753aab9ca351ff614ab10c7c85c4f3f165c918a5204353",
+      "duration": 1.749,
+      "peak": 0.3781,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often near the young friend.",
+      "file": "kokoro-afheart-v1/3504068e543d7c9c9520.mp3",
+      "bytes": 14280,
+      "sha256": "cb5951a83103f870fd474824946b6dbbd36a76c9048a718226258e2eaf5a7395",
+      "duration": 1.771,
+      "peak": 0.3676,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often near them today.",
+      "file": "kokoro-afheart-v1/5424dfede1126439df65.mp3",
+      "bytes": 14280,
+      "sha256": "141dedb048d2694220cf6c26c3b3faccc662bbb9471df00f8351392264e2b1d7",
+      "duration": 1.728,
+      "peak": 0.3561,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often not support near the friend.",
+      "file": "kokoro-afheart-v1/7553024b4cca48797135.mp3",
+      "bytes": 18792,
+      "sha256": "710b6ad177ba817833c7c909a0d8050a06ab04c2ad33d198cf4148cb55f470b2",
+      "duration": 2.133,
+      "peak": 0.3409,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often not the support near the friend.",
+      "file": "kokoro-afheart-v1/3aec1e4f7a6de144ae33.mp3",
+      "bytes": 19728,
+      "sha256": "249ba75bb8f08dd5560e1b2c07e386433163b74ecd736b35949cabf8ae7a98af",
+      "duration": 2.325,
+      "peak": 0.3615,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often support near our friend.",
+      "file": "kokoro-afheart-v1/fdd204e16fe2bb85147a.mp3",
+      "bytes": 17160,
+      "sha256": "9af5ba516b4cde46faaf80ac99ebeb6bc2ccf4f8e77a2cb76340e78457baf54b",
+      "duration": 2.005,
+      "peak": 0.3258,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am often support near our young friend near our friend.",
+      "file": "kokoro-afheart-v1/7713a75a2893fd99139e.mp3",
+      "bytes": 24960,
+      "sha256": "12a37f9655cd533a631aafe82e648f4d928b8eb9ab460bdfac9ba29f206edba8",
+      "duration": 3.051,
+      "peak": 0.3561,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am support near our friend.",
+      "file": "kokoro-afheart-v1/9f51ed36ae0c15307245.mp3",
+      "bytes": 14232,
+      "sha256": "7a7494e9c184777db7ebd250763f0db56646af0a8cd66b6d57ff0c41035da910",
+      "duration": 1.685,
+      "peak": 0.4388,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am the guide near them.",
+      "file": "kokoro-afheart-v1/250e044ec1be93753e07.mp3",
+      "bytes": 12360,
+      "sha256": "b567e37b28320df173c01da3b7f2bbd4ab08bf3904fa79683de2141b8c96c8e2",
+      "duration": 1.429,
+      "peak": 0.3388,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am the guide near water today.",
+      "file": "kokoro-afheart-v1/a850208d7c74386f5158.mp3",
+      "bytes": 16656,
+      "sha256": "54e9ed886cd7289cd9b856d5d7fba2a536192ef7c8eda211198725d3729f3d67",
+      "duration": 1.856,
+      "peak": 0.3611,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am the guide near water.",
+      "file": "kokoro-afheart-v1/eab8faa21b02767bb077.mp3",
+      "bytes": 12648,
+      "sha256": "e66865d12bbe6debcfd3e8a6d5998e0dafe97c13018741ae75d41be774c5c641",
+      "duration": 1.579,
+      "peak": 0.3768,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am the support near them.",
+      "file": "kokoro-afheart-v1/2bdde2e73fd7c4adaa17.mp3",
+      "bytes": 12552,
+      "sha256": "9410d3d36f386a6dfe75a82d56df4ee451024786db55fff9235f9274999417fb",
+      "duration": 1.557,
+      "peak": 0.3751,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am the young guide today.",
+      "file": "kokoro-afheart-v1/6c5018260f3a5f9ac59c.mp3",
+      "bytes": 13080,
+      "sha256": "30d9b3daef0cfb2a3d7b4c6e6864fdf09c55c077001cd35a128a2d8671bdc6ad",
+      "duration": 1.6,
+      "peak": 0.4586,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am your guide near them.",
+      "file": "kokoro-afheart-v1/1df40dab1a526cf7288f.mp3",
+      "bytes": 12144,
+      "sha256": "a87d381dafc0c48200eaece46f2a94d9cb4a176420e0ac8dd1a03e78cf8d15d2",
+      "duration": 1.408,
+      "peak": 0.5222,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am your guide near water.",
+      "file": "kokoro-afheart-v1/a83a571fe17740678729.mp3",
+      "bytes": 12648,
+      "sha256": "a30a498f0b9de582c5011eb07c353455d43854ad36b2100c2612b4ceb4a8053e",
+      "duration": 1.6,
+      "peak": 0.3604,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am your support near clean water.",
+      "file": "kokoro-afheart-v1/039a716520286dc3e100.mp3",
+      "bytes": 16272,
+      "sha256": "707e3e88c5581372988fcc621ba94fdf8a4909f8082a027531ea7f9ba3006a28",
+      "duration": 1.941,
+      "peak": 0.4256,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am your useful support near water.",
+      "file": "kokoro-afheart-v1/9b2f24409793b78fde7c.mp3",
+      "bytes": 18552,
+      "sha256": "8e8dcb357ccc7012d18ddebf1c8633daa7304c9f3c96a6fdd08e4a708309cf36",
+      "duration": 2.219,
+      "peak": 0.4392,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I am your young guide near water.",
+      "file": "kokoro-afheart-v1/03ce21eee41973ab80b7.mp3",
+      "bytes": 15024,
+      "sha256": "b1f5d4566ba82267354ea2a1594821ce93768e734ac2f2a44778c782598bcfe3",
+      "duration": 1.813,
+      "peak": 0.4635,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be a young guide.",
+      "file": "kokoro-afheart-v1/40743c26419a36cea463.mp3",
+      "bytes": 10968,
+      "sha256": "e1ab9f64cda647b138d4657c690b904736c3071959cc6a85c4181c25a470e2e2",
+      "duration": 1.387,
+      "peak": 0.4077,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be not helpful support near a friend.",
+      "file": "kokoro-afheart-v1/5c201c186d7755f4ce6a.mp3",
+      "bytes": 20400,
+      "sha256": "57f5f4aca7e6dd2eb2ae3bebd162a0dc7f2b29a448f641502f921c6033debdb9",
+      "duration": 2.347,
+      "peak": 0.3559,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be not myself near the fresh water.",
+      "file": "kokoro-afheart-v1/099976a451db0ab4e7f9.mp3",
+      "bytes": 20160,
+      "sha256": "e06a16b66a67a4ffe0d635c0be886e9d0f95873ead05c9b1872b15e1810fecb1",
+      "duration": 2.389,
+      "peak": 0.3863,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be not often happy.",
+      "file": "kokoro-afheart-v1/d1a853dfb5051d0d2b83.mp3",
+      "bytes": 15000,
+      "sha256": "3d148085de848ed196ae99a15ed396eda555e3340a112d9e95d824f5ed8c4d57",
+      "duration": 1.621,
+      "peak": 0.3128,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be often the support near our friend today.",
+      "file": "kokoro-afheart-v1/6c735b84ac519756e03d.mp3",
+      "bytes": 21168,
+      "sha256": "ade186439729332d88d2e1b7d6b3843eb0fc60297089766ecbcdc0d6ef1f7720",
+      "duration": 2.432,
+      "peak": 0.3729,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be often the support near our friend.",
+      "file": "kokoro-afheart-v1/8f706ee489646eae2635.mp3",
+      "bytes": 18888,
+      "sha256": "1013ea4fb841968cf9a96f23eb8fde38d8558c40cf96c0aa1eaccc5d24098faf",
+      "duration": 2.176,
+      "peak": 0.3295,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be support near water today.",
+      "file": "kokoro-afheart-v1/bd9afa7fe27f9aacf868.mp3",
+      "bytes": 18192,
+      "sha256": "bdd3a0f52efa3765453e4df00a72c755da01d3f704e44026a568d822a5c50a42",
+      "duration": 1.984,
+      "peak": 0.3347,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be your useful support near a friend today.",
+      "file": "kokoro-afheart-v1/672ca3d417e146776f30.mp3",
+      "bytes": 23280,
+      "sha256": "0147ae9844929206a4814d018982f89dfc2d7aa9fec3483a13ac1e4759309cd6",
+      "duration": 2.859,
+      "peak": 0.4456,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can be your young guide.",
+      "file": "kokoro-afheart-v1/7dc78cd82e107c2c4d75.mp3",
+      "bytes": 11448,
+      "sha256": "903287b7191c02b3ba58eb90e276de09457819bb674f5fbd39e57c483ef22d97",
+      "duration": 1.429,
+      "peak": 0.4479,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can enjoy music near an useful friend.",
+      "file": "kokoro-afheart-v1/4a0a12efa70e7b67e75b.mp3",
+      "bytes": 22656,
+      "sha256": "871f5f314bf31fe17e5a27bd1561215362ff48b8d53478e89518bd1cfe2a88ec",
+      "duration": 2.731,
+      "peak": 0.3884,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can enjoy music near the friend very well.",
+      "file": "kokoro-afheart-v1/08cbbf51289e472a3bee.mp3",
+      "bytes": 21768,
+      "sha256": "fd0bb0afd089f059e4a9f2be83893786673c0cc1fa5fb38aa1be75330827e5dd",
+      "duration": 2.667,
+      "peak": 0.3861,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can enjoy our music near them.",
+      "file": "kokoro-afheart-v1/a277fd3b049fcdadd4fc.mp3",
+      "bytes": 15912,
+      "sha256": "f565311cb86be80330ddd572d51d5ce71bbd92081b56cea346016c0ae7fb428f",
+      "duration": 1.877,
+      "peak": 0.3508,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can enjoy the useful music.",
+      "file": "kokoro-afheart-v1/7c039702a0bf13a72168.mp3",
+      "bytes": 16296,
+      "sha256": "7d5561fd27556350d9f6359d21e18c46ee85389f40984b36df907d13c392cfaf",
+      "duration": 1.941,
+      "peak": 0.4592,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give management advice today.",
+      "file": "kokoro-afheart-v1/7848a2bef9dbda3c4f06.mp3",
+      "bytes": 20256,
+      "sha256": "d105ee06ec9d98bef6fd91e8fa864df193dc2443e3c84f2154a24c9c4ebd5884",
+      "duration": 2.133,
+      "peak": 0.3723,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give our management a book.",
+      "file": "kokoro-afheart-v1/2ba1f9a2b410066b666d.mp3",
+      "bytes": 16368,
+      "sha256": "adc1297bd03da45ce0356dbe127fe2335a7573c3f8375697fa5a7922400debb9",
+      "duration": 1.877,
+      "peak": 0.4655,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give our management the advice.",
+      "file": "kokoro-afheart-v1/d595919dcc7e6f05f530.mp3",
+      "bytes": 18768,
+      "sha256": "932977172ed971065b4cac300047be53638d7e966049b75e997eb175a563ecfe",
+      "duration": 2.176,
+      "peak": 0.4446,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give the management advice.",
+      "file": "kokoro-afheart-v1/61fa2e21cdc5b217927d.mp3",
+      "bytes": 17832,
+      "sha256": "1a4e93c833b7707fb884e09c047a93ee665d900c8554a91536cbf3a462ebfa6b",
+      "duration": 1.92,
+      "peak": 0.349,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give them advice near the friend.",
+      "file": "kokoro-afheart-v1/5d300435a00d0369ae21.mp3",
+      "bytes": 17472,
+      "sha256": "176c6e8f3521a7bea62e811be33e62db033592c7f4168ac752ea847caff83e8c",
+      "duration": 2.133,
+      "peak": 0.3545,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give them an useful book.",
+      "file": "kokoro-afheart-v1/aea4e8e522c8846c5000.mp3",
+      "bytes": 15288,
+      "sha256": "5f4b191988e65d3aca372d9ee4d5e52121c52e830c9c14ad4b6a4535792cdd7a",
+      "duration": 1.92,
+      "peak": 0.4439,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give them helpful advice near the friend.",
+      "file": "kokoro-afheart-v1/9123890eb19592569ff6.mp3",
+      "bytes": 22464,
+      "sha256": "734c69888e541cd344f09a2c605e3f2a1d231f3431367a33deac4ff9c4768ae3",
+      "duration": 2.667,
+      "peak": 0.3575,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can give them the advice.",
+      "file": "kokoro-afheart-v1/bc3a67fb7d9059468153.mp3",
+      "bytes": 14760,
+      "sha256": "4a9547911fceaff96f66ea00fd1575a2be5a2e8952bea758e7c7e835aa76b530",
+      "duration": 1.643,
+      "peak": 0.4038,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not give the management a book.",
+      "file": "kokoro-afheart-v1/64cf53cce202fc0575ad.mp3",
+      "bytes": 17952,
+      "sha256": "b64ce1f748f55161e8ab3f019416b372d53c3195f02965b13ccc97a63cab595e",
+      "duration": 1.963,
+      "peak": 0.4019,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not give the useful management advice today.",
+      "file": "kokoro-afheart-v1/2c2f4348bac4d2fa674b.mp3",
+      "bytes": 26496,
+      "sha256": "40852ad8b1ab98f52e976134463055ccdd65923f633d464d4a19b52d22b8667d",
+      "duration": 2.837,
+      "peak": 0.3728,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not give them a book very well.",
+      "file": "kokoro-afheart-v1/a3c470faacfbc9c52098.mp3",
+      "bytes": 16032,
+      "sha256": "d7f77bfc379e962e1f7450d4d899f16fde463cea2e028b1e23d257b395446b5b",
+      "duration": 1.92,
+      "peak": 0.4086,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not give them an useful book very well.",
+      "file": "kokoro-afheart-v1/f6ade67389ce9712b191.mp3",
+      "bytes": 22704,
+      "sha256": "c87f05016e025ced3be6ff850f3b136722a9c6466bee441358cf185009fd24c8",
+      "duration": 2.667,
+      "peak": 0.3481,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not make them ready very well.",
+      "file": "kokoro-afheart-v1/d6513b78357e1c24ea38.mp3",
+      "bytes": 17592,
+      "sha256": "c7bd71f0672e1c06c2b0b452699cb1a3a0877a757ac0c6b9c06b7692af13ca91",
+      "duration": 1.963,
+      "peak": 0.3983,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not often work near clean fresh water today.",
+      "file": "kokoro-afheart-v1/189b42381fdcce398c01.mp3",
+      "bytes": 24744,
+      "sha256": "7c52a37f57bb2006fbbed4ccc933bc173e0eec6798c8f7b9aedcc31f839c190d",
+      "duration": 2.837,
+      "peak": 0.4059,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can not read a book very well.",
+      "file": "kokoro-afheart-v1/b939bea9e62385a7ad27.mp3",
+      "bytes": 15048,
+      "sha256": "549bf6f5268eee56c0d9413d55ac8f1de66f111ce0f4d3b6d7b2a531bb266139",
+      "duration": 1.792,
+      "peak": 0.3342,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can often enjoy the music.",
+      "file": "kokoro-afheart-v1/75901418dd5341babf6b.mp3",
+      "bytes": 16272,
+      "sha256": "9fbe66375686c8ec53df92ac30a109a8cabf9152e03d2e2e6e3c08e1b5cd18a5",
+      "duration": 1.899,
+      "peak": 0.3661,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can often give helpful management a book today.",
+      "file": "kokoro-afheart-v1/a63745cbe710fc5626e3.mp3",
+      "bytes": 24144,
+      "sha256": "23ebd9922b6020359dcad05256cf53c4e532cf95a66f04389c3c28644dd3762d",
+      "duration": 2.773,
+      "peak": 0.3527,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can often give our management a book.",
+      "file": "kokoro-afheart-v1/7ac6bbe58c73d7101367.mp3",
+      "bytes": 18048,
+      "sha256": "c5f5dcf5d525955f66e840242e89e1dd95654385c82f96b5de2d9b4ffbad6ad3",
+      "duration": 2.155,
+      "peak": 0.3966,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can often give our useful management a book today.",
+      "file": "kokoro-afheart-v1/87ae14ac9e0f44d16bbb.mp3",
+      "bytes": 23664,
+      "sha256": "3c115f65b187f45522afac09d1c85dd90a122f73b7d1f27348f28bcd5cf4572d",
+      "duration": 2.859,
+      "peak": 0.3817,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can often give them helpful advice today.",
+      "file": "kokoro-afheart-v1/b90541c84cad7f4c21fd.mp3",
+      "bytes": 21720,
+      "sha256": "823b278537fe739ebe5be42d48c765db3bbbf67125ca5ad235734e3ab26cf32c",
+      "duration": 2.496,
+      "peak": 0.3816,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can read a book near a friend.",
+      "file": "kokoro-afheart-v1/06e5bfac2d84fbebf33b.mp3",
+      "bytes": 13992,
+      "sha256": "8b9d7957e70d641557632c13d882745ecd02718aca292362c013f2f34e589ba5",
+      "duration": 1.707,
+      "peak": 0.428,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can read a book today.",
+      "file": "kokoro-afheart-v1/6259152111851e50bc53.mp3",
+      "bytes": 12840,
+      "sha256": "2707e5cbe12b82da03f2ff530ab7d195d59e33133660d094204342428d1c2edd",
+      "duration": 1.451,
+      "peak": 0.4508,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can read the useful book near water near water today.",
+      "file": "kokoro-afheart-v1/5349e5ec8015ce283787.mp3",
+      "bytes": 25920,
+      "sha256": "5edbfcc4881cbcd502ae176288a2d554279572ff6cb480356f8665c77b5f07c7",
+      "duration": 3.157,
+      "peak": 0.3268,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can work near the water very well.",
+      "file": "kokoro-afheart-v1/ed3d4bd269f53f8ab924.mp3",
+      "bytes": 16824,
+      "sha256": "4f34ffdedb76b669ff49748a13b19f15be3a2da54ca9ffc93d42373ebdc2b17b",
+      "duration": 1.92,
+      "peak": 0.3309,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I do not enjoy music near water today.",
+      "file": "kokoro-afheart-v1/2c54b4c60ff892aeacf5.mp3",
+      "bytes": 21312,
+      "sha256": "e1ee52e529f5e228f15ac451352eb60d1b1616d5662003d07c72867537623610",
+      "duration": 2.389,
+      "peak": 0.2892,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I do not give our young student the book.",
+      "file": "kokoro-afheart-v1/80c8f24ad1ff1b21df1c.mp3",
+      "bytes": 16272,
+      "sha256": "ec9132ed59cc42f0ec7eb223ab3ad60f698a0848c2491fc9f4830502be4ed69d",
+      "duration": 1.941,
+      "peak": 0.4099,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I do not need the book near the water.",
+      "file": "kokoro-afheart-v1/df4b78f1ff20362d9626.mp3",
+      "bytes": 16776,
+      "sha256": "916db915ec3d46a1374c3df8453e873ee0bd85f8d1b6a0636f1d078ca1b67ef3",
+      "duration": 1.899,
+      "peak": 0.372,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I do not often work near our friend today.",
+      "file": "kokoro-afheart-v1/1f5efff4dceb6a52c521.mp3",
+      "bytes": 19272,
+      "sha256": "4928026b4ebbd317714fa93f47a802a4e2cf15cb61c2401ae543d4a7af3e77a3",
+      "duration": 2.197,
+      "peak": 0.3321,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I do not often work today.",
+      "file": "kokoro-afheart-v1/669204187c30ac54504b.mp3",
+      "bytes": 14616,
+      "sha256": "f54d510192b9545836964c7a0241fe26d864d676668ceee277cb7bc31400343a",
+      "duration": 1.685,
+      "peak": 0.3849,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I enjoy music near water today.",
+      "file": "kokoro-afheart-v1/2fa60e2da6c02099c1e8.mp3",
+      "bytes": 18408,
+      "sha256": "460026d28cd884f33b38cfe6398f9a6a7acf43dffa0290dc6ec42d3b0cbe93dc",
+      "duration": 2.112,
+      "peak": 0.3196,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I enjoy the music near them.",
+      "file": "kokoro-afheart-v1/e25fe0b0caa37c21197d.mp3",
+      "bytes": 15240,
+      "sha256": "a0a34c41cdfab9369534978df70756b88165d7ee182312dba5557453f75e6c24",
+      "duration": 1.771,
+      "peak": 0.3333,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I enjoy the music often today.",
+      "file": "kokoro-afheart-v1/28bba265f01823783c89.mp3",
+      "bytes": 17736,
+      "sha256": "533e436917e26f2596b4aeb905535d1df8ede8a419a6e0c73d0fa934d811fffe",
+      "duration": 2.112,
+      "peak": 0.3079,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give helpful management advice today.",
+      "file": "kokoro-afheart-v1/1c597ea8b32c51b6a5c8.mp3",
+      "bytes": 20856,
+      "sha256": "244df88d88e0429258c6a32b26bd815b50337e0f16ecd57fb3a55022240523e0",
+      "duration": 2.347,
+      "peak": 0.3755,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give management advice near a friend.",
+      "file": "kokoro-afheart-v1/3beba27389fc29b6bf64.mp3",
+      "bytes": 20472,
+      "sha256": "e48ea4597862eb302c035e8596a1b4871e8dae296e30f591fa427b83a1aee808",
+      "duration": 2.304,
+      "peak": 0.3904,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give management an useful book.",
+      "file": "kokoro-afheart-v1/cdc5a51453ab65441957.mp3",
+      "bytes": 17520,
+      "sha256": "049ad6a2f203c1eff92cb932de563aeaa5adb630a675637c62b5437908eb8ca2",
+      "duration": 2.091,
+      "peak": 0.4472,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give management our book today.",
+      "file": "kokoro-afheart-v1/0a8984d17305a8cddd50.mp3",
+      "bytes": 17280,
+      "sha256": "c9565f8ca68f56a2bf71ac5ff32b1bd48b41b8ad7154f8f67a2749578c9faf3a",
+      "duration": 1.92,
+      "peak": 0.3202,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give management the advice near a friend.",
+      "file": "kokoro-afheart-v1/271402968c14348a59c5.mp3",
+      "bytes": 21792,
+      "sha256": "abe9909c5e8177e88e26348c951a740c9b361ee3d7a05a2c792aa156faff7179",
+      "duration": 2.517,
+      "peak": 0.3861,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give our management our advice.",
+      "file": "kokoro-afheart-v1/7139a2565614b4255b40.mp3",
+      "bytes": 18408,
+      "sha256": "a188d27e5eca9af431cecabd14ddf84772b46042ead368273c8852c6b785ce11",
+      "duration": 2.027,
+      "peak": 0.3341,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give our useful management often advice near them.",
+      "file": "kokoro-afheart-v1/2a973155ca19516d69ec.mp3",
+      "bytes": 25776,
+      "sha256": "f8801ab885e8f0e1154e0dc023aab618b319f2f3ce2c1d70ce63d745b321b042",
+      "duration": 3.136,
+      "peak": 0.4504,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give the management the advice.",
+      "file": "kokoro-afheart-v1/e67fb563e4fed57a3606.mp3",
+      "bytes": 16464,
+      "sha256": "4b16b87fd25b40cb2aff39cb372e0782db466c2116f6781afdef1dc2b262af49",
+      "duration": 1.941,
+      "peak": 0.4073,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give the student our advice near them today.",
+      "file": "kokoro-afheart-v1/4c3e9ca76466d130374d.mp3",
+      "bytes": 22848,
+      "sha256": "837e7b8a0d15a4f1ed3939d199a4ec5664bdde6d8ca2761e61535eccfb7fd087",
+      "duration": 2.709,
+      "peak": 0.4113,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give the student our advice.",
+      "file": "kokoro-afheart-v1/452e66f1281830ecb08c.mp3",
+      "bytes": 15960,
+      "sha256": "35bc21046921ae3888b5f48a15e7facd9227ce0ec2fefe549152173ab93c0ff0",
+      "duration": 1.835,
+      "peak": 0.35,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give the student our book near them.",
+      "file": "kokoro-afheart-v1/1176e25ebbacbab6114b.mp3",
+      "bytes": 17016,
+      "sha256": "4b427ac4182c19f92f878cf64a51ab4254b47618d06e026203cb2a435326bcc9",
+      "duration": 1.941,
+      "peak": 0.366,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them a book near them.",
+      "file": "kokoro-afheart-v1/1ef275ccb3b9a75f6bd8.mp3",
+      "bytes": 13512,
+      "sha256": "5b011639de3d78fc491227a9a07f52e8781bede95ef8fb570497c9eb3ce1a01b",
+      "duration": 1.493,
+      "peak": 0.4003,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them advice near the water.",
+      "file": "kokoro-afheart-v1/04f2b75a81f8fce19c44.mp3",
+      "bytes": 16992,
+      "sha256": "fe3a4914b415d24088e4cd09fe09dfda278db87a5c4abd3694385c59d9ed6c21",
+      "duration": 1.963,
+      "peak": 0.3375,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them advice near the young helpful friend.",
+      "file": "kokoro-afheart-v1/6ce25ee9c6c31ea53fb1.mp3",
+      "bytes": 24048,
+      "sha256": "845473b82d417601e614bd0b74a8cfef1e5d2508e98023bf2feda314381e3b37",
+      "duration": 2.816,
+      "peak": 0.3601,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them only the book.",
+      "file": "kokoro-afheart-v1/b18436bbeab301b75884.mp3",
+      "bytes": 12648,
+      "sha256": "8d669dd3b09094b2e49ac7427c057a6d2bde42c1f49a5cce0c152076d6c4bf91",
+      "duration": 1.536,
+      "peak": 0.3251,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them our useful advice today.",
+      "file": "kokoro-afheart-v1/2e4f4e3d6a765d035468.mp3",
+      "bytes": 19320,
+      "sha256": "1225e66d84e0a63476b7fa836693fba938a8e4f187160a10044cc1957706215b",
+      "duration": 2.24,
+      "peak": 0.3722,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them our useful book near them.",
+      "file": "kokoro-afheart-v1/8d94fbf3f504c6f5e996.mp3",
+      "bytes": 18624,
+      "sha256": "08596238eb154b2276730d8fb117ed6544904c6b16151c55bbe37a0c2904f983",
+      "duration": 2.219,
+      "peak": 0.3768,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them something near water.",
+      "file": "kokoro-afheart-v1/151f6407a40e45a9171a.mp3",
+      "bytes": 16488,
+      "sha256": "ffe1be6422f27450e5f541848fb8d4d85aa8411857c83d55d286ad012e8d1057",
+      "duration": 1.877,
+      "peak": 0.3585,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them the advice today.",
+      "file": "kokoro-afheart-v1/af79b0b78ec9edc4a4f5.mp3",
+      "bytes": 14856,
+      "sha256": "8c4dd6928cc6338903c17473bddb9859e575a829929e35843e1d0f721f3fab5a",
+      "duration": 1.728,
+      "peak": 0.3533,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them the book today.",
+      "file": "kokoro-afheart-v1/c9079534fcbbb8bffbe1.mp3",
+      "bytes": 12528,
+      "sha256": "f3572db3db1f457c2cb0767cd7394c39c0c941d373613312dfb6de6bd4cee074",
+      "duration": 1.472,
+      "peak": 0.4228,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them the useful advice today.",
+      "file": "kokoro-afheart-v1/5f8890de4ede6672bb2c.mp3",
+      "bytes": 19464,
+      "sha256": "3763717039dd20c2f79ef37891d8e2572f3c4e5468705ed1078bc8503a5fd8d8",
+      "duration": 2.133,
+      "peak": 0.3771,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I give them the useful advice.",
+      "file": "kokoro-afheart-v1/ad51f34cd1241031db7b.mp3",
+      "bytes": 16800,
+      "sha256": "ce461dd0d7e6a2e41e723171bdff21f5a1e4afafd7650889a6db800edfaf6b6d",
+      "duration": 1.813,
+      "peak": 0.3685,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I help them near the friend today.",
+      "file": "kokoro-afheart-v1/c960ee024d0817044297.mp3",
+      "bytes": 15408,
+      "sha256": "3382b0112cab1ba36605eaf5574367b478f56dc60d36d06939675c8ea441e422",
+      "duration": 1.792,
+      "peak": 0.3651,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I help them near them today.",
+      "file": "kokoro-afheart-v1/ac0a1d46318c5d4bc8ac.mp3",
+      "bytes": 14280,
+      "sha256": "4ac479129216ca6be0fd18c8b7a0f67cd488cb61e0445af3dc270ac360958f32",
+      "duration": 1.643,
+      "peak": 0.3897,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I make our useful work easy.",
+      "file": "kokoro-afheart-v1/44fab1bb093fc723e17c.mp3",
+      "bytes": 15336,
+      "sha256": "78cc772fbe6192602d8a77614a50a9c5c488b1f96bb837aab656b90115587f38",
+      "duration": 1.813,
+      "peak": 0.4012,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I make the student ready today.",
+      "file": "kokoro-afheart-v1/b99220b5d174a8fd2e70.mp3",
+      "bytes": 15576,
+      "sha256": "0e4005a9fa6e6de9dd97a59210abb8f83517374e0eb756ba19ab8da4947f43ba",
+      "duration": 1.749,
+      "peak": 0.3304,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need an useful book near them.",
+      "file": "kokoro-afheart-v1/048918bb77d145f45e86.mp3",
+      "bytes": 15960,
+      "sha256": "8016d796d052cde2512eec6c59f1497cf153e8f895da79c46d0b872cb7d06824",
+      "duration": 1.835,
+      "peak": 0.4806,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need our book near them.",
+      "file": "kokoro-afheart-v1/67e25cc368d93f8d7a67.mp3",
+      "bytes": 12288,
+      "sha256": "73551fdc71c797701fa2f9acadc09168603520b9b2c1c94c0a25bda6bf45a662",
+      "duration": 1.451,
+      "peak": 0.4685,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need our book near water.",
+      "file": "kokoro-afheart-v1/55e3a4f1c4c0e98ff4e6.mp3",
+      "bytes": 13440,
+      "sha256": "0f66cd7838e4b39464d3570a82b39dde18eb72e05a1004ea96aa883f34964f0c",
+      "duration": 1.6,
+      "peak": 0.3317,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need the book near the friend.",
+      "file": "kokoro-afheart-v1/f0bc66a5beb55078dbea.mp3",
+      "bytes": 14496,
+      "sha256": "bde68ebf23f41c7aff9d75a9b58d088c804d13a30500cfb555beb024f96fbdf7",
+      "duration": 1.664,
+      "peak": 0.4501,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need the book near the useful friend.",
+      "file": "kokoro-afheart-v1/5f64b196d0046c385151.mp3",
+      "bytes": 19728,
+      "sha256": "3492572e384162fc28c5aa508bf387907d34b6dae0da44fece96e0452170cc9c",
+      "duration": 2.176,
+      "peak": 0.4661,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need the book near water.",
+      "file": "kokoro-afheart-v1/da5ecf1accf457bc39d2.mp3",
+      "bytes": 14448,
+      "sha256": "dd8b8e9d5a039eb7b7dc56defa195b63625a0a5b9e8194c7bd8c90f779cc23ba",
+      "duration": 1.557,
+      "peak": 0.4227,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I need the useful book near them.",
+      "file": "kokoro-afheart-v1/08b644c569698f2866f7.mp3",
+      "bytes": 15624,
+      "sha256": "6210265ee25cfb8bef7a1031b54f4953de1572b983f980b58ff2b7dfeb0432c0",
+      "duration": 1.813,
+      "peak": 0.4421,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often am a guide near water.",
+      "file": "kokoro-afheart-v1/039e63bbdac862eecec0.mp3",
+      "bytes": 15720,
+      "sha256": "fc67a32d5da52106a4c86d40168b564c313ae35fc601c75e22568dafb875d2aa",
+      "duration": 1.941,
+      "peak": 0.4122,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often am the useful support.",
+      "file": "kokoro-afheart-v1/00e010112fa12ca21ff7.mp3",
+      "bytes": 16584,
+      "sha256": "2737f83732514b8e7689a9b01f4119c87a509b50784b9cb0f76669b5f8d0532a",
+      "duration": 1.963,
+      "peak": 0.3977,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often am the young guide.",
+      "file": "kokoro-afheart-v1/879bfb644bb610756054.mp3",
+      "bytes": 13944,
+      "sha256": "3b5020ad721d81e70839758a6128c4664db37f644095158769f487a61892d814",
+      "duration": 1.643,
+      "peak": 0.361,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often am your young guide near water.",
+      "file": "kokoro-afheart-v1/ec61b421e553c4a3d78a.mp3",
+      "bytes": 19176,
+      "sha256": "e2146b3a354060776789d7552e383c85ba7abdd5a8014a775b008b182fd11cb7",
+      "duration": 2.176,
+      "peak": 0.2851,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often do not give the young student helpful advice near water.",
+      "file": "kokoro-afheart-v1/36550c8149ed316d13ff.mp3",
+      "bytes": 31224,
+      "sha256": "0748850b0f7fefdb070195c9171a869d301940b74ff9f2b3764ba3cf0ceca862",
+      "duration": 3.712,
+      "peak": 0.3922,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy helpful music near them.",
+      "file": "kokoro-afheart-v1/27160458bc8f20c84c99.mp3",
+      "bytes": 20400,
+      "sha256": "7edd9c185de7bd428c98823f2ca4bb027075209a0fa34e375548a20a4785887c",
+      "duration": 2.389,
+      "peak": 0.4135,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy helpful music today.",
+      "file": "kokoro-afheart-v1/196aa4fbc3e8411d2d4b.mp3",
+      "bytes": 20736,
+      "sha256": "f08be5b2279ae4e35ed3db720f9fac5803b905928bb7473be122c7093ef09e05",
+      "duration": 2.325,
+      "peak": 0.4438,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy music near our water.",
+      "file": "kokoro-afheart-v1/833489b747aaa3662124.mp3",
+      "bytes": 19848,
+      "sha256": "4847ed86c6c0d1ac0100481348909a5856cbf6e931222e3152a85627fd0eea00",
+      "duration": 2.304,
+      "peak": 0.3117,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy only the music.",
+      "file": "kokoro-afheart-v1/d9e882385e11a56b6f9b.mp3",
+      "bytes": 17832,
+      "sha256": "cd024428618d22f8060c08b97d2506f6c163fb8427b33a053270b41cf91380f7",
+      "duration": 2.005,
+      "peak": 0.3677,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy our music today.",
+      "file": "kokoro-afheart-v1/d5dbb6fa5677e29d309f.mp3",
+      "bytes": 16824,
+      "sha256": "706edea7c086cebe23d4114f0d00a820fc0fd38a053d0ba800fefaa3b5d8c199",
+      "duration": 2.027,
+      "peak": 0.4005,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy our music very well.",
+      "file": "kokoro-afheart-v1/7037652538563d794046.mp3",
+      "bytes": 18336,
+      "sha256": "81abed702c1d66b34b634902d8553a1738c5915f787182c411542139854301f1",
+      "duration": 2.24,
+      "peak": 0.2976,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often enjoy our useful music near them.",
+      "file": "kokoro-afheart-v1/aa2e02c148527aed74bd.mp3",
+      "bytes": 21000,
+      "sha256": "142c8ed2c76baca648e04b87fb6c1f61b6cea8a7c5e68842d28d24d966cb0ff5",
+      "duration": 2.517,
+      "peak": 0.3806,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give our student advice today.",
+      "file": "kokoro-afheart-v1/af93f723ed3fd6c341ba.mp3",
+      "bytes": 19752,
+      "sha256": "990b904010e4cc4b0e2706642481e6b563f78a23a58d81315a938ef74f4dd283",
+      "duration": 2.261,
+      "peak": 0.3353,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give our useful management advice near them.",
+      "file": "kokoro-afheart-v1/e3c9a482bbc7b322514f.mp3",
+      "bytes": 26520,
+      "sha256": "adb03eedf7836833792451c84994952e518ba3bd9b468110ede4975edf683b4b",
+      "duration": 3.2,
+      "peak": 0.4296,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give the management our useful book.",
+      "file": "kokoro-afheart-v1/ad8f838a103f32316362.mp3",
+      "bytes": 23184,
+      "sha256": "8113c7a7ffc127b708365cb774c1d0ac6411e7e940857df38485f022a88e25f2",
+      "duration": 2.731,
+      "peak": 0.3782,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give the useful management our advice.",
+      "file": "kokoro-afheart-v1/ea437346aa959a77771a.mp3",
+      "bytes": 24336,
+      "sha256": "2bad1a9925e3f5bc6a16a01097cd2f7d268d9b4fae2194690a010e9957220259",
+      "duration": 2.859,
+      "peak": 0.3601,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give them helpful advice today.",
+      "file": "kokoro-afheart-v1/e59b2fd7c43ce6bb3278.mp3",
+      "bytes": 20832,
+      "sha256": "34709243f6eb786938a3b1cf059ee9b2f17d1a21961c4872b083c5c33114d43c",
+      "duration": 2.325,
+      "peak": 0.3883,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give them near clean water a book today.",
+      "file": "kokoro-afheart-v1/02c88fafd01c78f07424.mp3",
+      "bytes": 23640,
+      "sha256": "55b933de9c7330f4b50e96e047990cfed05f833710a96775b5649192be7fa6e5",
+      "duration": 2.752,
+      "peak": 0.3808,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give them near clean water advice today.",
+      "file": "kokoro-afheart-v1/9657d6881ffacfdd5d0e.mp3",
+      "bytes": 24336,
+      "sha256": "db7efb39e6b73f8ea6360f9dcaaf5e5ec9c5910c9557dd42bdfd09318d8391f9",
+      "duration": 2.837,
+      "peak": 0.3744,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often give them the book today.",
+      "file": "kokoro-afheart-v1/1b16a44d21e3a1259fcb.mp3",
+      "bytes": 15912,
+      "sha256": "83419ed8622ef35cfd3996f9d5a6f1a8377fcc43de39a0ed18c9c508ea77c402",
+      "duration": 1.813,
+      "peak": 0.3387,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often help them near clean water today.",
+      "file": "kokoro-afheart-v1/f5f4f959a48426cb3615.mp3",
+      "bytes": 20952,
+      "sha256": "a500ff919e493f22f39782d24410596243c31c7cd56d61df631f26daee9ad012",
+      "duration": 2.368,
+      "peak": 0.3853,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often make a student ready.",
+      "file": "kokoro-afheart-v1/19e52abe3439b0e14d3a.mp3",
+      "bytes": 15768,
+      "sha256": "9d809beab7cfd7067fa8b7773904a9706f00457398df91da92cbf8ae90d1b807",
+      "duration": 1.749,
+      "peak": 0.3779,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often need our book today.",
+      "file": "kokoro-afheart-v1/86f0e7535fa34ca03522.mp3",
+      "bytes": 13920,
+      "sha256": "87b0cc9ddea677827ce15ccb687b296f9e43cd34d263f9855312d5daa19dfba9",
+      "duration": 1.728,
+      "peak": 0.3643,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often need the book near a friend.",
+      "file": "kokoro-afheart-v1/404378981430168a1db4.mp3",
+      "bytes": 16320,
+      "sha256": "9722d95d1835fbbe1676ccf32d13642b278cc90e1cecd9192ac95e7e5c056813",
+      "duration": 1.877,
+      "peak": 0.3617,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often work near our water.",
+      "file": "kokoro-afheart-v1/72c9bcab28eb5e672a1b.mp3",
+      "bytes": 15144,
+      "sha256": "44eabb5c3544c6983d95a220e49068207ae0de340d909ceeb80f11088d7bfc78",
+      "duration": 1.749,
+      "peak": 0.3082,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often work near the fresh water.",
+      "file": "kokoro-afheart-v1/e365effa1a6d6043a99e.mp3",
+      "bytes": 16632,
+      "sha256": "8cbe9f900b389e0fd2eff4ed0cff9b1d29aa0c6934d1a4251fc533cbbc1cd7f8",
+      "duration": 1.92,
+      "peak": 0.3806,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I often work near the water.",
+      "file": "kokoro-afheart-v1/ac998a38c057fff78eff.mp3",
+      "bytes": 14208,
+      "sha256": "7e35370dc117ff4e14651139ec432221976178af5a887d20c2f4067ae49f78a9",
+      "duration": 1.707,
+      "peak": 0.3431,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I work near a friend today.",
+      "file": "kokoro-afheart-v1/9057754743a3cafc2a91.mp3",
+      "bytes": 13896,
+      "sha256": "ef336da1208864605383b113c5f9bfa3dc073b0b631bb9d661e2c31aa193c26b",
+      "duration": 1.579,
+      "peak": 0.3903,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I work near our young friend.",
+      "file": "kokoro-afheart-v1/2d36d74c2193425f73a7.mp3",
+      "bytes": 12648,
+      "sha256": "4388fbcb7f0124cd86fc3cd912092c09aba045f7235399c87410d16c9915305b",
+      "duration": 1.536,
+      "peak": 0.3671,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I work near the fresh water.",
+      "file": "kokoro-afheart-v1/f5571dfbde9076532f64.mp3",
+      "bytes": 13704,
+      "sha256": "29a8d238a3ac2183d9eba3f02e9e4af498cf5fb66f25a54512c6d7fe4274cfc5",
+      "duration": 1.557,
+      "peak": 0.4114,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I work near the water today.",
+      "file": "kokoro-afheart-v1/246bc3ae4c86b6806a02.mp3",
+      "bytes": 14568,
+      "sha256": "814061e07f50167953f5d1f838677cbb3bb1be979a41d8d3ef8a3eadaef76a88",
+      "duration": 1.6,
+      "peak": 0.3241,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I work often near our fresh water.",
+      "file": "kokoro-afheart-v1/bfc6dbf995feb37bb8c9.mp3",
+      "bytes": 16416,
+      "sha256": "69705681d9aae7fa110f126c1368cb3c34c09f8dce544a5340e74a50352d377e",
+      "duration": 1.856,
+      "peak": 0.4642,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Is a teacher support near clean water?",
+      "file": "kokoro-afheart-v1/4764445f2751e570106a.mp3",
+      "bytes": 18144,
+      "sha256": "6f29fa1390a555b7984c4c01d51a5618cc064c5ed2e82f361c43bb5f371666e7",
+      "duration": 2.133,
+      "peak": 0.3149,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Is a teacher very well the guide?",
+      "file": "kokoro-afheart-v1/f7197f297b820de5d277.mp3",
+      "bytes": 15360,
+      "sha256": "5d8a6ac672e6ffccb67db4c45b053525243ba99e4d0cf881067f7d5091e6b32e",
+      "duration": 1.92,
+      "peak": 0.3576,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management can enjoy helpful music today.",
+      "file": "kokoro-afheart-v1/7899741e385347fc7c74.mp3",
+      "bytes": 21432,
+      "sha256": "2177db5d0c927093969820f3c1b205798ee2a6025e5cd2a03d41ce4f7e7d9635",
+      "duration": 2.645,
+      "peak": 0.38,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management can not enjoy the music near water.",
+      "file": "kokoro-afheart-v1/a40f66687925d80c09c1.mp3",
+      "bytes": 25392,
+      "sha256": "7e87845c4e999e4c4b4c64e7949ecb1912edd426f6dda7753a2f2ea4bb1ae117",
+      "duration": 2.837,
+      "peak": 0.3474,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management can not read the book near a friend today.",
+      "file": "kokoro-afheart-v1/6df70e19def96abd5bcf.mp3",
+      "bytes": 24816,
+      "sha256": "89f5099f10325a0be2a4cafbcfcb23b9ae692c65feca9d2c63bdd18a5845f316",
+      "duration": 2.837,
+      "peak": 0.3973,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management can often give them a book.",
+      "file": "kokoro-afheart-v1/2315e32786776515ea02.mp3",
+      "bytes": 18336,
+      "sha256": "e747b95338f581ebf5273c3f5e78a8d08f9b43ee0646d3a550024a4d963de754",
+      "duration": 2.176,
+      "peak": 0.3646,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management does not enjoy the music today.",
+      "file": "kokoro-afheart-v1/f54eb9d526fcc2f8e5a0.mp3",
+      "bytes": 22320,
+      "sha256": "e480153069a5464ac8a2eb12a15f9399736a481ecf6638e5e2704690c7e4af03",
+      "duration": 2.624,
+      "peak": 0.3403,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management does not give the management a book today.",
+      "file": "kokoro-afheart-v1/2a32428917b9fedd517d.mp3",
+      "bytes": 25872,
+      "sha256": "1d31152de235eaccff4a43296506ff3f86b9123ae3d90e62662f79d40bebdaea",
+      "duration": 2.923,
+      "peak": 0.3317,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management does not help them near water near water today.",
+      "file": "kokoro-afheart-v1/83c6081b544589b1aa8d.mp3",
+      "bytes": 27912,
+      "sha256": "6c248a19dbf64be046ce187be1fe65129a3f2d58c53c1a93ec841cec77a6585d",
+      "duration": 3.221,
+      "peak": 0.2806,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management does not help them near water today.",
+      "file": "kokoro-afheart-v1/06fe133dd6fb3bedda74.mp3",
+      "bytes": 23112,
+      "sha256": "21f8d0bca4b5455862a137f5252dea02dc23da3e74f4d843a6d707c835356c98",
+      "duration": 2.624,
+      "peak": 0.302,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management does not help them today.",
+      "file": "kokoro-afheart-v1/79f939626cbf89e9b3b8.mp3",
+      "bytes": 17424,
+      "sha256": "816da6c2f00516656665bb60c4b5d74fa859b0d404a0eb7059958c127ea2872e",
+      "duration": 2.069,
+      "peak": 0.3118,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management enjoys music near clean water.",
+      "file": "kokoro-afheart-v1/737282f93fc3778e9f8b.mp3",
+      "bytes": 24096,
+      "sha256": "85df1cba22e74f9d76a43a3298b5faeedbfacd4e770638f574b31373a605711f",
+      "duration": 2.816,
+      "peak": 0.3488,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management enjoys the music near the water.",
+      "file": "kokoro-afheart-v1/189e5c8cf42d11d37c06.mp3",
+      "bytes": 23472,
+      "sha256": "7cd8ebd608fba723adcd6f491569726066c05f2e163d305cf82f634fa1e4ae6d",
+      "duration": 2.688,
+      "peak": 0.3762,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management enjoys the useful music near a friend today.",
+      "file": "kokoro-afheart-v1/40f6009dc776b9285e4a.mp3",
+      "bytes": 30576,
+      "sha256": "c15875a4d3ee9535854aeafc809f896772529a8a11d76d7fb2b727480bce2a9d",
+      "duration": 3.605,
+      "peak": 0.3918,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management gives our young student our useful advice.",
+      "file": "kokoro-afheart-v1/618fe9c53883e91b3754.mp3",
+      "bytes": 26976,
+      "sha256": "28987dbc9bd789fb003d6eae363ae889b346ce8180e17fba43098e3db86de98e",
+      "duration": 3.093,
+      "peak": 0.4443,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management gives the management a book.",
+      "file": "kokoro-afheart-v1/408ef5ff7e31000b4a13.mp3",
+      "bytes": 20184,
+      "sha256": "8a5507e3cc62cfc71fd57cfe4c3a6e857914346e18f4f43308b1b7471cdb33da",
+      "duration": 2.283,
+      "peak": 0.3349,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management gives the management the advice.",
+      "file": "kokoro-afheart-v1/4595e6d2f07ab53e37c4.mp3",
+      "bytes": 22704,
+      "sha256": "22df912327d86b21a08b8a4ea6acde9dccf8398b36522e3845b787ac68007473",
+      "duration": 2.645,
+      "peak": 0.3627,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management gives them something near a young friend very well.",
+      "file": "kokoro-afheart-v1/270d8d8cbfd11bf7df2e.mp3",
+      "bytes": 29256,
+      "sha256": "95c2eeaa6ba8c799745df463944c13a8d90f749ed5b30329babeaf72c1556558",
+      "duration": 3.413,
+      "peak": 0.3857,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management helps them near a friend very well.",
+      "file": "kokoro-afheart-v1/5e23f6a2b95520b24190.mp3",
+      "bytes": 22272,
+      "sha256": "3f60674804d1a9e4e00b3efd819c45ddf745a7163933af3c45ae5724620737bd",
+      "duration": 2.581,
+      "peak": 0.404,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management helps them near an useful friend very well.",
+      "file": "kokoro-afheart-v1/cfd17b041271a858dc8b.mp3",
+      "bytes": 27312,
+      "sha256": "3775c987e70ce451ae2085feab3a3b20050c9d45a7f51d07eefe3ac9472c4784",
+      "duration": 3.2,
+      "peak": 0.3545,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management helps them only near a friend.",
+      "file": "kokoro-afheart-v1/1291d149c8ebb2fa906a.mp3",
+      "bytes": 20712,
+      "sha256": "e3dfa95619ed5e9d7e292318f3d60da44844710ccf4110cd81f2198e603bb912",
+      "duration": 2.411,
+      "peak": 0.3607,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My education can be not near them today.",
+      "file": "kokoro-afheart-v1/4b07215b2aa947343557.mp3",
+      "bytes": 21672,
+      "sha256": "45f98fda77d0600d92c5a27643389822c483ddefb076fbf56bea00baf401c773",
+      "duration": 2.517,
+      "peak": 0.3283,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My education is not helpful support today.",
+      "file": "kokoro-afheart-v1/25e24127786e66969b31.mp3",
+      "bytes": 24576,
+      "sha256": "d6192c6498e1a291fa26cf93e9d51375cf65b11f6c41d4792120e00e623101f0",
+      "duration": 2.859,
+      "peak": 0.3519,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My education is not support today.",
+      "file": "kokoro-afheart-v1/f0a2e1bfafae0dc4bc1f.mp3",
+      "bytes": 20112,
+      "sha256": "e9e30ef59302c514902d536647406824c8568669a89bff9ae2917fc341687689",
+      "duration": 2.368,
+      "peak": 0.3536,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My education is the support today.",
+      "file": "kokoro-afheart-v1/94f97436c3c3c008fbd6.mp3",
+      "bytes": 19440,
+      "sha256": "800cf3b23a65d1ad380fa7d39850d5523fb1aed800b17acddad2f44382316ebe",
+      "duration": 2.368,
+      "peak": 0.3505,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management can enjoy the music.",
+      "file": "kokoro-afheart-v1/7f1fdeac28ca75144d15.mp3",
+      "bytes": 19320,
+      "sha256": "d6565faffb61dc19aaca4cd53f89b6bb1ed518ed07f786d85b6fbab02694f761",
+      "duration": 2.261,
+      "peak": 0.3825,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management can give them an useful book.",
+      "file": "kokoro-afheart-v1/f1c9e8a3630b9f98f15e.mp3",
+      "bytes": 22824,
+      "sha256": "8225c1c9202f1a91659a5492f2f1b5d037c69965629c1ef37b44c84521d6c296",
+      "duration": 2.645,
+      "peak": 0.346,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management enjoys the music only near a friend.",
+      "file": "kokoro-afheart-v1/5e49bce2388bf38acb1e.mp3",
+      "bytes": 27960,
+      "sha256": "68293c7ea310547beedc375880a396ff5aca0050543583d88cd2790e7e96da44",
+      "duration": 3.307,
+      "peak": 0.3576,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management gives a student the book near them.",
+      "file": "kokoro-afheart-v1/990b3ed698cc6afcf2ce.mp3",
+      "bytes": 22632,
+      "sha256": "949de5b57762095f3821fd076015757a41a67325b5a128a17820ad5acd236594",
+      "duration": 2.688,
+      "peak": 0.3614,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management gives our student the book near them.",
+      "file": "kokoro-afheart-v1/fa371b856008d331078c.mp3",
+      "bytes": 22776,
+      "sha256": "6ae338fd7684c3720ed242d8a56097eb9223899d8b6265de8796aa7578e54d49",
+      "duration": 2.688,
+      "peak": 0.4895,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management gives them advice near the friend.",
+      "file": "kokoro-afheart-v1/71876ffe3498635eb911.mp3",
+      "bytes": 24384,
+      "sha256": "2db09c0b5868011cd1a138ac492d271291fe170333aa46fe5da5d03517db4f29",
+      "duration": 2.837,
+      "peak": 0.3873,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management gives them advice today.",
+      "file": "kokoro-afheart-v1/453576b6fc9f78527307.mp3",
+      "bytes": 20784,
+      "sha256": "4c7a1fec10321dee76609c0d48ec9d9906ed1b4befacdc6a9a3c0dcc11df2540",
+      "duration": 2.432,
+      "peak": 0.3888,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management gives them helpful advice.",
+      "file": "kokoro-afheart-v1/424276eb4ed62280f6eb.mp3",
+      "bytes": 21648,
+      "sha256": "a79efade2ece71d199aebbd6e2aa51601766f5600d8af1411a384970ba0d85ae",
+      "duration": 2.56,
+      "peak": 0.3605,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management makes our work easy today.",
+      "file": "kokoro-afheart-v1/dccc566218f69540cb40.mp3",
+      "bytes": 22464,
+      "sha256": "2da3024c7b43eee93101ec9731abb0a664c199a6b5b620a39e70488c3a7d77ed",
+      "duration": 2.517,
+      "peak": 0.4413,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My management needs our book near them.",
+      "file": "kokoro-afheart-v1/d03a73df024aee2beaeb.mp3",
+      "bytes": 19392,
+      "sha256": "6f5b8fbc0bb83720e81fcc55b166f2e78590fbde3d4b56d73562c55a9d271df6",
+      "duration": 2.261,
+      "peak": 0.4367,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher can be a guide today.",
+      "file": "kokoro-afheart-v1/97b679a4f87fc5023a58.mp3",
+      "bytes": 16608,
+      "sha256": "a6f6fb79ac4a596e1062ef7e6e1f904d61715ea6ab21e98736b648247a8f72ae",
+      "duration": 1.941,
+      "peak": 0.3678,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher can be a guide.",
+      "file": "kokoro-afheart-v1/70df13bcc372e0f65bd2.mp3",
+      "bytes": 12648,
+      "sha256": "efc78f0fa6b6e106f1735aae44c04cd81e4602854f5f4147548f37f8993b8f23",
+      "duration": 1.557,
+      "peak": 0.3114,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher can give the useful management helpful advice today.",
+      "file": "kokoro-afheart-v1/bae88cec942a2500bd84.mp3",
+      "bytes": 33792,
+      "sha256": "a6a168b7027c076993dc1c6b239ee752a143de28bb4dfb6040e058449503b550",
+      "duration": 4.011,
+      "peak": 0.4424,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher gives them advice today.",
+      "file": "kokoro-afheart-v1/d6df0457ac6da0e5cbe8.mp3",
+      "bytes": 18408,
+      "sha256": "215c6dff36b7e82576495e951efcfb3695be2e32364b5a4a03e364eaa91315ee",
+      "duration": 2.069,
+      "peak": 0.4252,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is a young guide near them.",
+      "file": "kokoro-afheart-v1/996967ee3a46855335d6.mp3",
+      "bytes": 18024,
+      "sha256": "89a35d897726d2a9586fee80408a52f7ba0e1ddeb2538e240c69eba787e82893",
+      "duration": 2.261,
+      "peak": 0.3401,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is near the young friend.",
+      "file": "kokoro-afheart-v1/0ede3d04dbe5671f3415.mp3",
+      "bytes": 16896,
+      "sha256": "98cb395027198e07a33a2c77d518fada7d47ed1a5043cb7d462f80a000f6808b",
+      "duration": 2.027,
+      "peak": 0.3395,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is not a guide.",
+      "file": "kokoro-afheart-v1/25965c91b3b586aa2717.mp3",
+      "bytes": 14064,
+      "sha256": "921ac82c55febfc2fe6f37fec8674a727b90c3cbaee29353962fa9975971afc9",
+      "duration": 1.685,
+      "peak": 0.2903,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is often near clean water today.",
+      "file": "kokoro-afheart-v1/4cd8b4989a6240d69470.mp3",
+      "bytes": 22296,
+      "sha256": "0807214650cdf1fa3c00484c59f20ba22e7b6cef696ba1b45943c85650b3eccd",
+      "duration": 2.581,
+      "peak": 0.3959,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is support near them.",
+      "file": "kokoro-afheart-v1/0bb57dc188c8c1cfa292.mp3",
+      "bytes": 15960,
+      "sha256": "de793b38571ac4072847b8c21f93306c17bda33fb76d6bfc89611ceab6f55642",
+      "duration": 1.813,
+      "peak": 0.4181,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is the useful support.",
+      "file": "kokoro-afheart-v1/c9f71ddcadac2b10e72d.mp3",
+      "bytes": 19248,
+      "sha256": "6d21e1ca46f8c276a38cb573cc2dd4b3f2c472cf4f5c1cb596cec790751bdb07",
+      "duration": 2.24,
+      "peak": 0.3516,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher is your guide near water.",
+      "file": "kokoro-afheart-v1/31d31804f79dd9952a6a.mp3",
+      "bytes": 18168,
+      "sha256": "5e9805985ed5ff59170c6399c15da55dbcf22ca9d0d7a853e35d6b8ca4a007f3",
+      "duration": 2.24,
+      "peak": 0.3058,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher often enjoys the music.",
+      "file": "kokoro-afheart-v1/d6704da5e2223d3dce5f.mp3",
+      "bytes": 19632,
+      "sha256": "2a424c4705c6f8cc1fdf547d2cc66da2374c17c82f28056ea17671b58c9cf342",
+      "duration": 2.304,
+      "peak": 0.3897,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher often gives the useful management the book today.",
+      "file": "kokoro-afheart-v1/20230ef03d121a6241bd.mp3",
+      "bytes": 29520,
+      "sha256": "17fb67d06c227d21603fb13efb920ddff9eb6477c35db1f9e8efee9b86a5f58d",
+      "duration": 3.52,
+      "peak": 0.3996,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My teacher works near the water.",
+      "file": "kokoro-afheart-v1/aa8b37f3e56b6fea66cd.mp3",
+      "bytes": 15216,
+      "sha256": "88b359ca32e729540c266ee29b24f61f7826d0c8a5a3f95a4e603e1d1134a3af",
+      "duration": 1.792,
+      "peak": 0.3471,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful education can be myself.",
+      "file": "kokoro-afheart-v1/544bc01c70a61bce479c.mp3",
+      "bytes": 19944,
+      "sha256": "50e4357f09fa8a359f7a0ac97d46ff48be75a65e12bf4a53b828e6d969ad256c",
+      "duration": 2.368,
+      "peak": 0.3357,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful education can be the guide.",
+      "file": "kokoro-afheart-v1/e84f37fbfcbef5583275.mp3",
+      "bytes": 20016,
+      "sha256": "61b2e6aa7b9cd79e2aba0527dcd417b706c20e66a0eb656397699e31c0271bc0",
+      "duration": 2.389,
+      "peak": 0.3589,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful education is near them.",
+      "file": "kokoro-afheart-v1/13928705da2fde8f8e14.mp3",
+      "bytes": 17784,
+      "sha256": "1c2695ff9be2501c765dbdbf106238e3c29b26e55f5206b78d2093107bef3753",
+      "duration": 2.155,
+      "peak": 0.3492,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful education is the support near water today.",
+      "file": "kokoro-afheart-v1/b9c9a3c480388935ca2e.mp3",
+      "bytes": 28872,
+      "sha256": "47affe0769e4d7d06ab338a9aae0d7b449565cc673571ec863b7d5190ef3877b",
+      "duration": 3.264,
+      "peak": 0.3591,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful education is the support today.",
+      "file": "kokoro-afheart-v1/cb775601f02956fe7a44.mp3",
+      "bytes": 22512,
+      "sha256": "8bdc0377e3e6b57def14d8d8c1818d029224e6e1cad5a5819c7ffa88e1efca81",
+      "duration": 2.709,
+      "peak": 0.4065,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful management gives the management advice near water today.",
+      "file": "kokoro-afheart-v1/7e878359b7e44d72d95d.mp3",
+      "bytes": 35352,
+      "sha256": "3fd8f15c319ff0fee52324c09eefeaf2ad4f713290146b3cec32410f044590db",
+      "duration": 4.096,
+      "peak": 0.3895,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful management gives the management advice today.",
+      "file": "kokoro-afheart-v1/88cbfd7e4be9ccae4643.mp3",
+      "bytes": 29640,
+      "sha256": "eb91a992c8d7c5745b1b7a8c4d216558733f89ae29d16cc3b966b80568465ee6",
+      "duration": 3.307,
+      "peak": 0.4209,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful management gives the management the advice near water today.",
+      "file": "kokoro-afheart-v1/3d9e192832286c823bb5.mp3",
+      "bytes": 36048,
+      "sha256": "26a7d3540be528054c3f956f164120236f9882c9ecfaa83d9d55490f6c3ba735",
+      "duration": 4.352,
+      "peak": 0.4093,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful traffic can flow near the friend.",
+      "file": "kokoro-afheart-v1/2a7346fa4afa5c02cc98.mp3",
+      "bytes": 19728,
+      "sha256": "0b1693e7f8f9c4cec78156f9644d0170accb35d64bf6195018489210e78cf9a2",
+      "duration": 2.475,
+      "peak": 0.3685,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful traffic flows near them.",
+      "file": "kokoro-afheart-v1/592cdd94bea2b530e2a6.mp3",
+      "bytes": 18216,
+      "sha256": "cc5313588210e638f7e94fd72aa6fba1a8ce5eb0fd7022987fb40435c4d17d8d",
+      "duration": 2.027,
+      "peak": 0.3817,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My useful traffic flows very well.",
+      "file": "kokoro-afheart-v1/104420fbd3d2e2a74e0f.mp3",
+      "bytes": 18528,
+      "sha256": "f4b77612e86fb09be044da00084e72126800b0e27d0f2deef115b9d43e5d54c2",
+      "duration": 2.155,
+      "peak": 0.3675,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My young teacher gives them advice today.",
+      "file": "kokoro-afheart-v1/37ee169f9ff771c2e266.mp3",
+      "bytes": 19800,
+      "sha256": "8221276cbde4971fe1337489ae5f7802ef56492c1f5d265f67ef8dd492a05896",
+      "duration": 2.453,
+      "peak": 0.4187,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My young teacher works near the friend.",
+      "file": "kokoro-afheart-v1/21cf9f6d9d7214b6d450.mp3",
+      "bytes": 17184,
+      "sha256": "c2fa021d03b635489782b98de265997250b797b58c7a676cb3fcdf08e10085db",
+      "duration": 2.069,
+      "peak": 0.3866,
+      "sampleRate": 24000
+    },
+    {
+      "text": "My young teacher works near them.",
+      "file": "kokoro-afheart-v1/19e7042d7f14190d9c9a.mp3",
+      "bytes": 15096,
+      "sha256": "c78d30ee3a7075908065780bad28e7c3a0f3ed74803f58658cad6503f0a79e88",
+      "duration": 1.856,
+      "peak": 0.3741,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Read the book near our water!",
+      "file": "kokoro-afheart-v1/506cca440720af030da6.mp3",
+      "bytes": 13560,
+      "sha256": "18060ba3b03ac6a146ef275be5f240f758e8f18acb5f7563f3291211678dbc00",
+      "duration": 1.579,
+      "peak": 0.4194,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Sometimes management gives them near them advice.",
+      "file": "kokoro-afheart-v1/c0f6fd80b9f576f0fc84.mp3",
+      "bytes": 26256,
+      "sha256": "f58c91bcdb74a91ba36edc83d4044740e65d318b073752b0006599135e91b26b",
+      "duration": 2.965,
+      "peak": 0.4228,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Sometimes management helps them near them.",
+      "file": "kokoro-afheart-v1/ad123b2d12853ae34ce7.mp3",
+      "bytes": 21048,
+      "sha256": "7ff1b6bc1e86ef3d3ce774a3f3a5744765c460d3d66608cc047722ac5f9a5eff",
+      "duration": 2.453,
+      "peak": 0.4118,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education can be not the guide.",
+      "file": "kokoro-afheart-v1/8892d4426bce766d67d9.mp3",
+      "bytes": 17904,
+      "sha256": "cb18fe272c6d6e1a8d46314355691905a9a9efaa8a0b736f0c9a2a64c68d3e08",
+      "duration": 2.027,
+      "peak": 0.4172,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is a young guide.",
+      "file": "kokoro-afheart-v1/0d68dd63d94f046509e3.mp3",
+      "bytes": 16704,
+      "sha256": "be99a4ca6af8b1a47c2d11f1739772fb4eace7e1e6b5dfd85230ca4cd48a2bfb",
+      "duration": 2.069,
+      "peak": 0.4381,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is near a friend.",
+      "file": "kokoro-afheart-v1/19cb0aa1c4ad7e9be4f9.mp3",
+      "bytes": 16176,
+      "sha256": "393865f62a3052c70926bccbe48debd131911717e9ba567d39c7bc05cdb8ce68",
+      "duration": 1.963,
+      "peak": 0.3658,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is near our water.",
+      "file": "kokoro-afheart-v1/d59ca4e21cceaaa68225.mp3",
+      "bytes": 17544,
+      "sha256": "317dc042bc50af043648784f5c5e41783d517d8402b169e635e5828e4a021dd0",
+      "duration": 2.176,
+      "peak": 0.4223,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is not near water.",
+      "file": "kokoro-afheart-v1/d79d6eca1d4967cc89fd.mp3",
+      "bytes": 19320,
+      "sha256": "54be73fda79204417a8a63b956e2d570fdbfa8eb1daf90d9fbc7a325b13e91e4",
+      "duration": 2.261,
+      "peak": 0.4252,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is not often important.",
+      "file": "kokoro-afheart-v1/6a81c3c6d17dd9fe9ae3.mp3",
+      "bytes": 21384,
+      "sha256": "2c33461a704915d0748060630601ae13ae373f7c7c3adab6db1ab1ab9f595b83",
+      "duration": 2.603,
+      "peak": 0.3483,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is not the guide today.",
+      "file": "kokoro-afheart-v1/d16eed0da7c8ed2d57ff.mp3",
+      "bytes": 19992,
+      "sha256": "2c4a984ef9917880da53e883f5efb8665983a22d7df55f367e65c2688b8f9dc6",
+      "duration": 2.411,
+      "peak": 0.381,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is often near the water near the friend.",
+      "file": "kokoro-afheart-v1/3375209917724e42714e.mp3",
+      "bytes": 26952,
+      "sha256": "433a2485a849afe4d3cb95ce9f5deac0883730da431251e55edb636e97ca762d",
+      "duration": 3.157,
+      "peak": 0.4626,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education is the useful support near water.",
+      "file": "kokoro-afheart-v1/2284295f71219f33d40d.mp3",
+      "bytes": 27408,
+      "sha256": "b9d37978a79db1f995419b785e5fcd2241d1ace96ade4554a722a00cbae5f295",
+      "duration": 3.221,
+      "peak": 0.5086,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The education looks important and useful today.",
+      "file": "kokoro-afheart-v1/9ce352b78b83484b05b2.mp3",
+      "bytes": 24720,
+      "sha256": "358f253a1ca1e5657dbee713120b8c36d82864e0f245ccfd30b83cf8cd4c645f",
+      "duration": 2.88,
+      "peak": 0.3635,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The management can enjoy our music.",
+      "file": "kokoro-afheart-v1/b2d3ae1019407f9111d1.mp3",
+      "bytes": 18216,
+      "sha256": "b766242f925971a76ad82c28f2bcf42a262197628eee958a581106105a9233cd",
+      "duration": 2.155,
+      "peak": 0.3153,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The management can enjoy the music near a friend.",
+      "file": "kokoro-afheart-v1/7da9410e4b2537fcbc64.mp3",
+      "bytes": 24072,
+      "sha256": "19937e00f9224b15bf4fcbdd9590d014fcfb6ab2288580cd53c50340dff40ba6",
+      "duration": 2.837,
+      "peak": 0.3626,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The management near water needs a book.",
+      "file": "kokoro-afheart-v1/158833dab8dbcd32dff8.mp3",
+      "bytes": 18720,
+      "sha256": "4616bc0f04426ed769a28f41bcec501f4108eac2edc456d8cb4ec26b81c0643f",
+      "duration": 2.219,
+      "peak": 0.2915,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The management often enjoys our useful music.",
+      "file": "kokoro-afheart-v1/5bd16af213b27b948803.mp3",
+      "bytes": 24504,
+      "sha256": "d1d902dd1d776e564ca7e32a4cec1f177adba31c6896a61a49033b2bf38ca5c8",
+      "duration": 2.944,
+      "peak": 0.3997,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The management often gives management a book.",
+      "file": "kokoro-afheart-v1/ff5ee5e5b0ea27efc1cb.mp3",
+      "bytes": 22056,
+      "sha256": "e60f7cd6a86d90b3ea67eb275974c727c3d8f3d78cfb4300185609746ddc2c94",
+      "duration": 2.56,
+      "peak": 0.4112,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The management often gives the management a book.",
+      "file": "kokoro-afheart-v1/8586820369ae7cceff1f.mp3",
+      "bytes": 24888,
+      "sha256": "db21d1250b741704c4fc2c190ac7d50ef9ad762ca71a930d047c601fe072e199",
+      "duration": 2.752,
+      "peak": 0.4279,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher can give them advice near water.",
+      "file": "kokoro-afheart-v1/02b60420b7640b5518af.mp3",
+      "bytes": 20928,
+      "sha256": "a96eaed4deb1c6f7a8b78e056b19c9248550992056d4060d6e5e69551ccc67cf",
+      "duration": 2.56,
+      "peak": 0.356,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher can not enjoy our music.",
+      "file": "kokoro-afheart-v1/7850f13f60f93f6baf4b.mp3",
+      "bytes": 17448,
+      "sha256": "32152b491ad4b81546e2d7e4abd9f54d9472a39d1a8858c00da690ff94818607",
+      "duration": 2.219,
+      "peak": 0.3297,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher can often give them a book.",
+      "file": "kokoro-afheart-v1/90fdc24db876559e2115.mp3",
+      "bytes": 17712,
+      "sha256": "52aba4139ccce9acaca4565d86f390746de5370bddc2e053a059e9f845158007",
+      "duration": 2.069,
+      "peak": 0.3717,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher can work near a friend.",
+      "file": "kokoro-afheart-v1/2c504d5577fb8a94add3.mp3",
+      "bytes": 15768,
+      "sha256": "5bcbf002d6f274a5acf2e95405391ac860a2c23273be95f0aed1f95f5959d50a",
+      "duration": 1.856,
+      "peak": 0.4271,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher does not often give management advice.",
+      "file": "kokoro-afheart-v1/6307bedcd97588a3f2a3.mp3",
+      "bytes": 24960,
+      "sha256": "fe852bceb61fceb2524beff4cc451502cbc236f2ac86a25c9910f20b699a7ec9",
+      "duration": 2.965,
+      "peak": 0.3374,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher enjoys our useful music.",
+      "file": "kokoro-afheart-v1/efc97a3a2319fab4b7a6.mp3",
+      "bytes": 19728,
+      "sha256": "97ad7fcbbd8daf978404dacd4ba4a10e895e47ab360724128086045e243d0b8c",
+      "duration": 2.325,
+      "peak": 0.4732,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher gives them advice near water.",
+      "file": "kokoro-afheart-v1/49510218bfc40f59c4c0.mp3",
+      "bytes": 19848,
+      "sha256": "e760952da37b691a815d51cbbeb040f0b938891949caf785bf3f0701be354039",
+      "duration": 2.411,
+      "peak": 0.3904,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher gives them advice today.",
+      "file": "kokoro-afheart-v1/ebe98ba7079a6f79c2ca.mp3",
+      "bytes": 19008,
+      "sha256": "3892fb11f869d820e3a0e3a2315bcc49ac88fc6fda0c7985c96c1ed4326fdc47",
+      "duration": 2.069,
+      "peak": 0.4332,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher gives them the advice today.",
+      "file": "kokoro-afheart-v1/838f0f77d9533eba0a1a.mp3",
+      "bytes": 18792,
+      "sha256": "37a0215a4f5a5afc8003d72c45d7bef104711db81eda1fabbc241c056a19b9de",
+      "duration": 2.325,
+      "peak": 0.4124,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is a guide near them.",
+      "file": "kokoro-afheart-v1/dbfdb9b9e9ba66dcbe2e.mp3",
+      "bytes": 15144,
+      "sha256": "77230620b16ed8e4a46f6d7a8113ee31b6897df93c26c5be1d962fd33f46278b",
+      "duration": 1.92,
+      "peak": 0.3573,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is myself near water.",
+      "file": "kokoro-afheart-v1/fee531ec6b14c3f40adb.mp3",
+      "bytes": 17232,
+      "sha256": "d2c637fc68aba7c1c38ca4308cf321925871e26a1a6908eab1cb83e5a9d29fc2",
+      "duration": 2.048,
+      "peak": 0.3117,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is not a young guide.",
+      "file": "kokoro-afheart-v1/edeea229dae4b21bbc5d.mp3",
+      "bytes": 15648,
+      "sha256": "b8685f9a1485ca4c61c570f6d53bcc3e6f0d83b03ad75e8bcb702d121ef61a69",
+      "duration": 1.877,
+      "peak": 0.3074,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is not often your useful support near a young friend today.",
+      "file": "kokoro-afheart-v1/3a816f6ea1d8e226a85d.mp3",
+      "bytes": 34488,
+      "sha256": "d625fde7586172200b8c3598a6400625f1023e5c2b090e5745d14e6861ad20d3",
+      "duration": 4.181,
+      "peak": 0.3643,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is not support often.",
+      "file": "kokoro-afheart-v1/078f36c108ddfd37eb0b.mp3",
+      "bytes": 16824,
+      "sha256": "48748bb9651045050c8b460ec12896dc8980e7217937d26e33b8b065bec99e9a",
+      "duration": 2.027,
+      "peak": 0.3476,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is not support today.",
+      "file": "kokoro-afheart-v1/432a9db0799f7cdc1185.mp3",
+      "bytes": 17544,
+      "sha256": "f92bd79b86ecd4b3f7af9a0f2ab0cd34da1fbbd3650e1bb5c43073ff57005919",
+      "duration": 1.984,
+      "peak": 0.3801,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is often near them.",
+      "file": "kokoro-afheart-v1/67ef7b397fb1d3c0fb8b.mp3",
+      "bytes": 14832,
+      "sha256": "7f47c6d201605814bcdb5da68fc1e9c9c679eca0b011e3e7a65a800de8df75f9",
+      "duration": 1.771,
+      "peak": 0.3802,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is often your guide.",
+      "file": "kokoro-afheart-v1/cb2bbc53088bac4e5143.mp3",
+      "bytes": 15096,
+      "sha256": "50090fbd0bf63690f26652943d9925824769360e99b52cdd78dff35938890613",
+      "duration": 1.792,
+      "peak": 0.3478,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is the guide today.",
+      "file": "kokoro-afheart-v1/517fc8f91e20aee7d94a.mp3",
+      "bytes": 15888,
+      "sha256": "668d11a8851457b2d30034bb1c93ca5fef25f464c2d93b59a727912b9b314ee3",
+      "duration": 1.877,
+      "peak": 0.3773,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is your guide near them.",
+      "file": "kokoro-afheart-v1/3db80013b24444c27294.mp3",
+      "bytes": 16176,
+      "sha256": "4529c8ed6c7abc193bec5425839b47415511a5b5ab80fac030712c922e9c90f6",
+      "duration": 2.027,
+      "peak": 0.359,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is your guide near water.",
+      "file": "kokoro-afheart-v1/a023576100be556f3849.mp3",
+      "bytes": 17448,
+      "sha256": "acbbb6abfea80a0de6e8697d53d2bcd68340a2ad3b6609c26077dd29c974ff9e",
+      "duration": 2.155,
+      "peak": 0.3214,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher is your useful support near water.",
+      "file": "kokoro-afheart-v1/9fc8f7cf956a1d132b4f.mp3",
+      "bytes": 22680,
+      "sha256": "c87b61559c110fe1dbfdb4a83bd094f0d983c6e2fefd379b422c5610161eef9b",
+      "duration": 2.795,
+      "peak": 0.3092,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher needs a book today.",
+      "file": "kokoro-afheart-v1/4b4cd449bdf8674c5c5e.mp3",
+      "bytes": 15456,
+      "sha256": "639e61f6bf90dbf8707d7b0d327a98b4ceec02989ed95c3c56a58a03c6e03579",
+      "duration": 1.813,
+      "peak": 0.4311,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher needs our book near water.",
+      "file": "kokoro-afheart-v1/8fbc3871984ca3541989.mp3",
+      "bytes": 18984,
+      "sha256": "6e05f84b16977bcf1dd6b086d4ab89c6037ae42a421fd542b4a9974b5f966d37",
+      "duration": 2.24,
+      "peak": 0.4092,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher needs our book today.",
+      "file": "kokoro-afheart-v1/255ebf29db6453e0cb77.mp3",
+      "bytes": 16104,
+      "sha256": "c2f696533902c5026ee028e4f8e269f6c2f0b34560fd0bfb18901990c46d5a7b",
+      "duration": 1.899,
+      "peak": 0.4564,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher often enjoys music near a friend today.",
+      "file": "kokoro-afheart-v1/46957def09824e2790db.mp3",
+      "bytes": 26520,
+      "sha256": "1a2e641234680e317de280ddc43fc83d880b97512af58c0a29a545bc891d4f00",
+      "duration": 3.136,
+      "peak": 0.4021,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher often looks happy today.",
+      "file": "kokoro-afheart-v1/b67d7cd76a7b5037a395.mp3",
+      "bytes": 17136,
+      "sha256": "3c630ddfcad966de96fe5c5f62aa82e958ef9d84b3f42162b29c85ce7a288c3b",
+      "duration": 2.112,
+      "peak": 0.411,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher often makes a student ready today.",
+      "file": "kokoro-afheart-v1/4d8d42087c607298ea53.mp3",
+      "bytes": 21864,
+      "sha256": "6495b4950cde9a86d0dd95c5c8391b678805090c9ed1250871f5f562b5d4176e",
+      "duration": 2.517,
+      "peak": 0.3797,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher often works near a friend today.",
+      "file": "kokoro-afheart-v1/7a8a1309af3d4f4dfdbc.mp3",
+      "bytes": 19680,
+      "sha256": "806f92795e65069460c64c66b2481e90935697b5441468a9ecd497a4eebc2ea6",
+      "duration": 2.432,
+      "peak": 0.3605,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The traffic can flow often near them.",
+      "file": "kokoro-afheart-v1/4a8955c94a16a1369489.mp3",
+      "bytes": 17328,
+      "sha256": "fe12f8f39123f9e13aa9209ed8f87bb7d82984df1ececfe6dafdd4d5237f5f4c",
+      "duration": 2.005,
+      "peak": 0.3587,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The useful good education is not a guide.",
+      "file": "kokoro-afheart-v1/f1305620a9de6f6f8250.mp3",
+      "bytes": 21624,
+      "sha256": "fd5cbed99c566da4aa09dbd3bebe9ddcfec5262b4177a00cedc2bc7ff2065847",
+      "duration": 2.603,
+      "peak": 0.3736,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The useful good management does not give a student advice.",
+      "file": "kokoro-afheart-v1/19acc866ac7588818824.mp3",
+      "bytes": 30888,
+      "sha256": "9a5c9949b46d709ff94f322d62b570e5445604e38e9529061aa468f50d711aa9",
+      "duration": 3.392,
+      "peak": 0.3358,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The useful traffic flows near water.",
+      "file": "kokoro-afheart-v1/c2e226e2d29f0ad157fb.mp3",
+      "bytes": 17760,
+      "sha256": "703dad531a074ec572cf702bf9767c7b3eef45a68de3ac497a6d2a3558a04326",
+      "duration": 2.133,
+      "peak": 0.3701,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Today, education is not a guide.",
+      "file": "kokoro-afheart-v1/521ebc06e8ca11b91ad4.mp3",
+      "bytes": 18576,
+      "sha256": "ad0495c98e13535cfc38fbee1166db118d7bfc5c46b955f8c50fc0ab1f915ba6",
+      "duration": 2.24,
+      "peak": 0.3524,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Today, education is not a young guide.",
+      "file": "kokoro-afheart-v1/e1d5413316288f94aa24.mp3",
+      "bytes": 20400,
+      "sha256": "a39d106aaefeda6ff3b290be4f4c13746e019d040cebcf9c4745b0bcaf5bd0c9",
+      "duration": 2.453,
+      "peak": 0.3742,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Today, my young teacher is often support.",
+      "file": "kokoro-afheart-v1/66d5ae7fcce0ea8ddf41.mp3",
+      "bytes": 21384,
+      "sha256": "e460d51ff7354ba6657c2fce90207c0b16f2913a8811aa75213314725677fd6c",
+      "duration": 2.581,
+      "peak": 0.3527,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Today, my young teacher is often the support.",
+      "file": "kokoro-afheart-v1/ad7c6c9a8addfedef0bf.mp3",
+      "bytes": 22032,
+      "sha256": "ea240a9636c69defbde6f546b735ad8e41660b9a3489db70d7697972feb11d05",
+      "duration": 2.667,
+      "peak": 0.3417,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Today, the management can help them near the water.",
+      "file": "kokoro-afheart-v1/d3082db12cc88a31dbe7.mp3",
+      "bytes": 23136,
+      "sha256": "a084f115a0de3cd8055a2c794cb63c3996b10b35e098286a64408de67bbc466a",
+      "duration": 2.795,
+      "peak": 0.3651,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Today, the useful education is support.",
+      "file": "kokoro-afheart-v1/e5abeeee02dc7e952b0c.mp3",
+      "bytes": 22056,
+      "sha256": "eaa1832e70a2b573510ceb0d0444ae5a4396637191624596542263ca9d5317c8",
+      "duration": 2.56,
+      "peak": 0.3842,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management wants a student to work.",
+      "file": "kokoro-afheart-v1/c8025ffdf3f40cb6109c.mp3",
+      "bytes": 16920,
+      "sha256": "29cb40b3b1984efea7583c63558bdbd2bc0e41572b1737818f6c84c64df31c5b",
+      "duration": 2.048,
+      "peak": 0.3496,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can want them to work.",
+      "file": "kokoro-afheart-v1/28e72759883bb06947fd.mp3",
+      "bytes": 12696,
+      "sha256": "0aea2c404d9fdf8c5ed086e95631eeedb5fc53bceefa4acdab787e533c07d813",
+      "duration": 1.472,
+      "peak": 0.368,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I want them to work?",
+      "file": "kokoro-afheart-v1/62268d013584650ff7d6.mp3",
+      "bytes": 11568,
+      "sha256": "49d7b201c3fa48e60b41ee2a9392a50e14092ad4934ac20b1c3f51f3aa817d1b",
+      "duration": 1.408,
+      "peak": 0.264,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Do I want our management near the friend to work?",
+      "file": "kokoro-afheart-v1/f8c38f20b68d0747b184.mp3",
+      "bytes": 22416,
+      "sha256": "426429ef258536a6ee3ed156de473b519b2accbf0fdaf32546ea86f15241e810",
+      "duration": 2.688,
+      "peak": 0.3892,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher wants a young student to work.",
+      "file": "kokoro-afheart-v1/c6a60132c46a4f9bf05b.mp3",
+      "bytes": 17976,
+      "sha256": "20b9af31b928c943714878c2f2f7aceef8650e1e61da93529dd13b169db1f3de",
+      "duration": 2.197,
+      "peak": 0.3335,
+      "sampleRate": 24000
+    },
+    {
+      "text": "A teacher wants our management to work.",
+      "file": "kokoro-afheart-v1/b85a016546c7108f802f.mp3",
+      "bytes": 20472,
+      "sha256": "c3753c9e142bc85c18922177191a89c122e1995e026c05862222dc9a5b58c379",
+      "duration": 2.368,
+      "peak": 0.3386,
+      "sampleRate": 24000
+    },
+    {
+      "text": "The teacher wants the management to work.",
+      "file": "kokoro-afheart-v1/04f822c3554d146033e0.mp3",
+      "bytes": 19512,
+      "sha256": "193b281b58a03c3b71d3c34bbab079ea3402198f89baf1c5f35bb50f7a6fadbf",
+      "duration": 2.304,
+      "peak": 0.3653,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management does not want management to work.",
+      "file": "kokoro-afheart-v1/50feb74a47027af4c006.mp3",
+      "bytes": 21936,
+      "sha256": "e5b6e21e07e5a3ca6e4c5123d1245f5eec735309f41a6d36b502b6a6c04f4d58",
+      "duration": 2.56,
+      "peak": 0.3036,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management can want management to work.",
+      "file": "kokoro-afheart-v1/1bbd6388b9d9e40d7426.mp3",
+      "bytes": 20544,
+      "sha256": "1f40df42b6ebdd23dd103aac012a68f7988dcb831f03225a0c23632fb300fc25",
+      "duration": 2.325,
+      "peak": 0.3808,
+      "sampleRate": 24000
+    },
+    {
+      "text": "Management wants the student to work.",
+      "file": "kokoro-afheart-v1/acf20c19f8898441d54a.mp3",
+      "bytes": 17520,
+      "sha256": "596ccefeff7f9b1b54ec2510daac81f4b6e41e58e0630141503db3b8cf471327",
+      "duration": 2.133,
+      "peak": 0.34,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can want the useful management to work.",
+      "file": "kokoro-afheart-v1/00ccd1bc9aac8eec2a5f.mp3",
+      "bytes": 20280,
+      "sha256": "18dd2bbe32da2b9d5d599a267f075b911c4a894aaab8ab18444c01cbf66466b2",
+      "duration": 2.368,
+      "peak": 0.3037,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can want management to work.",
+      "file": "kokoro-afheart-v1/9636a1aea843f39b6e4c.mp3",
+      "bytes": 15024,
+      "sha256": "847f7c639aaf8a1d349ecb5859900710ed84e4fa56e222700616834b2fb377c9",
+      "duration": 1.792,
+      "peak": 0.4309,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I can want our student to work.",
+      "file": "kokoro-afheart-v1/701b306371cb0e1fd2b8.mp3",
+      "bytes": 14976,
+      "sha256": "c9480a3abad5e363a729ff18866a1df72e529824a357e8228bb0566d79801491",
+      "duration": 1.749,
+      "peak": 0.3418,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I want a young student to work.",
+      "file": "kokoro-afheart-v1/5fceb0635cfc82d52932.mp3",
+      "bytes": 13704,
+      "sha256": "34313c6b1e29146e04487bb6cc061f304aba471fce27ed95fa91da449f95f802",
+      "duration": 1.728,
+      "peak": 0.4031,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I want the young student to work.",
+      "file": "kokoro-afheart-v1/6f28cfbbc1dda77198cc.mp3",
+      "bytes": 14568,
+      "sha256": "cad7ac22bd51088ff3cb8cd732d56b28fefc1762232791c4929c8b5962a55181",
+      "duration": 1.728,
+      "peak": 0.3339,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I want the useful management to work.",
+      "file": "kokoro-afheart-v1/012a9539304632d95cc1.mp3",
+      "bytes": 18456,
+      "sha256": "64bd528e2b9a6d05af0458336fd36480c5212d0501b364f19285ef0ef3fbccd7",
+      "duration": 2.133,
+      "peak": 0.4038,
+      "sampleRate": 24000
+    },
+    {
+      "text": "I want our management to work.",
+      "file": "kokoro-afheart-v1/5b10b2afb77e812ae7a9.mp3",
+      "bytes": 14784,
+      "sha256": "8067a537029f74638ddd198f05f702f23368562f913432951abef43cc71c4aea",
+      "duration": 1.728,
+      "peak": 0.3037,
+      "sampleRate": 24000
     }
   ],
-  "fallbackSources": {
-    "system-en-us-v1": "Samantha en_US"
-  }
+  "fallbackSources": {}
 }

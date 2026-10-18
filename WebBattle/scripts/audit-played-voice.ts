@@ -1,0 +1,6 @@
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';import {judgeCards,type Kind} from '../shared/rules.js';import {cardSentenceExample} from '../shared/card-sentence-example.js';
+const rows=JSON.parse(readFileSync('docs/audio-audit/played-pos-snapshot.json','utf8')) as {key:string;kinds:Kind[]}[],known=new Map<string,string>();
+for(const p of ['public/audio/sentences/manifest.json','.runtime/kokoro-catalog/manifest.json','.runtime/kokoro-expanded/manifest.json'])if(existsSync(p))for(const e of JSON.parse(readFileSync(p,'utf8')).entries)known.set(e.text,e.file);
+const missing:unknown[]=[],rejected:unknown[]=[],matched:unknown[]=[];
+for(const row of rows){const cards=row.kinds.map((kind,i)=>({id:String(i),kind})),j=judgeCards(cards),e=cardSentenceExample(cards,j,0).example;if(!e){rejected.push({key:row.key,reason:j.reason});continue}const file=known.get(e.english);if(file)matched.push({key:row.key,text:e.english,file});else missing.push({key:row.key,english:e.english,source:'actual-played-final-audit'});}
+const result={observedCombinations:rows.length,matched:matched.length,noCurrentExample:rejected.length,missing:missing.length,missingRows:missing,rejectedRows:rejected};writeFileSync('.runtime/played-voice-coverage.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
