@@ -1,0 +1,1334 @@
+{
+  "verifiedAt": "2026-10-18T12:58:33.468Z",
+  "base": "https://logos-card-battle.netlify.app",
+  "expandedOnly": true,
+  "catalogSentences": 39143,
+  "randomIndices": [
+    27165,
+    17171,
+    12886,
+    14409,
+    23592,
+    37630,
+    11732,
+    38659,
+    24282,
+    13174,
+    14937,
+    31303,
+    4685,
+    35987,
+    15539,
+    29809,
+    22705,
+    3484,
+    4804,
+    17568
+  ],
+  "samplesPerDevice": 35,
+  "realBufferPlayback": 70,
+  "errors": [],
+  "physicalHandsetVerified": false,
+  "results": [
+    {
+      "device": "PC Chromium",
+      "text": "My management does make our student give our management a student.",
+      "source": "random-current-deck",
+      "index": 27165,
+      "code": "ended",
+      "sentence": "My management does make our student give our management a student.",
+      "context": "running",
+      "elapsedMs": "5303",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/82047dc0ee6815f0a959.mp3",
+      "duration": "3.52",
+      "peak": "0.3821859359741211",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does my management make the student make them ready, confident, and happy?",
+      "source": "random-current-deck",
+      "index": 17171,
+      "code": "ended",
+      "sentence": "Does my management make the student make them ready, confident, and happy?",
+      "context": "running",
+      "elapsedMs": "4433",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/e3b50261cce93e063d8d.mp3",
+      "duration": "4.181333333333333",
+      "peak": "0.3571498394012451",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does management make management make the management easy, useful, and important?",
+      "source": "random-current-deck",
+      "index": 12886,
+      "code": "ended",
+      "sentence": "Does management make management make the management easy, useful, and important?",
+      "context": "running",
+      "elapsedMs": "5591",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/574319fe4785442eee92.mp3",
+      "duration": "4.8213333333333335",
+      "peak": "0.35963284969329834",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Can the teacher make the student give management the student?",
+      "source": "random-current-deck",
+      "index": 14409,
+      "code": "ended",
+      "sentence": "Can the teacher make the student give management the student?",
+      "context": "running",
+      "elapsedMs": "3619",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/f682cccdcec479c235ff.mp3",
+      "duration": "3.072",
+      "peak": "0.3327789604663849",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The teacher does make our student look happy.",
+      "source": "random-current-deck",
+      "index": 23592,
+      "code": "ended",
+      "sentence": "The teacher does make our student look happy.",
+      "context": "running",
+      "elapsedMs": "2764",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/fab55efa2e8a3d747620.mp3",
+      "duration": "2.368",
+      "peak": "0.3668001890182495",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Management makes our management give our management our student.",
+      "source": "random-current-deck",
+      "index": 37630,
+      "code": "ended",
+      "sentence": "Management makes our management give our management our student.",
+      "context": "running",
+      "elapsedMs": "3939",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/af2cf2359b03f7e258f0.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.5027433633804321",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The teacher can not make management give our management our management.",
+      "source": "random-current-deck",
+      "index": 11732,
+      "code": "ended",
+      "sentence": "The teacher can not make management give our management our management.",
+      "context": "running",
+      "elapsedMs": "4465",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/93f5cf704c0eeab5ad94.mp3",
+      "duration": "3.925333333333333",
+      "peak": "0.4636673033237457",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not make our management make our student easy and useful.",
+      "source": "random-current-deck",
+      "index": 38659,
+      "code": "ended",
+      "sentence": "A teacher can not make our management make our student easy and useful.",
+      "context": "running",
+      "elapsedMs": "4583",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/63d74b23fd85c2a11838.mp3",
+      "duration": "4.181333333333333",
+      "peak": "0.5714198350906372",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My management can not make our student give them something.",
+      "source": "random-current-deck",
+      "index": 24282,
+      "code": "ended",
+      "sentence": "My management can not make our student give them something.",
+      "context": "running",
+      "elapsedMs": "3370",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/bca9384372c9c4b00639.mp3",
+      "duration": "3.008",
+      "peak": "0.42120134830474854",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does the teacher not make the student look happy?",
+      "source": "random-current-deck",
+      "index": 13174,
+      "code": "ended",
+      "sentence": "Does the teacher not make the student look happy?",
+      "context": "running",
+      "elapsedMs": "2936",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/6e9b0e259679ab4bb5de.mp3",
+      "duration": "2.5813333333333333",
+      "peak": "0.3729950785636902",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can make the student give the student a student.",
+      "source": "random-current-deck",
+      "index": 14937,
+      "code": "ended",
+      "sentence": "A teacher can make the student give the student a student.",
+      "context": "running",
+      "elapsedMs": "3273",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/998bc3312f7de0ef800f.mp3",
+      "duration": "2.9013333333333335",
+      "peak": "0.48699915409088135",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Management does make the management give our student management.",
+      "source": "random-current-deck",
+      "index": 31303,
+      "code": "ended",
+      "sentence": "Management does make the management give our student management.",
+      "context": "running",
+      "elapsedMs": "4091",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/29bb7688e8ae8fc84aae.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.5426161289215088",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does my management not make them give the student the management?",
+      "source": "random-current-deck",
+      "index": 4685,
+      "code": "ended",
+      "sentence": "Does my management not make them give the student the management?",
+      "context": "running",
+      "elapsedMs": "3988",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/69716eb9371c94703c32.mp3",
+      "duration": "3.6053333333333333",
+      "peak": "0.35972386598587036",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does the teacher make our management give the student our management?",
+      "source": "random-current-deck",
+      "index": 35987,
+      "code": "ended",
+      "sentence": "Does the teacher make our management give the student our management?",
+      "context": "running",
+      "elapsedMs": "4003",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/5d4f3e2c5ef35e9a4343.mp3",
+      "duration": "3.6053333333333333",
+      "peak": "0.39578545093536377",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does the management not make the student give a student the management?",
+      "source": "random-current-deck",
+      "index": 15539,
+      "code": "ended",
+      "sentence": "Does the management not make the student give a student the management?",
+      "context": "running",
+      "elapsedMs": "4091",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/c7ed80ae8c13e9dcab62.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.4016650319099426",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does management make the management give them our management?",
+      "source": "random-current-deck",
+      "index": 29809,
+      "code": "ended",
+      "sentence": "Does management make the management give them our management?",
+      "context": "running",
+      "elapsedMs": "3778",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d8321ae772e7a1aeaa4e.mp3",
+      "duration": "3.392",
+      "peak": "0.3452152609825134",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "My management can make a student make the student ready and confident.",
+      "source": "random-current-deck",
+      "index": 22705,
+      "code": "ended",
+      "sentence": "My management can make a student make the student ready and confident.",
+      "context": "running",
+      "elapsedMs": "4454",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/e13528469dbba8de1db4.mp3",
+      "duration": "3.9466666666666668",
+      "peak": "0.3357633054256439",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "The teacher can not make them give them management.",
+      "source": "random-current-deck",
+      "index": 3484,
+      "code": "ended",
+      "sentence": "The teacher can not make them give them management.",
+      "context": "running",
+      "elapsedMs": "3143",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/dad07613a9289dc5d93e.mp3",
+      "duration": "2.752",
+      "peak": "0.4070621430873871",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does the management make them give a student something?",
+      "source": "random-current-deck",
+      "index": 4804,
+      "code": "ended",
+      "sentence": "Does the management make them give a student something?",
+      "context": "running",
+      "elapsedMs": "2989",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/1d5459a48424bd5b3c96.mp3",
+      "duration": "2.6666666666666665",
+      "peak": "0.3611376881599426",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Make the student make a student ready!",
+      "source": "random-current-deck",
+      "index": 17568,
+      "code": "ended",
+      "sentence": "Make the student make a student ready!",
+      "context": "running",
+      "elapsedMs": "2396",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d9a90a2ec3707e8f9b64.mp3",
+      "duration": "2.026666666666667",
+      "peak": "0.32464757561683655",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can enjoy music near a useful friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can enjoy music near a useful friend.",
+      "context": "running",
+      "elapsedMs": "3589",
+      "url": "/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "duration": "2.688",
+      "peak": "0.3552902340888977",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near our friends.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friends.",
+      "context": "running",
+      "elapsedMs": "2087",
+      "url": "/audio/sentences/kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.45095527172088623",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near our friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friend.",
+      "context": "running",
+      "elapsedMs": "2078",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.38532754778862",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I work.",
+      "context": "running",
+      "elapsedMs": "1354",
+      "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+      "duration": "0.96",
+      "peak": "0.3957744240760803",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "A teacher can work.",
+      "context": "running",
+      "elapsedMs": "1486",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+      "duration": "1.3653333333333333",
+      "peak": "0.35644879937171936",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does management give the management something?",
+      "source": "latest-reported-question",
+      "code": "ended",
+      "sentence": "Does management give the management something?",
+      "context": "running",
+      "elapsedMs": "3031",
+      "url": "/audio/sentences/kokoro-afheart-v1/37f1029aedf1c57f9344.mp3",
+      "duration": "2.56",
+      "peak": "0.3679012656211853",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Does the management make them enjoy our management?",
+      "source": "latest-reported-question",
+      "code": "ended",
+      "sentence": "Does the management make them enjoy our management?",
+      "context": "running",
+      "elapsedMs": "3406",
+      "url": "/audio/sentences/kokoro-afheart-v1/2053dfabb04875e85579.mp3",
+      "duration": "2.9226666666666667",
+      "peak": "0.3657882511615753",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not often be near the fresh water near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be near the fresh water near the fresh water.",
+      "context": "running",
+      "elapsedMs": "4249",
+      "url": "/audio/sentences/kokoro-afheart-v1/30ba0baa9de1b27149da.mp3",
+      "duration": "3.6906666666666665",
+      "peak": "0.3964237868785858",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not often be near clean water near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be near clean water near the fresh water.",
+      "context": "running",
+      "elapsedMs": "4127",
+      "url": "/audio/sentences/kokoro-afheart-v1/8e7c26e52f701e880182.mp3",
+      "duration": "3.648",
+      "peak": "0.4071282148361206",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not often be near water near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be near water near the fresh water.",
+      "context": "running",
+      "elapsedMs": "3844",
+      "url": "/audio/sentences/kokoro-afheart-v1/978adc12a2daf5426ebe.mp3",
+      "duration": "3.328",
+      "peak": "0.38324108719825745",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "A teacher can not often be support near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be support near the fresh water.",
+      "context": "running",
+      "elapsedMs": "3612",
+      "url": "/audio/sentences/kokoro-afheart-v1/cc4491e3847b3af16036.mp3",
+      "duration": "3.1573333333333333",
+      "peak": "0.41377079486846924",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can often work near a friend near the friend.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "I can often work near a friend near the friend.",
+      "context": "running",
+      "elapsedMs": "2969",
+      "url": "/audio/sentences/kokoro-afheart-v1/405c476d4396b1ea191b.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.38686761260032654",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can not often help them near a friend near the friend.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "I can not often help them near a friend near the friend.",
+      "context": "running",
+      "elapsedMs": "3426",
+      "url": "/audio/sentences/kokoro-afheart-v1/f0cad048aaa4da08963a.mp3",
+      "duration": "2.7306666666666666",
+      "peak": "0.4058956205844879",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "I can work near a friend near the friend.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "I can work near a friend near the friend.",
+      "context": "running",
+      "elapsedMs": "2463",
+      "url": "/audio/sentences/kokoro-afheart-v1/546e545fe4af850ebed1.mp3",
+      "duration": "1.984",
+      "peak": "0.42151346802711487",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "PC Chromium",
+      "text": "Give management our advice very well!",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "Give management our advice very well!",
+      "context": "running",
+      "elapsedMs": "2996",
+      "url": "/audio/sentences/kokoro-afheart-v1/fd39040cd5e61bd01787.mp3",
+      "duration": "2.3253333333333335",
+      "peak": "0.33463722467422485",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My management does make our student give our management a student.",
+      "source": "random-current-deck",
+      "index": 27165,
+      "code": "ended",
+      "sentence": "My management does make our student give our management a student.",
+      "context": "running",
+      "elapsedMs": "4401",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/82047dc0ee6815f0a959.mp3",
+      "duration": "3.52",
+      "peak": "0.3821859359741211",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does my management make the student make them ready, confident, and happy?",
+      "source": "random-current-deck",
+      "index": 17171,
+      "code": "ended",
+      "sentence": "Does my management make the student make them ready, confident, and happy?",
+      "context": "running",
+      "elapsedMs": "4727",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/e3b50261cce93e063d8d.mp3",
+      "duration": "4.181333333333333",
+      "peak": "0.3571498394012451",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does management make management make the management easy, useful, and important?",
+      "source": "random-current-deck",
+      "index": 12886,
+      "code": "ended",
+      "sentence": "Does management make management make the management easy, useful, and important?",
+      "context": "running",
+      "elapsedMs": "4977",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/574319fe4785442eee92.mp3",
+      "duration": "4.8213333333333335",
+      "peak": "0.35963284969329834",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Can the teacher make the student give management the student?",
+      "source": "random-current-deck",
+      "index": 14409,
+      "code": "ended",
+      "sentence": "Can the teacher make the student give management the student?",
+      "context": "running",
+      "elapsedMs": "3287",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/f682cccdcec479c235ff.mp3",
+      "duration": "3.072",
+      "peak": "0.3327789604663849",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The teacher does make our student look happy.",
+      "source": "random-current-deck",
+      "index": 23592,
+      "code": "ended",
+      "sentence": "The teacher does make our student look happy.",
+      "context": "running",
+      "elapsedMs": "2467",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/fab55efa2e8a3d747620.mp3",
+      "duration": "2.368",
+      "peak": "0.3668001890182495",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Management makes our management give our management our student.",
+      "source": "random-current-deck",
+      "index": 37630,
+      "code": "ended",
+      "sentence": "Management makes our management give our management our student.",
+      "context": "running",
+      "elapsedMs": "3675",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/af2cf2359b03f7e258f0.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.5027433633804321",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The teacher can not make management give our management our management.",
+      "source": "random-current-deck",
+      "index": 11732,
+      "code": "ended",
+      "sentence": "The teacher can not make management give our management our management.",
+      "context": "running",
+      "elapsedMs": "4065",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/93f5cf704c0eeab5ad94.mp3",
+      "duration": "3.925333333333333",
+      "peak": "0.4636673033237457",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not make our management make our student easy and useful.",
+      "source": "random-current-deck",
+      "index": 38659,
+      "code": "ended",
+      "sentence": "A teacher can not make our management make our student easy and useful.",
+      "context": "running",
+      "elapsedMs": "4325",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/63d74b23fd85c2a11838.mp3",
+      "duration": "4.181333333333333",
+      "peak": "0.5714198350906372",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My management can not make our student give them something.",
+      "source": "random-current-deck",
+      "index": 24282,
+      "code": "ended",
+      "sentence": "My management can not make our student give them something.",
+      "context": "running",
+      "elapsedMs": "3145",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/bca9384372c9c4b00639.mp3",
+      "duration": "3.008",
+      "peak": "0.42120134830474854",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does the teacher not make the student look happy?",
+      "source": "random-current-deck",
+      "index": 13174,
+      "code": "ended",
+      "sentence": "Does the teacher not make the student look happy?",
+      "context": "running",
+      "elapsedMs": "2683",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/6e9b0e259679ab4bb5de.mp3",
+      "duration": "2.5813333333333333",
+      "peak": "0.3729950785636902",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can make the student give the student a student.",
+      "source": "random-current-deck",
+      "index": 14937,
+      "code": "ended",
+      "sentence": "A teacher can make the student give the student a student.",
+      "context": "running",
+      "elapsedMs": "3038",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/998bc3312f7de0ef800f.mp3",
+      "duration": "2.9013333333333335",
+      "peak": "0.48699915409088135",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Management does make the management give our student management.",
+      "source": "random-current-deck",
+      "index": 31303,
+      "code": "ended",
+      "sentence": "Management does make the management give our student management.",
+      "context": "running",
+      "elapsedMs": "3665",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/29bb7688e8ae8fc84aae.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.5426161289215088",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does my management not make them give the student the management?",
+      "source": "random-current-deck",
+      "index": 4685,
+      "code": "ended",
+      "sentence": "Does my management not make them give the student the management?",
+      "context": "running",
+      "elapsedMs": "3706",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/69716eb9371c94703c32.mp3",
+      "duration": "3.6053333333333333",
+      "peak": "0.35972386598587036",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does the teacher make our management give the student our management?",
+      "source": "random-current-deck",
+      "index": 35987,
+      "code": "ended",
+      "sentence": "Does the teacher make our management give the student our management?",
+      "context": "running",
+      "elapsedMs": "3737",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/5d4f3e2c5ef35e9a4343.mp3",
+      "duration": "3.6053333333333333",
+      "peak": "0.39578545093536377",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does the management not make the student give a student the management?",
+      "source": "random-current-deck",
+      "index": 15539,
+      "code": "ended",
+      "sentence": "Does the management not make the student give a student the management?",
+      "context": "running",
+      "elapsedMs": "3667",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/c7ed80ae8c13e9dcab62.mp3",
+      "duration": "3.562666666666667",
+      "peak": "0.4016650319099426",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does management make the management give them our management?",
+      "source": "random-current-deck",
+      "index": 29809,
+      "code": "ended",
+      "sentence": "Does management make the management give them our management?",
+      "context": "running",
+      "elapsedMs": "3478",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d8321ae772e7a1aeaa4e.mp3",
+      "duration": "3.392",
+      "peak": "0.3452152609825134",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "My management can make a student make the student ready and confident.",
+      "source": "random-current-deck",
+      "index": 22705,
+      "code": "ended",
+      "sentence": "My management can make a student make the student ready and confident.",
+      "context": "running",
+      "elapsedMs": "4048",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/e13528469dbba8de1db4.mp3",
+      "duration": "3.9466666666666668",
+      "peak": "0.3357633054256439",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "The teacher can not make them give them management.",
+      "source": "random-current-deck",
+      "index": 3484,
+      "code": "ended",
+      "sentence": "The teacher can not make them give them management.",
+      "context": "running",
+      "elapsedMs": "2878",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/dad07613a9289dc5d93e.mp3",
+      "duration": "2.752",
+      "peak": "0.4070621430873871",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does the management make them give a student something?",
+      "source": "random-current-deck",
+      "index": 4804,
+      "code": "ended",
+      "sentence": "Does the management make them give a student something?",
+      "context": "running",
+      "elapsedMs": "2769",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/1d5459a48424bd5b3c96.mp3",
+      "duration": "2.6666666666666665",
+      "peak": "0.3611376881599426",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Make the student make a student ready!",
+      "source": "random-current-deck",
+      "index": 17568,
+      "code": "ended",
+      "sentence": "Make the student make a student ready!",
+      "context": "running",
+      "elapsedMs": "2115",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/d9a90a2ec3707e8f9b64.mp3",
+      "duration": "2.026666666666667",
+      "peak": "0.32464757561683655",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can enjoy music near a useful friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can enjoy music near a useful friend.",
+      "context": "running",
+      "elapsedMs": "3481",
+      "url": "/audio/sentences/kokoro-afheart-v1/20163d701283b250d281.mp3",
+      "duration": "2.688",
+      "peak": "0.3552902340888977",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near our friends.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friends.",
+      "context": "running",
+      "elapsedMs": "1941",
+      "url": "/audio/sentences/kokoro-afheart-v1/14ec0701df5835da2005.mp3",
+      "duration": "1.5786666666666667",
+      "peak": "0.45095527172088623",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near our friend.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I can work near our friend.",
+      "context": "running",
+      "elapsedMs": "1938",
+      "url": "/audio/sentences/kokoro-afheart-v1/f1e79f36c38facf2fe70.mp3",
+      "duration": "1.5573333333333332",
+      "peak": "0.38532754778862",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "I work.",
+      "context": "running",
+      "elapsedMs": "1256",
+      "url": "/audio/sentences/kokoro-afheart-v1/0a5864f74683e0f527d1.mp3",
+      "duration": "0.96",
+      "peak": "0.3957744240760803",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can work.",
+      "source": "reported-or-regression",
+      "code": "ended",
+      "sentence": "A teacher can work.",
+      "context": "running",
+      "elapsedMs": "1462",
+      "url": "https://logos-card-audio.jesus-and-children-ranking-worker.workers.dev/kokoro-afheart-v1/102e9062cc016a64ae90.mp3",
+      "duration": "1.3653333333333333",
+      "peak": "0.35644879937171936",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does management give the management something?",
+      "source": "latest-reported-question",
+      "code": "ended",
+      "sentence": "Does management give the management something?",
+      "context": "running",
+      "elapsedMs": "2919",
+      "url": "/audio/sentences/kokoro-afheart-v1/37f1029aedf1c57f9344.mp3",
+      "duration": "2.56",
+      "peak": "0.3679012656211853",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Does the management make them enjoy our management?",
+      "source": "latest-reported-question",
+      "code": "ended",
+      "sentence": "Does the management make them enjoy our management?",
+      "context": "running",
+      "elapsedMs": "3288",
+      "url": "/audio/sentences/kokoro-afheart-v1/2053dfabb04875e85579.mp3",
+      "duration": "2.9226666666666667",
+      "peak": "0.3657882511615753",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not often be near the fresh water near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be near the fresh water near the fresh water.",
+      "context": "running",
+      "elapsedMs": "4140",
+      "url": "/audio/sentences/kokoro-afheart-v1/30ba0baa9de1b27149da.mp3",
+      "duration": "3.6906666666666665",
+      "peak": "0.3964237868785858",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not often be near clean water near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be near clean water near the fresh water.",
+      "context": "running",
+      "elapsedMs": "4019",
+      "url": "/audio/sentences/kokoro-afheart-v1/8e7c26e52f701e880182.mp3",
+      "duration": "3.648",
+      "peak": "0.4071282148361206",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not often be near water near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be near water near the fresh water.",
+      "context": "running",
+      "elapsedMs": "3680",
+      "url": "/audio/sentences/kokoro-afheart-v1/978adc12a2daf5426ebe.mp3",
+      "duration": "3.328",
+      "peak": "0.38324108719825745",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "A teacher can not often be support near the fresh water.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "A teacher can not often be support near the fresh water.",
+      "context": "running",
+      "elapsedMs": "3301",
+      "url": "/audio/sentences/kokoro-afheart-v1/cc4491e3847b3af16036.mp3",
+      "duration": "3.1573333333333333",
+      "peak": "0.41377079486846924",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can often work near a friend near the friend.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "I can often work near a friend near the friend.",
+      "context": "running",
+      "elapsedMs": "2767",
+      "url": "/audio/sentences/kokoro-afheart-v1/405c476d4396b1ea191b.mp3",
+      "duration": "2.3893333333333335",
+      "peak": "0.38686761260032654",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can not often help them near a friend near the friend.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "I can not often help them near a friend near the friend.",
+      "context": "running",
+      "elapsedMs": "3224",
+      "url": "/audio/sentences/kokoro-afheart-v1/f0cad048aaa4da08963a.mp3",
+      "duration": "2.7306666666666666",
+      "peak": "0.4058956205844879",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "I can work near a friend near the friend.",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "I can work near a friend near the friend.",
+      "context": "running",
+      "elapsedMs": "2344",
+      "url": "/audio/sentences/kokoro-afheart-v1/546e545fe4af850ebed1.mp3",
+      "duration": "1.984",
+      "peak": "0.42151346802711487",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    },
+    {
+      "device": "Android Chrome emulation",
+      "text": "Give management our advice very well!",
+      "source": "latest-gap-supplement",
+      "code": "ended",
+      "sentence": "Give management our advice very well!",
+      "context": "running",
+      "elapsedMs": "2702",
+      "url": "/audio/sentences/kokoro-afheart-v1/fd39040cd5e61bd01787.mp3",
+      "duration": "2.3253333333333335",
+      "peak": "0.33463722467422485",
+      "httpResponse": {
+        "status": 200,
+        "contentType": "audio/mpeg"
+      },
+      "recordedSourceStarted": true,
+      "recordedSourceEnded": true
+    }
+  ]
+}

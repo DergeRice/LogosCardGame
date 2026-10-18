@@ -25,7 +25,7 @@ async function sentenceFiles(text:string){
  const key=await kokoroObjectKey(normalized);
  return [...(entry?['/audio/sentences/'+entry.file]:[]),SENTENCE_AUDIO_ORIGIN+'/'+key];
 }
-function prefetchRecordedAudio(text:string){
+export function prefetchRecordedSentenceAudio(text:string){
  const key=normalizeSpeechText(text);let task=files.get(key);if(task)return task;
  task=(async()=>{let failure:VoiceError|undefined;
   for(let round=0;round<2;round++){
@@ -43,11 +43,13 @@ function prefetchRecordedAudio(text:string){
  })().catch(error=>{files.delete(key);throw error});files.set(key,task);if(files.size>24)files.delete(files.keys().next().value!);return task;
 }
 /** Recorded packs first; an uncatalogued sentence is still synthesized as one whole Kokoro utterance. */
-export async function prefetchSentenceAudio(text:string,onGenerating?:()=>void){
- try{return await prefetchRecordedAudio(text);}catch(error){
+export async function prefetchSentenceAudio(text:string,onGenerating?:()=>void,shouldGenerate:()=>boolean=()=>true){
+ try{return await prefetchRecordedSentenceAudio(text);}catch(error){
   if(!(error instanceof VoiceError)||!['missing','network','timeout'].includes(error.code))throw error;
+  if(!shouldGenerate())throw new VoiceError('cancelled');
   onGenerating?.();
   const {generateKokoroAudio}=await import('./kokoroClient.js');
+  if(!shouldGenerate())throw new VoiceError('cancelled');
   try{return await generateKokoroAudio(text);}catch{throw new VoiceError('network',undefined,'kokoro-worker');}
  }
 }
@@ -59,7 +61,7 @@ export function playSentenceExample(text:string,onStart:()=>void,onEnd:()=>void,
  const done=(async()=>{
  try{
   report('loading');if(!ctx)throw new VoiceError('unsupported');
-  const file=await prefetchSentenceAudio(text,()=>report('generating',{stage:'kokoro_generation'}));if(cancelled)return;
+  const file=await prefetchSentenceAudio(text,()=>report('generating',{stage:'kokoro_generation'}),()=>!cancelled);if(cancelled)return;
   if(ctx.state!=='running'){void ctx.resume().catch(()=>{});await Promise.race([new Promise<void>(resolve=>{const check=()=>{if(ctx.state==='running'){ctx.removeEventListener('statechange',check);resolve()}};ctx.addEventListener('statechange',check);setTimeout(()=>{ctx.removeEventListener('statechange',check);resolve()},1200);check()}),new Promise<void>(resolve=>setTimeout(resolve,1300))]);}
   if(cancelled)return;if(ctx.state!=='running')throw new VoiceError('blocked');
   let buffer:AudioBuffer;try{buffer=await new Promise<AudioBuffer>((resolve,reject)=>{const timer=setTimeout(()=>reject(new VoiceError('timeout',undefined,file.url)),5000);ctx.decodeAudioData(file.bytes.slice(0)).then(value=>{clearTimeout(timer);resolve(value)},()=>{clearTimeout(timer);reject(new VoiceError('decode',undefined,file.url))});})}catch(error){throw error instanceof VoiceError?error:new VoiceError('decode',undefined,file.url)}

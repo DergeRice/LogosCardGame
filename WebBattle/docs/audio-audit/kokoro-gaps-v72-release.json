@@ -1,0 +1,30 @@
+{
+  "version": "v0.9.72",
+  "verifiedAt": "2026-10-18T12:55:34.317Z",
+  "inputCandidates": 82213,
+  "acceptedCandidates": 82034,
+  "newManifestEntries": 39143,
+  "actualMp3": 39143,
+  "uploadedReceipts": 39143,
+  "sha256Verified": 39143,
+  "newBytes": 1120580472,
+  "newCharacters": 2346884,
+  "failures": 0,
+  "r2": {
+    "verifiedAt": "2026-10-18T12:55:29.378Z",
+    "source": "Fresh authenticated R2 list via temporary read-only Worker; not /health or old receipts",
+    "objects": 82007,
+    "bytes": 2096837688,
+    "expectedEntries": 82007,
+    "matched": 82007,
+    "unexpectedObjects": 0,
+    "mismatches": []
+  },
+  "scope": "All currently inventoried POS, latest played POS, and systematic subject/auxiliary/object/complement/nested-VP grid up to 15 cards; not all possible 15-card arrays.",
+  "model": "Kokoro-82M v1.0",
+  "voice": "af_heart",
+  "apiTtsRequests": 0,
+  "browserBackup": "Kokoro.js 1.2.1 q8 WASM, af_heart, whole utterance",
+  "firstMissingModelBytes": 92361116,
+  "physicalHandsetVerified": false
+}

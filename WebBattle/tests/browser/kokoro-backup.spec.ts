@@ -1,11 +1,14 @@
 import {test,expect} from './fixtures.js';
 import {observeRecordedAudio} from './helpers/audio.js';
+import {kokoroObjectKey} from '../../shared/kokoro-audio.js';
 for(const mobile of [false,true])test(`real Kokoro WASM backup and cache, ${mobile?'mobile touch':'PC'}`,async({browser})=>{
  test.setTimeout(150000);
  const ctx=await browser.newContext({viewport:mobile?{width:844,height:390}:{width:1280,height:900},isMobile:mobile,hasTouch:mobile});
  await ctx.addInitScript(observeRecordedAudio);await ctx.addInitScript(()=>{(window as any).__voiceEvents=[];(window as any).__ticks=0;setInterval(()=>(window as any).__ticks++,50);window.addEventListener('logos-voice-status',event=>(window as any).__voiceEvents.push((event as CustomEvent).detail));Object.defineProperty(window,'speechSynthesis',{value:undefined});Object.defineProperty(window,'SpeechSynthesisUtterance',{value:undefined});});
  const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
- await page.route('**/audio/sentences/**/*.mp3',route=>route.fulfill({status:404}));await page.route('https://logos-card-audio.*.workers.dev/**',route=>route.fulfill({status:404}));
+ const burst=['The kind teacher can work quietly.','Our friendly guide can work today.','A useful book can help our friend.','The young student can read our story today.'];
+ const delayed=new Set(await Promise.all(burst.slice(0,3).map(kokoroObjectKey)));
+ await page.route('**/audio/sentences/**/*.mp3',route=>route.fulfill({status:404}));await page.route('https://logos-card-audio.*.workers.dev/**',async route=>{if(delayed.has(new URL(route.request().url()).pathname.slice(1)))await new Promise(resolve=>setTimeout(resolve,500));await route.fulfill({status:404});});
  try{await page.goto('/audio-check');const text='A kind teacher can make our friend read the useful story quietly.';await page.getByLabel('직접 검사할 문장').fill(text);
  if(mobile)await page.getByRole('button',{name:'문장 재생',exact:true}).tap();else await page.getByRole('button',{name:'문장 재생',exact:true}).click();
  await expect.poll(()=>page.evaluate(()=>(window as any).__voiceEvents.some((e:any)=>e.code==='generating'))).toBe(true);
@@ -13,7 +16,6 @@ for(const mobile of [false,true])test(`real Kokoro WASM backup and cache, ${mobi
  await expect(page.getByRole('status')).toHaveText('ended',{timeout:110000});await expect(page.locator('dl')).toContainText('kokoro-generated:');
  const recordings=await page.evaluate(()=>(window as any).__recordedBuffers);expect(recordings).toHaveLength(1);expect(recordings[0].peak).toBeGreaterThan(.02);expect(recordings[0].end).toBeGreaterThan(recordings[0].start);expect(recordings[0].duration).toBeGreaterThan(2);
  await page.getByRole('button',{name:'문장 재생',exact:true}).click();await expect.poll(()=>page.evaluate(()=>(window as any).__recordedBuffers.length),{timeout:10000}).toBe(2);await expect(page.getByRole('status')).toHaveText('ended',{timeout:20000});await expect(page.locator('dl')).toContainText('kokoro-cache:');expect(errors).toEqual([]);
- const burst=['The kind teacher can work quietly.','Our friendly guide can work today.','A useful book can help our friend.','The young student can read our story today.'];
  for(const sentence of burst){await page.getByLabel('직접 검사할 문장').fill(sentence);await page.getByRole('button',{name:'문장 재생',exact:true}).click();}
  await expect(page.getByRole('status')).toHaveText('ended',{timeout:60000});const latest=await page.evaluate(()=>(window as any).__voiceEvents.filter((e:any)=>e.code==='ended').at(-1));expect(latest.sentence).toBe(burst.at(-1));expect(latest.url).toContain('kokoro-generated:');expect(errors).toEqual([]);
  const evidence=await page.evaluate(()=>(window as any).__voiceEvents.filter((e:any)=>e.code==='ended'));await test.info().attach('kokoro-backup-real-playback',{body:JSON.stringify({mobile,evidence,recordings}),contentType:'application/json'});

@@ -1,0 +1,59 @@
+{
+  "verifiedAt": "2026-10-18T12:45:27.675Z",
+  "staticManifestEntries": 1089,
+  "staticActualMp3": 1089,
+  "allLocalSha256Verified": 1089,
+  "newStaticHttpVerified": 8,
+  "chirpIds": 0,
+  "chirpActualMp3": 0,
+  "files": [
+    {
+      "text": "A teacher can not often be near the fresh water near the fresh water.",
+      "status": 200,
+      "bytes": 31152,
+      "sha256": "2df39c8c37f37382e17d962c5f8ec08d863ac93dd8b51c09da3da4ec6be7f9e6"
+    },
+    {
+      "text": "A teacher can not often be near clean water near the fresh water.",
+      "status": 200,
+      "bytes": 31128,
+      "sha256": "2077d296c1b40fd2f9759d55f35aeb9c4adf5cc6ff707265e3ffc031a1ee9573"
+    },
+    {
+      "text": "A teacher can not often be near water near the fresh water.",
+      "status": 200,
+      "bytes": 27528,
+      "sha256": "da711a4b04ec3f1accae9ea4f27c78cc370bf4bbd3aa51cca569680ff29ccdd6"
+    },
+    {
+      "text": "A teacher can not often be support near the fresh water.",
+      "status": 200,
+      "bytes": 26112,
+      "sha256": "2fd8328ccbe59b065fbcd1eecadfefde083b9e8579da70baa6ceaf697579cd62"
+    },
+    {
+      "text": "I can often work near a friend near the friend.",
+      "status": 200,
+      "bytes": 20616,
+      "sha256": "2ddbaa0afb96a6953c34d9dc60c8dc7cc02ca57160ac175a8216271000c65fb8"
+    },
+    {
+      "text": "I can not often help them near a friend near the friend.",
+      "status": 200,
+      "bytes": 23424,
+      "sha256": "81b3b898b15d617b2baa1addba24a766cc7ad7e79bb8a1c12b47693a72be99b0"
+    },
+    {
+      "text": "I can work near a friend near the friend.",
+      "status": 200,
+      "bytes": 17976,
+      "sha256": "a03343c47a823175da4aede0325d9e8ab2477579ba38fe1970df796d17374269"
+    },
+    {
+      "text": "Give management our advice very well!",
+      "status": 200,
+      "bytes": 19488,
+      "sha256": "75a60e82775c6cab6cccf775913b8b7cb6c5559ee546349781603fdda6511e5d"
+    }
+  ]
+}

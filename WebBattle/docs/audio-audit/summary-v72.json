@@ -1,0 +1,37 @@
+{
+  "verifiedAt": "2026-10-18T12:59:40.550Z",
+  "version": "v0.9.72",
+  "newCloudMp3": 39143,
+  "newStaticMp3": 8,
+  "totalNewUniqueMp3": 39151,
+  "staticEntries": 1089,
+  "r2Objects": 82007,
+  "checked": 82213,
+  "accepted": 82034,
+  "missingInCensus": 0,
+  "latestPlayedCombinations": 849,
+  "supportedLatestPlayed": 847,
+  "disallowedLatestPlayed": 2,
+  "unitTests": {
+    "passed": 155,
+    "failed": 0
+  },
+  "builtBackupTests": {
+    "passed": 3,
+    "failed": 0,
+    "reorderedOldResponses": true,
+    "realWasmAndPlayback": true,
+    "stalledWorkerIsFixture": true
+  },
+  "recordedPlayback": {
+    "distinctSentences": 35,
+    "total": 70,
+    "devices": [
+      "PC Chromium",
+      "Android Chrome emulation"
+    ],
+    "errors": 0
+  },
+  "physicalHandsetVerified": false,
+  "paidTtsRequests": 0
+}

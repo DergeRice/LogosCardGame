@@ -1,0 +1,8 @@
+import {readFileSync,readdirSync,writeFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+const hash=b=>createHash('sha256').update(b).digest('hex'),root='public/audio/sentences/',manifestBytes=readFileSync(root+'manifest.json'),m=JSON.parse(manifestBytes),actual=readdirSync(root,{recursive:true}).filter(p=>p.endsWith('.mp3'));
+for(const e of m.entries){const b=readFileSync(root+e.file);if(b.length!==e.bytes||hash(b)!==e.sha256)throw Error('Local mismatch '+e.file);}
+if(actual.length!==m.entries.length)throw Error('Unexpected MP3 count');
+const base='https://logos-card-battle.netlify.app',r=await fetch(base+'/audio/sentences/manifest.json');if(!r.ok||JSON.stringify(await r.json())!==JSON.stringify(m))throw Error('Deployed manifest data differs');
+const files=await Promise.all(JSON.parse(readFileSync('docs/audio-audit/latest-gaps-v72.json')).entries.map(async e=>{const r=await fetch(base+'/audio/sentences/'+e.file),b=Buffer.from(await r.arrayBuffer());if(r.status!==200||!r.headers.get('content-type')?.startsWith('audio/')||b.length!==e.bytes||hash(b)!==e.sha256)throw Error('Remote mismatch '+e.file);return{text:e.text,status:r.status,bytes:b.length,sha256:hash(b)};}));
+const chirp=JSON.parse(readFileSync('public/audio/chirp/manifest.json')),chirpCount=readdirSync('public/audio/chirp',{recursive:true}).filter(p=>p.endsWith('.mp3')).length;
+const report={verifiedAt:new Date().toISOString(),staticManifestEntries:m.entries.length,staticActualMp3:actual.length,allLocalSha256Verified:m.entries.length,newStaticHttpVerified:files.length,chirpIds:chirp.ids.length,chirpActualMp3:chirpCount,files};writeFileSync('docs/audio-audit/static-v72.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({...report,files:undefined}));
