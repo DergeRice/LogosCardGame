@@ -1,0 +1,1 @@
+export function CosmeticArt({image,name}:{image?:string;name:string}){return image?.startsWith('/')?<img src={image} alt={name} draggable={false}/>:<span className="item-glyph" style={image?.startsWith('#')?{color:image}:undefined}>{image?.startsWith('#')?'◎':image??'✧'}</span>;}
