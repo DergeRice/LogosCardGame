@@ -1,4 +1,5 @@
-const GAME_ASSET_URLS=[
+import {CONTROL_ICONS} from './controlIcons.js';
+const GAME_ASSET_URLS=[...Object.values(CONTROL_ICONS),
  '/landing/background.jpg','/landing/cards.png','/landing/mascots.png','/landing/cards-mobile.webp','/landing/mascots-mobile.webp',
  '/brand-ui/game-back.png','/brand-ui/loading.png','/brand-ui/loading-under.png','/brand-ui/panels.png','/brand-ui/ui-icons.png','/brand-ui/start-button.png'
 ];

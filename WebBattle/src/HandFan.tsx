@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import type { Card } from '../shared/rules.js';
-import {AtlasIcon} from './BrandSprites.js';
+import {ControlIcon} from './ControlIcon.js';
 
 type Props = { cards: Card[]; renderCard: (card: Card, style?: CSSProperties) => ReactNode; forceExpanded?: boolean; label?:string };
 export function HandFan({ cards, renderCard, forceExpanded=false, label='내 손패' }: Props) {
@@ -26,7 +26,7 @@ export function HandFan({ cards, renderCard, forceExpanded=false, label='내 손
  const radius = edge ? chord / (2 * Math.sin(edge)) : 0;
  const sag = radius * (1 - Math.cos(edge));
  return <div className="hand-container" ref={container} style={{'--mobile-hand-width':`${cardWidth}px`,'--fan-height':`${cardHeight+sag+cardWidth*Math.sin(edge)/2+5}px`} as CSSProperties}>
-  {cards.length > 1 && !forceExpanded && <button className="hand-layout-toggle" aria-label={expanded ? '손패 모아 보기' : '손패 펼쳐 보기'} onClick={() => setExpanded(!expanded)}><AtlasIcon icon="cards"/></button>}
+  {cards.length > 1 && !forceExpanded && <button className="hand-layout-toggle" aria-label={expanded ? '손패 모아 보기' : '손패 펼쳐 보기'} onContextMenu={event=>event.preventDefault()} onClick={() => setExpanded(!expanded)}><ControlIcon name={expanded?'hand':'show'}/></button>}
   <div className={spread ? 'hand hand-spread' : 'hand hand-fan'} aria-label={label} style={spread ? undefined : { height: cardHeight + sag + 95 }}>
    {cards.map((card, i) => {
     const angle = cards.length > 1 ? -maxAngle + 2 * maxAngle * i / (cards.length - 1) : 0;
