@@ -1,0 +1,303 @@
+{
+  "seed": 20261020,
+  "trials": 10000,
+  "independentTargetTrialsPerCategory": 10000,
+  "sizes": {
+    "character": 40,
+    "background": 40,
+    "emote": 60,
+    "frame": 80
+  },
+  "boardCount": 40,
+  "actualSizes": {
+    "character": 2,
+    "background": 2,
+    "emote": 4,
+    "frame": 3
+  },
+  "assumptions": [
+    "Background pool assumed 40. Board never drops from a box.",
+    "Empty initial collection, no free defaults for planned pool. No automatic dust spending in collection series.",
+    "Each eligible item within a category has equal probability. Dust uniform integer 4..40.",
+    "Every item costs 100 dust. No cash price or gold exchange rate is currently implemented.",
+    "Cash amounts use displayed diamond packs, not live purchases; free preview is currently enabled."
+  ],
+  "diamondPacks": [
+    {
+      "amount": 100,
+      "won": 1200
+    },
+    {
+      "amount": 300,
+      "won": 2900
+    },
+    {
+      "amount": 1000,
+      "won": 8900
+    },
+    {
+      "amount": 3000,
+      "won": 25000
+    }
+  ],
+  "boxes": [
+    {
+      "id": "silver",
+      "weights": [
+        35,
+        2,
+        10,
+        30,
+        23
+      ],
+      "offers": [
+        {
+          "count": 1,
+          "cost": 1000
+        },
+        {
+          "count": 10,
+          "cost": 9800
+        }
+      ],
+      "planned": {
+        "hits": {
+          "dust": 3528,
+          "character": 204,
+          "background": 998,
+          "emote": 2935,
+          "frame": 2335
+        },
+        "unique": 220,
+        "duplicates": 6252,
+        "dust": 214737,
+        "redeemable": 2147,
+        "dustRemainder": 37
+      },
+      "currentCatalog": {
+        "hits": {
+          "dust": 3486,
+          "character": 208,
+          "background": 1012,
+          "emote": 2999,
+          "frame": 2295
+        },
+        "unique": 11,
+        "duplicates": 6503,
+        "dust": 219592,
+        "redeemable": 2195,
+        "dustRemainder": 92
+      },
+      "targets": {
+        "character": {
+          "mean": 13.8212,
+          "median": 13,
+          "p90": 21,
+          "natural": 59
+        },
+        "background": {
+          "mean": 13.6254,
+          "median": 13,
+          "p90": 21,
+          "natural": 332
+        },
+        "emote": {
+          "mean": 13.43,
+          "median": 13,
+          "p90": 21,
+          "natural": 692
+        },
+        "frame": {
+          "mean": 13.5594,
+          "median": 13,
+          "p90": 21,
+          "natural": 395
+        },
+        "board": {
+          "mean": 13.8611,
+          "median": 13,
+          "p90": 21,
+          "natural": 0
+        }
+      },
+      "initialDustEquivalent": 72.7,
+      "fullCollectionDustPerBox": 22
+    },
+    {
+      "id": "gold",
+      "weights": [
+        30,
+        5,
+        15,
+        25,
+        25
+      ],
+      "offers": [
+        {
+          "count": 1,
+          "cost": 3000
+        },
+        {
+          "count": 10,
+          "cost": 28000
+        }
+      ],
+      "planned": {
+        "hits": {
+          "dust": 2956,
+          "character": 469,
+          "background": 1514,
+          "emote": 2532,
+          "frame": 2529
+        },
+        "unique": 220,
+        "duplicates": 6824,
+        "dust": 214226,
+        "redeemable": 2142,
+        "dustRemainder": 26
+      },
+      "currentCatalog": {
+        "hits": {
+          "dust": 2995,
+          "character": 474,
+          "background": 1501,
+          "emote": 2541,
+          "frame": 2489
+        },
+        "unique": 11,
+        "duplicates": 6994,
+        "dust": 219275,
+        "redeemable": 2192,
+        "dustRemainder": 75
+      },
+      "targets": {
+        "character": {
+          "mean": 15.7274,
+          "median": 15,
+          "p90": 24,
+          "natural": 176
+        },
+        "background": {
+          "mean": 15.431,
+          "median": 15,
+          "p90": 24,
+          "natural": 549
+        },
+        "emote": {
+          "mean": 15.386,
+          "median": 15,
+          "p90": 24,
+          "natural": 642
+        },
+        "frame": {
+          "mean": 15.43,
+          "median": 15,
+          "p90": 24,
+          "natural": 519
+        },
+        "board": {
+          "mean": 15.9145,
+          "median": 15,
+          "p90": 24,
+          "natural": 0
+        }
+      },
+      "initialDustEquivalent": 76.6,
+      "fullCollectionDustPerBox": 22
+    },
+    {
+      "id": "diamond",
+      "weights": [
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "offers": [
+        {
+          "count": 1,
+          "cost": 100
+        },
+        {
+          "count": 10,
+          "cost": 900
+        },
+        {
+          "count": 20,
+          "cost": 1700
+        },
+        {
+          "count": 40,
+          "cost": 3000
+        },
+        {
+          "count": 100,
+          "cost": 6000
+        }
+      ],
+      "planned": {
+        "hits": {
+          "dust": 1043,
+          "character": 1477,
+          "background": 2008,
+          "emote": 2433,
+          "frame": 3039
+        },
+        "unique": 220,
+        "duplicates": 8737,
+        "dust": 214169,
+        "redeemable": 2141,
+        "dustRemainder": 69
+      },
+      "currentCatalog": {
+        "hits": {
+          "dust": 977,
+          "character": 1487,
+          "background": 2003,
+          "emote": 2538,
+          "frame": 2995
+        },
+        "unique": 11,
+        "duplicates": 9012,
+        "dust": 219129,
+        "redeemable": 2191,
+        "dustRemainder": 29
+      },
+      "targets": {
+        "character": {
+          "mean": 29.7188,
+          "median": 30,
+          "p90": 44,
+          "natural": 1092
+        },
+        "background": {
+          "mean": 28.8863,
+          "median": 29,
+          "p90": 44,
+          "natural": 1483
+        },
+        "emote": {
+          "mean": 29.6108,
+          "median": 29,
+          "p90": 44,
+          "natural": 1187
+        },
+        "frame": {
+          "mean": 29.5355,
+          "median": 29,
+          "p90": 44,
+          "natural": 1122
+        },
+        "board": {
+          "mean": 31.7222,
+          "median": 31,
+          "p90": 46,
+          "natural": 0
+        }
+      },
+      "initialDustEquivalent": 92.2,
+      "fullCollectionDustPerBox": 22
+    }
+  ]
+}
