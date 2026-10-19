@@ -51,7 +51,7 @@ test('real sockets: reconnect, forfeit grace, session rating, result cleanup and
  try{
   const a=await new Client(url).hello('A'),b=await new Client(url).hello('B');a.send('quick');await a.until(()=>!!a.room);b.send('quick');await b.until(()=>b.room?.phase==='battle');await a.until(()=>a.room?.phase==='battle');
   const before=a.room!,token=a.token;a.ws.close();await wait(80);const resumed=await new Client(url).hello('ignored',token);await resumed.until(()=>resumed.room?.phase==='battle');assert.equal(resumed.room!.matchId,before.matchId);assert.deepEqual(resumed.room!.hand,before.hand);
-  b.ws.close();await resumed.until(()=>resumed.room?.phase==='result');assert.equal(resumed.room!.winner,resumed.room!.you);assert.match(resumed.room!.reason!,/유예/);assert.equal(resumed.room!.players.find(p=>p.id===resumed.room!.you)!.rating,1012);
+  b.ws.close();await resumed.until(()=>resumed.room?.phase==='result');assert.equal(resumed.room!.winner,resumed.room!.you);assert.match(resumed.room!.reason!,/유예/);assert.equal(resumed.room!.players.find(p=>p.id===resumed.room!.you)!.rating,1000);assert.equal(resumed.room!.players.find(p=>p.id===resumed.room!.you)!.rankGames,1);
   await resumed.until(()=>resumed.messages.some(m=>m.type==='home'&&m.message?.includes('보관 시간이 끝났어요')));assert.equal(app.game.rooms.size,0);
   const fresh=await new Client(url).hello('Fresh','nonexistent');assert.ok(fresh.messages.some(m=>m.type==='home'&&m.message?.includes('만료')));
  }finally{await app.close();}

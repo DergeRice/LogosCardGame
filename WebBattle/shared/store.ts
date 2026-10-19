@@ -10,6 +10,8 @@ export const DIAMOND_PACKS=[{amount:100,won:1200},{amount:300,won:2900},{amount:
 export const COSMETICS=[
  {id:'character-naro',type:'character',name:'나로와 친구들',image:'/landing/mascots-mobile.webp'},
  {id:'character-table',type:'character',name:'카드 테이블',image:'/brand-ui/loading-under.png'},
+ {id:'board-classic',type:'board',name:'기본 나무 보드',image:'/brand-ui/game-back.png'},
+ {id:'board-garden',type:'board',name:'정원 보드',image:'/landing/background.jpg'},
  {id:'background-garden',type:'background',name:'햇살 정원',image:'/landing/background.jpg'},
  {id:'background-table',type:'background',name:'로고스 테이블',image:'/brand-ui/game-back.png'},
  {id:'emote-smile',type:'emote',name:'싱글벙글',image:'😊'}, {id:'emote-fire',type:'emote',name:'불타는 승부',image:'🔥'},
@@ -18,9 +20,12 @@ export const COSMETICS=[
  {id:'frame-violet',type:'frame',name:'라일락 프레임',image:'#a28bca'},
  ...EXTRA_COSMETICS,
 ] as const;
-export type HubSave={revision?:number;gold:number;diamonds:number;dust:number;owned:string[];character:string;background:string;frame:string;bestScore:number;bestRating:number};
-export function defaultHubSave():HubSave{return {revision:0,gold:50000,diamonds:1000,dust:0,owned:['character-naro','background-garden','frame-mint','emote-smile'],character:'character-naro',background:'background-garden',frame:'frame-mint',bestScore:0,bestRating:1000};}
+export type HubSave={revision?:number;gold:number;diamonds:number;dust:number;owned:string[];board?:string;emote?:string;character:string;background:string;frame:string;bestScore:number;bestRating:number};
+export function defaultHubSave():HubSave{return {revision:0,gold:50000,diamonds:1000,dust:0,board:'board-classic',emote:'emote-smile',owned:['board-classic','character-naro','background-garden','frame-mint','emote-smile'],character:'character-naro',background:'background-garden',frame:'frame-mint',bestScore:0,bestRating:1000};}
 export function readHubSave(key:string):HubSave{const base=defaultHubSave();try{const data=JSON.parse(localStorage.getItem(key)??'null');if(!data||typeof data!=='object')return base;for(const field of ['gold','diamonds','dust','bestScore','bestRating'] as const)if(Number.isFinite(data[field])&&data[field]>=0)base[field]=Math.min(1e8,Math.floor(data[field]));if(Array.isArray(data.owned))base.owned=[...new Set([...base.owned,...data.owned.filter((id:unknown)=>typeof id==='string'&&COSMETICS.some(c=>c.id===id))])] as string[];for(const field of ['character','background','frame'] as const)if(base.owned.includes(data[field])&&COSMETICS.some(c=>c.id===data[field]&&c.type===field))base[field]=data[field];return base;}catch{return base;}}
-export type LootReward={name:string;type:LootType;duplicate:boolean;image?:string;dust?:number;itemId?:string};
+export type LootReward={name:string;type:LootType|'board';duplicate:boolean;image?:string;dust?:number;itemId?:string};
 export function openDemoBox(save:HubSave,boxId:string,count:number,random:()=>number=Math.random){const box=BOXES.find(b=>b.id===boxId),offer=box?.offers.find(o=>o.count===count);if(!box||!offer)throw Error('잘못된 상자 요청입니다.');const cost=offer.cost;if(save[box.currency]<cost)throw Error('재화가 부족해요.');const next={...save,owned:[...save.owned],[box.currency]:save[box.currency]-cost},rewards:LootReward[]=[];for(let i=0;i<count;i++){const type=lootType(random(),box.id);if(type==='dust'){const dust=4+Math.floor(random()*37);next.dust+=dust;rewards.push({name:`별가루 ${dust}`,type,duplicate:false,dust});continue;}const pool=COSMETICS.filter(c=>c.type===type),item=pool[Math.floor(random()*pool.length)];if(!item)throw Error('Invalid cosmetic roll');const duplicate=next.owned.includes(item.id),dust=duplicate?4+Math.floor(random()*37):0;if(duplicate)next.dust+=dust;else next.owned.push(item.id);rewards.push({name:item.name,type,duplicate,image:item.image,dust,itemId:item.id});}return {next,rewards};}
 export function dummyRanking(tier:number){const first=['달빛','새벽','초록','구름','별빛','노을','민트','라임','바람','햇살','은빛','푸른'],last=['나로','여우','책갈피','호랑이','산책','고양이','마법사','모험가','소다','카드','문장','고래'];return Array.from({length:12},(_,i)=>({id:`demo-${tier}-${i}`,name:first[(i+tier)%12]+last[(i*5+tier)%12],rating:300+tier*500+Math.max(0,490-i*37),avatar:(['pronoun','verb','adjective','count'] as const)[i%4]}));}
+
+export const EXCHANGE_CATEGORIES=[['character','캐릭터'],['background','배경'],['board','보드판'],['emote','이모티콘'],['frame','프레임']] as const;
+export function isEquipped(save:HubSave,item:{id:string;type:string}){return item.type in save&&(save as unknown as Record<string,unknown>)[item.type]===item.id;}

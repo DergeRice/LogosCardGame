@@ -48,7 +48,7 @@ test('settled match rating is restored on a later account login',()=>{
  const rival=game.hello(second.peer,undefined,'게스트 2000');
  game.quick(owner);game.quick(rival);game.tick();game.tick();game.tick();
  const room=[...game.rooms.values()][0];assert.equal(room.phase,'battle');
- owner.score=20;rival.score=0;game.finish(room,'테스트 정산');
+ game.community.record(owner).rankGames=3;game.community.record(rival).rankGames=3;owner.score=20;rival.score=0;game.finish(room,'테스트 정산');
  assert.ok(owner.rating>1000);
  const saved=snapshot(game),resumed=new Game();restore(resumed,saved);
  resumed.sessions.clear();
