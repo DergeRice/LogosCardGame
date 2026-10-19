@@ -1,0 +1,572 @@
+{
+  "asOf": "2026-10-20",
+  "seed": 20261020,
+  "trialsPerScenario": 10000,
+  "scope": "Offline simulation of configured paid rules; FREE_BOX_PREVIEW currently makes actual preview charges and saved rewards zero. Not a cash-out valuation.",
+  "dustPrice": 100,
+  "wonPerDiamond": {
+    "min": 8.333333333333334,
+    "max": 12
+  },
+  "diamondOffers": [
+    {
+      "count": 1,
+      "diamonds": 100,
+      "diamondsPerOpen": 100,
+      "wonPerOpen": {
+        "min": 833.3333333333334,
+        "max": 1200
+      }
+    },
+    {
+      "count": 10,
+      "diamonds": 900,
+      "diamondsPerOpen": 90,
+      "wonPerOpen": {
+        "min": 750,
+        "max": 1080
+      }
+    },
+    {
+      "count": 20,
+      "diamonds": 1700,
+      "diamondsPerOpen": 85,
+      "wonPerOpen": {
+        "min": 708.3333333333334,
+        "max": 1020
+      }
+    },
+    {
+      "count": 40,
+      "diamonds": 3000,
+      "diamondsPerOpen": 75,
+      "wonPerOpen": {
+        "min": 625,
+        "max": 900
+      }
+    },
+    {
+      "count": 100,
+      "diamonds": 6000,
+      "diamondsPerOpen": 60,
+      "wonPerOpen": {
+        "min": 500.00000000000006,
+        "max": 720
+      }
+    }
+  ],
+  "cashPerOpen": {
+    "min": 500.00000000000006,
+    "max": 1200
+  },
+  "pools": {
+    "character": [
+      "character-naro",
+      "character-table"
+    ],
+    "background": [
+      "background-garden",
+      "background-table"
+    ],
+    "emote": [
+      "emote-smile",
+      "emote-fire",
+      "emote-clap",
+      "emote-wow"
+    ],
+    "frame": [
+      "frame-mint",
+      "frame-gold",
+      "frame-violet",
+      "frame-style-01",
+      "frame-style-02",
+      "frame-style-03",
+      "frame-style-04",
+      "frame-style-05",
+      "frame-style-06",
+      "frame-style-07",
+      "frame-style-08",
+      "frame-style-09",
+      "frame-style-10",
+      "frame-style-11",
+      "frame-style-12",
+      "frame-style-13",
+      "frame-style-14",
+      "frame-style-15",
+      "frame-style-16",
+      "frame-style-17",
+      "frame-style-18",
+      "frame-style-19",
+      "frame-style-20",
+      "frame-style-21",
+      "frame-style-22",
+      "frame-style-23",
+      "frame-style-24",
+      "frame-style-25",
+      "frame-style-26",
+      "frame-style-27",
+      "frame-style-28",
+      "frame-style-29",
+      "frame-style-30"
+    ]
+  },
+  "boxes": [
+    {
+      "id": "silver",
+      "name": "실버 박스",
+      "currency": "gold",
+      "price": 1000,
+      "offers": [
+        {
+          "count": 1,
+          "cost": 1000
+        },
+        {
+          "count": 10,
+          "cost": 9800
+        }
+      ],
+      "weights": [
+        35,
+        2,
+        10,
+        30,
+        23
+      ],
+      "freshIndependent": {
+        "trials": 10000,
+        "counts": {
+          "dust": 3495,
+          "frame": 2248,
+          "background": 1002,
+          "character": 217,
+          "emote": 3038
+        },
+        "newItems": {
+          "frame": 2187,
+          "background": 508,
+          "emote": 3038,
+          "character": 106
+        },
+        "newCount": 5839,
+        "duplicates": 666,
+        "dust": 91870,
+        "directDust": 77032,
+        "duplicateDust": 14838,
+        "dustPerOpen": 9.187,
+        "duplicateRate": 0.0666,
+        "dustEquivalentPerOpen": 67.577
+      },
+      "oneAccount": {
+        "trials": 10000,
+        "counts": {
+          "emote": 2992,
+          "dust": 3398,
+          "background": 1011,
+          "frame": 2392,
+          "character": 207
+        },
+        "newItems": {
+          "emote": 4,
+          "frame": 32,
+          "background": 1,
+          "character": 1
+        },
+        "newCount": 38,
+        "duplicates": 6564,
+        "dust": 217884,
+        "directDust": 74703,
+        "duplicateDust": 143181,
+        "dustPerOpen": 21.7884,
+        "duplicateRate": 0.6564,
+        "dustEquivalentPerOpen": 22.1684
+      },
+      "allOwned": {
+        "trials": 10000,
+        "counts": {
+          "emote": 2996,
+          "character": 215,
+          "dust": 3395,
+          "background": 1031,
+          "frame": 2363
+        },
+        "newItems": {},
+        "newCount": 0,
+        "duplicates": 6605,
+        "dust": 221087,
+        "directDust": 75033,
+        "duplicateDust": 146054,
+        "dustPerOpen": 22.1087,
+        "duplicateRate": 0.6605,
+        "dustEquivalentPerOpen": 22.1087
+      },
+      "first100DustFresh": {
+        "trials": 10000,
+        "meanOpens": 9.7194,
+        "median": 10,
+        "p90": 13,
+        "p95": 15,
+        "meanCurrencyCost": 9719.4
+      },
+      "first100DustAllOwned": {
+        "trials": 10000,
+        "meanOpens": 5.1357,
+        "median": 5,
+        "p90": 7,
+        "p95": 7,
+        "meanCurrencyCost": 5135.7
+      }
+    },
+    {
+      "id": "gold",
+      "name": "골드 박스",
+      "currency": "gold",
+      "price": 3000,
+      "offers": [
+        {
+          "count": 1,
+          "cost": 3000
+        },
+        {
+          "count": 10,
+          "cost": 28000
+        }
+      ],
+      "weights": [
+        30,
+        5,
+        15,
+        25,
+        25
+      ],
+      "freshIndependent": {
+        "trials": 10000,
+        "counts": {
+          "frame": 2499,
+          "background": 1555,
+          "emote": 2477,
+          "dust": 2989,
+          "character": 480
+        },
+        "newItems": {
+          "frame": 2429,
+          "background": 758,
+          "emote": 2477,
+          "character": 265
+        },
+        "newCount": 5929,
+        "duplicates": 1082,
+        "dust": 90703,
+        "directDust": 66756,
+        "duplicateDust": 23947,
+        "dustPerOpen": 9.0703,
+        "duplicateRate": 0.1082,
+        "dustEquivalentPerOpen": 68.3603
+      },
+      "oneAccount": {
+        "trials": 10000,
+        "counts": {
+          "background": 1455,
+          "frame": 2529,
+          "emote": 2529,
+          "dust": 2997,
+          "character": 490
+        },
+        "newItems": {
+          "frame": 32,
+          "emote": 4,
+          "background": 1,
+          "character": 1
+        },
+        "newCount": 38,
+        "duplicates": 6965,
+        "dust": 219519,
+        "directDust": 66640,
+        "duplicateDust": 152879,
+        "dustPerOpen": 21.9519,
+        "duplicateRate": 0.6965,
+        "dustEquivalentPerOpen": 22.3319
+      },
+      "allOwned": {
+        "trials": 10000,
+        "counts": {
+          "dust": 3013,
+          "background": 1544,
+          "frame": 2490,
+          "emote": 2460,
+          "character": 493
+        },
+        "newItems": {},
+        "newCount": 0,
+        "duplicates": 6987,
+        "dust": 220643,
+        "directDust": 66073,
+        "duplicateDust": 154570,
+        "dustPerOpen": 22.0643,
+        "duplicateRate": 0.6987,
+        "dustEquivalentPerOpen": 22.0643
+      },
+      "first100DustFresh": {
+        "trials": 10000,
+        "meanOpens": 9.9994,
+        "median": 10,
+        "p90": 14,
+        "p95": 15,
+        "meanCurrencyCost": 29998.199999999997
+      },
+      "first100DustAllOwned": {
+        "trials": 10000,
+        "meanOpens": 5.1495,
+        "median": 5,
+        "p90": 7,
+        "p95": 7,
+        "meanCurrencyCost": 15448.5
+      }
+    },
+    {
+      "id": "diamond",
+      "name": "다이아 박스",
+      "currency": "diamonds",
+      "price": 100,
+      "offers": [
+        {
+          "count": 1,
+          "cost": 100
+        },
+        {
+          "count": 10,
+          "cost": 900
+        },
+        {
+          "count": 20,
+          "cost": 1700
+        },
+        {
+          "count": 40,
+          "cost": 3000
+        },
+        {
+          "count": 100,
+          "cost": 6000
+        }
+      ],
+      "weights": [
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "freshIndependent": {
+        "trials": 10000,
+        "counts": {
+          "character": 1524,
+          "frame": 2971,
+          "emote": 2519,
+          "background": 2027,
+          "dust": 959
+        },
+        "newItems": {
+          "character": 778,
+          "frame": 2879,
+          "emote": 2519,
+          "background": 1007
+        },
+        "newCount": 7183,
+        "duplicates": 1858,
+        "dust": 62069,
+        "directDust": 20857,
+        "duplicateDust": 41212,
+        "dustPerOpen": 6.2069,
+        "duplicateRate": 0.1858,
+        "dustEquivalentPerOpen": 78.0369
+      },
+      "oneAccount": {
+        "trials": 10000,
+        "counts": {
+          "background": 2057,
+          "character": 1388,
+          "frame": 2973,
+          "emote": 2507,
+          "dust": 1075
+        },
+        "newItems": {
+          "character": 1,
+          "frame": 32,
+          "emote": 4,
+          "background": 1
+        },
+        "newCount": 38,
+        "duplicates": 8887,
+        "dust": 219832,
+        "directDust": 23960,
+        "duplicateDust": 195872,
+        "dustPerOpen": 21.9832,
+        "duplicateRate": 0.8887,
+        "dustEquivalentPerOpen": 22.3632
+      },
+      "allOwned": {
+        "trials": 10000,
+        "counts": {
+          "emote": 2512,
+          "frame": 2958,
+          "dust": 1034,
+          "character": 1519,
+          "background": 1977
+        },
+        "newItems": {},
+        "newCount": 0,
+        "duplicates": 8966,
+        "dust": 219942,
+        "directDust": 22685,
+        "duplicateDust": 197257,
+        "dustPerOpen": 21.9942,
+        "duplicateRate": 0.8966,
+        "dustEquivalentPerOpen": 21.9942
+      },
+      "first100DustFresh": {
+        "trials": 10000,
+        "meanOpens": 11.5913,
+        "median": 11,
+        "p90": 16,
+        "p95": 17,
+        "meanCurrencyCost": 1159.13
+      },
+      "first100DustAllOwned": {
+        "trials": 10000,
+        "meanOpens": 5.1608,
+        "median": 5,
+        "p90": 7,
+        "p95": 7,
+        "meanCurrencyCost": 516.08
+      }
+    }
+  ],
+  "singleItemTargets": [
+    {
+      "type": "character",
+      "poolSize": 2,
+      "perBox": [
+        {
+          "box": "silver",
+          "expectedOpens": 100,
+          "currencyCost": 100000
+        },
+        {
+          "box": "gold",
+          "expectedOpens": 40,
+          "currencyCost": 120000
+        },
+        {
+          "box": "diamond",
+          "expectedOpens": 13.333333333333334,
+          "currencyCost": 1333.3333333333335,
+          "won": {
+            "min": 6666.666666666668,
+            "max": 16000
+          }
+        }
+      ]
+    },
+    {
+      "type": "background",
+      "poolSize": 2,
+      "perBox": [
+        {
+          "box": "silver",
+          "expectedOpens": 20,
+          "currencyCost": 20000
+        },
+        {
+          "box": "gold",
+          "expectedOpens": 13.333333333333334,
+          "currencyCost": 40000
+        },
+        {
+          "box": "diamond",
+          "expectedOpens": 10,
+          "currencyCost": 1000,
+          "won": {
+            "min": 5000.000000000001,
+            "max": 12000
+          }
+        }
+      ]
+    },
+    {
+      "type": "emote",
+      "poolSize": 4,
+      "perBox": [
+        {
+          "box": "silver",
+          "expectedOpens": 13.333333333333334,
+          "currencyCost": 13333.333333333334
+        },
+        {
+          "box": "gold",
+          "expectedOpens": 16,
+          "currencyCost": 48000
+        },
+        {
+          "box": "diamond",
+          "expectedOpens": 16,
+          "currencyCost": 1600,
+          "won": {
+            "min": 8000.000000000001,
+            "max": 19200
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "poolSize": 33,
+      "perBox": [
+        {
+          "box": "silver",
+          "expectedOpens": 143.47826086956522,
+          "currencyCost": 143478.26086956522
+        },
+        {
+          "box": "gold",
+          "expectedOpens": 132,
+          "currencyCost": 396000
+        },
+        {
+          "box": "diamond",
+          "expectedOpens": 110,
+          "currencyCost": 11000,
+          "won": {
+            "min": 55000.00000000001,
+            "max": 132000
+          }
+        }
+      ]
+    }
+  ],
+  "longRunDustWon": {
+    "perDust": {
+      "min": 22.72727272727273,
+      "max": 54.54545454545455
+    },
+    "per100Dust": {
+      "min": 2272.727272727273,
+      "max": 5454.545454545455
+    }
+  },
+  "assumedSilverAnchor": {
+    "assumption": "Only if one silver opening is assigned the same long-run duplicate/dust utility as one diamond opening; not an actual exchange or gold sale.",
+    "wonPerGold": {
+      "min": 0.5000000000000001,
+      "max": 1.2
+    },
+    "silverWon": {
+      "min": 500.00000000000006,
+      "max": 1200
+    },
+    "goldBoxWon": {
+      "min": 1500.0000000000002,
+      "max": 3600
+    }
+  }
+}
