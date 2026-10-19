@@ -11,3 +11,7 @@
 @media(prefers-reduced-motion:reduce){.reward-flip-inner{transition:none}.pixi-loot-opening[data-renderer=fallback]>.loot-opening-fallback{animation:none}}
 /* Global disabled-button filters flatten 3D descendants and expose the empty front. */
 .game-hub .reward-flip,.game-hub .reward-flip:disabled{filter:none;transform-style:preserve-3d}
+/* WebKit can flatten flipped faces through an animated modal ancestor. Keep the
+   unopened front hidden explicitly so its empty surface cannot cover the back. */
+.reward-flip:not(.is-revealed) .reward-card-front{visibility:hidden}
+.reward-flip.is-revealed .reward-card-back{visibility:hidden}
