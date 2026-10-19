@@ -4,7 +4,7 @@ import {COSMETICS} from '../shared/store.js';
 test('new frame can be redeemed, equipped, shared with opponents and restored without extra payment',()=>{
  const g=new Game({minimumPlayers:2}),messages:any[]=[],socket:GameSocket={readyState:1,bufferedAmount:0,send(raw){messages.push(JSON.parse(raw))},close(){},terminate(){}};
  const p=g.hello(socket,null,'Frame owner'),other=g.hello(socket,null,'Opponent');
- const item=COSMETICS.find(c=>c.id==='frame-style-50');assert.ok(item);assert.equal(item.type,'frame');
+ const item=COSMETICS.find(c=>c.id==='frame-style-60');assert.ok(item);assert.equal(item.type,'frame');
  const record=g.community.record(p);record.store.dust=300;
  const request={type:'storeRedeem',id:item.id,requestId:'frame-once',storeVersion:0};g.handle(p,request);g.handle(p,request);
  assert.equal(record.store.dust,0);assert.equal(record.store.owned.filter(id=>id===item.id).length,1);

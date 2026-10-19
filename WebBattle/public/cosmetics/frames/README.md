@@ -1,5 +1,7 @@
 # 사용자 제공 프로필 프레임
 
+v0.9.98 추가분: `D:/download/img4 (1).png`~`img4 (10).png`를 `style-51.webp`~`style-60.webp`에 순서대로 연결했습니다. 512×512 투명 WebP이며 이미지 프레임 총 60종, 기본 포함 63종입니다.
+
 v0.9.97 추가분: `D:/download/imgg (1).png`~`imgg (20).png`를 `style-31.webp`~`style-50.webp`에 순서대로 연결했습니다. 새20개 합계889,358바이트(원본12,422,184바이트), 동일한512×512 투명 WebP 설정입니다. 이미지 프레임은 총50종, 기존 기본3종을 포함한 상점 프레임은53종입니다. 기존 파일과 ID는 유지합니다.
 
 `D:/download/img (1).png`부터 `img (30).png`까지를 같은 번호의 `style-01.webp`~`style-30.webp`로 연결합니다. 512×512, 비율 유지, 투명 배경 및 중앙 구멍 유지, WebP quality 88/alphaQuality 100입니다. 원본 PNG는 수정하지 않았습니다.

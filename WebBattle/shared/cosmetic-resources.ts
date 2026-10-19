@@ -299,5 +299,65 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "type": "frame",
     "name": "style 50",
     "image": "/cosmetics/frames/style-50.webp"
+  },
+  {
+    "id": "frame-style-51",
+    "type": "frame",
+    "name": "style 51",
+    "image": "/cosmetics/frames/style-51.webp"
+  },
+  {
+    "id": "frame-style-52",
+    "type": "frame",
+    "name": "style 52",
+    "image": "/cosmetics/frames/style-52.webp"
+  },
+  {
+    "id": "frame-style-53",
+    "type": "frame",
+    "name": "style 53",
+    "image": "/cosmetics/frames/style-53.webp"
+  },
+  {
+    "id": "frame-style-54",
+    "type": "frame",
+    "name": "style 54",
+    "image": "/cosmetics/frames/style-54.webp"
+  },
+  {
+    "id": "frame-style-55",
+    "type": "frame",
+    "name": "style 55",
+    "image": "/cosmetics/frames/style-55.webp"
+  },
+  {
+    "id": "frame-style-56",
+    "type": "frame",
+    "name": "style 56",
+    "image": "/cosmetics/frames/style-56.webp"
+  },
+  {
+    "id": "frame-style-57",
+    "type": "frame",
+    "name": "style 57",
+    "image": "/cosmetics/frames/style-57.webp"
+  },
+  {
+    "id": "frame-style-58",
+    "type": "frame",
+    "name": "style 58",
+    "image": "/cosmetics/frames/style-58.webp"
+  },
+  {
+    "id": "frame-style-59",
+    "type": "frame",
+    "name": "style 59",
+    "image": "/cosmetics/frames/style-59.webp"
+  },
+  {
+    "id": "frame-style-60",
+    "type": "frame",
+    "name": "style 60",
+    "image": "/cosmetics/frames/style-60.webp"
   }
 ];
