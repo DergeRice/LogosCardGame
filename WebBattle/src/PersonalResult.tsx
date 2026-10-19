@@ -1,10 +1,39 @@
-import {useEffect,useState} from 'react';
-import {type PublicPlayer} from '../shared/rules.js';
+import {useEffect,useRef,useState,type ReactNode} from 'react';
+import type {PublicPlayer,RoomView} from '../shared/rules.js';
 import {leagueFor} from './hubModel.js';
-import {Avatar} from './MatchPresentation.js';
 import {AnimatedNumber} from './ScorePresentation.js';
-export function PersonalResult({player}:{player:PublicPlayer}){
- const before=player.rating-player.ratingDelta,[rating,setRating]=useState(before);
- useEffect(()=>{const timer=setTimeout(()=>setRating(player.rating),350);return()=>clearTimeout(timer)},[player.rating]);
- return <section className="personal-result" aria-label="내 경기 결과"><div className="result-profile"><Avatar kind={player.avatar}/><b>{player.name}</b><small>나의 결과</small></div><div className="personal-rewards"><div><span>획득 포인트</span><strong>+<AnimatedNumber value={player.reward} testId="my-reward"/> P</strong><small>기본 보상 {player.baseReward??player.reward}P</small></div><div><span>획득 골드</span><strong>+<AnimatedNumber value={player.coinReward??0} testId="my-gold"/> G</strong><small>기본 {player.coinBase??0}G · 보정 {Math.round((player.coinAdjustment??0)*100)}%</small></div><div className={`rating-result ${player.ratingDelta>0?'rating-up':player.ratingDelta<0?'rating-down':''}`}><span>{(player.rankGames??0)<3?`3판 이후 집계됩니다. (${player.rankGames??0}/3)` : leagueFor(player.rating).label} · 레이팅{(player.ratingMultiplier??1)>1?` ×${player.ratingMultiplier}`:''}</span>{(player.rankGames??0)<3?<strong className="placement-result">배치 중 · {3-(player.rankGames??0)}판 남음</strong>:<><div className="rating-change"><small>{before} →</small><strong><AnimatedNumber value={rating} duration={1800} testId="result-rating"/></strong></div><b>{player.ratingDelta>=0?'+':''}{player.ratingDelta}</b></>}</div></div></section>;
+import {scheduleScoreChimes,playGameSfx} from './gameSfx.js';
+import {PixiResultGold} from './PixiResultGold.js';
+import './result-presentation.css';
+
+/** Rewards were already settled by the server; animation never grants currency. */
+export function PersonalResult({player,room,diamonds=0,connected,retry,home,children}:{player:PublicPlayer;room:RoomView;diamonds?:number;connected:boolean;retry:()=>void;home:()=>void;children?:ReactNode}){
+ const before=player.rating-player.ratingDelta;
+ const [rating,setRating]=useState(before),[phase,setPhase]=useState<'rank'|'ready'|'flight'|'credited'>('rank');
+ const [balance,setBalance]=useState(Math.max(0,(player.coins??0)-(player.coinReward??0)));
+ const wallet=useRef<HTMLDivElement>(null),origin=useRef<HTMLDivElement>(null);
+ useEffect(()=>{const start=setTimeout(()=>setRating(player.rating),180),end=setTimeout(()=>setPhase(p=>p==='rank'?'ready':p),1700);return()=>{clearTimeout(start);clearTimeout(end)}},[player.rating]);
+ const reward=player.coinReward??0,placed=(player.rankGames??0)>=3;
+ useEffect(()=>{if(phase==='credited'&&reward>0)return scheduleScoreChimes(performance.now(),1000,12)},[phase,reward]);
+ function collect(){if(phase==='rank'||phase==='ready')playGameSfx('score');setPhase(p=>p==='rank'||p==='ready'?'flight':p)}
+ function arrive(){setBalance(player.coins??0);setPhase('credited')}
+ const winner=(room.resultPlayers??room.players).find(p=>p.id===room.winner)?.name??'상대';
+ return <main className={`result result-stage result-${phase==='rank'?'intro':phase}`} onClick={collect}>
+  <div className="result-wallet" ref={wallet} aria-label="내 재화" aria-hidden={phase==='rank'||phase==='ready'}>
+   <span className="wallet-gold"><i aria-hidden="true">●</i><AnimatedNumber value={balance} duration={1100} testId="result-gold-balance"/><small>골드</small></span>
+   <span className="wallet-diamonds"><i aria-hidden="true">◆</i>{diamonds.toLocaleString()}<small>다이아</small></span>
+  </div>
+  <header className="result-heading"><h1>{room.winner===room.you?'승리':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?'함께 마무리한 한 판':`${winner}의 승리!`}</p></header>
+  <section className={`result-rank ${player.ratingDelta<0?'rating-down':'rating-up'}`} aria-label="내 랭크">
+   <span>{placed?leagueFor(player.rating).label:'배치 중'}</span>
+   <strong><AnimatedNumber value={rating} duration={1400} testId="result-rating"/></strong>
+   <small>{placed?`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`:`3판 이후 집계됩니다. (${player.rankGames??0}/3)`}</small>
+  </section>
+  <div className="result-gold-origin" ref={origin} aria-label={`획득 골드 ${reward}`}><i aria-hidden="true">●</i><b>+{reward.toLocaleString()}</b><span>골드</span></div>
+  <button className="result-tap" disabled={phase==='flight'||phase==='credited'} onClick={e=>{e.stopPropagation();collect()}}>{phase==='credited'?'보상 받음':phase==='flight'?'':'탭하여 보상 받기'}</button>
+  <div className="result-actions" onClick={e=>e.stopPropagation()}><button className="primary" disabled={!connected||Boolean(room.custom&&player.rematch)} onClick={retry}>다시 하기</button><button className="secondary" disabled={!connected} onClick={home}>시작화면으로</button></div>
+  {room.custom&&player.rematch&&<p className="result-wait" role="status">다른 플레이어를 기다리는 중</p>}
+  <div className="result-companions" onClick={e=>e.stopPropagation()}>{children}</div>
+  {phase==='flight'&&<PixiResultGold origin={origin} target={wallet} onArrival={arrive}/>}
+ </main>;
 }

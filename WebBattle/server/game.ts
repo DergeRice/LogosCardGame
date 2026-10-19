@@ -254,7 +254,7 @@ export class Game {
   this.log(r,`${p.name} 님이 테스트용 특수카드 ${moved}장을 받았어요. 이 판은 레이팅과 포인트에 반영되지 않습니다.`);
   this.send(p.socket,{type:'ack',requestId:id});this.broadcast(r);
  }
- allRematch(r: Room) { return r.players.length >= 2 && r.players.every(p => p.rematch && (p.ai || p.socket?.readyState === 1)); }
+ allRematch(r: Room) { return r.players.length >= (r.custom?1:2) && r.players.every(p => p.rematch && (p.ai || p.socket?.readyState === 1)); }
  leave(p: Player,surrender=false) {
   const r = p.room ? this.rooms.get(p.room) : undefined;
   if(r?.custom&&r.phase==='lobby'){
@@ -528,6 +528,17 @@ export class Game {
   if(msg.type==='robNoticeRead'){const room=p.room&&this.rooms.get(p.room);if(room&&msg.matchId===room.matchId&&typeof msg.noticeId==='string'){p.robNotices=(p.robNotices??[]).filter(n=>n.id!==msg.noticeId);this.send(p.socket,{type:'state',room:this.view(room,p)});}return;}
   if (msg.type === 'ping') {this.community.send(p);const r=p.room&&this.rooms.get(p.room);if(r&&r.phase==='result')this.send(p.socket,{type:'state',room:this.view(r,p)});return this.send(p.socket, { type: 'pong', now: Date.now() });}
   if(msg.type==='roomDifficulty')return this.setRoomDifficulty(p,msg.difficulty,msg.id);
+  if (msg.type === 'retryMatch') {
+   const previous=p.room&&this.rooms.get(p.room);
+   if(!previous||previous.phase!=='result'||msg.matchId!==previous.matchId)return this.fail(p,'종료된 경기에서만 다시 시작할 수 있어요.');
+   if(previous.custom){
+    p.rematch=true;for(const x of previous.players)if(x.ai)x.rematch=true;
+    if(this.allRematch(previous))this.reveal(previous);else this.broadcast(previous);
+   }else{
+    const difficulty=previous.aiSetting;this.leave(p);this.quick(p,difficulty);
+   }
+   return;
+  }
   if (msg.type === 'quick') return this.quick(p,msg.difficulty);
   if (msg.type === 'roomList') return this.sendRoomList(p.socket);
   if (msg.type === 'createRoom') return this.createRoom(p);
