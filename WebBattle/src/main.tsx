@@ -61,7 +61,7 @@ import {BUILD_VERSION} from './buildVersion.js';
 import {useGameViewport} from './useGameViewport.js';
 import {useDealtHand} from './useDealtHand.js';
 import { CARD_FACE_URLS, preloadCardFaces } from './preloadCards.js';
-import {preloadGameAssets} from './preloadGameAssets.js';
+import {GAME_ASSET_URLS,preloadGameAssets} from './preloadGameAssets.js';
 import {CardViewer} from './CardViewer.js';
 import {MotionDiagnostics} from './MotionDiagnostics.js';
 import {RoomBrowser,RoomLobby} from './RoomPanels.js';
@@ -123,7 +123,7 @@ function App() {
  const [pending, setPending] = useState(false), pendingAt = useRef(0), pendingId=useRef<string|null>(null), uiActions=useRef<string[]>([]), recalling=useRef<string[]>([]), selectedLive=useRef<string[]>([]), uiContext=useRef<Record<string,unknown>>({});
  const socketRef = useRef<WebSocket | null>(null);
  const [notice, setNotice] = useState('');
- const [cardLoad,setCardLoad]=useState({done:0,total:CARD_FACE_URLS.length,ready:false,failed:0});
+ const [cardLoad,setCardLoad]=useState({percent:0,ready:false,failed:0});
  const [rooms,setRooms]=useState<RoomListing[]>([]),[roomBrowserOpen,setRoomBrowserOpen]=useState(false);
  const lastEvent = useRef('');
  const [correct,setCorrect]=useState<ScoreReveal|null>(null);
@@ -175,7 +175,16 @@ function App() {
   if(document.fullscreenElement||doc.webkitFullscreenElement){await exitGameFullscreen();return;}
   await enterGameFullscreen();
  }
- useEffect(()=>{let active=true;void preloadProfiles();if(exampleVoice)void preloadSentenceVoice();void Promise.all([preloadCardFaces((done,total)=>{if(active)setCardLoad(old=>({...old,done,total}));}),preloadGameAssets()]).then(([{failed}])=>{if(active)setCardLoad(old=>({...old,ready:true,failed}));});return()=>{active=false;};},[]);
+ useEffect(()=>{
+  let active=true,finishTimer:ReturnType<typeof setTimeout>|undefined;
+  const groups={cards:{done:0,total:CARD_FACE_URLS.length},art:{done:0,total:GAME_ASSET_URLS.length},profiles:{done:0,total:1}};
+  const progress=(key:keyof typeof groups,done:number,total:number)=>{groups[key]={done,total};const all=Object.values(groups),percent=Math.min(99,Math.floor(all.reduce((n,g)=>n+g.done,0)/all.reduce((n,g)=>n+g.total,0)*100));if(active)setCardLoad(old=>({...old,percent:Math.max(old.percent,percent)}))};
+  if(exampleVoice)void preloadSentenceVoice();
+  void Promise.all([preloadCardFaces((done,total)=>progress('cards',done,total)),preloadGameAssets((done,total)=>progress('art',done,total)),preloadProfiles().then(()=>progress('profiles',1,1))]).then(([cards,art])=>{
+   if(!active)return;const failed=cards.failed+art.failed;setCardLoad(old=>({...old,percent:failed?Math.min(99,old.percent):100,failed}));
+   if(!failed)finishTimer=setTimeout(()=>{if(active)setCardLoad(old=>({...old,ready:true}))},500);
+  });return()=>{active=false;clearTimeout(finishTimer)};
+ },[]);
  useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 1000); return () => clearInterval(t); }, []);
  useEffect(() => {
   let stopped = false, retry: ReturnType<typeof setTimeout>, resumeCheck:ReturnType<typeof setTimeout>, attempts = 0, responseSerial=0;
@@ -275,7 +284,7 @@ function App() {
  const playerRanks=new Map((room?.players??[]).slice().sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id)).map((player,index)=>[player.id,index+1]));
  const hasScore=Boolean(room?.players.some(player=>player.score!==0));
  const renderCard = (c: Card, style?: CSSProperties) => <button key={c.id} style={style} data-card-id={c.id} data-kind={c.kind} data-variant={c.variant??''} title={CATALOG[c.kind].name+' '+(['get2','get3','rob','exchange','protect','nothing'].includes(c.kind)?CATALOG[c.kind].example:effectLabel(c)||'카드당 1점')} className={'game-card '+CATALOG[c.kind].tone+(dealt.arriving.has(c.id)?' card-arriving':'')+(drag.preview?.id===c.id?' drag-source':'')+(inspectMode?' inspect-mode':'')} aria-label={CATALOG[c.kind].name+(inspectMode?' 카드 확대':' 카드 선택')} disabled={(!interactionEnabled&&!inspectMode)||dealt.arriving.has(c.id)} draggable={false} onContextMenu={e=>e.preventDefault()} onDragStart={e=>e.preventDefault()} onPointerDown={e=>{if(!inspectMode)drag.start(e,c.id,['get2','get3','rob','exchange','protect','nothing'].includes(c.kind));}} onClick={()=>{if(inspectMode){queueAction('card_inspect',c.id);setInspectCard(c);return;}drag.click(()=>['get2','get3','rob','exchange','protect','nothing'].includes(c.kind)?playSpecial(c):add(c.id));}}><Illustration kind={c.kind} card={c}/><CardLabel card={c}/></button>;
- if(!cardLoad.ready||cardLoad.failed)return <main className="card-preload-screen" role="status" aria-live="polite"><PixiLoading/><img className="preload-under" src="/brand-ui/loading-under.png" alt=""/><strong className="preload-label">{cardLoad.failed?'카드를 모두 불러오지 못했어요':'게임 준비 중'}</strong>{cardLoad.failed>0&&<button className="primary preload-retry" onClick={()=>location.reload()}>다시 불러오기</button>}</main>;
+ if(!cardLoad.ready||cardLoad.failed)return <main className="card-preload-screen card-fill-loading"><PixiLoading progress={cardLoad.percent}/><strong className="loading-percent" role="progressbar" aria-label="리소스 로딩" aria-valuemin={0} aria-valuemax={100} aria-valuenow={cardLoad.percent}>{cardLoad.percent}%</strong><p className="loading-caption" role="status">{cardLoad.failed?'리소스를 모두 불러오지 못했어요':'리소스 불러오는 중'}</p>{cardLoad.failed>0&&<button className="primary preload-retry" onClick={()=>location.reload()}>다시 불러오기</button>}</main>;
  return <div className="shell" style={{'--equipped-board':`url(${JSON.stringify(COSMETICS.find(c=>c.id===(community?.store.board??'board-classic'))?.image??'/brand-ui/game-back.png')})` } as CSSProperties} data-fullscreen={fullscreen} data-viewport-height={Math.min(innerHeight,visualViewport?.height??innerHeight)}><small className="build-version" aria-label="게임 버전">{BUILD_VERSION}</small>
   <button className="settings-trigger" aria-label="설정 열기" aria-expanded={settingsOpen} onClick={()=>setSettingsOpen(open=>!open)}><AtlasIcon icon="settings"/></button>
   {settingsOpen&&<GameSettings onSurrender={room?.phase==='battle'?()=>{if(send('surrender')){setSettingsOpen(false);setEmoteOpen(false);}}:undefined} canSurrender={connected} uuid={uuid} account={account} provider={accountProvider} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}

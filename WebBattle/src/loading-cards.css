@@ -1,0 +1,11 @@
+.card-preload-screen.card-fill-loading{position:fixed;inset:auto;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#fffdf7,#edf2f7);color:#526b87;text-align:center;padding:16px}
+.card-fill-loading .card-loading-art{position:relative;width:180px;height:240px;flex:none}
+.card-loading-art canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+.loading-card-placeholder{position:absolute;left:18px;top:10px;width:124px;height:196px;border:3px solid #33475c;border-radius:15px;background:#e8eaf0;box-shadow:10px 8px 0 #d8e5ee,20px 15px 0 #b7d1e6;overflow:hidden}
+.loading-card-placeholder>b{position:absolute;inset:0;display:grid;place-items:center;background:#76b7f3;color:#fff;font-size:68px}
+.card-loading-art[data-renderer=pixi] .loading-card-placeholder{visibility:hidden}
+.card-fill-loading .loading-percent{font-size:36px;line-height:1.15;letter-spacing:-1px;font-variant-numeric:tabular-nums;color:#385779}
+.card-fill-loading .loading-caption{font-size:12px;color:#8290a1;margin:0}
+.card-fill-loading .preload-retry{margin-top:8px}
+@media(orientation:landscape) and (max-height:550px){.card-fill-loading .card-loading-art{width:112px;height:149px}.card-fill-loading .loading-card-placeholder{transform:scale(.622);transform-origin:top left;left:11px;top:6px}.card-fill-loading .loading-percent{font-size:28px}.card-preload-screen.card-fill-loading{gap:7px}}
+.card-loading-art>canvas{width:100%!important;height:100%!important}
