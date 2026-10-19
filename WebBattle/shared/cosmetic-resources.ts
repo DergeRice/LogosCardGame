@@ -179,5 +179,125 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "type": "frame",
     "name": "style 30",
     "image": "/cosmetics/frames/style-30.webp"
+  },
+  {
+    "id": "frame-style-31",
+    "type": "frame",
+    "name": "style 31",
+    "image": "/cosmetics/frames/style-31.webp"
+  },
+  {
+    "id": "frame-style-32",
+    "type": "frame",
+    "name": "style 32",
+    "image": "/cosmetics/frames/style-32.webp"
+  },
+  {
+    "id": "frame-style-33",
+    "type": "frame",
+    "name": "style 33",
+    "image": "/cosmetics/frames/style-33.webp"
+  },
+  {
+    "id": "frame-style-34",
+    "type": "frame",
+    "name": "style 34",
+    "image": "/cosmetics/frames/style-34.webp"
+  },
+  {
+    "id": "frame-style-35",
+    "type": "frame",
+    "name": "style 35",
+    "image": "/cosmetics/frames/style-35.webp"
+  },
+  {
+    "id": "frame-style-36",
+    "type": "frame",
+    "name": "style 36",
+    "image": "/cosmetics/frames/style-36.webp"
+  },
+  {
+    "id": "frame-style-37",
+    "type": "frame",
+    "name": "style 37",
+    "image": "/cosmetics/frames/style-37.webp"
+  },
+  {
+    "id": "frame-style-38",
+    "type": "frame",
+    "name": "style 38",
+    "image": "/cosmetics/frames/style-38.webp"
+  },
+  {
+    "id": "frame-style-39",
+    "type": "frame",
+    "name": "style 39",
+    "image": "/cosmetics/frames/style-39.webp"
+  },
+  {
+    "id": "frame-style-40",
+    "type": "frame",
+    "name": "style 40",
+    "image": "/cosmetics/frames/style-40.webp"
+  },
+  {
+    "id": "frame-style-41",
+    "type": "frame",
+    "name": "style 41",
+    "image": "/cosmetics/frames/style-41.webp"
+  },
+  {
+    "id": "frame-style-42",
+    "type": "frame",
+    "name": "style 42",
+    "image": "/cosmetics/frames/style-42.webp"
+  },
+  {
+    "id": "frame-style-43",
+    "type": "frame",
+    "name": "style 43",
+    "image": "/cosmetics/frames/style-43.webp"
+  },
+  {
+    "id": "frame-style-44",
+    "type": "frame",
+    "name": "style 44",
+    "image": "/cosmetics/frames/style-44.webp"
+  },
+  {
+    "id": "frame-style-45",
+    "type": "frame",
+    "name": "style 45",
+    "image": "/cosmetics/frames/style-45.webp"
+  },
+  {
+    "id": "frame-style-46",
+    "type": "frame",
+    "name": "style 46",
+    "image": "/cosmetics/frames/style-46.webp"
+  },
+  {
+    "id": "frame-style-47",
+    "type": "frame",
+    "name": "style 47",
+    "image": "/cosmetics/frames/style-47.webp"
+  },
+  {
+    "id": "frame-style-48",
+    "type": "frame",
+    "name": "style 48",
+    "image": "/cosmetics/frames/style-48.webp"
+  },
+  {
+    "id": "frame-style-49",
+    "type": "frame",
+    "name": "style 49",
+    "image": "/cosmetics/frames/style-49.webp"
+  },
+  {
+    "id": "frame-style-50",
+    "type": "frame",
+    "name": "style 50",
+    "image": "/cosmetics/frames/style-50.webp"
   }
 ];
