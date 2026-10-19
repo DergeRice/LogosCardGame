@@ -1,1 +1,1 @@
-User supplied Naro sheet: assets-source/Emotes10.png. Rebuild: node scripts/import-naro-art.mjs. Alpha components isolate protruding ears/effects; hello/thanks contact boundary is separated at x=323. Labels preserved; transparent 512px contain; no rotation or stretching. Six free emotions; mistake/taunt/yawn/love are 100-dust exchange items.
+User supplied Naro sheet: assets-source/Emotes10.png. Alpha-connected components (with a contact boundary for hello/thanks) in scripts/import-naro-art.mjs; printed captions removed; transparent 512px contain; no stretching.
