@@ -1,0 +1,10 @@
+.shell .battle .table-player .player-card-count{font-size:9px!important;gap:2px}
+.shell .battle .table-player .player-card-count .game-control-icon{width:12px;height:12px}
+.shell .battle .table-player .player-profile-details>b{text-align:center}
+.shell .battle .table-player.draw-approved{background:#e3f2e2;border-color:#91bb87;box-shadow:inset 0 0 0 1px #87b87d70,0 0 0 1px #9ac59155}
+.shell .battle .table-player.draw-approved .character-avatar{border-color:#81b976}
+.shell .battle .table-feedback-row .deck-request-button.last-consent{animation:only-me-consent 1.35s ease-in-out infinite;transform:none;border-color:#dda342;box-shadow:0 0 0 3px #f3ca6677,0 0 20px #f0bd4f70}
+@keyframes only-me-consent{50%{box-shadow:0 0 0 5px #f3ca66a0,0 0 30px #f0bd4fb0;filter:brightness(1.12)}}
+@media(max-width:1000px){.shell .battle .table-player .player-card-count{font-size:8px!important}.shell .battle .table-player .player-card-count .game-control-icon{width:10px;height:10px}}
+@media(orientation:landscape) and (max-height:350px){.shell .battle .table-player .player-card-count{font-size:7px!important}.shell .battle .table-player .player-card-count .game-control-icon{width:9px;height:9px}}
+@media(prefers-reduced-motion:reduce){.shell .battle .table-feedback-row .deck-request-button.last-consent{animation:none;outline:2px solid #dda342}}

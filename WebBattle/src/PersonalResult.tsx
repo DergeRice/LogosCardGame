@@ -23,7 +23,7 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
    <span className="wallet-gold"><i aria-hidden="true">●</i><AnimatedNumber value={balance} duration={1100} testId="result-gold-balance"/><small>골드</small></span>
    <span className="wallet-diamonds"><i aria-hidden="true">◆</i>{diamonds.toLocaleString()}<small>다이아</small></span>
   </div>
-  <header className="result-heading"><h1>{room.winner===room.you?'승리':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?'함께 마무리한 한 판':`${winner}의 승리!`}</p></header>
+  <header className="result-heading"><h1>{room.forfeiterId===room.you?'패배':room.winner===room.you?'승리':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?(room.forfeiterId===room.you?'항복으로 경기가 종료됐어요':'함께 마무리한 한 판'):`${winner}의 승리!`}</p></header>
   <section className={`result-rank ${player.ratingDelta<0?'rating-down':'rating-up'}`} aria-label="내 랭크">
    <span>{leagueFor(player.rating).label}</span>
    <strong><AnimatedNumber value={rating} duration={1400} testId="result-rating"/></strong>
