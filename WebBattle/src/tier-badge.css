@@ -1,5 +1,5 @@
 .tier-badge{display:inline-block;width:28px;height:28px;object-fit:contain;vertical-align:middle;flex-shrink:0}
-.hub-identity small,.hub-profile-summary>div>span,.hub-ranking-list>div>span:has(.tier-badge),.match-profile>span{display:flex;align-items:center;gap:5px}
+.hub-identity small,.hub-profile-summary>div>span,.hub-ranking-list>div>span:has(.tier-badge),.match-profile>span:has(.tier-badge){display:flex;align-items:center;gap:5px}
 .hub-identity .tier-badge{width:25px;height:25px}
 .hub-league-switch .tier-badge{width:84px;height:84px;filter:drop-shadow(0 5px 8px #26384425)}
 .hub-profile-summary .tier-badge{width:34px;height:34px}
