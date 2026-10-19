@@ -1,3 +1,4 @@
+import {TierBadge} from './TierBadge.js';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import type {PublicPlayer,RoomView} from '../shared/rules.js';
 import {leagueFor} from './hubModel.js';
@@ -25,7 +26,7 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
   </div>
   <header className="result-heading"><h1>{room.forfeiterId===room.you?'패배':room.winner===room.you?'승리':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?(room.forfeiterId===room.you?'항복으로 경기가 종료됐어요':'함께 마무리한 한 판'):`${winner}의 승리!`}</p></header>
   <section className={`result-rank ${player.ratingDelta<0?'rating-down':'rating-up'}`} aria-label="내 랭크">
-   <span>{leagueFor(player.rating).label}</span>
+   <TierBadge tier={leagueFor(player.rating).tier}/><span>{leagueFor(player.rating).label}</span>
    <strong><AnimatedNumber value={rating} duration={1400} testId="result-rating"/></strong>
    <small>{`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`} </small>
   </section>

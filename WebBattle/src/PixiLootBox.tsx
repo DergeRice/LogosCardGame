@@ -1,3 +1,4 @@
+import {boxArt} from './hubArt.js';
 import {useEffect,useRef} from 'react';
 import type {Application} from 'pixi.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
@@ -14,8 +15,8 @@ export function PixiLootBox({box,onOpened}:{box:string;onOpened:()=>void}){
     const {Application,Assets,Sprite,Graphics}=await import('pixi.js');if(disposed||finished)return;
     const instance=new Application();app=instance;await instance.init({width:360,height:230,backgroundAlpha:0,antialias:true,autoDensity:true,resolution:pixiResolution(),preference:'webgl',powerPreference:'low-power'});initialized=true;
     if(disposed||finished){instance.destroy(true,{children:true});app=undefined;return;}
-    instance.ticker.stop();const texture=await Assets.load(`/hub/box-${box}.svg`);if(disposed||finished){instance.destroy(true,{children:true});app=undefined;return;}
-    const sprite=new Sprite(texture);sprite.anchor.set(.5);sprite.position.set(180,118);sprite.width=200;sprite.height=150;const scale=sprite.scale.clone();instance.stage.addChild(sprite);
+    instance.ticker.stop();const texture=await Assets.load(boxArt(box));if(disposed||finished){instance.destroy(true,{children:true});app=undefined;return;}
+    const sprite=new Sprite(texture);sprite.anchor.set(.5);sprite.position.set(180,118);sprite.width=200;sprite.height=200;const scale=sprite.scale.clone();instance.stage.addChild(sprite);
     const particles=Array.from({length:isMobileGraphics()?18:28},(_,i)=>{const p=new Graphics().roundRect(-3,-3,6+i%3,6+i%3,2).fill(i%3===0?0xffffff:0xf4cb65);p.alpha=0;instance.stage.addChild(p);return p});
     let elapsed=0;node.dataset.renderer='pixi';node.dataset.phase='shaking';node.append(instance.canvas);instance.ticker.maxFPS=isMobileGraphics()?24:30;
     instance.ticker.add(t=>{
@@ -28,5 +29,5 @@ export function PixiLootBox({box,onOpened}:{box:string;onOpened:()=>void}){
   })();
   return()=>{disposed=true;clearTimeout(watchdog);clearTimeout(fallbackTimer);document.removeEventListener('visibilitychange',visibility);unwatch();if(initialized)app?.destroy(true,{children:true})};
  },[box]);
- return <div className="pixi-loot-opening" ref={host} aria-label="상자가 흔들린 뒤 열립니다"><img className="loot-opening-fallback" src={`/hub/box-${box}.svg`} alt="" draggable={false}/></div>;
+ return <div className="pixi-loot-opening" ref={host} aria-label="상자가 흔들린 뒤 열립니다"><img className="loot-opening-fallback" src={boxArt(box)} alt="" draggable={false}/></div>;
 }

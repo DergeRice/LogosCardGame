@@ -1,6 +1,7 @@
+import {BOX_ART,TIER_ART} from './hubArt.js';
 import {NARO_EMOTES} from '../shared/emotes.js';
 import {CONTROL_ICONS} from './controlIcons.js';
-export const GAME_ASSET_URLS=[...Object.values(CONTROL_ICONS),...NARO_EMOTES.map(e=>e.image),
+export const GAME_ASSET_URLS=[...Object.values(BOX_ART),...TIER_ART,...Object.values(CONTROL_ICONS),...NARO_EMOTES.map(e=>e.image),
  '/landing/background.jpg','/landing/cards.png','/landing/mascots.png','/landing/cards-mobile.webp','/landing/mascots-mobile.webp',
  '/brand-ui/game-back.png','/brand-ui/panels.png','/brand-ui/ui-icons.png','/brand-ui/start-button.png'
 ];

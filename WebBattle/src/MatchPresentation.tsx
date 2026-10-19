@@ -1,3 +1,4 @@
+import {TierBadge} from './TierBadge.js';
 import {useEffect,useMemo,useState,type CSSProperties} from 'react';
 import { CATALOG, RULES, type Kind, type RoomView, type PublicPlayer } from '../shared/rules.js';
 import {leagueFor} from './hubModel.js';
@@ -15,7 +16,7 @@ export function Avatar({ kind, className = '' }: { kind: Kind; className?: strin
  return <span className={`character-avatar ${className}`}><span role="img" aria-label={`${CATALOG[safeKind].name} 캐릭터 프로필`} style={{ backgroundImage: `url(${ART.sheet(c.sheet)})`, backgroundSize: `${ART.sheetWidth / ART.crop.width * 100}% ${ART.sheetHeight / ART.crop.height * 100}%`, backgroundPosition: `${ART.columns[c.col] / (ART.sheetWidth - ART.crop.width) * 100}% ${ART.rows[c.row] / (ART.sheetHeight - ART.crop.height) * 100}%` }}/></span>;
 }
 export function Profile({ player, mine = false }: { player: PublicPlayer; mine?: boolean }) {
- return <article className={`match-profile ${mine ? 'mine' : 'rival'}`}><Avatar kind={player.avatar}/><small>{mine ? 'YOU' : player.ai ? 'AI PLAYER' : 'PLAYER'}</small><h3>{player.name}</h3><span>{leagueFor(player.rating).label}</span></article>;
+ return <article className={`match-profile ${mine ? 'mine' : 'rival'}`}><Avatar kind={player.avatar}/><small>{mine ? 'YOU' : player.ai ? 'AI PLAYER' : 'PLAYER'}</small><h3>{player.name}</h3><span><TierBadge tier={leagueFor(player.rating).tier}/>{leagueFor(player.rating).label}</span></article>;
 }
 export function MatchPresentation({ room, now, cancel }: { room: RoomView; now: number; cancel: () => void }) {
  const me = room.players.find(p => p.id === room.you)!;
