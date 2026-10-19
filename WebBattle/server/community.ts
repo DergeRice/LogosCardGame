@@ -3,7 +3,7 @@ import {BASIC_EMOTES,emoteSlots,type EmoteSlots} from '../shared/emotes.js';
 import {randomInt,randomUUID} from 'node:crypto';
 import type {Game} from './game.js';
 import type {Peer,CommunityView,Invitation,StoreResult} from '../shared/community.js';
-import {COSMETICS,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
+import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
 type Player=ReturnType<Game['newPlayer']>;
 export type CommunityRecord={id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;rating?:number;grants?:string[]};
 export type CommunityInvite=Invitation & {to:string};
@@ -24,7 +24,7 @@ export class Community {
  acceptInvite(p:Player,msg:Record<string,unknown>){const i=this.invites.get(String(msg.id));if(!i||i.to!==this.id(p)||i.expiresAt<=Date.now())return this.game.fail(p,'초대가 만료되었어요.');if(msg.accept===true){if(p.room)return this.game.fail(p,'현재 방에서 나온 뒤 초대를 받아 주세요.');this.game.joinRoom(p,i.code);}this.invites.delete(i.id);this.send(p);}
  store(p:Player,msg:Record<string,unknown>){if(p.room)return this.game.fail(p,'상점은 홈에서 이용해 주세요.');const r=this.record(p),requestId=typeof msg.requestId==='string'?msg.requestId:'';if(!requestId||requestId.length>80)return this.game.fail(p,'유효한 구매 요청이 필요해요.');const prior=r.results.find(x=>x.requestId===requestId);if(prior){this.send(p);this.game.send(p.socket,{type:'storeResult',...prior});return;}if(msg.storeVersion!==(r.store.revision??0)){this.send(p);return this.game.fail(p,'상점 정보가 바뀌었어요. 다시 선택해 주세요.');}let result:StoreResult;
  if(msg.type==='storeOpen'){const opened=openDemoBox({...r.store,gold:p.coins??0},String(msg.box),Number(msg.count),()=>randomInt(1000000000)/1000000000);r.store=opened.next;p.coins=opened.next.gold;result={requestId,source:'box',box:String(msg.box),rewards:opened.rewards};}
- else{const item=COSMETICS.find(c=>c.id===msg.id);if(!item||r.store.owned.includes(item.id))return this.game.fail(p,'아직 보유하지 않은 치장을 선택해 주세요.');if(r.store.dust<100)return this.game.fail(p,'별가루 100개가 필요해요.');r.store.dust-=100;r.store.owned.push(item.id);result={requestId,source:'redeem',rewards:[{name:item.name,type:item.type,duplicate:false,image:item.image,itemId:item.id}]};}
+ else{const item=COSMETICS.find(c=>c.id===msg.id);if(!item||r.store.owned.includes(item.id))return this.game.fail(p,'아직 보유하지 않은 치장을 선택해 주세요.');const price=dustPrice(item.type);if(r.store.dust<price)return this.game.fail(p,`별가루 ${price}개가 필요해요.`);r.store.dust-=price;r.store.owned.push(item.id);result={requestId,source:'redeem',rewards:[{name:item.name,type:item.type,duplicate:false,image:item.image,itemId:item.id}]};}
  r.store.revision=(r.store.revision??0)+1;const account=[...this.game.accounts.values()].find(a=>a.id===p.accountId);if(account)account.coins=p.coins;r.results.push(result);r.results=r.results.slice(-20);this.send(p);this.game.send(p.socket,{type:'storeResult',...result});}
  setEmotes(p:Player,msg:Record<string,unknown>){
   if(p.room)return this.game.fail(p,'감정표현은 홈에서 장착해 주세요.');

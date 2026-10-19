@@ -1,0 +1,344 @@
+{
+  "seed": 20261020,
+  "trials": 10000,
+  "independentTargetTrialsPerCategory": 10000,
+  "sizes": {
+    "character": 40,
+    "background": 40,
+    "emote": 60,
+    "frame": 80,
+    "board": 40
+  },
+  "boardCount": 40,
+  "actualSizes": {
+    "character": 2,
+    "background": 2,
+    "emote": 4,
+    "frame": 33,
+    "board": 2
+  },
+  "assumptions": [
+    "Background pool assumed 40. Board now drops from boxes.",
+    "Empty initial collection, no free defaults for planned pool. No automatic dust spending in collection series.",
+    "Each eligible item within a category has equal probability. Dust uses configured box ranges; duplicates use category fixed amounts.",
+    "Category-specific live dust prices apply. No cash price or gold exchange rate is currently implemented.",
+    "Cash amounts use displayed diamond packs, not live purchases; free preview is currently enabled."
+  ],
+  "diamondPacks": [
+    {
+      "amount": 100,
+      "won": 1200
+    },
+    {
+      "amount": 300,
+      "won": 2900
+    },
+    {
+      "amount": 1000,
+      "won": 8900
+    },
+    {
+      "amount": 3000,
+      "won": 25000
+    }
+  ],
+  "boxes": [
+    {
+      "id": "silver",
+      "weights": [
+        59.5,
+        1,
+        7,
+        18,
+        7,
+        7.5
+      ],
+      "offers": [
+        {
+          "count": 1,
+          "cost": 1000
+        },
+        {
+          "count": 10,
+          "cost": 9800
+        }
+      ],
+      "planned": {
+        "hits": {
+          "dust": 5947,
+          "character": 100,
+          "background": 718,
+          "emote": 1820,
+          "frame": 691,
+          "board": 724
+        },
+        "unique": 258,
+        "duplicates": 3795,
+        "dust": 141608,
+        "purchasingPower": {
+          "character": 166,
+          "background": 354,
+          "emote": 708,
+          "frame": 472,
+          "board": 283
+        }
+      },
+      "currentCatalog": {
+        "hits": {
+          "dust": 5973,
+          "character": 112,
+          "background": 721,
+          "emote": 1754,
+          "frame": 683,
+          "board": 757
+        },
+        "unique": 43,
+        "duplicates": 3984,
+        "dust": 149871,
+        "purchasingPower": {
+          "character": 176,
+          "background": 374,
+          "emote": 749,
+          "frame": 499,
+          "board": 299
+        }
+      },
+      "targets": {
+        "character": {
+          "mean": 140.8063,
+          "median": 142,
+          "p90": 155,
+          "natural": 325
+        },
+        "background": {
+          "mean": 69.7803,
+          "median": 73,
+          "p90": 83,
+          "natural": 1192
+        },
+        "emote": {
+          "mean": 37.4541,
+          "median": 39,
+          "p90": 46,
+          "natural": 1151
+        },
+        "frame": {
+          "mean": 56.24,
+          "median": 57,
+          "p90": 66,
+          "natural": 546
+        },
+        "board": {
+          "mean": 83.1476,
+          "median": 89,
+          "p90": 99,
+          "natural": 1610
+        }
+      },
+      "initialDustEquivalent": 135.76,
+      "fullCollectionDustPerBox": 15.01
+    },
+    {
+      "id": "gold",
+      "weights": [
+        25,
+        4,
+        16,
+        20,
+        17,
+        18
+      ],
+      "offers": [
+        {
+          "count": 1,
+          "cost": 3000
+        },
+        {
+          "count": 10,
+          "cost": 28000
+        }
+      ],
+      "planned": {
+        "hits": {
+          "dust": 2546,
+          "character": 411,
+          "background": 1592,
+          "emote": 1990,
+          "frame": 1668,
+          "board": 1793
+        },
+        "unique": 260,
+        "duplicates": 7194,
+        "dust": 262797,
+        "purchasingPower": {
+          "character": 309,
+          "background": 656,
+          "emote": 1313,
+          "frame": 875,
+          "board": 525
+        }
+      },
+      "currentCatalog": {
+        "hits": {
+          "dust": 2591,
+          "character": 378,
+          "background": 1598,
+          "emote": 1919,
+          "frame": 1706,
+          "board": 1808
+        },
+        "unique": 43,
+        "duplicates": 7366,
+        "dust": 269209,
+        "purchasingPower": {
+          "character": 316,
+          "background": 673,
+          "emote": 1346,
+          "frame": 897,
+          "board": 538
+        }
+      },
+      "targets": {
+        "character": {
+          "mean": 98.0125,
+          "median": 102,
+          "p90": 114,
+          "natural": 986
+        },
+        "background": {
+          "mean": 51.9338,
+          "median": 55,
+          "p90": 68,
+          "natural": 2052
+        },
+        "emote": {
+          "mean": 31.9067,
+          "median": 32,
+          "p90": 43,
+          "natural": 1052
+        },
+        "frame": {
+          "mean": 44.3221,
+          "median": 45,
+          "p90": 57,
+          "natural": 926
+        },
+        "board": {
+          "mean": 59.7181,
+          "median": 65,
+          "p90": 79,
+          "natural": 2634
+        }
+      },
+      "initialDustEquivalent": 284,
+      "fullCollectionDustPerBox": 27.05
+    },
+    {
+      "id": "diamond",
+      "weights": [
+        10,
+        12,
+        18,
+        18,
+        20,
+        22
+      ],
+      "offers": [
+        {
+          "count": 1,
+          "cost": 100
+        },
+        {
+          "count": 10,
+          "cost": 900
+        },
+        {
+          "count": 20,
+          "cost": 1700
+        },
+        {
+          "count": 40,
+          "cost": 3000
+        },
+        {
+          "count": 100,
+          "cost": 6000
+        }
+      ],
+      "planned": {
+        "hits": {
+          "dust": 1007,
+          "character": 1180,
+          "background": 1769,
+          "emote": 1832,
+          "frame": 1978,
+          "board": 2234
+        },
+        "unique": 260,
+        "duplicates": 8733,
+        "dust": 330059,
+        "purchasingPower": {
+          "character": 388,
+          "background": 825,
+          "emote": 1650,
+          "frame": 1100,
+          "board": 660
+        }
+      },
+      "currentCatalog": {
+        "hits": {
+          "dust": 1029,
+          "character": 1255,
+          "background": 1827,
+          "emote": 1775,
+          "frame": 1940,
+          "board": 2174
+        },
+        "unique": 43,
+        "duplicates": 8928,
+        "dust": 340455,
+        "purchasingPower": {
+          "character": 400,
+          "background": 851,
+          "emote": 1702,
+          "frame": 1134,
+          "board": 680
+        }
+      },
+      "targets": {
+        "character": {
+          "mean": 85.5464,
+          "median": 94,
+          "p90": 111,
+          "natural": 2550
+        },
+        "background": {
+          "mean": 52.3438,
+          "median": 56,
+          "p90": 72,
+          "natural": 2370
+        },
+        "emote": {
+          "mean": 35.3388,
+          "median": 36,
+          "p90": 50,
+          "natural": 1060
+        },
+        "frame": {
+          "mean": 46.4387,
+          "median": 47,
+          "p90": 62,
+          "natural": 1142
+        },
+        "board": {
+          "mean": 58.0606,
+          "median": 64,
+          "p90": 81,
+          "natural": 3098
+        }
+      },
+      "initialDustEquivalent": 383.6,
+      "fullCollectionDustPerBox": 33.9
+    }
+  ]
+}
