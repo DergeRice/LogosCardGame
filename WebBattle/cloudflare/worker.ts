@@ -144,5 +144,5 @@ export class BattleArena extends DurableObject<Env>{
  async webSocketClose(ws:WebSocket,code:number,reason:string){await this.disconnected(ws);try{ws.close(code,reason);}catch{/* already closed */}}
  async webSocketError(ws:WebSocket){await this.disconnected(ws);}
  async disconnected(ws:WebSocket){await this.serial(()=>{const a=ws.deserializeAttachment() as Attachment;const p=[...this.game.sessions.values()].find(p=>p.id===a.id);if(p){this.game.audit(p,'disconnected','warn');this.game.disconnected(p,this.adapter(ws));}this.adapters.delete(ws);});}
- async alarm(){this.scheduledAlarm=null;await this.serial(()=>this.game.tick());}
+ async alarm(){await this.serial(()=>{this.scheduledAlarm=null;this.game.tick();});}
 }
