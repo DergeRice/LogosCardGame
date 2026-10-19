@@ -2,7 +2,6 @@ import {emoteSlots,aiEmote,AI_EMOTE_LOADOUTS,type EmotionEvent} from '../shared/
 import {Community} from './community.js';
 import {availableGuestName,GUEST_NAME_COUNT} from '../shared/guestNames.js';
 import {matchGold} from '../shared/matchRewards.js';
-import {BASIC_SUPPLY_KINDS,BASIC_SUPPLY_COOLDOWN_MS} from '../shared/basicSupply.js';
 import {aiGoChoice} from './aiStrategy.js';
 import {compatibleRatings,roomRating,aiDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {BUILD_VERSION} from '../src/buildVersion.js';
@@ -285,16 +284,8 @@ export class Game {
   this.log(r, `${p.name} 님의 ${nextGo}고! 전원 카드 1장${nextGo>=2?' · 고 플레이어 보너스 1장':''}${previousLeader?` · ${previousLeader.name} 점수 ÷2`:''} · ${nextGo===1?'+3점':nextGo===2?'+6점':'다음 문장 ×2'} 적용`); this.broadcast(r);
  }
  claimBasic(p:Player,msg:Record<string,unknown>){
-  const r=p.room&&this.rooms.get(p.room),id=typeof msg.requestId==='string'?msg.requestId:'';
-  if(!r||r.phase!=='battle'||msg.matchId!==r.matchId)return this.fail(p,'진행 중인 경기가 없어요.',id);
-  if(!/^[\w-]{1,80}$/.test(id))return this.fail(p,'올바른 요청 번호가 필요해요.');
-  if(p.seen.has(id))return this.send(p.socket,{type:'ack',requestId:id,duplicate:true});
-  if(r.decision||r.deck.length>=r.players.length||(r.endsAt>0&&Date.now()>=r.endsAt))return this.fail(p,'공용 덱 배분이 끝난 경기에서만 받을 수 있어요.',id);
-  if(!BASIC_SUPPLY_KINDS.includes(msg.kind as typeof BASIC_SUPPLY_KINDS[number]))return this.fail(p,'기본 카드 5종 중에서 선택하세요.',id);
-  if(Date.now()<(p.basicSupplyAt??0))return this.fail(p,'기본 카드는 30초마다 한 장 받을 수 있어요.',id);
-  p.seen.add(id);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
-  const card:Card={id:randomUUID(),kind:msg.kind as typeof BASIC_SUPPLY_KINDS[number]};p.hand.push(card);p.handVersion++;p.basicSupplyAt=Date.now()+BASIC_SUPPLY_COOLDOWN_MS;
-  this.audit(p,'basic_supply','info',{requestId:id,kind:card.kind},r,[card]);this.log(r,`${p.name} 님이 기본 카드를 한 장 받았어요.`,p);this.send(p.socket,{type:'ack',requestId:id});this.broadcast(r);
+  // Legacy clients cannot mint extra cards after the shared deck is exhausted.
+  return this.fail(p,'배분이 완료됐어요. 원하는 카드 추가 지급은 종료됐습니다.',typeof msg.requestId==='string'?msg.requestId:undefined);
  }
  newDrawVote(r:Room):DrawVote|undefined{return r.deck.length>=r.players.length?{id:randomUUID(),approved:[],aiApproveAt:Object.fromEntries(r.players.filter(x=>x.ai).map(x=>[x.id,Date.now()+randomInt(1200,9000)]))}:undefined;}
  distribute(r:Room,source:'automatic'|'unanimous'){
@@ -587,7 +578,7 @@ export class Game {
    if (r.endsAt > 0 && now >= r.endsAt) { this.finish(r, r.finalRound?'마지막 5분이 끝났어요. 최종 점수로 정산합니다.':'경기 시간이 끝났어요. 현재 점수로 정산합니다.'); continue; }
    if(!r.decision&&r.drawVote){let changed=false;for(const p of r.players)if(p.ai&&!r.drawVote.approved.includes(p.id)&&now>=(r.drawVote.aiApproveAt?.[p.id]??now)){r.drawVote.approved.push(p.id);changed=true;}if(r.drawVote.approved.length===r.players.length){this.distribute(r,'unanimous');continue;}if(changed)this.broadcast(r);}
    if(r.nextDealAt>0&&now>=r.nextDealAt){this.distribute(r,'automatic');continue;}
-   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && applyGoBenefit(judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!)),activeGoLevel(r,p)).points>=RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); else if(r.deck.length<r.players.length&&now>=(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});}if(!cards&&this.botEmotion(p,now-(r.startedAt??now)>60000?'longWait':'waiting'))this.broadcast(r); }
+   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && applyGoBenefit(judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!)),activeGoLevel(r,p)).points>=RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); if(!cards&&this.botEmotion(p,now-(r.startedAt??now)>60000?'longWait':'waiting'))this.broadcast(r); }
   }
   for (const [token, p] of this.sessions) if (!p.room && !p.socket && now - p.touchedAt > GUEST_RETENTION_MS) this.sessions.delete(token);
   for(const [hash,session] of this.accountSessions)if(session.expiresAt<=now)this.accountSessions.delete(hash);
