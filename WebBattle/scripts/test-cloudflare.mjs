@@ -49,6 +49,12 @@ try{
  assert.equal((await mf.dispatchFetch('http://localhost/admin/logs/access/redeem',{method:'POST',body:JSON.stringify({code:bootstrap.token})})).status,401);
  const audit=await (await mf.dispatchFetch('http://localhost/admin/logs?q='+message.requestId,{headers:adminHeaders})).json();
  assert.ok(audit.logs.some(e=>e.event==='submit_result'));
+ assert.ok(audit.logs.every(e=>e.event!=='request'&&e.event!=='judgment'));
+ assert.ok(audit.inventory.some(row=>row.kind==='player'&&row.count>=4));
+ for(let i=0;i<20;i++)actor.send('clientEvent',{event:'ui_actions',events:['select']});
+ await wait(300);
+ const minimalLogs=await (await mf.dispatchFetch('http://localhost/admin/logs?limit=500',{headers:adminHeaders})).json();
+ assert.ok(minimalLogs.logs.every(e=>e.event==='submit_result'||e.level==='error'||e.details.code==='AUDIO_FAILURE'));
  const resultLog=audit.logs.find(e=>e.event==='submit_result');assert.equal(resultLog.details.submittedCards[0].id,played.id);
  const sentenceStats=await (await mf.dispatchFetch('http://localhost/admin/logs/sentences',{headers:adminHeaders})).json();
  assert.equal(sentenceStats.total,naturalCorrect?1:0);assert.equal(sentenceStats.unique,naturalCorrect?1:0);

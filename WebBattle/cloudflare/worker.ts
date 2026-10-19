@@ -36,6 +36,8 @@ export default {
 export class BattleArena extends DurableObject<Env>{
  game:Game; audit:AuditStore;cache=new Map<string,string>();adapters=new Map<WebSocket,GameSocket>();
  // All game mutations AND persistence are serialized; responses flush after commit.
+ private scheduledAlarm:number|null=null;
+ private connectionsCleanedAt=0;
  queue:Promise<unknown>=Promise.resolve();outbox:(()=>void)[]|null=null;
  constructor(ctx:DurableObjectState,env:Env){
   super(ctx,env);
@@ -45,6 +47,7 @@ export class BattleArena extends DurableObject<Env>{
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY,value TEXT NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');
    for(const row of ctx.storage.sql.exec<{key:string;value:string}>('SELECT key,value FROM records'))this.cache.set(row.key,row.value);
+   this.scheduledAlarm=await ctx.storage.getAlarm();
    const players=restore(this.game,this.cache);
    for(const ws of ctx.getWebSockets()){
     const a=ws.deserializeAttachment() as Attachment;const adapter=this.adapter(ws),p=a.id?players.get(a.id):undefined;
@@ -61,11 +64,11 @@ export class BattleArena extends DurableObject<Env>{
   a={get readyState(){return ws.readyState;},bufferedAmount:0,send(data){schedule(()=>ws.send(data));},close(code,reason){schedule(()=>ws.close(code,reason));},terminate(){schedule(()=>ws.close(1013,'Slow connection'));}};
   this.adapters.set(ws,a);return a;
  }
- async serial<T>(fn:()=>T|Promise<T>):Promise<T>{
+ async serial<T>(fn:()=>T|Promise<T>,persist=true):Promise<T>{
   const work=this.queue.then(async()=>{
    this.outbox=[];
    try{
-    const result=await fn();await this.persist();const pending=this.outbox;this.outbox=null;
+    const result=await fn();if(persist)await this.persist();const pending=this.outbox;this.outbox=null;
     for(const send of pending)try{send();}catch{/* remote close races are handled by close events */}
     return result;
    }catch(e){this.outbox=null;this.ctx.abort('Game storage commit failed; reconnect to restore committed state.');throw e;}
@@ -80,11 +83,12 @@ export class BattleArena extends DurableObject<Env>{
   this.ctx.storage.transactionSync(()=>{
    for(const [key,value]of next)if(this.cache.get(key)!==value)this.ctx.storage.sql.exec('INSERT INTO records(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',key,value);
    for(const key of this.cache.keys())if(!next.has(key))this.ctx.storage.sql.exec('DELETE FROM records WHERE key=?',key);
-   this.ctx.storage.sql.exec('DELETE FROM connections WHERE expires<=?',now);
+   if(now-this.connectionsCleanedAt>=60000){this.ctx.storage.sql.exec('DELETE FROM connections WHERE expires<=?',now);this.connectionsCleanedAt=now;}
   });this.cache=next;
-  if(deadline!==null)await this.ctx.storage.setAlarm(deadline);else await this.ctx.storage.deleteAlarm();
+  if(deadline!==this.scheduledAlarm){if(deadline!==null)await this.ctx.storage.setAlarm(deadline);else await this.ctx.storage.deleteAlarm();this.scheduledAlarm=deadline;}
  }
  async fetch(request:Request):Promise<Response>{
+  if(new URL(request.url).pathname==='/health')return Response.json({status:'ok',provider:'cloudflare',storage:'sqlite',rooms:this.game.rooms.size});
   if(new URL(request.url).pathname==='/admin/grants/test-friends'){
    if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
    if(request.method!=='POST')return new Response('POST required',{status:405});const text=await request.text();if(text.length>1024)return new Response('Too large',{status:413});
@@ -117,6 +121,8 @@ export class BattleArena extends DurableObject<Env>{
   });
  }
  async webSocketMessage(ws:WebSocket,raw:string|ArrayBuffer){
+  let telemetryOnly=false;
+  try{telemetryOnly=typeof raw==='string'&&raw.length<=4096&&JSON.parse(raw)?.type==='clientEvent';}catch{/* normal validation below */}
   await this.serial(async()=>{
    const adapter=this.adapter(ws),a=ws.deserializeAttachment() as Attachment;
    let p:Player|undefined=a.id?[...this.game.sessions.values()].find(p=>p.id===a.id):undefined;
@@ -133,10 +139,10 @@ export class BattleArena extends DurableObject<Env>{
      }else this.game.handle(p,msg);
     }
    }catch(e){const message=e instanceof SyntaxError?'읽을 수 없는 요청이에요.':e instanceof Error?e.message:'요청 오류';this.game.audit(p,'server_error','error',{code:'SERVER_ERROR',reason:message});this.game.send(adapter,{type:'error',message});}
-  });
+  },!telemetryOnly);
  }
  async webSocketClose(ws:WebSocket,code:number,reason:string){await this.disconnected(ws);try{ws.close(code,reason);}catch{/* already closed */}}
  async webSocketError(ws:WebSocket){await this.disconnected(ws);}
  async disconnected(ws:WebSocket){await this.serial(()=>{const a=ws.deserializeAttachment() as Attachment;const p=[...this.game.sessions.values()].find(p=>p.id===a.id);if(p){this.game.audit(p,'disconnected','warn');this.game.disconnected(p,this.adapter(ws));}this.adapters.delete(ws);});}
- async alarm(){await this.serial(()=>this.game.tick());}
+ async alarm(){this.scheduledAlarm=null;await this.serial(()=>this.game.tick());}
 }

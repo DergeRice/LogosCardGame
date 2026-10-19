@@ -6,6 +6,9 @@ const accessHash=(token:string)=>createHash('sha256').update(token).digest('hex'
 export class AuditStore{
  private cleanedAt=0;
  private insertCount=0;
+ private budgetDay=-1;
+ private budgetUsed=0;
+ private recent=new Map<string,number>();
  constructor(private readonly sql:SqlStorage){
   sql.exec("CREATE TABLE IF NOT EXISTS audit_logs(id TEXT PRIMARY KEY,time INTEGER NOT NULL,level TEXT NOT NULL,event TEXT NOT NULL,action TEXT,player TEXT,room TEXT,request_id TEXT,data TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'open',note TEXT NOT NULL DEFAULT '')");
   sql.exec('CREATE INDEX IF NOT EXISTS audit_time ON audit_logs(time)');
@@ -63,7 +66,17 @@ export class AuditStore{
   return Response.json({...totals,forms,combinations,missingCards:missing,nextOffset:rows.length>limit?offset+limit:null},{headers:{'Cache-Control':'no-store'}});
  }
  insert(e:AuditEvent){
+  // Store human submissions and actionable failures instead of routine traffic.
+  if(e.details.actorAI===true)return;
+  if(e.event!=='submit_result'&&e.level!=='error'&&!(e.event==='client'&&e.details.code==='AUDIO_FAILURE'))return;
+  const day=Math.floor(e.time/86400000);
+  if(day!==this.budgetDay){this.budgetDay=day;this.budgetUsed=this.sql.exec<{count:number}>('SELECT COUNT(*) AS count FROM audit_logs WHERE time>=?',day*86400000).one().count;this.recent.clear();}
+  if(this.budgetUsed>=1000)return;
+  const signature=[e.playerId,e.event,e.details.code,e.details.reason].join(':');
+  if(e.event!=='submit_result'&&e.time-(this.recent.get(signature)??0)<60000)return;
+  this.recent.set(signature,e.time);
   this.sql.exec('INSERT INTO audit_logs(id,time,level,event,action,player,room,request_id,data) VALUES(?,?,?,?,?,?,?,?,?)',e.id,e.time,e.level,e.event,e.action,e.player??'',e.room??'',e.requestId,JSON.stringify(e));
+  this.budgetUsed++;
   this.observe(e);
   if(++this.insertCount%32===0||Date.now()-this.cleanedAt>60000){this.cleanedAt=Date.now();this.sql.exec('DELETE FROM audit_logs WHERE time<?',Date.now()-AUDIT_RETENTION_MS);this.sql.exec('DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs ORDER BY time DESC LIMIT -1 OFFSET ?)',AUDIT_MAX_ROWS);}
  }
@@ -81,7 +94,6 @@ export class AuditStore{
   const q=(url.searchParams.get('q')??'').slice(0,120),level=url.searchParams.get('level')??'',status=url.searchParams.get('status')??'',before=Number(url.searchParams.get('before'))||Date.now()+1;
   const limit=Math.min(500,Math.max(1,Number(url.searchParams.get('limit'))||100));
   const beforeId=url.searchParams.get('beforeId')??'zzzz';
-  this.sql.exec('DELETE FROM audit_logs WHERE time<?',Date.now()-AUDIT_RETENTION_MS);
   const rows=this.sql.exec<{data:string;status:string;note:string}>('SELECT data,status,note FROM audit_logs WHERE (time<? OR (time=? AND id<?)) AND time>? AND (?=\'\' OR level=?) AND (?=\'\' OR status=?) AND (?=\'\' OR player LIKE ? OR room LIKE ? OR request_id LIKE ? OR data LIKE ?) ORDER BY time DESC,id DESC LIMIT ?',before,before,beforeId,Date.now()-AUDIT_RETENTION_MS,level,level,status,status,q,`%${q}%`,`%${q}%`,`%${q}%`,`%${q}%`,limit).toArray();
   const logs=rows.map(row=>{
    const e={...JSON.parse(row.data),status:row.status,note:row.note} as AuditEvent;
@@ -92,6 +104,7 @@ export class AuditStore{
    return e;
   });
   const counts=this.sql.exec<{level:string;count:number}>('SELECT level,COUNT(*) AS count FROM audit_logs GROUP BY level').toArray();
-  return Response.json({logs,counts,nextBefore:logs.length===limit?logs[logs.length-1].time:null,nextBeforeId:logs.length===limit?logs[logs.length-1].id:null,retentionDays:7,maxRows:AUDIT_MAX_ROWS},{headers:{'Cache-Control':'no-store'}});
+  const inventory=this.sql.exec("SELECT substr(key,1,instr(key,':')-1) AS kind,COUNT(*) AS count FROM records GROUP BY kind").toArray();
+  return Response.json({logs,counts,inventory,nextBefore:logs.length===limit?logs[logs.length-1].time:null,nextBeforeId:logs.length===limit?logs[logs.length-1].id:null,retentionDays:7,maxRows:AUDIT_MAX_ROWS},{headers:{'Cache-Control':'no-store'}});
  }
 }

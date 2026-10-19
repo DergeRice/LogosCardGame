@@ -510,8 +510,8 @@ export class Game {
   this.send(p.socket, { type: 'ack', requestId: msg.requestId });this.broadcast(r);
  }
  handle(p: Player, msg: Record<string, unknown>) {
-  p.touchedAt = Date.now(); this.tick();
   if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'||msg.code==='AUDIO_FAILURE'?'warn':'info',msg);}return;}
+  p.touchedAt = Date.now(); this.tick();
   if(msg.type!=='ping')this.audit(p,'request','info',msg);
   if(msg.type==='ranking')return this.community.ranking(p,msg.tier);
   if(msg.type==='community')return this.community.send(p);
