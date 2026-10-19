@@ -15,3 +15,7 @@
    unopened front hidden explicitly so its empty surface cannot cover the back. */
 .reward-flip:not(.is-revealed) .reward-card-front{visibility:hidden}
 .reward-flip.is-revealed .reward-card-back{visibility:hidden}
+/* The offline status must not cover or intercept the local animation trial. */
+.shell:has(.store-reward-modal)>.connection-banner{visibility:hidden;pointer-events:none}
+.reward-card-grid:has(>.reward-flip:only-child){grid-template-columns:120px;justify-content:center}
+.reward-card-front>.item-glyph{display:grid;place-items:center;height:60px;line-height:1;flex:none}
