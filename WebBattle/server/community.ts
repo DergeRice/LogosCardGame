@@ -1,3 +1,4 @@
+import {migrateEmoteCatalog} from '../shared/store.js';
 import {BASIC_EMOTES,emoteSlots,type EmoteSlots} from '../shared/emotes.js';
 import {randomInt,randomUUID} from 'node:crypto';
 import type {Game} from './game.js';
@@ -10,7 +11,7 @@ export class Community {
  records=new Map<string,CommunityRecord>();invites=new Map<string,CommunityInvite>();
  constructor(private game:Game){}
  id(p:Player){return p.accountId??p.id;}
- record(p:Player){const id=this.id(p);let record=this.records.get(id);if(!record){const initial=defaultHubSave();initial.gold=0;initial.diamonds=0;record={id,name:p.name,avatar:p.avatar,friends:[],incoming:[],store:initial,results:[]};this.records.set(id,record);}record.store.board??='board-classic';record.store.emote??='emote-smile';for(const e of BASIC_EMOTES)if(!record.store.owned.includes(e.id))record.store.owned.push(e.id);record.store.emotes=emoteSlots(record.store);if(!record.store.owned.includes('board-classic'))record.store.owned.push('board-classic');record.rating=p.rating;record.name=p.name;record.avatar=p.avatar;return record;}
+ record(p:Player){const id=this.id(p);let record=this.records.get(id);if(!record){const initial=defaultHubSave();initial.gold=0;initial.diamonds=0;record={id,name:p.name,avatar:p.avatar,friends:[],incoming:[],store:initial,results:[]};this.records.set(id,record);}record.store.board??='board-classic';record.store.emote??='emote-smile';migrateEmoteCatalog(record.store);if(!record.store.owned.includes('board-classic'))record.store.owned.push('board-classic');record.rating=p.rating;record.name=p.name;record.avatar=p.avatar;return record;}
  player(id:string){return [...this.game.sessions.values()].find(p=>this.id(p)===id);}
  peer(id:string):Peer|undefined{const p=this.player(id),r=p?this.record(p):this.records.get(id);return r?{id,name:r.name,avatar:r.avatar,online:Boolean(p?.socket?.readyState===1)}:undefined;}
  view(p:Player):CommunityView{const r=this.record(p);return {rankGames:r.rankGames??0,friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}

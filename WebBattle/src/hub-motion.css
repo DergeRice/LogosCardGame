@@ -1,0 +1,36 @@
+.hub-content{animation:hub-page-in .24s cubic-bezier(.2,.7,.2,1) both}
+.hub-tabs>button{transition:background .18s ease,box-shadow .18s ease,transform .18s ease;color:inherit}
+.hub-tabs>button:active{transform:scale(.94)}
+.hub-tabs>button>span{display:grid;place-items:center;width:36px;height:36px;flex:none;line-height:1}
+.hub-tabs .game-control-icon{width:34px;height:34px;max-width:100%;max-height:100%;transform:none;filter:none;opacity:1}
+.hub-tabs>button[aria-selected=true] .game-control-icon{transform:none;filter:none}
+:is(.hub-modal-backdrop,.community-backdrop,.settings-backdrop,.special-backdrop,.decision-backdrop,.hub-mobile-room-backdrop,.account-backdrop){animation:popup-veil-in .18s ease-out both}
+:is(.hub-modal,.community-modal,.game-settings,.special-panel,.go-dialog,.hub-mobile-room-window,.account-dialog){animation:popup-panel-in .23s cubic-bezier(.18,.75,.25,1) both}
+.emote-owned-list .reaction-image{width:52px;height:52px;flex:none;display:grid;place-items:center}.emote-slots .reaction-image{width:46px;height:46px;display:grid;place-items:center}
+.emote-owned-list .reaction-image>img,.emote-slots .reaction-image>img{display:block;width:100%;height:100%;object-fit:contain;transform:none}
+.battle .reaction-bubble{overflow:visible}
+.battle .reaction-bubble .reaction-image{display:block;width:100%;height:100%;max-width:none;max-height:none}
+.battle .reaction-bubble .reaction-image>img{object-fit:contain;width:100%;height:100%;display:block}
+@keyframes hub-page-in{from{opacity:0}to{opacity:1}}
+@keyframes popup-veil-in{from{opacity:0}to{opacity:1}}
+@keyframes popup-panel-in{from{opacity:0;scale:.96;translate:0 6px}to{opacity:1;scale:1;translate:0 0}}
+@media(orientation:landscape) and (max-height:550px){.hub-tabs>button>span{width:27px;height:27px}.hub-tabs .game-control-icon{width:26px;height:26px}}
+@media(prefers-reduced-motion:reduce){.hub-content,:is(.hub-modal-backdrop,.community-backdrop,.settings-backdrop,.special-backdrop,.decision-backdrop,.hub-mobile-room-backdrop,.account-backdrop),:is(.hub-modal,.community-modal,.game-settings,.special-panel,.go-dialog,.hub-mobile-room-window,.account-dialog){animation:none}.hub-tabs>button{transition:none}}
+
+.community-backdrop{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);right:auto;bottom:auto;box-sizing:border-box}
+.community-backdrop .community-modal{max-height:calc(var(--game-height,100dvh) - 24px)}
+.special-backdrop>section{animation:popup-panel-in .23s cubic-bezier(.18,.75,.25,1) both}
+@media(prefers-reduced-motion:reduce){.special-backdrop>section{animation:none}}
+.game-hub .emote-slots .reaction-image{width:50px;height:50px}
+.game-hub .emote-owned-list .reaction-image{width:60px;height:60px}
+.game-hub .emote-owned-list{grid-auto-rows:112px}
+@media(orientation:landscape) and (max-height:550px){
+ .community-backdrop .emote-equip-modal{padding:10px 14px;max-height:calc(var(--game-height,100dvh) - 24px);gap:0}
+ .emote-equip-modal h2{font-size:16px}.emote-equip-modal>p{display:none}
+ .emote-equip-modal .emote-slots{margin:6px 0;gap:8px}.game-hub .emote-equip-modal .emote-slots>button{width:52px;height:50px;min-height:50px}
+ .game-hub .emote-equip-modal .emote-slots .reaction-image{width:42px;height:42px}
+ .game-hub .emote-owned-list{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:84px;flex:1;min-height:68px}
+ .game-hub .emote-owned-list>button{min-height:84px;padding:3px;gap:1px}
+ .game-hub .emote-owned-list .reaction-image{width:46px;height:46px}
+ .emote-equip-actions{padding-top:6px;flex:none}.emote-equip-actions button{padding:6px 10px;font-size:11px}
+}

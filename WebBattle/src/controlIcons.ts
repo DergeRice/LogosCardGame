@@ -1,1 +1,1 @@
-export const CONTROL_ICONS={show:'/icons/controls/show.png',hand:'/icons/controls/card-hand.png',count:'/icons/controls/card-count.png',chat:'/icons/controls/chat.png'} as const;
+export const CONTROL_ICONS={show:'/icons/controls/show-cards.png',hand:'/icons/controls/hand-cards.png',count:'/icons/controls/card.png',chat:'/icons/controls/emote-chat.png',home:'/icons/controls/home.png',ranking:'/icons/controls/ranking.png',friends:'/icons/controls/friends.png',shop:'/icons/controls/shop.png',profile:'/icons/controls/profile.png'} as const;

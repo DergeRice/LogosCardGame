@@ -1,15 +1,17 @@
-export const BASIC_EMOTES=[
- {id:'emote-mistake',type:'emote',name:'실수',image:'😅',basic:true},
- {id:'emote-angry',type:'emote',name:'화남',image:'😠',basic:true},
- {id:'emote-surprise',type:'emote',name:'놀람',image:'😲',basic:true},
- {id:'emote-taunt',type:'emote',name:'도발',image:'😏',basic:true},
- {id:'emote-think',type:'emote',name:'고민 중',image:'🤔',basic:true},
- {id:'emote-hello',type:'emote',name:'인사',image:'👋',basic:true},
- {id:'emote-thanks',type:'emote',name:'감사',image:'🙏',basic:true},
- {id:'emote-yawn',type:'emote',name:'하품',image:'🥱',basic:true},
- {id:'emote-cheer',type:'emote',name:'응원',image:'🙌',basic:true},
- {id:'emote-love',type:'emote',name:'사랑',image:'❤️',basic:true},
+export const NARO_EMOTES=[
+ {id:'emote-mistake',type:'emote',name:'실수',image:'/emotes/naro/mistake.png',basic:false,dustOnly:true},
+ {id:'emote-angry',type:'emote',name:'화남',image:'/emotes/naro/angry.png',basic:true},
+ {id:'emote-surprise',type:'emote',name:'놀람',image:'/emotes/naro/surprise.png',basic:true},
+ {id:'emote-taunt',type:'emote',name:'도발',image:'/emotes/naro/taunt.png',basic:false,dustOnly:true},
+ {id:'emote-think',type:'emote',name:'고민 중',image:'/emotes/naro/think.png',basic:true},
+ {id:'emote-hello',type:'emote',name:'인사',image:'/emotes/naro/hello.png',basic:true},
+ {id:'emote-thanks',type:'emote',name:'감사',image:'/emotes/naro/thanks.png',basic:true},
+ {id:'emote-yawn',type:'emote',name:'하품',image:'/emotes/naro/yawn.png',basic:false,dustOnly:true},
+ {id:'emote-cheer',type:'emote',name:'응원',image:'/emotes/naro/cheer.png',basic:true},
+ {id:'emote-love',type:'emote',name:'사랑',image:'/emotes/naro/love.png',basic:false,dustOnly:true},
 ] as const;
+export const DUST_EMOTE_IDS=['emote-mistake','emote-taunt','emote-yawn','emote-love'];
+export const BASIC_EMOTES=NARO_EMOTES.filter(e=>e.basic);
 export const DEFAULT_EMOTE_SLOTS=['emote-hello','emote-cheer','emote-surprise','emote-think'];
 export type EmoteSlots=(string|null)[];
 export function emoteSlots(save:{emotes?:EmoteSlots;emote?:string;owned:string[]}):EmoteSlots{

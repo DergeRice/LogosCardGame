@@ -13,7 +13,7 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
  const [balance,setBalance]=useState(Math.max(0,(player.coins??0)-(player.coinReward??0)));
  const wallet=useRef<HTMLDivElement>(null),origin=useRef<HTMLDivElement>(null);
  useEffect(()=>{const start=setTimeout(()=>setRating(player.rating),180),end=setTimeout(()=>setPhase(p=>p==='rank'?'ready':p),1700);return()=>{clearTimeout(start);clearTimeout(end)}},[player.rating]);
- const reward=player.coinReward??0,placed=(player.rankGames??0)>=3;
+ const reward=player.coinReward??0;
  useEffect(()=>{if(phase==='credited'&&reward>0)return scheduleScoreChimes(performance.now(),1000,12)},[phase,reward]);
  function collect(){if(phase==='rank'||phase==='ready')playGameSfx('score');setPhase(p=>p==='rank'||p==='ready'?'flight':p)}
  function arrive(){setBalance(player.coins??0);setPhase('credited')}
@@ -25,9 +25,9 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
   </div>
   <header className="result-heading"><h1>{room.winner===room.you?'승리':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?'함께 마무리한 한 판':`${winner}의 승리!`}</p></header>
   <section className={`result-rank ${player.ratingDelta<0?'rating-down':'rating-up'}`} aria-label="내 랭크">
-   <span>{placed?leagueFor(player.rating).label:'배치 중'}</span>
+   <span>{leagueFor(player.rating).label}</span>
    <strong><AnimatedNumber value={rating} duration={1400} testId="result-rating"/></strong>
-   <small>{placed?`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`:`3판 이후 집계됩니다. (${player.rankGames??0}/3)`}</small>
+   <small>{`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`} </small>
   </section>
   <div className="result-gold-origin" ref={origin} aria-label={`획득 골드 ${reward}`}><i aria-hidden="true">●</i><b>+{reward.toLocaleString()}</b><span>골드</span></div>
   <button className="result-tap" disabled={phase==='flight'||phase==='credited'} onClick={e=>{e.stopPropagation();collect()}}>{phase==='credited'?'보상 받음':phase==='flight'?'':'탭하여 보상 받기'}</button>
