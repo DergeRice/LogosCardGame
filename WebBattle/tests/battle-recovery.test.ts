@@ -6,13 +6,24 @@ import {aiGoChoice,aiStopChance} from '../server/aiStrategy.js';
 import {scoreChimeDelays} from '../src/gameSfx.js';
 const socket=()=>({readyState:1,bufferedAmount:0,messages:[] as any[],send(raw:string){this.messages.push(JSON.parse(raw))},close(){},terminate(){}});
 function fixture(){const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.deal(r,5);game.begin(r);return{game,a,b,r}}
-test('exhaustion never grants selected cards to humans, old clients or AI, including after restart',t=>{
- let now=100000;t.mock.method(Date,'now',()=>now);const{game,a,b,r}=fixture(),before=a.hand.map(c=>c.id),version=a.handVersion;
- r.deck=[];b.ai='normal';b.hand=[];b.nextAI=now;
- for(const kind of ['pronoun','count','verb','indefinite','article','rob'])game.handle(a,{type:'claimBasic',matchId:r.matchId,requestId:'old-'+kind,kind});
- assert.deepEqual(a.hand.map(c=>c.id),before);assert.equal(a.handVersion,version);assert.equal(a.score,0);
- for(let i=0;i<100;i++){now+=1000;game.tick();}assert.equal(b.hand.length,0);
- const fresh=new Game({minimumPlayers:2});restore(fresh,snapshot(game));const saved=fresh.sessions.get(a.token)!;fresh.claimBasic(saved,{matchId:r.matchId,requestId:'restart',kind:'verb'});assert.deepEqual(saved.hand.map(c=>c.id),before);
+test('each player selects exactly one rescue card per match, including preposition and restart',t=>{
+ let now=100000;t.mock.method(Date,'now',()=>now);const{game,a,b,r}=fixture(),before=a.hand.length;
+ const msg={type:'claimBasic',matchId:r.matchId,requestId:'rescue-once',kind:'preposition'};
+ game.handle(a,msg);assert.equal(a.hand.length,before);r.deck=[];game.handle(a,msg);assert.equal(a.hand.length,before+1);assert.equal(a.hand.at(-1)!.kind,'preposition');assert.equal(a.basicSupplyUsed,true);game.handle(a,msg);assert.equal(a.hand.length,before+1);
+ now+=300000;game.claimBasic(a,{...msg,requestId:'new-id',kind:'verb'});assert.equal(a.hand.length,before+1);
+ const fresh=new Game({minimumPlayers:2});restore(fresh,snapshot(game));const saved=fresh.sessions.get(a.token)!;fresh.claimBasic(saved,{...msg,requestId:'restart',kind:'pronoun'});assert.equal(saved.hand.length,before+1);assert.equal(fresh.view(fresh.rooms.get(r.code)!,saved).basicSupplyUsed,true);
+ // Legacy records that already received a supply are counted as spent too.
+ b.basicSupplyAt=123;b.basicSupplyUsed=undefined;game.claimBasic(b,{...msg,requestId:'legacy'});assert.equal(b.hand.length,before);
+ game.resetPlayer(a);assert.equal(a.basicSupplyUsed,false);assert.equal(a.basicSupplyAt,0);
+});
+
+test('AI receives at most one rescue card after exhaustion',t=>{
+ let now=100000;t.mock.method(Date,'now',()=>now);const{game,b,r}=fixture();r.deck=[];b.ai='normal';b.hand=[];b.nextAI=now;for(let i=0;i<60;i++){now+=1000;game.tick();}assert.equal(b.basicSupplyUsed,true);assert.equal(b.hand.length,1);
+});
+
+test('losses increase 50 percent, score 10 activates a half-loss shield, and settlement is idempotent',()=>{
+ for(const score of [0,9,10,11]){const{game,a,b,r}=fixture();game.community.record(a).rankGames=3;game.community.record(b).rankGames=3;a.score=score;b.score=50;game.finish(r,'fixture');assert.equal(a.ratingDelta,score>=10?-9:-18);assert.equal(a.ratingShield,score>=10);assert.equal(b.ratingDelta,12);const saved=a.rating;game.finish(r,'duplicate');assert.equal(a.rating,saved);const fresh=new Game();restore(fresh,snapshot(game));assert.equal(fresh.sessions.get(a.token)!.ratingShield,score>=10);}
+ const{game,a,b,r}=fixture();a.score=10;b.score=20;game.finish(r,'placement');assert.equal(a.ratingDelta,0);assert.equal(a.ratingShield,false);
 });
 
 test('human and AI third Go waits for another score without manufactured points; second Go continues',()=>{

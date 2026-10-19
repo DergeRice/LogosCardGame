@@ -29,6 +29,7 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
    <TierBadge tier={leagueFor(player.rating).tier}/><span>{leagueFor(player.rating).label}</span>
    <strong><AnimatedNumber value={rating} duration={1400} testId="result-rating"/></strong>
    <small>{`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`} </small>
+   {player.ratingShield&&<div className="rating-shield" role="status"><b>🛡 보호막!</b><span>레이팅 감소 50%</span></div>}
   </section>
   <div className="result-gold-origin" ref={origin} aria-label={`획득 골드 ${reward}`}><i aria-hidden="true">●</i><b>+{reward.toLocaleString()}</b><span>골드</span></div>
   <button className="result-tap" disabled={phase==='flight'||phase==='credited'} onClick={e=>{e.stopPropagation();collect()}}>{phase==='credited'?'보상 받음':phase==='flight'?'':'탭하여 보상 받기'}</button>

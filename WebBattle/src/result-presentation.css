@@ -20,3 +20,7 @@
  .shell .result-stage .result-actions>button{height:34px;min-height:34px;padding:6px 12px;font-size:12px}
  .shell .result-stage .result-companions{flex:1;min-height:0}
 }
+.result-rank{position:relative}.rating-shield{display:flex;align-items:center;justify-content:center;gap:8px;color:#397a74;font-size:12px;background:#e1f3ed;border:1px solid #a7cfc0;border-radius:16px;padding:5px 11px;animation:shield-pop .45s ease-out both}.rating-shield b{font-size:14px}.rating-shield span{font-size:10px}
+@keyframes shield-pop{from{opacity:0;scale:.75}to{opacity:1;scale:1}}
+@media(orientation:landscape) and (max-height:550px){.rating-shield{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);white-space:nowrap;gap:4px;padding:4px 8px;flex-direction:column}.rating-shield b{font-size:12px}.rating-shield span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.rating-shield{animation:none}}
