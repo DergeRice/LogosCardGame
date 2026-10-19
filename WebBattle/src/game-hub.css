@@ -13,3 +13,5 @@
 /* Desktop room dock: previous 380x500 ceiling -> 570x750; fit short viewports. */
 .game-hub[data-hub-tab=home][data-compact=false] .hub-home{grid-template-columns:minmax(0,1fr) minmax(0,570px)}
 .game-hub[data-hub-tab=home][data-compact=false] .hub-room-dock{height:min(750px,100%)}
+
+.hub-room-list .hub-empty>.game-control-icon{width:52px;height:52px;margin:0 auto 12px;object-fit:contain;opacity:.8}

@@ -36,5 +36,16 @@ export class Community {
 
  ranking(p:Player,tier:unknown){if(!Number.isInteger(tier)||Number(tier)<0||Number(tier)>7)return this.game.fail(p,'올바른 리그를 선택해 주세요.');for(const player of this.game.sessions.values())this.record(player);const rows=[...this.records.values()].filter(r=>(r.rankGames??0)>=3&&leagueFor(r.rating??1000).tier===tier).map(r=>({id:r.id,name:r.name,avatar:r.avatar,rating:r.rating??1000})).sort((a,b)=>b.rating-a.rating||a.id.localeCompare(b.id));this.game.send(p.socket,{type:'ranking',tier,players:rows.slice(0,100),total:rows.length});}
  grantGold(name:string,amount:number,grantId:string,playerId?:string){const candidates=[...this.game.sessions.values()].filter(p=>!p.ai&&p.name===name&&(!playerId||p.id===playerId));if(candidates.length!==1)throw Error(`대상 ${candidates.length}명: 고유한 닉네임/ID 확인이 필요합니다.`);const p=candidates[0],record=this.record(p);if(!Number.isSafeInteger(amount)||amount<0||amount>99999999||!grantId||grantId.length>80)throw Error('잘못된 지급 요청');if(record.grants?.includes(grantId))return {id:p.id,name:p.name,gold:p.coins,duplicate:true};p.coins=amount;const account=[...this.game.accounts.values()].find(a=>a.id===p.accountId);if(account)account.coins=amount;record.grants=[...(record.grants??[]),grantId].slice(-50);this.game.audit(p,'admin_gold_grant','info',{reason:`관리자 테스트 골드 잔액 ${amount}`,requestId:grantId});this.send(p);return {id:p.id,name:p.name,gold:p.coins,duplicate:false};}
+ seedTestFriends(name:string,grantId:string,playerId?:string){
+  if(typeof name!=='string'||!grantId||typeof grantId!=='string'||grantId.length>80)throw Error('잘못된 테스트 친구 요청');
+  const candidates=[...this.game.sessions.values()].filter(p=>!p.ai&&p.name===name&&(!playerId||p.id===playerId));
+  if(candidates.length!==1)throw Error(`대상 ${candidates.length}명: 고유한 닉네임/ID 확인이 필요합니다.`);
+  const p=candidates[0],record=this.record(p),seeds=[['naro','테스트 나로','pronoun'],['tori','테스트 토리','verb'],['bora','테스트 보라','adjective'],['mori','테스트 모리','count'],['ruri','테스트 루리','mass']] as const;
+  const response=(added:number,duplicate:boolean)=>({id:p.id,name:p.name,added,duplicate,total:record.friends.length,friends:this.view(p).friends.filter(f=>f.id.startsWith('test-friend-'))});
+  if(record.grants?.includes(grantId))return response(0,true);
+  const missing=seeds.filter(([key])=>!record.friends.includes('test-friend-'+key));if(record.friends.length+missing.length>100)throw Error('친구 목록이 가득 찼어요.');
+  for(const [key,name,avatar]of seeds){const id='test-friend-'+key;let friend=this.records.get(id);if(!friend){friend={id,name,avatar,friends:[],incoming:[],store:defaultHubSave(),results:[],rankGames:0};this.records.set(id,friend)}if(!friend.friends.includes(record.id))friend.friends.push(record.id);if(!record.friends.includes(id))record.friends.push(id);}
+  record.grants=[...(record.grants??[]),grantId].slice(-50);this.game.audit(p,'admin_test_friends_grant','info',{reason:`테스트 친구 ${missing.length}명 추가`,requestId:grantId});this.send(p);return response(missing.length,false);
+ }
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}
 }
