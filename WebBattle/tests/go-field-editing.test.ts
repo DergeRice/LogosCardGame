@@ -13,10 +13,9 @@ test('controlled Go fixture: scored field can be reordered, submitted and return
  const submit=(order=ids)=>{now+=1600;game.action(a,{requestId:randomUUID(),matchId:r.matchId,handVersion:a.handVersion,fieldVersion:a.fieldVersion,cards:order});};
  submit();assert.equal(a.score,26);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});
  game.syncDraft(a,{matchId:r.matchId,handVersion:a.handVersion,cards:ids});assert.deepEqual(a.draftIds,ids);
- submit();assert.equal(a.judgment!.valid,true);assert.equal(a.judgment!.points,3);assert.equal(a.score,29); // The new Go bonus is credited once.
- if(r.decision)game.choice(a,{matchId:r.matchId,decisionId:r.decision.id,choice:'go'});
+ submit();assert.equal(a.score,26);assert.equal(r.decision,undefined); // Unchanged field cannot farm Go bonuses.
  r.leaderId=undefined; // Isolate anti-replay from a further Go benefit, not a normal-play score validation.
- const before=a.score;submit();assert.equal(a.judgment!.valid,true);assert.equal(a.judgment!.accepted,false);assert.equal(a.score,before);
+ const before=a.score;submit();assert.equal(a.judgment!.valid,true);assert.equal(a.score,before);
  const recall={requestId:'recall',matchId:r.matchId,handVersion:a.handVersion,fieldVersion:a.fieldVersion,cards:[ids[0]]};game.recallCards(a,recall);game.recallCards(a,recall);
  assert.equal(a.hand.filter(c=>c.id===ids[0]).length,1);assert.ok(!fieldCards(a).some(c=>c.id===ids[0]));assert.ok(!r.discard.some(c=>c.id===ids[0]));assert.equal(a.score,before);
  const stored=snapshot(game),restored=new Game();restore(restored,stored);assert.deepEqual(restored.sessions.get(a.token)!.scoreClaims,a.scoreClaims);
