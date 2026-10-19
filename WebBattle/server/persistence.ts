@@ -4,10 +4,14 @@ import {GUEST_RETENTION_MS} from '../shared/progression.js';
 import {cardEffect} from '../shared/rules.js';
 import { randomUUID } from 'node:crypto';
 import { Game } from './game.js';
+import {thinkMs} from './ai.js';
 type Player=ReturnType<Game['newPlayer']>;
 type Room=Game['rooms'] extends Map<string,infer R>?R:never;
-type StoredPlayer=Omit<Player,'socket'|'seen'> & {seen:string[]};
-type StoredRoom=Omit<Room,'players'> & {players:string[]};
+type StoredPlayer=Omit<Player,'socket'|'seen'|'nextAI'|'reaction'|'reactionAt'|'lastAction'> & {seen:string[]};
+type StoredRoom=Omit<Room,'players'|'log'> & {players:string[]};
+// Guest expiry can be extended by at most 15 minutes after restart. Never expire
+// a guest early just to avoid persisting every ordinary activity timestamp.
+export const ACTIVITY_CHECKPOINT_MS=15*60_000;
 
 // One row per player/room: no live sockets or browser-accessible session secrets.
 export function snapshot(game:Game):Map<string,string>{
@@ -15,11 +19,12 @@ export function snapshot(game:Game):Map<string,string>{
  for(const p of game.sessions.values())players.set(p.id,p);
  for(const r of game.rooms.values()){
   for(const p of r.players)players.set(p.id,p);
-  records.set('room:'+r.code,JSON.stringify({...r,players:r.players.map(p=>p.id)} satisfies StoredRoom));
+  const {log,...state}=r;
+  records.set('room:'+r.code,JSON.stringify({...state,players:r.players.map(p=>p.id)} satisfies StoredRoom));
  }
  for(const p of players.values()){
-  const {socket,seen,...rest}=p;
-  records.set('player:'+p.id,JSON.stringify({...rest,seen:[...seen]} satisfies StoredPlayer));
+  const {socket,seen,nextAI,reaction,reactionAt,lastAction,...rest}=p;
+  records.set('player:'+p.id,JSON.stringify({...rest,touchedAt:Math.ceil(p.touchedAt/ACTIVITY_CHECKPOINT_MS)*ACTIVITY_CHECKPOINT_MS,seen:[...seen]} satisfies StoredPlayer));
  }
  for(const [key,account] of game.accounts)records.set('account:'+key,JSON.stringify(account));
  for(const [hash,session] of game.accountSessions)records.set('auth:'+hash,JSON.stringify(session));
@@ -36,7 +41,9 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
   if(key.startsWith('auth:'))game.accountSessions.set(key.slice(5),JSON.parse(json));
  }
  for(const [key,json] of records)if(key.startsWith('player:')){
-  const p=JSON.parse(json) as StoredPlayer,player={...p,seen:new Set(p.seen)};
+  const p=JSON.parse(json) as StoredPlayer;
+  // Ignore old runtime-only fields too; legacy rows migrate on the next commit.
+  const player:Player={...p,seen:new Set(p.seen),nextAI:p.ai?Date.now()+thinkMs(p.ai):0,reaction:undefined,reactionAt:Date.now(),lastAction:undefined};
   const keep=(c:typeof p.hand[number])=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2;
   const hand=player.hand.filter(keep);
   if(hand.length!==player.hand.length){player.hand=hand;player.handVersion++;player.draftIds=(player.draftIds??[]).filter(id=>hand.some(c=>c.id===id));}
@@ -62,7 +69,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
   r.deck=r.deck.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
   r.discard=r.discard.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
   if(r.exchange){const owners=[players.get(r.exchange.fromId),players.get(r.exchange.toId)];if(owners.some((p,i)=>!p||![...p.hand,...(p.playedSentences??[]).flat(),...(p.lastPlayed??[])].some(c=>c.id===(i?r.exchange!.wantedId:r.exchange!.offerId))))r.exchange=undefined;}
-  game.rooms.set(r.code,{...r,players:r.players.map(id=>players.get(id)!).filter(Boolean)});
+  game.rooms.set(r.code,{...r,log:[],players:r.players.map(id=>players.get(id)!).filter(Boolean)});
  }
  return players;
 }

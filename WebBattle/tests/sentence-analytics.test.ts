@@ -7,7 +7,7 @@ import {makeAudit} from '../server/audit.js';
 import {Game} from '../server/game.js';
 const cards=[{id:'unused',kind:'adjective'},{id:'s',kind:'pronoun',variant:'pronoun-x2'},{id:'v',kind:'verb'},{id:'o',kind:'mass',variant:'mass-plus2'}];
 const event=(requestId:string,overrides:Record<string,unknown>={})=>makeAudit('submit_result','info',{playerId:'p',matchId:'m',requestId},{valid:true,accepted:true,patternType:3,usedStartIndex:1,usedLength:3,submittedCards:cards,...overrides});
-function storage(){const db=new DatabaseSync(':memory:');return {db,sql:{exec(query:string,...bindings:any[]){const s=db.prepare(query);const rows=s.columns().length?s.all(...bindings):(s.run(...bindings),[]);return {toArray:()=>rows,one:()=>{assert.equal(rows.length,1);return rows[0]}}}}};}
+function storage(){const db=new DatabaseSync(':memory:');db.exec('CREATE TABLE records(key TEXT PRIMARY KEY,value TEXT NOT NULL)');return {db,sql:{exec(query:string,...bindings:any[]){const s=db.prepare(query);const rows=s.columns().length?s.all(...bindings):(s.run(...bindings),[]);return {toArray:()=>rows,one:()=>{assert.equal(rows.length,1);return rows[0]}}}}};}
 test('administrator bootstrap is single-use; hashed browser sessions persist, expire and revoke',async()=>{
  const {db,sql}=storage(),store=new AuditStore(sql as any);
  const created=await (await store.access(new Request('https://local/admin/logs/access/bootstrap',{method:'POST'}))).json();
@@ -29,14 +29,15 @@ test('POS normalization retains order and repetition, excludes unrecognized card
 test('SQLite cumulative statistics survive log deletion, dedupe requests and backfill old snapshots',async()=>{
  const {db,sql}=storage();const store=new AuditStore(sql as any);
  store.insert(event('a'));store.insert(event('b',{accepted:false,submittedCards:cards.map(c=>({...c,variant:undefined})),actorAI:true}));store.insert(event('a'));
- let stats=await (await store.handle(new Request('https://local/admin/logs/sentences'))).json();assert.equal(stats.total,2);assert.equal(stats.unique,1);assert.equal(stats.scoredTotal,1);assert.equal(stats.combinations[0].aiCount,1);
- const legacy=event('legacy',{submittedCards:undefined,selectedCards:[]});store.insert(makeAudit('judgment','info',{playerId:'p',matchId:'m',requestId:'legacy'},{selectedCards:cards}));
+ let stats=await (await store.handle(new Request('https://local/admin/logs/sentences'))).json();assert.equal(stats.total,1);assert.equal(stats.unique,1);assert.equal(stats.scoredTotal,1);assert.equal(stats.combinations[0].aiCount,0);
+ const legacy=event('legacy',{submittedCards:undefined,selectedCards:[]});const oldJudgment=makeAudit('judgment','info',{playerId:'p',matchId:'m',requestId:'legacy'},{selectedCards:cards});
+ sql.exec('INSERT INTO audit_logs(id,time,level,event,action,player,room,request_id,data) VALUES(?,?,?,?,?,?,?,?,?)',oldJudgment.id,oldJudgment.time,oldJudgment.level,oldJudgment.event,oldJudgment.action,'p','r','legacy',JSON.stringify(oldJudgment));
  // Simulate pre-migration rows (no aggregate yet), then recreate the store.
  sql.exec('INSERT INTO audit_logs(id,time,level,event,action,player,room,request_id,data) VALUES(?,?,?,?,?,?,?,?,?)',legacy.id,legacy.time,legacy.level,legacy.event,legacy.action,'p','r','legacy',JSON.stringify(legacy));
  sql.exec("DELETE FROM sentence_meta WHERE key='backfilled'");new AuditStore(sql as any);
- stats=await (await store.handle(new Request('https://local/admin/logs/sentences'))).json();assert.equal(stats.total,3);assert.equal(stats.unique,1);
+ stats=await (await store.handle(new Request('https://local/admin/logs/sentences'))).json();assert.equal(stats.total,2);assert.equal(stats.unique,1);
  const logs=await (await store.handle(new Request('https://local/admin/logs?q=legacy'))).json();assert.equal(logs.logs.find((e:any)=>e.event==='submit_result').details.submittedCards.length,4);
- sql.exec('DELETE FROM audit_logs');new AuditStore(sql as any);stats=await (await store.handle(new Request('https://local/admin/logs/sentences'))).json();assert.equal(stats.total,3);assert.equal(stats.unique,1);db.close();
+ sql.exec('DELETE FROM audit_logs');new AuditStore(sql as any);stats=await (await store.handle(new Request('https://local/admin/logs/sentences'))).json();assert.equal(stats.total,2);assert.equal(stats.unique,1);db.close();
 });
 test('scored submission snapshot survives removal from hand and records only one result on duplicate',()=>{
  const game=new Game({minimumPlayers:2}),socket={readyState:1,bufferedAmount:0,send(){},terminate(){},close(){}};

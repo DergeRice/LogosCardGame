@@ -28,3 +28,15 @@ test('cloud audit drops routine and AI traffic, throttles errors, and preserves 
   assert.deepEqual((await response.json()).inventory,[{kind:'account',count:1}]);
  }finally{db.close();}
 });
+
+
+test('disabled diagnostics skip legacy statistics backfill without deleting original logs',()=>{
+ const db=new DatabaseSync(':memory:');
+ const sql={exec(query:string,...args:any[]){const stmt=db.prepare(query);const rows=stmt.columns().length?stmt.all(...args):(stmt.run(...args),[]);return {toArray:()=>rows,one:()=>{assert.equal(rows.length,1);return rows[0];},[Symbol.iterator]:()=>rows[Symbol.iterator]()};}} as unknown as SqlStorage;
+ try{
+  new AuditStore(sql);db.exec("DELETE FROM sentence_meta WHERE key='backfilled'");
+  const event=makeAudit('submit_result','info',{playerId:'fixture',requestId:'old'},{valid:true,accepted:false,patternType:1,usedStartIndex:0,usedLength:1,submittedCards:[{id:'v',kind:'verb'}]});
+  db.prepare('INSERT INTO audit_logs(id,time,level,event,action,player,room,request_id,data) VALUES(?,?,?,?,?,?,?,?,?)').run(event.id,event.time,event.level,event.event,event.action,'fixture','','old',JSON.stringify(event));
+  const before=Number(db.prepare('SELECT total_changes() AS n').get()!.n);new AuditStore(sql,false);assert.equal(Number(db.prepare('SELECT total_changes() AS n').get()!.n),before);assert.equal(Number(db.prepare('SELECT COUNT(*) AS n FROM audit_logs').get()!.n),1);assert.equal(Number(db.prepare('SELECT COUNT(*) AS n FROM sentence_combos').get()!.n),0);
+ }finally{db.close();}
+});

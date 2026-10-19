@@ -9,7 +9,7 @@ export class AuditStore{
  private budgetDay=-1;
  private budgetUsed=0;
  private recent=new Map<string,number>();
- constructor(private readonly sql:SqlStorage){
+ constructor(private readonly sql:SqlStorage,backfill=true){
   sql.exec("CREATE TABLE IF NOT EXISTS audit_logs(id TEXT PRIMARY KEY,time INTEGER NOT NULL,level TEXT NOT NULL,event TEXT NOT NULL,action TEXT,player TEXT,room TEXT,request_id TEXT,data TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'open',note TEXT NOT NULL DEFAULT '')");
   sql.exec('CREATE INDEX IF NOT EXISTS audit_time ON audit_logs(time)');
   sql.exec('CREATE INDEX IF NOT EXISTS audit_request ON audit_logs(request_id,event)');
@@ -17,7 +17,7 @@ export class AuditStore{
   sql.exec('CREATE TABLE IF NOT EXISTS sentence_combos(key TEXT PRIMARY KEY,pattern INTEGER NOT NULL,sample TEXT NOT NULL,count INTEGER NOT NULL,scored INTEGER NOT NULL,ai INTEGER NOT NULL,unknown_actor INTEGER NOT NULL,first_at INTEGER NOT NULL,last_at INTEGER NOT NULL)');
   sql.exec('CREATE TABLE IF NOT EXISTS sentence_seen(key TEXT PRIMARY KEY)');
   sql.exec('CREATE TABLE IF NOT EXISTS sentence_meta(key TEXT PRIMARY KEY,value INTEGER NOT NULL)');
-  if(!sql.exec("SELECT value FROM sentence_meta WHERE key='backfilled'").toArray().length){
+  if(backfill&&!sql.exec("SELECT value FROM sentence_meta WHERE key='backfilled'").toArray().length){
    const history=sql.exec<{data:string}>('SELECT data FROM audit_logs ORDER BY time,id').toArray().map(r=>JSON.parse(r.data) as AuditEvent);
    const snapshots=new Map<string,AuditEvent>();
    for(const e of history)if(e.event==='judgment'||e.event==='request'&&e.action==='submit'&&!snapshots.has(submissionKey(e)))snapshots.set(submissionKey(e),e);

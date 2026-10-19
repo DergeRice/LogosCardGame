@@ -4,7 +4,7 @@ import { snapshot,restore,nextDeadline } from '../server/persistence.js';
 import {AuditStore} from './audit-store.js';
 import {adminAuthorized} from '../server/audit.js';
 import {verifyAppleCode} from '../server/appleAuth.js';
-interface Env { BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
+interface Env { BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
 type Attachment={id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
@@ -41,8 +41,8 @@ export class BattleArena extends DurableObject<Env>{
  queue:Promise<unknown>=Promise.resolve();outbox:(()=>void)[]|null=null;
  constructor(ctx:DurableObjectState,env:Env){
   super(ctx,env);
-  this.audit=new AuditStore(ctx.storage.sql);
-  this.game=new Game({auditSink:event=>this.audit.insert(event),durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,180,2,300)*1000});
+  this.audit=new AuditStore(ctx.storage.sql,env.CAPTURE_DIAGNOSTICS==='1');
+  this.game=new Game({auditSink:event=>{if(env.CAPTURE_DIAGNOSTICS==='1')try{this.audit.insert(event)}catch{/* Optional diagnostics must never cancel a game commit. */}},durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,180,2,300)*1000});
   ctx.blockConcurrencyWhile(async()=>{
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY,value TEXT NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');

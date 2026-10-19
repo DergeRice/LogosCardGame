@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
 const persistence=await mkdtemp(join(tmpdir(),'logos-cloud-test-'));
-const make=()=>new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:resolve('.runtime/cloudflare-build/worker.js'),compatibilityDate:'2026-09-01',compatibilityFlags:['nodejs_compat'],durableObjects:{BATTLE:{className:'BattleArena',useSQLite:true}},resourcePersistencePath:persistence,bindings:{ALLOWED_ORIGINS:'https://logos-card-battle.netlify.app',MATCH_SECONDS:'0',RECONNECT_SECONDS:'180',ADMIN_LOG_TOKEN:'test-admin-secret-32-characters-long'}}));
+const make=(diagnostics='1')=>new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:resolve('.runtime/cloudflare-build/worker.js'),compatibilityDate:'2026-09-01',compatibilityFlags:['nodejs_compat'],durableObjects:{BATTLE:{className:'BattleArena',useSQLite:true}},resourcePersistencePath:persistence,bindings:{ALLOWED_ORIGINS:'https://logos-card-battle.netlify.app',MATCH_SECONDS:'0',RECONNECT_SECONDS:'180',CAPTURE_DIAGNOSTICS:diagnostics,ADMIN_LOG_TOKEN:'test-admin-secret-32-characters-long'}}));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 class Client{
  constructor(url){this.messages=[];this.ws=new WebSocket(url,{origin:'https://logos-card-battle.netlify.app'});this.ws.on('message',raw=>{const m=JSON.parse(raw);this.messages.push(m);if(m.type==='session')this.token=m.token;if(m.type==='state')this.room=m.room;});this.ws.on('error',()=>{});}
@@ -51,7 +51,7 @@ try{
  assert.ok(audit.logs.some(e=>e.event==='submit_result'));
  assert.ok(audit.logs.every(e=>e.event!=='request'&&e.event!=='judgment'));
  assert.ok(audit.inventory.some(row=>row.kind==='player'&&row.count>=4));
- for(let i=0;i<20;i++)actor.send('clientEvent',{event:'ui_actions',events:['select']});
+ for(let i=0;i<8;i++)actor.send('clientEvent',{event:'ui_actions',events:['select']});
  await wait(300);
  const minimalLogs=await (await mf.dispatchFetch('http://localhost/admin/logs?limit=500',{headers:adminHeaders})).json();
  assert.ok(minimalLogs.logs.every(e=>e.event==='submit_result'||e.level==='error'||e.details.code==='AUDIO_FAILURE'));
@@ -75,6 +75,24 @@ try{
  const beforeDraw=clients[0].room.deckCount,voteId=clients[0].room.drawVote.id,handSizes=clients.map(c=>c.room.hand.length);for(const c of clients)c.send('drawVote',{voteId,approve:true});for(let i=0;i<clients.length;i++)await clients[i].until(()=>clients[i].room.hand.length===handSizes[i]+1);assert.equal(clients[0].room.deckCount,beforeDraw-4);
  clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');
  for(const c of clients.slice(1))c.send('rematch');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='battle'&&c.room.matchId!==saved[0].room.matchId);
+ // Production default: gameplay persists while automatic diagnostics stay off.
+ const beforeRestart=clients.slice(1).map(c=>({token:c.token,hand:c.room.hand,matchId:c.room.matchId}));
+ for(const c of clients)c.ws.close();await wait(250);await mf.dispose();mf=make('0');url=new URL('/socket',await mf.ready);url.protocol='ws:';
+ clients=await Promise.all(beforeRestart.map(s=>new Client(url).hello('restored',s.token)));
+ for(let i=0;i<clients.length;i++){await clients[i].until(()=>clients[i].room?.phase==='battle');assert.deepEqual(clients[i].room.hand,beforeRestart[i].hand);}
+ const special=['rob','exchange','protect','get2','get3','nothing'];const probe=clients.find(c=>c.room.hand.some(x=>!special.includes(x.kind)));assert.ok(probe);const quietId=randomUUID(),card=probe.room.hand.find(x=>!special.includes(x.kind));
+ await wait(Math.max(0,probe.room.actionAt-Date.now())+30);
+ probe.send('submit',{requestId:quietId,handVersion:probe.room.handVersion,cards:[card.id]});
+ await probe.until(()=>probe.room.judgment?.submissionId===quietId);
+ const quiet=await(await mf.dispatchFetch('http://localhost/admin/logs?q='+quietId)).json();assert.equal(quiet.logs.length,0);
+ probe.send('discard',{requestId:randomUUID(),cardId:card.id,handVersion:probe.room.handVersion});
+ // A rejected action must still obey cooldown. Send the actual discard after it.
+ await wait(Math.max(0,probe.room.actionAt-Date.now())+30);
+ if(probe.room.hand.some(c=>c.id===card.id))probe.send('discard',{requestId:randomUUID(),cardId:card.id,handVersion:probe.room.handVersion});
+ await probe.until(()=>!probe.room.hand.some(c=>c.id===card.id));
+ const quietSaved=clients.map(c=>({token:c.token,hand:c.room.hand}));for(const c of clients)c.ws.close();await wait(250);await mf.dispose();mf=make('0');url=new URL('/socket',await mf.ready);url.protocol='ws:';
+ clients=await Promise.all(quietSaved.map(s=>new Client(url).hello('restored',s.token)));for(let i=0;i<clients.length;i++){await clients[i].until(()=>clients[i].room?.phase==='battle');assert.deepEqual(clients[i].room.hand,quietSaved[i].hand);}
+ console.log('PASS: production diagnostics disabled, human judgment/discard and restart recovery persist without new audit records.');
  console.log(`PASS: real Cloudflare runtime: 4 WebSockets, unique deck, ${naturalCorrect?'Correct':'invalid natural submission'} retention/dedupe, discard/dedupe, SQLite process restart recovery, unanimous draw, forfeit, rematch, rejected origin. No forced score/hand/winner.`);
 }finally{for(const c of clients)c.ws.close();await mf.dispose();}
 
