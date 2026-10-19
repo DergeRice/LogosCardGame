@@ -1,4 +1,4 @@
-import {COSMETICS} from '../shared/store.js';
+import {emoteSlots,aiEmote,AI_EMOTE_LOADOUTS,type EmotionEvent} from '../shared/emotes.js';
 import {Community} from './community.js';
 import {availableGuestName,GUEST_NAME_COUNT} from '../shared/guestNames.js';
 import {matchGold} from '../shared/matchRewards.js';
@@ -11,10 +11,10 @@ import {fieldCards,canTransferCard} from '../shared/cardViews.js';
 import { randomInt, randomUUID, randomBytes, scryptSync, timingSafeEqual, createHash } from 'node:crypto';
 export interface GameSocket { readonly readyState: number; readonly bufferedAmount: number; send(data: string): void; close(code?: number, reason?: string): void; terminate(): void; }
 type WebSocket = GameSocket;
-import { judgeCards, DECK_FACES, RULES, REACTIONS, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
+import { judgeCards, DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 
-type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; calledGo?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
+type Player = { accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple';appleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = { resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
@@ -128,13 +128,13 @@ export class Game {
  }
  disconnected(p: Player, socket: WebSocket) { if (p.socket !== socket) return; p.socket = undefined; p.disconnectedAt = Date.now(); const r = p.room && this.rooms.get(p.room); if (r) this.broadcast(r); this.community.publish(); }
  view(r: Room, p: Player): RoomView {
-  const state:RoomView={ submittedSequences:p.submittedSequences??[],resultPlayers:r.resultPlayers,code: r.code, phase: r.phase, custom:r.custom, name:r.name, hostId:r.hostId, matchId: r.matchId, players: r.players.map(x => ({ id: x.id, socialId:x.ai?undefined:this.community.id(x), name: x.name, avatar: x.avatar, rating: x.rating, ratingDelta: x.ratingDelta, points: x.points, reward: x.reward, coins:x.coins??0,coinReward:x.coinReward??0,coinBase:x.coinBase,coinAdjustment:x.coinAdjustment,ratingMultiplier:1, baseReward:x.baseReward, opponentRating:x.opponentRating,rewardRatio:x.rewardRatio, calledGo:Boolean(x.calledGo), score: x.score, rankGames:x.ai?undefined:this.community.record(x).rankGames??0,ready: x.ready, rematch: x.rematch, connected: Boolean(x.ai || x.socket?.readyState === 1), handCount: x.hand.length, ai: Boolean(x.ai), difficulty:x.ai, disconnectedAt: x.disconnectedAt, lastPlayed:x.lastPlayed, playedSentences:x.playedSentences, lastAction:x.lastAction, reaction:x.reaction&&Date.now()-x.reaction.at<3000?x.reaction:undefined })), hand: ['battle', 'dealing'].includes(r.phase) ? p.hand : [], basicSupplyAt:p.basicSupplyAt??0, handVersion: p.handVersion, fieldVersion:p.fieldVersion??0, you: p.id, robNotices:p.robNotices, endsAt: r.endsAt, finalRound:r.finalRound, stageEndsAt: r.stageEndsAt, nextDealAt: r.nextDealAt, dealSerial: r.dealSerial, deckCount: r.deck.length, deckTotal: DECK_FACES.length, usedCards: r.discard, dealIntervalMs: this.dealMs, goCount: r.goCount, multiplier: 1, aiSetting:r.aiSetting, highScore: r.highScore, leaderId:r.leaderId, drawVote:r.drawVote, testMode:r.testMode, decision: r.decision, exchange:r.exchange?{id:r.exchange.id,fromId:r.exchange.fromId,toId:r.exchange.toId,expiresAt:r.exchange.expiresAt,offer:r.exchange.toId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.fromId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.offerId)})():undefined,wanted:r.exchange.toId===p.id||r.exchange.fromId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.toId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.wantedId)})():undefined}:undefined,serverNow: Date.now(), actionAt: p.actionAt, exchangeAt: p.exchangeAt, reconnectMs: this.reconnectMs, durationMs: this.durationMs, winner: r.winner, reason: r.reason, log: r.log, judgment: p.judgment, expiresAt: r.expiresAt };
+  const state:RoomView={ submittedSequences:p.submittedSequences??[],emoteLoadout:p.emoteLoadout??emoteSlots(this.community.record(p).store).filter((id):id is string=>Boolean(id)),resultPlayers:r.resultPlayers,code: r.code, phase: r.phase, custom:r.custom, name:r.name, hostId:r.hostId, matchId: r.matchId, players: r.players.map(x => ({ id: x.id, socialId:x.ai?undefined:this.community.id(x), name: x.name, avatar: x.avatar, rating: x.rating, ratingDelta: x.ratingDelta, points: x.points, reward: x.reward, coins:x.coins??0,coinReward:x.coinReward??0,coinBase:x.coinBase,coinAdjustment:x.coinAdjustment,ratingMultiplier:1, baseReward:x.baseReward, opponentRating:x.opponentRating,rewardRatio:x.rewardRatio, calledGo:Boolean(x.calledGo), score: x.score, rankGames:x.ai?undefined:this.community.record(x).rankGames??0,ready: x.ready, rematch: x.rematch, connected: Boolean(x.ai || x.socket?.readyState === 1), handCount: x.hand.length, ai: Boolean(x.ai), difficulty:x.ai, disconnectedAt: x.disconnectedAt, lastPlayed:x.lastPlayed, playedSentences:x.playedSentences, lastAction:x.lastAction, reaction:x.reaction&&Date.now()-x.reaction.at<3000?x.reaction:undefined })), hand: ['battle', 'dealing'].includes(r.phase) ? p.hand : [], basicSupplyAt:p.basicSupplyAt??0, handVersion: p.handVersion, fieldVersion:p.fieldVersion??0, you: p.id, robNotices:p.robNotices, endsAt: r.endsAt, finalRound:r.finalRound, stageEndsAt: r.stageEndsAt, nextDealAt: r.nextDealAt, dealSerial: r.dealSerial, deckCount: r.deck.length, deckTotal: DECK_FACES.length, usedCards: r.discard, dealIntervalMs: this.dealMs, goCount: r.goCount, multiplier: 1, aiSetting:r.aiSetting, highScore: r.highScore, leaderId:r.leaderId, drawVote:r.drawVote, testMode:r.testMode, decision: r.decision, exchange:r.exchange?{id:r.exchange.id,fromId:r.exchange.fromId,toId:r.exchange.toId,expiresAt:r.exchange.expiresAt,offer:r.exchange.toId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.fromId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.offerId)})():undefined,wanted:r.exchange.toId===p.id||r.exchange.fromId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.toId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.wantedId)})():undefined}:undefined,serverNow: Date.now(), actionAt: p.actionAt, exchangeAt: p.exchangeAt, reconnectMs: this.reconnectMs, durationMs: this.durationMs, winner: r.winner, reason: r.reason, log: r.log, judgment: p.judgment, expiresAt: r.expiresAt };
   if(r.phase==='battle'||r.phase==='dealing')state.players.forEach((player,index)=>{const source=r.players[index],draft=new Set(source.draftIds??[]);player.handPreview=source.hand.filter(c=>!draft.has(c.id));player.draftPreview=(source.draftIds??[]).map(id=>[...source.hand,...fieldCards(source)].find(c=>c.id===id)).filter((c):c is Card=>Boolean(c));});
   return state;
  }
  broadcast(r: Room) { for (const p of r.players) if (!p.ai) this.send(p.socket, { type: 'state', room: this.view(r, p) }); }
  log(r: Room, text: string, actor?: Player) { const id=randomUUID(); r.log.unshift({ id, text }); r.log.length = Math.min(r.log.length, 8); if(actor)actor.lastAction={id,text};this.audit(actor,'game_event','info',{reason:text},r); }
- resetPlayer(p: Player) { p.robNotices=[]; p.hand = []; p.handVersion++; p.fieldVersion=0;p.draftIds=[]; p.scoreClaims=[]; p.submittedSequences=[];p.baseScore=0;p.ownGoBaseScore=0; p.score = 0; p.calledGo=false; p.basicSupplyAt=0; p.ready = true; p.rematch = false; p.judgment = undefined; p.lastPlayed=undefined; p.playedSentences=[]; p.lastAction=undefined; p.reaction=undefined; p.reactionAt=0; p.ratingDelta = 0; p.reward = 0; p.coinReward=0;p.coinBase=0;p.coinAdjustment=0;p.baseReward=0;p.opponentRating=undefined;p.rewardRatio=undefined; p.seen.clear(); }
+ resetPlayer(p: Player) { p.emoteLoadout=p.ai?[...AI_EMOTE_LOADOUTS[Number(p.name.match(/\d+/)?.[0]??0)%AI_EMOTE_LOADOUTS.length]]:emoteSlots(this.community.record(p).store).filter((id):id is string=>Boolean(id)); p.robNotices=[]; p.hand = []; p.handVersion++; p.fieldVersion=0;p.draftIds=[]; p.scoreClaims=[]; p.submittedSequences=[];p.baseScore=0;p.ownGoBaseScore=0; p.score = 0; p.calledGo=false; p.basicSupplyAt=0; p.ready = true; p.rematch = false; p.judgment = undefined; p.lastPlayed=undefined; p.playedSentences=[]; p.lastAction=undefined; p.reaction=undefined; p.reactionAt=0; p.ratingDelta = 0; p.reward = 0; p.coinReward=0;p.coinBase=0;p.coinAdjustment=0;p.baseReward=0;p.opponentRating=undefined;p.rewardRatio=undefined; p.seen.clear(); }
  roomList():RoomListing[]{return [...this.rooms.values()].filter(r=>r.custom&&r.phase==='lobby').map(r=>({code:r.code,name:r.name??`${r.players[0]?.name??'플레이어'}님의 방`,hostName:r.players.find(p=>p.id===r.hostId)?.name??'',humans:r.players.filter(p=>!p.ai).length,aiCount:r.players.filter(p=>p.ai).length,maxPlayers:RULES.maxPlayers}));}
  sendRoomList(socket:WebSocket|undefined){this.send(socket,{type:'roomList',rooms:this.roomList()});}
  publishRoomList(){const payload={type:'roomList',rooms:this.roomList()};for(const p of this.sessions.values())if(!p.ai)this.send(p.socket,payload);}
@@ -209,7 +209,7 @@ export class Game {
   }
   for(const p of changed)p.handVersion++;r.dealSerial++;
  }
- begin(r: Room) { const now = Date.now(); r.phase = 'battle'; r.startedAt=now; r.endsAt = this.durationMs > 0 ? now + this.durationMs : 0; r.nextDealAt = now + this.dealMs; r.drawVote=this.newDrawVote(r); for (const p of r.players) { p.actionAt = now; p.nextAI = now + thinkMs(p.ai ?? 'normal'); } this.log(r, '대전 시작 · 30초마다 전원 1장, 전원이 먼저 동의하면 즉시 배분'); this.broadcast(r); }
+ begin(r: Room) { const now = Date.now(); r.phase = 'battle'; r.startedAt=now; r.endsAt = this.durationMs > 0 ? now + this.durationMs : 0; r.nextDealAt = now + this.dealMs; r.drawVote=this.newDrawVote(r); for (const p of r.players) { p.actionAt = now; p.nextAI = now + thinkMs(p.ai ?? 'normal');this.botEmotion(p,'hello'); } this.log(r, '대전 시작 · 30초마다 전원 1장, 전원이 먼저 동의하면 즉시 배분'); this.broadcast(r); }
  finish(r: Room, reason: string, forfeiter?: string) {
   if (!['battle', 'dealing', 'reveal'].includes(r.phase)) return;
   r.phase = 'result'; r.decision = undefined;r.drawVote=undefined;r.exchange=undefined; r.reason = reason; r.expiresAt = Date.now()+this.resultMs;
@@ -255,7 +255,7 @@ export class Game {
   this.send(p.socket,{type:'ack',requestId:id});this.broadcast(r);
  }
  allRematch(r: Room) { return r.players.length >= 2 && r.players.every(p => p.rematch && (p.ai || p.socket?.readyState === 1)); }
- leave(p: Player) {
+ leave(p: Player,surrender=false) {
   const r = p.room ? this.rooms.get(p.room) : undefined;
   if(r?.custom&&r.phase==='lobby'){
    r.players=r.players.filter(x=>x!==p);
@@ -264,7 +264,7 @@ export class Game {
    else{if(r.hostId===p.id)r.hostId=r.players.find(x=>!x.ai)!.id;this.broadcast(r);}
    this.send(p.socket,{type:'home',rating:p.rating,coins:p.coins??0,points:p.points});this.publishRoomList();return;
   }
-  if (r) { if(r.exchange&&(r.exchange.fromId===p.id||r.exchange.toId===p.id))r.exchange=undefined; r.drawVote=undefined; this.finish(r, `${p.name} 님이 대전을 포기했어요.`, p.id); r.players = r.players.filter(x => x !== p); if(r.custom&&r.hostId===p.id)r.hostId=r.players.find(x=>!x.ai)?.id; for (const x of r.players) x.rematch = false; if (!r.players.some(x => !x.ai)) this.rooms.delete(r.code); else { if (r.phase === 'matching' && r.players.length === 1) { const bot = this.newPlayer('로고스 AI'); bot.ai = 'normal'; bot.room = r.code; bot.token = ''; r.players.push(bot); } this.broadcast(r); } }
+  if (r) { if(r.exchange&&(r.exchange.fromId===p.id||r.exchange.toId===p.id))r.exchange=undefined; r.drawVote=undefined; this.finish(r, `${p.name} 님이 ${surrender?'항복했어요.':'대전을 포기했어요.'}`, p.id); r.players = r.players.filter(x => x !== p); if(r.custom&&r.hostId===p.id)r.hostId=r.players.find(x=>!x.ai)?.id; for (const x of r.players) x.rematch = false; if (!r.players.some(x => !x.ai)) this.rooms.delete(r.code); else { if (r.phase === 'matching' && r.players.length === 1) { const bot = this.newPlayer('로고스 AI'); bot.ai = 'normal'; bot.room = r.code; bot.token = ''; r.players.push(bot); } this.broadcast(r); } }
   p.room = undefined; this.send(p.socket, { type: 'home', rating: p.rating, coins:p.coins??0, points: p.points });
  }
  choice(p: Player, msg: Record<string, unknown>) {
@@ -342,10 +342,12 @@ export class Game {
   vote.approved.push(p.id);this.send(p.socket,{type:'ack',voteId:vote.id});
   if(vote.approved.length===r.players.length)this.distribute(r,'unanimous');else this.broadcast(r);
  }
+ botEmotion(p:Player,event:EmotionEvent){const r=p.room&&this.rooms.get(p.room);if(!p.ai||!r||r.phase!=='battle'||Date.now()-(p.reactionAt??0)<8000)return;const emoji=aiEmote(event,p.emoteLoadout??AI_EMOTE_LOADOUTS[0]);if(emoji){p.reactionAt=Date.now();p.reaction={id:randomUUID(),emoji:emoji as Reaction,at:Date.now()};return true;}}
  react(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room);
   if(!r||r.phase!=='battle'||msg.matchId!==r.matchId)return this.fail(p,'대전 중에만 감정표현을 보낼 수 있어요.');
-  if(!REACTIONS.includes(msg.emoji as typeof REACTIONS[number])&&!COSMETICS.some(c=>c.type==='emote'&&c.id===msg.emoji&&this.community.record(p).store.owned.includes(c.id)))return this.fail(p,'사용할 수 없는 감정표현이에요.');
+  if(!p.emoteLoadout)p.emoteLoadout=emoteSlots(this.community.record(p).store).filter((id):id is string=>Boolean(id));
+  if(!p.emoteLoadout.includes(String(msg.emoji)))return this.fail(p,'장착하지 않은 감정표현이에요.');
   const now=Date.now();if(now-(p.reactionAt??0)<1800)return this.fail(p,'감정표현은 잠시 후 다시 보낼 수 있어요.');
   p.reactionAt=now;p.reaction={id:randomUUID(),emoji:msg.emoji as Reaction,at:now};this.broadcast(r);
  }
@@ -408,7 +410,7 @@ export class Game {
     }else{stolen=target.hand.splice(target.hand.findIndex(c=>c.id===msg.stealId),1)[0];target.handVersion++;target.draftIds=(target.draftIds??[]).filter(id=>id!==stolen.id);}
     p.hand.push(stolen);p.handVersion++;
     target.robNotices=[...(target.robNotices??[]),{id:randomUUID(),fromId:p.id,fromName:p.name,fromAvatar:p.avatar,card:{...stolen},source:msg.stealSource as "hand"|"field"}].slice(-8);
-    this.log(r,`${p.name} 님이 ${target.name} 님의 ${msg.stealSource==='field'?'필드':'손패'}에서 ${stolen.kind} 카드 1장을 뺏었어요.`);p.lastAction={id:randomUUID(),text:`${target.name}님의 카드 1장 ROB!`,flights:[{fromId:target.id,toId:p.id,card:stolen}]};
+    this.botEmotion(target,'robbed');this.log(r,`${p.name} 님이 ${target.name} 님의 ${msg.stealSource==='field'?'필드':'손패'}에서 ${stolen.kind} 카드 1장을 뺏었어요.`);p.lastAction={id:randomUUID(),text:`${target.name}님의 카드 1장 ROB!`,flights:[{fromId:target.id,toId:p.id,card:stolen}]};
     target.lastAction={id:randomUUID(),text:'카드를 빼앗겼어요!'};
    }
   }else if(card.kind==='exchange'&&target){
@@ -427,7 +429,7 @@ export class Game {
   if(msg.accept===false&&!EXCHANGE_REPLIES.includes(msg.reason as typeof EXCHANGE_REPLIES[number]))return this.fail(p,'빠른 답장을 선택해 주세요.');
   if(msg.accept===true&&(!sender||!offer||!given||!canTransferCard(offer)||!canTransferCard(given)))return this.fail(p,'선택한 교환 카드가 더 이상 없어요.');
   r.exchange=undefined;
-   if(msg.accept===true&&sender&&offer&&given){this.removeOwnedCard(r,sender,offer.id);this.removeOwnedCard(r,p,given.id);sender.draftIds=(sender.draftIds??[]).filter(id=>id!==offer.id);p.draftIds=(p.draftIds??[]).filter(id=>id!==given.id);sender.hand.push(given);p.hand.push(offer);sender.handVersion++;p.handVersion++;this.log(r,`${sender.name} 님과 ${p.name} 님이 카드를 한 장씩 교환했어요.`);sender.lastAction={id:randomUUID(),text:`${p.name}님과 교환 완료!`,flights:[{fromId:sender.id,toId:p.id,card:offer}]};p.lastAction={id:randomUUID(),text:`${sender.name}님과 교환 완료!`,flights:[{fromId:p.id,toId:sender.id,card:given}]};}
+   if(msg.accept===true&&sender&&offer&&given){this.removeOwnedCard(r,sender,offer.id);this.removeOwnedCard(r,p,given.id);sender.draftIds=(sender.draftIds??[]).filter(id=>id!==offer.id);p.draftIds=(p.draftIds??[]).filter(id=>id!==given.id);sender.hand.push(given);p.hand.push(offer);sender.handVersion++;p.handVersion++;this.botEmotion(sender,'exchange');this.botEmotion(p,'exchange');this.log(r,`${sender.name} 님과 ${p.name} 님이 카드를 한 장씩 교환했어요.`);sender.lastAction={id:randomUUID(),text:`${p.name}님과 교환 완료!`,flights:[{fromId:sender.id,toId:p.id,card:offer}]};p.lastAction={id:randomUUID(),text:`${sender.name}님과 교환 완료!`,flights:[{fromId:p.id,toId:sender.id,card:given}]};}
   else {this.log(r,`${p.name} 님이 교환을 거절했어요.`);p.lastAction={id:randomUUID(),text:'교환 요청을 거절했어요.'};if(sender){const reason=String(msg.reason);this.send(sender.socket,{type:'exchangeResponse',matchId:r.matchId,fromName:p.name,reason});sender.lastAction={id:randomUUID(),text:`${p.name}님의 답장 · ${reason}`};}}
   this.broadcast(r);
  }
@@ -496,12 +498,14 @@ export class Game {
    p.fieldVersion=(p.fieldVersion??0)+1;
    r.discard.push(...p.hand.filter(c => accepted.has(c.id))); p.hand = p.hand.filter(c => !accepted.has(c.id)); p.handVersion++;
    p.draftIds=msg.cards as string[];
+   this.botEmotion(p,p.score>Math.max(...r.players.filter(x=>x!==p).map(x=>x.score))?'lead':'scored');for(const other of r.players)if(other!==p&&other.ai&&p.score>other.score)this.botEmotion(other,'surpassed');
    this.log(r, `${p.name} · ${p.judgment.label} +${p.judgment.awardedPoints}점`,p);
    const canExtendOwnGo=r.leaderId===p.id&&r.goCount<RULES.maxGo;
    const ownBaseImproved=(p.baseScore??0)>(p.ownGoBaseScore??0);
    const canStartGo=p.score>=RULES.goThreshold&&p.score>r.highScore&&((canExtendOwnGo&&ownBaseImproved)||r.leaderId!==p.id);
    if (canStartGo) { r.highScore = p.score; r.decision = { id: randomUUID(), playerId: p.id, startedAt: Date.now(), expiresAt: Date.now() + (p.ai ? this.decisionMs : this.humanDecisionMs) }; this.log(r, `${p.name} 님이 최고점 ${p.score}점! ${r.leaderId===p.id?`${r.goCount+1}고`:'1고'} / 스톱 선택권 획득`); }
   }
+  if(!p.judgment.accepted)this.botEmotion(p,'mistake');
   this.audit(p,'submit_result','info',{...msg,points:p.judgment.points,awardedPoints:p.judgment.awardedPoints,valid:p.judgment.valid,patternType:p.judgment.patternType,usedStartIndex:p.judgment.usedStartIndex,usedLength:p.judgment.usedLength,accepted:p.judgment.accepted,reason:p.judgment.accepted?'scored':p.judgment.valid?'valid_below_threshold':'invalid_grammar'},undefined,selected as Card[]);
   this.send(p.socket, { type: 'ack', requestId: msg.requestId });this.broadcast(r);
  }
@@ -516,6 +520,7 @@ export class Game {
   if(msg.type==='friendInvite')return this.community.invite(p,msg);
   if(msg.type==='inviteReply')return this.community.acceptInvite(p,msg);
   if(msg.type==='storeOpen'||msg.type==='storeRedeem')return this.community.store(p,msg);
+  if(msg.type==='storeEmotes')return this.community.setEmotes(p,msg);
   if(msg.type==='storeEquip')return this.community.equip(p,msg);
   if(msg.type==='register'||msg.type==='login')return this.authenticate(p,msg);
   if(msg.type==='logout')return this.logout(p);
@@ -539,6 +544,7 @@ export class Game {
   if (msg.type === 'drawRequest') return this.drawRequest(p,msg);
   if (msg.type === 'drawVote') return this.drawVote(p,msg);
   if(msg.type==='claimBasic')return this.claimBasic(p,msg);
+  if(msg.type==='surrender'){const active=p.room&&this.rooms.get(p.room);if(!active||active.phase!=='battle'||msg.matchId!==active.matchId)return this.fail(p,'현재 진행 중인 경기에서만 항복할 수 있어요.');return this.leave(p,true);}
   if (msg.type === 'react') return this.react(p,msg);
   if (msg.type === 'special') return this.special(p,msg);
   if (msg.type === 'inspectRob') return this.inspectRob(p,msg);
@@ -570,7 +576,7 @@ export class Game {
    if (r.endsAt > 0 && now >= r.endsAt) { this.finish(r, r.finalRound?'마지막 5분이 끝났어요. 최종 점수로 정산합니다.':'경기 시간이 끝났어요. 현재 점수로 정산합니다.'); continue; }
    if(!r.decision&&r.drawVote){let changed=false;for(const p of r.players)if(p.ai&&!r.drawVote.approved.includes(p.id)&&now>=(r.drawVote.aiApproveAt?.[p.id]??now)){r.drawVote.approved.push(p.id);changed=true;}if(r.drawVote.approved.length===r.players.length){this.distribute(r,'unanimous');continue;}if(changed)this.broadcast(r);}
    if(r.nextDealAt>0&&now>=r.nextDealAt){this.distribute(r,'automatic');continue;}
-   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && applyGoBenefit(judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!)),activeGoLevel(r,p)).points>=RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); else if(r.deck.length<r.players.length&&now>=(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});} }
+   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && applyGoBenefit(judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!)),activeGoLevel(r,p)).points>=RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); else if(r.deck.length<r.players.length&&now>=(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});}if(!cards&&this.botEmotion(p,now-(r.startedAt??now)>60000?'longWait':'waiting'))this.broadcast(r); }
   }
   for (const [token, p] of this.sessions) if (!p.room && !p.socket && now - p.touchedAt > GUEST_RETENTION_MS) this.sessions.delete(token);
   for(const [hash,session] of this.accountSessions)if(session.expiresAt<=now)this.accountSessions.delete(hash);

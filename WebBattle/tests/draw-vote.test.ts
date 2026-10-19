@@ -33,8 +33,8 @@ test('after Go distribution stays automatic and unanimous; new high score only t
  score(b);score(b);assert.equal(r.decision?.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);const before=r.deck.length;
  now=r.nextDealAt;game.tick();assert.equal(r.deck.length,before-2);assert.ok(r.drawVote);assert.equal(r.leaderId,b.id);
 });
-test('only four emoji reactions are broadcast and rapid repeats are rejected',()=>{
- const{game,sa,sb,a,b,r}=roomForTwo();game.react(a,{matchId:r.matchId,emoji:'🔥'});assert.equal(sb.messages.at(-1)?.room.players.find((p:any)=>p.id===a.id).reaction.emoji,'🔥');game.react(a,{matchId:r.matchId,emoji:'💯'});assert.match(sa.messages.at(-1)?.message,/사용할 수 없는/);game.react(a,{matchId:r.matchId,emoji:'👏'});assert.match(sa.messages.at(-1)?.message,/잠시 후/);assert.equal(b.reaction,undefined);
+test('only equipped emoji reactions are broadcast and rapid repeats are rejected',()=>{
+ const{game,sa,sb,a,b,r}=roomForTwo();game.react(a,{matchId:r.matchId,emoji:'emote-hello'});assert.equal(sb.messages.at(-1)?.room.players.find((p:any)=>p.id===a.id).reaction.emoji,'emote-hello');game.react(a,{matchId:r.matchId,emoji:'emote-yawn'});assert.match(sa.messages.at(-1)?.message,/장착하지 않은/);game.react(a,{matchId:r.matchId,emoji:'emote-cheer'});assert.match(sa.messages.at(-1)?.message,/잠시 후/);assert.equal(b.reaction,undefined);
 });
 test('opponent field preview follows validated draft order and excludes those cards from hand preview',()=>{
  const {game,a,b,r}=roomForTwo();

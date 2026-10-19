@@ -1,3 +1,4 @@
+import {emoteSlots,DEFAULT_EMOTE_SLOTS} from '../shared/emotes.js';
 import {COSMETICS} from '../shared/store.js';
 import type {CommunityView,StoreResult,RankedPeer} from '../shared/community.js';
 import {ResultFriends,InviteNotice} from './CommunityPanels.js';
@@ -19,7 +20,7 @@ import {AdminLogs} from './AdminLogs.js';
 import {playerCards,fieldCards,canTransferCard} from '../shared/cardViews.js';
 import React, { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { createRoot } from 'react-dom/client';
-import { CATALOG, VARIANTS, RULES, REACTIONS, EXCHANGE_REPLIES, effectLabel, judgeCards, type Card, type RoomView, type RoomListing, type Kind } from '../shared/rules.js';
+import { CATALOG, VARIANTS, RULES, EXCHANGE_REPLIES, effectLabel, judgeCards, type Card, type RoomView, type RoomListing, type Kind } from '../shared/rules.js';
 import './style.css';
 import './original-cards.css';
 import {CardLabel,StatusCardBlock} from './CardLabel.js';
@@ -240,6 +241,7 @@ function App() {
  const locked = scoreProgress.running || !connected || pending || !room || room.phase !== 'battle' || Boolean(room.decision) || now < room.actionAt || Boolean(room?.endsAt && seconds <= 0);
  const hand = room?.hand ?? [], ownedCards=[...hand,...(me?fieldCards(me):[])], chosen = selected.map(id => ownedCards.find(c => c.id === id)).filter((c): c is Card => Boolean(c));
  const unchangedSubmission=room?.submittedSequences?.includes(JSON.stringify(selected))??false;
+ const equippedEmotes=room?.emoteLoadout??(community?emoteSlots(community.store).filter((id):id is string=>Boolean(id)):[...DEFAULT_EMOTE_SLOTS]);
  const ownGo=room?.leaderId&&room.leaderId===room.you?(room.goCount??0):0;
  const ownGoBenefit=ownGo===1?'+3점 혜택 적용중!':ownGo===2?'+6점 혜택 적용중!':ownGo===3?'×2점수 혜택 적용중!':'';
  const decisionGo=room?.decision?(room.decision.playerId===room.leaderId?(room.goCount??0)+1:1):0;
@@ -276,7 +278,7 @@ function App() {
  if(!cardLoad.ready||cardLoad.failed)return <main className="card-preload-screen" role="status" aria-live="polite"><PixiLoading/><img className="preload-under" src="/brand-ui/loading-under.png" alt=""/><strong className="preload-label">{cardLoad.failed?'카드를 모두 불러오지 못했어요':'게임 준비 중'}</strong>{cardLoad.failed>0&&<button className="primary preload-retry" onClick={()=>location.reload()}>다시 불러오기</button>}</main>;
  return <div className="shell" style={{'--equipped-board':`url(${JSON.stringify(COSMETICS.find(c=>c.id===(community?.store.board??'board-classic'))?.image??'/brand-ui/game-back.png')})` } as CSSProperties} data-fullscreen={fullscreen} data-viewport-height={Math.min(innerHeight,visualViewport?.height??innerHeight)}><small className="build-version" aria-label="게임 버전">{BUILD_VERSION}</small>
   <button className="settings-trigger" aria-label="설정 열기" aria-expanded={settingsOpen} onClick={()=>setSettingsOpen(open=>!open)}><AtlasIcon icon="settings"/></button>
-  {settingsOpen&&<GameSettings uuid={uuid} account={account} provider={accountProvider} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}
+  {settingsOpen&&<GameSettings onSurrender={room?.phase==='battle'?()=>{if(send('surrender')){setSettingsOpen(false);setEmoteOpen(false);}}:undefined} canSurrender={connected} uuid={uuid} account={account} provider={accountProvider} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}
   {!connected && <div className="connection-banner" role="status">{status}. 새로고침해도 같은 세션으로 복귀합니다.</div>}
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}
@@ -300,7 +302,7 @@ function App() {
    <SentenceField cards={fieldDisplay} committedIds={committedFieldIds} score={correct} completed={scoreProgress.completed} disabled={!interactionEnabled} drag={drag} onReturn={add} renderFace={c=><Illustration kind={c.kind} card={c}/>} goCount={room.goCount??0} continuingIds={continuingFieldIds}/>{example&&!scoreProgress.running&&<SentenceExamplePanel key={example.id} example={example} voice={exampleVoice} onClose={()=>setExample(null)}/>}
    </div>
 
-   <div ref={drag.handZone} className={`battle-hand-zone ${drag.preview?.toHand?'hand-return-target':''}`}><HandFan cards={remainingHand} renderCard={renderCard} forceExpanded={inspectMode} label="내 손패"/><div className="hand-emote-control"><button className="emoji-trigger" aria-label="감정표현 열기" aria-expanded={emoteOpen} onClick={()=>setEmoteOpen(open=>!open)}><ReactionImage emoji={(community?.store.emote??'emote-smile') as `emote-${string}`}/></button>{emoteOpen&&<div className="emoji-options" aria-label="감정표현">{[...REACTIONS,...COSMETICS.filter(c=>c.type==='emote'&&community?.store.owned.includes(c.id)).map(c=>c.id as `emote-${string}`)].map(emoji=><button key={emoji} aria-label={`${emoji} 감정표현 보내기`} disabled={!connected||room.phase!=='battle'} onClick={()=>{send('react',{emoji});setEmoteOpen(false);}}><ReactionImage emoji={emoji}/></button>)}</div>}</div></div>
+   <div ref={drag.handZone} className={`battle-hand-zone ${drag.preview?.toHand?'hand-return-target':''}`}><HandFan cards={remainingHand} renderCard={renderCard} forceExpanded={inspectMode} label="내 손패"/><div className="hand-emote-control"><button className="emoji-trigger" aria-label="감정표현 열기" aria-expanded={emoteOpen} onClick={()=>setEmoteOpen(open=>!open)}><ReactionImage emoji={(equippedEmotes[0]??'emote-smile') as `emote-${string}`}/></button>{emoteOpen&&<div className="emoji-options" aria-label="감정표현">{equippedEmotes.map(emoji=><button key={emoji} aria-label={`${COSMETICS.find(c=>c.id===emoji)?.name??emoji} 감정표현 보내기`} disabled={!connected||room.phase!=='battle'} onClick={()=>{send('react',{emoji});setEmoteOpen(false);}}><ReactionImage emoji={emoji as `emote-${string}`}/></button>)}{!equippedEmotes.length&&<small>프로필에서 감정표현을 장착해 주세요.</small>}</div>}</div></div>
   </main>}
   {viewingPlayer&&<OpponentFieldPreview player={viewingPlayer} onClose={()=>{void exitGameFullscreen();setViewingHandId(null);}}/>}
   {drag.preview&&<div ref={drag.trashZone} className={`card-trash-zone ${drag.preview.toTrash?'trash-hover':''}`} role="region" aria-label="카드 버리기"><span aria-hidden="true">🗑</span><b>{drag.preview.toTrash?'놓으면 버려집니다':'여기에 놓아 카드 버리기'}</b></div>}
