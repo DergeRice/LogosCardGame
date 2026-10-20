@@ -31,13 +31,14 @@ export function GoogleLogin({socket,onClose,onSuccess,provider='google'}:{provid
  const success=useRef(onSuccess);success.current=onSuccess;
  useEffect(()=>{
   let active=true,started=false;const own=!socket;
+  setError('');setBusy(false);setStart(null);setReturnAccount(null);target.current?.replaceChildren();
   const ws=socket??new WebSocket(gameSocketURL());connection.current=ws;
   const fail=(message:string)=>{if(active){setError(message);setBusy(false);}};
   const begin=()=>{if(started||!active)return;started=true;ws.send(JSON.stringify({type:provider==='google'?'googleBegin':'appleBegin',platform:nativePlatform()??'web'}));};
   const hello=()=>ws.send(JSON.stringify({type:'hello',readableGuest:true,name:localStorage.getItem('logos-guest-name')||'Google 로그인',token:sessionStorage.getItem('logos-token')||localStorage.getItem('logos-guest-token'),authToken:localStorage.getItem('logos-account-token')}));
   const receive=async(event:MessageEvent)=>{
    const msg=JSON.parse(event.data);
-   if(msg.type==='session'&&own){sessionStorage.setItem('logos-token',msg.token);sessionStorage.setItem('logos-name',msg.name);begin();}
+   if(msg.type==='session'){if(own){sessionStorage.setItem('logos-token',msg.token);sessionStorage.setItem('logos-name',msg.name);}begin();}
    if(msg.type===(provider==='google'?'googleChallenge':'appleChallenge')){
     if(nativePlatform()){
      setStart(()=>async()=>{try{setBusy(true);const result=await nativeCredential(provider,msg);if(active&&ws.readyState===1)ws.send(JSON.stringify({type:provider==='google'?'googleLogin':'appleCredential',...result,...(provider==='google'?{intent:own?'login':'link'}:{})}));}catch(e){fail(e instanceof Error?e.message:'로그인을 취소했어요.');}});return;
@@ -58,7 +59,7 @@ export function GoogleLogin({socket,onClose,onSuccess,provider='google'}:{provid
   };
   const closed=()=>fail('서버 연결이 끊겼어요. 닫고 다시 시도해 주세요.');
   ws.addEventListener('message',receive);ws.addEventListener('close',closed);ws.addEventListener('error',closed);
-  if(own)ws.addEventListener('open',hello);else if(ws.readyState===1)begin();else fail('서버 연결 후 다시 시도해 주세요.');
+  if(own)ws.addEventListener('open',hello);else if(ws.readyState===1)begin();else if(ws.readyState!==0)fail('서버 연결 후 다시 시도해 주세요.');
   return()=>{active=false;ws.removeEventListener('message',receive);ws.removeEventListener('close',closed);ws.removeEventListener('error',closed);ws.removeEventListener('open',hello);if(own)ws.close();};
  },[socket,provider]);
  return <div className="account-backdrop"><section className="account-dialog" role="dialog" aria-modal="true" aria-label={`${label} 계정 연결`}><h2>{label} 계정 연결</h2><p>처음 연결하면 현재 진행 기록과 보유 아이템이 저장돼요. 이미 연결한 계정은 그 계정의 기록을 불러와요.</p><div ref={target} hidden={returnAccount!==null}/>{returnAccount!==null&&<div className="google-return-confirmation"><h3>원래 계정으로 돌아가시겠습니까?</h3><p>{returnAccount} 계정의 기존 기록과 보유 아이템을 불러옵니다. 현재 게스트 기록과 합쳐지지 않습니다.</p><button disabled={busy} onClick={()=>{setBusy(true);connection.current?.send(JSON.stringify({type:'googleReturnConfirm',accept:true}));}}>원래 계정으로 돌아가기</button><button disabled={busy} onClick={()=>{connection.current?.send(JSON.stringify({type:'googleReturnConfirm',accept:false}));onClose();}}>게스트로 계속하기</button></div>}{start&&returnAccount===null&&<button className={provider==='apple'?'apple-login':'google-login'} disabled={busy} onClick={()=>void start()}>{label} 계정으로 계속하기</button>}{busy&&<p role="status">계정을 확인하고 있어요…</p>}{error&&<p role="alert">{error}</p>}<button onClick={onClose}>닫기</button></section></div>;

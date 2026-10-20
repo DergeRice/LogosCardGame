@@ -3,11 +3,11 @@ test.use({autoGuest:false});
 for(const mobile of [false,true])test(`Google landing and settings use server nonce ${mobile?'mobile':'desktop'}`,async({page})=>{
  if(mobile){await page.setViewportSize({width:844,height:390});await page.addInitScript(()=>Object.defineProperty(window,'visualViewport',{value:Object.assign(new EventTarget(),{width:844,height:330,offsetTop:20,offsetLeft:0,scale:1})}));}
  await page.route('https://accounts.google.com/gsi/client',route=>route.fulfill({contentType:'text/javascript',body:`window.google={accounts:{id:{initialize(options){window.testGoogleOptions=options},renderButton(el){const b=document.createElement('button');b.textContent='테스트 Google 계정 선택';b.onclick=()=>window.testGoogleOptions.callback({credential:'test-credential'});el.append(b)}}}};`}));
- const sent:any[]=[];
+ const sent:any[]=[];let challenges=0;
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{
   const m=JSON.parse(String(raw));sent.push(m);
   if(m.type==='hello')ws.send(JSON.stringify({type:'session',id:'guest-id',uuid:'guest-id',token:'guest-token',name:'연동 검사',avatar:'pronoun',rating:1000,points:0,coins:123,account:null}));
-  if(m.type==='googleBegin')ws.send(JSON.stringify({type:'googleChallenge',clientId:'test.apps.googleusercontent.com',nonce:'server-nonce'}));
+  if(m.type==='googleBegin'){if(++challenges===2){ws.close({code:1012,reason:'Auth reconnect regression'});return;}ws.send(JSON.stringify({type:'googleChallenge',clientId:'test.apps.googleusercontent.com',nonce:'server-nonce'}));}
   if(m.type==='googleLogin'&&m.intent==='link'){ws.send(JSON.stringify({type:'googleReturnConfirmation',username:'구글 사용자'}));return;}
   if(m.type==='googleLogin'||(m.type==='googleReturnConfirm'&&m.accept===true)){ws.send(JSON.stringify({type:'auth',authToken:'test-account-token',username:'구글 사용자'}));ws.send(JSON.stringify({type:'session',id:'guest-id',uuid:'account-id',token:'guest-token',name:'구글 사용자',avatar:'pronoun',rating:1000,points:0,coins:123,account:{username:'구글 사용자',provider:'google'}}));}
  }));
