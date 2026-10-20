@@ -1,13 +1,15 @@
+import {appleAndroidCallback} from './appleCallback.js';
 import {GoogleChallenges,verifyGoogleCredential} from './googleAuth.js';
 import { createServer } from 'node:http';
 import { pathToFileURL } from 'node:url';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { Game } from './game.js';
-import {verifyAppleCode} from './appleAuth.js';
+import {verifyAppleCredential} from './appleAuth.js';
 export function createBattleServer(options: ConstructorParameters<typeof Game>[0] = {}) {
  const game = new Game(options);
- const googleChallenges=new GoogleChallenges();
- const server = createServer((req, res) => { res.setHeader('Content-Type', 'application/json'); if (req.url === '/health') { res.end(JSON.stringify({ status: 'ok', rooms: game.rooms.size })); } else { res.writeHead(404); res.end('{"error":"not_found"}'); } });
+ const googleChallenges=new GoogleChallenges(),appleChallenges=new GoogleChallenges();
+ const appleAudiences=new Map<string,string>();
+ const server = createServer(async(req, res) => { if(req.url==='/auth/apple/android'){const chunks:Buffer[]=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>16384){res.writeHead(413);res.end();return;}chunks.push(Buffer.from(chunk));}const response=await appleAndroidCallback(new Request('http://localhost/auth/apple/android',{method:req.method,headers:{'Content-Type':String(req.headers['content-type']??'')},...(req.method==='POST'?{body:Buffer.concat(chunks).toString('utf8')}:{})}));res.writeHead(response.status,Object.fromEntries(response.headers));res.end(await response.text());return;} res.setHeader('Content-Type', 'application/json'); if (req.url === '/health') { res.end(JSON.stringify({ status: 'ok', rooms: game.rooms.size })); } else { res.writeHead(404); res.end('{"error":"not_found"}'); } });
  const wss = new WebSocketServer({ noServer: true, maxPayload: 4096, perMessageDeflate: false });
  const origins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173').split(',').map(s => s.trim());
  const ips = new Map<string, { count: number; at: number }>();
@@ -33,12 +35,19 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
      if(msg.type==='googleBegin'){
       if(!process.env.GOOGLE_CLIENT_ID)throw Error('Google 로그인 설정이 아직 완료되지 않았어요.');
       if(player.room)throw Error('Google 로그인은 홈에서 진행해 주세요.');
-      game.send(ws,{type:'googleChallenge',clientId:process.env.GOOGLE_CLIENT_ID,nonce:googleChallenges.issue(player.id)});
+      game.send(ws,{type:'googleChallenge',clientId:process.env.GOOGLE_CLIENT_ID,iosClientId:process.env.GOOGLE_IOS_CLIENT_ID,nonce:googleChallenges.issue(player.id)});
      }else if(msg.type==='googleLogin'){
-      const identity=await verifyGoogleCredential(process.env.GOOGLE_CLIENT_ID??'',msg.credential,googleChallenges.take(player.id));
+      const identity=await verifyGoogleCredential([process.env.GOOGLE_CLIENT_ID,process.env.GOOGLE_IOS_CLIENT_ID].filter((x):x is string=>Boolean(x)),msg.credential,googleChallenges.take(player.id));
       if(player.socket===ws)game.loginGoogle(player,identity);
-     }else if(msg.type==='appleLogin'){
-      const identity=await verifyAppleCode({clientId:process.env.APPLE_CLIENT_ID??'',teamId:process.env.APPLE_TEAM_ID??'',keyId:process.env.APPLE_KEY_ID??'',privateKey:process.env.APPLE_PRIVATE_KEY??'',redirectUri:process.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);
+      }else if(msg.type==='appleBegin'){
+      if(player.room)throw Error('Apple 로그인은 홈에서 진행해 주세요.');
+      const audience=msg.platform==='ios'?process.env.APPLE_APP_ID:process.env.APPLE_CLIENT_ID;
+      if(!audience||!process.env.APPLE_CLIENT_ID)throw Error('Apple 로그인 설정이 아직 완료되지 않았어요.');
+      appleAudiences.set(player.id,audience);
+      game.send(ws,{type:'appleChallenge',clientId:process.env.APPLE_CLIENT_ID,redirectUri:msg.platform==='android'?process.env.APPLE_ANDROID_REDIRECT_URI:process.env.APPLE_REDIRECT_URI,nonce:appleChallenges.issue(player.id)});
+     }else if(msg.type==='appleCredential'){
+      const nonce=appleChallenges.take(player.id),audience=appleAudiences.get(player.id)??'';appleAudiences.delete(player.id);
+      const identity=await verifyAppleCredential(audience,msg.credential,nonce);
       if(player.socket===ws)game.loginApple(player,identity,msg.name);
      }else game.handle(player,msg);
     }

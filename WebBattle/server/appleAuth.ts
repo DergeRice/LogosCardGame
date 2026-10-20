@@ -1,4 +1,4 @@
-import {SignJWT,createRemoteJWKSet,importPKCS8,jwtVerify} from 'jose';
+import {SignJWT,createRemoteJWKSet,importPKCS8,jwtVerify,type JWTVerifyGetKey} from 'jose';
 
 export type AppleConfig={clientId:string;teamId:string;keyId:string;privateKey:string;redirectUri:string};
 export type AppleIdentity={sub:string;email?:string};
@@ -16,5 +16,15 @@ export async function verifyAppleCode(config:AppleConfig,code:unknown,nonce:unkn
   const {payload}=await jwtVerify(result.id_token,appleKeys,{issuer:'https://appleid.apple.com',audience:config.clientId,clockTolerance:30});
   if(payload.nonce!==nonce||typeof payload.sub!=='string'||!payload.sub)throw Error('nonce_or_subject');
   return {sub:payload.sub,email:typeof payload.email==='string'?payload.email:undefined};
+ }catch{throw Error('Apple 로그인 검증에 실패했어요. 다시 시도해 주세요.');}
+}
+
+export async function verifyAppleCredential(clientId:string,credential:unknown,nonce:string,keys:JWTVerifyGetKey=appleKeys):Promise<AppleIdentity>{
+ if(!clientId)throw Error('Apple 로그인 설정이 아직 완료되지 않았어요.');
+ if(typeof credential!=='string'||credential.length<100||credential.length>8192)throw Error('Apple 로그인 요청이 올바르지 않아요.');
+ try{
+  const {payload}=await jwtVerify(credential,keys,{algorithms:['RS256'],issuer:'https://appleid.apple.com',audience:clientId,requiredClaims:['sub','exp','iat','nonce'],maxTokenAge:'10m',clockTolerance:30});
+  if(payload.nonce!==nonce||typeof payload.sub!=='string'||!payload.sub||payload.sub.length>255)throw Error('identity');
+  return {sub:payload.sub};
  }catch{throw Error('Apple 로그인 검증에 실패했어요. 다시 시도해 주세요.');}
 }

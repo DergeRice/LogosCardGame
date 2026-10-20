@@ -1,18 +1,20 @@
+import {appleAndroidCallback} from '../server/appleCallback.js';
 import {verifyGoogleCredential} from '../server/googleAuth.js';
 import { DurableObject } from 'cloudflare:workers';
 import { Game,type GameSocket } from '../server/game.js';
 import { snapshot,restore,nextDeadline } from '../server/persistence.js';
 import {AuditStore} from './audit-store.js';
 import {adminAuthorized} from '../server/audit.js';
-import {verifyAppleCode} from '../server/appleAuth.js';
-interface Env { GOOGLE_CLIENT_ID?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
-type Attachment={googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
+import {verifyAppleCredential} from '../server/appleAuth.js';
+interface Env { GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
+type Attachment={appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
 
 export default {
  async fetch(request:Request,env:Env):Promise<Response>{
   const url=new URL(request.url);
+  if(url.pathname==='/auth/apple/android')return appleAndroidCallback(request);
   if(url.pathname.startsWith('/admin/logs')||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends'||url.pathname==='/admin/grants/items')){
    const origin=request.headers.get('Origin'),allowed=!origin||env.ALLOWED_ORIGINS.split(',').includes(origin);
    const headers=new Headers({'Cache-Control':'no-store','Vary':'Origin'});
@@ -144,14 +146,23 @@ export class BattleArena extends DurableObject<Env>{
       if(p.room)throw Error('Google 로그인은 홈에서 진행해 주세요.');
       const nonce=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
       a.googleNonce={value:nonce,expires:Date.now()+5*60_000};ws.serializeAttachment(a);
-      this.game.send(adapter,{type:'googleChallenge',clientId:this.env.GOOGLE_CLIENT_ID,nonce});
+      this.game.send(adapter,{type:'googleChallenge',clientId:this.env.GOOGLE_CLIENT_ID,iosClientId:this.env.GOOGLE_IOS_CLIENT_ID,nonce});
      }else if(msg.type==='googleLogin'){
       const challenge=a.googleNonce;a.googleNonce=undefined;ws.serializeAttachment(a);
       if(!challenge||challenge.expires<Date.now())throw Error('Google 로그인 시간이 만료됐어요. 다시 시도해 주세요.');
-      const identity=await verifyGoogleCredential(this.env.GOOGLE_CLIENT_ID??'',msg.credential,challenge.value);
+      const identity=await verifyGoogleCredential([this.env.GOOGLE_CLIENT_ID,this.env.GOOGLE_IOS_CLIENT_ID].filter((x):x is string=>Boolean(x)),msg.credential,challenge.value);
       if(p.socket===adapter)this.game.loginGoogle(p,identity);
-     }else if(msg.type==='appleLogin'){
-      const identity=await verifyAppleCode({clientId:this.env.APPLE_CLIENT_ID??'',teamId:this.env.APPLE_TEAM_ID??'',keyId:this.env.APPLE_KEY_ID??'',privateKey:this.env.APPLE_PRIVATE_KEY??'',redirectUri:this.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);
+      }else if(msg.type==='appleBegin'){
+      if(p.room)throw Error('Apple 로그인은 홈에서 진행해 주세요.');
+      const audience=msg.platform==='ios'?this.env.APPLE_APP_ID:this.env.APPLE_CLIENT_ID;
+      if(!audience||!this.env.APPLE_CLIENT_ID)throw Error('Apple 로그인 설정이 아직 완료되지 않았어요.');
+      const nonce=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
+      a.appleNonce={value:nonce,expires:Date.now()+5*60_000,audience};ws.serializeAttachment(a);
+      this.game.send(adapter,{type:'appleChallenge',clientId:this.env.APPLE_CLIENT_ID,redirectUri:msg.platform==='android'?this.env.APPLE_ANDROID_REDIRECT_URI:this.env.APPLE_REDIRECT_URI,nonce});
+     }else if(msg.type==='appleCredential'){
+      const challenge=a.appleNonce;a.appleNonce=undefined;ws.serializeAttachment(a);
+      if(!challenge||challenge.expires<Date.now())throw Error('Apple 로그인 시간이 만료됐어요. 다시 시도해 주세요.');
+      const identity=await verifyAppleCredential(challenge.audience,msg.credential,challenge.value);
       if(p.socket===adapter)this.game.loginApple(p,identity,msg.name);
      }else this.game.handle(p,msg);
     }

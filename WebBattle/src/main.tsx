@@ -1,3 +1,4 @@
+import {gameSocketURL} from './nativeAuth.js';
 import {GoogleLogin} from './GoogleLogin.js';
 import {sortStatusCards} from './statusCards.js';
 import './battle-status-refine.css';
@@ -115,7 +116,9 @@ function App() {
  const [rankings,setRankings]=useState<Record<number,RankedPeer[]>>({});
  const [community,setCommunity]=useState<CommunityView|null>(null),[storeResult,setStoreResult]=useState<StoreResult|null>(null);
  const [account,setAccount]=useState<string|null>(null);
+ const [appleOpen,setAppleOpen]=useState(false);
  const [googleOpen,setGoogleOpen]=useState(false);
+ const [linkedProviders,setLinkedProviders]=useState<string[]>([]);
  const [uuid,setUuid]=useState(''),[accountProvider,setAccountProvider]=useState<string|null>(null);
  const [volume,setVolume]=useState(readSfxLevel);
  const [showExamples,setShowExamples]=useState(localStorage.getItem('logos-show-examples')!=='off');
@@ -195,7 +198,7 @@ function App() {
   const heartbeats=new Set<ReturnType<typeof setInterval>>();
   function connect() {
    if (stopped) return; setStatus(attempts ? '재연결 중 · 무료 서버를 깨우는 데 잠시 걸릴 수 있어요' : '서버 연결 중');
-   const url = import.meta.env.VITE_WS_URL || `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/socket`;
+   const url = gameSocketURL();
    const ws = new WebSocket(url); socketRef.current = ws;
    let heartbeat:ReturnType<typeof setInterval>;
    ws.onopen = () => { if(socketRef.current!==ws){ws.close();return;} ws.send(JSON.stringify({ type: 'hello', readableGuest:true, name: sessionStorage.getItem('logos-name') || name, token: sessionStorage.getItem('logos-token')||localStorage.getItem('logos-guest-token'),authToken:localStorage.getItem('logos-account-token') })); heartbeat = setInterval(() => { if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'ping' })); }, 12000);heartbeats.add(heartbeat); };
@@ -206,7 +209,7 @@ function App() {
     if(msg.type==='community'){setCommunity(msg.community);setProfile(old=>({...old,coins:msg.community.store.gold}));}
     if(msg.type==='storeResult')setStoreResult({requestId:msg.requestId,source:msg.source,box:msg.box,rewards:msg.rewards});
     if(msg.type==='notice')setNotice(msg.message);
-    if (msg.type === 'session') { const previousName=localStorage.getItem('logos-guest-name')||sessionStorage.getItem('logos-name');if(!msg.account&&previousName&&previousName!==msg.name){const oldKey='logos-hub-demo-v1:'+encodeURIComponent(previousName),newKey='logos-hub-demo-v1:'+encodeURIComponent(msg.name),oldValue=localStorage.getItem(oldKey);if(oldValue&&!localStorage.getItem(newKey))localStorage.setItem(newKey,oldValue);}setUuid(msg.uuid??msg.id??'');setAccountProvider(msg.account?.provider??null); sessionStorage.setItem('logos-token', msg.token); sessionStorage.setItem('logos-name', msg.name); if(!msg.account){localStorage.setItem('logos-guest-token',msg.token);localStorage.setItem('logos-guest-name',msg.name);}setName(msg.name); setAccount(msg.account?.username??null); setProfile({avatar:msg.avatar, rating:msg.rating, points:msg.points, coins:msg.coins??0}); setConnected(true); setStatus('서버 연결됨'); attempts = 0; }
+    if (msg.type === 'session') { const previousName=localStorage.getItem('logos-guest-name')||sessionStorage.getItem('logos-name');if(!msg.account&&previousName&&previousName!==msg.name){const oldKey='logos-hub-demo-v1:'+encodeURIComponent(previousName),newKey='logos-hub-demo-v1:'+encodeURIComponent(msg.name),oldValue=localStorage.getItem(oldKey);if(oldValue&&!localStorage.getItem(newKey))localStorage.setItem(newKey,oldValue);}setUuid(msg.uuid??msg.id??'');setAccountProvider(msg.account?.provider??null);setLinkedProviders(msg.account?.linkedProviders??(msg.account?.provider?[msg.account.provider]:[])); sessionStorage.setItem('logos-token', msg.token); sessionStorage.setItem('logos-name', msg.name); if(!msg.account){localStorage.setItem('logos-guest-token',msg.token);localStorage.setItem('logos-guest-name',msg.name);}setName(msg.name); setAccount(msg.account?.username??null); setProfile({avatar:msg.avatar, rating:msg.rating, points:msg.points, coins:msg.coins??0}); setConnected(true); setStatus('서버 연결됨'); attempts = 0; }
     if (msg.type === 'auth') { if(msg.authToken){localStorage.setItem('logos-account-token',msg.authToken);setAccount(msg.username);setAuthMode(null);setAuthPassword('');setNotice('계정이 연결됐어요. 이제 레이팅이 저장됩니다.');}else{localStorage.removeItem('logos-account-token');sessionStorage.removeItem('logos-token');location.reload();} }
     if (msg.type === 'state') {
      const r = msg.room as RoomView, previous = roomRef.current;if(r.phase!=='battle'||(previous&&previous.matchId!==r.matchId)||r.judgment?.submissionId===pendingId.current){pendingId.current=null;pendingAt.current=0;setPending(false);} offset.current = r.serverNow - Date.now();
@@ -291,8 +294,9 @@ function App() {
  if(!cardLoad.ready||cardLoad.failed)return <main className="card-preload-screen card-fill-loading"><PixiLoading progress={cardLoad.percent}/><strong className="loading-percent" role="progressbar" aria-label="리소스 로딩" aria-valuemin={0} aria-valuemax={100} aria-valuenow={cardLoad.percent}>{cardLoad.percent}%</strong><p className="loading-caption" role="status">{cardLoad.failed?'리소스를 모두 불러오지 못했어요':'리소스 불러오는 중'}</p>{cardLoad.failed>0&&<button className="primary preload-retry" onClick={()=>location.reload()}>다시 불러오기</button>}</main>;
  return <div className="shell" style={{'--equipped-board':`url(${JSON.stringify(COSMETICS.find(c=>c.id===(community?.store.board??'board-classic'))?.image??'/brand-ui/game-back.png')})` } as CSSProperties} data-fullscreen={fullscreen} data-viewport-height={Math.min(innerHeight,visualViewport?.height??innerHeight)}><small className="build-version" aria-label="게임 버전">{BUILD_VERSION}</small>
   <button className="settings-trigger" aria-label="설정 열기" aria-expanded={settingsOpen} onClick={()=>setSettingsOpen(open=>!open)}><AtlasIcon icon="settings"/></button>
+  {appleOpen&&<GoogleLogin provider="apple" socket={socketRef.current} onClose={()=>setAppleOpen(false)} onSuccess={()=>setAppleOpen(false)}/>}
   {googleOpen&&<GoogleLogin socket={socketRef.current} onClose={()=>setGoogleOpen(false)} onSuccess={()=>setGoogleOpen(false)}/>}
-  {settingsOpen&&<GameSettings onGoogle={!room&&connected?()=>{setSettingsOpen(false);setGoogleOpen(true)}:undefined} onSurrender={room?.phase==='battle'?()=>{if(send('surrender')){setSettingsOpen(false);setEmoteOpen(false);}}:undefined} canSurrender={connected} uuid={uuid} account={account} provider={accountProvider} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}
+  {settingsOpen&&<GameSettings onApple={!room&&connected?()=>{setSettingsOpen(false);setAppleOpen(true)}:undefined} onGoogle={!room&&connected?()=>{setSettingsOpen(false);setGoogleOpen(true)}:undefined} onSurrender={room?.phase==='battle'?()=>{if(send('surrender')){setSettingsOpen(false);setEmoteOpen(false);}}:undefined} canSurrender={connected} uuid={uuid} account={account} provider={accountProvider} providers={linkedProviders} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}
   {!connected && <div className="connection-banner" role="status">{status}. 새로고침해도 같은 세션으로 복귀합니다.</div>}
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}

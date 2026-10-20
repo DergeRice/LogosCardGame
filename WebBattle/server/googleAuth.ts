@@ -11,8 +11,8 @@ export class GoogleChallenges {
  }
  take(id:string){const value=this.entries.get(id);this.entries.delete(id);if(!value||value.expires<Date.now())throw Error('Google 로그인 시간이 만료됐어요. 다시 시도해 주세요.');return value.nonce;}
 }
-export async function verifyGoogleCredential(clientId:string,credential:unknown,nonce:string,keys:JWTVerifyGetKey=googleKeys):Promise<GoogleIdentity>{
- if(!clientId)throw Error('Google 로그인 설정이 아직 완료되지 않았어요.');
+export async function verifyGoogleCredential(clientId:string|string[],credential:unknown,nonce:string,keys:JWTVerifyGetKey=googleKeys):Promise<GoogleIdentity>{
+ if(!clientId||(Array.isArray(clientId)&&!clientId.length))throw Error('Google 로그인 설정이 아직 완료되지 않았어요.');
  if(typeof credential!=='string'||credential.length<100||credential.length>8192)throw Error('Google 로그인 요청이 올바르지 않아요.');
  try{
   const {payload}=await jwtVerify(credential,keys,{algorithms:['RS256'],issuer:['https://accounts.google.com','accounts.google.com'],audience:clientId,requiredClaims:['sub','exp','iat','nonce'],maxTokenAge:'10m',clockTolerance:30});

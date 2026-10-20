@@ -17,10 +17,10 @@ test('Apple identity links to one persistent account and separate coin balance',
  assert.equal(repeated.last('session')!.name,'Alice');assert.equal(repeat.coins,7);
  assert.equal([...restored.accounts.values()].filter(a=>a.provider==='apple').length,1);
 });
-test('Apple identity cannot replace another signed-in account',()=>{
+test('Apple identity links to an existing password account without replacing its identity',()=>{
  const game=new Game(),first=socket(),player=game.hello(first.peer,undefined,'게스트 1234');
  game.handle(player,{type:'register',username:'ordinary',password:'correct horse battery'});
- game.loginApple(player,{sub:'another-apple-user'},'Alice');
- assert.match(first.last('error')!.message,/로그아웃/);
- assert.equal([...game.accounts.values()].filter(a=>a.provider==='apple').length,0);
+ const id=player.accountId;game.loginApple(player,{sub:'another-apple-user'},'Alice');
+ assert.equal(player.accountId,id);assert.equal(game.accounts.size,1);
+ assert.equal([...game.accounts.values()][0].appleSubHash?.length,64);
 });

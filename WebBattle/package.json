@@ -24,9 +24,16 @@
     "version:next": "node scripts/bump-version.mjs",
     "examples:review": "tsx scripts/build-reviewed-examples.ts",
     "audio:sentences": "python scripts/generate-kokoro.py",
-    "cosmetics:build": "node scripts/generate-cosmetic-resources.mjs"
+    "cosmetics:build": "node scripts/generate-cosmetic-resources.mjs",
+    "native:sync": "npm run build && cap sync",
+    "native:android": "cap open android",
+    "native:ios": "cap open ios"
   },
   "dependencies": {
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/core": "^8.5.3",
+    "@capgo/capacitor-social-login": "^8.7.4",
     "@diffusionstudio/vits-web": "1.0.3",
     "@huggingface/transformers": "3.8.1",
     "jose": "^6.2.12",
@@ -37,6 +44,9 @@
     "ws": "^8.18.3"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
     "@cloudflare/workers-types": "^5.20260927.1",
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.0.0",
