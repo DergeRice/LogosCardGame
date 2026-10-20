@@ -19,17 +19,17 @@ export function HomeCharacter({character}:{character:{id:string;name:string;imag
   void(async()=>{try{
    const {Application,Assets,Sprite}=await import('pixi.js');if(disposed)return;
    const instance=new Application();app=instance;
-   await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:true,autoDensity:true,resolution:pixiResolution(),preference:'webgl',powerPreference:'low-power'});initialized=true;
+   await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:true,autoDensity:true,resolution:pixiResolution(true),preference:'webgl',powerPreference:'low-power'});initialized=true;
    if(disposed){instance.destroy(true,{children:true});return;}instance.ticker.stop();instance.ticker.maxFPS=isMobileGraphics()?24:30;
    const actor=new Sprite();sprite=actor;actor.anchor.set(.5);instance.stage.addChild(actor);node.append(instance.canvas);
    const draw=()=>{
     if(!sprite||!sprite.texture.width)return;
-    const w=instance.screen.width,h=instance.screen.height,base=Math.min(w*.92/sprite.texture.width,h*.92/sprite.texture.height),pulse=Math.max(0,1-(performance.now()-pressed.current)/450);
+    const w=instance.screen.width,h=instance.screen.height,base=Math.min(w*.92/sprite.texture.width,h*.92/sprite.texture.height,1),pulse=Math.max(0,1-(performance.now()-pressed.current)/450);
     const breath=reduced.matches?0:Math.sin(elapsed/1100),bounce=reduced.matches?0:Math.sin(pulse*Math.PI)*Math.min(9,h*.025);
     sprite.position.set(w/2,h/2-breath*2-bounce);sprite.scale.set(base*(1+breath*.008+pulse*.015));sprite.rotation=reduced.matches?0:Math.sin(pulse*Math.PI*2)*.025;
     if(!instance.ticker.started)instance.renderer.render(instance.stage);
    };
-   const load=async(url:string)=>{const current=++sequence;try{const texture=await Assets.load(url);if(disposed||current!==sequence)return;actor.texture=texture;node.dataset.textureSource=url;draw();clearTimeout(watchdog);failed=false;setRenderer('pixi');visibility();}catch{fallback()}};
+   const load=async(url:string)=>{const current=++sequence;try{const texture=await Assets.load(url);if(disposed||current!==sequence)return;texture.source.scaleMode='linear';texture.source.autoGenerateMipmaps=true;texture.source.updateMipmaps();actor.texture=texture;node.dataset.textureSource=url;draw();clearTimeout(watchdog);failed=false;setRenderer('pixi');visibility();}catch{fallback()}};
    loadRef.current=load;
    observer=new ResizeObserver(()=>{if(disposed)return;instance.renderer.resize(Math.max(1,node.clientWidth),Math.max(1,node.clientHeight));draw()});observer.observe(node);
    instance.ticker.add(t=>{elapsed+=Math.min(70,t.deltaMS);draw()});
