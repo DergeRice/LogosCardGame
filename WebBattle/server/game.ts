@@ -100,11 +100,23 @@ export class Game {
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
   this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
  }
- loginGoogle(p:Player,identity:{sub:string;name?:string}){
+ private googleReturns=new Map<string,{identity:{sub:string;name?:string};socket:GameSocket|undefined;expires:number}>();
+ confirmGoogleReturn(p:Player,accept:unknown){
+  const pending=this.googleReturns.get(p.id);this.googleReturns.delete(p.id);
+  if(accept!==true)return;
+  if(!pending||pending.socket!==p.socket||pending.expires<Date.now())return this.fail(p,'로그인 확인 시간이 만료됐어요. 다시 로그인해 주세요.');
+  this.loginGoogle(p,pending.identity);
+ }
+ loginGoogle(p:Player,identity:{sub:string;name?:string},confirmReturn=false){
+  this.googleReturns.delete(p.id);
   if(p.room)return this.fail(p,'Google 로그인은 대전이 끝난 뒤 해주세요.');
   const subHash=createHash('sha256').update(identity.sub).digest('hex');
   let account=[...this.accounts.values()].find(a=>a.googleSubHash===subHash);
   if(p.accountId&&account&&p.accountId!==account.id)return this.fail(p,'이 Google 계정은 다른 게임 계정에 연결되어 있어요.');
+  if(account&&!p.accountId&&confirmReturn){
+   this.googleReturns.set(p.id,{identity,socket:p.socket,expires:Date.now()+5*60_000});
+   this.send(p.socket,{type:'googleReturnConfirmation',username:account.username});return true;
+  }
   if(!account&&p.accountId){
    account=[...this.accounts.values()].find(a=>a.id===p.accountId);
    if(!account||account.googleSubHash)return this.fail(p,'이미 다른 Google 계정이 연결되어 있어요.');
@@ -154,7 +166,7 @@ export class Game {
   this.send(p.socket,{type:'auth',username:null,authToken:null});
   p.socket?.close(4000,'로그아웃');
  }
- disconnected(p: Player, socket: WebSocket) { if (p.socket !== socket) return; p.socket = undefined; p.disconnectedAt = Date.now(); const r = p.room && this.rooms.get(p.room); if (r) this.broadcast(r); this.community.publish(); }
+ disconnected(p: Player, socket: WebSocket) { if (p.socket !== socket) return; this.googleReturns.delete(p.id); p.socket = undefined; p.disconnectedAt = Date.now(); const r = p.room && this.rooms.get(p.room); if (r) this.broadcast(r); this.community.publish(); }
  view(r: Room, p: Player): RoomView {
   const state:RoomView={forfeiterId:r.forfeiterId, submittedSequences:p.submittedSequences??[],emoteLoadout:p.emoteLoadout??emoteSlots(this.community.record(p).store).filter((id):id is string=>Boolean(id)),resultPlayers:r.resultPlayers,code: r.code, phase: r.phase, custom:r.custom, name:r.name, hostId:r.hostId, matchId: r.matchId, players: r.players.map(x => ({ id: x.id, socialId:x.ai?undefined:this.community.id(x), name: x.name, avatar: x.avatar, profileId:x.ai?(x.profileId??basicProfile(x.id)):this.community.record(x).store.profile,characterId:x.ai?undefined:this.community.record(x).store.character, frameId:x.ai?showcaseFrame(Math.max(0,Number(x.name.match(/\d+/)?.[0]??1)-1)):this.community.record(x).store.frame, rating: x.rating, ratingDelta: x.ratingDelta,ratingShield:x.ratingShield, points: x.points, reward: x.reward, coins:x.coins??0,coinReward:x.coinReward??0,coinBase:x.coinBase,coinAdjustment:x.coinAdjustment,ratingMultiplier:1, baseReward:x.baseReward, opponentRating:x.opponentRating,rewardRatio:x.rewardRatio, calledGo:Boolean(x.calledGo), score: x.score, rankGames:x.ai?undefined:this.community.record(x).rankGames??0,ready: x.ready, rematch: x.rematch, connected: Boolean(x.ai || x.socket?.readyState === 1), handCount: x.hand.length, ai: Boolean(x.ai), difficulty:x.ai, disconnectedAt: x.disconnectedAt, lastPlayed:x.lastPlayed, playedSentences:x.playedSentences, lastAction:x.lastAction, reaction:x.reaction&&Date.now()-x.reaction.at<3000?x.reaction:undefined })), hand: ['battle', 'dealing'].includes(r.phase) ? p.hand : [], basicSupplyAt:p.basicSupplyAt??0,basicSupplyUsed:Boolean(p.basicSupplyUsed||(p.basicSupplyAt??0)>0), handVersion: p.handVersion, fieldVersion:p.fieldVersion??0, you: p.id, robNotices:p.robNotices, endsAt: r.endsAt, finalRound:r.finalRound, stageEndsAt: r.stageEndsAt, nextDealAt: r.nextDealAt, dealSerial: r.dealSerial, deckCount: r.deck.length, deckTotal: DECK_FACES.length, usedCards: r.discard, dealIntervalMs: this.dealMs, goCount: r.goCount, multiplier: 1, aiSetting:r.aiSetting, highScore: r.highScore, leaderId:r.leaderId, drawVote:r.drawVote, testMode:r.testMode, decision: r.decision, exchange:r.exchange?{id:r.exchange.id,fromId:r.exchange.fromId,toId:r.exchange.toId,expiresAt:r.exchange.expiresAt,offer:r.exchange.toId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.fromId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.offerId)})():undefined,wanted:r.exchange.toId===p.id||r.exchange.fromId===p.id?(()=>{const owner=r.players.find(x=>x.id===r.exchange!.toId);return owner&&[...owner.hand,...fieldCards(owner)].find(c=>c.id===r.exchange!.wantedId)})():undefined}:undefined,serverNow: Date.now(), actionAt: p.actionAt, exchangeAt: p.exchangeAt, reconnectMs: this.reconnectMs, durationMs: this.durationMs, winner: r.winner, reason: r.reason, log: r.log, judgment: p.judgment, expiresAt: r.expiresAt };
   if(r.phase==='battle'||r.phase==='dealing')state.players.forEach((player,index)=>{const source=r.players[index],draft=new Set(source.draftIds??[]);player.handPreview=source.hand.filter(c=>!draft.has(c.id));player.draftPreview=(source.draftIds??[]).map(id=>[...source.hand,...fieldCards(source)].find(c=>c.id===id)).filter((c):c is Card=>Boolean(c));});
@@ -544,6 +556,7 @@ export class Game {
   this.send(p.socket, { type: 'ack', requestId: msg.requestId });this.broadcast(r);
  }
  handle(p: Player, msg: Record<string, unknown>) {
+  if(msg.type==='googleReturnConfirm'){this.confirmGoogleReturn(p,msg.accept);return;}
   if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'||msg.code==='AUDIO_FAILURE'?'warn':'info',msg);}return;}
   p.touchedAt = Date.now(); this.tick();
   if(msg.type!=='ping')this.audit(p,'request','info',msg);

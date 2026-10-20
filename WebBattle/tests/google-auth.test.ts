@@ -36,3 +36,21 @@ test('Google can link an existing password account but cannot merge two accounts
  const t=socket(),q=game.hello(t.peer,undefined,'게스트2');game.authenticate(q,{type:'register',username:'second',password:'another secure password'});
  game.loginGoogle(q,{sub:'linked'});assert.match(t.last('error').message,/다른 게임 계정/);
 });
+
+
+test('guest link to an existing Google account requires consent and never merges inventory',()=>{
+ const game=new Game(),first=socket(),owner=game.hello(first.peer,undefined,'원래 계정');owner.coins=123;game.loginGoogle(owner,{sub:'one-google'});const id=owner.accountId;
+ const second=socket(),guest=game.hello(second.peer,undefined,'새 게스트');guest.coins=999;
+ game.loginGoogle(guest,{sub:'one-google'},true);
+ assert.equal(guest.accountId,undefined);assert.equal(guest.coins,999);assert.equal(second.last('auth'),undefined);assert.ok(second.last('googleReturnConfirmation'));
+ game.handle(guest,{type:'googleReturnConfirm',accept:false});game.handle(guest,{type:'googleReturnConfirm',accept:true});assert.equal(guest.accountId,undefined);
+ game.loginGoogle(guest,{sub:'one-google'},true);game.handle(guest,{type:'googleReturnConfirm',accept:true});
+ assert.equal(guest.accountId,id);assert.equal(guest.coins,123);assert.equal(game.accounts.size,1);assert.ok(second.last('auth').authToken);
+});
+
+test('unlinked Google identity saves the guest directly and confirmation cannot select another account',()=>{
+ const game=new Game(),s=socket(),guest=game.hello(s.peer,undefined,'게스트');guest.coins=77;
+ game.handle(guest,{type:'googleReturnConfirm',accept:true});assert.equal(guest.accountId,undefined);
+ game.loginGoogle(guest,{sub:'new-google'},true);assert.ok(guest.accountId);assert.equal(guest.coins,77);assert.equal(s.last('googleReturnConfirmation'),undefined);
+ game.loginGoogle(guest,{sub:'another-google'},true);assert.equal(game.accounts.size,1);assert.match(s.last('error').message,/다른 Google/);
+});

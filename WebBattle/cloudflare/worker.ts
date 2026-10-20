@@ -7,7 +7,7 @@ import {AuditStore} from './audit-store.js';
 import {adminAuthorized} from '../server/audit.js';
 import {verifyAppleCredential} from '../server/appleAuth.js';
 interface Env { GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
-type Attachment={appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
+type Attachment={googleReturn?:{identity:{sub:string;name?:string};expires:number};appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
 
@@ -142,6 +142,7 @@ export class BattleArena extends DurableObject<Env>{
     if(!p){if(msg.type!=='hello')throw Error('게스트 세션이 필요해요.');p=this.game.hello(adapter,msg.token,msg.name,msg.authToken,msg.readableGuest);this.game.audit(p,'connected');a.id=p.id;ws.serializeAttachment(a);}
     else if(p.socket===adapter){
      if(msg.type==='googleBegin'){
+      a.googleReturn=undefined;ws.serializeAttachment(a);
       if(!this.env.GOOGLE_CLIENT_ID)throw Error('Google 로그인 설정이 아직 완료되지 않았어요.');
       if(p.room)throw Error('Google 로그인은 홈에서 진행해 주세요.');
       const nonce=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
@@ -151,7 +152,16 @@ export class BattleArena extends DurableObject<Env>{
       const challenge=a.googleNonce;a.googleNonce=undefined;ws.serializeAttachment(a);
       if(!challenge||challenge.expires<Date.now())throw Error('Google 로그인 시간이 만료됐어요. 다시 시도해 주세요.');
       const identity=await verifyGoogleCredential([this.env.GOOGLE_CLIENT_ID,this.env.GOOGLE_IOS_CLIENT_ID].filter((x):x is string=>Boolean(x)),msg.credential,challenge.value);
-      if(p.socket===adapter)this.game.loginGoogle(p,identity);
+      if(p.socket===adapter){
+       const pending=this.game.loginGoogle(p,identity,msg.intent==='link');
+       a.googleReturn=pending?{identity,expires:Date.now()+5*60_000}:undefined;ws.serializeAttachment(a);
+      }
+     }else if(msg.type==='googleReturnConfirm'){
+      const pending=a.googleReturn;a.googleReturn=undefined;ws.serializeAttachment(a);
+      if(msg.accept===true){
+       if(!pending||pending.expires<Date.now())throw Error('로그인 확인 시간이 만료됐어요. 다시 로그인해 주세요.');
+       this.game.loginGoogle(p,pending.identity);
+      }else this.game.confirmGoogleReturn(p,false);
       }else if(msg.type==='appleBegin'){
       if(p.room)throw Error('Apple 로그인은 홈에서 진행해 주세요.');
       const audience=msg.platform==='ios'?this.env.APPLE_APP_ID:this.env.APPLE_CLIENT_ID;

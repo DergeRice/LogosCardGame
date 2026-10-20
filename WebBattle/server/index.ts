@@ -38,7 +38,7 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
       game.send(ws,{type:'googleChallenge',clientId:process.env.GOOGLE_CLIENT_ID,iosClientId:process.env.GOOGLE_IOS_CLIENT_ID,nonce:googleChallenges.issue(player.id)});
      }else if(msg.type==='googleLogin'){
       const identity=await verifyGoogleCredential([process.env.GOOGLE_CLIENT_ID,process.env.GOOGLE_IOS_CLIENT_ID].filter((x):x is string=>Boolean(x)),msg.credential,googleChallenges.take(player.id));
-      if(player.socket===ws)game.loginGoogle(player,identity);
+      if(player.socket===ws)game.loginGoogle(player,identity,msg.intent==='link');
       }else if(msg.type==='appleBegin'){
       if(player.room)throw Error('Apple 로그인은 홈에서 진행해 주세요.');
       const audience=msg.platform==='ios'?process.env.APPLE_APP_ID:process.env.APPLE_CLIENT_ID;

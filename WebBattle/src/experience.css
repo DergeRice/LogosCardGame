@@ -16,3 +16,5 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:au
 @media(prefers-reduced-motion:reduce){.rating-result strong,.consent-person.approved{animation:none}.consent-person{transition:none}}
 
 .account-dialog .apple-login{background:#202020;color:#fff;border:1px solid #202020;border-radius:8px;min-height:44px;padding:10px 18px;font-weight:700}.account-dialog .google-login{background:#fff;color:#202124;border:1px solid #dadce0;border-radius:8px;min-height:44px;padding:10px 18px;font-weight:700}
+
+.google-return-confirmation button{display:block;width:100%;min-height:44px;margin:10px 0;padding:10px 14px;border:1px solid #b9c9bc;border-radius:10px;background:#f0f5ee;color:#173d27;font-size:14px;font-weight:700}.google-return-confirmation button:first-of-type{background:#173d27;color:#fff}.google-return-confirmation h3{font-size:18px;line-height:1.4}
