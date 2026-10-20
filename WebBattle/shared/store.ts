@@ -1,3 +1,4 @@
+import {HOME_CHARACTERS} from './homeCharacters.js';
 import {NARO_EMOTES,BASIC_EMOTES,DUST_EMOTE_IDS,DEFAULT_EMOTE_SLOTS,emoteSlots,type EmoteSlots} from './emotes.js';
 import {EXTRA_COSMETICS} from './cosmetic-resources.js';
 export const LEAGUES=['아이언','브론즈','실버','골드','플래티넘','에메랄드','다이아','네더라이트'] as const;
@@ -16,6 +17,7 @@ export const COSMETICS=[
  ...NARO_EMOTES,
  {id:'character-naro',type:'character',name:'나로와 친구들',image:'/landing/mascots-mobile.webp'},
  {id:'character-table',type:'character',name:'카드 테이블',image:'/brand-ui/loading-under.png'},
+ ...HOME_CHARACTERS,
  {id:'board-classic',type:'board',name:'기본 나무 보드',image:'/brand-ui/game-back.png'},
  {id:'board-garden',type:'board',name:'정원 보드',image:'/landing/background.jpg'},
  {id:'background-garden',type:'background',name:'햇살 정원',image:'/landing/background.jpg'},

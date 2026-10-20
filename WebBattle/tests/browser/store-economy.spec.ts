@@ -7,7 +7,7 @@ for(const mobile of [false,true])test(`v96 shop odds prices and board reveal ${m
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{const m=JSON.parse(String(raw));sent.push(m);if(m.type==='storeOpen')ws.send(JSON.stringify({type:'storeResult',source:'box',box:m.box,requestId:m.requestId,rewards:[{name:'정원 보드',type:'board',image:'/landing/background.jpg',itemId:'board-garden',duplicate:false}]}));if(m.type==='hello'){ws.send(JSON.stringify({type:'session',name:'상점 검증',token:'economy-fixture',avatar:'pronoun',rating:1000,coins:50000,points:0}));ws.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store}}));}}));
  try{
   await page.goto('/');await page.getByRole('tab',{name:'상점',exact:true}).click({timeout:60000});
-  await expect(page.getByRole('button',{name:'✧ 850 · 구매',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'✧ 850 · 구매',exact:true}).first()).toBeDisabled();
   for(const [category,price] of [['보드판',500],['홈 배경',400],['프레임',300],['이모티콘',200]] as const){await page.getByRole('tab',{name:category,exact:true}).click();await expect(page.getByRole('button',{name:`✧ ${price} · 구매`,exact:true}).first()).toBeEnabled();}
   const boxes=page.locator('.store-box-rows>article');
   for(let i=0;i<3;i++){
