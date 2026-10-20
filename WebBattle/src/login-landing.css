@@ -48,3 +48,5 @@
  .landing-title{width:74.4%;left:12.8%;top:16%}.landing-mascots{width:56.76%;left:21.62%;top:38%}.landing-cards{width:110%;left:-5%;top:-5%}
 }
 @media(prefers-reduced-motion:reduce){.landing-background,.landing-cards,.landing-title,.landing-mascots,.landing-cta{animation:none!important;opacity:1;transform:none}}
+
+.landing-policy-links{display:flex;justify-content:center;gap:12px;font-size:10px;font-weight:700}.landing-policy-links a{color:inherit;text-decoration:underline;text-underline-offset:2px}
