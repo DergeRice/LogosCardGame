@@ -61,6 +61,66 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "image": "/cosmetics/emotes/%EA%B0%95%EC%95%84%EC%A7%80%20%ED%99%94%EB%82%A8.webp"
   },
   {
+    "id": "emote-말 고민",
+    "type": "emote",
+    "name": "말 고민",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EA%B3%A0%EB%AF%BC.webp"
+  },
+  {
+    "id": "emote-말 놀람",
+    "type": "emote",
+    "name": "말 놀람",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EB%86%80%EB%9E%8C.webp"
+  },
+  {
+    "id": "emote-말 눈물",
+    "type": "emote",
+    "name": "말 눈물",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EB%88%88%EB%AC%BC.webp"
+  },
+  {
+    "id": "emote-말 미소",
+    "type": "emote",
+    "name": "말 미소",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EB%AF%B8%EC%86%8C.webp"
+  },
+  {
+    "id": "emote-말 부끄러움",
+    "type": "emote",
+    "name": "말 부끄러움",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EB%B6%80%EB%81%84%EB%9F%AC%EC%9B%80.webp"
+  },
+  {
+    "id": "emote-말 사랑",
+    "type": "emote",
+    "name": "말 사랑",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EC%82%AC%EB%9E%91.webp"
+  },
+  {
+    "id": "emote-말 신남",
+    "type": "emote",
+    "name": "말 신남",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EC%8B%A0%EB%82%A8.webp"
+  },
+  {
+    "id": "emote-말 인사",
+    "type": "emote",
+    "name": "말 인사",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%EC%9D%B8%EC%82%AC.webp"
+  },
+  {
+    "id": "emote-말 하품",
+    "type": "emote",
+    "name": "말 하품",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%ED%95%98%ED%92%88.webp"
+  },
+  {
+    "id": "emote-말 화남",
+    "type": "emote",
+    "name": "말 화남",
+    "image": "/cosmetics/emotes/%EB%A7%90%20%ED%99%94%EB%82%A8.webp"
+  },
+  {
     "id": "emote-분홍원숭이 고민",
     "type": "emote",
     "name": "분홍원숭이 고민",
@@ -119,6 +179,66 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "type": "emote",
     "name": "분홍원숭이 화남",
     "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%ED%99%94%EB%82%A8.webp"
+  },
+  {
+    "id": "emote-왕 고민",
+    "type": "emote",
+    "name": "왕 고민",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EA%B3%A0%EB%AF%BC.webp"
+  },
+  {
+    "id": "emote-왕 놀람",
+    "type": "emote",
+    "name": "왕 놀람",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EB%86%80%EB%9E%8C.webp"
+  },
+  {
+    "id": "emote-왕 눈물",
+    "type": "emote",
+    "name": "왕 눈물",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EB%88%88%EB%AC%BC.webp"
+  },
+  {
+    "id": "emote-왕 부끄러움",
+    "type": "emote",
+    "name": "왕 부끄러움",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EB%B6%80%EB%81%84%EB%9F%AC%EC%9B%80.webp"
+  },
+  {
+    "id": "emote-왕 사랑",
+    "type": "emote",
+    "name": "왕 사랑",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EC%82%AC%EB%9E%91.webp"
+  },
+  {
+    "id": "emote-왕 응원",
+    "type": "emote",
+    "name": "왕 응원",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EC%9D%91%EC%9B%90.webp"
+  },
+  {
+    "id": "emote-왕 인사",
+    "type": "emote",
+    "name": "왕 인사",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EC%9D%B8%EC%82%AC.webp"
+  },
+  {
+    "id": "emote-왕 최고",
+    "type": "emote",
+    "name": "왕 최고",
+    "image": "/cosmetics/emotes/%EC%99%95%20%EC%B5%9C%EA%B3%A0.webp"
+  },
+  {
+    "id": "emote-왕 하품",
+    "type": "emote",
+    "name": "왕 하품",
+    "image": "/cosmetics/emotes/%EC%99%95%20%ED%95%98%ED%92%88.webp"
+  },
+  {
+    "id": "emote-왕 화남",
+    "type": "emote",
+    "name": "왕 화남",
+    "image": "/cosmetics/emotes/%EC%99%95%20%ED%99%94%EB%82%A8.webp"
   },
   {
     "id": "emote-점박이 고민",
