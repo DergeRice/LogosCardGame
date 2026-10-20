@@ -26,7 +26,7 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  get3: { name: 'Get 3', symbol: '+3', example: '카드 3장 받기', sheet: 4, col: 1, row: 2, tone: 'blue' },
  rob: { name: 'Rob', symbol: 'R', example: '상대 카드 1장 뺏기', sheet: 4, col: 0, row: 2, tone: 'coral' },
  exchange: { name: 'Exchange', symbol: 'E', example: '상대에게 카드 교환 요청', sheet: 4, col: 2, row: 1, tone: 'green' },
- nothing: {name:'Nothing',symbol:'Ø',example:'꽝 · 문장·득점·교환에 사용할 수 없어요. 아래 쓰레기통으로 버리세요.',sheet:7,col:0,row:0,tone:'gold',source:'public/assets/nothing1.png'},
+ nothing: {name:'Nothing',symbol:'Ø',example:'꽝 · 문장·득점·교환에 사용할 수 없어요. 보관함으로 옮겨 두세요.',sheet:7,col:0,row:0,tone:'gold',source:'public/assets/nothing1.png'},
  protect: { name: 'Protect', symbol: 'S', example: '가지고 있으면 Rob 방어', sheet: 4, col: 3, row: 1, tone: 'gold' }
 };
 export const CARD_POS: Record<Kind, LearningPosType | null> = {
@@ -106,7 +106,7 @@ export type Judgment = LearningGrammarCheckResult & { form?: number; label?: str
 export function judge(kinds: Kind[]): Judgment {
  // This is the actual battle entry point. Check() has different semantics.
  const positions=kinds.map(kind => CARD_POS[kind]);
- if(kinds.includes('nothing'))return {valid:false,patternType:1,message:'Nothing은 꽝 카드라 문장에 사용할 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'Nothing은 아래 쓰레기통으로 버리세요.',spans:[]};
+ if(kinds.includes('nothing'))return {valid:false,patternType:1,message:'Nothing은 꽝 카드라 문장에 사용할 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'Nothing은 보관함으로 옮겨 두세요.',spans:[]};
  if(positions.some(pos=>pos===null))return {valid:false,patternType:1,message:'기능 카드는 문장에 넣을 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'기능 카드는 손패에서 사용하세요.',spans:[]};
  let adjectiveRun=0,adverbRun=0;
  for(const kind of kinds){adjectiveRun=kind==='adjective'?adjectiveRun+1:0;adverbRun=['adverb','frequency','very'].includes(kind)?adverbRun+1:0;const message=adjectiveRun>3?'형용사는 연속 3장까지 사용할 수 있습니다.':adverbRun>2?'부사는 연속 2장까지 사용할 수 있습니다.':'';if(message)return {valid:false,patternType:1,message,debugLog:'[BattleSyntax] modifier chain limit',usedStartIndex:0,usedLength:0,points:0,reason:message,spans:[]};}
@@ -144,5 +144,5 @@ export type ExchangeRequest = { id:string; fromId:string; toId:string; offerId:s
 export type Decision = { id: string; playerId: string; expiresAt: number; startedAt: number };
 export type RobNotice = {id:string;fromId:string;fromName:string;fromAvatar:Kind;fromProfileId?:string;fromCharacterId?:string;fromFrameId?:string;card:Card;source:"hand"|"field"};
 export type RoomListing = {code:string;name:string;hostName:string;humans:number;aiCount:number;maxPlayers:number};
-export type RoomView = { forfeiterId?:string; emoteLoadout?:string[]; submittedSequences?:string[]; resultPlayers?:PublicPlayer[];code: string; phase: 'lobby' | 'matching' | 'reveal' | 'dealing' | 'battle' | 'result'; custom?:boolean; name?:string; hostId?:string; matchId: string; players: PublicPlayer[]; hand: Card[]; handVersion: number; basicSupplyAt?:number;basicSupplyUsed?:boolean; fieldVersion?: number; you: string; robNotices?:RobNotice[]; endsAt: number; finalRound?:boolean; stageEndsAt: number; nextDealAt: number; dealSerial: number; deckCount: number; deckTotal: number; usedCards: Card[]; dealIntervalMs: number; goCount: number; aiSetting?:Difficulty; multiplier: number; highScore: number; leaderId?: string; drawVote?: DrawVote; testMode?: boolean; decision?: Decision; exchange?: { id:string;fromId:string;toId:string;expiresAt:number;offer?:Card;wanted?:Card }; serverNow: number; actionAt: number; exchangeAt: number; reconnectMs: number; durationMs: number; winner?: string | null; reason?: string; log: { id: string; text: string }[]; judgment?: Judgment; expiresAt: number };
+export type RoomView = { storage?:Card[];storageVersion?:number; forfeiterId?:string; emoteLoadout?:string[]; submittedSequences?:string[]; resultPlayers?:PublicPlayer[];code: string; phase: 'lobby' | 'matching' | 'reveal' | 'dealing' | 'battle' | 'result'; custom?:boolean; name?:string; hostId?:string; matchId: string; players: PublicPlayer[]; hand: Card[]; handVersion: number; basicSupplyAt?:number;basicSupplyUsed?:boolean; fieldVersion?: number; you: string; robNotices?:RobNotice[]; endsAt: number; finalRound?:boolean; stageEndsAt: number; nextDealAt: number; dealSerial: number; deckCount: number; deckTotal: number; usedCards: Card[]; dealIntervalMs: number; goCount: number; aiSetting?:Difficulty; multiplier: number; highScore: number; leaderId?: string; drawVote?: DrawVote; testMode?: boolean; decision?: Decision; exchange?: { id:string;fromId:string;toId:string;expiresAt:number;offer?:Card;wanted?:Card }; serverNow: number; actionAt: number; exchangeAt: number; reconnectMs: number; durationMs: number; winner?: string | null; reason?: string; log: { id: string; text: string }[]; judgment?: Judgment; expiresAt: number };
 

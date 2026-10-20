@@ -38,7 +38,7 @@ try{
  }
  const naturalCorrect=Boolean(actor);actor??=clients[0];const played=actor.room.hand.find(c=>c.kind==='verb')??actor.room.hand[0];
  const message={requestId:randomUUID(),handVersion:actor.room.handVersion,cards:[played.id]};actor.send('submit',message);actor.send('submit',message);
- await actor.until(()=>actor.room.judgment?.submissionId===message.requestId);if(naturalCorrect)assert.equal(actor.room.judgment.valid,true);assert.equal(actor.room.judgment.accepted,false);assert.equal(actor.room.players.find(p=>p.id===actor.room.you).score,0);assert.ok(actor.room.hand.some(c=>c.id===played.id));await actor.until(()=>actor.messages.some(m=>m.duplicate));
+ await actor.until(()=>actor.room.judgment?.submissionId===message.requestId);if(naturalCorrect)assert.equal(actor.room.judgment.valid,true);assert.equal(actor.room.judgment.accepted,naturalCorrect);assert.equal(actor.room.players.find(p=>p.id===actor.room.you).score,naturalCorrect?actor.room.judgment.points:0);assert.equal(actor.room.hand.some(c=>c.id===played.id),!naturalCorrect);await actor.until(()=>actor.messages.some(m=>m.duplicate));
  const adminHeaders={Authorization:'Bearer test-admin-secret-32-characters-long',Origin:'https://logos-card-battle.netlify.app'};
  assert.equal((await mf.dispatchFetch('http://localhost/admin/logs')).status,200);
  assert.equal((await mf.dispatchFetch('http://localhost/admin/logs',{headers:{Authorization:'Bearer wrong'}})).status,200);
@@ -65,15 +65,17 @@ try{
  const reviewed=await mf.dispatchFetch('http://localhost/admin/logs/'+auditId,{method:'POST',headers:{...adminHeaders,'Content-Type':'application/json'},body:JSON.stringify({status:'investigating',note:'재시작 저장 검사'})});assert.equal(reviewed.status,200);
  await wait(Math.max(0,actor.room.actionAt-Date.now())+30);
  const trashCard=actor.room.hand.find(c=>c.id!==played.id)??actor.room.hand[0],trashSize=actor.room.hand.length,trashDeck=actor.room.deckCount,trashRequest={requestId:randomUUID(),cardId:trashCard.id,handVersion:actor.room.handVersion};
- actor.send('discard',trashRequest);actor.send('discard',trashRequest);await actor.until(()=>actor.room.hand.length===trashSize-1);await actor.until(()=>actor.messages.some(m=>m.requestId===trashRequest.requestId&&m.duplicate));assert.equal(actor.room.deckCount,trashDeck);assert.equal(actor.room.usedCards.filter(c=>c.id===trashCard.id).length,1);
+ actor.send('discard',trashRequest);actor.send('discard',trashRequest);await actor.until(()=>actor.room.hand.length===trashSize-1);await actor.until(()=>actor.messages.some(m=>m.requestId===trashRequest.requestId&&m.duplicate));assert.equal(actor.room.deckCount,trashDeck);assert.equal(actor.room.storage.filter(c=>c.id===trashCard.id).length,1);assert.equal(actor.room.usedCards.filter(c=>c.id===trashCard.id).length,0);
  const saved=clients.map(c=>({token:c.token,room:c.room}));for(const c of clients)c.ws.close();await wait(250);await mf.dispose();
  mf=make();url=new URL('/socket',await mf.ready);url.protocol='ws:';
  clients=await Promise.all(saved.map((s,i)=>new Client(url).hello('resumed',s.token,i===0?accountToken:undefined)));
  for(let i=0;i<4;i++){await clients[i].until(()=>clients[i].room?.phase==='battle');assert.equal(clients[i].room.matchId,saved[i].room.matchId);assert.deepEqual(clients[i].room.hand,saved[i].room.hand);}
+ assert.equal(clients[saved.findIndex(s=>s.token===actor.token)].room.storage[0].id,trashCard.id);
  const persistedAudit=await (await mf.dispatchFetch('http://localhost/admin/logs?q='+message.requestId,{headers:adminHeaders})).json();assert.ok(persistedAudit.logs.some(e=>e.id===auditId&&e.note==='재시작 저장 검사'));
  assert.equal((await mf.dispatchFetch('http://localhost/admin/logs',{headers:sessionHeaders})).status,200);
  const persistedStats=await (await mf.dispatchFetch('http://localhost/admin/logs/sentences',{headers:adminHeaders})).json();assert.equal(persistedStats.total,sentenceStats.total);assert.equal(persistedStats.unique,sentenceStats.unique);
  const restored=clients[saved.findIndex(s=>s.token===actor.token)];restored.send('submit',message);await restored.until(()=>restored.messages.some(m=>m.duplicate));
+ await wait(Math.max(0,restored.room.actionAt-Date.now())+30);const retrieve={requestId:randomUUID(),cardId:trashCard.id,handVersion:restored.room.handVersion,storageVersion:restored.room.storageVersion};restored.send('retrieveCard',retrieve);restored.send('retrieveCard',retrieve);await restored.until(()=>restored.room.storage.length===0&&restored.room.hand.some(c=>c.id===trashCard.id));await restored.until(()=>restored.messages.some(m=>m.requestId===retrieve.requestId&&m.duplicate));assert.equal(restored.room.hand.filter(c=>c.id===trashCard.id).length,1);
  const beforeDraw=clients[0].room.deckCount,voteId=clients[0].room.drawVote.id,handSizes=clients.map(c=>c.room.hand.length);for(const c of clients)c.send('drawVote',{voteId,approve:true});for(let i=0;i<clients.length;i++)await clients[i].until(()=>clients[i].room.hand.length===handSizes[i]+1);assert.equal(clients[0].room.deckCount,beforeDraw-4);
  clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');
  for(const c of clients.slice(1))c.send('rematch');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='battle'&&c.room.matchId!==saved[0].room.matchId);

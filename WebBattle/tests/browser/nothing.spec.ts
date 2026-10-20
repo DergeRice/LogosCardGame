@@ -10,7 +10,7 @@ for(const mobile of [false,true])test(`Nothing matches normal card size and disc
  await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{
   const m=JSON.parse(String(raw));messages.push(m);
   if(m.type==='hello'){ws.send(JSON.stringify({type:'session',token:'nothing-fixture',name:me.name,avatar:'pronoun',rating:1000,points:0}));ws.send(JSON.stringify({type:'state',room}));}
-  if(m.type==='discard'){room.usedCards.push(room.hand.find(c=>c.id===m.cardId)!);room.hand=room.hand.filter(c=>c.id!==m.cardId);room.handVersion++;ws.send(JSON.stringify({type:'ack',requestId:m.requestId}));ws.send(JSON.stringify({type:'state',room}));}
+  if(m.type==='storeCard'){room.usedCards.push(room.hand.find(c=>c.id===m.cardId)!);room.hand=room.hand.filter(c=>c.id!==m.cardId);room.handVersion++;ws.send(JSON.stringify({type:'ack',requestId:m.requestId}));ws.send(JSON.stringify({type:'state',room}));}
  }));
  try{
   await page.goto('/');await page.getByRole('button',{name:'손패 펼쳐 보기'}).click();
@@ -19,16 +19,16 @@ for(const mobile of [false,true])test(`Nothing matches normal card size and disc
    const card=page.locator(`[data-card-id="blank-${i}"]`);expect(await card.evaluate(el=>({width:el.clientWidth,height:el.clientHeight}))).toEqual(normal);
    expect(await card.locator('img').evaluate(el=>({width:(el as HTMLImageElement).naturalWidth,height:(el as HTMLImageElement).naturalHeight}))).toEqual({width:488,height:693});
   }
-  await page.locator('[data-card-id="blank-0"]').click();await expect(page.getByRole('status').filter({hasText:'Nothing은 꽝 카드예요. 아래 쓰레기통으로 버려주세요.'})).toBeVisible();await expect(page.locator('[data-field-id]')).toHaveCount(0);
+  await page.locator('[data-card-id="blank-0"]').click();await expect(page.getByRole('status').filter({hasText:'Nothing은 꽝 카드예요. 아래 보관 영역으로 옮겨 주세요.'})).toBeVisible();await expect(page.locator('[data-field-id]')).toHaveCount(0);
   await page.screenshot({path:`docs/screenshots/nothing-hand-${mobile?'mobile':'desktop'}.png`});
   const box=(await page.locator('[data-card-id="blank-0"]').boundingBox())!,x=box.x+box.width/2,y=box.y+box.height/2;
   const touch=mobile&&browserName==='chromium'?await context.newCDPSession(page):null;
   if(touch){await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await page.waitForTimeout(300);await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+12,y:y-12}]});}
   else{await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+12,y-12);}
-  const trash=page.getByRole('region',{name:'카드 버리기'});await expect(trash).toBeVisible();const target=(await trash.boundingBox())!,tx=target.x+target.width/2,ty=target.y+target.height/2;
+  const trash=page.getByRole('region',{name:'카드 보관하기'});await expect(trash).toBeVisible();const target=(await trash.boundingBox())!,tx=target.x+target.width/2,ty=target.y+target.height/2;
   if(touch){await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:tx,y:ty}]});await expect(trash).toHaveClass(/trash-hover/);await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
   else{await page.mouse.move(tx,ty,{steps:10});await page.mouse.up();}
-  await expect(page.locator('[data-card-id="blank-0"]')).toHaveCount(0);expect(messages.filter(m=>m.type==='discard').map(m=>m.cardId)).toEqual(['blank-0']);expect(messages.some(m=>m.type==='special')).toBe(false);await expect(page.getByTestId('my-score')).toHaveText('0');expect(errors).toEqual([]);
+  await expect(page.locator('[data-card-id="blank-0"]')).toHaveCount(0);expect(messages.filter(m=>m.type==='storeCard').map(m=>m.cardId)).toEqual(['blank-0']);expect(messages.some(m=>m.type==='special')).toBe(false);await expect(page.getByTestId('my-score')).toHaveText('0');expect(errors).toEqual([]);
   expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
  }finally{await context.close()}
 });

@@ -20,6 +20,6 @@ test('Nothing cannot enter a draft, forge a sentence or special action; discard 
  game.syncDraft(a,{...base,cards:[card.id]});assert.deepEqual(a.draftIds,[]);
  game.action(a,{...base,cards:[card.id,'verb'],requestId:randomUUID()});assert.equal(a.score,0);assert.equal(a.hand.length,2);
  game.special(a,{...base,cardId:card.id,requestId:randomUUID()});assert.equal(a.hand.length,2);
- const discard={...base,cardId:card.id,requestId:randomUUID()};game.discardCard(a,discard);game.discardCard(a,discard);assert.equal(a.hand.length,1);assert.equal(a.score,0);assert.equal(room.discard.filter(c=>c.id===card.id).length,1);
+ const discard={...base,cardId:card.id,requestId:randomUUID()};game.discardCard(a,discard);game.discardCard(a,discard);assert.equal(a.hand.length,1);assert.equal(a.score,0);assert.equal(a.storage?.filter(c=>c.id===card.id).length,1);assert.equal(room.discard.filter(c=>c.id===card.id).length,0);
  a.hand=[{...card,id:'ai-nothing'}];a.ai='normal';a.actionAt=0;assert.equal(game.autoSpecial(room,a),true);assert.equal(a.hand.length,0);assert.equal(a.score,0);
 });

@@ -24,14 +24,12 @@ test('71 physical cards including requested extra copies, no refill/recycling th
  game.deal(r,13);assert.equal(r.deck.length,0);const cards=[...people.flatMap(p=>p.hand),...r.deck];assert.equal(cards.length,71);assert.equal(new Set(cards.map(faceKey)).size,59);assert.equal(new Set(cards.map(c=>c.id)).size,71);const expected=new Map<string,number>();for(const c of DECK_FACES)expected.set(faceKey(c),(expected.get(faceKey(c))??0)+1);const actual=new Map<string,number>();for(const c of cards)actual.set(faceKey(c),(actual.get(faceKey(c))??0)+1);assert.deepEqual(actual,expected);
  const spent=people[0].hand.pop()!;r.discard.push(spent);const serial=r.dealSerial;game.deal(r,1);assert.equal(r.dealSerial,serial);assert.equal(r.deck.length,0);assert.equal(people.flatMap(p=>p.hand).some(c=>c.id===spent.id),false);
 });
-test('controlled fixtures: <20 retains hand; exactly 20 scores and opens the Go choice',t=>{
+test('low scores accumulate and the twenty point threshold only opens Go choice',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2}),p=game.hello(socket(),null,'A');game.quick(p);const r=game.rooms.get(p.room!)!;game.reveal(r);game.begin(r);
- p.hand=fixture(13);const before=[...p.hand],version=p.handVersion;
- for(let i=0;i<3;i++){now+=1600;const msg={requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)};game.action(p,msg);game.action(p,msg);assert.equal(p.judgment!.valid,true);assert.equal(p.judgment!.points,13);assert.equal(p.judgment!.accepted,false);assert.equal(p.score,0);assert.deepEqual(p.hand,before);assert.equal(p.handVersion,version);assert.equal(r.discard.length,0);}
- p.hand=[...fixture(20),{id:randomUUID(),kind:'pronoun'}];p.handVersion++;const leftover=p.hand.at(-1)!;now+=1600;
- const msg={requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)};game.action(p,msg);game.action(p,msg);
- assert.equal(p.score,20);assert.equal(p.judgment!.usedLength,5);assert.equal(p.judgment!.accepted,true);assert.deepEqual(p.hand,[leftover]);assert.equal(r.discard.length,5);assert.equal(game.view(r,p).usedCards.length,5);assert.equal(r.decision!.playerId,p.id);
+ for(const points of [13,20]){p.hand=fixture(points as 13|20);p.handVersion++;now+=1600;const msg={requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)};game.action(p,msg);game.action(p,msg);assert.equal(p.judgment!.accepted,true);assert.equal(p.hand.length,0);if(points===13){assert.equal(p.score,13);assert.equal(r.decision,undefined);}}
+ assert.equal(p.score,33);assert.equal(r.decision!.playerId,p.id);assert.equal(r.highScore,33);
 });
+
 test('controlled fixtures: Go authority, takeover and one-time settlement preserved',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2,durationMs:90000}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
  const submit=(p:typeof a,mode:20|26|13)=>{p.hand=fixture(mode);p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
