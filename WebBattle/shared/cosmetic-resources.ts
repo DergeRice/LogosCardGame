@@ -901,16 +901,94 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "image": "/cosmetics/frames/style-60.webp"
   },
   {
+    "id": "board-가을양피지",
+    "type": "board",
+    "name": "가을양피지",
+    "image": "/cosmetics/boards/%EA%B0%80%EC%9D%84%EC%96%91%ED%94%BC%EC%A7%80.webp"
+  },
+  {
+    "id": "board-공책",
+    "type": "board",
+    "name": "공책",
+    "image": "/cosmetics/boards/%EA%B3%B5%EC%B1%85.webp"
+  },
+  {
+    "id": "board-구름하늘",
+    "type": "board",
+    "name": "구름하늘",
+    "image": "/cosmetics/boards/%EA%B5%AC%EB%A6%84%ED%95%98%EB%8A%98.webp"
+  },
+  {
+    "id": "board-네온아케이드",
+    "type": "board",
+    "name": "네온아케이드",
+    "image": "/cosmetics/boards/%EB%84%A4%EC%98%A8%EC%95%84%EC%BC%80%EC%9D%B4%EB%93%9C.webp"
+  },
+  {
+    "id": "board-달빛연못",
+    "type": "board",
+    "name": "달빛연못",
+    "image": "/cosmetics/boards/%EB%8B%AC%EB%B9%9B%EC%97%B0%EB%AA%BB.webp"
+  },
+  {
+    "id": "board-대나무",
+    "type": "board",
+    "name": "대나무",
+    "image": "/cosmetics/boards/%EB%8C%80%EB%82%98%EB%AC%B4.webp"
+  },
+  {
+    "id": "board-도토리숲",
+    "type": "board",
+    "name": "도토리숲",
+    "image": "/cosmetics/boards/%EB%8F%84%ED%86%A0%EB%A6%AC%EC%88%B2.webp"
+  },
+  {
+    "id": "board-딸기크림",
+    "type": "board",
+    "name": "딸기크림",
+    "image": "/cosmetics/boards/%EB%94%B8%EA%B8%B0%ED%81%AC%EB%A6%BC.webp"
+  },
+  {
+    "id": "board-리본공방",
+    "type": "board",
+    "name": "리본공방",
+    "image": "/cosmetics/boards/%EB%A6%AC%EB%B3%B8%EA%B3%B5%EB%B0%A9.webp"
+  },
+  {
     "id": "board-마법도서관",
     "type": "board",
     "name": "마법도서관",
     "image": "/cosmetics/boards/%EB%A7%88%EB%B2%95%EB%8F%84%EC%84%9C%EA%B4%80.webp"
   },
   {
+    "id": "board-민트책상",
+    "type": "board",
+    "name": "민트책상",
+    "image": "/cosmetics/boards/%EB%AF%BC%ED%8A%B8%EC%B1%85%EC%83%81.webp"
+  },
+  {
     "id": "board-벚꽃밤",
     "type": "board",
     "name": "벚꽃밤",
     "image": "/cosmetics/boards/%EB%B2%9A%EA%BD%83%EB%B0%A4.webp"
+  },
+  {
+    "id": "board-베이커리",
+    "type": "board",
+    "name": "베이커리",
+    "image": "/cosmetics/boards/%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC.webp"
+  },
+  {
+    "id": "board-별빛천문대",
+    "type": "board",
+    "name": "별빛천문대",
+    "image": "/cosmetics/boards/%EB%B3%84%EB%B9%9B%EC%B2%9C%EB%AC%B8%EB%8C%80.webp"
+  },
+  {
+    "id": "board-비오는창가",
+    "type": "board",
+    "name": "비오는창가",
+    "image": "/cosmetics/boards/%EB%B9%84%EC%98%A4%EB%8A%94%EC%B0%BD%EA%B0%80.webp"
   },
   {
     "id": "board-사막시장",
@@ -943,10 +1021,52 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "image": "/cosmetics/boards/%EC%9A%B0%EC%A3%BC%EC%84%A0.webp"
   },
   {
+    "id": "board-은하수",
+    "type": "board",
+    "name": "은하수",
+    "image": "/cosmetics/boards/%EC%9D%80%ED%95%98%EC%88%98.webp"
+  },
+  {
+    "id": "board-음악실",
+    "type": "board",
+    "name": "음악실",
+    "image": "/cosmetics/boards/%EC%9D%8C%EC%95%85%EC%8B%A4.webp"
+  },
+  {
+    "id": "board-장난감",
+    "type": "board",
+    "name": "장난감",
+    "image": "/cosmetics/boards/%EC%9E%A5%EB%82%9C%EA%B0%90.webp"
+  },
+  {
+    "id": "board-조개해변",
+    "type": "board",
+    "name": "조개해변",
+    "image": "/cosmetics/boards/%EC%A1%B0%EA%B0%9C%ED%95%B4%EB%B3%80.webp"
+  },
+  {
+    "id": "board-초록피크닉",
+    "type": "board",
+    "name": "초록피크닉",
+    "image": "/cosmetics/boards/%EC%B4%88%EB%A1%9D%ED%94%BC%ED%81%AC%EB%8B%89.webp"
+  },
+  {
     "id": "board-칠판",
     "type": "board",
     "name": "칠판",
     "image": "/cosmetics/boards/%EC%B9%A0%ED%8C%90.webp"
+  },
+  {
+    "id": "board-커피대리석",
+    "type": "board",
+    "name": "커피대리석",
+    "image": "/cosmetics/boards/%EC%BB%A4%ED%94%BC%EB%8C%80%EB%A6%AC%EC%84%9D.webp"
+  },
+  {
+    "id": "board-크리스마스",
+    "type": "board",
+    "name": "크리스마스",
+    "image": "/cosmetics/boards/%ED%81%AC%EB%A6%AC%EC%8A%A4%EB%A7%88%EC%8A%A4.webp"
   },
   {
     "id": "board-하늘성채",
