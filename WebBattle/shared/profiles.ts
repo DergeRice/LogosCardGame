@@ -1,3 +1,4 @@
+import {ACCESSORY_PROFILES} from './accessoryProfiles.js';
 import {characterName} from './characterNames.js';
 export const BASIC_PROFILES=[
  {id:'profile-basic-rabbit',type:'profile',name:'아리 얼굴',image:'/profiles/basic/rabbit.webp',basic:true},
@@ -9,6 +10,6 @@ export const BASIC_PROFILES=[
 export const COLLECTIBLE_PROFILES=[
  ['rabbit-wink','윙크 토끼'],['naro-smile','웃는 나로'],['dog-cool','멋쟁이 강아지'],['spotted-laugh','신난 점박이'],['hamster-wink','윙크 햄스터'],
  ['rabbit-happy','행복한 토끼'],['naro-cool','멋쟁이 나로'],['dog-love','사랑에 빠진 강아지'],['spotted-cool','멋쟁이 점박이'],['hamster-cool','멋쟁이 햄스터'],
-].map(([id,name])=>({id:'profile-'+id,type:'profile' as const,name:characterName(name),image:'/profiles/collectible/'+id+'.webp'}));
+].map(([id,name])=>({id:'profile-'+id,type:'profile' as const,name:characterName(name),image:'/profiles/collectible/'+id+'.webp'})).concat(ACCESSORY_PROFILES);
 /** Stable fallback for older saves, bots and example ranking rows. */
 export function basicProfile(seed:string){let hash=0;for(const c of seed)hash=(Math.imul(hash,31)+c.charCodeAt(0))>>>0;return BASIC_PROFILES[hash%BASIC_PROFILES.length].id;}

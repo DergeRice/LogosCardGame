@@ -1,3 +1,4 @@
+import {NARO_CHARACTER_POSES} from './naroCharacter.js';
 import {characterName} from './characterNames.js';
 import {NARO_EMOTES} from './emotes.js';
 import {EXTRA_COSMETICS} from './cosmetic-resources.js';
@@ -8,7 +9,7 @@ function character(id:string,name:string,ids:string[]){
 }
 const series=(name:string,poses:string[])=>poses.map(p=>'emote-'+name+' '+p);
 export const HOME_CHARACTERS=[
- character('character-naro-solo','나로',NARO_EMOTES.map(c=>c.id)),
+ {id:'character-naro-solo',type:'character' as const,name:'나로',image:NARO_CHARACTER_POSES[0].image,poses:NARO_CHARACTER_POSES},
  character('character-hamster','햄스터',series('햄스터',['인사','응원','화남','어질어질','놀람','부끄러움','하품','사랑','고민','눈물'])),
  character('character-dog','강아지',series('강아지',['최고','기쁨','화남','놀람','걱정','도발','고민','하품','사랑','응원'])),
  character('character-spotted','점박이',series('점박이',['인사','응원','화남','놀람','고민','눈물','사랑','부끄러움','하품','최고'])),

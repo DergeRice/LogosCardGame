@@ -3,14 +3,14 @@ import {BASIC_PROFILES,COLLECTIBLE_PROFILES} from '../shared/profiles.js';
 import {COSMETICS,defaultHubSave,migrateProfiles,openDemoBox,BOX_WEIGHTS,LOOT_WEIGHTS,dummyRanking} from '../shared/store.js';
 import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';import {Game,type GameSocket} from '../server/game.js';import {snapshot,restore} from '../server/persistence.js';
 const socket=():GameSocket=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}});
-test('15 independent profile artworks: five free and ten collectible, all decoded and preloaded',async()=>{
- assert.equal(COSMETICS.filter(c=>c.type==='profile').length,15);assert.equal(BASIC_PROFILES.length,5);assert.equal(COLLECTIBLE_PROFILES.length,10);
+test('74 independent profile artworks: five free and 69 collectible, all decoded and preloaded',async()=>{
+ assert.equal(COSMETICS.filter(c=>c.type==='profile').length,74);assert.equal(BASIC_PROFILES.length,5);assert.equal(COLLECTIBLE_PROFILES.length,69);
  for(const item of [...BASIC_PROFILES,...COLLECTIBLE_PROFILES]){const image=await sharp('public'+item.image).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(image.info.width,512);assert.equal(image.info.height,512);assert.equal(image.data[3],0);assert.ok(GAME_ASSET_URLS.includes(item.image));assert.equal(defaultHubSave().owned.includes(item.id),BASIC_PROFILES.some(p=>p.id===item.id));}
 });
-test('every box draws all ten paid profiles and never the five free profiles',()=>{
+test('every box draws all paid profiles and never the five free profiles',()=>{
  const index=LOOT_WEIGHTS.findIndex(c=>c.type==='profile');
  for(const box of ['silver','gold','diamond'] as const){const roll=(BOX_WEIGHTS[box].slice(0,index).reduce((a,b)=>a+b,0)+.1)/100;
-  for(let i=0;i<10;i++){let n=0;const opened=openDemoBox(defaultHubSave(),box,1,()=>n++===0?roll:(i+.5)/10);assert.equal(opened.rewards[0].itemId,COLLECTIBLE_PROFILES[i].id);assert.equal(opened.rewards[0].duplicate,false);let m=0;const duplicate=openDemoBox(opened.next,box,1,()=>m++===0?roll:(i+.5)/10);assert.equal(duplicate.rewards[0].dust,25);}
+  for(let i=0;i<COLLECTIBLE_PROFILES.length;i++){let n=0;const opened=openDemoBox(defaultHubSave(),box,1,()=>n++===0?roll:(i+.5)/COLLECTIBLE_PROFILES.length);assert.equal(opened.rewards[0].itemId,COLLECTIBLE_PROFILES[i].id);assert.equal(opened.rewards[0].duplicate,false);let m=0;const duplicate=openDemoBox(opened.next,box,1,()=>m++===0?roll:(i+.5)/COLLECTIBLE_PROFILES.length);assert.equal(duplicate.rewards[0].dust,25);}
  }
 });
 test('new guest/account profile is random, owned and stable after reconnect and server restore',()=>{
