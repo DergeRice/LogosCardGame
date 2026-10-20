@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {selectEmote} from '../src/emoteSelection.js';
+test('default selection fills holes from the left without replacing equipped items',()=>{const a=[null,'b',null,null];const b=selectEmote(a,null,'a');assert.deepEqual(b,['a','b',null,null]);assert.deepEqual(selectEmote(b,null,'c'),['a','b','c',null]);assert.deepEqual(a,[null,'b',null,null]);});
+test('selecting an equipped item without a target removes it and reuses the first hole',()=>{assert.deepEqual(selectEmote(['a','b','c','d'],null,'b'),['a',null,'c','d']);assert.deepEqual(selectEmote(['a',null,'c','d'],null,'e'),['a','e','c','d']);});
+test('full automatic selection never silently overwrites a slot',()=>assert.deepEqual(selectEmote(['a','b','c','d'],null,'e'),['a','b','c','d']));
+test('explicit replacement moves an already equipped item without duplicates',()=>{assert.deepEqual(selectEmote(['a','b','c',null],0,'c'),['c','b',null,null]);assert.deepEqual(selectEmote(['a','b','c',null],1,'d'),['a','d','c',null]);});
