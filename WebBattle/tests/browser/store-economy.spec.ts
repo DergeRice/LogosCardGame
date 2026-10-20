@@ -8,7 +8,7 @@ for(const mobile of [false,true])test(`v96 shop odds prices and board reveal ${m
  try{
   await page.goto('/');await page.getByRole('tab',{name:'상점',exact:true}).click({timeout:60000});
   await expect(page.getByRole('button',{name:'✧ 850 · 구매',exact:true})).toBeDisabled();
-  for(const [category,price] of [['보드판',500],['배경',400],['프레임',300],['이모티콘',200]] as const){await page.getByRole('tab',{name:category,exact:true}).click();await expect(page.getByRole('button',{name:`✧ ${price} · 구매`,exact:true}).first()).toBeEnabled();}
+  for(const [category,price] of [['보드판',500],['홈 배경',400],['프레임',300],['이모티콘',200]] as const){await page.getByRole('tab',{name:category,exact:true}).click();await expect(page.getByRole('button',{name:`✧ ${price} · 구매`,exact:true}).first()).toBeEnabled();}
   const boxes=page.locator('.store-box-rows>article');
   for(let i=0;i<3;i++){
    await boxes.nth(i).getByRole('button',{name:'획득 확률 ⓘ'}).click();const rates=page.getByRole('dialog',{name:'상자 확률',exact:true});

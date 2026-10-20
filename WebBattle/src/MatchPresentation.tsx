@@ -9,21 +9,22 @@ import {leagueFor} from './hubModel.js';
 import {useProfileImage} from './profiles.js';
 import { ART } from './theme.js';
 
-export function Avatar({kind,className='',frameId}:{kind:Kind;className?:string;frameId?:string}){
+export function Avatar({kind,className='',frameId,characterId}:{kind:Kind;className?:string;frameId?:string;characterId?:string}){
  const safeKind=CATALOG[kind]?kind:'pronoun';
- const src=useProfileImage(safeKind),[failed,setFailed]=useState(false);
+ const legacy=useProfileImage(safeKind),character=COSMETICS.find(c=>c.type==='character'&&c.id===characterId);
+ const src=character?.image??legacy,[failed,setFailed]=useState(false);
  useEffect(()=>setFailed(false),[src]);
  const c=CATALOG[safeKind];
- const portrait=<span className={`character-avatar ${className}`}>{src&&!failed?<img src={src} onError={()=>setFailed(true)} alt={`${c.name} 캐릭터 프로필`}/>:<span role="img" aria-label={`${c.name} 캐릭터 프로필`} style={{backgroundImage:`url(${ART.sheet(c.sheet)})`,backgroundSize:`${ART.sheetWidth/ART.crop.width*100}% ${ART.sheetHeight/ART.crop.height*100}%`,backgroundPosition:`${ART.columns[c.col]/(ART.sheetWidth-ART.crop.width)*100}% ${ART.rows[c.row]/(ART.sheetHeight-ART.crop.height)*100}%`}}/>}</span>;
+ const portrait=<span className={`character-avatar ${character?'equipped-character-avatar':''} ${className}`} data-character-id={character?.id}>{src&&!failed?<img src={src} onError={()=>setFailed(true)} alt={`${character?.name??c.name} 캐릭터 프로필`} draggable={false}/>:<span role="img" aria-label={`${c.name} 캐릭터 프로필`} style={{backgroundImage:`url(${ART.sheet(c.sheet)})`,backgroundSize:`${ART.sheetWidth/ART.crop.width*100}% ${ART.sheetHeight/ART.crop.height*100}%`,backgroundPosition:`${ART.columns[c.col]/(ART.sheetWidth-ART.crop.width)*100}% ${ART.rows[c.row]/(ART.sheetHeight-ART.crop.height)*100}%`}}/>}</span>;
  const frame=frameId?COSMETICS.find(c=>c.type==='frame'&&c.id===frameId):undefined;
- return frame?.image.startsWith('/')?<span className="avatar-with-frame">{portrait}<img className="avatar-frame-art" src={frame.image} alt="장착한 프레임" draggable={false}/></span>:portrait;
+ return frame?.image.startsWith('/')?<span className="avatar-with-frame">{portrait}<img className="avatar-frame-art" src={frame.image} alt="장착한 프레임" draggable={false}/></span>:frame?.image.startsWith('#')?<span className="avatar-with-frame" style={{outline:`3px solid ${frame.image}`,borderRadius:'50%'}}>{portrait}</span>:portrait;
 }
 export function Profile({ player, mine = false }: { player: PublicPlayer; mine?: boolean }) {
- return <article className={`match-profile ${mine ? 'mine' : 'rival'}`}><Avatar kind={player.avatar} frameId={player.frameId}/><small>{mine ? 'YOU' : player.ai ? 'AI PLAYER' : 'PLAYER'}</small><h3>{player.name}</h3><span><TierBadge tier={leagueFor(player.rating).tier}/>{leagueFor(player.rating).label}</span></article>;
+ return <article className={`match-profile ${mine ? 'mine' : 'rival'}`}><Avatar kind={player.avatar} characterId={player.characterId} frameId={player.frameId}/><small>{mine ? 'YOU' : player.ai ? 'AI PLAYER' : 'PLAYER'}</small><h3>{player.name}</h3><span><TierBadge tier={leagueFor(player.rating).tier}/>{leagueFor(player.rating).label}</span></article>;
 }
 export function MatchPresentation({ room, now, cancel }: { room: RoomView; now: number; cancel: () => void }) {
  const me = room.players.find(p => p.id === room.you)!;
- if (room.phase === 'matching') { const humans=room.players.filter(p=>!p.ai);return <main className="match-screen"><div className="eyebrow">FINDING YOUR NEXT MATCH</div><h1>상대를 찾고 있어요<span className="matching-dots">…</span></h1><div className="matching-orbit"><Avatar kind={me.avatar} frameId={me.frameId}/></div><strong>{Math.max(0, Math.ceil((room.stageEndsAt - now) / 1000))}초 후 매칭 확정</strong><div className="matching-slots">{Array.from({ length: RULES.maxPlayers }, (_, i) => <span key={i}>{humans[i] ? <Avatar kind={humans[i].avatar} frameId={humans[i].frameId}/> : '+'}</span>)}</div><button className="text-button" onClick={cancel}>매칭 취소</button></main>;}
+ if (room.phase === 'matching') { const humans=room.players.filter(p=>!p.ai);return <main className="match-screen"><div className="eyebrow">FINDING YOUR NEXT MATCH</div><h1>상대를 찾고 있어요<span className="matching-dots">…</span></h1><div className="matching-orbit"><Avatar kind={me.avatar} characterId={me.characterId} frameId={me.frameId}/></div><strong>{Math.max(0, Math.ceil((room.stageEndsAt - now) / 1000))}초 후 매칭 확정</strong><div className="matching-slots">{Array.from({ length: RULES.maxPlayers }, (_, i) => <span key={i}>{humans[i] ? <Avatar kind={humans[i].avatar} characterId={humans[i].characterId} frameId={humans[i].frameId}/> : '+'}</span>)}</div><button className="text-button" onClick={cancel}>매칭 취소</button></main>;}
  return <main className="match-screen versus-screen" key={room.matchId}><div className="eyebrow">MATCH FOUND · {room.players.length} PLAYERS</div><h1>매칭 성사!</h1><div className="versus-layout"><Profile player={me} mine/><strong className="vs-mark">VS</strong><div className="rival-profiles">{room.players.filter(p => p.id !== room.you).map((p, i) => <div key={p.id} style={{ '--arrival': `${1 + i * .35}s` } as CSSProperties}><Profile player={p}/></div>)}</div></div><p>하나의 덱. 다섯 장의 시작. 다음 최고점은 누구?</p></main>;
 }
 export function SharedDeck({ room, now, onApprove,onClaim,claimDisabled=false }: { room: RoomView; now: number; onApprove: () => void;onClaim?:(kind:BasicSupplyKind)=>void;claimDisabled?:boolean }) {

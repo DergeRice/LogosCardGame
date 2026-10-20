@@ -11,3 +11,4 @@
 .reward-card-front .cosmetic-frame-preview,.direct-rewards .cosmetic-frame-preview{height:100px}
 .reward-card-front .cosmetic-frame-preview>img,.direct-rewards .cosmetic-frame-preview>img{width:100px!important;height:100px!important}
 @media(orientation:landscape) and (max-height:540px){.cosmetic-frame-preview{height:64px}.cosmetic-frame-preview>img{width:64px!important;height:64px!important}.cosmetic-frame-preview .character-avatar{--profile-size:40px}.reward-card-front .cosmetic-frame-preview{height:64px}.reward-card-front .cosmetic-frame-preview>img{width:64px!important;height:64px!important}}
+.equipped-character-avatar>img{object-fit:contain;object-position:center;width:100%;height:100%}.hub-cosmetic-help{font-size:12px;color:#778571;line-height:1.5;margin:8px 0 12px}

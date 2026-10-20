@@ -1,0 +1,23 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {Game,type GameSocket} from '../server/game.js';
+import {restore,snapshot} from '../server/persistence.js';
+import {EXCHANGE_CATEGORIES} from '../shared/store.js';
+const peer=(g:Game)=>{const messages:any[]=[],socket:GameSocket={readyState:1,bufferedAmount:0,send(raw){messages.push(JSON.parse(raw))},close(){},terminate(){}};return{p:g.hello(socket,null,'Appearance'),messages};};
+
+test('home background and game board equip independently; character/frame reach peers, ranks, lobby and restore',()=>{
+ const g=new Game(),a=peer(g),b=peer(g),r=g.community.record(a.p);
+ r.store.owned.push('character-table','background-table','board-garden','frame-style-15'); // Inventory fixture only.
+ const equip=(id:string)=>g.handle(a.p,{type:'storeEquip',id});
+ equip('character-table');assert.equal(r.store.character,'character-table');assert.equal(r.store.background,'background-garden');assert.equal(r.store.board,'board-classic');
+ equip('background-table');equip('board-garden');equip('frame-style-15');assert.equal(r.store.background,'background-table');assert.equal(r.store.board,'board-garden');
+ equip('board-forged');assert.equal(r.store.board,'board-garden');assert.equal(a.messages.at(-1).type,'error');
+ assert.deepEqual(g.community.peer(a.p.id),{id:a.p.id,name:a.p.name,avatar:a.p.avatar,characterId:'character-table',frameId:'frame-style-15',online:true});
+ r.rankGames=3;g.community.ranking(b.p,1);const ranked=b.messages.at(-1).players.find((p:any)=>p.id===a.p.id);assert.equal(ranked.characterId,'character-table');assert.equal(ranked.frameId,'frame-style-15');
+ g.createRoom(a.p);g.joinRoom(b.p,a.p.room!);const room=g.rooms.get(a.p.room!)!,publicPlayer=g.view(room,b.p).players.find(p=>p.id===a.p.id)!;
+ assert.equal(publicPlayer.characterId,'character-table');assert.equal(publicPlayer.frameId,'frame-style-15');
+ const fresh=new Game();restore(fresh,snapshot(g));const saved=fresh.sessions.get(a.p.token)!;const store=fresh.community.record(saved).store;
+ assert.deepEqual([store.character,store.background,store.board,store.frame],['character-table','background-table','board-garden','frame-style-15']);
+ assert.equal(fresh.view(fresh.rooms.get(saved.room!)!,saved).players.find(p=>p.id===saved.id)!.characterId,'character-table');
+ assert.ok(EXCHANGE_CATEGORIES.some(([id,label])=>id==='background'&&label==='홈 배경'));
+});
