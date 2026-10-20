@@ -1,9 +1,10 @@
+import {characterName} from './characterNames.js';
 import {NARO_EMOTES} from './emotes.js';
 import {EXTRA_COSMETICS} from './cosmetic-resources.js';
 const art=[...NARO_EMOTES,...EXTRA_COSMETICS.filter(c=>c.type==='emote')];
 function character(id:string,name:string,ids:string[]){
- const poses=ids.map(id=>{const item=art.find(c=>c.id===id);if(!item)throw Error(`Missing character pose: ${id}`);return {id:item.id,name:item.name,image:item.image};});
- return {id,type:'character' as const,name,image:poses[0].image,poses};
+ const poses=ids.map(id=>{const item=art.find(c=>c.id===id);if(!item)throw Error(`Missing character pose: ${id}`);return {id:item.id,name:characterName(item.name),image:item.image};});
+ return {id,type:'character' as const,name:characterName(name),image:poses[0].image,poses};
 }
 const series=(name:string,poses:string[])=>poses.map(p=>'emote-'+name+' '+p);
 export const HOME_CHARACTERS=[

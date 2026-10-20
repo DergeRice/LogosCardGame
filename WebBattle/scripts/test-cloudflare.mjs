@@ -19,6 +19,8 @@ try{
  let url=new URL('/socket',await mf.ready);url.protocol='ws:';
  assert.equal((await (await mf.dispatchFetch('http://localhost/health')).json()).provider,'cloudflare');
  assert.equal((await mf.dispatchFetch('http://localhost/socket',{headers:{Upgrade:'websocket',Origin:'https://untrusted.example'}})).status,403);
+ assert.equal((await mf.dispatchFetch('http://localhost/admin/accounts?name=dergerice%20dev')).status,401);
+ assert.equal((await mf.dispatchFetch('http://localhost/admin/grants/super',{method:'POST',body:JSON.stringify({name:'dergerice dev',id:'forged'})})).status,401);
  clients=await Promise.all(['A','B','C','D'].map(n=>new Client(url).hello(n)));
  clients[0].send('register',{username:'cloud_player',password:'a strong cloud password'});
  await clients[0].until(()=>clients[0].messages.some(m=>m.type==='auth'));

@@ -1,3 +1,4 @@
+import {findAccounts,grantSuperAccount} from '../server/superAccount.js';
 import {appleAndroidCallback} from '../server/appleCallback.js';
 import {verifyGoogleCredential} from '../server/googleAuth.js';
 import { DurableObject } from 'cloudflare:workers';
@@ -15,7 +16,7 @@ export default {
  async fetch(request:Request,env:Env):Promise<Response>{
   const url=new URL(request.url);
   if(url.pathname==='/auth/apple/android')return appleAndroidCallback(request);
-  if(url.pathname.startsWith('/admin/logs')||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends'||url.pathname==='/admin/grants/items')){
+  if(url.pathname.startsWith('/admin/logs')||url.pathname==='/admin/accounts'||url.pathname==='/admin/grants/super'||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends'||url.pathname==='/admin/grants/items')){
    const origin=request.headers.get('Origin'),allowed=!origin||env.ALLOWED_ORIGINS.split(',').includes(origin);
    const headers=new Headers({'Cache-Control':'no-store','Vary':'Origin'});
    if(origin&&allowed){headers.set('Access-Control-Allow-Origin',origin);headers.set('Access-Control-Allow-Headers','Authorization,Content-Type');headers.set('Access-Control-Allow-Methods','GET,POST,OPTIONS');}
@@ -92,7 +93,18 @@ export class BattleArena extends DurableObject<Env>{
  }
  async fetch(request:Request):Promise<Response>{
   if(new URL(request.url).pathname==='/health')return Response.json({status:'ok',provider:'cloudflare',storage:'sqlite',rooms:this.game.rooms.size});
+  if(new URL(request.url).pathname==='/admin/accounts'){
+   if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
+   if(request.method!=='GET')return new Response('GET required',{status:405});
+   try{return Response.json({accounts:findAccounts(this.game,new URL(request.url).searchParams.get('name')??'')});}catch(error){return Response.json({error:String(error)},{status:400});}
+  }
+  if(new URL(request.url).pathname==='/admin/grants/super'){
+   if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
+   if(request.method!=='POST')return new Response('POST required',{status:405});const text=await request.text();if(text.length>1024)return new Response('Too large',{status:413});
+   try{const body=JSON.parse(text);return await this.serial(()=>{try{return Response.json(grantSuperAccount(this.game,body.name,body.id));}catch(error){return Response.json({error:String(error)},{status:400});}});}catch(error){return Response.json({error:String(error)},{status:400});}
+  }
   if(new URL(request.url).pathname==='/admin/grants/test-friends'){
+
    if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
    if(request.method!=='POST')return new Response('POST required',{status:405});const text=await request.text();if(text.length>1024)return new Response('Too large',{status:413});
    try{const body=JSON.parse(text);return await this.serial(()=>{try{return Response.json(this.game.community.seedTestFriends(body.name,body.grantId,body.playerId));}catch(error){return Response.json({error:error instanceof Error?error.message:'추가 실패'},{status:400});}});}catch(error){return Response.json({error:error instanceof Error?error.message:'추가 실패'},{status:400});}

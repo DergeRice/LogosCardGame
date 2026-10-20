@@ -1,3 +1,4 @@
+import {renameNickname} from './nickname.js';
 import {BASIC_PROFILES,basicProfile} from '../shared/profiles.js';
 import {showcaseFrame} from '../shared/store.js';
 import {emoteSlots,aiEmote,AI_EMOTE_LOADOUTS,type EmotionEvent} from '../shared/emotes.js';
@@ -17,7 +18,7 @@ import { judgeCards, DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, 
 import { chooseMove, thinkMs } from './ai.js';
 
 type Player = { profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
-export type Account = {avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
+export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = { forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
 type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
@@ -56,12 +57,12 @@ export class Game {
   let p=account?[...this.sessions.values()].find(session=>session.accountId===account.id):typeof token === 'string' ? this.sessions.get(token) : undefined;
   if(p?.accountId&&!account)p=undefined;
   const expired = Boolean(token && !p);
-  if(account&&!p){p=this.newPlayer(account.username);p.accountId=account.id;p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;this.sessions.set(p.token,p);}
+  if(account&&!p){p=this.newPlayer(account.nickname??account.username);p.accountId=account.id;p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;this.sessions.set(p.token,p);}
   if (!p) { if (this.sessions.size >= 2000) throw Error('서버가 붐빕니다. 잠시 후 다시 시도하세요.'); const cleaned = readableGuest===true?availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].map(p=>p.name))):typeof name === 'string' ? name.trim().replace(/[\u0000-\u001f\u007f]/g, '') : ''; if (!cleaned || cleaned.length > 16) throw Error('닉네임은 1~16자로 입력해 주세요.'); p = this.newPlayer(cleaned); this.sessions.set(p.token, p); }
   if(readableGuest===true&&!p.accountId&&/^게스트\s*\d+$/.test(p.name))p.name=availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].filter(x=>x!==p).map(x=>x.name)));
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
-  this.send(socket, { type: 'session', token: p.token, id: p.id, uuid:p.accountId??p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{linkedProviders:[...(account?.googleSubHash?['google']:[]),...(account?.appleSubHash?['apple']:[])],username:p.name,provider:account?.googleSubHash?'google':account?.provider??'password'}:null });
+  this.send(socket, { type: 'session', token: p.token, id: p.id, uuid:p.accountId??p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{linkedProviders:[...(account?.googleSubHash?['google']:[]),...(account?.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account?.googleSubHash?'google':account?.provider??'password'}:null });
   this.community.record(p);this.community.publish();
   this.sendRoomList(socket);
   const room = p.room && this.rooms.get(p.room);
@@ -95,10 +96,10 @@ export class Game {
    if(p.accountId&&p.accountId!==account.id)return this.fail(p,'현재 계정에서 로그아웃한 뒤 다시 로그인해 주세요.');
    p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
-  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
  }
  private googleReturns=new Map<string,{identity:{sub:string;name?:string};socket:GameSocket|undefined;expires:number}>();
  confirmGoogleReturn(p:Player,accept:unknown){
@@ -115,7 +116,7 @@ export class Game {
   if(p.accountId&&account&&p.accountId!==account.id)return this.fail(p,'이 Google 계정은 다른 게임 계정에 연결되어 있어요.');
   if(account&&!p.accountId&&confirmReturn){
    this.googleReturns.set(p.id,{identity,socket:p.socket,expires:Date.now()+5*60_000});
-   this.send(p.socket,{type:'googleReturnConfirmation',username:account.username});return true;
+   this.send(p.socket,{type:'googleReturnConfirmation',username:account.nickname??account.username});return true;
   }
   if(!account&&p.accountId){
    account=[...this.accounts.values()].find(a=>a.id===p.accountId);
@@ -132,10 +133,10 @@ export class Game {
    if(previous){previous.socket?.close(4001,'다른 창에서 Google 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
    p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
-  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:p.name,provider:'google'}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:'google'}});
  }
  loginApple(p:Player,identity:{sub:string;email?:string},suggestedName:unknown){
   if(p.room)return this.fail(p,'Apple 로그인은 대전이 끝난 뒤 해주세요.');
@@ -154,10 +155,10 @@ export class Game {
    if(previous){previous.socket?.close(4001,'다른 창에서 Apple 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
    p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
-  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
  }
  logout(p:Player){
   if(!p.accountId)return;
@@ -561,6 +562,7 @@ export class Game {
   p.touchedAt = Date.now(); this.tick();
   if(msg.type!=='ping')this.audit(p,'request','info',msg);
   if(msg.type==='ranking')return this.community.ranking(p,msg.tier);
+  if(msg.type==='renameNickname')return renameNickname(this,p,msg);
   if(msg.type==='community')return this.community.send(p);
   if(msg.type==='friendRequest')return this.community.request(p,msg);
   if(msg.type==='friendReply')return this.community.reply(p,msg);
