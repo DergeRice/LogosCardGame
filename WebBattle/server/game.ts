@@ -5,7 +5,7 @@ import {emoteSlots,aiEmote,AI_EMOTE_LOADOUTS,type EmotionEvent} from '../shared/
 import {BASIC_SUPPLY_KINDS} from '../shared/basicSupply.js';
 import {Community} from './community.js';
 import {availableGuestName,GUEST_NAME_COUNT} from '../shared/guestNames.js';
-import {matchGold} from '../shared/matchRewards.js';
+import {matchGold,goPointReward} from '../shared/matchRewards.js';
 import {aiGoChoice} from './aiStrategy.js';
 import {compatibleRatings,roomRating,aiDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {BUILD_VERSION} from '../src/buildVersion.js';
@@ -24,7 +24,7 @@ type Room = { forfeiterId?:string; resultPlayers?:RoomView['players'];code: stri
 type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 function shuffle<T>(items: T[]): T[] { for (let i = items.length - 1; i > 0; i--) { const j = randomInt(i + 1); [items[i], items[j]] = [items[j], items[i]]; } return items; }
-function goReward(go:number){return go>=3?200:go===2?100:50;}
+
 function activeGoLevel(room:Room,player:Player){return room.leaderId===player.id?room.goCount:0;}
 function applyGoBenefit(judgment:Judgment,go:number){
  if(!judgment.valid||go<1)return judgment;
@@ -262,7 +262,7 @@ export class Game {
    const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0&&r.players.length>=2&&p.id!==forfeiter)rankRecord.rankGames=(rankRecord.rankGames??0)+1;
    p.ratingDelta = !p.ai&&p.id!==forfeiter&&(rankRecord?.rankGames??0)<3?0:Math.round(24 * delta / Math.max(1, r.players.length - 1)); p.ratingShield=false;if(p.ratingDelta<0){const loss=Math.round(-p.ratingDelta*1.5);p.ratingShield=p.score>=10;p.ratingDelta=-(p.ratingShield?Math.ceil(loss/2):loss);}p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating);p.ratingShield=Boolean(p.ratingShield&&p.ratingDelta<0);
    const winner=p.id===r.winner&&p.id!==forfeiter, winnerGo=winner&&r.leaderId===p.id?r.goCount:0;
-   p.baseReward=winner?goReward(winnerGo):0;p.opponentRating=roomRating(r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!));p.rewardRatio=1;p.reward=winner?goReward(winnerGo):0;p.points+=p.reward;
+   p.baseReward=winner?goPointReward(winnerGo):0;p.opponentRating=roomRating(r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!));p.rewardRatio=1;p.reward=winner?goPointReward(winnerGo):0;p.points+=p.reward;
    const gold=matchGold({go:winnerGo,finalCards:p.lastPlayed?.length??0,rating:ratings.get(p.id)!,opponents:r.players.filter(x=>x!==p).map(x=>ratings.get(x.id)!),score:p.score,scores:r.players.map(x=>x.score),elapsedMs:Math.max(0,Date.now()-(r.startedAt??Date.now())),difficulty:r.aiSetting,custom:r.custom});p.coinBase=winner?gold.base:0;p.coinAdjustment=winner?gold.adjustment:0;p.coinReward=winner?gold.total:0;p.coins=(p.coins??0)+p.coinReward;
    if(p.accountId){const account=[...this.accounts.values()].find(a=>a.id===p.accountId);if(account){account.rating=p.rating;account.points=p.points;account.coins=p.coins??0;}}
   }

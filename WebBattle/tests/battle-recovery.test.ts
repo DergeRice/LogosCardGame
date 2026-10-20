@@ -29,7 +29,7 @@ test('losses increase 50 percent, score 10 activates a half-loss shield, and set
 test('human and AI third Go waits for another score without manufactured points; second Go continues',()=>{
  for(const ai of [false,true]){const{game,a,b,r}=fixture();if(ai)a.ai='normal';a.score=55;b.score=40;r.highScore=55;r.leaderId=a.id;r.goCount=1;r.decision={id:'two',playerId:a.id,startedAt:Date.now(),expiresAt:0};
   game.choice(a,{matchId:r.matchId,decisionId:'two',choice:'go'});assert.equal(r.phase,'battle');assert.equal(r.goCount,2);
-  a.score=81;r.highScore=81;r.decision={id:'three',playerId:a.id,startedAt:Date.now(),expiresAt:0};game.choice(a,{matchId:r.matchId,decisionId:'three',choice:'go'});assert.equal(r.phase,'battle');assert.equal(a.score,81);game.tick();assert.equal(r.phase,'battle');game.finish(r,'stop');assert.equal(r.winner,a.id);assert.equal(a.reward,200);assert.equal(b.reward,0);const points=a.points;game.tick();assert.equal(a.points,points);
+  a.score=81;r.highScore=81;r.decision={id:'three',playerId:a.id,startedAt:Date.now(),expiresAt:0};game.choice(a,{matchId:r.matchId,decisionId:'three',choice:'go'});assert.equal(r.phase,'battle');assert.equal(a.score,81);game.tick();assert.equal(r.phase,'battle');game.finish(r,'stop');assert.equal(r.winner,a.id);assert.equal(a.reward,750);assert.equal(b.reward,0);const points=a.points;game.tick();assert.equal(a.points,points);
  }
 });
 test('restored battle at three Go remains playable and result state is resent on heartbeat',()=>{

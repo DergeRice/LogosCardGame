@@ -21,8 +21,8 @@ test('Go benefits belong only to the caller and a new caller halves the prior ca
 test('Go rank points and gold use the winner Go level and final sentence card count',()=>{
  const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
  a.score=40;b.score=10;r.leaderId=a.id;r.goCount=3;a.lastPlayed=Array.from({length:5},(_,i)=>({id:String(i),kind:'verb'}));game.finish(r,'stop');
- assert.equal(a.reward,200);assert.equal(a.coinBase,220);assert.equal(a.coinReward,380);assert.equal(b.reward,0);assert.equal(b.coinReward,0);
+ assert.equal(a.reward,750);assert.equal(a.coinBase,220);assert.equal(a.coinReward,3300);assert.equal(b.reward,0);assert.equal(b.coinReward,0);
  assert.deepEqual(matchGold({go:1,finalCards:15,rating:1000,opponents:[1000],score:100,scores:[100],elapsedMs:0}).total,320);
- assert.deepEqual(matchGold({go:2,finalCards:15,rating:1000,opponents:[1000],score:100,scores:[100],elapsedMs:0}).total,380);
- assert.deepEqual(matchGold({go:3,finalCards:15,rating:1000,opponents:[1000],score:100,scores:[100],elapsedMs:0}).total,480);
+ assert.deepEqual(matchGold({go:2,finalCards:15,rating:1000,opponents:[1000],score:100,scores:[100],elapsedMs:0}).total,1600);
+ assert.deepEqual(matchGold({go:3,finalCards:15,rating:1000,opponents:[1000],score:100,scores:[100],elapsedMs:0}).total,4800);
 });

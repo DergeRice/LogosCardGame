@@ -5,7 +5,7 @@ import {Game,type GameSocket} from '../server/game.js';
 import {snapshot,restore,nextDeadline} from '../server/persistence.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}} as GameSocket);
 test('only the unique winner receives fixed Go rank points',()=>{
- for(const go of [0,1,2,3]){const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);a.score=50;b.score=10;r.leaderId=a.id;r.goCount=go;game.finish(r,'finish');assert.equal(a.reward,go>=3?200:go===2?100:50);assert.equal(b.reward,0);}
+ for(const go of [0,1,2,3]){const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);a.score=50;b.score=10;r.leaderId=a.id;r.goCount=go;game.finish(r,'finish');assert.equal(a.reward,go>=3?750:go===2?250:50);assert.equal(b.reward,0);}
 });
 test('rating separated players wait in distinct rooms; AI seats track the human rating and actual difficulty',()=>{
  const game=new Game(),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B'),far=game.hello(socket(),null,'Far');a.rating=1000;b.rating=1050;far.rating=1600;game.quick(a);game.quick(b);game.quick(far);assert.equal(a.room,b.room);assert.notEqual(a.room,far.room);assert.equal(aiDifficulty(800),'easy');assert.equal(aiDifficulty(1000),'normal');assert.equal(aiDifficulty(1600),'hard');
