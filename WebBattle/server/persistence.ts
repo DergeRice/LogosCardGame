@@ -1,3 +1,4 @@
+import {migrateProfiles} from '../shared/store.js';
 import type {CommunityRecord,CommunityInvite} from './community.js';
 import {judgeCards} from '../shared/rules.js';
 import {GUEST_RETENTION_MS} from '../shared/progression.js';
@@ -36,7 +37,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
  game.community.records.clear();game.community.invites.clear();game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();const players=new Map<string,Player>();
  for(const [key,json] of records){
   if(key.startsWith('invite:')){const invite=JSON.parse(json) as CommunityInvite;if(invite.expiresAt>Date.now())game.community.invites.set(key.slice(7),invite);}
-  if(key.startsWith('community:'))game.community.records.set(key.slice(10),JSON.parse(json) as CommunityRecord);
+  if(key.startsWith('community:')){const record=JSON.parse(json) as CommunityRecord;migrateProfiles(record.store,record.id);game.community.records.set(key.slice(10),record);}
   if(key.startsWith('account:'))game.accounts.set(key.slice(8),JSON.parse(json));
   if(key.startsWith('auth:'))game.accountSessions.set(key.slice(5),JSON.parse(json));
  }

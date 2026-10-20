@@ -12,13 +12,13 @@ for(const size of ['desktop','portrait','landscape'] as const)test(`frame image 
   const item=page.locator('.dust-grid article').first(),trigger=item.getByRole('button',{name:/프레임 크게 보기/});
   await trigger.click();const modal=page.getByRole('dialog',{name:'프레임 미리보기',exact:true});await expect(modal).toBeVisible();
   await expect(modal.locator('.avatar-frame-art')).toHaveAttribute('src','/cosmetics/frames/style-01.webp');
-  await expect(modal.locator('.equipped-character-avatar img')).toHaveAttribute('src','/landing/mascots-mobile.webp');
+  await expect(modal.locator('.equipped-profile-avatar img')).toHaveAttribute('src','/profiles/basic/rabbit.webp');
   await page.keyboard.press('Tab');await expect(modal.getByRole('button',{name:'프레임 미리보기 닫기'})).toBeFocused();
   await modal.evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished)));
   const image=(await modal.locator('.avatar-frame-art').boundingBox())!,card=(await modal.boundingBox())!;
   expect(image.width).toBeGreaterThan(100);expect(image.x).toBeGreaterThanOrEqual(card.x);expect(image.x+image.width).toBeLessThanOrEqual(card.x+card.width);
   expect(card.y).toBeGreaterThanOrEqual(mobile?20:0);expect(card.y+card.height).toBeLessThanOrEqual(mobile?viewport.height-40:viewport.height);
-  await modal.screenshot({path:`.runtime/v105-preview-${size}-${test.info().project.name}.png`});
+  await modal.screenshot({path:`.runtime/v110-preview-${size}-${test.info().project.name}.png`});
   await page.keyboard.press('Escape');await expect(modal).toHaveCount(0);await expect(trigger).toBeFocused();
   await trigger.click();await modal.getByRole('button',{name:'프레임 미리보기 닫기'}).click();
   expect(sent.filter(m=>m.type==='storeRedeem'||m.type==='storeEquip')).toHaveLength(0);expect(save.dust).toBe(1000);expect(save.frame).toBe('');

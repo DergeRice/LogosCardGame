@@ -16,7 +16,7 @@ for(const size of ['desktop','portrait','landscape'] as const)test(`home charact
   expect(sent.slice(before).some(m=>['storeEmotes','storeEquip','storeRedeem'].includes(m.type))).toBe(false);expect(save.dust).toBe(0);expect(save.owned.includes(character.poses[0].id)).toBe(false);
   const bounds=(await actor.boundingBox())!;expect(bounds.width).toBeGreaterThan(100);expect(bounds.height).toBeGreaterThan(100);expect(bounds.y).toBeGreaterThanOrEqual(mobile?20:0);expect(bounds.y+bounds.height).toBeLessThanOrEqual(mobile?viewport.height-40:viewport.height);
   await page.screenshot({path:`.runtime/v109-home-${size}-${test.info().project.name}.png`});
-  await page.getByRole('tab',{name:'프로필',exact:true}).click();await expect(page.locator('.home-character-canvas')).toHaveCount(0);await expect(page.locator('.hub-profile-summary .equipped-character-avatar img')).toHaveAttribute('src',character.image);
+  await page.getByRole('tab',{name:'프로필',exact:true}).click();await expect(page.locator('.home-character-canvas')).toHaveCount(0);await expect(page.locator('.hub-profile-summary .equipped-profile-avatar img')).toHaveAttribute('src','/profiles/basic/rabbit.webp');
   await page.getByRole('tab',{name:'홈',exact:true}).click();await expect(actor).toHaveAttribute('data-renderer','pixi');await expect(actor).toHaveAttribute('data-pose-index','0');
   await canvas.locator('canvas').evaluate(el=>el.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));await expect(actor).toHaveAttribute('data-renderer','fallback');await expect(image).toBeVisible();
   expect(errors).toEqual([]);expect(await page.evaluate(()=>scrollY)).toBe(0);

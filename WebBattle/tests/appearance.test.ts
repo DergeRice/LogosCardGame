@@ -27,7 +27,7 @@ test('home background and game board equip independently; character/frame reach 
  equip('character-table');assert.equal(r.store.character,'character-table');assert.equal(r.store.background,'background-garden');assert.equal(r.store.board,'board-classic');
  equip('background-table');equip('board-garden');equip('frame-style-15');assert.equal(r.store.background,'background-table');assert.equal(r.store.board,'board-garden');
  equip('board-forged');assert.equal(r.store.board,'board-garden');assert.equal(a.messages.at(-1).type,'error');
- assert.deepEqual(g.community.peer(a.p.id),{id:a.p.id,name:a.p.name,avatar:a.p.avatar,characterId:'character-table',frameId:'frame-style-15',online:true});
+ assert.deepEqual(g.community.peer(a.p.id),{id:a.p.id,name:a.p.name,avatar:a.p.avatar,profileId:r.store.profile,characterId:'character-table',frameId:'frame-style-15',online:true});
  r.rankGames=3;g.community.ranking(b.p,1);const ranked=b.messages.at(-1).players.find((p:any)=>p.id===a.p.id);assert.equal(ranked.characterId,'character-table');assert.equal(ranked.frameId,'frame-style-15');
  g.createRoom(a.p);g.joinRoom(b.p,a.p.room!);const room=g.rooms.get(a.p.room!)!,publicPlayer=g.view(room,b.p).players.find(p=>p.id===a.p.id)!;
  assert.equal(publicPlayer.characterId,'character-table');assert.equal(publicPlayer.frameId,'frame-style-15');

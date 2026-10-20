@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {BOX_WEIGHTS,LOOT_WEIGHTS,BOX_DUST,DUST_PRICES,DUPLICATE_DUST,COSMETICS,defaultHubSave,lootType,openDemoBox} from '../shared/store.js';
 import {Game,type GameSocket} from '../server/game.js';
 
-test('approved v96 odds include boards, 1% silver characters and no pity boost',()=>{
- assert.deepEqual(BOX_WEIGHTS,{silver:[59.5,1,7,18,7,7.5],gold:[25,4,16,20,17,18],diamond:[10,12,18,18,20,22]});
+test('v110 odds include profiles and boards, 1% silver characters and no pity boost',()=>{
+ assert.deepEqual(BOX_WEIGHTS,{silver:[59.5,1,7,13,7,7.5,5],gold:[25,4,16,12,17,18,8],diamond:[10,12,18,8,20,22,10]});
  for(const id of ['silver','gold','diamond'] as const){
   assert.equal(BOX_WEIGHTS[id].reduce((a,b)=>a+b,0),100);
   const counts=LOOT_WEIGHTS.map(x=>Array.from({length:10000},(_,i)=>lootType((i+.5)/10000,id)).filter(t=>t===x.type).length);
@@ -35,8 +35,8 @@ test('all categories can drop and each duplicate returns the approved fixed dust
 });
 
 test('server ignores forged redemption price, charges category price once and refuses insufficient funds',()=>{
- assert.deepEqual(DUST_PRICES,{character:850,board:500,background:400,frame:300,emote:200});
- for(const type of ['character','board','background','frame','emote'] as const){
+ assert.deepEqual(DUST_PRICES,{profile:300,character:850,board:500,background:400,frame:300,emote:200});
+ for(const type of ['profile','character','board','background','frame','emote'] as const){
   const messages:any[]=[],socket:GameSocket={readyState:1,bufferedAmount:0,send(s){messages.push(JSON.parse(s))},close(){},terminate(){}};
   const g=new Game(),p=g.hello(socket,null,'Economy fixture'),r=g.community.record(p),item=COSMETICS.find(c=>c.type===type&&!r.store.owned.includes(c.id))!;
   assert.ok(item);const cost=DUST_PRICES[type];r.store.dust=cost-1;
