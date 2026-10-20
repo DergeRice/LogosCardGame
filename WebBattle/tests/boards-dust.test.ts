@@ -1,0 +1,15 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import sharp from 'sharp';import {COSMETICS,defaultHubSave,openDemoBox,BOX_WEIGHTS,LOOT_WEIGHTS,dustPrice,DUPLICATE_DUST} from '../shared/store.js';import {DUST_IMAGE} from '../shared/art.js';import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';import {Game,type GameSocket} from '../server/game.js';import {snapshot,restore} from '../server/persistence.js';
+const boards=COSMETICS.filter(c=>c.type==='board'&&c.image.startsWith('/cosmetics/boards/'));
+test('512px transparent stardust and ten wide board images decode and are preloaded',async()=>{
+ assert.equal(boards.length,10);assert.equal(COSMETICS.filter(c=>c.type==='board').length,12);assert.deepEqual(new Set(boards.map(b=>b.name)),new Set(['우주선','칠판','흰벽돌','마법도서관','하늘성채','벚꽃밤','사막시장','아늑한방','설원','수중세계']));
+ const dust=await sharp('public'+DUST_IMAGE).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(dust.info.width,512);assert.equal(dust.info.height,512);assert.equal(dust.data[3],0);assert.ok(GAME_ASSET_URLS.includes(DUST_IMAGE));
+ for(const board of boards){const m=await sharp('public'+decodeURIComponent(board.image)).metadata();assert.equal(m.width,1536);assert.ok(m.height!>=660&&m.height!<=706);assert.ok(GAME_ASSET_URLS.includes(board.image));assert.ok(!defaultHubSave().owned.includes(board.id));}
+ const reward=openDemoBox(defaultHubSave(),'silver',1,()=>0).rewards[0];assert.equal(reward.type,'dust');assert.equal(reward.image,DUST_IMAGE);
+});
+test('all ten boards participate in every box at existing category odds and cost 500 dust',()=>{
+ assert.equal(dustPrice('board'),500);assert.equal(DUPLICATE_DUST.board,40);const index=LOOT_WEIGHTS.findIndex(c=>c.type==='board'),pool=COSMETICS.filter(c=>c.type==='board');
+ for(const box of ['silver','gold','diamond'] as const){const roll=(BOX_WEIGHTS[box].slice(0,index).reduce((a,b)=>a+b,0)+.1)/100;for(const b of boards){let call=0;const opened=openDemoBox(defaultHubSave(),box,1,()=>call++===0?roll:(pool.findIndex(c=>c.id===b.id)+.5)/pool.length);assert.equal(opened.rewards[0].itemId,b.id);assert.equal(opened.rewards[0].image,b.image);}}
+});
+test('server board ownership, 500-dust redemption, equip and restore keep home background independent',()=>{
+ for(const b of boards){const socket:GameSocket={readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}},g=new Game(),p=g.hello(socket,null,'Board buyer'),r=g.community.record(p);g.handle(p,{type:'storeEquip',id:b.id});assert.equal(r.store.board,'board-classic');r.store.dust=500;const request={type:'storeRedeem',id:b.id,requestId:'board-buy',storeVersion:0};g.handle(p,request);g.handle(p,request);assert.equal(r.store.dust,0);assert.equal(r.store.owned.filter(id=>id===b.id).length,1);g.handle(p,{type:'storeEquip',id:b.id});assert.equal(r.store.board,b.id);assert.equal(r.store.background,'background-garden');const next=new Game();restore(next,snapshot(g));assert.equal(next.community.records.get(p.id)?.store.board,b.id);}
+});
