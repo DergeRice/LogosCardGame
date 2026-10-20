@@ -1,5 +1,7 @@
 # Google 로그인 운영 설정
 
+v0.9.112 기준: 프로젝트 `logos-card-game`의 게시 상태는 **프로덕션 단계**, 사용자 유형은 **외부**이며 전체 Google 사용자에게 공개되었습니다. 홈페이지/개인정보처리방침은 운영 `/about.html`, `/privacy.html`입니다.
+
 Google Identity Services 공식 버튼으로 ID 토큰을 받고, 서버에서 Google JWKS 서명·issuer·audience·만료시간·발급시간과 5분짜리 일회용 nonce를 검증한다. 이메일 주소를 계정 식별자나 자동 병합 근거로 사용하지 않는다. Google sub의 SHA-256만 계정 연결에 저장한다.
 
 ## Google Cloud
