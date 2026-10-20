@@ -1,0 +1,7 @@
+import {useLayoutEffect,useRef,useState} from 'react';import {ControlIcon} from './ControlIcon.js';import type {CONTROL_ICONS} from './controlIcons.js';
+type Item=readonly [string,keyof typeof CONTROL_ICONS,string];
+export function HubTabs<T extends readonly Item[]>({items,active,onChange}:{items:T;active:T[number][0];onChange:(id:T[number][0])=>void}){
+ const nav=useRef<HTMLElement>(null),[marker,setMarker]=useState({x:0,width:0});
+ useLayoutEffect(()=>{const el=nav.current;if(!el)return;const measure=()=>{const selected=el.querySelector<HTMLElement>('[role=tab][aria-selected=true]');if(!selected)return;const width=Math.min(38,selected.offsetWidth*.55),x=selected.offsetLeft+(selected.offsetWidth-width)/2;setMarker(old=>old.x===x&&old.width===width?old:{x,width});};measure();const observer=new ResizeObserver(measure);observer.observe(el,{box:'border-box'});for(const button of el.querySelectorAll('button'))observer.observe(button,{box:'border-box'});window.addEventListener('resize',measure);return()=>{observer.disconnect();window.removeEventListener('resize',measure)};},[active]);
+ return <nav ref={nav} className="hub-tabs" aria-label="메인 메뉴" role="tablist">{items.map(([id,icon,label])=><button role="tab" aria-label={label} id={`tab-${id}`} aria-selected={active===id} key={id} onClick={()=>onChange(id)}><span><ControlIcon name={icon}/></span><b>{label}</b></button>)}<i className="hub-tab-indicator" aria-hidden="true" data-active-tab={active} style={{width:marker.width,transform:`translate3d(${marker.x}px,0,0)`}}/></nav>;
+}

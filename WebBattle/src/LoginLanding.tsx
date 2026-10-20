@@ -1,6 +1,5 @@
 import {AccountLoginButtons} from './GoogleLogin.js';
 import {useCallback,useState} from 'react';
-import {BUILD_VERSION} from './buildVersion.js';
 import {PixiLanding} from './PixiLanding.js';
 
 export function LoginLanding({onGuest,departing=false}:{onGuest:()=>void;departing?:boolean}){
@@ -17,6 +16,6 @@ export function LoginLanding({onGuest,departing=false}:{onGuest:()=>void;departi
     </div>
    </div>
   </div>
-  <div className="landing-footer"><span className="build-version">{BUILD_VERSION}</span><nav className="landing-policy-links" aria-label="서비스 안내"><a href="/about.html" target="_blank" rel="noopener">서비스 소개</a><a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a></nav><small className="landing-copyright">@copyright all reserves in BaraGames 2026</small></div>
+  <div className="landing-footer"><nav className="landing-policy-links" aria-label="서비스 안내"><a href="/about.html" target="_blank" rel="noopener">서비스 소개</a><a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a></nav><small className="landing-copyright">@copyright all reserves in BaraGames 2026</small></div>
  </main></>;
 }

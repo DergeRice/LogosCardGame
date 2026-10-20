@@ -19,6 +19,6 @@ test('character redemption and equip persist without granting its expression col
 
 test('white and brown horse poses belong to one collectible character',()=>{
  const horses=HOME_CHARACTERS.filter(c=>c.id.includes('horse'));assert.equal(horses.length,1);
- assert.deepEqual(horses[0].poses.map(p=>p.name),['말 미소','말 사랑','말 인사','말 고민','말 부끄러움','말 신남','말 놀람','말 화남','말 눈물','말 하품']);
+ assert.deepEqual(horses[0].poses.map(p=>p.name),['트랜스 미소','트랜스 사랑','트랜스 인사','트랜스 고민','트랜스 부끄러움','트랜스 신남','트랜스 놀람','트랜스 화남','트랜스 눈물','트랜스 하품']);
  assert.equal(COSMETICS.filter(c=>c.type==='character'&&c.id.includes('horse')).length,1);
 });

@@ -34,3 +34,8 @@
  .game-hub .emote-owned-list .reaction-image{width:46px;height:46px}
  .emote-equip-actions{padding-top:6px;flex:none}.emote-equip-actions button{padding:6px 10px;font-size:11px}
 }
+
+/* Navigation indicator is a DOM control decoration, independent of game sprites. */
+.hub-tabs{position:relative}.hub-tab-indicator{position:absolute;left:0;bottom:3px;height:4px;border-radius:99px;background:#3c7659;pointer-events:none;transition:transform .28s cubic-bezier(.22,.8,.25,1),width .28s cubic-bezier(.22,.8,.25,1);will-change:transform}.hub-tabs>button{padding-bottom:7px}.hub-tabs>button[aria-selected=true]{background:#e7ede280}
+@media(orientation:landscape) and (max-height:540px){.hub-tab-indicator{height:3px;bottom:1px}.hub-tabs>button{padding-bottom:4px}}
+@media(prefers-reduced-motion:reduce){.hub-tab-indicator{transition:none;will-change:auto}}

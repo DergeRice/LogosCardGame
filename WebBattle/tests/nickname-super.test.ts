@@ -1,9 +1,9 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import {Game,type GameSocket} from '../server/game.js';import {snapshot,restore} from '../server/persistence.js';import {grantSuperAccount,findAccounts} from '../server/superAccount.js';import {COSMETICS,BOXES} from '../shared/store.js';import {HOME_CHARACTERS} from '../shared/homeCharacters.js';import {BASIC_PROFILES} from '../shared/profiles.js';
 const peer=(g:Game,name:string)=>{const messages:any[]=[],socket:GameSocket={readyState:1,bufferedAmount:0,send(raw){messages.push(JSON.parse(raw))},close(){},terminate(){}};return {p:g.hello(socket,null,name),socket,messages}};
 test('named characters change labels across characters, profiles and emotes without changing IDs or paths',()=>{
- for(const [id,name]of [['rabbit','아리'],['dog','프로나운'],['spotted','버프'],['hamster','두두']]){assert.equal(HOME_CHARACTERS.find(c=>c.id==='character-'+id)?.name,name);assert.ok(BASIC_PROFILES.some(c=>c.name===name+' 얼굴'));}
+ for(const [id,name]of [['rabbit','아리'],['dog','프로나운'],['spotted','버프'],['hamster','두두'],['pink-monkey','애드버프'],['horse','트랜스'],['king','코리쉬']]){assert.equal(HOME_CHARACTERS.find(c=>c.id==='character-'+id)?.name,name);if(['rabbit','dog','spotted','hamster'].includes(id))assert.ok(BASIC_PROFILES.some(c=>c.name===name+' 얼굴'));}
  assert.equal(COSMETICS.find(c=>c.id==='emote-토끼 인사')?.name,'아리 인사');assert.ok(COSMETICS.find(c=>c.id==='emote-토끼 인사')?.image.includes(encodeURIComponent('토끼')));
- assert.ok(!COSMETICS.some(c=>/토끼|강아지|점박이|햄스터/.test(c.name)));
+ assert.ok(!COSMETICS.some(c=>/토끼|강아지|점박이|햄스터|분홍원숭이|^말 |^왕 /.test(c.name)));
 });
 test('nickname costs exactly 1500 once, keeps login ID/identity/inventory and survives login and restore',()=>{
  const g=new Game(),a=peer(g,'Original');g.authenticate(a.p,{type:'register',username:'loginid',password:'long-test-password'});a.p.coins=3000;const r=g.community.record(a.p),id=r.id,owned=[...r.store.owned],token=a.messages.find(m=>m.type==='auth').authToken;

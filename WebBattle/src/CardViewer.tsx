@@ -1,6 +1,5 @@
 import {useEffect,useMemo,useState} from 'react';
 import {CATALOG,DECK_FACES,cardFace,effectLabel,type Card,type Kind} from '../shared/rules.js';
-import {BUILD_VERSION} from './buildVersion.js';
 import './card-viewer.css';
 
 type Group='all'|'grammar'|'special';
@@ -21,7 +20,7 @@ export function CardViewer(){
  useEffect(()=>{if(!selected)return;const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setSelected(null)};document.addEventListener('keydown',close);return()=>document.removeEventListener('keydown',close)},[selected]);
  return <main className="viewer-page">
   <header className="viewer-header"><a className="viewer-brand" href="/">◇ LOGOS <span>CARD BATTLE</span></a><a className="viewer-back" href="/">게임으로 돌아가기 ↗</a></header>
-  <section className="viewer-hero"><div className="viewer-kicker">CARD LIBRARY · {BUILD_VERSION}</div><h1>카드 뷰어</h1><p>현재 대전 덱에 들어가는 카드 {cards.length}장을 살펴보세요. 카드를 누르면 크게 볼 수 있습니다.</p><div className="viewer-summary"><strong>{cards.length}<small>전체 카드</small></strong><strong>{cards.filter(c=>!special.has(c.kind)).length}<small>문법 카드</small></strong><strong>{cards.filter(c=>special.has(c.kind)).length}<small>기능·꽝 카드</small></strong></div></section>
+  <section className="viewer-hero"><div className="viewer-kicker">CARD LIBRARY</div><h1>카드 뷰어</h1><p>현재 대전 덱에 들어가는 카드 {cards.length}장을 살펴보세요. 카드를 누르면 크게 볼 수 있습니다.</p><div className="viewer-summary"><strong>{cards.length}<small>전체 카드</small></strong><strong>{cards.filter(c=>!special.has(c.kind)).length}<small>문법 카드</small></strong><strong>{cards.filter(c=>special.has(c.kind)).length}<small>기능·꽝 카드</small></strong></div></section>
   <section className="viewer-content" aria-label="카드 목록"><div className="viewer-controls"><div className="viewer-tabs" role="group" aria-label="카드 분류">{([['all','전체'],['grammar','문법'],['special','기능']] as const).map(([id,label])=><button key={id} type="button" aria-pressed={group===id} onClick={()=>setGroup(id)}>{label}</button>)}</div><label className="viewer-search"><span>카드 검색</span><input type="search" placeholder="이름, 품사, 효과 검색" value={query} onChange={event=>setQuery(event.target.value)}/></label></div>
    <div className="viewer-results" aria-live="polite">{visible.length}장 표시</div>
    {visible.length?<div className="viewer-grid">{visible.map(card=><button key={card.id} className="viewer-tile" type="button" onClick={()=>setSelected(card)} aria-label={`${cardFace(card).name}${effectLabel(card)?` ${effectLabel(card)}`:''} 카드 보기`}><img src={image(card)} alt="" loading="lazy"/><span><b>{cardFace(card).name}</b><small>{effectLabel(card)||cardFace(card).example}</small></span></button>)}</div>:<p className="viewer-empty">검색 결과가 없습니다.</p>}
