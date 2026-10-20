@@ -12,7 +12,7 @@ const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Numbe
 export default {
  async fetch(request:Request,env:Env):Promise<Response>{
   const url=new URL(request.url);
-  if(url.pathname.startsWith('/admin/logs')||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends')){
+  if(url.pathname.startsWith('/admin/logs')||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends'||url.pathname==='/admin/grants/items')){
    const origin=request.headers.get('Origin'),allowed=!origin||env.ALLOWED_ORIGINS.split(',').includes(origin);
    const headers=new Headers({'Cache-Control':'no-store','Vary':'Origin'});
    if(origin&&allowed){headers.set('Access-Control-Allow-Origin',origin);headers.set('Access-Control-Allow-Headers','Authorization,Content-Type');headers.set('Access-Control-Allow-Methods','GET,POST,OPTIONS');}
@@ -93,6 +93,11 @@ export class BattleArena extends DurableObject<Env>{
    if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
    if(request.method!=='POST')return new Response('POST required',{status:405});const text=await request.text();if(text.length>1024)return new Response('Too large',{status:413});
    try{const body=JSON.parse(text);return await this.serial(()=>{try{return Response.json(this.game.community.seedTestFriends(body.name,body.grantId,body.playerId));}catch(error){return Response.json({error:error instanceof Error?error.message:'추가 실패'},{status:400});}});}catch(error){return Response.json({error:error instanceof Error?error.message:'추가 실패'},{status:400});}
+  }
+  if(new URL(request.url).pathname==='/admin/grants/items'){
+   if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
+   if(request.method!=='POST')return new Response('POST required',{status:405});const text=await request.text();if(text.length>4096)return new Response('Too large',{status:413});
+   try{const body=JSON.parse(text);return await this.serial(()=>{try{return Response.json(this.game.community.grantItems(body.name,body.items,body.grantId,body.playerId));}catch(error){return Response.json({error:error instanceof Error?error.message:'지급 실패'},{status:400});}});}catch(error){return Response.json({error:error instanceof Error?error.message:'지급 실패'},{status:400});}
   }
   if(new URL(request.url).pathname==='/admin/grants/gold'){
    if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});

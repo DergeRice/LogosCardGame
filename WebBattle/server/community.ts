@@ -47,5 +47,17 @@ export class Community {
   for(const [key,name,avatar]of seeds){const id='test-friend-'+key;let friend=this.records.get(id);if(!friend){friend={id,name,avatar,friends:[],incoming:[],store:defaultHubSave(),results:[],rankGames:0};this.records.set(id,friend)}if(!friend.friends.includes(record.id))friend.friends.push(record.id);if(!record.friends.includes(id))record.friends.push(id);}
   record.grants=[...(record.grants??[]),grantId].slice(-50);this.game.audit(p,'admin_test_friends_grant','info',{reason:`테스트 친구 ${missing.length}명 추가`,requestId:grantId});this.send(p);return response(missing.length,false);
  }
+ grantItems(name:string,items:unknown,grantId:string,playerId?:string){
+  if(typeof name!=='string'||typeof grantId!=='string'||!grantId||grantId.length>80||!Array.isArray(items)||items.length<1||items.length>20||items.some(id=>typeof id!=='string'||!COSMETICS.some(c=>c.id===id)))throw Error('잘못된 아이템 지급 요청');
+  const candidates=[...this.game.sessions.values()].filter(p=>!p.ai&&p.name===name&&(!playerId||p.id===playerId));
+  if(candidates.length!==1)throw Error(`대상 ${candidates.length}명: 고유한 닉네임/ID 확인이 필요합니다.`);
+  const p=candidates[0],r=this.record(p),ids=[...new Set(items as string[])];
+  const response=(added:string[],duplicate:boolean)=>({id:p.id,name:p.name,added,duplicate,owned:ids.filter(id=>r.store.owned.includes(id))});
+  if(r.grants?.includes(grantId))return response([],true);
+  const added=ids.filter(id=>!r.store.owned.includes(id));r.store.owned.push(...added);
+  if(added.length)r.store.revision=(r.store.revision??0)+1;
+  r.grants=[...(r.grants??[]),grantId].slice(-50);
+  this.game.audit(p,'admin_items_grant','info',{reason:`관리자 아이템 ${added.length}개 지급`,requestId:grantId});this.send(p);return response(added,false);
+ }
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}
 }
