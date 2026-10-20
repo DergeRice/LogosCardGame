@@ -21,4 +21,7 @@
 - 승인된 JavaScript 원본은 https://logos-card-battle.netlify.app 하나만 등록. 공개 클라이언트 ID를 wrangler GOOGLE_CLIENT_ID에 설정. 시크릿 미사용/미저장.
 - 현재 로그인한 Google 계정을 테스트 사용자로 등록. 앱은 아직 테스트 상태이며 일반 사용자 공개는 Google 브랜딩 구성을 완료해야 함.
 - Cloudflare 로그인 nonce는 WebSocket attachment에 저장하여 절전 복원 시 유지. Node 서버는 세션별 메모리 nonce 사용.
-- 배포 및 실제 Google 로그인 검증 결과는 후속 기록에 반영.
+- Cloudflare 버전 e8a399cb-9305-42e4-8241-3708bc808987 및 Netlify 운영 v0.9.111 배포 완료.
+- 운영 도메인에서 실제 Google 계정 인증 성공. 설정의 Google 연동 상태 및 새로고침 후 동일 UUID/계정 복원 확인. 비밀번호·이메일·Google 토큰을 테스트 출력/저장소로 복사하지 않고 UI 상태로 확인.
+- Google 콘솔 게시 상태는 테스트 중. 일반 공개 버튼은 브랜딩 구성 미완료로 비활성 상태이며 전체 사용자 공개 완료로 보고하지 않음.
+- 실제 휴대폰/별도 기기에서의 Google 인증은 수행하지 않음. 모바일 크기 UI 검증과 서버 저장/복원 테스트는 위 결과 참고.
