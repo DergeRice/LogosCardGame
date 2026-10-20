@@ -9,7 +9,7 @@ for(const size of ['desktop','portrait','landscape'] as const)test(`paid boxes a
  await page.routeWebSocket('**/socket',ws=>{const sync=()=>ws.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store}}));ws.onMessage(raw=>{const m=JSON.parse(String(raw));sent.push(m);if(m.type==='hello'){ws.send(JSON.stringify({type:'session',name:'상점 검사',token:'paid-fixture',avatar:'pronoun',rating:1000,coins:20000,points:0}));sync();}if(m.type==='storeOpen'){const opened=openDemoBox(store,m.box,m.count,()=>0);store={...opened.next,revision:(store.revision??0)+1};sync();ws.send(JSON.stringify({type:'storeResult',source:'box',box:m.box,requestId:m.requestId,rewards:opened.rewards}));}})});
  try{
   await page.goto('/');await page.getByRole('tab',{name:'상점',exact:true}).click({timeout:60000});
-  await expect(page.locator('.hub-shop')).not.toContainText(/무료|보상은 저장|상품별 별가루/);
+  await expect(page.locator('.hub-shop')).not.toContainText(/보상은 저장|상품별 별가루/);
   for(const box of BOXES){
    const row=page.locator(`[data-box=${box.id}]`);await row.scrollIntoViewIfNeeded();
    const img=(await row.locator(':scope>img').boundingBox())!,heading=(await row.getByRole('heading').boundingBox())!,offer=(await row.locator('.store-offers').boundingBox())!;

@@ -574,7 +574,7 @@ export class Game {
   if(msg.type==='friendReply')return this.community.reply(p,msg);
   if(msg.type==='friendInvite')return this.community.invite(p,msg);
   if(msg.type==='inviteReply')return this.community.acceptInvite(p,msg);
-  if(msg.type==='storeOpen'||msg.type==='storeRedeem')return this.community.store(p,msg);
+  if(msg.type==='storeOpen'||msg.type==='storeOpenFree'||msg.type==='storeRedeem')return this.community.store(p,msg);
   if(msg.type==='storeEmotes')return this.community.setEmotes(p,msg);
   if(msg.type==='storeEquip')return this.community.equip(p,msg);
   if(msg.type==='register'||msg.type==='login')return this.authenticate(p,msg);
