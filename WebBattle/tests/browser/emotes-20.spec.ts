@@ -12,7 +12,7 @@ for(const mobile of [false,true])test(`20 new emotes shop loadout and battle ${m
  try{
   await page.goto('/');await page.getByRole('tab',{name:'상점',exact:true}).click({timeout:60000});await page.getByRole('tab',{name:'이모티콘',exact:true}).click();await expect(page.locator('.dust-grid article')).toHaveCount(34);
   await expect(page.locator('.dust-grid img[src*="/cosmetics/emotes/"]')).toHaveCount(20);
-  expect(await page.locator('.dust-grid img[src*="/cosmetics/emotes/"]').evaluateAll(xs=>xs.every(el=>(el as HTMLImageElement).naturalWidth===512))).toBe(true);
+  for(const item of selected){const image=page.locator('.dust-grid').getByAltText(item.name,{exact:true});await image.scrollIntoViewIfNeeded();await expect.poll(()=>image.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBe(512);}
   await page.screenshot({path:`.runtime/v99-shop-${mobile?'mobile':'desktop'}-${test.info().project.name}.png`});
   await page.getByRole('tab',{name:'프로필',exact:true}).click();await page.getByRole('button',{name:'감정표현 장착',exact:true}).click();const dialog=page.getByRole('dialog',{name:'감정표현 장착',exact:true});
   for(let i=0;i<4;i++){await dialog.getByRole('button',{name:new RegExp(`^감정표현 슬롯 ${i+1}`)}).click();await dialog.getByRole('button',{name:selected[i].name+' 선택',exact:true}).click();}
