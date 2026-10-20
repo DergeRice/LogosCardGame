@@ -2,8 +2,23 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {Game,type GameSocket} from '../server/game.js';
 import {restore,snapshot} from '../server/persistence.js';
-import {EXCHANGE_CATEGORIES} from '../shared/store.js';
+import {COSMETICS,dummyRanking,EXCHANGE_CATEGORIES} from '../shared/store.js';
 const peer=(g:Game)=>{const messages:any[]=[],socket:GameSocket={readyState:1,bufferedAmount:0,send(raw){messages.push(JSON.parse(raw))},close(){},terminate(){}};return{p:g.hello(socket,null,'Appearance'),messages};};
+
+test('some demo ranks and AI wear stable real frames without granting human items or AI accounts',()=>{
+ for(let tier=0;tier<8;tier++){
+  const rows=dummyRanking(tier),framed=rows.filter(p=>p.frameId);
+  assert.equal(framed.length,8);assert.deepEqual(rows,dummyRanking(tier));
+  assert.ok(framed.every(p=>COSMETICS.some(c=>c.type==='frame'&&c.id===p.frameId)));
+ }
+ const g=new Game(),a=peer(g),store=structuredClone(g.community.record(a.p).store);
+ g.createRoom(a.p);for(let i=0;i<3;i++)g.addRoomAI(a.p);
+ const room=g.rooms.get(a.p.room!)!,bots=g.view(room,a.p).players.filter(p=>p.ai);
+ assert.deepEqual(bots.map(p=>p.frameId),['frame-style-15','frame-style-30',undefined]);
+ assert.deepEqual(g.community.record(a.p).store,store);assert.equal(g.community.records.size,1);
+ const fresh=new Game();restore(fresh,snapshot(g));const saved=fresh.sessions.get(a.p.token)!;
+ assert.deepEqual(fresh.view(fresh.rooms.get(saved.room!)!,saved).players.filter(p=>p.ai).map(p=>p.frameId),bots.map(p=>p.frameId));
+});
 
 test('home background and game board equip independently; character/frame reach peers, ranks, lobby and restore',()=>{
  const g=new Game(),a=peer(g),b=peer(g),r=g.community.record(a.p);
