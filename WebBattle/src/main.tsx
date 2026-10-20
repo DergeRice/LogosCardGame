@@ -1,3 +1,4 @@
+import {GoogleLogin} from './GoogleLogin.js';
 import {sortStatusCards} from './statusCards.js';
 import './battle-status-refine.css';
 import {ControlIcon} from './ControlIcon.js';
@@ -114,6 +115,7 @@ function App() {
  const [rankings,setRankings]=useState<Record<number,RankedPeer[]>>({});
  const [community,setCommunity]=useState<CommunityView|null>(null),[storeResult,setStoreResult]=useState<StoreResult|null>(null);
  const [account,setAccount]=useState<string|null>(null);
+ const [googleOpen,setGoogleOpen]=useState(false);
  const [uuid,setUuid]=useState(''),[accountProvider,setAccountProvider]=useState<string|null>(null);
  const [volume,setVolume]=useState(readSfxLevel);
  const [showExamples,setShowExamples]=useState(localStorage.getItem('logos-show-examples')!=='off');
@@ -289,7 +291,8 @@ function App() {
  if(!cardLoad.ready||cardLoad.failed)return <main className="card-preload-screen card-fill-loading"><PixiLoading progress={cardLoad.percent}/><strong className="loading-percent" role="progressbar" aria-label="리소스 로딩" aria-valuemin={0} aria-valuemax={100} aria-valuenow={cardLoad.percent}>{cardLoad.percent}%</strong><p className="loading-caption" role="status">{cardLoad.failed?'리소스를 모두 불러오지 못했어요':'리소스 불러오는 중'}</p>{cardLoad.failed>0&&<button className="primary preload-retry" onClick={()=>location.reload()}>다시 불러오기</button>}</main>;
  return <div className="shell" style={{'--equipped-board':`url(${JSON.stringify(COSMETICS.find(c=>c.id===(community?.store.board??'board-classic'))?.image??'/brand-ui/game-back.png')})` } as CSSProperties} data-fullscreen={fullscreen} data-viewport-height={Math.min(innerHeight,visualViewport?.height??innerHeight)}><small className="build-version" aria-label="게임 버전">{BUILD_VERSION}</small>
   <button className="settings-trigger" aria-label="설정 열기" aria-expanded={settingsOpen} onClick={()=>setSettingsOpen(open=>!open)}><AtlasIcon icon="settings"/></button>
-  {settingsOpen&&<GameSettings onSurrender={room?.phase==='battle'?()=>{if(send('surrender')){setSettingsOpen(false);setEmoteOpen(false);}}:undefined} canSurrender={connected} uuid={uuid} account={account} provider={accountProvider} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}
+  {googleOpen&&<GoogleLogin socket={socketRef.current} onClose={()=>setGoogleOpen(false)} onSuccess={()=>setGoogleOpen(false)}/>}
+  {settingsOpen&&<GameSettings onGoogle={!room&&connected?()=>{setSettingsOpen(false);setGoogleOpen(true)}:undefined} onSurrender={room?.phase==='battle'?()=>{if(send('surrender')){setSettingsOpen(false);setEmoteOpen(false);}}:undefined} canSurrender={connected} uuid={uuid} account={account} provider={accountProvider} volume={volume} onVolume={value=>{setVolume(value);applySfxLevel(value);tone();}} showExamples={showExamples} onShowExamples={value=>{setShowExamples(value);setExampleVoice(value);localStorage.setItem('logos-show-examples',value?'on':'off');localStorage.setItem('logos-example-voice',value?'on':'off');}} onClose={()=>setSettingsOpen(false)}/>}
   {!connected && <div className="connection-banner" role="status">{status}. 새로고침해도 같은 세션으로 복귀합니다.</div>}
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}

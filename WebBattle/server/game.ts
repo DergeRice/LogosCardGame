@@ -17,7 +17,7 @@ import { judgeCards, DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, 
 import { chooseMove, thinkMs } from './ai.js';
 
 type Player = { profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
-export type Account = {avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple';appleSubHash?:string;failedLogins:number;lockedUntil:number};
+export type Account = {avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = { forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
 type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
@@ -61,7 +61,7 @@ export class Game {
   if(readableGuest===true&&!p.accountId&&/^게스트\s*\d+$/.test(p.name))p.name=availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].filter(x=>x!==p).map(x=>x.name)));
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
-  this.send(socket, { type: 'session', token: p.token, id: p.id, uuid:p.accountId??p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{username:p.name,provider:account?.provider??'password'}:null });
+  this.send(socket, { type: 'session', token: p.token, id: p.id, uuid:p.accountId??p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{username:p.name,provider:account?.googleSubHash?'google':account?.provider??'password'}:null });
   this.community.record(p);this.community.publish();
   this.sendRoomList(socket);
   const room = p.room && this.rooms.get(p.room);
@@ -80,7 +80,7 @@ export class Game {
    if(account)return this.fail(p,'이미 사용 중인 아이디예요.');
    const salt=Buffer.from(randomBytes(16)).toString('hex');account={avatar:p.avatar,id:randomUUID(),username,salt,passwordHash:Buffer.from(scryptSync(password,salt,32)).toString('hex'),rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};this.accounts.set(key,account);
   }else{
-   if(!account||account.provider==='apple')return this.fail(p,'아이디 또는 비밀번호가 맞지 않아요.');
+   if(!account||(account.provider==='apple'||account.provider==='google'))return this.fail(p,'아이디 또는 비밀번호가 맞지 않아요.');
    if(account.lockedUntil>Date.now())return this.fail(p,'로그인 시도가 많아요. 잠시 후 다시 시도해 주세요.');
    const actual=scryptSync(password,account.salt,32),expected=Buffer.from(account.passwordHash,'hex');
    if(expected.length!==actual.length||!timingSafeEqual(actual,expected)){
@@ -98,7 +98,32 @@ export class Game {
   const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.username;this.community.migrate(p,oldIdentity);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:account.provider??'password'}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
+ }
+ loginGoogle(p:Player,identity:{sub:string;name?:string}){
+  if(p.room)return this.fail(p,'Google 로그인은 대전이 끝난 뒤 해주세요.');
+  const subHash=createHash('sha256').update(identity.sub).digest('hex');
+  let account=[...this.accounts.values()].find(a=>a.googleSubHash===subHash);
+  if(p.accountId&&account&&p.accountId!==account.id)return this.fail(p,'이 Google 계정은 다른 게임 계정에 연결되어 있어요.');
+  if(!account&&p.accountId){
+   account=[...this.accounts.values()].find(a=>a.id===p.accountId);
+   if(!account||account.googleSubHash)return this.fail(p,'이미 다른 Google 계정이 연결되어 있어요.');
+   account.googleSubHash=subHash;
+  }
+  if(!account){
+   const clean=(identity.name??'').trim().normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,'').slice(0,16);
+   account={id:randomUUID(),username:clean||`Google 사용자 ${subHash.slice(0,4)}`,avatar:p.avatar,salt:'',passwordHash:'',provider:'google',googleSubHash:subHash,rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};
+   this.accounts.set(`google:${subHash}`,account);
+  }else{
+   const previous=[...this.sessions.values()].find(other=>other!==p&&other.accountId===account!.id);
+   if(previous?.room)return this.fail(p,'이 Google 계정은 다른 대전에서 사용 중이에요.');
+   if(previous){previous.socket?.close(4001,'다른 창에서 Google 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
+   p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
+  }
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
+  this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:'google'}});
  }
  loginApple(p:Player,identity:{sub:string;email?:string},suggestedName:unknown){
   if(p.room)return this.fail(p,'Apple 로그인은 대전이 끝난 뒤 해주세요.');
@@ -119,7 +144,7 @@ export class Game {
   const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.username;this.community.migrate(p,oldIdentity);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
-  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:account.provider??'password'}});
+  this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{username:p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
  }
  logout(p:Player){
   if(!p.accountId)return;

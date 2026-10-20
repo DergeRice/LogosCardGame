@@ -1,3 +1,4 @@
+import {GoogleChallenges,verifyGoogleCredential} from './googleAuth.js';
 import { createServer } from 'node:http';
 import { pathToFileURL } from 'node:url';
 import { WebSocketServer, type WebSocket } from 'ws';
@@ -5,6 +6,7 @@ import { Game } from './game.js';
 import {verifyAppleCode} from './appleAuth.js';
 export function createBattleServer(options: ConstructorParameters<typeof Game>[0] = {}) {
  const game = new Game(options);
+ const googleChallenges=new GoogleChallenges();
  const server = createServer((req, res) => { res.setHeader('Content-Type', 'application/json'); if (req.url === '/health') { res.end(JSON.stringify({ status: 'ok', rooms: game.rooms.size })); } else { res.writeHead(404); res.end('{"error":"not_found"}'); } });
  const wss = new WebSocketServer({ noServer: true, maxPayload: 4096, perMessageDeflate: false });
  const origins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173').split(',').map(s => s.trim());
@@ -28,7 +30,14 @@ export function createBattleServer(options: ConstructorParameters<typeof Game>[0
     const msg = JSON.parse(raw.toString()); if (!msg || typeof msg !== 'object' || Array.isArray(msg)) throw Error('잘못된 메시지예요.');
     if (!player) { if (msg.type !== 'hello') throw Error('게스트 세션이 필요해요.'); player = game.hello(ws, msg.token, msg.name,msg.authToken,msg.readableGuest); clearTimeout(helloTimeout);game.audit(player,'connected'); }
     else if (player.socket === ws){
-     if(msg.type==='appleLogin'){
+     if(msg.type==='googleBegin'){
+      if(!process.env.GOOGLE_CLIENT_ID)throw Error('Google 로그인 설정이 아직 완료되지 않았어요.');
+      if(player.room)throw Error('Google 로그인은 홈에서 진행해 주세요.');
+      game.send(ws,{type:'googleChallenge',clientId:process.env.GOOGLE_CLIENT_ID,nonce:googleChallenges.issue(player.id)});
+     }else if(msg.type==='googleLogin'){
+      const identity=await verifyGoogleCredential(process.env.GOOGLE_CLIENT_ID??'',msg.credential,googleChallenges.take(player.id));
+      if(player.socket===ws)game.loginGoogle(player,identity);
+     }else if(msg.type==='appleLogin'){
       const identity=await verifyAppleCode({clientId:process.env.APPLE_CLIENT_ID??'',teamId:process.env.APPLE_TEAM_ID??'',keyId:process.env.APPLE_KEY_ID??'',privateKey:process.env.APPLE_PRIVATE_KEY??'',redirectUri:process.env.APPLE_REDIRECT_URI??''},msg.code,msg.nonce);
       if(player.socket===ws)game.loginApple(player,identity,msg.name);
      }else game.handle(player,msg);

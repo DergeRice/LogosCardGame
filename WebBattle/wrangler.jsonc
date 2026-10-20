@@ -6,7 +6,7 @@
  "compatibility_flags":["nodejs_compat"],
  "workers_dev":true,
  "preview_urls":false,
- "vars":{"CAPTURE_DIAGNOSTICS":"0","ALLOWED_ORIGINS":"https://logos-card-battle.netlify.app,http://localhost:5173,http://127.0.0.1:5173","MATCH_SECONDS":"0","RECONNECT_SECONDS":"180"},
+ "vars":{"GOOGLE_CLIENT_ID":"434352222825-s9v4l9gqmfum6gkkgln23n5cpopdj6qm.apps.googleusercontent.com","CAPTURE_DIAGNOSTICS":"0","ALLOWED_ORIGINS":"https://logos-card-battle.netlify.app,http://localhost:5173,http://127.0.0.1:5173","MATCH_SECONDS":"0","RECONNECT_SECONDS":"180"},
  "durable_objects":{"bindings":[{"name":"BATTLE","class_name":"BattleArena"}]},
  "migrations":[{"tag":"v1","new_sqlite_classes":["BattleArena"]}],
  "observability":{"enabled":false}
