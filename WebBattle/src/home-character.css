@@ -1,14 +1,30 @@
 .game-hub .home-character-touch{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation}
 .home-character-touch:focus-visible{outline:2px solid #43634a;outline-offset:-4px;border-radius:20px}
-.home-character-canvas{position:absolute;inset:0;pointer-events:none}
+.home-character-canvas{position:absolute;inset:-24px 0 -32px;pointer-events:none}
 .home-character-canvas canvas{display:block;width:100%!important;height:100%!important}
 .home-character-touch[data-renderer=pixi]>.hub-main-character{visibility:hidden}
 .home-character-touch[data-renderer=fallback]>.home-character-canvas{visibility:hidden}
 .home-character-touch[data-renderer=fallback]>.hub-main-character{animation:home-character-breathe 3s ease-in-out infinite}
-@keyframes home-character-breathe{50%{transform:translateY(-3px) scale(1.008)}}
+@keyframes home-character-breathe{0%,100%{transform:translateY(18px) scale(1.1)}50%{transform:translateY(15px) scale(1.109)}}
 @media(prefers-reduced-motion:reduce){.home-character-touch[data-renderer=fallback]>.hub-main-character{animation:none}}
 .home-character-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin:16px 0;max-height:calc(var(--game-height,100dvh) - 180px);overflow:auto}
 .home-character-options>button{display:grid;justify-items:center;gap:5px;padding:10px;border:1px solid #d7e0cf;border-radius:12px;background:#f2f1e6}
 .home-character-options>button[aria-pressed=true]{border-color:#496e50;background:#e3eddc}
 .home-character-options img{width:90px;height:90px;object-fit:contain}
 .home-character-options b{font-size:12px}.home-character-options small{font-size:10px;color:#73846d}
+.hub-character-stage .hub-main-character{transform:translateY(18px) scale(1.1)}
+.home-character-speech{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:min(300px,calc(100% - 24px));padding:12px 16px;border:2px solid #d4dfc8;border-radius:18px;background:#fffdf5;color:#385445;font-size:14px;font-weight:600;line-height:21px;text-align:center;pointer-events:none;z-index:2}
+.home-character-speech:after{content:'';position:absolute;bottom:-9px;left:calc(50% - 7px);width:13px;height:13px;transform:rotate(45deg);background:#fffdf5;border-right:2px solid #d4dfc8;border-bottom:2px solid #d4dfc8}
+.hub-character-stage[data-renderer=pixi]>.home-character-speech{clip-path:inset(50%);height:1px;width:1px;overflow:hidden;white-space:nowrap;padding:0;border:0}
+.hub-character-stage[data-renderer=fallback]>.home-character-speech{animation:home-speech-pop .52s cubic-bezier(.2,1.5,.45,1) both}
+@keyframes home-speech-pop{from{opacity:0;transform:translateX(-50%) scale(.1)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+@media(prefers-reduced-motion:reduce){.hub-character-stage[data-renderer=fallback]>.home-character-speech{animation:none}}
+@media(orientation:landscape) and (max-height:540px){
+ .home-character-speech{top:8px;left:auto;right:8px;width:min(220px,48%);transform:none;font-size:13px;line-height:19px}
+ .home-character-speech:after{left:16px}
+ .hub-character-stage .hub-main-character{transform:translate(-18%,18px) scale(1.1)}
+ .home-character-touch[data-renderer=fallback]>.hub-main-character{animation-name:home-character-side-breathe}
+ .hub-character-stage[data-renderer=fallback]>.home-character-speech{animation-name:home-speech-side-pop}
+}
+@keyframes home-character-side-breathe{0%,100%{transform:translate(-18%,18px) scale(1.1)}50%{transform:translate(-18%,15px) scale(1.109)}}
+@keyframes home-speech-side-pop{from{opacity:0;transform:scale(.1)}to{opacity:1;transform:scale(1)}}
