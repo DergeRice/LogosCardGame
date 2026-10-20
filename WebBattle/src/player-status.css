@@ -1,4 +1,5 @@
 /* Avatar/name on the left, score in the center, all-owned card count at top right. */
+@media(max-width:600px) and (orientation:portrait){.shell .battle .table-player .player-last-action{top:calc(100% + 3px);bottom:auto}}
 .battle .table-player{position:relative;display:block;--seat-avatar:64.8px;--seat-left:10px;--seat-chip-height:20px}
 .battle .table-player .player-profile-hit{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;min-height:0}
 .battle .table-player .player-profile-hit>.character-avatar{--profile-size:var(--seat-avatar);position:absolute;left:var(--seat-left);top:calc((100% - var(--seat-avatar))/2)}

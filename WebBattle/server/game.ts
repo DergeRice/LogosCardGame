@@ -451,6 +451,12 @@ export class Game {
   this.special(p,{matchId:r.matchId,requestId:randomUUID(),handVersion:p.handVersion,cardId:action.id,targetId:target?.id,offerId:offer?.id,wantedId:target?.hand.find(canTransferCard)?.id,stealId:robChoice?.card.id,stealSource:robChoice?.source,targetHandVersion:target?.handVersion,targetFieldVersion:target?.fieldVersion??0});
   return true;
  }
+ showLowScore(p:Player,judgment:Judgment,repeat=false){
+  if(!judgment.valid||judgment.points>=RULES.goThreshold)return false;
+  const text=`문장 ${judgment.points}점 · 기준 미달`;
+  if(!repeat&&p.lastAction?.text===text)return false;
+  p.lastAction={id:randomUUID(),text};return true;
+ }
  action(p: Player, msg: Record<string, unknown>) {
   const r = p.room && this.rooms.get(p.room);
   if (!r || r.phase !== 'battle') return this.fail(p, '진행 중인 경기가 없어요.', String(msg.requestId));
@@ -506,7 +512,7 @@ export class Game {
    const canStartGo=p.score>=RULES.goThreshold&&p.score>r.highScore&&((canExtendOwnGo&&ownBaseImproved)||r.leaderId!==p.id);
    if (canStartGo) { r.highScore = p.score; r.decision = { id: randomUUID(), playerId: p.id, startedAt: Date.now(), expiresAt: Date.now() + (p.ai ? this.decisionMs : this.humanDecisionMs) }; this.log(r, `${p.name} 님이 최고점 ${p.score}점! ${r.leaderId===p.id?`${r.goCount+1}고`:'1고'} / 스톱 선택권 획득`); }
   }
-  if(!p.judgment.accepted)this.botEmotion(p,'mistake');
+  if(!p.judgment.accepted){this.showLowScore(p,p.judgment,true);this.botEmotion(p,'mistake');}
   this.audit(p,'submit_result','info',{...msg,points:p.judgment.points,awardedPoints:p.judgment.awardedPoints,valid:p.judgment.valid,patternType:p.judgment.patternType,usedStartIndex:p.judgment.usedStartIndex,usedLength:p.judgment.usedLength,accepted:p.judgment.accepted,reason:p.judgment.accepted?'scored':p.judgment.valid?'valid_below_threshold':'invalid_grammar'},undefined,selected as Card[]);
   this.send(p.socket, { type: 'ack', requestId: msg.requestId });this.broadcast(r);
  }
@@ -588,7 +594,17 @@ export class Game {
    if (r.endsAt > 0 && now >= r.endsAt) { this.finish(r, r.finalRound?'마지막 5분이 끝났어요. 최종 점수로 정산합니다.':'경기 시간이 끝났어요. 현재 점수로 정산합니다.'); continue; }
    if(!r.decision&&r.drawVote){let changed=false;for(const p of r.players)if(p.ai&&!r.drawVote.approved.includes(p.id)&&now>=(r.drawVote.aiApproveAt?.[p.id]??now)){r.drawVote.approved.push(p.id);changed=true;}if(r.drawVote.approved.length===r.players.length){this.distribute(r,'unanimous');continue;}if(changed)this.broadcast(r);}
    if(r.nextDealAt>0&&now>=r.nextDealAt){this.distribute(r,'automatic');continue;}
-   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) { p.nextAI = now + thinkMs(p.ai); if(this.autoSpecial(r,p))continue; const started = performance.now(), cards = chooseMove(p.hand, p.ai); aiSpent += performance.now() - started; if (cards && applyGoBenefit(judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!)),activeGoLevel(r,p)).points>=RULES.goThreshold) this.action(p, { type: 'submit', cards, requestId: randomUUID(), matchId: r.matchId, handVersion: p.handVersion }); else if(r.deck.length<r.players.length&&!p.basicSupplyUsed&&!(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':kinds.includes('mass')?'preposition':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});}if(!cards&&this.botEmotion(p,now-(r.startedAt??now)>60000?'longWait':'waiting'))this.broadcast(r); }
+   for (const p of r.players) if (r.phase==='battle' && !r.decision && p.ai && now >= p.nextAI && aiSpent < 16) {
+    p.nextAI = now + thinkMs(p.ai);if(this.autoSpecial(r,p))continue;
+    const started=performance.now(),cards=chooseMove(p.hand,p.ai);aiSpent+=performance.now()-started;
+    const candidate=cards?applyGoBenefit(judgeCards(cards.map(id=>p.hand.find(c=>c.id===id)!)),activeGoLevel(r,p)):undefined;
+    if(cards&&candidate&&candidate.points>=RULES.goThreshold)this.action(p,{type:'submit',cards,requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion});
+    else{
+     if(candidate&&this.showLowScore(p,candidate))this.broadcast(r);
+     if(r.deck.length<r.players.length&&!p.basicSupplyUsed&&!(p.basicSupplyAt??0)){const kinds=p.hand.map(c=>c.kind),kind=!kinds.includes('pronoun')&&!kinds.includes('mass')?'pronoun':!kinds.includes('verb')&&!kinds.includes('be')?'verb':kinds.includes('count')&&!kinds.some(k=>k==='article'||k==='indefinite'||k==='possessive')?'indefinite':kinds.includes('article')||kinds.includes('indefinite')?'count':kinds.includes('mass')?'preposition':'article';this.claimBasic(p,{matchId:r.matchId,requestId:randomUUID(),kind});}
+    }
+    if(!cards&&this.botEmotion(p,now-(r.startedAt??now)>60000?'longWait':'waiting'))this.broadcast(r);
+   }
   }
   for (const [token, p] of this.sessions) if (!p.room && !p.socket && now - p.touchedAt > GUEST_RETENTION_MS) this.sessions.delete(token);
   for(const [hash,session] of this.accountSessions)if(session.expiresAt<=now)this.accountSessions.delete(hash);
