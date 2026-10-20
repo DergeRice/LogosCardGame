@@ -16,4 +16,5 @@ export const HOME_CHARACTERS=[
  character('character-pink-monkey','분홍원숭이',series('분홍원숭이',['인사','응원','신남','화남','놀람','눈물','고민','사랑','부끄러움','하품'])),
  character('character-horse','말',series('말',['미소','사랑','인사','고민','부끄러움','신남','놀람','화남','눈물','하품'])),
  character('character-king','왕',series('왕',['인사','응원','화남','놀람','눈물','고민','사랑','부끄러움','하품','최고'])),
+ character('character-hans','한스 대왕',series('한스 대왕',['인사','응원','화남','놀람','눈물','고민','사랑','부끄러움','하품','최고'])),
 ];

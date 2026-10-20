@@ -421,6 +421,66 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%ED%99%94%EB%82%A8.webp"
   },
   {
+    "id": "emote-한스 대왕 고민",
+    "type": "emote",
+    "name": "한스 대왕 고민",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EA%B3%A0%EB%AF%BC.webp"
+  },
+  {
+    "id": "emote-한스 대왕 놀람",
+    "type": "emote",
+    "name": "한스 대왕 놀람",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EB%86%80%EB%9E%8C.webp"
+  },
+  {
+    "id": "emote-한스 대왕 눈물",
+    "type": "emote",
+    "name": "한스 대왕 눈물",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EB%88%88%EB%AC%BC.webp"
+  },
+  {
+    "id": "emote-한스 대왕 부끄러움",
+    "type": "emote",
+    "name": "한스 대왕 부끄러움",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EB%B6%80%EB%81%84%EB%9F%AC%EC%9B%80.webp"
+  },
+  {
+    "id": "emote-한스 대왕 사랑",
+    "type": "emote",
+    "name": "한스 대왕 사랑",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EC%82%AC%EB%9E%91.webp"
+  },
+  {
+    "id": "emote-한스 대왕 응원",
+    "type": "emote",
+    "name": "한스 대왕 응원",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EC%9D%91%EC%9B%90.webp"
+  },
+  {
+    "id": "emote-한스 대왕 인사",
+    "type": "emote",
+    "name": "한스 대왕 인사",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EC%9D%B8%EC%82%AC.webp"
+  },
+  {
+    "id": "emote-한스 대왕 최고",
+    "type": "emote",
+    "name": "한스 대왕 최고",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%EC%B5%9C%EA%B3%A0.webp"
+  },
+  {
+    "id": "emote-한스 대왕 하품",
+    "type": "emote",
+    "name": "한스 대왕 하품",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%ED%95%98%ED%92%88.webp"
+  },
+  {
+    "id": "emote-한스 대왕 화남",
+    "type": "emote",
+    "name": "한스 대왕 화남",
+    "image": "/cosmetics/emotes/%ED%95%9C%EC%8A%A4%20%EB%8C%80%EC%99%95%20%ED%99%94%EB%82%A8.webp"
+  },
+  {
     "id": "emote-햄스터 고민",
     "type": "emote",
     "name": "햄스터 고민",

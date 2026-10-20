@@ -3,3 +3,5 @@
 .clean-settings .settings-heading>b{color:#385445}.clean-settings .settings-heading>button{color:#658055;background:#eaf0e2}
 
 .settings-version{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px;padding-top:12px;border-top:1px solid #e7e8de;font-size:12px;color:#7a8877}.settings-version code{font-size:12px;font-variant-numeric:tabular-nums}
+
+.hub-collection-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;max-width:100%;min-width:0}.game-hub .hub-collection-tabs button{flex:0 0 auto;white-space:nowrap;word-break:keep-all}

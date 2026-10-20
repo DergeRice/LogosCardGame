@@ -5,8 +5,8 @@ import {COSMETICS,defaultHubSave,LOOT_WEIGHTS,BOX_WEIGHTS,openDemoBox} from '../
 import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';
 const added=COSMETICS.filter(c=>c.type==='emote'&&c.image.startsWith('/cosmetics/emotes/'));
 
-test('70 supplied emotes are transparent 512px images, preloaded, collectible and present in the draw pool',async()=>{
- assert.equal(added.length,70);assert.equal(added.filter(c=>c.name.startsWith('두두')).length,10);assert.equal(added.filter(c=>c.name.startsWith('프로나운')).length,10);assert.equal(added.filter(c=>c.name.startsWith('버프')).length,10);assert.equal(added.filter(c=>c.name.startsWith('아리')).length,10);assert.equal(added.filter(c=>c.name.startsWith('애드버프')).length,10);
+test('80 supplied emotes are transparent 512px images, preloaded, collectible and present in the draw pool',async()=>{
+ assert.equal(added.length,80);assert.equal(added.filter(c=>c.name.startsWith('두두')).length,10);assert.equal(added.filter(c=>c.name.startsWith('프로나운')).length,10);assert.equal(added.filter(c=>c.name.startsWith('버프')).length,10);assert.equal(added.filter(c=>c.name.startsWith('아리')).length,10);assert.equal(added.filter(c=>c.name.startsWith('애드버프')).length,10);
  assert.equal(added.filter(c=>c.name.startsWith('트랜스 ')).length,10);assert.equal(added.filter(c=>c.name.startsWith('코리쉬 ')).length,10);
  const pool=COSMETICS.filter(c=>c.type==='emote'&&!('basic'in c&&c.basic)&&!('dustOnly'in c&&c.dustOnly));
  const category=LOOT_WEIGHTS.findIndex(c=>c.type==='emote'),roll=(BOX_WEIGHTS.silver.slice(0,category).reduce((a,b)=>a+b,0)+1)/100;

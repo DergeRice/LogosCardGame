@@ -6,7 +6,7 @@ const retired=['frame-mint','frame-gold','frame-violet','emote-smile','emote-fir
 test('retired placeholder cosmetics are absent; supplied artwork remains available',()=>{
  assert.ok(retired.every(id=>!COSMETICS.some(c=>c.id===id)));
  assert.equal(COSMETICS.filter(c=>c.type==='frame').length,60);
- assert.equal(COSMETICS.filter(c=>c.type==='emote').length,80);
+ assert.equal(COSMETICS.filter(c=>c.type==='emote').length,90);
  assert.ok(COSMETICS.filter(c=>c.type==='emote'||c.type==='frame').every(c=>c.image.startsWith('/')));
  assert.equal(defaultHubSave().frame,'');
 });

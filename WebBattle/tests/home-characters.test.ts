@@ -1,8 +1,8 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {HOME_CHARACTERS} from '../shared/homeCharacters.js';import {COSMETICS,defaultHubSave,dustPrice,openDemoBox} from '../shared/store.js';
 import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';import {Game,type GameSocket} from '../server/game.js';import {snapshot,restore} from '../server/persistence.js';
-test('eight emote characters use first artwork and ten preloaded poses; character draws preserve category odds',()=>{
- assert.equal(HOME_CHARACTERS.length,8);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,COSMETICS.length);
+test('nine emote characters use first artwork and ten preloaded poses; character draws preserve category odds',()=>{
+ assert.equal(HOME_CHARACTERS.length,9);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,COSMETICS.length);
  const pool=COSMETICS.filter(c=>c.type==='character');
  for(const c of HOME_CHARACTERS){assert.equal(c.poses.length,10);assert.equal(new Set(c.poses.map(p=>p.id)).size,10);assert.equal(c.image,c.poses[0].image);assert.equal(defaultHubSave().owned.includes(c.id),false);assert.equal(dustPrice(c.type),850);assert.ok(c.poses.every(p=>GAME_ASSET_URLS.includes(p.image)));
   let n=0;const result=openDemoBox({...defaultHubSave(),owned:[]},'silver',1,()=>n++===0?.6:(pool.findIndex(p=>p.id===c.id)+.5)/pool.length);assert.equal(result.rewards[0].itemId,c.id);
