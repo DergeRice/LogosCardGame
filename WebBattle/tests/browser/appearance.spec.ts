@@ -4,7 +4,7 @@ import type {RoomView} from '../../shared/rules.js';
 for(const mobile of [false,true])test(`character portrait home background and game board ${mobile?'mobile':'desktop'}`,async({browser})=>{
  const ctx=await guestContext(browser,{viewport:mobile?{width:844,height:390}:{width:1366,height:900},isMobile:mobile,hasTouch:mobile});
  if(mobile)await ctx.addInitScript(()=>Object.defineProperty(window,'visualViewport',{value:Object.assign(new EventTarget(),{width:844,height:330,offsetTop:20,offsetLeft:0,scale:1})}));
- const page=await ctx.newPage(),store=defaultHubSave(),errors:string[]=[];store.owned.push('character-table','background-table','board-garden','frame-style-15');
+ const page=await ctx.newPage(),store=defaultHubSave(),errors:string[]=[];store.owned.push('character-hans','background-table','board-우주선','frame-style-15');
  page.on('pageerror',e=>errors.push(e.message));
  const me={id:'me',name:'외형 검사',avatar:'pronoun' as const,rating:1000,ratingDelta:0,points:0,reward:0,score:0,ready:true,connected:true,handCount:0,rematch:false,ai:false};
  const room:RoomView={code:'123456',phase:'battle',matchId:'appearance-fixture',players:[me,{...me,id:'other'}],you:'me',hand:[],handVersion:1,fieldVersion:0,endsAt:0,stageEndsAt:0,nextDealAt:Date.now()+30000,dealSerial:1,deckCount:40,deckTotal:71,usedCards:[],dealIntervalMs:30000,goCount:0,multiplier:1,highScore:0,serverNow:Date.now(),actionAt:0,exchangeAt:0,reconnectMs:30000,durationMs:0,log:[],expiresAt:0};

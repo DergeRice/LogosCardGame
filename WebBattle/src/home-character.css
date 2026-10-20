@@ -5,7 +5,7 @@
 .home-character-touch[data-renderer=pixi]>.hub-main-character{visibility:hidden}
 .home-character-touch[data-renderer=fallback]>.home-character-canvas{visibility:hidden}
 .home-character-touch[data-renderer=fallback]>.hub-main-character{animation:home-character-breathe 3s ease-in-out infinite}
-@keyframes home-character-breathe{0%,100%{transform:translateY(18px) scale(1.1)}50%{transform:translateY(15px) scale(1.109)}}
+@keyframes home-character-breathe{0%,100%{transform:none}50%{transform:translateY(-3px) scale(1.008)}}
 @media(prefers-reduced-motion:reduce){.home-character-touch[data-renderer=fallback]>.hub-main-character{animation:none}}
 .home-character-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin:16px 0;max-height:calc(var(--game-height,100dvh) - 180px);overflow:auto}
 .home-character-options>button{display:grid;justify-items:center;gap:5px;padding:10px;border:1px solid #d7e0cf;border-radius:12px;background:#f2f1e6}
@@ -26,5 +26,11 @@
  .home-character-touch[data-renderer=fallback]>.hub-main-character{animation-name:home-character-side-breathe}
  .hub-character-stage[data-renderer=fallback]>.home-character-speech{animation-name:home-speech-side-pop}
 }
-@keyframes home-character-side-breathe{0%,100%{transform:translate(-18%,18px) scale(1.1)}50%{transform:translate(-18%,15px) scale(1.109)}}
+@keyframes home-character-side-breathe{0%,100%{transform:none}50%{transform:translateY(-3px) scale(1.008)}}
 @keyframes home-speech-side-pop{from{opacity:0;transform:scale(.1)}to{opacity:1;transform:scale(1)}}
+@media(orientation:portrait) and (max-width:750px){
+ .home-character-canvas{bottom:-56px}
+ .home-character-speech{top:calc(var(--home-head-y,160px) - 18px);transform:translate(-50%,-100%)}
+ .hub-character-stage[data-renderer=fallback]>.home-character-speech{animation-name:home-speech-head-pop}
+}
+@keyframes home-speech-head-pop{from{opacity:0;transform:translate(-50%,-100%) scale(.1)}to{opacity:1;transform:translate(-50%,-100%) scale(1)}}

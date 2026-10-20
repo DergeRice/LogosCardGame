@@ -20,10 +20,8 @@ export const COSMETICS=[
  ...NARO_EMOTES,
  ...BASIC_PROFILES,...COLLECTIBLE_PROFILES,
  {id:'character-naro',type:'character',name:'나로와 친구들',image:'/landing/mascots-mobile.webp'},
- {id:'character-table',type:'character',name:'카드 테이블',image:'/brand-ui/loading-under.png'},
  ...HOME_CHARACTERS,
  {id:'board-classic',type:'board',name:'기본 나무 보드',image:'/brand-ui/game-back.png'},
- {id:'board-garden',type:'board',name:'정원 보드',image:'/landing/background.jpg'},
  {id:'background-garden',type:'background',name:'햇살 정원',image:'/landing/background.jpg'},
  {id:'background-table',type:'background',name:'로고스 테이블',image:'/brand-ui/game-back.png'},
  ...EXTRA_COSMETICS.map(item=>({...item,name:characterName(item.name)})),
@@ -52,6 +50,9 @@ export function migrateEmoteCatalog(save:HubSave){
 }
 
 export function migrateProfiles(save:HubSave,seed='default'){
+ save.owned=save.owned.filter(id=>id!=='character-table'&&id!=='board-garden');
+ if(save.character==='character-table')save.character='character-naro';
+ if(save.board==='board-garden')save.board='board-classic';
  for(const p of BASIC_PROFILES)if(!save.owned.includes(p.id))save.owned.push(p.id);
  if(!save.profile||!save.owned.includes(save.profile)||!COSMETICS.some(c=>c.type==='profile'&&c.id===save.profile))save.profile=basicProfile(seed);
  save.profileCatalogVersion=1;return save;

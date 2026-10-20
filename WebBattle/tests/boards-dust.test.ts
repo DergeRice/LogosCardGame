@@ -1,7 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import sharp from 'sharp';import {COSMETICS,defaultHubSave,openDemoBox,BOX_WEIGHTS,LOOT_WEIGHTS,dustPrice,DUPLICATE_DUST} from '../shared/store.js';import {DUST_IMAGE} from '../shared/art.js';import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';import {Game,type GameSocket} from '../server/game.js';import {snapshot,restore} from '../server/persistence.js';
 const boards=COSMETICS.filter(c=>c.type==='board'&&c.image.startsWith('/cosmetics/boards/'));
 test('512px transparent stardust and ten wide board images decode and are preloaded',async()=>{
- assert.equal(boards.length,10);assert.equal(COSMETICS.filter(c=>c.type==='board').length,12);assert.deepEqual(new Set(boards.map(b=>b.name)),new Set(['우주선','칠판','흰벽돌','마법도서관','하늘성채','벚꽃밤','사막시장','아늑한방','설원','수중세계']));
+ assert.equal(boards.length,10);assert.equal(COSMETICS.filter(c=>c.type==='board').length,11);assert.deepEqual(new Set(boards.map(b=>b.name)),new Set(['우주선','칠판','흰벽돌','마법도서관','하늘성채','벚꽃밤','사막시장','아늑한방','설원','수중세계']));
  const dust=await sharp('public'+DUST_IMAGE).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(dust.info.width,512);assert.equal(dust.info.height,512);assert.equal(dust.data[3],0);assert.ok(GAME_ASSET_URLS.includes(DUST_IMAGE));
  for(const board of boards){const m=await sharp('public'+decodeURIComponent(board.image)).metadata();assert.equal(m.width,1536);assert.ok(m.height!>=660&&m.height!<=706);assert.ok(GAME_ASSET_URLS.includes(board.image));assert.ok(!defaultHubSave().owned.includes(board.id));}
  const reward=openDemoBox(defaultHubSave(),'silver',1,()=>0).rewards[0];assert.equal(reward.type,'dust');assert.equal(reward.image,DUST_IMAGE);
