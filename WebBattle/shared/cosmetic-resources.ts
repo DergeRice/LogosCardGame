@@ -61,6 +61,66 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "image": "/cosmetics/emotes/%EA%B0%95%EC%95%84%EC%A7%80%20%ED%99%94%EB%82%A8.webp"
   },
   {
+    "id": "emote-분홍원숭이 고민",
+    "type": "emote",
+    "name": "분홍원숭이 고민",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EA%B3%A0%EB%AF%BC.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 놀람",
+    "type": "emote",
+    "name": "분홍원숭이 놀람",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EB%86%80%EB%9E%8C.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 눈물",
+    "type": "emote",
+    "name": "분홍원숭이 눈물",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EB%88%88%EB%AC%BC.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 부끄러움",
+    "type": "emote",
+    "name": "분홍원숭이 부끄러움",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EB%B6%80%EB%81%84%EB%9F%AC%EC%9B%80.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 사랑",
+    "type": "emote",
+    "name": "분홍원숭이 사랑",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EC%82%AC%EB%9E%91.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 신남",
+    "type": "emote",
+    "name": "분홍원숭이 신남",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EC%8B%A0%EB%82%A8.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 응원",
+    "type": "emote",
+    "name": "분홍원숭이 응원",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EC%9D%91%EC%9B%90.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 인사",
+    "type": "emote",
+    "name": "분홍원숭이 인사",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%EC%9D%B8%EC%82%AC.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 하품",
+    "type": "emote",
+    "name": "분홍원숭이 하품",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%ED%95%98%ED%92%88.webp"
+  },
+  {
+    "id": "emote-분홍원숭이 화남",
+    "type": "emote",
+    "name": "분홍원숭이 화남",
+    "image": "/cosmetics/emotes/%EB%B6%84%ED%99%8D%EC%9B%90%EC%88%AD%EC%9D%B4%20%ED%99%94%EB%82%A8.webp"
+  },
+  {
     "id": "emote-점박이 고민",
     "type": "emote",
     "name": "점박이 고민",
@@ -119,6 +179,66 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "type": "emote",
     "name": "점박이 화남",
     "image": "/cosmetics/emotes/%EC%A0%90%EB%B0%95%EC%9D%B4%20%ED%99%94%EB%82%A8.webp"
+  },
+  {
+    "id": "emote-토끼 고민",
+    "type": "emote",
+    "name": "토끼 고민",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EA%B3%A0%EB%AF%BC.webp"
+  },
+  {
+    "id": "emote-토끼 놀람",
+    "type": "emote",
+    "name": "토끼 놀람",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EB%86%80%EB%9E%8C.webp"
+  },
+  {
+    "id": "emote-토끼 눈물",
+    "type": "emote",
+    "name": "토끼 눈물",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EB%88%88%EB%AC%BC.webp"
+  },
+  {
+    "id": "emote-토끼 부끄러움",
+    "type": "emote",
+    "name": "토끼 부끄러움",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EB%B6%80%EB%81%84%EB%9F%AC%EC%9B%80.webp"
+  },
+  {
+    "id": "emote-토끼 사랑",
+    "type": "emote",
+    "name": "토끼 사랑",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EC%82%AC%EB%9E%91.webp"
+  },
+  {
+    "id": "emote-토끼 신남",
+    "type": "emote",
+    "name": "토끼 신남",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EC%8B%A0%EB%82%A8.webp"
+  },
+  {
+    "id": "emote-토끼 응원",
+    "type": "emote",
+    "name": "토끼 응원",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EC%9D%91%EC%9B%90.webp"
+  },
+  {
+    "id": "emote-토끼 인사",
+    "type": "emote",
+    "name": "토끼 인사",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%EC%9D%B8%EC%82%AC.webp"
+  },
+  {
+    "id": "emote-토끼 하품",
+    "type": "emote",
+    "name": "토끼 하품",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%ED%95%98%ED%92%88.webp"
+  },
+  {
+    "id": "emote-토끼 화남",
+    "type": "emote",
+    "name": "토끼 화남",
+    "image": "/cosmetics/emotes/%ED%86%A0%EB%81%BC%20%ED%99%94%EB%82%A8.webp"
   },
   {
     "id": "emote-햄스터 고민",

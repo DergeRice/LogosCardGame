@@ -5,8 +5,8 @@ import {COSMETICS,defaultHubSave,LOOT_WEIGHTS,BOX_WEIGHTS,openDemoBox} from '../
 import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';
 const added=COSMETICS.filter(c=>c.type==='emote'&&c.image.startsWith('/cosmetics/emotes/'));
 
-test('30 supplied emotes are transparent 512px images, preloaded, collectible and present in the draw pool',async()=>{
- assert.equal(added.length,30);assert.equal(added.filter(c=>c.name.startsWith('햄스터')).length,10);assert.equal(added.filter(c=>c.name.startsWith('강아지')).length,10);assert.equal(added.filter(c=>c.name.startsWith('점박이')).length,10);
+test('50 supplied emotes are transparent 512px images, preloaded, collectible and present in the draw pool',async()=>{
+ assert.equal(added.length,50);assert.equal(added.filter(c=>c.name.startsWith('햄스터')).length,10);assert.equal(added.filter(c=>c.name.startsWith('강아지')).length,10);assert.equal(added.filter(c=>c.name.startsWith('점박이')).length,10);assert.equal(added.filter(c=>c.name.startsWith('토끼')).length,10);assert.equal(added.filter(c=>c.name.startsWith('분홍원숭이')).length,10);
  const pool=COSMETICS.filter(c=>c.type==='emote'&&!('basic'in c&&c.basic)&&!('dustOnly'in c&&c.dustOnly));
  const category=LOOT_WEIGHTS.findIndex(c=>c.type==='emote'),roll=(BOX_WEIGHTS.silver.slice(0,category).reduce((a,b)=>a+b,0)+1)/100;
  for(const item of added){
@@ -26,7 +26,7 @@ test('two real local WebSockets redeem a new emote for 200, equip and transmit i
  const send=(c:any,type:string,extra:any={})=>c.ws.send(JSON.stringify({type,...extra}));
  try{
   for(const name of ['EmoteBuyer','EmoteObserver']){const c:any={ws:new WebSocket(`ws://127.0.0.1:${(app.server.address() as any).port}/socket`)};clients.push(c);c.ws.on('message',(raw:any)=>{const m=JSON.parse(String(raw));if(m.type==='community')c.community=m.community;if(m.type==='state')c.room=m.room;});await new Promise(r=>c.ws.on('open',r));send(c,'hello',{name});await wait(()=>!!c.community);}
-  const[a,b]=clients,p=[...app.game.sessions.values()][0],record=app.game.community.record(p),item=added.find(c=>c.name==='점박이 인사')!;record.store.dust=200; // Seeded wallet, not earned currency.
+  const[a,b]=clients,p=[...app.game.sessions.values()][0],record=app.game.community.record(p),item=added.find(c=>c.name==='토끼 인사')!;record.store.dust=200; // Seeded wallet, not earned currency.
   send(a,'storeRedeem',{id:item.id,requestId:'new-emote',storeVersion:0});await wait(()=>a.community.store.owned.includes(item.id));assert.equal(a.community.store.dust,0);
   send(a,'storeEmotes',{slots:[item.id,null,null,null]});await wait(()=>a.community.store.emotes[0]===item.id);
   send(a,'createRoom');await wait(()=>a.room?.phase==='lobby');send(b,'joinRoom',{code:a.room.code});await wait(()=>a.room.players.length===2);send(a,'startRoom');await wait(()=>a.room?.phase==='battle'&&b.room?.phase==='battle');
