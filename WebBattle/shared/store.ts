@@ -20,14 +20,10 @@ export const COSMETICS=[
  {id:'board-garden',type:'board',name:'정원 보드',image:'/landing/background.jpg'},
  {id:'background-garden',type:'background',name:'햇살 정원',image:'/landing/background.jpg'},
  {id:'background-table',type:'background',name:'로고스 테이블',image:'/brand-ui/game-back.png'},
- {id:'emote-smile',type:'emote',name:'싱글벙글',image:'😊'}, {id:'emote-fire',type:'emote',name:'불타는 승부',image:'🔥'},
- {id:'emote-clap',type:'emote',name:'최고야',image:'👏'}, {id:'emote-wow',type:'emote',name:'깜짝',image:'😮'},
- {id:'frame-mint',type:'frame',name:'민트 프레임',image:'#78a995'}, {id:'frame-gold',type:'frame',name:'햇살 프레임',image:'#dfb24c'},
- {id:'frame-violet',type:'frame',name:'라일락 프레임',image:'#a28bca'},
  ...EXTRA_COSMETICS,
 ] as const;
 export type HubSave={revision?:number;emoteCatalogVersion?:number;gold:number;diamonds:number;dust:number;owned:string[];board?:string;emote?:string;emotes?:EmoteSlots;character:string;background:string;frame:string;bestScore:number;bestRating:number};
-export function defaultHubSave():HubSave{return {revision:0,emoteCatalogVersion:2,gold:50000,diamonds:1000,dust:0,board:'board-classic',emote:DEFAULT_EMOTE_SLOTS[0],emotes:[...DEFAULT_EMOTE_SLOTS],owned:[...BASIC_EMOTES.map(e=>e.id),'board-classic','character-naro','background-garden','frame-mint'],character:'character-naro',background:'background-garden',frame:'frame-mint',bestScore:0,bestRating:1000};}
+export function defaultHubSave():HubSave{return {revision:0,emoteCatalogVersion:2,gold:50000,diamonds:1000,dust:0,board:'board-classic',emote:DEFAULT_EMOTE_SLOTS[0],emotes:[...DEFAULT_EMOTE_SLOTS],owned:[...BASIC_EMOTES.map(e=>e.id),'board-classic','character-naro','background-garden'],character:'character-naro',background:'background-garden',frame:'',bestScore:0,bestRating:1000};}
 export function readHubSave(key:string):HubSave{const base=defaultHubSave();try{const data=JSON.parse(localStorage.getItem(key)??'null');if(!data||typeof data!=='object')return base;for(const field of ['gold','diamonds','dust','bestScore','bestRating'] as const)if(Number.isFinite(data[field])&&data[field]>=0)base[field]=Math.min(1e8,Math.floor(data[field]));if(Array.isArray(data.owned))base.owned=[...new Set([...base.owned,...data.owned.filter((id:unknown)=>typeof id==='string'&&COSMETICS.some(c=>c.id===id))])] as string[];for(const field of ['character','background','board','frame'] as const)if(base.owned.includes(data[field])&&COSMETICS.some(c=>c.id===data[field]&&c.type===field))base[field]=data[field];base.emoteCatalogVersion=data.emoteCatalogVersion;
 base.emotes=emoteSlots({...base,emotes:Array.isArray(data.emotes)?data.emotes:undefined,emote:data.emote});return migrateEmoteCatalog(base);}catch{return base;}}
 export type LootReward={name:string;type:LootType|'board';duplicate:boolean;image?:string;dust?:number;itemId?:string};
@@ -40,6 +36,10 @@ export function isEquipped(save:HubSave,item:{id:string;type:string}){return ite
 /** v1 granted all ten free. Convert those free grants to six; later dust purchases persist. */
 export function migrateEmoteCatalog(save:HubSave){
  if((save.emoteCatalogVersion??0)<2){save.owned=save.owned.filter(id=>!DUST_EMOTE_IDS.includes(id));save.emoteCatalogVersion=2;}
+ const retired=new Set(['frame-mint','frame-gold','frame-violet','emote-smile','emote-fire','emote-clap','emote-wow']);
+ if(save.owned.some(id=>retired.has(id)))save.owned=save.owned.filter(id=>!retired.has(id));
+ if(retired.has(save.frame))save.frame='';
+ if(save.emote&&retired.has(save.emote))save.emote=DEFAULT_EMOTE_SLOTS[0];
  for(const e of BASIC_EMOTES)if(!save.owned.includes(e.id))save.owned.push(e.id);
  save.emotes=emoteSlots(save);return save;
 }

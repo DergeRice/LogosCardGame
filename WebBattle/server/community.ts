@@ -11,7 +11,7 @@ export class Community {
  records=new Map<string,CommunityRecord>();invites=new Map<string,CommunityInvite>();
  constructor(private game:Game){}
  id(p:Player){return p.accountId??p.id;}
- record(p:Player){const id=this.id(p);let record=this.records.get(id);if(!record){const initial=defaultHubSave();initial.gold=0;initial.diamonds=0;record={id,name:p.name,avatar:p.avatar,friends:[],incoming:[],store:initial,results:[]};this.records.set(id,record);}record.store.board??='board-classic';record.store.emote??='emote-smile';migrateEmoteCatalog(record.store);if(!record.store.owned.includes('board-classic'))record.store.owned.push('board-classic');record.rating=p.rating;record.name=p.name;record.avatar=p.avatar;return record;}
+ record(p:Player){const id=this.id(p);let record=this.records.get(id);if(!record){const initial=defaultHubSave();initial.gold=0;initial.diamonds=0;record={id,name:p.name,avatar:p.avatar,friends:[],incoming:[],store:initial,results:[]};this.records.set(id,record);}record.store.board??='board-classic';record.store.emote??='emote-hello';migrateEmoteCatalog(record.store);if(!record.store.owned.includes('board-classic'))record.store.owned.push('board-classic');record.rating=p.rating;record.name=p.name;record.avatar=p.avatar;return record;}
  player(id:string){return [...this.game.sessions.values()].find(p=>this.id(p)===id);}
  peer(id:string):Peer|undefined{const p=this.player(id),r=p?this.record(p):this.records.get(id);return r?{id,name:r.name,avatar:r.avatar,characterId:r.store.character,frameId:r.store.frame,online:Boolean(p?.socket?.readyState===1)}:undefined;}
  view(p:Player):CommunityView{const r=this.record(p);return {rankGames:r.rankGames??0,friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
@@ -30,7 +30,7 @@ export class Community {
   if(p.room)return this.game.fail(p,'감정표현은 홈에서 장착해 주세요.');
   const r=this.record(p),slots=msg.slots;
   if(!Array.isArray(slots)||slots.length!==4||slots.some(id=>id!==null&&(typeof id!=='string'||!r.store.owned.includes(id)||!COSMETICS.some(c=>c.type==='emote'&&c.id===id)))||new Set(slots.filter(Boolean)).size!==slots.filter(Boolean).length)return this.game.fail(p,'서로 다른 보유 감정표현을 최대 4개 선택해 주세요.');
-  r.store.emotes=[...slots] as EmoteSlots;r.store.emote=r.store.emotes.find((id):id is string=>Boolean(id))??'emote-smile';this.send(p);
+  r.store.emotes=[...slots] as EmoteSlots;r.store.emote=r.store.emotes.find((id):id is string=>Boolean(id))??'emote-hello';this.send(p);
  }
  equip(p:Player,msg:Record<string,unknown>){const r=this.record(p),item=COSMETICS.find(c=>c.id===msg.id);if(!item||!r.store.owned.includes(item.id))return this.game.fail(p,'보유한 치장만 장착할 수 있어요.');if(item.type==='emote'){const slots=emoteSlots(r.store).map(id=>id===item.id?null:id);slots[0]=item.id;return this.setEmotes(p,{slots});}if(item.type==='character'||item.type==='background'||item.type==='frame'||item.type==='board')r.store[item.type]=item.id;this.send(p);}
 
