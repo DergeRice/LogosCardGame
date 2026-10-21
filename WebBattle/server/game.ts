@@ -19,7 +19,7 @@ type WebSocket = GameSocket;
 import { judgeCards, DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 
-type Player = {deleted?:boolean;goHits?:number; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
+type Player = {deleted?:boolean;goHits?:number;hitBaseScore?:number; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = {countdownStartedAt?:number;countdownVersion?:number;goTarget?:number; highHitScore?:number; forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
@@ -183,7 +183,7 @@ export class Game {
  }
  broadcast(r: Room) { for (const p of r.players) if (!p.ai) this.send(p.socket, { type: 'state', room: this.view(r, p) }); }
  log(r: Room, text: string, actor?: Player) { const id=randomUUID(); r.log.unshift({ id, text }); r.log.length = Math.min(r.log.length, 8); if(actor)actor.lastAction={id,text};this.audit(actor,'game_event','info',{reason:text},r); }
- resetPlayer(p: Player) { p.goHits=0; p.emoteLoadout=p.ai?[...AI_EMOTE_LOADOUTS[Number(p.name.match(/\d+/)?.[0]??0)%AI_EMOTE_LOADOUTS.length]]:emoteSlots(this.community.record(p).store).filter((id):id is string=>Boolean(id)); p.robNotices=[];p.storage=[];p.storageVersion=0;p.aiReadyAt=0; p.hand = []; p.handVersion++; p.fieldVersion=0;p.draftIds=[]; p.scoreClaims=[]; p.submittedSequences=[];p.baseScore=0;p.ownGoBaseScore=0; p.score = 0; p.calledGo=false; p.basicSupplyAt=0;p.basicSupplyUsed=false;p.ratingShield=false; p.ready = true; p.rematch = false; p.judgment = undefined; p.lastPlayed=undefined; p.playedSentences=[]; p.lastAction=undefined; p.reaction=undefined; p.reactionAt=0; p.ratingDelta = 0; p.reward = 0; p.coinReward=0;p.coinBase=0;p.coinAdjustment=0;p.baseReward=0;p.opponentRating=undefined;p.rewardRatio=undefined; p.seen.clear(); }
+ resetPlayer(p: Player) { p.goHits=0;p.hitBaseScore=0; p.emoteLoadout=p.ai?[...AI_EMOTE_LOADOUTS[Number(p.name.match(/\d+/)?.[0]??0)%AI_EMOTE_LOADOUTS.length]]:emoteSlots(this.community.record(p).store).filter((id):id is string=>Boolean(id)); p.robNotices=[];p.storage=[];p.storageVersion=0;p.aiReadyAt=0; p.hand = []; p.handVersion++; p.fieldVersion=0;p.draftIds=[]; p.scoreClaims=[]; p.submittedSequences=[];p.baseScore=0;p.ownGoBaseScore=0; p.score = 0; p.calledGo=false; p.basicSupplyAt=0;p.basicSupplyUsed=false;p.ratingShield=false; p.ready = true; p.rematch = false; p.judgment = undefined; p.lastPlayed=undefined; p.playedSentences=[]; p.lastAction=undefined; p.reaction=undefined; p.reactionAt=0; p.ratingDelta = 0; p.reward = 0; p.coinReward=0;p.coinBase=0;p.coinAdjustment=0;p.baseReward=0;p.opponentRating=undefined;p.rewardRatio=undefined; p.seen.clear(); }
  roomList():RoomListing[]{return [...this.rooms.values()].filter(r=>r.custom&&r.phase==='lobby').map(r=>({code:r.code,name:r.name??`${r.players[0]?.name??'플레이어'}님의 방`,hostName:r.players.find(p=>p.id===r.hostId)?.name??'',humans:r.players.filter(p=>!p.ai).length,aiCount:r.players.filter(p=>p.ai).length,maxPlayers:RULES.maxPlayers}));}
  sendRoomList(socket:WebSocket|undefined){this.send(socket,{type:'roomList',rooms:this.roomList()});}
  publishRoomList(){const payload={type:'roomList',rooms:this.roomList()};for(const p of this.sessions.values())if(!p.ai)this.send(p.socket,payload);}
@@ -241,7 +241,7 @@ export class Game {
    r.players.push(this.newBot(`로고스 AI ${r.players.filter(p=>p.ai).length+1}`,r));
   }
   const center=roomRating(r.players.filter(x=>!x.ai).map(x=>x.rating)),bots=r.players.filter(x=>x.ai);bots.forEach((bot,i)=>{const offset=(bots.length===1?0:bots.length===2?[-.05,.05][i]:[-.08,0,.08][i%3])+randomInt(-10,11)/1000;bot.rating=Math.max(0,Math.round(center*(1+offset)));bot.ai=r.custom?(bot.ai??'normal'):(r.aiSetting??aiDifficulty(bot.rating));bot.rating=Math.max(0,Math.round(bot.rating*(bot.ai==='easy'?.85:bot.ai==='hard'?1.15:1)));});
-  r.countdownStartedAt=undefined;r.countdownVersion=1;r.forfeiterId=undefined;r.resultPlayers=undefined;r.rulesVersion=4;r.goTarget=undefined;r.startedAt=0; r.phase = 'reveal'; r.matchId = randomUUID(); r.stageEndsAt = Date.now() + this.revealMs; r.endsAt = 0; r.finalRound=false; r.goCount = 0; r.highScore = 0; r.highHitScore=0; r.leaderId=undefined; r.drawVote=undefined; r.nextDrawRequestAt=0; r.testMode = false; r.decision = undefined; r.exchange=undefined; r.winner = undefined; r.reason = undefined; r.dealSerial = 0; r.log = []; r.discard = [];
+  r.countdownStartedAt=undefined;r.countdownVersion=1;r.forfeiterId=undefined;r.resultPlayers=undefined;r.rulesVersion=5;r.goTarget=undefined;r.startedAt=0; r.phase = 'reveal'; r.matchId = randomUUID(); r.stageEndsAt = Date.now() + this.revealMs; r.endsAt = 0; r.finalRound=false; r.goCount = 0; r.highScore = 0; r.highHitScore=0; r.leaderId=undefined; r.drawVote=undefined; r.nextDrawRequestAt=0; r.testMode = false; r.decision = undefined; r.exchange=undefined; r.winner = undefined; r.reason = undefined; r.dealSerial = 0; r.log = []; r.discard = [];
   r.deck = shuffle(DECK_FACES.map(face=>({...face,id:randomUUID()}))); r.dealCursor=randomInt(r.players.length);
   for (const p of r.players) this.resetPlayer(p);
   r.expiresAt = this.durationMs > 0 ? Date.now() + this.revealMs + this.dealingMs + this.durationMs + this.resultMs + 60_000 : 0;
@@ -327,12 +327,12 @@ export class Game {
   const nextGo=r.goCount+1;
   if (nextGo > RULES.maxGo) return this.fail(p, '3고까지 선택할 수 있어요.');
   const previousLeader=d.previousLeaderId?r.players.find(x=>x.id===d.previousLeaderId):undefined;
-  if(previousLeader){previousLeader.score=Math.floor(previousLeader.score/2);previousLeader.calledGo=false;}
+  if(previousLeader){previousLeader.score=Math.floor(previousLeader.score/2);previousLeader.hitBaseScore=previousLeader.score;previousLeader.calledGo=false;}
   p.ownGoBaseScore=p.baseScore??p.score;const paused = Date.now() - d.startedAt;p.calledGo=true;r.leaderId=p.id;r.goTarget=nextGo;
   if(r.endsAt > 0&&!r.finalRound&&r.countdownStartedAt===undefined) r.endsAt += paused; if(r.nextDealAt>0)r.nextDealAt+=paused; if(r.drawVote?.aiApproveAt)for(const id of Object.keys(r.drawVote.aiApproveAt))r.drawVote.aiApproveAt[id]+=paused; for (const x of r.players) x.nextAI += paused; r.decision = undefined;
   this.deal(r,1);
   if(nextGo>=2&&r.deck.length){p.hand.push(r.deck.pop()!);p.handVersion++;this.receivedCards(p);r.dealSerial++;}
-  this.deckCountdown(r);r.rulesVersion=4;
+  this.deckCountdown(r);r.rulesVersion=5;
   this.log(r, `${p.name} 님의 ${nextGo}GO 도전! 본인 카드 2장 · 나머지 각 1장 · 승리 보상 ${nextGo===2?5:15}배${previousLeader?` · ${previousLeader.name} 점수 ÷2`:''}`); this.broadcast(r);
  }
  claimBasic(p:Player,msg:Record<string,unknown>){
@@ -562,13 +562,14 @@ export class Game {
    p.draftIds=msg.cards as string[];
    this.botEmotion(p,p.score>Math.max(...r.players.filter(x=>x!==p).map(x=>x.score))?'lead':'scored');for(const other of r.players)if(other!==p&&other.ai&&p.score>other.score)this.botEmotion(other,'surpassed');
    this.log(r, `${p.name} · ${p.judgment.label} +${p.judgment.awardedPoints}점`,p);
-   const effectiveHit=p.judgment.awardedPoints!>=RULES.goThreshold&&p.judgment.awardedPoints!>(r.highHitScore??0);
-   if(effectiveHit)r.highHitScore=p.judgment.awardedPoints!;
+   const hitScore=p.score-(p.hitBaseScore??0);
+   const effectiveHit=hitScore>=RULES.goThreshold&&hitScore>(r.highHitScore??0);
+   if(effectiveHit){r.highHitScore=hitScore;p.hitBaseScore=p.score;}
    if(effectiveHit){const previous=p.goHits??0,otherGo=r.players.some(other=>other!==p&&(other.goHits??0)>0);p.goHits=Math.min(RULES.maxGo,previous+1);this.startCountdown(r,'go');if(previous===1||(previous===0&&otherGo)){r.endsAt+=GO_COUNTDOWN_EXTENSION_MS;this.log(r,`${p.name} 님의 ${p.goHits}GO 성공 · 제한 시간 +20초`);}}
    if(effectiveHit){
     const previousLeaderId=r.leaderId&&r.leaderId!==p.id?r.leaderId:undefined;
     if(previousLeaderId)r.goTarget=undefined;
-    r.leaderId=p.id;r.goCount=p.goHits!;r.highScore=Math.max(r.highScore,p.score);r.rulesVersion=4;
+    r.leaderId=p.id;r.goCount=p.goHits!;r.highScore=Math.max(r.highScore,p.score);r.rulesVersion=5;
     r.decision={id:randomUUID(),playerId:p.id,previousLeaderId,startedAt:Date.now(),expiresAt:Date.now()+(p.ai?this.decisionMs:this.humanDecisionMs)};
     this.log(r,`${p.name} 님의 ${r.goCount}GO 유효타!${r.goCount<3?` ${r.goCount+1}GO 도전 / 스톱 선택`:' 3GO 성공 · 승리 보상 15배'}`);
    }

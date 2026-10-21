@@ -74,8 +74,11 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
    if(r.decision){const scorer=players.get(r.decision.playerId);if(scorer){const same=r.leaderId===scorer.id;scorer.goHits=Math.min(3,same?oldCount+1:1);r.decision.previousLeaderId=same?undefined:r.leaderId;r.leaderId=scorer.id;r.goCount=scorer.goHits;if(!same)r.goTarget=undefined;}}
    r.rulesVersion=4;
   }
-  // Rooms created before hit records were persisted still need the best single
-  // accepted score, not the cumulative scoreboard total, after a worker update.
+  // Existing GO holders start a fresh hit window after the update. Players
+  // without a GO keep their accumulated score toward their first hit.
+  for(const id of r.players){const player=players.get(id);if(player&&player.hitBaseScore===undefined)player.hitBaseScore=(player.goHits??0)>0?player.score:0;}
+  if((r.rulesVersion??0)<5)r.rulesVersion=5;
+  // Preserve the prior best hit when restoring rooms created before records.
   r.highHitScore??=Math.max(0,...r.players.flatMap(id=>{
    const player=players.get(id);
    return [...(player?.scoreClaims??[]).map(claim=>claim.points),player?.judgment?.awardedPoints??0];

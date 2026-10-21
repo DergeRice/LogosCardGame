@@ -25,7 +25,24 @@ test('legacy pending first effective hit migrates to 1GO once without granting c
  const count=a.hand.length,deck=r.deck.length,fresh=new Game();restore(fresh,snapshot(g));const room=fresh.rooms.get(r.code)!,p=fresh.sessions.get(a.token)!;assert.equal(room.goCount,1);assert.equal(p.goHits,1);assert.equal(room.leaderId,p.id);assert.equal(p.hand.length,count);assert.equal(room.deck.length,deck);
  const twice=new Game();restore(twice,snapshot(fresh));assert.equal(twice.rooms.get(r.code)!.goCount,1);assert.equal(twice.sessions.get(a.token)!.goHits,1);
 });
-test('23, 20, 25, 28 compare single hits across players while counting each player separately',t=>{
+test('scores 13 then 11 open the first 2GO choice at a cumulative 24 points',t=>{
+ let now=1e6;t.mock.method(Date,'now',()=>now);
+ const g=new Game({minimumPlayers:2}),a=g.hello(socket(),null,'이상진'),b=g.hello(socket(),null,'온화한 아기하마');g.quick(a);g.quick(b);
+ const r=g.rooms.get(a.room!)!;g.reveal(r);g.begin(r);
+ const decision=()=>r.decision;
+ const submit=(p:typeof a,cards:Card[])=>{p.hand=cards.map(c=>({...c,id:randomUUID()}));p.handVersion++;now+=1600;g.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
+ submit(a,[{id:'a',kind:'pronoun',variant:'pronoun-x2'},{id:'b',kind:'verb'},{id:'c',kind:'article'},{id:'d',kind:'count'},{id:'e',kind:'adjective',variant:'adjective-plus3'}]);
+ assert.equal(a.score,13);assert.equal(a.goHits,0);assert.equal(decision(),undefined);
+ submit(a,[{id:'a',kind:'pronoun',variant:'pronoun-x2'},{id:'b',kind:'verb'},{id:'c',kind:'article'},{id:'d',kind:'count',variant:'count-plus3'}]);
+ assert.equal(a.judgment?.awardedPoints,11);assert.equal(a.score,24);assert.equal(a.goHits,1);assert.equal(r.highHitScore,24);assert.equal(a.hitBaseScore,24);assert.equal(decision()?.playerId,a.id);assert.equal(r.goCount,1);
+ const restored=new Game();restore(restored,snapshot(g));assert.equal(restored.sessions.get(a.token)?.hitBaseScore,24);
+ g.choice(a,{matchId:r.matchId,decisionId:decision()!.id,choice:'go'});
+ submit(b,[{id:'a',kind:'pronoun',variant:'pronoun-x2'},{id:'b',kind:'verb'},{id:'c',kind:'article',variant:'article-x2'},{id:'d',kind:'count'},{id:'e',kind:'adjective'}]);
+ assert.equal(b.score,20);assert.equal(b.goHits,0);assert.equal(decision(),undefined);
+ submit(b,[{id:'a',kind:'pronoun'},{id:'b',kind:'verb'},{id:'c',kind:'article'},{id:'d',kind:'count'},{id:'e',kind:'adjective'}]);
+ assert.equal(b.score,25);assert.equal(b.goHits,1);assert.equal(r.highHitScore,25);assert.equal(decision()?.playerId,b.id);
+});
+test('23, 20, 25, 28 compare hit scores across players while counting each player separately',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);
  const g=new Game({minimumPlayers:3}),a=g.hello(socket(),null,'Player 1'),b=g.hello(socket(),null,'Player 2'),c=g.hello(socket(),null,'Player 3');
  for(const p of [a,b,c])g.quick(p);

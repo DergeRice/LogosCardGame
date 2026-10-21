@@ -30,7 +30,7 @@ test('after Go distribution stays automatic and unanimous; tied hits do not take
  score(a);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);
  const start=r.deck.length;for(const p of [a,b])game.drawRequest(p,{matchId:r.matchId,requestId:randomUUID()});assert.equal(r.deck.length,start);assert.match(sa.messages.filter(m=>m.type==='error').at(-1)?.message,/전원 동의/);
  const vote=r.drawVote!.id;game.drawVote(b,{matchId:r.matchId,voteId:vote,approve:true});assert.equal(r.deck.length,start);game.drawVote(a,{matchId:r.matchId,voteId:vote,approve:true});assert.equal(r.deck.length,start-2);
- score(b);score(b);assert.equal(r.decision,undefined);assert.equal(b.goHits,0);assert.equal(r.goCount,1);assert.equal(r.goTarget,2);const before=r.deck.length;
+ score(b);assert.equal(r.decision,undefined);assert.equal(b.goHits,0);assert.equal(r.goCount,1);assert.equal(r.goTarget,2);const before=r.deck.length;
  now=r.nextDealAt;game.tick();assert.equal(r.deck.length,before-2);assert.ok(r.drawVote);assert.equal(r.leaderId,a.id);
 });
 test('only equipped emoji reactions are broadcast and rapid repeats are rejected',()=>{

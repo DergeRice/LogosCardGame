@@ -37,12 +37,12 @@ test('four real sockets: unanimous draw, unique shared deck, retained Correct, d
   while(!clients.some(c=>c.room!.hand.some(card=>card.kind==='verb')))await approveDraw();
   const player=clients.find(c=>c.room!.hand.some(card=>card.kind==='verb'))!;assert.ok(player);const verb=player.room!.hand.find(c=>c.kind==='verb')!;
   const msg={cards:[verb.id],requestId:randomUUID(),handVersion:player.room!.handVersion};player.send('submit',msg);player.send('submit',msg);
-  await player.until(()=>player.room!.judgment?.submissionId===msg.requestId);assert.equal(player.room!.judgment!.valid,true);assert.equal(player.room!.judgment!.accepted,true);assert.equal(player.score,1);assert.ok(!player.room!.hand.some(c=>c.id===verb.id));await player.until(()=>player.messages.some(m=>m.duplicate));
+  await player.until(()=>player.room!.judgment?.submissionId===msg.requestId);assert.equal(player.room!.judgment!.valid,true);assert.equal(player.room!.judgment!.accepted,true);const earned=player.room!.judgment!.awardedPoints!;assert.equal(player.score,earned);assert.ok(!player.room!.hand.some(c=>c.id===verb.id));await player.until(()=>player.messages.some(m=>m.duplicate));
   while(clients[0].room!.deckCount>=4)await approveDraw();
   assert.equal(clients[0].room!.deckCount,DECK_FACES.length%4);assert.equal(seen.size,DECK_FACES.length-DECK_FACES.length%4);assert.equal(clients.flatMap(c=>c.room!.hand).length,DECK_FACES.length-DECK_FACES.length%4-1);
-  const staleId=randomUUID();player.send('submit',{...msg,requestId:staleId});await player.until(()=>player.messages.some(m=>m.type==='error'&&m.requestId===staleId&&m.message.includes('이전 카드')));assert.equal(player.score,1);
+  const staleId=randomUUID();player.send('submit',{...msg,requestId:staleId});await player.until(()=>player.messages.some(m=>m.type==='error'&&m.requestId===staleId&&m.message.includes('이전 카드')));assert.equal(player.score,earned);
   assert.equal(clients[0].room!.drawVote,undefined);clients[0].send('drawVote',{voteId:randomUUID(),approve:true});await clients[0].until(()=>clients[0].messages.some(m=>m.type==='error'&&m.message.includes('동의할')));
-  clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');assert.ok(clients[1].room!.players.every(p=>p.score===(p.id===player.room!.you?1:0)));
+  clients[0].send('leave');for(const c of clients.slice(1))await c.until(()=>c.room?.phase==='result');assert.ok(clients[1].room!.players.every(p=>p.score===(p.id===player.room!.you?earned:0)));
   assert.equal(clients[1].room!.finalRound,true);for(const c of clients.slice(1))c.send('rematch');await wait(100);assert.equal(clients[1].room!.phase,'result');clients[1].send('leave');await clients[1].until(()=>clients[1].messages.some(m=>m.type==='home'));
  }finally{await app.close();}
 });
