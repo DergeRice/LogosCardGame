@@ -5,8 +5,8 @@ test('retired table character and garden board disappear and equipped legacy sav
  for(const id of ['character-table','board-garden']){assert.ok(!COSMETICS.some(c=>c.id===id));assert.ok(!save.owned.includes(id));}assert.equal(save.character,'character-naro');assert.equal(save.board,'board-classic');assert.deepEqual([save.gold,save.dust,save.diamonds],before);
  for(const type of ['character','board']as const){const pool=COSMETICS.filter(c=>c.type===type),category=LOOT_WEIGHTS.findIndex(c=>c.type===type);for(let i=0;i<pool.length;i++){let n=0;const roll=(BOX_WEIGHTS.silver.slice(0,category).reduce((a,b)=>a+b,0)+.1)/100;const item=openDemoBox(defaultHubSave(),'silver',1,()=>n++===0?roll:(i+.5)/pool.length).rewards[0];assert.ok(item.itemId!=='character-table'&&item.itemId!=='board-garden');}}
 });
-test('boards with mismatched source aspect ratios are removed and equipped saves fall back safely',()=>{
- const retired=['마법도서관','벚꽃밤','사막시장','설원','아늑한방','하늘성채','흰벽돌'];
+test('boards with unsuitable source dimensions are removed and equipped saves fall back safely',()=>{
+ const retired=['마법도서관','벚꽃밤','사막시장','설원','아늑한방','하늘성채','흰벽돌','수중세계','우주선','칠판'];
  for(const name of retired){const id=`board-${name}`,save=defaultHubSave();save.owned.push(id);save.board=id;
   migrateProfiles(save);
   assert.ok(!COSMETICS.some(item=>item.id===id),id);

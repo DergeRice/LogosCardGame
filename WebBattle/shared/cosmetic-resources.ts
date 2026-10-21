@@ -1159,18 +1159,6 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "image": "/cosmetics/boards/%EB%B9%84%EC%98%A4%EB%8A%94%EC%B0%BD%EA%B0%80.webp"
   },
   {
-    "id": "board-수중세계",
-    "type": "board",
-    "name": "수중세계",
-    "image": "/cosmetics/boards/%EC%88%98%EC%A4%91%EC%84%B8%EA%B3%84.webp"
-  },
-  {
-    "id": "board-우주선",
-    "type": "board",
-    "name": "우주선",
-    "image": "/cosmetics/boards/%EC%9A%B0%EC%A3%BC%EC%84%A0.webp"
-  },
-  {
     "id": "board-은하수",
     "type": "board",
     "name": "은하수",
@@ -1199,12 +1187,6 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
     "type": "board",
     "name": "초록피크닉",
     "image": "/cosmetics/boards/%EC%B4%88%EB%A1%9D%ED%94%BC%ED%81%AC%EB%8B%89.webp"
-  },
-  {
-    "id": "board-칠판",
-    "type": "board",
-    "name": "칠판",
-    "image": "/cosmetics/boards/%EC%B9%A0%ED%8C%90.webp"
   },
   {
     "id": "board-커피대리석",

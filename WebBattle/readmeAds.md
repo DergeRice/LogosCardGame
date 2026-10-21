@@ -1,10 +1,14 @@
 # 광고 키 인계 — 2026-10-22
 
+## 현재 작업 폴더 확인 (2026-10-22)
+
+`web-battle` 최신 커밋으로 갱신 후 확인했다. 이 PC의 현재 작업 폴더에는 아래에 적힌 `.runtime/secrets/levelplay-s2s.dpapi`가 없고, 로컬 릴리스 환경에도 LevelPlay App Key·보상형 광고 단위 ID가 없다. `wrangler secret list`에는 `ADMIN_LOG_TOKEN`만 있다. Unity 프로젝트의 Git `Packages/manifest.json`과 `packages-lock.json`에는 LevelPlay 9.5.1이 등록돼 있다. LevelPlay 콘솔은 Unity ID 로그인 화면에서 멈춰 있어 기존 S2S 키·콜백 상태를 확인하거나 새 키를 안전하게 등록할 수 없다. 로그인과 원본 Unity 빌드 환경을 확인한 뒤 아래 인계 절차를 진행해야 한다.
+
 ## 현재 상태 / 필요한 키
 
 필요한 값은 **`LEVELPLAY_S2S_PRIVATE_KEY`**, 보상 서버 콜백 검증용 공유 비밀 문자열이다. RSA/pem 개인키나 ironSource 관리 API Secret Key와 다르다. LevelPlay의 앱별 **Set S2S callback → Private Key**와 Cloudflare Worker secret에 같은 값을 등록한다.
 
-2026-10-22 확인 시 운영 Worker secret 목록에는 `ADMIN_LOG_TOKEN`만 있고 광고 키는 없었다. 새 256비트 키를 아래 로컬 보관함에 준비했다. **아직 LevelPlay/Worker에 등록하지 않았으며 실제 광고 연결 완료 상태가 아니다.** 기존 콘솔 키가 이미 있다면 새 키로 덮어쓰기 전에 기존 운영 설정부터 확인한다.
+2026-10-22 확인 시 운영 Worker secret 목록에는 `ADMIN_LOG_TOKEN`만 있고 광고 키는 없었다. 이전 작업 환경에서는 새 256비트 키를 아래 로컬 보관함에 준비했지만 현재 작업 PC에서 그 파일을 찾지 못했다. **아직 LevelPlay/Worker에 등록하지 않았으며 실제 광고 연결 완료 상태가 아니다.** 기존 콘솔 키가 이미 있다면 새 키로 덮어쓰기 전에 기존 운영 설정부터 확인한다.
 
 공식 안내: https://docs.unity.com/en-us/grow/levelplay/platform/settings/server-to-server-callback
 
