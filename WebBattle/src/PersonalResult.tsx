@@ -22,7 +22,7 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
  const winner=(room.resultPlayers??room.players).find(p=>p.id===room.winner)?.name??'상대';
  return <main className={`result result-stage result-${phase==='rank'?'intro':phase}`} onClick={collect}>
   <div className="result-wallet" ref={wallet} aria-label="내 재화" aria-hidden={phase==='rank'||phase==='ready'}>
-   <span className="wallet-gold"><CurrencyIcon currency="coin"/><AnimatedNumber value={balance} duration={1100} testId="result-gold-balance"/><small>골드</small></span>
+   <span className="wallet-gold"><CurrencyIcon currency="coin"/><AnimatedNumber value={balance} duration={1100} testId="result-gold-balance"/></span>
    <span className="wallet-diamonds"><CurrencyIcon currency="diamond"/>{diamonds.toLocaleString()}<small>다이아</small></span>
   </div>
   <header className="result-heading"><h1>{room.forfeiterId===room.you?'패배':room.winner===room.you?'승리':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?(room.forfeiterId===room.you?'항복으로 경기가 종료됐어요':'함께 마무리한 한 판'):`${winner}의 승리!`}</p></header>
@@ -32,7 +32,7 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
    <small>{`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`} </small>
    {player.ratingShield&&<div className="rating-shield" role="status"><b>🛡 보호막!</b><span>레이팅 감소 50%</span></div>}
   </section>
-  <div className="result-gold-origin" ref={origin} aria-label={`획득 골드 ${reward}`}><CurrencyIcon currency="coin"/><b>+{reward.toLocaleString()}</b><span>골드</span></div>
+  <div className="result-gold-origin" ref={origin} aria-label={`획득 코인 ${reward}`}><CurrencyIcon currency="coin"/><b>+{reward.toLocaleString()}</b></div>
   <button className="result-tap" disabled={phase==='flight'||phase==='credited'} onClick={e=>{e.stopPropagation();collect()}}>{phase==='credited'?'보상 받음':phase==='flight'?'':'탭하여 보상 받기'}</button>
   <div className="result-actions" onClick={e=>e.stopPropagation()}><button className="primary" disabled={!connected||Boolean(room.custom&&player.rematch)} onClick={retry}>다시 하기</button><button className="secondary" disabled={!connected} onClick={home}>시작화면으로</button></div>
   {room.custom&&player.rematch&&<p className="result-wait" role="status">다른 플레이어를 기다리는 중</p>}

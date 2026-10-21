@@ -13,7 +13,7 @@ for(const width of [320,390])test(`portrait frames fit shop profile ranks and te
   expect(await fits('.dust-grid .cosmetic-frame-preview>img','.dust-grid article')).toBe(true);
   await page.getByRole('tab',{name:'프로필',exact:true}).click();await page.getByRole('tab',{name:'프레임',exact:true}).click();expect(await fits('.hub-collection .cosmetic-frame-preview>img','.hub-collection button')).toBe(true);
   await page.getByRole('tab',{name:'랭킹',exact:true}).click();await expect(page.locator('.hub-ranking-list .avatar-frame-art').first()).toBeVisible();
-  await page.getByRole('tab',{name:'상점',exact:true}).click();await page.locator('[data-box=silver]').getByRole('button',{name:'10회 오픈 9,800 골드',exact:true}).click();
+  await page.getByRole('tab',{name:'상점',exact:true}).click();await page.locator('[data-box=silver]').getByRole('button',{name:'10회 오픈 9,800',exact:true}).click();
   const modal=page.getByRole('dialog',{name:'상자 결과',exact:true});await expect(modal).toHaveAttribute('data-phase','cards');await modal.getByRole('button',{name:'전체 뒤집기',exact:true}).click();await expect(modal.locator('.is-revealed')).toHaveCount(10);
   await modal.locator('.reward-flip-inner').first().evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished)));
   await expect(modal.locator('.cosmetic-frame-preview>img')).toHaveCount(10);expect(await fits('.reward-card-front .cosmetic-frame-preview>img','.reward-card-front')).toBe(true);
