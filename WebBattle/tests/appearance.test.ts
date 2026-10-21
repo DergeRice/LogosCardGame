@@ -10,6 +10,9 @@ test('some demo ranks and AI wear stable real frames without granting human item
   const rows=dummyRanking(tier),framed=rows.filter(p=>p.frameId);
   assert.equal(framed.length,8);assert.deepEqual(rows,dummyRanking(tier));
   assert.ok(framed.every(p=>COSMETICS.some(c=>c.type==='frame'&&c.id===p.frameId)));
+  assert.equal(new Set(rows.map(p=>p.profileId)).size,12);
+  assert.ok(rows.every(p=>COSMETICS.some(c=>c.type==='profile'&&c.id===p.profileId)));
+  assert.ok(rows.some(p=>p.profileId.startsWith('profile-accessory-')));
  }
  const g=new Game(),a=peer(g),store=structuredClone(g.community.record(a.p).store);
  g.createRoom(a.p);for(let i=0;i<3;i++)g.addRoomAI(a.p);

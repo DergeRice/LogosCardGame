@@ -27,5 +27,5 @@ test('profile ownership, independent equip, peer/ranking/match propagation and p
  g.handle(p,{type:'storeEquip',id:item.id});assert.equal(r.store.profile,original);r.store.dust=300;g.handle(p,{type:'storeRedeem',id:item.id,requestId:'profile-buy',storeVersion:0});g.handle(p,{type:'storeEquip',id:item.id});assert.equal(r.store.dust,0);assert.equal(r.store.profile,item.id);assert.equal(r.store.character,character);assert.equal(g.community.peer(p.id)?.profileId,item.id);
  r.rankGames=3;g.community.ranking(p,1);assert.equal(messages.at(-1).players.find((x:any)=>x.id===p.id).profileId,item.id);
  g.createRoom(p);g.addRoomAI(p);const room=g.rooms.get(p.room!)!,view=g.view(room,p);assert.equal(view.players.find(x=>x.id===p.id)?.profileId,item.id);assert.ok(view.players.filter(x=>x.ai).every(x=>BASIC_PROFILES.some(b=>b.id===x.profileId)));
- const next=new Game();restore(next,snapshot(g));assert.equal(next.community.records.get(p.id)?.store.profile,item.id);assert.ok(dummyRanking(1).every(x=>BASIC_PROFILES.some(b=>b.id===x.profileId)));
+ const next=new Game();restore(next,snapshot(g));assert.equal(next.community.records.get(p.id)?.store.profile,item.id);assert.ok(dummyRanking(1).every(x=>COSMETICS.some(c=>c.type==='profile'&&c.id===x.profileId)));
 });
