@@ -7,6 +7,7 @@ Unity 원본은 저장소 루트이다. `main`의 Unity 프로젝트를 `web-bat
 - Unity C# 브리지, Android 네이티브 WebView와 Google Play Billing Java 구현 완료.
 - Unity LevelPlay SDK 9.5.1 사용. 네이티브 SDK·Unity Ads 어댑터는 QTlingo에서 사용하는 9.6.0/5.12.0/4.20.0으로 정렬.
 - 상품 ID: `diamonds_100`, `diamonds_300`, `diamonds_1000`, `diamonds_3000`. KRW 1200/2900/8900/24900.
+- Billing 8은 `standard` 구매 옵션의 `offerToken`을 명시하여 결제창을 연다. 대여/할인 옵션은 선택하지 않는다. [Google 공식 연결 가이드](https://developer.android.com/google/play/billing/one-time-product-multi-purchase-options-offers)를 기준으로 구현했다.
 - SDK의 성공 응답은 다이아/상자 지급을 의미하지 않는다. 반드시 서버 검증·영구 중복 방지 후 지급한다.
 - `commerceEnabled=false`가 기본값이다. 상품과 서버 검증이 완료된 뒤 빌드 환경의 `LOGOS_COMMERCE_ENABLED=1`로 활성화한다.
 - 2026-10-21 재시도에서도 LevelPlay 계정은 `Your account is restricted`이다. Unity Cloud 원본 연결 프로젝트 `LogosCardGame (1)`(583abf61-3c16-42c9-8709-e1a3b6c87474)의 Unity Ads는 이미 활성화되어 있다(Android Game ID 5868668). 이 프로젝트의 LevelPlay 연결 경로에서도 동일한 접근 제한을 확인했다. LevelPlay App Key/보상형 단위 생성은 계정 제한 해제 후 진행해야 한다. Unity Ads Game ID를 LevelPlay App Key로 대신 넣으면 안 된다.

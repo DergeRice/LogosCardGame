@@ -149,8 +149,26 @@ public final class LogosGoogleBilling implements PurchasesUpdatedListener {
             }
 
             final ProductDetails detail = details.get(0);
+            // Billing 8 one-time products require the token for the selected purchase option.
+            // Only the configured standard buy option is sold; never pick a rental/discount accidentally.
+            ProductDetails.OneTimePurchaseOfferDetails selectedOffer = null;
+            final List<ProductDetails.OneTimePurchaseOfferDetails> offers = detail.getOneTimePurchaseOfferDetailsList();
+            if (offers != null) {
+                for (ProductDetails.OneTimePurchaseOfferDetails offer : offers) {
+                    if ("standard".equals(offer.getPurchaseOptionId()) && offer.getRentalDetails() == null
+                        && (offer.getOfferId() == null || offer.getOfferId().isEmpty())) {
+                        selectedOffer = offer;
+                        break;
+                    }
+                }
+            }
+            if (selectedOffer == null || selectedOffer.getOfferToken().isEmpty()) {
+                failActive("현재 계정에서 구매할 수 있는 상품 옵션이 없어요.");
+                return;
+            }
             final BillingFlowParams.ProductDetailsParams productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
                 .setProductDetails(detail)
+                .setOfferToken(selectedOffer.getOfferToken())
                 .build();
             final BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(Collections.singletonList(productParams))
