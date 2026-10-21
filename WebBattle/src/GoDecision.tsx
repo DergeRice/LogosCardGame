@@ -22,7 +22,7 @@ export function GoDecision({room,now,connected,onChoice}:{room:RoomView;now:numb
    <h1 id="go-event-title">{own?(complete?'3GO 성공!':`${level}GO 도전하시겠습니까?`):`${name}님의 ${achieved}GO 득점!`}</h1>
    {own&&<>
     {!complete&&<p className="go-event-cards">전체 1장, <b>나만 2장 드로우!</b></p>}
-    <p className="go-event-reward">승리 시 <span className="go-gold"><CurrencyIcon currency="coin"/> 골드</span> · <span className="go-points">랭킹 포인트</span> <strong>{goRewardMultiplier(complete?3:level)}배!</strong></p>
+    {(room.goTarget??0)>=2&&<p className="go-event-reward">현재 승리 보상 <span className="go-gold"><CurrencyIcon currency="coin"/> 골드</span> · <span className="go-points">랭킹 포인트</span> <strong>{goRewardMultiplier(room.goTarget??0)}배!</strong></p>}
     <p className="go-event-risk">고를 선택한 뒤 점수를 추월당하면 점수가 ÷2 됩니다.</p>
    </>}
    {decision.expiresAt>0&&<p className="go-event-time">{Math.max(0,Math.ceil((decision.expiresAt-now)/1000))}초</p>}

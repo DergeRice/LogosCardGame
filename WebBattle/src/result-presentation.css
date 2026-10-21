@@ -71,3 +71,40 @@
 .result-people-panel .result-placement{font-weight:900;color:#8b6a2f}.result-people-panel .result-friends b{font-size:13px}.result-people-panel .result-friends span{font-size:11px}
 @media(orientation:landscape) and (max-height:550px){.result-people-trigger{top:auto;bottom:6px;left:7px}.result-people-panel{top:50%;padding:8px}.result-victory .result-heading{top:calc(50% - 83px)}.result-victory .result-rank .tier-badge{width:48px;height:48px}}
 @media(prefers-reduced-motion:reduce){.result-victory .result-heading,.result-victory .result-rank,.result-victory .result-rank .tier-badge,.result-victory .result-rank .result-tier-name,.result-victory .result-rank>strong{animation:none}}
+
+/* Keep every reveal attached to the badge, so the title rises above it and the tier falls below it. */
+.result-stage .result-hero{position:relative;flex:none;width:min(560px,100%)}
+.result-victory .result-hero{--result-badge-size:clamp(150px,25vh,220px);--result-badge-top:clamp(48px,8vh,68px);height:calc(var(--result-badge-size) + var(--result-badge-top) + 112px)}
+.result-victory .result-hero .result-heading{position:absolute;z-index:1;top:0;left:0;right:0;animation:result-title-emerge .7s .53s cubic-bezier(.16,.85,.28,1) both}
+.result-victory .result-hero .result-heading h1{animation:none}
+.result-victory .result-hero .result-rank{position:absolute;inset:0;display:block;z-index:2;animation:none}
+.result-victory .result-hero .result-rank>.tier-badge{position:absolute;z-index:4;top:var(--result-badge-top);left:50%;width:var(--result-badge-size);height:var(--result-badge-size);max-width:none;margin:0;transform:translateX(-50%);animation:result-badge-appear .8s cubic-bezier(.14,1.12,.24,1) both;filter:drop-shadow(0 12px 14px #0008)}
+.result-victory .result-hero .result-tier-name{position:absolute;z-index:1;top:calc(var(--result-badge-top) + var(--result-badge-size) - 7px);left:0;right:0;font-size:clamp(20px,3.5vh,30px);font-weight:900;color:#fff9cf;animation:result-tier-emerge .65s .58s both}
+.result-victory .result-hero .result-rank>strong{position:absolute;top:calc(var(--result-badge-top) + var(--result-badge-size) + 28px);left:0;right:0;font-size:clamp(38px,6vh,58px);color:#fff;-webkit-text-stroke:1.5px #121b19;text-shadow:0 3px 0 #15201d,0 8px 16px #0009;animation:result-rating-color 1.5s 1.12s both}
+.result-victory .result-hero .result-rank>small{position:absolute;top:calc(var(--result-badge-top) + var(--result-badge-size) + 88px);left:0;right:0;color:#bafc94}
+@keyframes result-badge-appear{0%{opacity:0;transform:translateX(-50%) scale(0)}62%{opacity:1;transform:translateX(-50%) scale(1.14)}100%{transform:translateX(-50%) scale(1)}}
+@keyframes result-title-emerge{0%{opacity:0;transform:translateY(85px)}35%{opacity:1}100%{opacity:1;transform:translateY(0)}}
+@keyframes result-tier-emerge{0%{opacity:0;transform:translateY(-65px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes result-rating-color{0%,48%{color:#fff;-webkit-text-stroke:1.5px #121b19;text-shadow:0 3px 0 #15201d,0 8px 16px #0009}65%,100%{color:#caff9e;-webkit-text-stroke:1.5px #275736;text-shadow:0 3px 0 #20452d,0 8px 16px #0009}}
+.result-defeat .result-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:260px}
+.result-defeat .result-rank{z-index:1}.result-defeat .result-rank>.tier-badge{width:clamp(96px,16vh,145px);height:clamp(96px,16vh,145px)}
+.result-stage .result-gold-origin{opacity:0;visibility:hidden;transition:opacity .25s}.result-stage.result-flight .result-gold-origin,.result-stage.result-credited .result-gold-origin{opacity:1;visibility:visible}
+.result-stage .result-wallet{background:#fff;color:#1c2224;border:2px solid #202820;box-shadow:0 9px 0 #0005,0 15px 30px #0007}.result-stage .result-wallet .wallet-gold{color:#141b1a;font-weight:900}
+.result-stage .result-actions{flex:none;min-height:44px}.result-stage .result-actions>button{visibility:hidden}.result-stage.result-credited .result-actions>button{visibility:visible}
+.result-stage .result-actions .primary{background:#ffda53;color:#243d2a;border:2px solid #314b35;font-weight:900}
+.result-stage .result-actions .secondary{background:#fffdf5;color:#263a2b;border:2px solid #425f48;font-weight:900}
+.result-stage .result-tap{color:#fffdf3;font-size:13px;text-shadow:0 2px 5px #000}
+.result-defeat .result-heading{padding:7px 26px 11px;border:2px solid #a8a7a0;border-radius:8px;background:linear-gradient(165deg,#515263,#2c3040);box-shadow:0 9px 0 #1314207a,0 17px 28px #080a12a8}
+@media(orientation:landscape) and (max-height:550px){.result-victory .result-hero{--result-badge-size:100px;--result-badge-top:27px;height:188px}.result-victory .result-hero .result-tier-name{top:125px;font-size:15px}.result-victory .result-hero .result-rank>strong{top:141px;font-size:30px}.result-victory .result-hero .result-rank>small{top:175px;font-size:9px}.result-defeat .result-hero{min-height:180px;gap:3px}.result-defeat .result-rank>.tier-badge{width:75px;height:75px}.shell .result.result-stage{gap:2px;padding-top:42px}.result-stage .result-actions{min-height:30px}.result-stage .result-tap{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.result-victory .result-hero .result-heading,.result-victory .result-hero .result-rank>.tier-badge,.result-victory .result-hero .result-tier-name,.result-victory .result-hero .result-rank>strong{animation:none}.result-victory .result-hero .result-rank>.tier-badge{transform:translateX(-50%)}.result-victory .result-hero .result-rank>strong{color:#caff9e;-webkit-text-stroke:1.5px #275736}}
+
+.result-stage .result-people-panel>header{height:30px;min-height:0;padding:0 0 8px;margin:0 0 8px}
+.result-stage .result-people-panel .result-friends{display:grid;width:100%;gap:7px}
+.result-stage .result-people-panel .result-friends article.result-person-row{display:grid;grid-template-columns:32px 42px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:2px 10px;width:100%;min-height:60px;margin:0;padding:7px 10px}
+.result-people-panel .result-person-row>.result-placement{grid-column:1;grid-row:1/3;white-space:nowrap}
+.result-people-panel .result-person-row>.result-person-avatar{grid-column:2;grid-row:1/3;display:grid;place-items:center;width:40px;height:40px}
+.result-people-panel .result-person-row .result-person-avatar .character-avatar,.result-people-panel .result-person-row .result-person-avatar .avatar-with-frame{display:inline-flex!important;visibility:visible;width:38px;height:38px;--profile-size:38px}
+.result-people-panel .result-person-row>.result-person-name{grid-column:3;grid-row:1;display:flex;align-items:center;gap:5px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}
+.result-people-panel .result-person-row>.result-person-meta{grid-column:3;grid-row:2;display:block!important;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.result-people-panel .result-person-row>button{grid-column:4;grid-row:1/3;white-space:nowrap}
+@media(orientation:landscape) and (max-height:550px){.result-stage .result-people-panel .result-friends article.result-person-row{grid-template-columns:26px 34px minmax(0,1fr) auto;min-height:52px;gap:1px 6px;padding:5px 7px}.result-people-panel .result-person-row>.result-person-avatar{width:32px;height:32px}.result-people-panel .result-person-row .result-person-avatar .character-avatar,.result-people-panel .result-person-row .result-person-avatar .avatar-with-frame{width:30px;height:30px;--profile-size:30px}}

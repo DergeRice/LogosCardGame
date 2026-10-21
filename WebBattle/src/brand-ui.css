@@ -271,6 +271,10 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
 
 .game-hub .hub-profile-summary{gap:24px;padding:10px 8px 18px;margin-bottom:20px;align-items:center;flex-wrap:wrap}.game-hub .hub-profile-summary>div{gap:10px;min-width:0}.game-hub .hub-profile-summary h2{line-height:1.4;overflow-wrap:anywhere}.game-hub .hub-profile-summary>div>span{gap:8px;line-height:1.6;flex-wrap:wrap}.game-hub .hub-profile-summary>div>small{display:block;line-height:1.6}.game-hub .hub-profile-summary .hub-avatar-frame{margin:10px}.game-hub .hub-league-switch small{white-space:nowrap}
 .shell.practice-shell:has(.battle){background-image:var(--equipped-board)!important}
+.battle .table-player .player-profile-hit>.avatar-with-frame{top:50%;transform:translateY(-50%);display:block;width:var(--seat-avatar);height:var(--seat-avatar)}
+.battle .table-player .player-profile-hit>.avatar-with-frame>.character-avatar{position:absolute;inset:0;display:block;width:100%;height:100%;--profile-size:var(--seat-avatar)}
+.battle .table-player .player-profile-hit>.avatar-with-frame>.avatar-frame-art{position:absolute;left:-18%;top:-18%;width:136%!important;height:136%!important;max-width:none;transform:none;object-fit:contain!important}
+.battle .table-player .player-profile-details>b{right:44px!important;max-height:1.2em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;overflow-wrap:normal!important}
 
 /* Once the deck is exhausted, the distribution strip becomes the match clock. */
 .battle .table-feedback-row .deck-request-button.match-timer{grid-template-columns:1fr auto;grid-template-rows:1fr;gap:10px;align-items:center;background:#f5f0e7;border-color:#bdad8c;color:#314b38}

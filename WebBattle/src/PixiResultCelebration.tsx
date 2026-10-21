@@ -21,7 +21,7 @@ export function PixiResultCelebration(){
    instance.ticker.maxFPS=isMobileGraphics()?24:30;
    let elapsed=0;
    instance.ticker.add(ticker=>{
-    elapsed+=Math.min(ticker.deltaMS,100);const t=Math.min(1,elapsed/1150),w=instance.screen.width,h=instance.screen.height;
+    elapsed+=Math.min(ticker.deltaMS,100);const t=Math.max(0,Math.min(1,(elapsed-320)/1150)),w=instance.screen.width,h=instance.screen.height;
     for(let i=0;i<particles.length;i++){
      const p=particles[i],originX=w*(.2+(i%5)*.15),originY=h*(.27+(i%3)*.13),angle=(i*2.3999632297)+(i%3)*.45,velocity=Math.min(w,h)*(.18+(i%7)*.018),age=Math.max(0,Math.min(1,(t-i%5*.025)/.78));
      p.x=originX+Math.cos(angle)*velocity*age;p.y=originY+Math.sin(angle)*velocity*age+age*age*h*.18;

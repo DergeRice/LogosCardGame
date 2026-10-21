@@ -5,18 +5,18 @@ import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import type {Card} from '../shared/rules.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}});
-const hand=():Card[]=>[{id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:'verb'},{id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:'count',variant:'count-plus3'},{id:randomUUID(),kind:'adjective',variant:'adjective-plus3'}];
+const hand=(points=26):Card[]=>[{id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:points===28?'be':'verb',variant:points===28?'be-plus3':undefined},{id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:'count',variant:'count-plus3'},{id:randomUUID(),kind:points===28?'adverb':'adjective',variant:points===28?'adverb-plus2':'adjective-plus3'}];
 test('effective hits achieve 1/2/3GO; challenges grant cards and 5x/15x without advancing hits',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);
  const g=new Game({minimumPlayers:2}),a=g.hello(socket(),null,'A'),b=g.hello(socket(),null,'B');g.quick(a);g.quick(b);const r=g.rooms.get(a.room!)!;g.reveal(r);g.begin(r);
- const hit=()=>{a.hand=hand();a.handVersion++;now+=1600;g.action(a,{requestId:randomUUID(),matchId:r.matchId,handVersion:a.handVersion,cards:a.hand.map(c=>c.id)});};
+ const hit=(points=26)=>{a.hand=hand(points);a.handVersion++;now+=1600;g.action(a,{requestId:randomUUID(),matchId:r.matchId,handVersion:a.handVersion,cards:a.hand.map(c=>c.id)});};
  const challenge=()=>g.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});
  hit();assert.equal(a.goHits,1);assert.equal(r.goCount,1);assert.equal(r.goTarget,undefined);assert.equal(r.decision?.playerId,a.id);
  let before=[a.hand.length,b.hand.length];challenge();assert.deepEqual([a.hand.length-before[0],b.hand.length-before[1]],[2,1]);assert.equal(a.goHits,1);assert.equal(r.goCount,1);assert.equal(r.goTarget,2);
  // A restart while challenging 2GO must retain both the achieved count and 5x reward.
  const fresh=new Game();restore(fresh,snapshot(g));const saved=fresh.rooms.get(r.code)!;assert.equal(saved.goCount,1);assert.equal(saved.goTarget,2);fresh.finish(saved,'stop');assert.equal(fresh.sessions.get(a.token)!.reward,250);
- hit();assert.equal(a.goHits,2);assert.equal(r.goCount,2);assert.equal(a.score,58);before=[a.hand.length,b.hand.length];challenge();assert.deepEqual([a.hand.length-before[0],b.hand.length-before[1]],[2,1]);assert.equal(r.goCount,2);assert.equal(r.goTarget,3);
- hit();assert.equal(a.goHits,3);assert.equal(r.goCount,3);assert.equal(a.score,110);assert.equal(r.phase,'battle');const id=r.decision!.id,deck=r.deck.length;
+ hit(28);assert.equal(a.goHits,2);assert.equal(r.goCount,2);assert.equal(a.score,54);before=[a.hand.length,b.hand.length];challenge();assert.deepEqual([a.hand.length-before[0],b.hand.length-before[1]],[2,1]);assert.equal(r.goCount,2);assert.equal(r.goTarget,3);
+ hit();assert.equal(a.goHits,3);assert.equal(r.goCount,3);assert.equal(a.score,106);assert.equal(r.phase,'battle');const id=r.decision!.id,deck=r.deck.length;
  challenge();assert.equal(r.decision?.id,id);assert.equal(r.deck.length,deck);assert.equal(r.goCount,3);
  g.choice(a,{matchId:r.matchId,decisionId:id,choice:'stop'});assert.equal(r.phase,'result');assert.equal(a.reward,750);assert.equal(a.coinReward,3300);const paid=[a.points,a.coins];g.finish(r,'duplicate');assert.deepEqual([a.points,a.coins],paid);
 });
@@ -59,7 +59,7 @@ test('23, 20, 25, 28 compare hit scores across players while counting each playe
  g.choice(a,{matchId:r.matchId,decisionId:decision()!.id,choice:'go'});assert.equal(r.goTarget,2);
  assert.equal(submit(b,'verb','count','adjective',{}),20);
  assert.equal(b.score,20);assert.equal(b.goHits,0);assert.equal(r.highHitScore,23);assert.equal(decision(),undefined);
- assert.equal(submit(a,'verb','count','preposition',{noun:'count-plus3'}),25);
+ assert.equal(submit(a,'verb','count','adverb',{noun:'count-plus3',ending:'adverb-plus2'}),25);
  assert.equal(a.goHits,2);assert.equal(r.highHitScore,25);assert.equal(decision()?.playerId,a.id);assert.equal(r.goCount,2);
  g.choice(a,{matchId:r.matchId,decisionId:decision()!.id,choice:'go'});assert.equal(r.goTarget,3);
  assert.equal(submit(c,'be','count','adverb',{verb:'be-plus3',noun:'count-plus3',ending:'adverb-plus2'}),28);
