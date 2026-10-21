@@ -69,12 +69,18 @@ class CheckContext {
 
  private TryMatchClause(seq: Sequence, start: number, end: number): SentencePatternType | null {
   while (start < end && this.IsAdverb(seq[start])) start++;
-  while (end > start && this.IsAdverb(seq[end - 1])) end--;
+  // A final RB can be a locative complement after BE ("They are there").
+  while (end > start && this.IsAdverb(seq[end - 1]) && !(seq[start]===P.PRP&&seq[start+1]===P.BE&&end===start+3&&seq[end-1]===P.RB)) end--;
   // An imperative may reduce to a single VB after stripping its adjuncts.
   if(this.battleAdjectiveChains&&start<end&&seq[start]===P.VB)return this.MatchAfterVerb(seq,start+1,end);
   if (end - start < 2) return null;
   if (seq[start] === P.WH) return this.TryMatchClause(seq, start + 1, end);
   if (seq[start] === P.DO) {
+   // Contracted negative question: DO + NOT + subject + base verb.
+   if(seq[start+1]===P.RB_NOT){
+    const subjectEnd=this.TryParseNP(seq,start+2,end);
+    if(subjectEnd!==null){const verbIndex=this.SkipAuxiliaryModifiers(seq,subjectEnd,end);if(seq[verbIndex]===P.VB)return this.MatchAfterVerb(seq,verbIndex+1,end,true);}
+   }
    if(this.battleAdjectiveChains){const verbIndex=this.SkipAuxiliaryModifiers(seq,start+1,end);if(seq[verbIndex]===P.VB)return this.MatchAfterVerb(seq,verbIndex+1,end);if(seq[verbIndex]===P.BE)return this.MatchAfterBe(seq,verbIndex+1,end);}
    // Imperative negative: DO + NOT + base verb (for example, “Do not run.”).
    if (seq[start + 1] === P.RB_NOT) { const verbIndex = this.SkipAuxiliaryModifiers(seq, start + 2, end); if (verbIndex < end && seq[verbIndex] === P.VB) return this.MatchAfterVerb(seq, verbIndex + 1, end);if(this.battleAdjectiveChains&&verbIndex<end&&seq[verbIndex]===P.BE)return this.MatchAfterBe(seq,verbIndex+1,end); }
@@ -107,9 +113,10 @@ class CheckContext {
   return null;
  }
 
- private MatchAfterVerb(seq: Sequence, start: number, end: number): SentencePatternType | null {
+ private MatchAfterVerb(seq: Sequence, start: number, end: number, allowBarePluralObject=false): SentencePatternType | null {
   start = this.SkipAdverbs(seq, start, end);
   if (start === end) return T.Type1;
+  if(allowBarePluralObject&&seq[start]===P.NNC&&start+1===end)return T.Type3;
   const verbPpEnd = this.TryParsePP(seq, start, end);
   if (verbPpEnd !== null && this.SkipAdverbs(seq, verbPpEnd, end) === end) return T.Type1;
   const stateComplementEnd = this.TryParseComplement(seq, start, end);
@@ -174,6 +181,7 @@ class CheckContext {
  }
 
  private MatchAfterBe(seq: Sequence, start: number, end: number): SentencePatternType | null {
+  if(seq[start]===P.RB&&start+1===end)return T.Type2;
   start = this.SkipAdverbs(seq, start, end);
   if (start >= end) return null;
   if (seq[start] === P.RB_NOT) start = this.SkipAdverbs(seq, start + 1, end);

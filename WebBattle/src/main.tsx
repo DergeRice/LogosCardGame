@@ -1,4 +1,5 @@
 import {GoDecision} from './GoDecision.js';
+import './changa.css';
 import {CardStorage} from './CardStorage.js';
 import type {NicknameResult} from '../shared/nickname.js';
 import {gameSocketURL} from './nativeAuth.js';

@@ -119,3 +119,6 @@
 @keyframes defeat-placard{0%{opacity:0;transform:translateY(-110px) rotate(-23deg)}35%{opacity:1;transform:translateY(10px) rotate(15deg)}55%{transform:rotate(-11deg)}72%{transform:rotate(7deg)}86%{transform:rotate(-4deg)}100%{transform:rotate(3deg)}}
 @keyframes defeat-rank-drop{from{opacity:0;transform:translateY(-26px) scale(.85)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.result-defeat .result-hero .result-heading,.result-defeat .result-hero .result-rank{animation:none}}
+
+/* Latin letters and numerals use the local Changa face; Korean falls back to the UI font. */
+.result-stage .result-heading h1,.result-stage .result-tier-name,.result-stage .result-rank>strong,.result-stage .result-rank>small,.result-stage .result-gold-origin>b,.result-stage .result-wallet>span,.result-stage .result-actions>button{font-family:'Changa',system-ui,sans-serif}

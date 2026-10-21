@@ -3,7 +3,7 @@ import {type SentenceExample,type ExampleRole} from './sentence-examples.js';
 type NP={start:number;end:number;head:number;baseEnd:number;pps:PP[]};
 type PP={start:number;end:number;np:NP};
 type Complement={start:number;end:number;kind:'adjective'|'to'|'verb'|'modal'};
-type Tail={pattern:number;object?:NP;second?:NP;complement?:Complement;vp?:{start:number;tail:Tail};pp?:PP;legacy?:string};
+type Tail={pattern:number;object?:NP;second?:NP;complement?:Complement;vp?:{start:number;tail:Tail};pp?:PP;location?:number;legacy?:string};
 export type CardExampleResult={example:SentenceExample|null;reason?:string;positions:Kind[]};
 
 /** Presentation parser for the active deck. The battle judgment stays authoritative.
@@ -12,13 +12,14 @@ export type CardExampleResult={example:SentenceExample|null;reason?:string;posit
 export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):CardExampleResult{
  const used=cards.slice(judgment.usedStartIndex,judgment.usedStartIndex+judgment.usedLength),seq=used.map(c=>c.kind),end=seq.length;
  const fail=(reason:string):CardExampleResult=>({example:null,reason,positions:seq});
+ let contractedNegativeQuestion=false;
  if(!judgment.valid||!end)return fail('인정된 문장 구간이 없습니다.');
  const adv=(k:Kind)=>k==='adverb'||k==='frequency';
  const skip=(s:number,e:number)=>{while(s<e&&adv(seq[s]))s++;return s};
  const auxSkip=(s:number,e:number)=>{while(s<e&&(adv(seq[s])||seq[s]==='not'))s++;return s};
  function np(s:number,e:number):NP|null{
   const start=s;if(s>=e)return null;let head=-1;
-  if(seq[s]==='pronoun'||seq[s]==='mass'||seq[s]==='proper')head=s;
+  if(seq[s]==='pronoun'||seq[s]==='mass'||seq[s]==='proper'||(contractedNegativeQuestion&&seq[s]==='count'))head=s;
   else if(['article','indefinite','possessive'].includes(seq[s])){s++;while(s<e&&(seq[s]==='adjective'||adv(seq[s])))s++;if(s<e&&(seq[s]==='count'||seq[s]==='mass'))head=s;}
   else if(seq[s]==='adjective'){s++;while(s<e&&seq[s]==='adjective')s++;if(s<e&&(seq[s]==='mass'||seq[s]==='proper'))head=s;}
   if(head<0)return null;const baseEnd=head+1,pps:PP[]=[];let next=baseEnd,p:PP|null;
@@ -54,10 +55,10 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function noun(n:NP,role:ExampleRole,place=false){
   nounRanges.push(n);const k=seq[n.head];let text='',ko='';
   if(k==='proper'){text='Naro';ko='나로';}
-  else if(k==='pronoun'){text=role==='subject'?cycle(['I','we','she']):role==='indirect'?'them':role==='direct'?'something':role==='subjectComplement'?(imperative?'yourself':words[subject?.head??-1]==='we'?'ourselves':words[subject?.head??-1]==='she'?'herself':'myself'):'them';ko=role==='subject'?cycle(['나','우리','그녀']):role==='indirect'?'그들':role==='direct'?'무언가':role==='subjectComplement'?(imperative?'너 자신':words[subject?.head??-1]==='we'?'우리 자신':words[subject?.head??-1]==='she'?'그녀 자신':'나 자신'): '그들';}
+  else if(k==='pronoun'){text=role==='subject'?(contractedNegativeQuestion?'you':cycle(['I','we','she','they'])):role==='indirect'?'them':role==='direct'?'something':role==='subjectComplement'?(imperative?'yourself':words[subject?.head??-1]==='we'?'ourselves':words[subject?.head??-1]==='she'?'herself':'myself'):'them';ko=role==='subject'?(contractedNegativeQuestion?'너':cycle(['나','우리','그녀','그들'])):role==='indirect'?'그들':role==='direct'?'무언가':role==='subjectComplement'?(imperative?'너 자신':words[subject?.head??-1]==='we'?'우리 자신':words[subject?.head??-1]==='she'?'그녀 자신':'나 자신'): '그들';}
   else if(k==='count'){
    const sets=place?['friend','guide','teacher']:role==='subject'?['teacher','student','guide']:role==='indirect'?['student','child','visitor']:role==='subjectComplement'?['guide','helper','friend']:pattern===5?['student','child','visitor']:pattern===3?['book','letter','story']:['book','letter','gift'];
-   text=cycle(sets);const translations:Record<string,string>={friend:'친구',helper:'도우미',guide:'안내자',teacher:'선생님',student:'학생',child:'아이',visitor:'방문객',book:'책',letter:'편지',gift:'선물',story:'이야기'};ko=translations[text];
+   text=contractedNegativeQuestion&&n.start===n.head&&role==='object'?'apples':cycle(sets);const translations:Record<string,string>={friend:'친구',helper:'도우미',guide:'안내자',teacher:'선생님',student:'학생',child:'아이',visitor:'방문객',book:'책',letter:'편지',gift:'선물',story:'이야기',apples:'사과들'};ko=translations[text];
   }else{
    text=place?'water':role==='subject'?(pattern===1?'traffic':pattern===2?'education':'management'):role==='indirect'?'management':role==='subjectComplement'?'support':pattern===5?(result?.complement?.kind==='to'||result?.vp?'management':'work'):pattern===4?'advice':'music';
    ko=({water:'물',traffic:'교통',education:'교육',management:'경영진',staff:'직원들',support:'지원',work:'일',advice:'조언',music:'음악'} as Record<string,string>)[text];
@@ -85,35 +86,37 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function tail(t:Tail,verb:number,finite:boolean,embedded=false):string|null{
   if(t.legacy)return t.legacy;
   if(t.complement?.kind==='modal'||t.complement?.kind==='verb')return '원본이 허용하는 일반동사·조동사 주격 보어 조합';
-  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(seq[t.object?.head??-1]==='pronoun'||seq[t.object?.head??-1]==='proper'?'help':seq[t.object?.head??-1]==='mass'?'enjoy':embedded||imperative||aux>=0&&seq[aux]==='modal'?'read':'need'):t.pattern===4?(seq[t.second?.head??-1]==='proper'?'show':'give'):t.complement?.kind==='to'?'want':t.vp?'make':'make';
+  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(contractedNegativeQuestion&&t.object?.start===t.object?.head&&seq[t.object?.head??-1]==='count'?'like':seq[t.object?.head??-1]==='pronoun'||seq[t.object?.head??-1]==='proper'?'help':seq[t.object?.head??-1]==='mass'?'enjoy':embedded||imperative||aux>=0&&seq[aux]==='modal'?'read':'need'):t.pattern===4?(seq[t.second?.head??-1]==='proper'?'show':'give'):t.complement?.kind==='to'?'want':t.vp?'make':'make';
   if(seq[verb]==='be')stem='be';
   const verbWord=stem==='be'?(imperative||!finite?'be':person1?'am':singular?'is':'are'):finite&&singular?stem+'s':stem;
-  put(verb,'verb',verbWord,({flow:'흐르다',work:'일하다',look:'보이다',need:'필요로 하다',give:'주다',want:'원하다',make:'만들다',be:'이다',read:'읽다',help:'돕다',enjoy:'즐기다',show:'보여주다'} as Record<string,string>)[stem]);
+  put(verb,'verb',verbWord,({flow:'흐르다',work:'일하다',look:'보이다',need:'필요로 하다',give:'주다',want:'원하다',make:'만들다',be:'이다',read:'읽다',help:'돕다',enjoy:'즐기다',show:'보여주다',like:'좋아하다'} as Record<string,string>)[stem]);
   if(t.object)noun(t.object,t.pattern===4?'indirect':'object');if(t.second)noun(t.second,'direct');if(t.complement)complement(t.complement,t.pattern===5?'objectComplement':'subjectComplement');if(t.pp)placePhrase(t.pp);
   if(t.vp){const reason=tail(t.vp.tail,t.vp.start,false,true);if(reason)return reason;roles[t.vp.start]='objectComplement';}
   return null;
  }
- let start=skip(0,end),stop=end;while(stop>start&&adv(seq[stop-1]))stop--;
+ let start=skip(0,end),stop=end;while(stop>start&&adv(seq[stop-1])&&!(seq[start]==='pronoun'&&seq[start+1]==='be'&&stop===start+3&&seq[stop-1]==='adverb'))stop--;
  let subject:NP|null=null,result:Tail|null=null,aux=-1;
  if(seq[start]==='verb'){imperative=true;main=start;result=afterVerb(main+1,stop);if(!result)return fail('명령문 동사 뒤 구성을 분석할 수 없습니다.');pattern=result.pattern;const reason=tail(result,main,false);if(reason)return fail(reason);if(end===1){put(main,'verb','run','달려');}}
  else if(seq[start]==='be'){
   const parsed=np(start+1,stop),c=parsed?.pps.length&&parsed.end===stop?{...parsed,end:parsed.baseEnd,pps:[]}:parsed;main=start;
   if(!c){imperative=true;let s=skip(start+1,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};if(!result)return fail('BE 명령문 보어를 분석할 수 없습니다.');const reason=tail(result,main,false);if(reason)return fail(reason);}
   else if(c.end===stop){imperative=true;put(main,'verb','be','되어라');noun(c,'subjectComplement');}
-  else{question=true;subject=c;noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';let s=skip(c.end,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};if(!result)return fail('BE 의문문 보어를 분석할 수 없습니다.');const reason=tail(result,main,true);if(reason)return fail(reason);}
+  else{question=true;subject=c;noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';let s=seq[c.end]==='adverb'&&c.end+1===stop?c.end:skip(c.end,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};else if(seq[s]==='adverb'&&s+1===stop){result={pattern:2,location:s};put(s,'place','there','거기');}if(!result)return fail('BE 의문문 보어를 분석할 수 없습니다.');const reason=tail(result,main,true);if(reason)return fail(reason);}
  }else{
   if(seq[start]==='do'&&['verb','be'].includes(seq[auxSkip(start+1,stop)])){imperative=true;aux=start;main=auxSkip(start+1,stop);}
+  else if(seq[start]==='do'&&seq[start+1]==='not'&&(subject=np(start+2,stop))){question=true;contractedNegativeQuestion=true;aux=start;main=auxSkip(subject.end,stop);}
   else if(seq[start]==='do'||seq[start]==='modal'){question=true;aux=start;subject=np(start+1,stop);if(subject)main=auxSkip(subject.end,stop);}
   else {subject=np(start,stop);if(subject){main=subject.end;while(adv(seq[main]))main++;if(seq[main]==='do'||seq[main]==='modal'){aux=main;main=auxSkip(main+1,stop);}}}
   if((!imperative&&!subject)||main<0||main>=stop)return fail('주어와 동사를 분석할 수 없습니다.');
   if(aux>=0&&seq[aux]==='do'&&seq[main]==='be'&&!imperative)return fail('DO 뒤 BE는 부정 명령문에서만 사용합니다.');
   if(subject){noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';}
   if(seq[main]==='be'){
-   let s=skip(main+1,stop);if(seq[s]==='not')s=skip(s+1,stop);
+   let s=seq[main+1]==='adverb'&&main+2===stop?main+1:skip(main+1,stop);if(seq[s]==='not')s=skip(s+1,stop);
    const n=np(s,stop),c=comp(s,stop),p=pp(s,stop);
    if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}
    else if(c?.kind==='adjective'&&skip(c.end,stop)===stop)result={pattern:2,complement:c};
    else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};
+   else if(seq[s]==='adverb'&&s+1===stop){result={pattern:2,location:s};put(s,'place','there','거기');}
   }else if(seq[main]==='verb')result=afterVerb(main+1,stop);
   if(!result)return fail('문장 구조를 분석할 수 없습니다.');pattern=result.pattern;
   const reason=tail(result,main,imperative?false:aux<0);if(reason)return fail(reason);
@@ -125,7 +128,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  }
  if(seq.filter(k=>k==='not').length>1)return fail('부정어 중복 조합');
  for(let i=0;i<end;i++)if(!words[i]){
-  if(seq[i]==='not')put(i,'manner','not','않다');
+  if(seq[i]==='not')put(i,'manner',contractedNegativeQuestion&&i===aux+1?"n't":'not','않다');
   else if(seq[i]==='frequency'){const w=seq[i-1]==='frequency'||seq[i+1]==='frequency'?adverbWord(i):[i<start&&imperative?'always':i<start?'sometimes':'often',i<start&&imperative?'항상':i<start?'때때로':'자주'];put(i,'time',w[0],w[1]);}
   else if(seq[i]==='adverb'){const w=adverbWord(i);put(i,'manner',w[0],w[1]);}
   else return fail(`${CATALOG[seq[i]].name}의 역할을 분석할 수 없습니다.`);
@@ -138,6 +141,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  type KoAction={plain:string;negative:string;command:string;prohibition:string;ability:string;question:string;negativeQuestion:string};
  const actions:Record<string,KoAction>={
   work:{plain:'일한다',negative:'일하지 않는다',command:'일해라',prohibition:'일하지 마라',ability:'일할',question:'일하나요',negativeQuestion:'일하지 않나요'},
+  like:{plain:'좋아한다',negative:'좋아하지 않는다',command:'좋아해라',prohibition:'좋아하지 마라',ability:'좋아할',question:'좋아하나요',negativeQuestion:'좋아하지 않나요'},
   run:{plain:'달린다',negative:'달리지 않는다',command:'달려라',prohibition:'달리지 마라',ability:'달릴',question:'달리나요',negativeQuestion:'달리지 않나요'},
   flow:{plain:'흐른다',negative:'흐르지 않는다',command:'흘러라',prohibition:'흐르지 마라',ability:'흐를',question:'흐르나요',negativeQuestion:'흐르지 않나요'},
   read:{plain:'읽는다',negative:'읽지 않는다',command:'읽어라',prohibition:'읽지 마라',ability:'읽을',question:'읽나요',negativeQuestion:'읽지 않나요'},
@@ -163,6 +167,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function predicate(t:Tail|undefined,at:number):{prefix:string;action:KoAction}{
   const stem=words[at].replace(/s$/,'');
   if(seq[at]==='be'){
+   if(t?.location!==undefined)return {prefix:'거기에 ',action:actions.exist};
    const n=nounRanges.find(n=>roles[n.head]==='subjectComplement');
    if(n)return {prefix:'',action:copula(koNP(n))};
    if(t?.pp)return {prefix:koNP(t.pp.np)+' 근처에 ',action:actions.exist};
@@ -180,13 +185,13 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  }
  function koreanSentence():string{
   if(imperative&&main===0&&end===1)return '달려!';
-  const modifiers=seq.flatMap((k,i)=>(k==='frequency'||k==='adverb')&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
+  const modifiers=seq.flatMap((k,i)=>(k==='frequency'||k==='adverb')&&i!==result?.location&&!nounRanges.some(n=>i>=n.start&&i<n.baseEnd)?[gloss[i]]:[]).join(' ');
   const {prefix,action}=predicate(result??undefined,main),negative=seq.includes('not'),modal=aux>=0&&seq[aux]==='modal';
   const endText=modal?action.ability+' 수 '+(negative?(question?'없나요':'없다'):(question?'있나요':'있다')):imperative?(negative?action.prohibition:action.command):question?(negative?action.negativeQuestion:action.question):(negative?action.negative:action.plain);
   return (subject?particle(koNP(subject),'은','는')+' ':'')+(modifiers?modifiers+' ':'')+prefix+endText+(question?'?':imperative?'!':'.');
  }
  for(let i=0;i<end;i++)if(words[i]==='a'&&/^[aeiou]/i.test(words[i+1]??''))words[i]='an';
  const parts=used.map((c,i)=>({text:i===0?words[i][0].toUpperCase()+words[i].slice(1):words[i],role:roles[i],kind:c.kind,cardId:c.id,gloss:gloss[i]}));
- const english=parts.map(p=>p.text).join(' ')+(question?'?':imperative?'!':'.');
+ const english=parts.map(p=>p.text).join(' ').replace(/ n't\b/g,"n't")+(question?'?':imperative?'!':'.');
  return {positions:seq,example:{id:`cards-${used.map(c=>c.id).join('-')}-${index}`,patternType:pattern,parts,english,korean:koreanSentence(),imperative,cardAligned:true}};
 }
