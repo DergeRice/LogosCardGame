@@ -46,3 +46,6 @@
  .result-gold-origin{height:19px}.result-gold-origin>b{font-size:17px}.result-stage .result-tap{min-height:16px;font-size:9px;line-height:1}.shell .result-stage .result-actions>button{height:30px;min-height:30px;padding:4px 10px;font-size:11px}
 }
 .rating-shield img{filter:brightness(0) saturate(100%) invert(25%) sepia(21%) saturate(1510%) hue-rotate(150deg) brightness(91%) contrast(89%)}
+/* The participant list opens in the centre; the people control stays at the upper-left. */
+.result-people-panel{left:50%;top:50%;transform:translate(-50%,-50%)}
+@media(orientation:landscape) and (max-height:550px){.result-people-panel{left:50%;top:50%;transform:translate(-50%,-50%);max-height:calc(100% - 48px)}}
