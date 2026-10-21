@@ -40,6 +40,17 @@ export function SharedDeck({ room, now, onApprove,onClaim,claimDisabled=false }:
  const canApprove=room.phase==='battle'&&!room.decision&&!exhausted&&Boolean(vote)&&!approved;
  const lastConsent=canApprove&&room.players.every(p=>p.id===room.you||vote!.approved.includes(p.id));
  if(exhausted&&room.phase==='battle'&&!room.basicSupplyUsed&&!(room.basicSupplyAt??0))return <section className="basic-supply" aria-label="이번 경기 카드 1장 선택">{BASIC_SUPPLY_KINDS.map(kind=><button key={kind} aria-label={`${CATALOG[kind].name} 받기`} disabled={claimDisabled||Boolean(room.decision)||!onClaim||(room.endsAt>0&&now>=room.endsAt)} onClick={()=>onClaim?.(kind)}><span className="basic-supply-caption">{CATALOG[kind].name}<small>1회 선택</small></span></button>)}</section>;
+ if(exhausted&&room.phase==='battle'){
+  const remaining=Math.max(0,room.endsAt-now),total=Math.max(60_000,room.endsAt-(room.countdownStartedAt??room.endsAt-60_000));
+  const remainingSeconds=Math.ceil(remaining/1000),clock=`${Math.floor(remainingSeconds/60)}:${String(remainingSeconds%60).padStart(2,'0')}`;
+  return <section className="draw-gauge compact-deck draw-request-control match-timer-control" aria-label="경기 제한 시간">
+   <div className="deck-charge-card deck-request-button match-timer" role="timer" aria-label={`경기 시간 ${clock} 남음`}>
+    <span className="match-timer-fill" style={{transform:`scaleX(${Math.min(1,remaining/total)})`}} aria-hidden="true"/>
+    <span className="deck-request-caption">배분 완료</span>
+    <span className="match-timer-readout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><time>{clock}</time></span>
+   </div>
+  </section>;
+ }
  return <section className={`draw-gauge compact-deck draw-request-control ${dealing?'initial-deal':''} ${exhausted?'exhausted':''}`} aria-label="카드 배분">
   <button className={`deck-charge-card deck-request-button ${canApprove?'awaiting-consent':''} ${lastConsent?'last-consent':''}`} disabled={!canApprove} onClick={onApprove} aria-label={exhausted?'배분 완료':canApprove?'카드 배분 동의':approved?'카드 배분 동의 완료':dealing?'배분 중':'카드 배분 대기'} title={exhausted?'모든 카드 배분이 끝났어요':'전원이 동의하면 즉시 1장씩 배분'}><span key={`${room.nextDealAt}-${gaugeRunning}`} className={`deck-request-fill ${gaugeRunning?'gauge-running':''}`} style={fillTiming}/><span className="deck-progress" role="progressbar" aria-label="자동 카드 배분까지" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}/><span className="deck-request-caption">{exhausted?'배분 완료':'카드 요청'}</span>{!exhausted&&<span className="consent-people" aria-label={`${count}명 동의 · 전체 ${room.players.length}명`}>{room.players.map(p=><span key={p.id} className={`consent-person ${vote?.approved.includes(p.id)?'approved':''}`} aria-label={`${p.name} ${vote?.approved.includes(p.id)?'동의 완료':'동의 대기'}`} title={`${p.name} · ${vote?.approved.includes(p.id)?'동의 완료':'동의 대기'}`}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="4"/><path d="M5 23v-6a7 7 0 0 1 14 0v6h-5v-5h-4v5Z"/></svg></span>)}</span>}{!exhausted&&<small className="deck-seconds">{seconds}s</small>}</button>
   {room.dealSerial>0&&<div className="deal-flight" key={room.matchId+room.dealSerial}>{Array.from({length:room.players.length*(dealing?5:1)},(_,i)=><i key={i} style={{'--delay':`${i*.085}s`,'--dx':`${[-180,180,-80,80,-240,240][i%room.players.length]}px`,'--dy':`${i%2?-95:115}px`} as CSSProperties}>◇</i>)}</div>}

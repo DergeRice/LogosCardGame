@@ -272,3 +272,12 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
 
 .game-hub .hub-profile-summary{gap:24px;padding:10px 8px 18px;margin-bottom:20px;align-items:center;flex-wrap:wrap}.game-hub .hub-profile-summary>div{gap:10px;min-width:0}.game-hub .hub-profile-summary h2{line-height:1.4;overflow-wrap:anywhere}.game-hub .hub-profile-summary>div>span{gap:8px;line-height:1.6;flex-wrap:wrap}.game-hub .hub-profile-summary>div>small{display:block;line-height:1.6}.game-hub .hub-profile-summary .hub-avatar-frame{margin:10px}.game-hub .hub-league-switch small{white-space:nowrap}
 .shell.practice-shell:has(.battle){background-image:var(--equipped-board)!important}
+
+/* Once the deck is exhausted, the distribution strip becomes the match clock. */
+.battle .table-feedback-row .deck-request-button.match-timer{grid-template-columns:1fr auto;grid-template-rows:1fr;gap:10px;align-items:center;background:#f5f0e7;border-color:#bdad8c;color:#314b38}
+.battle .table-feedback-row .match-timer>.match-timer-fill{position:absolute!important;inset:0!important;z-index:0;width:100%;height:100%;background:linear-gradient(90deg,#b8dba5,#d9ebae);transform-origin:left center;transition:transform .9s linear;pointer-events:none}
+.battle .table-feedback-row .match-timer>.deck-request-caption{grid-column:1;grid-row:1;justify-self:center;color:#294333;white-space:nowrap}
+.battle .table-feedback-row .match-timer>.match-timer-readout{position:relative!important;inset:auto!important;z-index:1;grid-column:2;grid-row:1;display:flex;align-items:center;gap:5px;color:#294333;font-size:clamp(15px,2.5vh,22px)!important;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.battle .table-feedback-row .match-timer-readout svg{position:static!important;inset:auto!important;width:21px;height:21px;transform:none!important;opacity:1;flex:none}
+.battle .table-feedback-row .match-timer-readout time{min-width:4ch;text-align:right}
+@media(orientation:landscape) and (max-height:500px){.battle .table-feedback-row .match-timer>.match-timer-readout{font-size:15px!important}.battle .table-feedback-row .match-timer-readout svg{width:17px;height:17px}}
