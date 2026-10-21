@@ -76,3 +76,30 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
 @media(orientation:landscape) and (max-height:540px){.hub-shop .store-box-rows>article>img{--art-height:256px;width:256px}.hub-shop .store-box-rows>article{padding:12px}.hub-shop .store-box-rows .store-open-options{width:100%}}
 
 .hub-shop .store-box-rows h2{position:relative;z-index:1;margin:0}.hub-shop .store-box-rows .store-box-timer{margin:0;min-height:17px}.hub-shop .store-box-rows .store-rates{margin:0;min-height:24px}.hub-shop .store-box-rows .store-offers{padding:2px 0}
+
+/* Keep the odds in the card corner and the free countdown over its action. */
+.hub-shop .store-box-rows>article{position:relative;gap:0;padding:12px 14px 14px}
+.hub-shop .store-box-rows h2{align-self:center}
+.hub-shop .store-box-rows>article>img{--art-height:262px;width:288px;height:var(--art-height);max-width:100%;margin:calc(var(--art-height)*-.15) 0 calc(var(--art-height)*-.17)}
+.hub-shop .store-box-rows .store-rates{position:absolute;top:10px;right:11px;z-index:2;min-height:28px;padding:3px 5px}
+.hub-shop .store-box-rows .store-open-options{margin:0;width:100%}
+.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto;align-items:end;gap:3px 6px;padding:0}
+.hub-shop .store-box-rows .store-box-timer{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:center;justify-content:end;width:100%;min-height:29px;line-height:1.2;font-size:10px;white-space:nowrap}
+.hub-shop .store-box-rows .store-box-timer span{display:block}
+.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers>button{grid-row:2;min-height:54px}
+.hub-shop .store-box-rows>article[data-box=diamond] .store-offers{margin:0;padding:0}
+@media(max-width:650px){.hub-shop .store-box-rows>article{padding:10px 12px 12px}.hub-shop .store-box-rows>article>img{--art-height:224px;width:243px}}
+@media(orientation:landscape) and (max-height:540px){
+ .hub-shop .store-box-grid.store-box-rows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:stretch}
+ .hub-shop .store-box-rows>article{min-width:0;padding:10px 7px 12px}
+ .hub-shop .store-box-rows h2{font-size:15px}
+ .hub-shop .store-box-rows>article>img{--art-height:205px;width:205px;max-width:100%;margin-top:calc(var(--art-height)*-.10)}
+ .hub-shop .store-box-rows .store-rates{top:5px;right:5px;font-size:9px;min-height:24px;padding:2px}
+ .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers{gap:2px 3px}
+ .hub-shop .store-box-rows .store-box-timer{font-size:9px}
+ .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers>button{min-height:50px;padding:5px 1px}
+ .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers b{font-size:10px}
+ .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers small{font-size:9px}
+ .hub-shop .store-box-rows>article[data-box=diamond] .store-offers{display:flex;overflow-x:auto;gap:4px;scrollbar-width:thin}
+ .hub-shop .store-box-rows>article[data-box=diamond] .store-offers>button{flex:0 0 calc(50% - 2px);min-height:50px;padding:5px 2px}
+}
