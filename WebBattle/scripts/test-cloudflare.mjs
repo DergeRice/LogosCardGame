@@ -4,9 +4,10 @@ import assert from 'node:assert/strict';
 import {mkdtemp} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
-import {randomUUID} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
+const adSecret='test-levelplay-private-key';
 const persistence=await mkdtemp(join(tmpdir(),'logos-cloud-test-'));
-const make=(diagnostics='1')=>new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:resolve('.runtime/cloudflare-build/worker.js'),compatibilityDate:'2026-09-01',compatibilityFlags:['nodejs_compat'],durableObjects:{BATTLE:{className:'BattleArena',useSQLite:true}},resourcePersistencePath:persistence,bindings:{ALLOWED_ORIGINS:'https://logos-card-battle.netlify.app',MATCH_SECONDS:'0',RECONNECT_SECONDS:'180',CAPTURE_DIAGNOSTICS:diagnostics,ADMIN_LOG_TOKEN:'test-admin-secret-32-characters-long'}}));
+const make=(diagnostics='1')=>new Miniflare(convertV4MiniflareOptions({modules:true,scriptPath:resolve('.runtime/cloudflare-build/worker.js'),compatibilityDate:'2026-09-01',compatibilityFlags:['nodejs_compat'],durableObjects:{BATTLE:{className:'BattleArena',useSQLite:true}},resourcePersistencePath:persistence,bindings:{ALLOWED_ORIGINS:'https://logos-card-battle.netlify.app',MATCH_SECONDS:'0',RECONNECT_SECONDS:'180',CAPTURE_DIAGNOSTICS:diagnostics,ADMIN_LOG_TOKEN:'test-admin-secret-32-characters-long',LEVELPLAY_S2S_PRIVATE_KEY:adSecret}}));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 class Client{
  constructor(url){this.messages=[];this.ws=new WebSocket(url,{origin:'https://logos-card-battle.netlify.app'});this.ws.on('message',raw=>{const m=JSON.parse(raw);this.messages.push(m);if(m.type==='session')this.token=m.token;if(m.type==='state')this.room=m.room;});this.ws.on('error',()=>{});}
@@ -22,6 +23,17 @@ try{
  assert.equal((await mf.dispatchFetch('http://localhost/admin/accounts?name=dergerice%20dev')).status,401);
  assert.equal((await mf.dispatchFetch('http://localhost/admin/grants/super',{method:'POST',body:JSON.stringify({name:'dergerice dev',id:'forged'})})).status,401);
  clients=await Promise.all(['A','B','C','D'].map(n=>new Client(url).hello(n)));
+ clients[1].send('adRewardTicket',{box:'silver'});
+ await clients[1].until(()=>clients[1].messages.some(m=>m.type==='adTicket'));
+ const adTicket=clients[1].messages.find(m=>m.type==='adTicket').ticket,adEvent='WorkerAd123',adTimestamp='202610221234';
+ const adSignature=createHash('md5').update(adTimestamp+adEvent+adTicket+'1'+adSecret).digest('hex');
+ const adUrl=`http://localhost/ads/levelplay/callback?timestamp=${adTimestamp}&eventId=${adEvent}&userId=${adTicket}&rewards=1&placement=logos_rewarded_box&signature=${adSignature}`;
+ assert.equal((await mf.dispatchFetch(adUrl.replace('rewards=1','rewards=2'))).status,403);
+ assert.equal((await mf.dispatchFetch(adUrl)).status,200);
+ await clients[1].until(()=>clients[1].messages.some(m=>m.type==='storeResult'&&m.requestId===adTicket));
+ assert.equal((await mf.dispatchFetch(adUrl)).status,200);
+ assert.equal(clients[1].messages.filter(m=>m.type==='storeResult'&&m.requestId===adTicket).length,1);
+ assert.equal(clients[1].messages.filter(m=>m.type==='community').at(-1).community.store.adUsage[new Date(Date.now()+9*3600000).toISOString().slice(0,10)],1);
  clients[0].send('register',{username:'cloud_player',password:'a strong cloud password'});
  await clients[0].until(()=>clients[0].messages.some(m=>m.type==='auth'));
  const accountToken=clients[0].messages.find(m=>m.type==='auth').authToken;

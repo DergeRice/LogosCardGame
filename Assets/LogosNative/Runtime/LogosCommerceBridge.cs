@@ -46,8 +46,7 @@ namespace Logos.Native
             try { request = JsonUtility.FromJson<Request>(payload); } catch { return; }
             if (request == null || string.IsNullOrEmpty(request.id) || request.id.Length > 80) return;
             if (request.method == "capabilities") { Send(new Reply { id=request.id, success=true, purchaseEnabled=settings.commerceEnabled, adReady=rewarded != null && rewarded.IsAdReady() }); return; }
-            if (!settings.commerceEnabled) { Fail(request, "결제·광고 서버 설정이 아직 완료되지 않았어요."); return; }
-            if (request.method == "purchase") { Buy(request); return; }
+            if (request.method == "purchase") { if (settings.commerceEnabled) Buy(request); else Fail(request, "결제 서버 설정이 아직 완료되지 않았어요."); return; }
             if (request.method == "rewarded") { ShowAd(request); return; }
             // Consumption is performed server-side after verified durable credit. No client confirm endpoint.
             Fail(request, "지원하지 않는 앱 요청이에요.");

@@ -9,6 +9,7 @@ import {ControlIcon} from './ControlIcon.js';
 import {emoteSlots,DEFAULT_EMOTE_SLOTS} from '../shared/emotes.js';
 import {COSMETICS} from '../shared/store.js';
 import type {CommunityView,StoreResult,RankedPeer} from '../shared/community.js';
+import type {AdTicketResponse} from '../shared/adRewards.js';
 import {ResultFriends,InviteNotice} from './CommunityPanels.js';
 import {GameSettings} from './GameSettings.js';
 import {AdminDashboard} from './AdminDashboard.js';
@@ -116,7 +117,7 @@ function App() {
  const [profile, setProfile] = useState({avatar:'pronoun' as Kind, rating:1000, points:0, coins:0});
  const [rankings,setRankings]=useState<Record<number,RankedPeer[]>>({});
  const [nicknameResult,setNicknameResult]=useState<NicknameResult|null>(null);
- const [community,setCommunity]=useState<CommunityView|null>(null),[storeResult,setStoreResult]=useState<StoreResult|null>(null);
+ const [community,setCommunity]=useState<CommunityView|null>(null),[storeResult,setStoreResult]=useState<StoreResult|null>(null),[adTicket,setAdTicket]=useState<AdTicketResponse|null>(null);
  const [account,setAccount]=useState<string|null>(null);
  const [linkedProviders,setLinkedProviders]=useState<string[]>([]);
  const [uuid,setUuid]=useState(''),[accountProvider,setAccountProvider]=useState<string|null>(null);
@@ -210,6 +211,7 @@ function App() {
     if(msg.type==='ranking')setRankings(old=>({...old,[msg.tier]:msg.players}));
     if(msg.type==='community'){setCommunity(msg.community);setProfile(old=>({...old,coins:msg.community.store.gold}));}
     if(msg.type==='storeResult')setStoreResult({requestId:msg.requestId,source:msg.source,box:msg.box,rewards:msg.rewards});
+    if(msg.type==='adTicket')setAdTicket(old=>({ticket:msg.ticket,box:msg.box,expiresAt:msg.expiresAt,serial:(old?.serial??0)+1}));
     if(msg.type==='accountDeleted'){for(const key of Object.keys(localStorage))if(key.startsWith('logos-'))localStorage.removeItem(key);for(const key of Object.keys(sessionStorage))if(key.startsWith('logos-'))sessionStorage.removeItem(key);location.replace('/account-deleted.html');return;}
     if(msg.type==='notice')setNotice(msg.message);
     if (msg.type === 'session') { if(localStorage.getItem('logos-account-token')&&!msg.account){localStorage.removeItem('logos-account-token');sessionStorage.removeItem('logos-entry');location.replace('/?intro');return;}const previousName=localStorage.getItem('logos-guest-name')||sessionStorage.getItem('logos-name');if(!msg.account&&previousName&&previousName!==msg.name){const oldKey='logos-hub-demo-v1:'+encodeURIComponent(previousName),newKey='logos-hub-demo-v1:'+encodeURIComponent(msg.name),oldValue=localStorage.getItem(oldKey);if(oldValue&&!localStorage.getItem(newKey))localStorage.setItem(newKey,oldValue);}setUuid(msg.uuid??msg.id??'');setAccountProvider(msg.account?.provider??null);setLinkedProviders(msg.account?.linkedProviders??(msg.account?.provider?[msg.account.provider]:[])); sessionStorage.setItem('logos-token', msg.token); sessionStorage.setItem('logos-name', msg.name); if(!msg.account){localStorage.setItem('logos-guest-token',msg.token);localStorage.setItem('logos-guest-name',msg.name);}setName(msg.name); setAccount(msg.account?.username??null); setProfile({avatar:msg.avatar, rating:msg.rating, points:msg.points, coins:msg.coins??0}); setConnected(true); setStatus('서버 연결됨'); attempts = 0; }
@@ -300,7 +302,7 @@ function App() {
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}
   {!room&&<InviteNotice data={community} send={send}/>}
-  {(!room||room.phase==='lobby') && <GameHub nicknameResult={nicknameResult} communityId={uuid} rankings={rankings} community={community} storeResult={storeResult} name={name} account={account} profile={profile} rooms={rooms} connected={connected} aiSetting={aiSetting} onDifficulty={value=>{setAiSetting(value);localStorage.setItem('logos-ai-difficulty',value)}} onQuick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick',{difficulty:aiSetting});}} send={send} onSettings={()=>setSettingsOpen(true)} onLogin={()=>setAuthMode('login')} onRegister={()=>setAuthMode('register')} onLogout={()=>send('logout')}/>}
+  {(!room||room.phase==='lobby') && <GameHub adTicket={adTicket} nicknameResult={nicknameResult} communityId={uuid} rankings={rankings} community={community} storeResult={storeResult} name={name} account={account} profile={profile} rooms={rooms} connected={connected} aiSetting={aiSetting} onDifficulty={value=>{setAiSetting(value);localStorage.setItem('logos-ai-difficulty',value)}} onQuick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick',{difficulty:aiSetting});}} send={send} onSettings={()=>setSettingsOpen(true)} onLogin={()=>setAuthMode('login')} onRegister={()=>setAuthMode('register')} onLogout={()=>send('logout')}/>}
   {!room&&roomBrowserOpen&&<RoomBrowser rooms={rooms} connected={connected} onClose={()=>setRoomBrowserOpen(false)} send={send}/>}
   {room?.phase==='lobby'&&<RoomLobby community={community} room={room} connected={connected} send={send}/>}
   {authMode&&!room&&<div className="account-backdrop" onClick={()=>setAuthMode(null)}><form className="account-dialog" role="dialog" aria-label={authMode==='register'?'계정 만들기':'계정 로그인'} onClick={e=>e.stopPropagation()} onSubmit={e=>{e.preventDefault();send(authMode,{username:authName,password:authPassword});}}><h2>{authMode==='register'?'계정 만들기':'계정 로그인'}</h2><p>같은 계정으로 웹과 Unity 웹뷰에서 레이팅을 이어갑니다.</p><label htmlFor="account-name">아이디</label><input id="account-name" autoComplete="username" minLength={3} maxLength={16} value={authName} onChange={e=>setAuthName(e.target.value)} required/><label htmlFor="account-password">비밀번호</label><input id="account-password" type="password" autoComplete={authMode==='register'?'new-password':'current-password'} minLength={10} maxLength={128} value={authPassword} onChange={e=>setAuthPassword(e.target.value)} required/><div className="account-dialog-actions"><button type="button" onClick={()=>setAuthMode(null)}>취소</button><button className="primary" disabled={!connected} type="submit">{authMode==='register'?'만들고 연동':'로그인'}</button></div></form></div>}

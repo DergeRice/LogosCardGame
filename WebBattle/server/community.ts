@@ -1,4 +1,5 @@
 import {FREE_BOX_INTERVALS,type FreeBox} from '../shared/freeBoxes.js';
+import {AD_DAILY_LIMIT,AD_TICKET_MS,adDay,adRemaining,type AdBox} from '../shared/adRewards.js';
 import {BASIC_PROFILES} from '../shared/profiles.js';
 import {migrateProfiles,migrateEmoteCatalog} from '../shared/store.js';
 import {BASIC_EMOTES,emoteSlots,type EmoteSlots} from '../shared/emotes.js';
@@ -7,7 +8,8 @@ import type {Game} from './game.js';
 import type {Peer,CommunityView,Invitation,StoreResult} from '../shared/community.js';
 import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
 type Player=ReturnType<Game['newPlayer']>;
-export type CommunityRecord={superUser?:boolean;superCatalogSize?:number;nicknameChanges?:{requestId:string;name:string;cost:number}[];id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;rating?:number;grants?:string[]};
+export type AdTicket={id:string;box:AdBox;day:string;expiresAt:number;eventId?:string;result?:StoreResult};
+export type CommunityRecord={adTicket?:AdTicket;superUser?:boolean;superCatalogSize?:number;nicknameChanges?:{requestId:string;name:string;cost:number}[];id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;rating?:number;grants?:string[]};
 export type CommunityInvite=Invitation & {to:string};
 export class Community {
  records=new Map<string,CommunityRecord>();invites=new Map<string,CommunityInvite>();
@@ -16,7 +18,7 @@ export class Community {
  record(p:Player){const id=this.id(p);let record=this.records.get(id);if(!record){const initial=defaultHubSave();initial.profile=p.profileId??BASIC_PROFILES[randomInt(BASIC_PROFILES.length)].id;initial.gold=0;initial.diamonds=0;record={id,name:p.name,avatar:p.avatar,friends:[],incoming:[],store:initial,results:[]};this.records.set(id,record);}migrateProfiles(record.store,id);record.store.board??='board-classic';record.store.emote??='emote-hello';migrateEmoteCatalog(record.store);if(!record.store.owned.includes('board-classic'))record.store.owned.push('board-classic');if(record.superUser&&record.superCatalogSize!==COSMETICS.length){record.store.owned=[...new Set([...record.store.owned,...COSMETICS.map(c=>c.id)])];record.superCatalogSize=COSMETICS.length;}record.rating=p.rating;record.name=p.name;record.avatar=p.avatar;return record;}
  player(id:string){return [...this.game.sessions.values()].find(p=>this.id(p)===id);}
  peer(id:string):Peer|undefined{const p=this.player(id),r=p?this.record(p):this.records.get(id);return r?{id,name:r.name,avatar:r.avatar,profileId:r.store.profile,characterId:r.store.character,frameId:r.store.frame,online:Boolean(p?.socket?.readyState===1)}:undefined;}
- view(p:Player):CommunityView{const r=this.record(p);return {serverNow:Date.now(),...(r.superUser?{superUser:true}:{}),rankGames:r.rankGames??0,friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
+ view(p:Player):CommunityView{const r=this.record(p);return {serverNow:Date.now(),adEnabled:this.game.adRewardsEnabled,...(r.superUser?{superUser:true}:{}),rankGames:r.rankGames??0,friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
  send(p:Player){this.game.send(p.socket,{type:'community',community:this.view(p)});}
  publish(){for(const p of this.game.sessions.values())if(p.socket?.readyState===1)this.send(p);}
  migrate(p:Player,oldId:string){const nextId=this.id(p),old=this.records.get(oldId);if(oldId===nextId||!old)return;const target=this.records.get(nextId);if(!target){old.id=nextId;this.records.set(nextId,old);}else{target.friends=[...new Set([...target.friends,...old.friends])].filter(x=>x!==nextId);target.incoming=[...new Set([...target.incoming,...old.incoming])].filter(x=>x!==nextId);}this.records.delete(oldId);for(const r of this.records.values()){r.friends=[...new Set(r.friends.map(x=>x===oldId?nextId:x))].filter(x=>x!==r.id);r.incoming=[...new Set(r.incoming.map(x=>x===oldId?nextId:x))].filter(x=>x!==r.id);}}
@@ -24,6 +26,32 @@ export class Community {
  reply(p:Player,msg:Record<string,unknown>){const r=this.record(p),id=typeof msg.id==='string'?msg.id:'',other=this.records.get(id);if(!other||!r.incoming.includes(id))return this.game.fail(p,'유효한 친구 요청이 없어요.');if(msg.accept===true){if(r.friends.length>=100||other.friends.length>=100)return this.game.fail(p,'친구 목록이 가득 찼어요.');r.friends=[...new Set([...r.friends,id])];other.friends=[...new Set([...other.friends,r.id])];other.incoming=other.incoming.filter(x=>x!==r.id);}r.incoming=r.incoming.filter(x=>x!==id);this.publish();}
  invite(p:Player,msg:Record<string,unknown>){const room=this.game.lobbyRoom(p),r=this.record(p),id=typeof msg.id==='string'?msg.id:'',other=this.player(id);if(!room||room.hostId!==p.id||room.players.length>=6)return this.game.fail(p,'여유 있는 대기방의 방장만 초대할 수 있어요.');if(!r.friends.includes(id)||!other||other.socket?.readyState!==1||other.room)return this.game.fail(p,'홈에 접속 중인 친구를 초대해 주세요.');const existing=[...this.invites.values()].find(i=>i.to===id&&i.code===room.code&&i.expiresAt>Date.now());if(existing)return this.game.fail(p,'이미 초대를 보냈어요.');const invitation={id:randomUUID(),from:this.peer(r.id)!,to:id,code:room.code,roomName:room.name??'친구의 방',expiresAt:Date.now()+120000};this.invites.set(invitation.id,invitation);this.send(other);this.game.send(p.socket,{type:'notice',message:'친구에게 초대를 보냈어요.'});}
  acceptInvite(p:Player,msg:Record<string,unknown>){const i=this.invites.get(String(msg.id));if(!i||i.to!==this.id(p)||i.expiresAt<=Date.now())return this.game.fail(p,'초대가 만료되었어요.');if(msg.accept===true){if(p.room)return this.game.fail(p,'현재 방에서 나온 뒤 초대를 받아 주세요.');this.game.joinRoom(p,i.code);}this.invites.delete(i.id);this.send(p);}
+ issueAdTicket(p:Player,msg:Record<string,unknown>){
+  if(!this.game.adRewardsEnabled)return this.game.fail(p,'광고 보상 연결을 준비 중이에요.');
+  if(p.room)return this.game.fail(p,'광고 상자는 홈에서 열어 주세요.');
+  const box=msg.box;if(box!=='silver'&&box!=='gold')return this.game.fail(p,'실버 또는 골드 상자를 선택해 주세요.');
+  const r=this.record(p),now=Date.now();
+  if(adRemaining(r.store.adUsage,now)<=0)return this.game.fail(p,'오늘 광고 상자를 모두 열었어요.');
+  const active=r.adTicket;
+  if(active&&!active.result&&active.expiresAt>now){if(active.box!==box)return this.game.fail(p,'진행 중인 광고를 마친 뒤 다시 시도해 주세요.');this.game.send(p.socket,{type:'adTicket',ticket:active.id,box,expiresAt:active.expiresAt});return;}
+  const ticket:AdTicket={id:randomUUID(),box,day:adDay(now),expiresAt:now+AD_TICKET_MS};r.adTicket=ticket;
+  this.game.send(p.socket,{type:'adTicket',ticket:ticket.id,box,expiresAt:ticket.expiresAt});
+ }
+ adStatus(p:Player,msg:Record<string,unknown>){const ticket=String(msg.ticket??''),r=this.record(p),active=r.adTicket;if(!active||active.id!==ticket)return this.game.fail(p,'광고 요청을 찾을 수 없어요.');if(active.result){this.game.send(p.socket,{type:'storeResult',...active.result});return;}this.game.send(p.socket,{type:'adStatus',ticket,pending:active.expiresAt>Date.now()});}
+ claimAdTicket(ticketId:string,eventId:string,now=Date.now()):'granted'|'duplicate'|'missing'|'expired'|'limit'{
+  const r=[...this.records.values()].find(record=>record.adTicket?.id===ticketId),ticket=r?.adTicket;
+  if(!r||!ticket)return 'missing';
+  if(ticket.result)return ticket.eventId===eventId?'duplicate':'missing';
+  if(now>ticket.expiresAt+60_000)return 'expired';
+  if((r.store.adUsage?.[ticket.day]??0)>=AD_DAILY_LIMIT)return 'limit';
+  const opened=openDemoBox(r.store,ticket.box,1,()=>randomInt(1000000000)/1000000000,true);
+  opened.next.adUsage={...r.store.adUsage,[ticket.day]:(r.store.adUsage?.[ticket.day]??0)+1};
+  opened.next.revision=(r.store.revision??0)+1;r.store=opened.next;
+  const result:StoreResult={requestId:ticket.id,source:'box',box:ticket.box,rewards:opened.rewards};ticket.result=result;ticket.eventId=eventId;
+  r.results.push(result);r.results=r.results.slice(-20);
+  const player=this.player(r.id);if(player){this.send(player);this.game.send(player.socket,{type:'storeResult',...result});}
+  return 'granted';
+ }
  store(p:Player,msg:Record<string,unknown>){if(p.room)return this.game.fail(p,'상점은 홈에서 이용해 주세요.');const r=this.record(p),requestId=typeof msg.requestId==='string'?msg.requestId:'';if(!requestId||requestId.length>80)return this.game.fail(p,'유효한 구매 요청이 필요해요.');const prior=r.results.find(x=>x.requestId===requestId);if(prior){this.send(p);this.game.send(p.socket,{type:'storeResult',...prior});return;}if(msg.storeVersion!==(r.store.revision??0)){this.send(p);return this.game.fail(p,'상점 정보가 바뀌었어요. 다시 선택해 주세요.');}let result:StoreResult;
  if(msg.type==='storeOpenFree'){const box=String(msg.box);if(!Object.hasOwn(FREE_BOX_INTERVALS,box)||msg.count!==1)return this.game.fail(p,'무료 상자는 실버 또는 골드 1개만 열 수 있어요.');const nextAt=r.store.freeBoxAt?.[box as FreeBox]??0;if(Date.now()<nextAt){this.send(p);return this.game.fail(p,'아직 무료 상자를 열 수 없어요.');}const opened=openDemoBox({...r.store,gold:p.coins??0},box,1,()=>randomInt(1000000000)/1000000000,true);opened.next.freeBoxAt={...r.store.freeBoxAt,[box]:Date.now()+FREE_BOX_INTERVALS[box as FreeBox]};r.store=opened.next;result={requestId,source:'box',box,rewards:opened.rewards};}
  else if(msg.type==='storeOpen'){const opened=openDemoBox({...r.store,gold:p.coins??0},String(msg.box),Number(msg.count),()=>randomInt(1000000000)/1000000000,r.superUser===true);r.store=opened.next;p.coins=opened.next.gold;result={requestId,source:'box',box:String(msg.box),rewards:opened.rewards};}

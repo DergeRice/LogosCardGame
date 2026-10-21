@@ -16,7 +16,7 @@
 - LevelPlay Android 앱 `로고스 카드게임`과 보상형 광고 단위 `logos_rewarded_box`, 같은 이름의 rewarded placement를 새로 만들었다. 기존 QTlingo 식별자는 사용하지 않는다.
 - LevelPlay rewarded 설정과 Unity Ads bidding network를 연결했다. 로고스 전용 Unity 서비스 계정과 Organization Core ID로 Android Game ID `5868669`의 rewarded placement `Rewarded_Android`를 `logos_unity_rewarded` 인스턴스로 등록했다. QTlingo 자격 증명과 광고 단위는 재사용하지 않는다.
 - LevelPlay 앱 키와 광고 단위 ID는 로컬 비공개 릴리스 환경 파일에만 있다. 저장소·웹 번들·Unity Resources에는 넣지 않는다.
-- S2S 콜백 endpoint와 검증 비밀값은 아직 만들지 않았다. 따라서 현재 광고 완료 이벤트만으로 상자를 지급할 수 없으며, 웹 서버 작업이 선행되어야 한다.
+- S2S 콜백 endpoint와 서명 검증 코드는 구현했다. LevelPlay 콘솔 설정과 Cloudflare Worker secret 등록 전에는 광고 버튼이 잠겨 있고 보상도 지급되지 않는다.
 - 대상 연령은 어린이·청소년·성인을 포함한다. 현재 네이티브 앱은 연령 판별 흐름이 생길 때까지 COPPA 보호 모드로 초기화한다. 웹에서 임의로 완화하지 않는다.
 
 ## 필요한 비공개 값
@@ -29,7 +29,7 @@ LEVELPLAY_APP_KEY_ANDROID=
 LEVELPLAY_REWARDED_AD_UNIT_ID=
 LEVELPLAY_REWARDED_PLACEMENT=logos_rewarded_box
 # rewarded S2S 콜백 검증용 서버 비밀값
-LEVELPLAY_REWARDED_S2S_SECRET=
+LEVELPLAY_S2S_PRIVATE_KEY=
 ```
 
 ## 연결 순서
@@ -38,18 +38,18 @@ LEVELPLAY_REWARDED_S2S_SECRET=
 2. 서버가 계정·상자에 묶은 일회성 `rewardTicket`을 발급한다. Unity는 이를 Dynamic User ID로 설정한다. 클라이언트가 보상 거래 ID를 만들어 검증을 대신할 수 없다.
 3. 상자 열기 직전에 rewarded를 표시한다. 닫기·스킵·실패는 보상하지 않는다.
 4. LevelPlay 콘솔에 S2S callback URL과 비밀값을 설정한다.
-5. 서버는 콜백 서명을 검증하고 `adTransactionId`를 한 번만 처리한 뒤 `storeOpenFree`와 같은 서버 추첨을 실행한다.
-6. 이미 열린 상자는 쿨다운 응답을 그대로 표시한다. 로컬 시간으로 쿨다운을 판정하거나 다이아·아이템을 직접 증가시키지 않는다.
+5. 서버는 콜백 서명을 검증하고 `eventId`를 한 번만 처리한 뒤 무료 1회와 같은 상자 추첨을 실행한다.
+6. 광고 개봉은 정기 무료 개봉의 쿨다운과 별개이며, 한국 날짜 기준 실버·골드 합계 하루 3회다. 로컬 시간으로 횟수를 판정하거나 다이아·아이템을 직접 증가시키지 않는다.
 
 ## 웹소켓/서버 계약
 
 클라이언트 요청은 `adRewardTicket`으로 제한한다. 광고 시청 완료 자체로 지급을 요청하지 않는다.
 
 ```ts
-{type:'adRewardTicket', box:'silver'|'gold', requestId:string, storeVersion:number}
+{type:'adRewardTicket', box:'silver'|'gold'}
 ```
 
-서버는 로그인한 계정·상자·만료 시각에 묶인 `rewardTicket`을 만들어 반환한다. S2S 검증이 완료된 거래만 처리하고 `adTransactionId`를 영구적으로 중복 방지한다. 지급 결과는 기존 `storeResult`를 사용하며, 클라이언트는 재연결 시 이 결과를 조회한다.
+서버는 현재 세션·상자·만료 시각에 묶인 `rewardTicket`을 만들어 반환한다. S2S 검증이 완료된 거래만 처리하고 `eventId`를 영구적으로 중복 방지한다. 지급 결과는 기존 `storeResult`를 사용하며, 클라이언트는 `adRewardStatus`로 이 결과를 조회한다.
 
 ## 검증 체크
 

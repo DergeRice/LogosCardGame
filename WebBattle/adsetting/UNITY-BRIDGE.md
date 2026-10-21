@@ -9,7 +9,7 @@ Unity 원본은 저장소 루트이다. `main`의 Unity 프로젝트를 `web-bat
 - 상품 ID: `diamonds_100`, `diamonds_300`, `diamonds_1000`, `diamonds_3000`. KRW 1200/2900/8900/24900.
 - Billing 8은 `standard` 구매 옵션의 `offerToken`을 명시하여 결제창을 연다. 대여/할인 옵션은 선택하지 않는다. [Google 공식 연결 가이드](https://developer.android.com/google/play/billing/one-time-product-multi-purchase-options-offers)를 기준으로 구현했다.
 - SDK의 성공 응답은 다이아/상자 지급을 의미하지 않는다. 반드시 서버 검증·영구 중복 방지 후 지급한다.
-- `commerceEnabled=false`가 기본값이다. 현재 웹 서버가 구매·광고 보상을 검증하지 않으므로, 서버 구현과 기기 검증이 끝나기 전에는 빌드 환경의 `LOGOS_COMMERCE_ENABLED=1`을 주지 않는다.
+- `commerceEnabled=false`가 기본값이다. 이는 구매만 제한하며 광고는 별도로 서버 설정과 SDK 준비 상태를 확인한다. 구매 서버 검증 전에는 `LOGOS_COMMERCE_ENABLED=1`을 주지 않는다.
 - 전용 LevelPlay Android 앱과 보상형 단위·placement `logos_rewarded_box`를 생성했다. 비공개 App Key와 ad unit ID는 릴리스 환경 파일만 사용한다. Unity Ads bidding network는 로고스 전용 Unity 서비스 계정과 Organization Core ID로 연결했고, Android Game ID `5868669`의 rewarded placement `Rewarded_Android`를 `logos_unity_rewarded` 인스턴스로 등록했다. QTlingo 자격 증명과 광고 단위는 재사용하지 않는다.
 - Play Console 상품 4개 모두 대한민국 전용 `standard` 구매 옵션으로 활성화했다. 가격은 100개 ₩1,200 / 300개 ₩2,900 / 1,000개 ₩8,900 / 3,000개 ₩24,900이다. 3,000개 일괄 가격의 자동 반올림을 개별 가격 수정으로 바로잡고 저장 완료를 확인했다.
 - Google Cloud `logos-card-game`에 `logos-play-verifier` 서비스 계정을 만들고, Play Console에서 `com.baragames.logoscardgame` 앱 한정으로 구매 조회·처리 권한을 부여했다. JSON 키는 로컬 비공개 경로에만 보관한다. Android Publisher API 활성화 확인 뒤 서버가 실제 구매 토큰을 검증할 수 있다.
@@ -39,17 +39,16 @@ await window.LogosNative.request('rewarded', {box:'silver',rewardTicket});
 
 ## 광고 보상 서버
 
-보상형 광고 단위는 하나다. 실버 12시간/골드 24시간은 기존 서버 규칙을 따른다. 무료 정기 개봉과 추가 광고 슬롯의 횟수/쿨다운은 합의 없이 같은 값으로 덮어쓰지 않는다. 현재 웹 변경의 `광고 3/3` 버튼은 별도 슬롯이며, 이 문서는 추가 3회 보상 규칙을 임의로 구현하지 않는다.
+보상형 광고 단위는 하나다. 실버 12시간/골드 24시간은 기존 서버 규칙을 따른다. 무료 정기 개봉과 추가 광고 슬롯은 별도다. 실버·골드 광고 개봉을 합해 한국 날짜 기준 하루 최대 3회다.
 
 `rewardTicket`은 서버가 짧은 유효기간으로 발급해 계정·상자와 저장한다. Unity는 LevelPlay Dynamic User ID에 이 ticket을 넣는다. S2S 콜백의 ticket·거래 ID·서명을 검증하고, 재전송 중복 방지 후 기존 상자 추첨 로직으로 지급한다. 취소·타임아웃·로드 실패·클라이언트 위조 콜백은 지급하지 않는다.
 
-현재 `WebBattle/server/game.ts`는 `iapPurchase`를 거절하며 `adRewardTicket`/S2S endpoint도 없다. 따라서 다음 웹 작업은 아래 순서를 지켜야 한다.
+`adRewardTicket`과 서명 검증을 거치는 `/ads/levelplay/callback`은 연결했다. `LEVELPLAY_S2S_PRIVATE_KEY`가 없는 서버는 ticket을 발급하지 않는다. 같은 private key를 LevelPlay S2S 설정과 Worker secret에 저장하고, callback URL을 `https://logos-card-battle-server.jesus-and-children-ranking-worker.workers.dev/ads/levelplay/callback`으로 설정해야 실제 광고 보상이 활성화된다. `iapPurchase`는 여전히 거절한다. 남은 결제 작업은 다음과 같다.
 
 1. `iapPurchase`에서 Google Android Publisher API로 상품 ID·구매 상태·토큰을 확인한다.
 2. 계정/구매 토큰의 영구 중복 방지 레코드와 다이아 지급을 하나의 서버 트랜잭션으로 확정한다.
 3. 그 뒤에만 Play consume을 호출한다. 실패 시 재시도할 수 있게 상태를 저장한다.
-4. `adRewardTicket`과 LevelPlay S2S endpoint를 만들고, 서명 검증 및 `adTransactionId` 멱등성을 구현한다.
-5. 서버 배포 후 `LOGOS_COMMERCE_ENABLED=1` 빌드와 Play 내부 테스트 기기에서 결제 완료·취소·복구·광고 완료·광고 취소를 확인한다.
+4. 광고는 S2S 설정 후 내부 테스트 기기에서 완료·취소·재전송을 확인한다. 구매는 서버 검증 후 `LOGOS_COMMERCE_ENABLED=1` 빌드에서 완료·취소·복구를 확인한다.
 
 ## 빌드
 
@@ -58,7 +57,7 @@ await window.LogosNative.request('rewarded', {box:'silver',rewardTicket});
 - `LOGOS_KEYSTORE_PROPERTIES`: 로컬 서명 properties 절대경로 (Git 제외)
 - `LOGOS_LEVELPLAY_APP_KEY`: 로고스 Android App Key
 - `LOGOS_LEVELPLAY_REWARDED_ID`: 로고스 rewarded ad unit
-- `LOGOS_COMMERCE_ENABLED=1`: 서버 및 상품 준비를 확인한 릴리스에서만 설정
+- `LOGOS_COMMERCE_ENABLED=1`: 구매 서버 및 상품 준비를 확인한 릴리스에서만 설정. 광고 활성화와 별개다.
 - 출력: `Builds/LogosCardGame-Unity.aab` (versionCode 2)
 
 설정은 `Resources/LogosNativeSettings.json`에 빌드 중 주입하고 finally에서 복구한다. `.p8`/서비스 계정 private key를 Unity Resources에 넣지 않는다.

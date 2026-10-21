@@ -23,7 +23,7 @@ type Player = {deleted?:boolean;goHits?:number;hitBaseScore?:number;debugGoUsed?
 export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = {retryQueued?:boolean;countdownStartedAt?:number;countdownVersion?:number;goTarget?:number; highHitScore?:number; forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
-type Options = {purgePlayerAudit?:(ids:string[])=>void; auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
+type Options = {adRewardsEnabled?:boolean;purgePlayerAudit?:(ids:string[])=>void; auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 const aiProfileIds=[...BASIC_PROFILES,...COLLECTIBLE_PROFILES].map(profile=>profile.id);
 function fallbackAIProfile(seed:string){let hash=0;for(const char of seed)hash=(Math.imul(hash,31)+char.charCodeAt(0))>>>0;return aiProfileIds[hash%aiProfileIds.length];}
@@ -37,6 +37,7 @@ function applyGoBenefit(judgment:Judgment,go:number){
  return judgment;
 }
 export class Game {
+ adRewardsEnabled=false;
  purgePlayerAudit?: (ids:string[])=>void;
  community=new Community(this);
  auditSink?: (event:AuditEvent)=>void; audits:AuditEvent[]=[]; telemetryAt=new Map<string,number>();
@@ -44,7 +45,7 @@ export class Game {
  rooms = new Map<string, Room>(); sessions = new Map<string, Player>();
  accounts = new Map<string,Account>(); accountSessions = new Map<string,AccountSession>();
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number; humanDecisionMs:number;
- constructor(options: Options = {}) { this.purgePlayerAudit=options.purgePlayerAudit; this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 30 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs;this.humanDecisionMs=options.humanDecisionMs??RULES.humanDecisionSeconds*1000; }
+ constructor(options: Options = {}) { this.adRewardsEnabled=options.adRewardsEnabled??false;this.purgePlayerAudit=options.purgePlayerAudit; this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 30 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs;this.humanDecisionMs=options.humanDecisionMs??RULES.humanDecisionSeconds*1000; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
  audit(p:Player|undefined,event:string,level:AuditEvent['level']='info',details:Record<string,unknown>={},overrideRoom?:Room,submittedCards?:readonly Card[]){
   if(p?.deleted)return;
@@ -605,6 +606,8 @@ export class Game {
   if(msg.type==='ranking')return this.community.ranking(p,msg.tier);
   if(msg.type==='renameNickname')return renameNickname(this,p,msg);
   if(msg.type==='community')return this.community.send(p);
+  if(msg.type==='adRewardTicket')return this.community.issueAdTicket(p,msg);
+  if(msg.type==='adRewardStatus')return this.community.adStatus(p,msg);
   if(msg.type==='friendRequest')return this.community.request(p,msg);
   if(msg.type==='friendReply')return this.community.reply(p,msg);
   if(msg.type==='friendInvite')return this.community.invite(p,msg);

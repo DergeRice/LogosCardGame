@@ -7,7 +7,8 @@ import { snapshot,restore,nextDeadline } from '../server/persistence.js';
 import {AuditStore} from './audit-store.js';
 import {adminAuthorized} from '../server/audit.js';
 import {verifyAppleCredential} from '../server/appleAuth.js';
-interface Env { GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
+import {verifyLevelPlayCallback} from '../server/levelPlayCallback.js';
+interface Env { LEVELPLAY_S2S_PRIVATE_KEY?:string;GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
 type Attachment={googleReturn?:{identity:{sub:string;name?:string};expires:number};appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
@@ -16,6 +17,7 @@ export default {
  async fetch(request:Request,env:Env):Promise<Response>{
   const url=new URL(request.url);
   if(url.pathname==='/auth/apple/android')return appleAndroidCallback(request);
+  if(url.pathname==='/ads/levelplay/callback')return env.BATTLE.getByName('public-arena-v1').fetch(request);
   if(url.pathname.startsWith('/admin/logs')||url.pathname==='/admin/accounts'||url.pathname==='/admin/grants/super'||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends'||url.pathname==='/admin/grants/items')){
    const origin=request.headers.get('Origin'),allowed=!origin||env.ALLOWED_ORIGINS.split(',').includes(origin);
    const headers=new Headers({'Cache-Control':'no-store','Vary':'Origin'});
@@ -42,14 +44,16 @@ export class BattleArena extends DurableObject<Env>{
  // All game mutations AND persistence are serialized; responses flush after commit.
  private scheduledAlarm:number|null=null;
  private connectionsCleanedAt=0;
+ private pendingAdEvents:{id:string;ticket:string;at:number}[]=[];
  queue:Promise<unknown>=Promise.resolve();outbox:(()=>void)[]|null=null;
  constructor(ctx:DurableObjectState,env:Env){
   super(ctx,env);
   this.audit=new AuditStore(ctx.storage.sql,env.CAPTURE_DIAGNOSTICS==='1');
-  this.game=new Game({purgePlayerAudit:ids=>this.audit.deletePlayers(ids),auditSink:event=>{if(env.CAPTURE_DIAGNOSTICS==='1')try{this.audit.insert(event)}catch{/* Optional diagnostics must never cancel a game commit. */}},durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,180,2,300)*1000});
+  this.game=new Game({adRewardsEnabled:Boolean(env.LEVELPLAY_S2S_PRIVATE_KEY),purgePlayerAudit:ids=>this.audit.deletePlayers(ids),auditSink:event=>{if(env.CAPTURE_DIAGNOSTICS==='1')try{this.audit.insert(event)}catch{/* Optional diagnostics must never cancel a game commit. */}},durationMs:bounded(env.MATCH_SECONDS,0,0,600)*1000,reconnectMs:bounded(env.RECONNECT_SECONDS,180,2,300)*1000});
   ctx.blockConcurrencyWhile(async()=>{
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY,value TEXT NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');
+   ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS ad_events (event_id TEXT PRIMARY KEY,ticket_id TEXT NOT NULL,at INTEGER NOT NULL)');
    for(const row of ctx.storage.sql.exec<{key:string;value:string}>('SELECT key,value FROM records'))this.cache.set(row.key,row.value);
    this.scheduledAlarm=await ctx.storage.getAlarm();
    const players=restore(this.game,this.cache);
@@ -87,12 +91,28 @@ export class BattleArena extends DurableObject<Env>{
   this.ctx.storage.transactionSync(()=>{
    for(const [key,value]of next)if(this.cache.get(key)!==value)this.ctx.storage.sql.exec('INSERT INTO records(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',key,value);
    for(const key of this.cache.keys())if(!next.has(key))this.ctx.storage.sql.exec('DELETE FROM records WHERE key=?',key);
+   for(const event of this.pendingAdEvents)this.ctx.storage.sql.exec('INSERT INTO ad_events(event_id,ticket_id,at) VALUES(?,?,?)',event.id,event.ticket,event.at);
    if(now-this.connectionsCleanedAt>=60000){this.ctx.storage.sql.exec('DELETE FROM connections WHERE expires<=?',now);this.connectionsCleanedAt=now;}
-  });this.cache=next;
+  });this.cache=next;this.pendingAdEvents=[];
   if(deadline!==this.scheduledAlarm){if(deadline!==null)await this.ctx.storage.setAlarm(deadline);else await this.ctx.storage.deleteAlarm();this.scheduledAlarm=deadline;}
  }
  async fetch(request:Request):Promise<Response>{
-  if(new URL(request.url).pathname==='/health')return Response.json({status:'ok',provider:'cloudflare',storage:'sqlite',rooms:this.game.rooms.size});
+  const url=new URL(request.url);
+  if(url.pathname==='/health')return Response.json({status:'ok',provider:'cloudflare',storage:'sqlite',rooms:this.game.rooms.size});
+  if(url.pathname==='/ads/levelplay/callback'){
+   if(request.method!=='GET')return new Response('GET required',{status:405});
+   if(!this.env.LEVELPLAY_S2S_PRIVATE_KEY)return new Response('Ad rewards unavailable',{status:503});
+   const callback=verifyLevelPlayCallback(url,this.env.LEVELPLAY_S2S_PRIVATE_KEY);
+   if(!callback)return new Response('Invalid callback',{status:403});
+   return this.serial(()=>{
+    const previous=this.ctx.storage.sql.exec<{ticket_id:string}>('SELECT ticket_id FROM ad_events WHERE event_id=?',callback.eventId).toArray()[0];
+    if(previous)return new Response(previous.ticket_id===callback.ticket?`${callback.eventId}:OK`:'Event already used',{status:previous.ticket_id===callback.ticket?200:409});
+    const result=this.game.community.claimAdTicket(callback.ticket,callback.eventId);
+    if(result==='granted'){this.pendingAdEvents.push({id:callback.eventId,ticket:callback.ticket,at:Date.now()});return new Response(`${callback.eventId}:OK`);}
+    if(result==='duplicate')return new Response(`${callback.eventId}:OK`);
+    return new Response(result,{status:result==='expired'?410:404});
+   });
+  }
   if(new URL(request.url).pathname==='/admin/accounts'){
    if(!adminAuthorized(request.headers.get('Authorization'),this.env.ADMIN_LOG_TOKEN))return Response.json({error:'관리자 인증 필요'},{status:401});
    if(request.method!=='GET')return new Response('GET required',{status:405});
