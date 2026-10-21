@@ -28,8 +28,8 @@ test('losses increase 50 percent, score 10 activates a half-loss shield, and set
 
 test('human and AI third Go waits for another score without manufactured points; second Go continues',()=>{
  for(const ai of [false,true]){const{game,a,b,r}=fixture();if(ai)a.ai='normal';a.score=55;b.score=40;r.highScore=55;r.leaderId=a.id;r.goCount=1;r.decision={id:'two',playerId:a.id,startedAt:Date.now(),expiresAt:0};
-  game.choice(a,{matchId:r.matchId,decisionId:'two',choice:'go'});assert.equal(r.phase,'battle');assert.equal(r.goCount,2);
-  a.score=81;r.highScore=81;r.decision={id:'three',playerId:a.id,startedAt:Date.now(),expiresAt:0};game.choice(a,{matchId:r.matchId,decisionId:'three',choice:'go'});assert.equal(r.phase,'battle');assert.equal(a.score,81);game.tick();assert.equal(r.phase,'battle');game.finish(r,'stop');assert.equal(r.winner,a.id);assert.equal(a.reward,750);assert.equal(b.reward,0);const points=a.points;game.tick();assert.equal(a.points,points);
+  game.choice(a,{matchId:r.matchId,decisionId:'two',choice:'go'});assert.equal(r.phase,'battle');assert.equal(r.goCount,1);assert.equal(r.goTarget,2);
+  a.score=81;r.highScore=81;r.goCount=2;a.goHits=2;r.decision={id:'three',playerId:a.id,startedAt:Date.now(),expiresAt:0};game.choice(a,{matchId:r.matchId,decisionId:'three',choice:'go'});assert.equal(r.phase,'battle');assert.equal(a.score,81);game.tick();assert.equal(r.phase,'battle');game.finish(r,'stop');assert.equal(r.winner,a.id);assert.equal(a.reward,750);assert.equal(b.reward,0);const points=a.points;game.tick();assert.equal(a.points,points);
  }
 });
 test('restored battle at three Go remains playable and result state is resent on heartbeat',()=>{
@@ -37,7 +37,7 @@ test('restored battle at three Go remains playable and result state is resent on
  fresh.finish(room,'manual');const peer=socket(),p=fresh.hello(peer,a.token,'ignored'),points=p.points;peer.messages=[];fresh.handle(p,{type:'ping'});assert.equal(peer.messages.find(m=>m.type==='state')?.room.phase,'result');assert.equal(p.points,points);
 });
 test('AI stop probability uses integer percent and reacts to lead, hand and exhausted deck',()=>{
- const state={score:40,rivals:[25],handCount:5,deckAvailable:true,goCount:0,difficulty:'normal' as const};assert.equal(aiStopChance(state),30);assert.equal(Array.from({length:100},(_,roll)=>aiGoChoice(state,roll)).filter(x=>x==='stop').length,30);assert.equal(aiStopChance({...state,goCount:1}),48);assert.ok(aiStopChance({...state,handCount:0,deckAvailable:false})>30);assert.equal(aiGoChoice({...state,goCount:2},0),'go');
+ const state={score:40,rivals:[25],handCount:5,deckAvailable:true,goCount:0,difficulty:'normal' as const};assert.equal(aiStopChance(state),30);assert.equal(Array.from({length:100},(_,roll)=>aiGoChoice(state,roll)).filter(x=>x==='stop').length,30);assert.equal(aiStopChance({...state,goCount:1}),30);assert.equal(aiStopChance({...state,goCount:2}),48);assert.equal(aiGoChoice({...state,goCount:3},99),'stop');assert.ok(aiStopChance({...state,handCount:0,deckAvailable:false})>30);assert.equal(aiGoChoice({...state,goCount:2},0),'go');
 });
 test('score sounds follow every score beat and never catch up by replaying old beats',()=>{
  assert.deepEqual(scoreChimeDelays(1000,900,3,1000),[.3,.6,.9]);assert.deepEqual(scoreChimeDelays(1000,900,3,1500),[.1,.4]);assert.deepEqual(scoreChimeDelays(1000,900,3,3000),[]);

@@ -14,7 +14,7 @@ test('Go benefits belong only to the caller and a new caller halves the prior ca
  let now=100000;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
  const score=(p:typeof a)=>{p.hand=scoringHand();p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
  score(a);assert.equal(a.score,26);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.leaderId,a.id);
- score(a);assert.equal(a.judgment?.goBonus,3);assert.equal(a.score,55);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,2);
+ score(a);assert.equal(a.judgment?.goBonus,6);assert.equal(a.score,58);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,2);
  a.score=27;r.highScore=27;b.score=2;score(b);assert.equal(b.score,28);assert.equal(r.decision?.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});
  assert.equal(r.leaderId,b.id);assert.equal(r.goCount,1);assert.equal(a.score,13);assert.equal(a.calledGo,false);assert.equal(b.calledGo,true);
 });

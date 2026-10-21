@@ -67,6 +67,12 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
   if(r.phase==='battle'&&r.nextDealAt>Date.now()+game.dealMs)r.nextDealAt=Date.now()+game.dealMs;
   if(game.durationMs===0&&['reveal','dealing','battle'].includes(r.phase)){if(!r.finalRound)r.endsAt=0;r.expiresAt=0;}
   if(r.decision&&!players.get(r.decision.playerId)?.ai&&r.decision.expiresAt<=0)r.decision.expiresAt=(r.decision.startedAt||Date.now())+game.humanDecisionMs;
+  if((r.rulesVersion??0)<4&&['battle','dealing'].includes(r.phase)){
+   const oldCount=r.goCount,leader=players.get(r.leaderId??'');if(leader)leader.goHits=Math.min(3,oldCount);
+   r.goTarget=oldCount?Math.min(3,oldCount+1):undefined;
+   if(r.decision){const scorer=players.get(r.decision.playerId);if(scorer){const same=r.leaderId===scorer.id;scorer.goHits=Math.min(3,same?oldCount+1:1);r.decision.previousLeaderId=same?undefined:r.leaderId;r.leaderId=scorer.id;r.goCount=scorer.goHits;if(!same)r.goTarget=undefined;}}
+   r.rulesVersion=4;
+  }
   r.deck=r.deck.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
   r.discard=r.discard.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
   if(r.exchange){const owners=[players.get(r.exchange.fromId),players.get(r.exchange.toId)];if(owners.some((p,i)=>!p||![...p.hand,...(p.playedSentences??[]).flat(),...(p.lastPlayed??[])].some(c=>c.id===(i?r.exchange!.wantedId:r.exchange!.offerId))))r.exchange=undefined;}
