@@ -100,5 +100,5 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
  .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers b{font-size:10px}
  .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers small{font-size:9px}
  .hub-shop .store-box-rows>article[data-box=diamond] .store-offers{display:flex;overflow-x:auto;gap:4px;scrollbar-width:thin}
- .hub-shop .store-box-rows>article[data-box=diamond] .store-offers>button{flex:0 0 calc(50% - 2px);min-height:50px;padding:5px 2px}
+ .hub-shop .store-box-rows>article[data-box=diamond] .store-offers>button{flex:0 0 calc(40% - 2px);min-height:50px;padding:5px 1px;white-space:normal}
 }

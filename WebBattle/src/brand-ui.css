@@ -185,6 +185,13 @@ html:has(.match-screen),body:has(.match-screen),html:has(.result),body:has(.resu
  .opponent-preview-heading button{position:absolute;right:9px;width:30px;height:30px;font-size:21px}
  .opponent-preview-scroll{padding-top:4px}
 }
+/* The dialog's header and card list share one vertical column, including short phones. */
+.opponent-preview-backdrop{left:var(--game-left,0px);top:var(--game-top,0px);right:auto;bottom:auto;width:var(--game-width,100vw);height:var(--game-height,100dvh);box-sizing:border-box}
+.opponent-preview-backdrop .opponent-field-preview{flex-direction:column;max-width:100%;max-height:100%;box-sizing:border-box}
+.opponent-preview-heading{width:100%;min-width:0;box-sizing:border-box}
+.opponent-preview-heading>div{min-width:0;overflow:hidden}
+.opponent-preview-heading b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opponent-preview-scroll{width:100%;min-width:0;box-sizing:border-box}
 
 /* Practice shares the real hand fan and full card faces with battle. */
 .practice-shell{position:fixed;left:var(--game-left,0px);top:var(--game-top,0px);width:var(--game-width,100vw);height:var(--game-height,100dvh);max-width:none;overflow:hidden;padding:0!important}
