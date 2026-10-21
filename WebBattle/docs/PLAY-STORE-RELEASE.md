@@ -10,7 +10,8 @@
 | 가격 | 무료 |
 | 기본 언어 | 한국어 (`ko-KR`) |
 | 개인정보처리방침 | `https://logos-card-battle.netlify.app/privacy.html` |
-| 지원 페이지 | `https://logos-card-battle.netlify.app/about.html` |
+| 지원 페이지 | `https://logos-card-battle.netlify.app/support.html` |
+| 계정 삭제 요청 URL | `https://logos-card-battle.netlify.app/account-delete.html` |
 | 지원 이메일 | `leesangjin2372@gmail.com` |
 | 출시 버전 | Android `versionCode 1`, `versionName 1.0` |
 
@@ -61,6 +62,7 @@ Play App Signing 화면에서 **앱 서명 인증서 SHA-1**을 복사해 Google
 - **연령 및 콘텐츠 등급**: 교육용 영어 문법 게임의 실제 기능 기준으로 설문한다.
 - **데이터 보안**: 계정 ID, 표시 이름, 게임 진행/재화/레이팅, 친구·대전 정보 및 로그인 식별자 해시를 서버에 저장한다. Google·Apple 토큰, 비밀번호 원문, 이메일은 저장하지 않는다. 전송은 HTTPS/WSS로 보호한다. `privacy.html` 내용과 Console 답변을 일치시킨다.
 - **개인정보처리방침**: 위 운영 URL을 등록한다.
+- **계정 삭제**: 앱 설정의 개인정보 · 회원 탈퇴 · 문의에서 인증된 본인 계정을 직접 삭제할 수 있다. 외부 삭제 요청 URL은 위 `account-delete.html`을 등록하며, 앱에 접속할 수 없는 이용자는 미리 작성된 메일로 요청할 수 있다. 외부 요청은 운영자가 본인 확인 후 처리한다. 실제 Android AAB에서도 설정과 메일 앱 연결을 확인한다.
 
 ## 출시 전 검증
 

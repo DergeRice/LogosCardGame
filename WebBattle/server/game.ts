@@ -1,3 +1,4 @@
+import {deleteGameAccount} from './accountDeletion.js';
 import {renameNickname} from './nickname.js';
 import {BASIC_PROFILES,basicProfile} from '../shared/profiles.js';
 import {showcaseFrame} from '../shared/store.js';
@@ -17,11 +18,11 @@ type WebSocket = GameSocket;
 import { judgeCards, DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 
-type Player = {goHits?:number; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
+type Player = {deleted?:boolean;goHits?:number; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
 type Room = {goTarget?:number; forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
-type Options = { auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
+type Options = {purgePlayerAudit?:(ids:string[])=>void; auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 function shuffle<T>(items: T[]): T[] { for (let i = items.length - 1; i > 0; i--) { const j = randomInt(i + 1); [items[i], items[j]] = [items[j], items[i]]; } return items; }
 
@@ -34,18 +35,20 @@ function applyGoBenefit(judgment:Judgment,go:number){
  return judgment;
 }
 export class Game {
+ purgePlayerAudit?: (ids:string[])=>void;
  community=new Community(this);
  auditSink?: (event:AuditEvent)=>void; audits:AuditEvent[]=[]; telemetryAt=new Map<string,number>();
  minimumPlayers = RULES.minPlayers;
  rooms = new Map<string, Room>(); sessions = new Map<string, Player>();
  accounts = new Map<string,Account>(); accountSessions = new Map<string,AccountSession>();
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number; humanDecisionMs:number;
- constructor(options: Options = {}) { this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 30 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs;this.humanDecisionMs=options.humanDecisionMs??RULES.humanDecisionSeconds*1000; }
+ constructor(options: Options = {}) { this.purgePlayerAudit=options.purgePlayerAudit; this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 30 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs;this.humanDecisionMs=options.humanDecisionMs??RULES.humanDecisionSeconds*1000; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
  audit(p:Player|undefined,event:string,level:AuditEvent['level']='info',details:Record<string,unknown>={},overrideRoom?:Room,submittedCards?:readonly Card[]){
+  if(p?.deleted)return;
   const r=overrideRoom??(p?.room?this.rooms.get(p.room):undefined);
   const record=makeAudit(event,level,{player:p?.name??'',playerId:p?.id??'',room:r?.code??p?.room??'',matchId:r?.matchId??''},safeDetails(details));
-  record.details={...record.details,serverBuild:BUILD_VERSION,serverPhase:r?.phase,submittedCards:submittedCards?.map(c=>({...c})),...(p?{actorAI:Boolean(p.ai),serverPhase:r?.phase,serverHandVersion:p.handVersion,cooldownMs:Math.max(0,p.actionAt-Date.now()),decision:r?.decision?.playerId,selectedCards:Array.isArray(details.cards)?details.cards.slice(0,15).map(id=>[...p.hand,...fieldCards(p)].find(c=>c.id===id)).filter(Boolean):undefined}:{})};
+  record.details={...record.details,serverBuild:BUILD_VERSION,serverPhase:r?.phase,submittedCards:submittedCards?.map(c=>({...c})),...(p?{actorAI:Boolean(p.ai),actorAccountId:p.accountId,serverPhase:r?.phase,serverHandVersion:p.handVersion,cooldownMs:Math.max(0,p.actionAt-Date.now()),decision:r?.decision?.playerId,selectedCards:Array.isArray(details.cards)?details.cards.slice(0,15).map(id=>[...p.hand,...fieldCards(p)].find(c=>c.id===id)).filter(Boolean):undefined}:{})};
   if(this.auditSink)this.auditSink(record);else{this.audits.push(record);if(this.audits.length>5000)this.audits.shift();}
  }
  fail(p: Player, message: string, requestId?: string) { this.audit(p,'rejected','warn',{reason:message,requestId});this.send(p.socket, { type: 'error', message, requestId });const r=p.room&&this.rooms.get(p.room);if(requestId&&r)this.send(p.socket,{type:'state',room:this.view(r,p)}); }
@@ -101,6 +104,7 @@ export class Game {
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
   this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
  }
+ clearAuthReturns(ids:string[]){for(const id of ids)this.googleReturns.delete(id);}
  private googleReturns=new Map<string,{identity:{sub:string;name?:string};socket:GameSocket|undefined;expires:number}>();
  confirmGoogleReturn(p:Player,accept:unknown){
   const pending=this.googleReturns.get(p.id);this.googleReturns.delete(p.id);
@@ -393,7 +397,7 @@ export class Game {
   vote.approved.push(p.id);this.send(p.socket,{type:'ack',voteId:vote.id});
   if(vote.approved.length===r.players.length)this.distribute(r,'unanimous');else this.broadcast(r);
  }
- botEmotion(p:Player,event:EmotionEvent){const r=p.room&&this.rooms.get(p.room);if(!p.ai||!r||r.phase!=='battle'||Date.now()-(p.reactionAt??0)<8000)return;const emoji=aiEmote(event,p.emoteLoadout??AI_EMOTE_LOADOUTS[0]);if(emoji){p.reactionAt=Date.now();p.reaction={id:randomUUID(),emoji:emoji as Reaction,at:Date.now()};return true;}}
+ botEmotion(p:Player,event:EmotionEvent,roll=randomInt(100)){const r=p.room&&this.rooms.get(p.room);if(!p.ai||!r||r.phase!=='battle'||Date.now()-(p.reactionAt??0)<8000||roll>=20)return;const emoji=aiEmote(event,p.emoteLoadout??AI_EMOTE_LOADOUTS[0]);if(emoji){p.reactionAt=Date.now();p.reaction={id:randomUUID(),emoji:emoji as Reaction,at:Date.now()};return true;}}
  react(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room);
   if(!r||r.phase!=='battle'||msg.matchId!==r.matchId)return this.fail(p,'대전 중에만 감정표현을 보낼 수 있어요.');
@@ -567,6 +571,8 @@ export class Game {
   this.send(p.socket, { type: 'ack', requestId: msg.requestId });this.broadcast(r);
  }
  handle(p: Player, msg: Record<string, unknown>) {
+  if(p.deleted)return;
+  if(msg.type==='deleteAccount')return deleteGameAccount(this,p,msg);
   if(msg.type==='googleReturnConfirm'){this.confirmGoogleReturn(p,msg.accept);return;}
   if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'||msg.code==='AUDIO_FAILURE'?'warn':'info',msg);}return;}
   p.touchedAt = Date.now(); this.tick();
