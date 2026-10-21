@@ -5,17 +5,17 @@ import {Game} from '../server/game.js';
 import {matchGold} from '../shared/matchRewards.js';
 import {type Card} from '../shared/rules.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}});
-const scoringHand=():Card[]=>[
- {id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:'verb'},
- {id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:'count',variant:'count-plus3'},
- {id:randomUUID(),kind:'adjective',variant:'adjective-plus3'}
+const scoringHand=(points=26):Card[]=>[
+ {id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:points===28?'be':'verb',variant:points===28?'be-plus3':undefined},
+ {id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:'count',variant:points===20?undefined:'count-plus3'},
+ {id:randomUUID(),kind:points===28?'adverb':'adjective',variant:points===28?'adverb-plus2':points===26?'adjective-plus3':undefined}
 ];
 test('Go benefits belong only to the caller and a new caller halves the prior caller',t=>{
  let now=100000;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
- const score=(p:typeof a)=>{p.hand=scoringHand();p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
- score(a);assert.equal(a.score,26);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.leaderId,a.id);
- score(a);assert.equal(a.judgment?.goBonus,6);assert.equal(a.score,58);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,2);
- a.score=27;r.highScore=27;b.score=2;score(b);assert.equal(b.score,28);assert.equal(r.decision?.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});
+ const score=(p:typeof a,points=26)=>{p.hand=scoringHand(points);p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
+ score(a,20);assert.equal(a.score,20);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.leaderId,a.id);
+ score(a,20);assert.equal(a.judgment?.goBonus,6);assert.equal(a.score,46);game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,2);
+ a.score=27;r.highScore=27;b.score=2;score(b,28);assert.equal(b.score,30);assert.equal(r.decision?.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});
  assert.equal(r.leaderId,b.id);assert.equal(r.goCount,1);assert.equal(a.score,13);assert.equal(a.calledGo,false);assert.equal(b.calledGo,true);
 });
 test('Go rank points and gold use the winner Go level and final sentence card count',()=>{

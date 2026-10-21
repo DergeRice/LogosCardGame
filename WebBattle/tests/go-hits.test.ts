@@ -25,3 +25,27 @@ test('legacy pending first effective hit migrates to 1GO once without granting c
  const count=a.hand.length,deck=r.deck.length,fresh=new Game();restore(fresh,snapshot(g));const room=fresh.rooms.get(r.code)!,p=fresh.sessions.get(a.token)!;assert.equal(room.goCount,1);assert.equal(p.goHits,1);assert.equal(room.leaderId,p.id);assert.equal(p.hand.length,count);assert.equal(room.deck.length,deck);
  const twice=new Game();restore(twice,snapshot(fresh));assert.equal(twice.rooms.get(r.code)!.goCount,1);assert.equal(twice.sessions.get(a.token)!.goHits,1);
 });
+test('23, 20, 25, 28 compare single hits across players while counting each player separately',t=>{
+ let now=1e6;t.mock.method(Date,'now',()=>now);
+ const g=new Game({minimumPlayers:3}),a=g.hello(socket(),null,'Player 1'),b=g.hello(socket(),null,'Player 2'),c=g.hello(socket(),null,'Player 3');
+ for(const p of [a,b,c])g.quick(p);
+ const r=g.rooms.get(a.room!)!;g.reveal(r);g.begin(r);const decision=()=>g.rooms.get(r.code)?.decision;
+ const submit=(p:typeof a,verb:'verb'|'be',noun:'count',ending:'adjective'|'adverb'|'preposition',variants:{verb?:string;noun?:string;ending?:string})=>{
+  p.hand=[{id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'},{id:randomUUID(),kind:verb,variant:variants.verb},{id:randomUUID(),kind:'article',variant:'article-x2'},{id:randomUUID(),kind:noun,variant:variants.noun},{id:randomUUID(),kind:ending,variant:variants.ending}];
+  p.handVersion++;now+=1600;g.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(card=>card.id)});
+  return p.judgment?.awardedPoints;
+ };
+ assert.equal(submit(a,'verb','count','adjective',{ending:'adjective-plus3'}),23);
+ assert.equal(a.goHits,1);assert.equal(r.highHitScore,23);assert.equal(decision()?.playerId,a.id);assert.equal(r.goCount,1);
+ const records=snapshot(g),restored=new Game();restore(restored,records);assert.equal(restored.rooms.get(r.code)?.highHitScore,23);
+ const olderRoom=JSON.parse(records.get('room:'+r.code)!);delete olderRoom.highHitScore;records.set('room:'+r.code,JSON.stringify(olderRoom));const migrated=new Game();restore(migrated,records);assert.equal(migrated.rooms.get(r.code)?.highHitScore,23);
+ g.choice(a,{matchId:r.matchId,decisionId:decision()!.id,choice:'go'});assert.equal(r.goTarget,2);
+ assert.equal(submit(b,'verb','count','adjective',{}),20);
+ assert.equal(b.score,20);assert.equal(b.goHits,0);assert.equal(r.highHitScore,23);assert.equal(decision(),undefined);
+ assert.equal(submit(a,'verb','count','preposition',{noun:'count-plus3'}),25);
+ assert.equal(a.goHits,2);assert.equal(r.highHitScore,25);assert.equal(decision()?.playerId,a.id);assert.equal(r.goCount,2);
+ g.choice(a,{matchId:r.matchId,decisionId:decision()!.id,choice:'go'});assert.equal(r.goTarget,3);
+ assert.equal(submit(c,'be','count','adverb',{verb:'be-plus3',noun:'count-plus3',ending:'adverb-plus2'}),28);
+ assert.equal(c.goHits,1);assert.equal(r.highHitScore,28);assert.equal(decision()?.playerId,c.id);assert.equal(r.goCount,1);
+ assert.equal(a.score,48);assert.equal(r.highScore,48);
+});

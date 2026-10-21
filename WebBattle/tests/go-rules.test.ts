@@ -5,11 +5,11 @@ import type { WebSocket } from 'ws';
 import { Game } from '../server/game.js';
 import { DECK_FACES,cardFace,faceKey,judgeCards,type Card } from '../shared/rules.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){}} as unknown as WebSocket);
-const fixture=(mode:20|26|13):Card[]=>[
- {id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'}, {id:randomUUID(),kind:'verb'},
+const fixture=(mode:20|26|13|28):Card[]=>[
+ {id:randomUUID(),kind:'pronoun',variant:'pronoun-x2'}, {id:randomUUID(),kind:mode===28?'be':'verb',variant:mode===28?'be-plus3':undefined},
  {id:randomUUID(),kind:'article',variant:mode===13?undefined:'article-x2'},
  {id:randomUUID(),kind:'count',variant:mode===20?undefined:'count-plus3'},
- {id:randomUUID(),kind:'adjective',variant:mode===26?'adjective-plus3':undefined}
+ {id:randomUUID(),kind:mode===28?'adverb':'adjective',variant:mode===28?'adverb-plus2':mode===26?'adjective-plus3':undefined}
 ];
 test('controlled single-recipient fixture: hand retains more than 20 cards without a cap',()=>{
  const game=new Game({minimumPlayers:2}),p=game.hello(socket(),null,'Hand capacity');game.quick(p);const r=game.rooms.get(p.room!)!;game.reveal(r);
@@ -32,9 +32,9 @@ test('low scores accumulate and a twenty-point effective hit opens 2GO once',t=>
 
 test('controlled fixtures: Go authority, takeover and one-time settlement preserved',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2,durationMs:90000}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
- const submit=(p:typeof a,mode:20|26|13)=>{p.hand=fixture(mode);p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
+ const submit=(p:typeof a,mode:20|26|13|28)=>{p.hand=fixture(mode);p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
  submit(a,26);const end=r.endsAt;now+=300;game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.endsAt,end);assert.equal(r.leaderId,a.id);assert.equal(r.goCount,1);
- a.score=27;r.highScore=27;b.score=2;submit(b,26);assert.equal(b.score,28);assert.equal(r.decision!.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.leaderId,b.id);assert.equal(a.score,13);
+ a.score=27;r.highScore=27;b.score=2;submit(b,28);assert.equal(b.score,30);assert.equal(r.decision!.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.leaderId,b.id);assert.equal(a.score,13);
  game.finish(r,'settle');assert.equal(r.winner,b.id);assert.equal(b.reward,250);const points=b.points;game.finish(r,'duplicate');assert.equal(b.points,points);
 });
 test('human 20+ score gets a bounded choice and settles once if the phone suspends it',t=>{

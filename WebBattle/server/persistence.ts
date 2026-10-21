@@ -74,6 +74,12 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
    if(r.decision){const scorer=players.get(r.decision.playerId);if(scorer){const same=r.leaderId===scorer.id;scorer.goHits=Math.min(3,same?oldCount+1:1);r.decision.previousLeaderId=same?undefined:r.leaderId;r.leaderId=scorer.id;r.goCount=scorer.goHits;if(!same)r.goTarget=undefined;}}
    r.rulesVersion=4;
   }
+  // Rooms created before hit records were persisted still need the best single
+  // accepted score, not the cumulative scoreboard total, after a worker update.
+  r.highHitScore??=Math.max(0,...r.players.flatMap(id=>{
+   const player=players.get(id);
+   return [...(player?.scoreClaims??[]).map(claim=>claim.points),player?.judgment?.awardedPoints??0];
+  }).filter(points=>points>=20));
   if((r.countdownVersion??0)<1&&r.phase==='battle'){
    const exhausted=r.deck.length<r.players.length,hasGo=r.players.some(id=>(players.get(id)?.goHits??0)>0);
    if(r.finalRound||exhausted||hasGo){r.countdownStartedAt=Date.now();r.endsAt=r.endsAt>0?Math.min(r.endsAt,Date.now()+MATCH_COUNTDOWN_MS):Date.now()+MATCH_COUNTDOWN_MS;if(exhausted){r.finalRound=true;r.nextDealAt=0;r.drawVote=undefined;}}
