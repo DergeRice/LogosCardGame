@@ -26,13 +26,18 @@ test('ROB inspection shows every opponent hand and field card in one private res
  const {game,a,b,r}=setup(),third=game.newPlayer('C'),sentA:any[]=[],sentB:any[]=[];
  third.room=r.code;third.socket=socket();r.players.push(third);
  a.socket={...socket(),send(data:string){sentA.push(JSON.parse(data));}};b.socket={...socket(),send(data:string){sentB.push(JSON.parse(data));}};
- const rob=card('rob'),handB=card('verb'),fieldB=card('mass'),handC=card('adjective');a.hand=[rob];b.hand=[handB];b.lastPlayed=[fieldB];third.hand=[handC];
+ const rob=card('rob'),handB=card('verb'),fieldB=card('mass'),storedB=card('adjective'),handC=card('adjective');a.hand=[rob];b.hand=[handB];b.lastPlayed=[fieldB];b.storage=[storedB];third.hand=[handC];
  game.inspectRob(a,{matchId:r.matchId,cardId:rob.id});const peek=sentA.at(-1);
  assert.equal(peek.type,'robView');assert.deepEqual(peek.players.map((p:any)=>p.id),[b.id,third.id]);
- assert.deepEqual(peek.players[0].cards.map((c:any)=>[c.id,c.source]),[[handB.id,'hand'],[fieldB.id,'field']]);
+ assert.deepEqual(peek.players[0].cards.map((c:any)=>[c.id,c.source]),[[handB.id,'hand'],[fieldB.id,'field'],[storedB.id,'storage']]);
  assert.deepEqual(peek.players[1].cards.map((c:any)=>[c.id,c.source]),[[handC.id,'hand']]);
  assert.equal(sentB.some(m=>m.type==='robView'),false);
  game.inspectRob(b,{matchId:r.matchId,cardId:rob.id});assert.match(sentB.at(-1).message,/ROB/);
+});
+test('ROB can take a storage card using its storage version and removes it from the owner storage',()=>{
+ const {game,a,b,r}=setup(),rob=card('rob'),stored=card('verb');a.hand=[rob];b.storage=[stored];b.storageVersion=4;
+ use(game,a,r,rob,{targetId:b.id,stealId:stored.id,stealSource:'storage',targetStorageVersion:3});assert.deepEqual(a.hand,[rob]);assert.deepEqual(b.storage,[stored]);
+ use(game,a,r,rob,{targetId:b.id,stealId:stored.id,stealSource:'storage',targetStorageVersion:4});assert.equal(a.hand.at(-1)?.id,stored.id);assert.deepEqual(b.storage,[]);assert.equal(b.storageVersion,5);assert.equal(game.view(r,b).robNotices?.[0].source,'storage');
 });
 test('ROB moves a field card to attacker hand, removes it from board/history/discard, keeps earned score',()=>{
  const {game,a,b,r}=setup();const rob=card('rob'),field=card('verb');a.hand=[rob];b.hand=[];b.lastPlayed=[field];b.playedSentences=[[field]];b.score=26;b.fieldVersion=1;r.discard=[field];

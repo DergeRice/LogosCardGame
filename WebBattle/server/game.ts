@@ -427,7 +427,7 @@ export class Game {
   if(!r||r.phase!=='battle'||msg.matchId!==r.matchId||r.decision)return this.fail(p,'지금은 ROB 대상을 볼 수 없어요.');
   const card=p.hand.find(c=>c.id===msg.cardId&&c.kind==='rob');
   if(!card)return this.fail(p,'ROB 카드를 가지고 있어야 해요.');
-  this.send(p.socket,{type:'robView',matchId:r.matchId,cardId:card.id,players:r.players.filter(x=>x!==p).map(x=>({id:x.id,name:x.name,avatar:x.avatar,connected:Boolean(x.ai||x.socket?.readyState===1),handVersion:x.handVersion,fieldVersion:x.fieldVersion??0,protected:x.hand.some(c=>c.kind==='protect'),cards:x.hand.some(c=>c.kind==='protect')?[]:[...x.hand.filter(canTransferCard).map(c=>({...c,source:'hand' as const})),...fieldCards(x).filter(canTransferCard).map(c=>({...c,source:'field' as const}))]}))});
+  this.send(p.socket,{type:'robView',matchId:r.matchId,cardId:card.id,players:r.players.filter(x=>x!==p).map(x=>({id:x.id,name:x.name,avatar:x.avatar,connected:Boolean(x.ai||x.socket?.readyState===1),handVersion:x.handVersion,fieldVersion:x.fieldVersion??0,storageVersion:x.storageVersion??0,protected:x.hand.some(c=>c.kind==='protect'),cards:x.hand.some(c=>c.kind==='protect')?[]:[...x.hand.filter(canTransferCard).map(c=>({...c,source:'hand' as const})),...fieldCards(x).filter(canTransferCard).map(c=>({...c,source:'field' as const})),...(x.storage??[]).filter(canTransferCard).map(c=>({...c,source:'storage' as const}))]}))});
  }
  inspectExchange(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room);
@@ -444,15 +444,15 @@ export class Game {
   if(!card||!['get2','get3','rob','exchange'].includes(card.kind))return this.fail(p,'사용할 수 있는 기능 카드가 없어요.',id);
   if(r.exchange?.fromId===p.id&&r.exchange.offerId===card.id)return this.fail(p,'교환 요청 중인 카드는 사용할 수 없어요.',id);
   if(card.kind==='exchange'&&r.exchange)return this.fail(p,'이미 교환 요청이 진행 중이에요.',id);
-  if(card.kind==='rob'&&(!target||(!target.ai&&target.socket?.readyState!==1)||!(target.hand.length||fieldCards(target).length)))return this.fail(p,'카드를 가진 상대를 선택해 주세요.',id);
+  if(card.kind==='rob'&&(!target||(!target.ai&&target.socket?.readyState!==1)||!(target.hand.length||fieldCards(target).length||(target.storage?.length??0))))return this.fail(p,'카드를 가진 상대를 선택해 주세요.',id);
   if(card.kind==='exchange'&&(!target||(!target.ai&&target.socket?.readyState!==1)||!(target.hand.length||fieldCards(target).length)))return this.fail(p,'카드를 가진 상대를 선택해 주세요.',id);
-  if(card.kind==='rob'&&(!target||typeof msg.stealId!=='string'||(msg.stealSource!=='hand'&&msg.stealSource!=='field')||(msg.stealSource==='hand'&&(msg.targetHandVersion!==target.handVersion||!target.hand.some(c=>c.id===msg.stealId)))||(msg.stealSource==='field'&&(msg.targetFieldVersion!==(target.fieldVersion??0)||!fieldCards(target).some(c=>c.id===msg.stealId)||!r.discard.some(c=>c.id===msg.stealId)))))return this.fail(p,'상대 카드가 바뀌었어요. ROB 대상을 다시 확인해 주세요.',id);
+  if(card.kind==='rob'&&(!target||typeof msg.stealId!=='string'||(msg.stealSource!=='hand'&&msg.stealSource!=='field'&&msg.stealSource!=='storage')||(msg.stealSource==='hand'&&(msg.targetHandVersion!==target.handVersion||!target.hand.some(c=>c.id===msg.stealId)))||(msg.stealSource==='storage'&&(msg.targetStorageVersion!==(target.storageVersion??0)||!(target.storage??[]).some(c=>c.id===msg.stealId)))||(msg.stealSource==='field'&&(msg.targetFieldVersion!==(target.fieldVersion??0)||!fieldCards(target).some(c=>c.id===msg.stealId)||!r.discard.some(c=>c.id===msg.stealId)))))return this.fail(p,'상대 카드가 바뀌었어요. ROB 대상을 다시 확인해 주세요.',id);
   if(card.kind==='exchange'&&(typeof msg.offerId!=='string'||msg.offerId===card.id||![...p.hand,...fieldCards(p)].some(c=>c.id===msg.offerId)))return this.fail(p,'교환할 내 카드 한 장을 골라 주세요.',id);
   if(card.kind==='exchange'&&(!target||msg.targetHandVersion!==target.handVersion||(fieldCards(target).some(c=>c.id===msg.wantedId)&&msg.targetFieldVersion!==(target.fieldVersion??0))||typeof msg.wantedId!=='string'||![...target.hand,...fieldCards(target)].some(c=>c.id===msg.wantedId)))return this.fail(p,'상대 카드가 바뀌었어요. 교환할 카드를 다시 확인해 주세요.',id);
-  if(card.kind==='rob'&&target&&!([...target.hand,...fieldCards(target)].some(c=>c.id===msg.stealId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT·Nothing 카드는 뺏을 수 없어요.',id);
+  if(card.kind==='rob'&&target&&!([...target.hand,...fieldCards(target),...(target.storage??[])].some(c=>c.id===msg.stealId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT·Nothing 카드는 뺏을 수 없어요.',id);
   if(card.kind==='exchange'&&(![...p.hand,...fieldCards(p)].some(c=>c.id===msg.offerId&&canTransferCard(c))||!target||![...target.hand,...fieldCards(target)].some(c=>c.id===msg.wantedId&&canTransferCard(c))))return this.fail(p,'ROB·EXCHANGE·PROTECT·Nothing 카드는 교환할 수 없어요.',id);
   if((card.kind==='get2'||card.kind==='get3')&&!r.deck.length)return this.fail(p,'공용 덱이 비었어요.',id);
-  const specialCards=[card,...[msg.offerId,msg.wantedId,msg.stealId].flatMap(id=>{const found=r.players.flatMap(x=>[...x.hand,...fieldCards(x)]).find(c=>c.id===id);return found?[found]:[];})];
+  const specialCards=[card,...[msg.offerId,msg.wantedId,msg.stealId].flatMap(id=>{const found=r.players.flatMap(x=>[...x.hand,...fieldCards(x),...(x.storage??[])]).find(c=>c.id===id);return found?[found]:[];})];
   p.seen.add(id);if(p.seen.size>256)p.seen.delete(p.seen.values().next().value!);
   const blocked=card.kind==='rob'&&target?.hand.some(c=>c.kind==='protect');
   if(!blocked){p.hand=p.hand.filter(c=>c.id!==card.id);p.handVersion++;r.discard.push(card);}p.actionAt=Date.now()+RULES.actionCooldownMs;
@@ -464,15 +464,18 @@ export class Game {
    if(target.hand.some(c=>c.kind==='protect')){this.log(r,`${p.name} 님의 ROB을 ${target.name} 님의 PROTECT가 막았어요.`);p.lastAction={id:randomUUID(),text:'PROTECT에 막혔어요!'};target.lastAction={id:randomUUID(),text:'ROB 방어 성공!'};}
    else{
     let stolen:Card;
-    if(msg.stealSource==='field'){
+    if(msg.stealSource==='storage'){
+     stolen=target.storage!.splice(target.storage!.findIndex(c=>c.id===msg.stealId),1)[0];
+     target.storageVersion=(target.storageVersion??0)+1;
+    }else if(msg.stealSource==='field'){
      stolen=r.discard.splice(r.discard.findIndex(c=>c.id===msg.stealId),1)[0];
      target.lastPlayed=(target.lastPlayed??[]).filter(c=>c.id!==stolen.id);
      target.playedSentences=(target.playedSentences??[]).map(sentence=>sentence.filter(c=>c.id!==stolen.id)).filter(sentence=>sentence.length);
      target.fieldVersion=(target.fieldVersion??0)+1;
     }else{stolen=target.hand.splice(target.hand.findIndex(c=>c.id===msg.stealId),1)[0];target.handVersion++;target.draftIds=(target.draftIds??[]).filter(id=>id!==stolen.id);}
     p.hand.push(stolen);p.handVersion++;this.receivedCards(p);
-    target.robNotices=[...(target.robNotices??[]),{id:randomUUID(),fromId:p.id,fromName:p.name,fromAvatar:p.avatar,fromProfileId:p.ai?(p.profileId??fallbackAIProfile(p.id)):this.community.record(p).store.profile,fromCharacterId:p.ai?undefined:this.community.record(p).store.character,fromFrameId:p.ai?showcaseFrame(Math.max(0,Number(p.name.match(/\d+/)?.[0]??1)-1)):this.community.record(p).store.frame,card:{...stolen},source:msg.stealSource as "hand"|"field"}].slice(-8);
-    this.botEmotion(target,'robbed');this.log(r,`${p.name} 님이 ${target.name} 님의 ${msg.stealSource==='field'?'필드':'손패'}에서 ${stolen.kind} 카드 1장을 뺏었어요.`);p.lastAction={id:randomUUID(),text:`${target.name}님의 카드 1장 ROB!`,flights:[{fromId:target.id,toId:p.id,card:stolen}]};
+    target.robNotices=[...(target.robNotices??[]),{id:randomUUID(),fromId:p.id,fromName:p.name,fromAvatar:p.avatar,fromProfileId:p.ai?(p.profileId??fallbackAIProfile(p.id)):this.community.record(p).store.profile,fromCharacterId:p.ai?undefined:this.community.record(p).store.character,fromFrameId:p.ai?showcaseFrame(Math.max(0,Number(p.name.match(/\d+/)?.[0]??1)-1)):this.community.record(p).store.frame,card:{...stolen},source:msg.stealSource as "hand"|"field"|"storage"}].slice(-8);
+    this.botEmotion(target,'robbed');this.log(r,`${p.name} 님이 ${target.name} 님의 ${msg.stealSource==='field'?'필드':msg.stealSource==='storage'?'보관함':'손패'}에서 ${stolen.kind} 카드 1장을 뺏었어요.`);p.lastAction={id:randomUUID(),text:`${target.name}님의 카드 1장 ROB!`,flights:[{fromId:target.id,toId:p.id,card:stolen}]};
     target.lastAction={id:randomUUID(),text:'카드를 빼앗겼어요!'};
    }
   }else if(card.kind==='exchange'&&target){
@@ -500,16 +503,16 @@ export class Game {
   const blank=p.hand.find(c=>c.kind==='nothing');
   if(blank&&Date.now()>=p.actionAt){this.discardCard(p,{matchId:r.matchId,cardId:blank.id,handVersion:p.handVersion,requestId:randomUUID()});return true;}
   const usable=p.hand.find(c=>(c.kind==='get2'||c.kind==='get3')&&r.deck.length);
-  const rivals=r.players.filter(x=>x!==p&&[...x.hand,...fieldCards(x)].some(canTransferCard)&&(!x.ai?x.socket?.readyState===1:true));
+  const rivals=r.players.filter(x=>x!==p&&[...x.hand,...fieldCards(x),...(x.storage??[])].some(canTransferCard)&&(!x.ai?x.socket?.readyState===1:true));
   const target=rivals[randomInt(Math.max(1,rivals.length))];
   const action=usable??(target&&p.hand.find(c=>c.kind==='rob'||c.kind==='exchange'));
   if(!action)return false;
   const offer=action.kind==='exchange'?p.hand.find(c=>c.id!==action.id&&canTransferCard(c)):undefined;
   if(action.kind==='exchange'&&(!offer||r.exchange||!target?.hand.length))return false;
-  const robOptions=action.kind==='rob'&&target&&!target.hand.some(c=>c.kind==='protect')?[...target.hand.filter(canTransferCard).map(card=>({card,source:'hand' as const})),...fieldCards(target).filter(canTransferCard).map(card=>({card,source:'field' as const}))]:[];
+  const robOptions=action.kind==='rob'&&target&&!target.hand.some(c=>c.kind==='protect')?[...target.hand.filter(canTransferCard).map(card=>({card,source:'hand' as const})),...fieldCards(target).filter(canTransferCard).map(card=>({card,source:'field' as const})),...(target.storage??[]).filter(canTransferCard).map(card=>({card,source:'storage' as const}))]:[];
   const robChoice=robOptions.length?robOptions[randomInt(robOptions.length)]:undefined;
   if(action.kind==='rob'&&!robChoice)return false;
-  this.special(p,{matchId:r.matchId,requestId:randomUUID(),handVersion:p.handVersion,cardId:action.id,targetId:target?.id,offerId:offer?.id,wantedId:target?.hand.find(canTransferCard)?.id,stealId:robChoice?.card.id,stealSource:robChoice?.source,targetHandVersion:target?.handVersion,targetFieldVersion:target?.fieldVersion??0});
+  this.special(p,{matchId:r.matchId,requestId:randomUUID(),handVersion:p.handVersion,cardId:action.id,targetId:target?.id,offerId:offer?.id,wantedId:target?.hand.find(canTransferCard)?.id,stealId:robChoice?.card.id,stealSource:robChoice?.source,targetHandVersion:target?.handVersion,targetFieldVersion:target?.fieldVersion??0,targetStorageVersion:target?.storageVersion??0});
   return true;
  }
  action(p: Player, msg: Record<string, unknown>) {
