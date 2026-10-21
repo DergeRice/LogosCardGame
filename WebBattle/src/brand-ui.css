@@ -28,7 +28,6 @@
 @media(orientation:landscape) and (max-height:350px){.battle .hand-emote-control{left:12px;bottom:4px;transform:none}.battle .hand-emote-control .emoji-options{left:0;transform:none}}
 @media(orientation:portrait) and (max-width:700px){.battle .field-feedback-wrap>.sentence-actions{right:12px;bottom:12px}.battle .field-feedback-wrap>.sentence-actions .submit{min-height:42px;padding:7px 14px!important;font-size:12px}}
 @media(orientation:landscape) and (max-height:500px) and (pointer:coarse){.battle .field-feedback-wrap>.sentence-actions{right:8px;bottom:10px}.battle .field-feedback-wrap>.sentence-actions .submit{min-height:27px;padding:4px 10px!important}}
-@media(orientation:landscape) and (max-height:500px) and (pointer:coarse){.battle .battle-hand-zone .hand-emote-control{left:8px;bottom:2px;transform:none}.battle .battle-hand-zone .emoji-options{left:0!important;transform:none!important}}
 @media(orientation:landscape) and (max-height:500px) and (pointer:coarse){.shell .result{gap:4px;padding:2px 8px}.shell .result-emblem{font-size:28px}.shell .result h1{font-size:25px}.shell .result .personal-result{margin:3px auto;padding:8px}.shell .result>.primary{min-height:32px;padding:6px 12px;font-size:12px}.shell .result>.text-button{padding:2px}}
 @media(orientation:portrait) and (max-width:700px){
  html:has(.battle),body:has(.battle),body:has(.battle) #root{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -281,3 +280,21 @@ html.practice-route,html.practice-route body,html.practice-route #root{height:10
 .battle .table-feedback-row .match-timer-readout svg{position:static!important;inset:auto!important;width:21px;height:21px;transform:none!important;opacity:1;flex:none}
 .battle .table-feedback-row .match-timer-readout time{min-width:4ch;text-align:right}
 @media(orientation:landscape) and (max-height:500px){.battle .table-feedback-row .match-timer>.match-timer-readout{font-size:15px!important}.battle .table-feedback-row .match-timer-readout svg{width:17px;height:17px}}
+
+/* The emote control has one stable home: the horizontal centre below the hand.
+   This keeps it clear of the storage control on the left and settings on the right. */
+.battle .battle-hand-zone .hand-emote-control{
+ position:absolute!important;
+ left:50%!important;
+ right:auto!important;
+ bottom:max(4px,env(safe-area-inset-bottom))!important;
+ transform:translateX(-50%)!important;
+ z-index:55;
+ margin:0!important;
+}
+.battle .battle-hand-zone .hand-emote-control .emoji-options{
+ left:50%!important;
+ right:auto!important;
+ transform:translateX(-50%)!important;
+ max-width:calc(100vw - max(24px,env(safe-area-inset-left)) - max(24px,env(safe-area-inset-right)));
+}
