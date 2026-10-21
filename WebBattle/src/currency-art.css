@@ -4,7 +4,7 @@
 .store-offers .currency-icon{width:14px!important;height:14px!important;max-width:14px;flex-basis:14px}
 .diamond-pack-grid .diamond-pack-art{display:block;width:100%;height:100px;object-fit:contain;margin:0 auto 8px}
 .community-modal>.diamond-pack-art{display:block;width:180px;height:130px;object-fit:contain;margin:0 auto}
-.diamond-pack-art[data-amount="100"]{transform:scale(.3)}
+.diamond-pack-art[data-amount="100"]{transform:scale(.6)}
 .diamond-pack-art[data-amount="300"]{transform:scale(.63)}
 .diamond-pack-art[data-amount="1000"]{transform:scale(.9)}
 .game-hub[data-hub-tab=shop] .hub-top{gap:8px}

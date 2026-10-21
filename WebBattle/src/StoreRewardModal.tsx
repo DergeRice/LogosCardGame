@@ -11,7 +11,7 @@ import {PixiLootBox} from './PixiLootBox.js';
 import {playGameSfx} from './gameSfx.js';
 import './store-reveal.css';
 
-function RewardContents({reward:r}:{reward:LootReward}){return <><b className="reward-category">{LOOT_WEIGHTS.find(w=>w.type===r.type)?.name}</b><span className="reward-art"><span className={`reward-original ${r.duplicate?'is-duplicate':''}`}><CosmeticArt image={r.type==='dust'?DUST_IMAGE:r.image} name={r.name}/></span>{r.duplicate&&<span className="reward-duplicate-overlay"><img src={DUST_IMAGE} alt=""/><b>+ <img src={DUST_IMAGE} alt="별가루"/> {r.dust??0}</b></span>}</span>{r.type==='dust'&&<b className="reward-dust-count">+{r.dust??0}</b>}<small>{r.duplicate?'중복':r.type==='dust'?'획득':'새 치장 획득'}</small></>;}
+function RewardContents({reward:r}:{reward:LootReward}){return <><b className="reward-category">{LOOT_WEIGHTS.find(w=>w.type===r.type)?.name}</b><span className="reward-art"><span className={`reward-original ${r.duplicate?'is-duplicate':''}`}><CosmeticArt image={r.type==='dust'?DUST_IMAGE:r.image} name={r.name}/></span>{r.duplicate&&<span className="reward-duplicate-overlay"><b>+ <img src={DUST_IMAGE} alt="별가루"/> {r.dust??0}</b></span>}</span>{r.type==='dust'&&<b className="reward-dust-count">+{r.dust??0}</b>}<small>{r.duplicate?'중복':r.type==='dust'?'획득':'새 치장 획득'}</small></>;}
 
 export function StoreRewardModal({result,onClose}:{result:StoreResult;onClose:()=>void;preview?:boolean}){
  const direct=result.source!=='box',box=BOXES.find(b=>b.id===result.box)??BOXES[0];

@@ -84,8 +84,7 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
 .hub-shop .store-box-rows .store-rates{position:absolute;top:10px;right:11px;z-index:2;min-height:28px;padding:3px 5px}
 .hub-shop .store-box-rows .store-open-options{margin:0;width:100%}
 .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto;align-items:end;gap:3px 6px;padding:0}
-.hub-shop .store-box-rows .store-box-timer{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:center;justify-content:end;width:100%;min-height:29px;line-height:1.2;font-size:10px;white-space:nowrap}
-.hub-shop .store-box-rows .store-box-timer span{display:block}
+.hub-shop .store-box-rows .store-box-timer{grid-column:1;grid-row:1;display:flex;align-items:end;justify-content:center;width:100%;min-height:29px;line-height:1.2;font-size:10px;white-space:nowrap}
 .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers>button{grid-row:2;min-height:54px}
 .hub-shop .store-box-rows>article[data-box=diamond] .store-offers{margin:0;padding:0}
 @media(max-width:650px){.hub-shop .store-box-rows>article{padding:10px 12px 12px}.hub-shop .store-box-rows>article>img{--art-height:224px;width:243px}}
