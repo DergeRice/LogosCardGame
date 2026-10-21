@@ -9,7 +9,7 @@ namespace Logos.Native
     [UnityEngine.Scripting.Preserve]
     public sealed class LogosCommerceBridge : MonoBehaviour
     {
-        [Serializable] public sealed class Settings { public string gameUrl, levelPlayAppKey, rewardedAdUnitId, rewardedPlacement; public bool commerceEnabled; }
+        [Serializable] public sealed class Settings { public string gameUrl, levelPlayAppKey, rewardedAdUnitId, rewardedPlacement; public bool commerceEnabled; public bool childDirectedTreatment = true; }
         [Serializable] private sealed class Request { public string id, method, productId, box, rewardTicket; }
         [Serializable] private sealed class Purchase { public bool success; public string productId, purchaseToken, receipt, transactionId, error; }
         [Serializable] private sealed class Reply { public string id, type = "logos-native-result", error, productId, purchaseToken, receipt, transactionId, box; public bool success, rewarded, purchaseEnabled, adReady; }
@@ -23,6 +23,9 @@ namespace Logos.Native
             settings = JsonUtility.FromJson<Settings>(Resources.Load<TextAsset>("LogosNativeSettings").text);
             // Credentials are injected by the release builder, never borrowed from QTlingo.
             if (!string.IsNullOrEmpty(settings.levelPlayAppKey) && !string.IsNullOrEmpty(settings.rewardedAdUnitId)) {
+                // Mixed-age app: keep child-directed treatment until an age/parental flow exists.
+                LevelPlayPrivacySettings.SetCOPPA(settings.childDirectedTreatment);
+                LevelPlay.SetMetaData("is_deviceid_optout", "true");
                 LevelPlay.OnInitSuccess += Initialized; LevelPlay.OnInitFailed += InitFailed;
                 LevelPlay.Init(settings.levelPlayAppKey);
             }

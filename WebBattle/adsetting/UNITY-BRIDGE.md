@@ -5,14 +5,14 @@ Unity 원본은 저장소 루트이다. `main`의 Unity 프로젝트를 `web-bat
 ## 실제 상태 (2026-10-21)
 
 - Unity C# 브리지, Android 네이티브 WebView와 Google Play Billing Java 구현 완료.
-- Unity LevelPlay SDK 9.5.1 사용. 네이티브 SDK·Unity Ads 어댑터는 QTlingo에서 사용하는 9.6.0/5.12.0/4.20.0으로 정렬.
+- Unity LevelPlay SDK 9.5.1 사용. 네이티브 SDK·Unity Ads 어댑터는 9.6.0/5.12.0/4.20.0으로 정렬.
 - 상품 ID: `diamonds_100`, `diamonds_300`, `diamonds_1000`, `diamonds_3000`. KRW 1200/2900/8900/24900.
 - Billing 8은 `standard` 구매 옵션의 `offerToken`을 명시하여 결제창을 연다. 대여/할인 옵션은 선택하지 않는다. [Google 공식 연결 가이드](https://developer.android.com/google/play/billing/one-time-product-multi-purchase-options-offers)를 기준으로 구현했다.
 - SDK의 성공 응답은 다이아/상자 지급을 의미하지 않는다. 반드시 서버 검증·영구 중복 방지 후 지급한다.
-- `commerceEnabled=false`가 기본값이다. 상품과 서버 검증이 완료된 뒤 빌드 환경의 `LOGOS_COMMERCE_ENABLED=1`로 활성화한다.
-- 2026-10-21 재시도에서도 LevelPlay 계정은 `Your account is restricted`이다. Unity Cloud 원본 연결 프로젝트 `LogosCardGame (1)`(583abf61-3c16-42c9-8709-e1a3b6c87474)의 Unity Ads는 이미 활성화되어 있다(Android Game ID 5868668). 이 프로젝트의 LevelPlay 연결 경로에서도 동일한 접근 제한을 확인했다. LevelPlay App Key/보상형 단위 생성은 계정 제한 해제 후 진행해야 한다. Unity Ads Game ID를 LevelPlay App Key로 대신 넣으면 안 된다.
+- `commerceEnabled=false`가 기본값이다. 현재 웹 서버가 구매·광고 보상을 검증하지 않으므로, 서버 구현과 기기 검증이 끝나기 전에는 빌드 환경의 `LOGOS_COMMERCE_ENABLED=1`을 주지 않는다.
+- 전용 LevelPlay Android 앱과 보상형 단위 `logos_rewarded_box`를 생성했다. Unity Ads는 기존 연결 프로젝트 `LogosCardGame (1)`(583abf61-3c16-42c9-8709-e1a3b6c87474)의 **Android Game ID `5868669`**로 instance를 연결했다. iOS Game ID `5868668`을 Android 설정에 넣지 않는다. 비공개 앱 키와 ad unit ID는 릴리스 환경 파일만 사용한다.
 - Play Console 상품 4개 모두 대한민국 전용 `standard` 구매 옵션으로 활성화했다. 가격은 100개 ₩1,200 / 300개 ₩2,900 / 1,000개 ₩8,900 / 3,000개 ₩24,900이다. 3,000개 일괄 가격의 자동 반올림을 개별 가격 수정으로 바로잡고 저장 완료를 확인했다.
-- Google Cloud `logos-card-game`의 기존 서비스 계정은 없었다. `logos-play-verifier` 생성 양식을 준비했으며, 서버 키 발급 및 앱 한정 구매 권한 부여는 실행 시점 보안 확인을 기다린다.
+- Google Cloud `logos-card-game`에 `logos-play-verifier` 서비스 계정을 만들고, Play Console에서 `com.baragames.logoscardgame` 앱 한정으로 구매 조회·처리 권한을 부여했다. JSON 키는 로컬 비공개 경로에만 보관한다. Android Publisher API 활성화 확인 뒤 서버가 실제 구매 토큰을 검증할 수 있다.
 - Unity Android 서명 AAB 빌드 성공: `Builds/LogosCardGame-Unity.aab`, versionCode 2 / versionName 1.0.1, 약 70MB. 기존 내부 테스트 AAB는 Capacitor 앱이며 이 Unity 브리지를 포함하지 않는다.
 
 ## 웹 → Unity API
@@ -41,6 +41,14 @@ await window.LogosNative.request('rewarded', {box:'silver',rewardTicket});
 보상형 광고 단위는 하나다. 실버 12시간/골드 24시간은 기존 서버 규칙을 따른다. 무료 정기 개봉과 추가 광고 슬롯의 횟수/쿨다운은 합의 없이 같은 값으로 덮어쓰지 않는다. 현재 웹 변경의 `광고 3/3` 버튼은 별도 슬롯이며, 이 문서는 추가 3회 보상 규칙을 임의로 구현하지 않는다.
 
 `rewardTicket`은 서버가 짧은 유효기간으로 발급해 계정·상자와 저장한다. Unity는 LevelPlay Dynamic User ID에 이 ticket을 넣는다. S2S 콜백의 ticket·거래 ID·서명을 검증하고, 재전송 중복 방지 후 기존 상자 추첨 로직으로 지급한다. 취소·타임아웃·로드 실패·클라이언트 위조 콜백은 지급하지 않는다.
+
+현재 `WebBattle/server/game.ts`는 `iapPurchase`를 거절하며 `adRewardTicket`/S2S endpoint도 없다. 따라서 다음 웹 작업은 아래 순서를 지켜야 한다.
+
+1. `iapPurchase`에서 Google Android Publisher API로 상품 ID·구매 상태·토큰을 확인한다.
+2. 계정/구매 토큰의 영구 중복 방지 레코드와 다이아 지급을 하나의 서버 트랜잭션으로 확정한다.
+3. 그 뒤에만 Play consume을 호출한다. 실패 시 재시도할 수 있게 상태를 저장한다.
+4. `adRewardTicket`과 LevelPlay S2S endpoint를 만들고, 서명 검증 및 `adTransactionId` 멱등성을 구현한다.
+5. 서버 배포 후 `LOGOS_COMMERCE_ENABLED=1` 빌드와 Play 내부 테스트 기기에서 결제 완료·취소·복구·광고 완료·광고 취소를 확인한다.
 
 ## 빌드
 
