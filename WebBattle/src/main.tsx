@@ -31,7 +31,6 @@ import { CATALOG, VARIANTS, RULES, EXCHANGE_REPLIES, effectLabel, judgeCards, ty
 import './style.css';
 import './original-cards.css';
 import {CardLabel,StatusCardBlock} from './CardLabel.js';
-import {preloadProfiles} from './profiles.js';
 import { HandFan } from './HandFan.js';
 import { useCardDrag } from './useCardDrag.js';
 import { SentenceField } from './SentenceField.js';
@@ -104,7 +103,6 @@ function ViewportPage({children}:{children:React.ReactNode}){useGameViewport();r
 function GameEntry({practice=false}:{practice?:boolean}){
  const [entered,setEntered]=useState(()=>Boolean(localStorage.getItem('logos-account-token'))||(!new URLSearchParams(location.search).has('intro')&&sessionStorage.getItem('logos-entry')==='guest'));
  const [departing,setDeparting]=useState(false);
- useEffect(()=>{if(practice)return;void preloadProfiles();void preloadGameAssets();void preloadCardFaces(()=>{});},[practice]);
  const finishEntry=()=>{setDeparting(true);setTimeout(()=>setEntered(true),580);};
  const onGuest=()=>{sessionStorage.setItem('logos-entry','guest');const saved=localStorage.getItem('logos-guest-name');if(saved)sessionStorage.setItem('logos-name',saved);finishEntry();};
  return entered?(practice?<ViewportPage><PracticeMode/></ViewportPage>:<App/>):<ViewportPage><LoginLanding onGuest={onGuest} departing={departing}/></ViewportPage>;
@@ -131,7 +129,7 @@ function App() {
  const [pending, setPending] = useState(false), pendingAt = useRef(0), pendingId=useRef<string|null>(null), uiActions=useRef<string[]>([]), recalling=useRef<string[]>([]), selectedLive=useRef<string[]>([]), uiContext=useRef<Record<string,unknown>>({});
  const socketRef = useRef<WebSocket | null>(null);
  const [notice, setNotice] = useState('');
- const [cardLoad,setCardLoad]=useState({percent:0,ready:false,failed:0});
+ const [cardLoad,setCardLoad]=useState(()=>({percent:localStorage.getItem('logos-assets-ready')===BUILD_VERSION?100:0,ready:localStorage.getItem('logos-assets-ready')===BUILD_VERSION,failed:0}));
  const [rooms,setRooms]=useState<RoomListing[]>([]),[roomBrowserOpen,setRoomBrowserOpen]=useState(false);
  const lastEvent = useRef('');
  const [correct,setCorrect]=useState<ScoreReveal|null>(null);
@@ -184,13 +182,14 @@ function App() {
   await enterGameFullscreen();
  }
  useEffect(()=>{
+  if(cardLoad.ready)return;
   let active=true,finishTimer:ReturnType<typeof setTimeout>|undefined;
-  const groups={cards:{done:0,total:CARD_FACE_URLS.length},art:{done:0,total:GAME_ASSET_URLS.length},profiles:{done:0,total:1}};
+  const groups={cards:{done:0,total:CARD_FACE_URLS.length},art:{done:0,total:GAME_ASSET_URLS.length}};
   const progress=(key:keyof typeof groups,done:number,total:number)=>{groups[key]={done,total};const all=Object.values(groups),percent=Math.min(99,Math.floor(all.reduce((n,g)=>n+g.done,0)/all.reduce((n,g)=>n+g.total,0)*100));if(active)setCardLoad(old=>({...old,percent:Math.max(old.percent,percent)}))};
   if(exampleVoice)void preloadSentenceVoice();
-  void Promise.all([preloadCardFaces((done,total)=>progress('cards',done,total)),preloadGameAssets((done,total)=>progress('art',done,total)),preloadProfiles().then(()=>progress('profiles',1,1))]).then(([cards,art])=>{
+  void Promise.all([preloadCardFaces((done,total)=>progress('cards',done,total)),preloadGameAssets((done,total)=>progress('art',done,total))]).then(([cards,art])=>{
    if(!active)return;const failed=cards.failed+art.failed;setCardLoad(old=>({...old,percent:failed?Math.min(99,old.percent):100,failed}));
-   if(!failed)finishTimer=setTimeout(()=>{if(active)setCardLoad(old=>({...old,ready:true}))},500);
+   if(!failed)finishTimer=setTimeout(()=>{if(active){localStorage.setItem('logos-assets-ready',BUILD_VERSION);setCardLoad(old=>({...old,ready:true}));}},500);
   });return()=>{active=false;clearTimeout(finishTimer)};
  },[]);
  useEffect(() => { const t = setInterval(() => { setNow(Date.now() + offset.current); if (pendingAt.current && Date.now() - pendingAt.current > 6000) { setPending(false); pendingAt.current = 0; trace('submit_timeout',{code:'SUBMIT_TIMEOUT',requestId:pendingId.current??''});pendingId.current=null;submission.current=null;setError('제출 응답이 늦습니다. 다시 제출하거나 새로고침으로 복귀해 주세요.'); } }, 1000); return () => clearInterval(t); }, []);

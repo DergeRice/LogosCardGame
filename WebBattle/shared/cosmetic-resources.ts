@@ -3,241 +3,241 @@ export const EXTRA_COSMETICS: {id:string;type:'character'|'background'|'emote'|'
   {
     "id": "background-가을 아카데미의 따뜻한 교정길",
     "type": "background",
-    "name": "가을 아카데미의 따뜻한 교정길",
+    "name": "가을 교정",
     "image": "/cosmetics/backgrounds/%EA%B0%80%EC%9D%84%20%EC%95%84%EC%B9%B4%EB%8D%B0%EB%AF%B8%EC%9D%98%20%EB%94%B0%EB%9C%BB%ED%95%9C%20%EA%B5%90%EC%A0%95%EA%B8%B8.webp"
   },
   {
     "id": "background-거대한 나무집 테라스 풍경",
     "type": "background",
-    "name": "거대한 나무집 테라스 풍경",
+    "name": "나무집",
     "image": "/cosmetics/backgrounds/%EA%B1%B0%EB%8C%80%ED%95%9C%20%EB%82%98%EB%AC%B4%EC%A7%91%20%ED%85%8C%EB%9D%BC%EC%8A%A4%20%ED%92%8D%EA%B2%BD.webp"
   },
   {
     "id": "background-고리 행성이 빛나는 우주 전망대",
     "type": "background",
-    "name": "고리 행성이 빛나는 우주 전망대",
+    "name": "고리 행성",
     "image": "/cosmetics/backgrounds/%EA%B3%A0%EB%A6%AC%20%ED%96%89%EC%84%B1%EC%9D%B4%20%EB%B9%9B%EB%82%98%EB%8A%94%20%EC%9A%B0%EC%A3%BC%20%EC%A0%84%EB%A7%9D%EB%8C%80.webp"
   },
   {
     "id": "background-고요한 놀이공원 산책로",
     "type": "background",
-    "name": "고요한 놀이공원 산책로",
+    "name": "놀이공원",
     "image": "/cosmetics/backgrounds/%EA%B3%A0%EC%9A%94%ED%95%9C%20%EB%86%80%EC%9D%B4%EA%B3%B5%EC%9B%90%20%EC%82%B0%EC%B1%85%EB%A1%9C.webp"
   },
   {
     "id": "background-고요한 박물관의 따뜻한 전시실",
     "type": "background",
-    "name": "고요한 박물관의 따뜻한 전시실",
+    "name": "박물관",
     "image": "/cosmetics/backgrounds/%EA%B3%A0%EC%9A%94%ED%95%9C%20%EB%B0%95%EB%AC%BC%EA%B4%80%EC%9D%98%20%EB%94%B0%EB%9C%BB%ED%95%9C%20%EC%A0%84%EC%8B%9C%EC%8B%A4.webp"
   },
   {
     "id": "background-고요한 해안 등대 언덕",
     "type": "background",
-    "name": "고요한 해안 등대 언덕",
+    "name": "해안 등대",
     "image": "/cosmetics/backgrounds/%EA%B3%A0%EC%9A%94%ED%95%9C%20%ED%95%B4%EC%95%88%20%EB%93%B1%EB%8C%80%20%EC%96%B8%EB%8D%95.webp"
   },
   {
     "id": "background-구름 왕국의 아이보리 정원",
     "type": "background",
-    "name": "구름 왕국의 아이보리 정원",
+    "name": "구름 정원",
     "image": "/cosmetics/backgrounds/%EA%B5%AC%EB%A6%84%20%EC%99%95%EA%B5%AD%EC%9D%98%20%EC%95%84%EC%9D%B4%EB%B3%B4%EB%A6%AC%20%EC%A0%95%EC%9B%90.webp"
   },
   {
     "id": "background-구름 위의 따뜻한 비행선 갑판",
     "type": "background",
-    "name": "구름 위의 따뜻한 비행선 갑판",
+    "name": "비행선",
     "image": "/cosmetics/backgrounds/%EA%B5%AC%EB%A6%84%20%EC%9C%84%EC%9D%98%20%EB%94%B0%EB%9C%BB%ED%95%9C%20%EB%B9%84%ED%96%89%EC%84%A0%20%EA%B0%91%ED%8C%90.webp"
   },
   {
     "id": "background-노을빛 언덕 캠핑장 풍경",
     "type": "background",
-    "name": "노을빛 언덕 캠핑장 풍경",
+    "name": "노을 캠핑",
     "image": "/cosmetics/backgrounds/%EB%85%B8%EC%9D%84%EB%B9%9B%20%EC%96%B8%EB%8D%95%20%EC%BA%A0%ED%95%91%EC%9E%A5%20%ED%92%8D%EA%B2%BD.webp"
   },
   {
     "id": "background-노을빛 지중해 원형극장",
     "type": "background",
-    "name": "노을빛 지중해 원형극장",
+    "name": "원형극장",
     "image": "/cosmetics/backgrounds/%EB%85%B8%EC%9D%84%EB%B9%9B%20%EC%A7%80%EC%A4%91%ED%95%B4%20%EC%9B%90%ED%98%95%EA%B7%B9%EC%9E%A5.webp"
   },
   {
     "id": "background-눈 덮인 알프스 마을 광장",
     "type": "background",
-    "name": "눈 덮인 알프스 마을 광장",
+    "name": "설원 마을",
     "image": "/cosmetics/backgrounds/%EB%88%88%20%EB%8D%AE%EC%9D%B8%20%EC%95%8C%ED%94%84%EC%8A%A4%20%EB%A7%88%EC%9D%84%20%EA%B4%91%EC%9E%A5.webp"
   },
   {
     "id": "background-달빛 수정 호수의 고요한 밤",
     "type": "background",
-    "name": "달빛 수정 호수의 고요한 밤",
+    "name": "달빛 호수",
     "image": "/cosmetics/backgrounds/%EB%8B%AC%EB%B9%9B%20%EC%88%98%EC%A0%95%20%ED%98%B8%EC%88%98%EC%9D%98%20%EA%B3%A0%EC%9A%94%ED%95%9C%20%EB%B0%A4.webp"
   },
   {
     "id": "background-대나무 선 정원의 아침",
     "type": "background",
-    "name": "대나무 선 정원의 아침",
+    "name": "대나무 정원",
     "image": "/cosmetics/backgrounds/%EB%8C%80%EB%82%98%EB%AC%B4%20%EC%84%A0%20%EC%A0%95%EC%9B%90%EC%9D%98%20%EC%95%84%EC%B9%A8.webp"
   },
   {
     "id": "background-따뜻한 아침의 베이커리 카페",
     "type": "background",
-    "name": "따뜻한 아침의 베이커리 카페",
+    "name": "아침 카페",
     "image": "/cosmetics/backgrounds/%EB%94%B0%EB%9C%BB%ED%95%9C%20%EC%95%84%EC%B9%A8%EC%9D%98%20%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC%20%EC%B9%B4%ED%8E%98.webp"
   },
   {
     "id": "background-버드나무와 연꽃이 있는 정원길",
     "type": "background",
-    "name": "버드나무와 연꽃이 있는 정원길",
+    "name": "연꽃 정원",
     "image": "/cosmetics/backgrounds/%EB%B2%84%EB%93%9C%EB%82%98%EB%AC%B4%EC%99%80%20%EC%97%B0%EA%BD%83%EC%9D%B4%20%EC%9E%88%EB%8A%94%20%EC%A0%95%EC%9B%90%EA%B8%B8.webp"
   },
   {
     "id": "background-별빛 마법학교 강당",
     "type": "background",
-    "name": "별빛 마법학교 강당",
+    "name": "마법학교",
     "image": "/cosmetics/backgrounds/%EB%B3%84%EB%B9%9B%20%EB%A7%88%EB%B2%95%ED%95%99%EA%B5%90%20%EA%B0%95%EB%8B%B9.webp"
   },
   {
     "id": "background-부드러운 화산 칼데라 석양",
     "type": "background",
-    "name": "부드러운 화산 칼데라 석양",
+    "name": "화산 노을",
     "image": "/cosmetics/backgrounds/%EB%B6%80%EB%93%9C%EB%9F%AC%EC%9A%B4%20%ED%99%94%EC%82%B0%20%EC%B9%BC%EB%8D%B0%EB%9D%BC%20%EC%84%9D%EC%96%91.webp"
   },
   {
     "id": "background-붉은 헛간과 사과 과수원",
     "type": "background",
-    "name": "붉은 헛간과 사과 과수원",
+    "name": "사과 농장",
     "image": "/cosmetics/backgrounds/%EB%B6%89%EC%9D%80%20%ED%97%9B%EA%B0%84%EA%B3%BC%20%EC%82%AC%EA%B3%BC%20%EA%B3%BC%EC%88%98%EC%9B%90.webp"
   },
   {
     "id": "background-붉은 협곡 캠프와 로프 다리",
     "type": "background",
-    "name": "붉은 협곡 캠프와 로프 다리",
+    "name": "붉은 협곡",
     "image": "/cosmetics/backgrounds/%EB%B6%89%EC%9D%80%20%ED%98%91%EA%B3%A1%20%EC%BA%A0%ED%94%84%EC%99%80%20%EB%A1%9C%ED%94%84%20%EB%8B%A4%EB%A6%AC.webp"
   },
   {
     "id": "background-비 내리는 파스텔 골목",
     "type": "background",
-    "name": "비 내리는 파스텔 골목",
+    "name": "빗속 골목",
     "image": "/cosmetics/backgrounds/%EB%B9%84%20%EB%82%B4%EB%A6%AC%EB%8A%94%20%ED%8C%8C%EC%8A%A4%ED%85%94%20%EA%B3%A8%EB%AA%A9.webp"
   },
   {
     "id": "background-빛나는 보랏빛 마법의 숲",
     "type": "background",
-    "name": "빛나는 보랏빛 마법의 숲",
+    "name": "보랏빛 숲",
     "image": "/cosmetics/backgrounds/%EB%B9%9B%EB%82%98%EB%8A%94%20%EB%B3%B4%EB%9E%8F%EB%B9%9B%20%EB%A7%88%EB%B2%95%EC%9D%98%20%EC%88%B2.webp"
   },
   {
     "id": "background-사탕 왕국의 분홍 비스킷 광장",
     "type": "background",
-    "name": "사탕 왕국의 분홍 비스킷 광장",
+    "name": "사탕 광장",
     "image": "/cosmetics/backgrounds/%EC%82%AC%ED%83%95%20%EC%99%95%EA%B5%AD%EC%9D%98%20%EB%B6%84%ED%99%8D%20%EB%B9%84%EC%8A%A4%ED%82%B7%20%EA%B4%91%EC%9E%A5.webp"
   },
   {
     "id": "background-산악 천문대의 복숭아빛 저녁",
     "type": "background",
-    "name": "산악 천문대의 복숭아빛 저녁",
+    "name": "산악 천문대",
     "image": "/cosmetics/backgrounds/%EC%82%B0%EC%95%85%20%EC%B2%9C%EB%AC%B8%EB%8C%80%EC%9D%98%20%EB%B3%B5%EC%88%AD%EC%95%84%EB%B9%9B%20%EC%A0%80%EB%85%81.webp"
   },
   {
     "id": "background-수중 마법 돔 광장",
     "type": "background",
-    "name": "수중 마법 돔 광장",
+    "name": "수중 광장",
     "image": "/cosmetics/backgrounds/%EC%88%98%EC%A4%91%20%EB%A7%88%EB%B2%95%20%EB%8F%94%20%EA%B4%91%EC%9E%A5.webp"
   },
   {
     "id": "background-청록 바다와 햇살 부두",
     "type": "background",
-    "name": "청록 바다와 햇살 부두",
+    "name": "햇살 부두",
     "image": "/cosmetics/backgrounds/%EC%B2%AD%EB%A1%9D%20%EB%B0%94%EB%8B%A4%EC%99%80%20%ED%96%87%EC%82%B4%20%EB%B6%80%EB%91%90.webp"
   },
   {
     "id": "background-초록 언덕이 보이는 작은 마을 공방",
     "type": "background",
-    "name": "초록 언덕이 보이는 작은 마을 공방",
+    "name": "마을 공방",
     "image": "/cosmetics/backgrounds/%EC%B4%88%EB%A1%9D%20%EC%96%B8%EB%8D%95%EC%9D%B4%20%EB%B3%B4%EC%9D%B4%EB%8A%94%20%EC%9E%91%EC%9D%80%20%EB%A7%88%EC%9D%84%20%EA%B3%B5%EB%B0%A9.webp"
   },
   {
     "id": "background-파스텔빛 창가 아트 스튜디오",
     "type": "background",
-    "name": "파스텔빛 창가 아트 스튜디오",
+    "name": "창가 공방",
     "image": "/cosmetics/backgrounds/%ED%8C%8C%EC%8A%A4%ED%85%94%EB%B9%9B%20%EC%B0%BD%EA%B0%80%20%EC%95%84%ED%8A%B8%20%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4.webp"
   },
   {
     "id": "background-포근한 공중목욕탕 휴식 공간",
     "type": "background",
-    "name": "포근한 공중목욕탕 휴식 공간",
+    "name": "공중목욕탕",
     "image": "/cosmetics/backgrounds/%ED%8F%AC%EA%B7%BC%ED%95%9C%20%EA%B3%B5%EC%A4%91%EB%AA%A9%EC%9A%95%ED%83%95%20%ED%9C%B4%EC%8B%9D%20%EA%B3%B5%EA%B0%84.webp"
   },
   {
     "id": "background-포근한 다락방 놀이방",
     "type": "background",
-    "name": "포근한 다락방 놀이방",
+    "name": "다락방",
     "image": "/cosmetics/backgrounds/%ED%8F%AC%EA%B7%BC%ED%95%9C%20%EB%8B%A4%EB%9D%BD%EB%B0%A9%20%EB%86%80%EC%9D%B4%EB%B0%A9.webp"
   },
   {
     "id": "background-푸른 커튼의 아늑한 연주회장",
     "type": "background",
-    "name": "푸른 커튼의 아늑한 연주회장",
+    "name": "연주회장",
     "image": "/cosmetics/backgrounds/%ED%91%B8%EB%A5%B8%20%EC%BB%A4%ED%8A%BC%EC%9D%98%20%EC%95%84%EB%8A%91%ED%95%9C%20%EC%97%B0%EC%A3%BC%ED%9A%8C%EC%9E%A5.webp"
   },
   {
     "id": "background-풍차와 꽃밭 사이 봄길",
     "type": "background",
-    "name": "풍차와 꽃밭 사이 봄길",
+    "name": "풍차 꽃밭",
     "image": "/cosmetics/backgrounds/%ED%92%8D%EC%B0%A8%EC%99%80%20%EA%BD%83%EB%B0%AD%20%EC%82%AC%EC%9D%B4%20%EB%B4%84%EA%B8%B8.webp"
   },
   {
     "id": "background-하얀 성채의 안뜰",
     "type": "background",
-    "name": "하얀 성채의 안뜰",
+    "name": "하얀 성채",
     "image": "/cosmetics/backgrounds/%ED%95%98%EC%96%80%20%EC%84%B1%EC%B1%84%EC%9D%98%20%EC%95%88%EB%9C%B0.webp"
   },
   {
     "id": "background-해바라기 들판의 시골길",
     "type": "background",
-    "name": "해바라기 들판의 시골길",
+    "name": "해바라기 길",
     "image": "/cosmetics/backgrounds/%ED%95%B4%EB%B0%94%EB%9D%BC%EA%B8%B0%20%EB%93%A4%ED%8C%90%EC%9D%98%20%EC%8B%9C%EA%B3%A8%EA%B8%B8.webp"
   },
   {
     "id": "background-햇살 가득한 빈 교실",
     "type": "background",
-    "name": "햇살 가득한 빈 교실",
+    "name": "햇살 교실",
     "image": "/cosmetics/backgrounds/%ED%96%87%EC%82%B4%20%EA%B0%80%EB%93%9D%ED%95%9C%20%EB%B9%88%20%EA%B5%90%EC%8B%A4.webp"
   },
   {
     "id": "background-햇살 가득한 작은 비행장",
     "type": "background",
-    "name": "햇살 가득한 작은 비행장",
+    "name": "작은 비행장",
     "image": "/cosmetics/backgrounds/%ED%96%87%EC%82%B4%20%EA%B0%80%EB%93%9D%ED%95%9C%20%EC%9E%91%EC%9D%80%20%EB%B9%84%ED%96%89%EC%9E%A5.webp"
   },
   {
     "id": "background-햇살 비치는 시골 우체국",
     "type": "background",
-    "name": "햇살 비치는 시골 우체국",
+    "name": "시골 우체국",
     "image": "/cosmetics/backgrounds/%ED%96%87%EC%82%B4%20%EB%B9%84%EC%B9%98%EB%8A%94%20%EC%8B%9C%EA%B3%A8%20%EC%9A%B0%EC%B2%B4%EA%B5%AD.webp"
   },
   {
     "id": "background-햇살 스미는 마법학원 도서관",
     "type": "background",
-    "name": "햇살 스미는 마법학원 도서관",
+    "name": "마법 도서관",
     "image": "/cosmetics/backgrounds/%ED%96%87%EC%82%B4%20%EC%8A%A4%EB%AF%B8%EB%8A%94%20%EB%A7%88%EB%B2%95%ED%95%99%EC%9B%90%20%EB%8F%84%EC%84%9C%EA%B4%80.webp"
   },
   {
     "id": "background-햇살이 스미는 깊은 수정 동굴",
     "type": "background",
-    "name": "햇살이 스미는 깊은 수정 동굴",
+    "name": "수정 동굴",
     "image": "/cosmetics/backgrounds/%ED%96%87%EC%82%B4%EC%9D%B4%20%EC%8A%A4%EB%AF%B8%EB%8A%94%20%EA%B9%8A%EC%9D%80%20%EC%88%98%EC%A0%95%20%EB%8F%99%EA%B5%B4.webp"
   },
   {
     "id": "background-황금 사막의 태양 신전",
     "type": "background",
-    "name": "황금 사막의 태양 신전",
+    "name": "태양 신전",
     "image": "/cosmetics/backgrounds/%ED%99%A9%EA%B8%88%20%EC%82%AC%EB%A7%89%EC%9D%98%20%ED%83%9C%EC%96%91%20%EC%8B%A0%EC%A0%84.webp"
   },
   {
     "id": "background-황금빛 증기기관차 승강장",
     "type": "background",
-    "name": "황금빛 증기기관차 승강장",
+    "name": "증기역",
     "image": "/cosmetics/backgrounds/%ED%99%A9%EA%B8%88%EB%B9%9B%20%EC%A6%9D%EA%B8%B0%EA%B8%B0%EA%B4%80%EC%B0%A8%20%EC%8A%B9%EA%B0%95%EC%9E%A5.webp"
   },
   {

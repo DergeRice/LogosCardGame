@@ -25,7 +25,6 @@ export const COSMETICS=[
  ...HOME_CHARACTERS,
  {id:'board-classic',type:'board',name:'기본 나무 보드',image:'/brand-ui/game-back.png'},
  {id:'background-garden',type:'background',name:'햇살 정원',image:'/landing/background.jpg'},
- {id:'background-table',type:'background',name:'로고스 테이블',image:'/brand-ui/game-back.png'},
  ...EXTRA_COSMETICS.map(item=>({...item,name:characterName(item.name)})),
 ] as const;
 export type HubSave={freeBoxAt?:{silver?:number;gold?:number};profile?:string;profileCatalogVersion?:number;revision?:number;emoteCatalogVersion?:number;gold:number;diamonds:number;dust:number;owned:string[];board?:string;emote?:string;emotes?:EmoteSlots;character:string;background:string;frame:string;bestScore:number;bestRating:number};
@@ -52,9 +51,11 @@ export function migrateEmoteCatalog(save:HubSave){
 }
 
 export function migrateProfiles(save:HubSave,seed='default'){
- save.owned=save.owned.filter(id=>id!=='character-table'&&id!=='board-garden');
+ const retired=new Set(['character-table','board-garden','background-table','profile-accessory-04-09','profile-accessory-06-03']);
+ save.owned=save.owned.filter(id=>!retired.has(id));
  if(save.character==='character-table')save.character='character-naro';
  if(save.board==='board-garden')save.board='board-classic';
+ if(save.background==='background-table')save.background='background-garden';
  for(const p of BASIC_PROFILES)if(!save.owned.includes(p.id))save.owned.push(p.id);
  if(!save.profile||!save.owned.includes(save.profile)||!COSMETICS.some(c=>c.type==='profile'&&c.id===save.profile))save.profile=basicProfile(seed);
  save.profileCatalogVersion=1;return save;

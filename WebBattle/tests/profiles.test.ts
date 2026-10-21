@@ -3,8 +3,8 @@ import {BASIC_PROFILES,COLLECTIBLE_PROFILES} from '../shared/profiles.js';
 import {COSMETICS,defaultHubSave,migrateProfiles,openDemoBox,BOX_WEIGHTS,LOOT_WEIGHTS,dummyRanking} from '../shared/store.js';
 import {GAME_ASSET_URLS} from '../src/preloadGameAssets.js';import {Game,type GameSocket} from '../server/game.js';import {snapshot,restore} from '../server/persistence.js';
 const socket=():GameSocket=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}});
-test('74 independent profile artworks: five free and 69 collectible, all decoded and preloaded',async()=>{
- assert.equal(COSMETICS.filter(c=>c.type==='profile').length,74);assert.equal(BASIC_PROFILES.length,5);assert.equal(COLLECTIBLE_PROFILES.length,69);
+test('72 independent profile artworks: five free and 67 collectible, all decoded and preloaded',async()=>{
+ assert.equal(COSMETICS.filter(c=>c.type==='profile').length,72);assert.equal(BASIC_PROFILES.length,5);assert.equal(COLLECTIBLE_PROFILES.length,67);
  for(const item of [...BASIC_PROFILES,...COLLECTIBLE_PROFILES]){const image=await sharp('public'+item.image).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(image.info.width,512);assert.equal(image.info.height,512);assert.equal(image.data[3],0);assert.ok(GAME_ASSET_URLS.includes(item.image));assert.equal(defaultHubSave().owned.includes(item.id),BASIC_PROFILES.some(p=>p.id===item.id));}
 });
 test('every box draws all paid profiles and never the five free profiles',()=>{

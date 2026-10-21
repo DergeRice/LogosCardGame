@@ -31,6 +31,7 @@ export function GameHub(p:Props){
  const key='logos-hub-demo-v1:'+encodeURIComponent(p.account??p.name),[save,setSave]=useState<HubSave>(()=>readHubSave(key));
  useEffect(()=>setSave(p.community?{...readHubSave(key),...p.community.store}:readHubSave(key)),[key]);
  useEffect(()=>{if(p.community)setSave(old=>({...old,...p.community!.store}));},[p.community]);
+ useEffect(()=>{const board=p.community?.store.board??save.board;if(board)sessionStorage.setItem('logos-equipped-board-id',board);},[p.community?.store.board,save.board]);
  useEffect(()=>{if(!p.connected)return;p.send('roomList');const timer=setInterval(()=>p.send('roomList'),15000);return()=>clearInterval(timer);},[p.connected]);
  useEffect(()=>{setTier(leagueFor(p.profile.rating).tier);},[p.profile.rating]);
  useEffect(()=>{setPage(old=>Math.min(old,Math.max(0,Math.ceil(p.rooms.length/3)-1)));},[p.rooms.length]);
