@@ -1,4 +1,4 @@
-/** Common lines stay separate so each character can receive its own lines later. */
+/** Home lines are selected per tap: 40% character line, 60% common line. */
 export const HOME_COMMON_LINES=[
  '오늘도 재밌게 놀아보자!',
  '영문법이 쏙쏙! 같이 시작해 볼까?',
@@ -31,8 +31,43 @@ export const HOME_COMMON_LINES=[
  '오늘의 첫 문장이 벌써 기대돼!',
  '준비됐어? 신나는 한 판을 시작하자!',
 ] as const;
-export const CHARACTER_HOME_LINES:Readonly<Record<string,readonly string[]>>={};
+const NARO_HOME_LINES=[
+  '내 이름은 나로! 명사를 담당해!!','오늘은 어떤 모험이 기다리고 있을까?','오늘도 정말 신나는 하루가 될 것 같아!','내 여자친구 아리는 잘 지내고 있는걸까?','프로나운 아저씨! 여기에요!!','두두님! 저 이제 혼자서도 잘하죠?','가자 트랜스! 변신이야!','내 포켓볼 본 적 있어?','내 시계로 \'s 를 사용할 수 있어!','내 모자는 관사야.','내 꼬리는 s로 복수형을 상대하지!'
+] as const;
+export const CHARACTER_HOME_LINES:Readonly<Record<string,readonly string[]>>={
+ 'character-naro':NARO_HOME_LINES,
+ 'character-naro-solo':NARO_HOME_LINES,
+ 'character-hamster':[
+  '나로님! 아직 더 연습하셔야해요!','정말 신나는 하루야!','감탄이 절로 나오네!!','내 이름은 두두! 감탄사를 담당하고 있어!','정말 멋진 나날들이야!','이 꽃 좀 봐! 너무 아름다워!','프로나운님~ 잘 지내고 있어요?','코리쉬님은 잘 지내시고 계신겠지?','한스대왕님이 오랜만에 보고 싶네!','아리님은 정말로 너무 아름다워!','나로님! 저도 트랜스 탈래요!','버프~ 이제 착하게 지내야해!'
+ ],
+ 'character-dog':[
+  '인 지 의 부를 담당하는 대명사! 프로나운 등장!','뼈다구는 넣어둬! 나는 국밥이 좋아!','힘 싸움하면 나지!','어이~ 두두~ 나로님 잘 지내지?','나로님! 엄청 성장하셨군요!','코리쉬 대왕님, 잘 지내시겠지?','아리님.. 정말 숙녀가 다 되셨군요.','한스 대왕님을 위해!','나로님! 쉬고 계세요. 제가 대신 해드릴게요.','나로님이 하시는건 제가 대신 할 수 있어요.'
+ ],
+ 'character-hans':[
+  '그래머랜드의 평화를 위해!','나는 그래머랜드의 국왕, 한스 대왕일세.','그래머랜드는 영원할걸세!','코리쉬 대왕이 참으로 듬직하지!','나로는 정말 크게 될 인재라네.','두두군 앞으로도 성실히 일해주게나.','프로나운군 언제나 그대를 믿고있다네.','백성들이 화목해 보여서 아주 좋네.','영문법을 아주 쉽게 배우는 로고스 법전이라..'
+ ],
+ 'character-rabbit':[
+  '나로! 위험할땐 나를 불러!','나는 아리, 형용해주는 모든 것을 담당하지!','아름답고 귀여운 나비네!','사랑스럽고 작고 소중한 토끼야. 이리 와~','애드버프님이 나를 살려주셨어.','ly묘약이라. 맛은 정말 끔찍했어.','변신할때 기분은 정말 짜릿하지!','두두 아저씨! 보고 싶었어요!','프로나운 아저씨! 저 이제 숙녀 다 됐죠?','워~워 진정해 트랜스!'
+ ],
+ 'character-spotted':[
+  '나는 버프 형제의 맏형 액션 버프!','나는 버프 형제의 동생 비 버프!','형! 같이 가! 나는 다 따라하지 못한단 말이야!','비 버프야! 잘 행동해야지.','액션 버프형은 정말 활동적이야.','액션 버프형도 가끔은 감정을 느낄때가 있어. 나랑 비슷하게.','비버프는 항상 상태를 잘 봐야해.','Do는 동사가 아니야! 몇번을 강조해도 모자라군.','두두? 그게 이름이야? 우리를 도와준다면, 목숨은 살려주지.','아리.. 비 버프를 도와줘.','애드버프 당신은 정말 어디로 튈지 모르는 사람이군.'
+ ],
+ 'character-horse':[
+  '나로님, 불러만 주세요! 트랜스!!!','명사구로 변장시켜드릴게요! 트랜스!!','6번방의 세계로~~~','애드버프..? 당신은 어떻게 여기에 있나요?','누구보다 빠르게!! 신속하게!!','포켓볼에 오래 갇혀있었더니 뻐근하네!','나로님! 부르셨어요? 준비되어있습니다!','포켓볼 안쪽이요? 엄청 럭셔리하답니다!','마차를 준비해! 가장 빠르게 데려다주지!!','프로나운님! 출발하시죠 트랜스!!'
+ ],
+ 'character-pink-monkey':[
+  '어머~ 나로구나~ 아리한테 얘기는 많이 들었어~ 쪼끄만하네~','아리야, ly묘약은 정말 필요할때만 사용해야해.','비가 자꾸 드물게 내리네~ 종종 내려야 시원한데!','항상 맑은 날일 순 없지~ 그치 버프야?','트랜스..? 너야말로 어떻게..? 6번방은 내껀데..','프로나운? 그 구닥다리 아저씨는 별로야~','나로가 ly묘약을..?!  말도 안돼...','나는 장소도 시간도 방법도 가리지 않지~','나는 자유로운 영혼이야. 어디든 가지.','비 버프, 내 뒤로 와.','액션 버프? 내 앞으로 와주겠어?'
+ ],
+ 'character-king':[
+  '그래머랜드는 승리할것입니다!!','KOR와 engLISH  이 둘의 통합이 코리쉬!','한글 배우듯이 영어를 배울 수 있다면.. 얼마나 좋을까.','한글과 영어의 합체! 코리쉬!!','두두와 프로나운, 나로를 부탁하네.','두두군, 항상 강조하지만, 고맙다네.','프로나운군, 우리 아들 나로를 항상 대신해줘서 고맙다네.','버프 형제, 그대들은 정말 없으면 안되는 존재들이라네.','애드버프, 그녀는 이 세계를 풍요롭게 해.','아리, 나로를 꾸며주어서 정말 고맙다네.','한스 대왕님의 자리를 이어야해..','트랜스, 넌 정말 특별한 아이들이야.','블랙 마왕.. 두고만 볼 순 없겠어.'
+ ],
+};
 export function pickHomeDialogue(characterId:string,previous?:string,random:()=>number=Math.random){
- const lines=[...HOME_COMMON_LINES,...(CHARACTER_HOME_LINES[characterId]??[])].filter(line=>line!==previous);
- return lines[Math.min(lines.length-1,Math.max(0,Math.floor(random()*lines.length)))];
+ const special=(CHARACTER_HOME_LINES[characterId]??[]).filter(line=>line!==previous);
+ const common=HOME_COMMON_LINES.filter(line=>line!==previous);
+ const roll=Math.min(1-Number.EPSILON,Math.max(0,random()));
+ const useSpecial=special.length>0&&roll<.4;
+ const lines=useSpecial?special:common;
+ const position=useSpecial?roll/.4:special.length>0?(roll-.4)/.6:roll;
+ return lines[Math.min(lines.length-1,Math.floor(Math.max(0,position)*lines.length))];
 }

@@ -5,7 +5,7 @@ import {HOME_CHARACTERS} from '../shared/homeCharacters.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
 import './home-character.css';
 
-export function HomeCharacter({character,speech}:{character:{id:string;name:string;image:string};speech?:{text:string;serial:number}}){
+export function HomeCharacter({character,speech,onInteract}:{character:{id:string;name:string;image:string};speech?:{text:string;serial:number};onInteract:()=>void}){
  const poses=HOME_CHARACTERS.find(c=>c.id===character.id)?.poses??[{image:character.image,name:character.name,id:character.id}];
  const [index,setIndex]=useState(0),[renderer,setRenderer]=useState('loading'),host=useRef<HTMLDivElement>(null),imageRef=useRef<HTMLImageElement>(null),source=poses[index%poses.length];
  const sourceRef=useRef(source.image),loadRef=useRef<((url:string)=>Promise<void>)|null>(null),pressed=useRef(-Infinity);sourceRef.current=source.image;
@@ -50,5 +50,5 @@ export function HomeCharacter({character,speech}:{character:{id:string;name:stri
   }catch{fallback()}})();
   return()=>{disposed=true;loadRef.current=null;speakRef.current=null;clearTimeout(watchdog);observer?.disconnect();unwatch();document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',visibility);if(initialized)app?.destroy(true,{children:true});};
  },[]);
- return <div className="hub-character-stage" data-character-id={character.id} data-renderer={renderer} aria-label="메인 캐릭터"><button type="button" className="home-character-touch" aria-label={`${character.name} 다음 표정`} data-renderer={renderer} data-pose-index={index%poses.length} onClick={()=>{pressed.current=performance.now();setIndex(old=>(old+1)%poses.length)}}><img ref={imageRef} className="hub-main-character" data-character-layer="base" src={source.image} alt={source.name} draggable={false}/><div className="home-character-canvas" ref={host} aria-hidden="true"/></button>{speech&&<div key={speech.serial} className="home-character-speech" role="status" aria-live="polite" aria-atomic="true" data-speech-serial={speech.serial}>{speech.text}</div>}</div>;
+ return <div className="hub-character-stage" data-character-id={character.id} data-renderer={renderer} aria-label="메인 캐릭터"><button type="button" className="home-character-touch" aria-label={`${character.name} 다음 표정`} data-renderer={renderer} data-pose-index={index%poses.length} onClick={()=>{pressed.current=performance.now();setIndex(old=>(old+1)%poses.length);onInteract()}}><img ref={imageRef} className="hub-main-character" data-character-layer="base" src={source.image} alt={source.name} draggable={false}/><div className="home-character-canvas" ref={host} aria-hidden="true"/></button>{speech&&<div key={speech.serial} className="home-character-speech" role="status" aria-live="polite" aria-atomic="true" data-speech-serial={speech.serial}>{speech.text}</div>}</div>;
 }
