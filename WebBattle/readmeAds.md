@@ -22,16 +22,16 @@ PowerShell에서 작업 폴더로 이동한 뒤:
 
 ```powershell
 # 키를 출력하지 않고 복호화 가능 여부와 지문 확인
-powershell -NoProfile -File adsetting/ads-key-vault.ps1 status
+powershell -NoProfile -ExecutionPolicy Bypass -File adsetting/ads-key-vault.ps1 status
 
 # 복호화한 키를 클립보드로 복사 → LevelPlay Private Key 칸에 붙여넣기
-powershell -NoProfile -File adsetting/ads-key-vault.ps1 copy
+powershell -NoProfile -ExecutionPolicy Bypass -File adsetting/ads-key-vault.ps1 copy
 
 # 콘솔 저장 후 클립보드 지우기 (클립보드 기록을 켰다면 기록에서도 삭제)
 Set-Clipboard -Value ''
 
 # 같은 키를 Worker에 입력: 표준입력으로 전달, 명령줄에 키를 쓰지 않음
-powershell -NoProfile -File adsetting/ads-key-vault.ps1 install
+powershell -NoProfile -ExecutionPolicy Bypass -File adsetting/ads-key-vault.ps1 install
 ```
 
 Node가 PATH에 없으면 install에 다음 인수를 추가한다:
@@ -39,6 +39,8 @@ Node가 PATH에 없으면 install에 다음 인수를 추가한다:
 ```powershell
 -Node 'C:\Users\1\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
 ```
+
+위 ExecutionPolicy 옵션은 해당 도구 실행 프로세스에만 적용하며 시스템 정책을 변경하지 않는다.
 
 `init`은 최초 생성 전용이며 기존 보관함이 있으면 실패한다. 재실행하며 키를 교체하지 말 것. 이 도구는 공개 웹 비밀번호 페이지를 만들지 않는다. 다른 PC 인계가 필요하면 신뢰하는 비밀번호 관리자의 보안 공유 기능으로 전달한다.
 
