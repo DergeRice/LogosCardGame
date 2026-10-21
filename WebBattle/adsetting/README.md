@@ -1,6 +1,6 @@
 # 로고스 카드게임 광고 설정 인계
 
-이 디렉터리는 광고 SDK를 연결할 담당자가 사용하는 단일 설정 계약이다. 웹 게임 코드에는 광고 SDK를 넣지 않는다. Android Capacitor 앱에서 **보상형 광고 1개**만 표시한다.
+이 디렉터리는 광고 SDK를 연결할 담당자가 사용하는 단일 설정 계약이다. 웹 게임 코드에는 광고 SDK를 넣지 않는다. Android Unity WebView 앱에서 **보상형 광고 1개**만 표시한다. 기존 내부 테스트의 Capacitor 앱에는 Unity 브리지가 없다.
 
 ## 현재 범위
 
@@ -13,7 +13,7 @@
 
 ## 필요한 값
 
-아래 값은 Git에 넣지 말고 CI/Capacitor native secret 또는 배포 환경변수로 관리한다.
+아래 값은 Git에 넣지 말고 CI/Unity 빌드 설정 또는 배포 환경변수로 관리한다.
 
 ```dotenv
 # Android 전용 LevelPlay 앱 설정
@@ -30,7 +30,7 @@ LEVELPLAY_REWARDED_S2S_SECRET=
 2. Rewarded ad unit 하나와 placement `logos_rewarded_box` 하나를 만든다.
 3. 앱 시작 시 SDK를 초기화하고 rewarded 로드 성공 여부만 UI에 전달한다.
 4. 상자 열기 직전에 rewarded를 표시한다. 닫기·스킵·실패는 보상하지 않는다.
-5. 보상 이벤트에는 로그인 계정 ID와 임의의 `adTransactionId`를 넣고 LevelPlay S2S 콜백을 서버로 보낸다.
+5. 서버가 계정·상자에 묶은 일회성 `rewardTicket`을 발급한다. Unity는 이를 Dynamic User ID로 설정하고, LevelPlay가 S2S 콜백을 서버로 보낸다. 클라이언트가 보상 거래 ID를 만들어 검증을 대신할 수 없다.
 6. 서버는 콜백 서명을 검증하고 `adTransactionId`를 한 번만 처리한 뒤 `storeOpenFree`와 같은 서버 추첨을 실행한다.
 7. 이미 열린 상자는 쿨다운 응답을 그대로 표시한다. 로컬 시간으로 쿨다운을 판정하거나 다이아·아이템을 직접 증가시키지 않는다.
 
