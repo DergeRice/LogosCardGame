@@ -25,6 +25,7 @@ export class AuditStore{
    sql.exec("INSERT INTO sentence_meta(key,value) VALUES('backfilled',?)",Date.now());
   }
  }
+ deletePlayers(ids:string[]){for(const id of ids)this.sql.exec("DELETE FROM audit_logs WHERE json_extract(data,'$.playerId')=? OR json_extract(data,'$.details.actorAccountId')=?",id,id);this.recent.clear();}
  authorized(header:string|null){
   const token=header?.startsWith('Bearer ')?header.slice(7):'';
   if(!/^[A-Za-z0-9_-]{32,128}$/.test(token))return false;

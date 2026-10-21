@@ -96,6 +96,18 @@ try{
  await probe.until(()=>!probe.room.hand.some(c=>c.id===card.id));
  const quietSaved=clients.map(c=>({token:c.token,hand:c.room.hand}));for(const c of clients)c.ws.close();await wait(250);await mf.dispose();mf=make('0');url=new URL('/socket',await mf.ready);url.protocol='ws:';
  clients=await Promise.all(quietSaved.map(s=>new Client(url).hello('restored',s.token)));for(let i=0;i<clients.length;i++){await clients[i].until(()=>clients[i].room?.phase==='battle');assert.deepEqual(clients[i].room.hand,quietSaved[i].hand);}
+ // A distinct synthetic account verifies destructive account deletion locally.
+ // No production account or real user data is involved.
+ const victim=await new Client(url).hello('Deletion fixture');clients.push(victim);
+ victim.send('register',{username:'cloud_delete',password:'synthetic delete password'});await victim.until(()=>victim.messages.some(m=>m.type==='auth'));
+ const deletionAuth=victim.messages.find(m=>m.type==='auth').authToken,deletedToken=victim.token;
+ victim.send('deleteAccount',{authToken:deletionAuth,confirmation:'탈퇴',acknowledge:false});await victim.until(()=>victim.messages.some(m=>m.type==='accountDeletionResult'&&m.ok===false));
+ victim.send('deleteAccount',{authToken:deletionAuth,confirmation:'탈퇴',acknowledge:true});await victim.until(()=>victim.messages.some(m=>m.type==='accountDeleted'));
+ assert.equal((await(await mf.dispatchFetch('http://localhost/admin/accounts?name=cloud_delete',{headers:adminHeaders})).json()).accounts.length,0);
+ for(const c of clients)c.ws.close();await wait(250);await mf.dispose();mf=make('0');url=new URL('/socket',await mf.ready);url.protocol='ws:';
+ const deleted=await new Client(url).hello('Deleted check',deletedToken,deletionAuth);clients.push(deleted);assert.equal(deleted.messages.find(m=>m.type==='session').account,null);
+ assert.equal((await(await mf.dispatchFetch('http://localhost/admin/accounts?name=cloud_delete',{headers:adminHeaders})).json()).accounts.length,0);
+ console.log('PASS: authenticated account deletion persists across SQLite restart; deleted auth cannot restore the account.');
  console.log('PASS: production diagnostics disabled, human judgment/discard and restart recovery persist without new audit records.');
  console.log(`PASS: real Cloudflare runtime: 4 WebSockets, unique deck, ${naturalCorrect?'Correct':'invalid natural submission'} retention/dedupe, discard/dedupe, SQLite process restart recovery, unanimous draw, forfeit, rematch, rejected origin. No forced score/hand/winner.`);
 }finally{for(const c of clients)c.ws.close();await mf.dispose();}
