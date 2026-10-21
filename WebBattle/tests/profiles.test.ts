@@ -26,6 +26,17 @@ test('profile ownership, independent equip, peer/ranking/match propagation and p
  const messages:any[]=[],g=new Game(),p=g.hello({...socket(),send(raw){messages.push(JSON.parse(raw))}},null,'Portrait buyer'),r=g.community.record(p),item=COLLECTIBLE_PROFILES[0],character=r.store.character,original=r.store.profile;
  g.handle(p,{type:'storeEquip',id:item.id});assert.equal(r.store.profile,original);r.store.dust=300;g.handle(p,{type:'storeRedeem',id:item.id,requestId:'profile-buy',storeVersion:0});g.handle(p,{type:'storeEquip',id:item.id});assert.equal(r.store.dust,0);assert.equal(r.store.profile,item.id);assert.equal(r.store.character,character);assert.equal(g.community.peer(p.id)?.profileId,item.id);
  r.rankGames=3;g.community.ranking(p,1);assert.equal(messages.at(-1).players.find((x:any)=>x.id===p.id).profileId,item.id);
- g.createRoom(p);g.addRoomAI(p);const room=g.rooms.get(p.room!)!,view=g.view(room,p);assert.equal(view.players.find(x=>x.id===p.id)?.profileId,item.id);assert.ok(view.players.filter(x=>x.ai).every(x=>BASIC_PROFILES.some(b=>b.id===x.profileId)));
+ g.createRoom(p);g.addRoomAI(p);const room=g.rooms.get(p.room!)!,view=g.view(room,p);assert.equal(view.players.find(x=>x.id===p.id)?.profileId,item.id);assert.ok(view.players.filter(x=>x.ai).every(x=>COSMETICS.some(c=>c.type==='profile'&&c.id===x.profileId)));
  const next=new Game();restore(next,snapshot(g));assert.equal(next.community.records.get(p.id)?.store.profile,item.id);assert.ok(dummyRanking(1).every(x=>COSMETICS.some(c=>c.type==='profile'&&c.id===x.profileId)));
+});
+test('AI opponents use the complete profile catalog, keep distinct portraits in a room and survive restore',()=>{
+ const game=new Game(),host=game.hello(socket(),null,'Bot profile host');game.createRoom(host);
+ for(let i=0;i<5;i++)game.addRoomAI(host);
+ const room=game.rooms.get(host.room!)!,bots=game.view(room,host).players.filter(player=>player.ai),allProfiles=new Set([...BASIC_PROFILES,...COLLECTIBLE_PROFILES].map(profile=>profile.id));
+ assert.equal(bots.length,5);
+ assert.ok(bots.every(bot=>bot.profileId&&allProfiles.has(bot.profileId)));
+ assert.equal(new Set(bots.map(bot=>bot.profileId)).size,bots.length);
+ assert.ok(bots.some(bot=>COLLECTIBLE_PROFILES.some(profile=>profile.id===bot.profileId)));
+ const restored=new Game();restore(restored,snapshot(game));
+ assert.deepEqual(restored.view(restored.rooms.get(room.code)!,restored.rooms.get(room.code)!.players[0]).players.filter(player=>player.ai).map(bot=>bot.profileId),bots.map(bot=>bot.profileId));
 });

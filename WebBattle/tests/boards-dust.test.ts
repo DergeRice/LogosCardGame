@@ -4,7 +4,7 @@ const boards=COSMETICS.filter(c=>c.type==='board'&&c.image.startsWith('/cosmetic
 test('512px transparent stardust and thirty wide board images decode and are preloaded',async()=>{
  assert.equal(boards.length,30);assert.equal(COSMETICS.filter(c=>c.type==='board').length,31);assert.deepEqual(new Set(boards.filter(b=>!newNames.includes(b.name)).map(b=>b.name)),new Set(['우주선','칠판','흰벽돌','마법도서관','하늘성채','벚꽃밤','사막시장','아늑한방','설원','수중세계']));
  const dust=await sharp('public'+DUST_IMAGE).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(dust.info.width,512);assert.equal(dust.info.height,512);assert.equal(dust.data[3],0);assert.ok(GAME_ASSET_URLS.includes(DUST_IMAGE));
- for(const board of boards){const m=await sharp('public'+decodeURIComponent(board.image)).metadata();if(newNames.includes(board.name)){assert.equal(m.width,1850);assert.equal(m.height,850);}else{assert.equal(m.width,1536);assert.ok(m.height!>=660&&m.height!<=706);}assert.ok(GAME_ASSET_URLS.includes(board.image));assert.ok(!defaultHubSave().owned.includes(board.id));}
+ for(const board of boards){const m=await sharp('public'+decodeURIComponent(board.image)).metadata();if(newNames.includes(board.name)){assert.equal(m.width,1850);assert.equal(m.height,850);}else if(board.name==='설원'){assert.equal(m.width,1672);assert.equal(m.height,941);}else{assert.equal(m.width,1536);assert.ok(m.height!>=660&&m.height!<=706);}assert.ok(GAME_ASSET_URLS.includes(board.image));assert.ok(!defaultHubSave().owned.includes(board.id));}
  const reward=openDemoBox(defaultHubSave(),'silver',1,()=>0).rewards[0];assert.equal(reward.type,'dust');assert.equal(reward.image,DUST_IMAGE);
 });
 test('all thirty boards participate in every box at existing category odds and cost 500 dust',()=>{
