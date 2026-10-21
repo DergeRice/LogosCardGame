@@ -15,7 +15,9 @@ export const BOX_DUST={silver:{min:4,max:12},gold:{min:12,max:28},diamond:{min:2
 export function dustPrice(type:keyof typeof DUST_PRICES){return DUST_PRICES[type];}
 export function lootType(roll:number,boxId: keyof typeof BOX_WEIGHTS='silver'):LootType{if(!Number.isFinite(roll)||roll<0||roll>=1)throw Error('Invalid loot roll');let at=roll*100;for(let i=0;i<LOOT_WEIGHTS.length;i++){if(at<BOX_WEIGHTS[boxId][i])return LOOT_WEIGHTS[i].type;at-=BOX_WEIGHTS[boxId][i];}return 'frame';}
 export const BOXES=[{id:'silver',name:'실버 박스',currency:'gold',price:1000,color:'#96b6b9',offers:[{count:1,cost:1000},{count:10,cost:9800}]},{id:'gold',name:'골드 박스',currency:'gold',price:3000,color:'#e7b750',offers:[{count:1,cost:3000},{count:10,cost:28000}]},{id:'diamond',name:'다이아 박스',currency:'diamonds',price:100,color:'#a28bdb',offers:[{count:1,cost:100},{count:10,cost:900},{count:20,cost:1700},{count:40,cost:3000},{count:100,cost:6000}]}] as const;
-export const DIAMOND_PACKS=[{amount:100,won:1200},{amount:300,won:2900},{amount:1000,won:8900},{amount:3000,won:25000}] as const;
+export const DIAMOND_PACKS=[{id:'diamonds_100',amount:100,won:1200},{id:'diamonds_300',amount:300,won:2900},{id:'diamonds_1000',amount:1000,won:8900},{id:'diamonds_3000',amount:3000,won:24900}] as const;
+export type DiamondPack=typeof DIAMOND_PACKS[number];
+export function diamondPack(id:string):DiamondPack|undefined{return DIAMOND_PACKS.find(pack=>pack.id===id);}
 export const COSMETICS=[
  ...NARO_EMOTES,
  ...BASIC_PROFILES,...COLLECTIBLE_PROFILES,
