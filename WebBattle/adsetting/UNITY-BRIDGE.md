@@ -10,7 +10,7 @@ Unity 원본은 저장소 루트이다. `main`의 Unity 프로젝트를 `web-bat
 - Billing 8은 `standard` 구매 옵션의 `offerToken`을 명시하여 결제창을 연다. 대여/할인 옵션은 선택하지 않는다. [Google 공식 연결 가이드](https://developer.android.com/google/play/billing/one-time-product-multi-purchase-options-offers)를 기준으로 구현했다.
 - SDK의 성공 응답은 다이아/상자 지급을 의미하지 않는다. 반드시 서버 검증·영구 중복 방지 후 지급한다.
 - `commerceEnabled=false`가 기본값이다. 현재 웹 서버가 구매·광고 보상을 검증하지 않으므로, 서버 구현과 기기 검증이 끝나기 전에는 빌드 환경의 `LOGOS_COMMERCE_ENABLED=1`을 주지 않는다.
-- 전용 LevelPlay Android 앱과 보상형 단위·placement `logos_rewarded_box`를 생성했다. 비공개 App Key와 ad unit ID는 릴리스 환경 파일만 사용한다. Unity Ads bidding network는 로고스 전용 Unity Ads API Key와 Organization Core ID를 발급한 뒤 연결한다. QTlingo 자격 증명과 광고 단위는 재사용하지 않는다.
+- 전용 LevelPlay Android 앱과 보상형 단위·placement `logos_rewarded_box`를 생성했다. 비공개 App Key와 ad unit ID는 릴리스 환경 파일만 사용한다. Unity Ads bidding network는 로고스 전용 Unity 서비스 계정과 Organization Core ID로 연결했고, Android Game ID `5868669`의 rewarded placement `Rewarded_Android`를 `logos_unity_rewarded` 인스턴스로 등록했다. QTlingo 자격 증명과 광고 단위는 재사용하지 않는다.
 - Play Console 상품 4개 모두 대한민국 전용 `standard` 구매 옵션으로 활성화했다. 가격은 100개 ₩1,200 / 300개 ₩2,900 / 1,000개 ₩8,900 / 3,000개 ₩24,900이다. 3,000개 일괄 가격의 자동 반올림을 개별 가격 수정으로 바로잡고 저장 완료를 확인했다.
 - Google Cloud `logos-card-game`에 `logos-play-verifier` 서비스 계정을 만들고, Play Console에서 `com.baragames.logoscardgame` 앱 한정으로 구매 조회·처리 권한을 부여했다. JSON 키는 로컬 비공개 경로에만 보관한다. Android Publisher API 활성화 확인 뒤 서버가 실제 구매 토큰을 검증할 수 있다.
 - Google Play Android Developer API 활성화 및 서비스 계정의 읽기 검증을 완료했다. `GOOGLE_PLAY_SERVICE_ACCOUNT_FILE=/비공개/키.json node WebBattle/adsetting/verify-play-products.mjs`는 키·토큰을 출력하지 않고 상품 ID만 확인한다.

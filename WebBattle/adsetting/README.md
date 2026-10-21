@@ -14,7 +14,7 @@
 ## 발급·연결 상태 (2026-10-21)
 
 - LevelPlay Android 앱 `로고스 카드게임`과 보상형 광고 단위 `logos_rewarded_box`, 같은 이름의 rewarded placement를 새로 만들었다. 기존 QTlingo 식별자는 사용하지 않는다.
-- 기본 LevelPlay rewarded 설정은 생성됐다. Unity Ads bidding network는 Unity Ads API Key와 로고스 전용 Organization Core ID가 필요한 별도 연결 단계이며, QTlingo 자격 증명을 재사용하지 않는다.
+- LevelPlay rewarded 설정과 Unity Ads bidding network를 연결했다. 로고스 전용 Unity 서비스 계정과 Organization Core ID로 Android Game ID `5868669`의 rewarded placement `Rewarded_Android`를 `logos_unity_rewarded` 인스턴스로 등록했다. QTlingo 자격 증명과 광고 단위는 재사용하지 않는다.
 - LevelPlay 앱 키와 광고 단위 ID는 로컬 비공개 릴리스 환경 파일에만 있다. 저장소·웹 번들·Unity Resources에는 넣지 않는다.
 - S2S 콜백 endpoint와 검증 비밀값은 아직 만들지 않았다. 따라서 현재 광고 완료 이벤트만으로 상자를 지급할 수 없으며, 웹 서버 작업이 선행되어야 한다.
 - 대상 연령은 어린이·청소년·성인을 포함한다. 현재 네이티브 앱은 연령 판별 흐름이 생길 때까지 COPPA 보호 모드로 초기화한다. 웹에서 임의로 완화하지 않는다.
