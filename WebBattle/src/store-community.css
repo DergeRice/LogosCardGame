@@ -65,12 +65,14 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
 .store-box-rows>article:not([data-box=diamond]) .store-offers small{font-size:10px}
 @media(orientation:landscape) and (max-height:540px){.hub-shop .store-box-rows>article{grid-template-rows:auto auto auto auto}.hub-shop .store-box-rows .store-box-timer{grid-column:1/-1;grid-row:3;min-height:17px}.hub-shop .store-box-rows .store-open-options{grid-row:4}.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers b{font-size:11px}.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers small{font-size:9px}}
 
-/* Large box artwork with the name above and one free/ad slot beside ten opens. */
+/* Compact artwork with free/ad, one open and ten opens. */
 .hub-shop .store-box-grid.store-box-rows{display:flex;flex-direction:column}
-.hub-shop .store-box-rows>article{display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px;overflow:hidden}
-.hub-shop .store-box-rows>article>img{width:450px;height:410px;max-width:none;object-fit:contain;flex:none}
+.hub-shop .store-box-rows>article{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px;overflow:hidden}
+.hub-shop .store-box-rows>article>img{--art-height:328px;width:360px;height:var(--art-height);max-width:none;object-fit:contain;flex:none;pointer-events:none;margin:calc(var(--art-height)*-.13) 0}
 .hub-shop .store-box-rows .store-offers{grid-row:auto;grid-column:auto}
-.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers{grid-template-columns:repeat(3,minmax(0,1fr));width:100%}
 .hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers>button{min-height:58px;flex:1}
-@media(max-width:650px){.hub-shop .store-box-rows>article{padding:14px}.hub-shop .store-box-rows>article>img{width:380px;height:350px}}
-@media(orientation:landscape) and (max-height:540px){.hub-shop .store-box-rows>article>img{width:320px;height:320px}.hub-shop .store-box-rows>article{padding:12px}.hub-shop .store-box-rows .store-open-options{width:100%}}
+@media(max-width:650px){.hub-shop .store-box-rows>article{padding:14px}.hub-shop .store-box-rows>article>img{--art-height:280px;width:304px}}
+@media(orientation:landscape) and (max-height:540px){.hub-shop .store-box-rows>article>img{--art-height:256px;width:256px}.hub-shop .store-box-rows>article{padding:12px}.hub-shop .store-box-rows .store-open-options{width:100%}}
+
+.hub-shop .store-box-rows h2{position:relative;z-index:1;margin:0}.hub-shop .store-box-rows .store-box-timer{margin:0;min-height:17px}.hub-shop .store-box-rows .store-rates{margin:0;min-height:24px}.hub-shop .store-box-rows .store-offers{padding:2px 0}

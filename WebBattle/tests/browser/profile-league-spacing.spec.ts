@@ -1,0 +1,12 @@
+import {test,expect,guestContext} from './fixtures.js';
+import {COSMETICS,defaultHubSave} from '../../shared/store.js';
+for(const layout of ['portrait','landscape'] as const)test(`profile spacing and league rating ranges ${layout}`,async({browser})=>{
+ const viewport=layout==='portrait'?{width:390,height:844}:{width:844,height:390},ctx=await guestContext(browser,{viewport,isMobile:true,hasTouch:true,reducedMotion:'reduce'}),save=defaultHubSave();save.frame=COSMETICS.find(c=>c.type==='frame'&&c.image)!.id;
+ await ctx.addInitScript(({viewport})=>Object.defineProperty(window,'visualViewport',{value:Object.assign(new EventTarget(),{width:viewport.width,height:viewport.height-60,offsetTop:20,offsetLeft:0,scale:1})}),{viewport});const page=await ctx.newPage();
+ await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{if(JSON.parse(String(raw)).type==='hello'){ws.send(JSON.stringify({type:'session',id:'me',uuid:'profile-spacing',name:'이상진',token:'spacing-fixture',avatar:'pronoun',rating:967,coins:0,points:0,account:{username:'FixtureUser'}}));ws.send(JSON.stringify({type:'community',community:{serverNow:Date.now(),friends:[],incoming:[],outgoing:[],invites:[],store:save}}));}}));
+ try{
+  await page.goto('/');await page.locator('#tab-profile').click({timeout:60000});const summary=page.locator('.hub-profile-summary'),portrait=(await summary.locator('.hub-avatar-frame').boundingBox())!,details=summary.locator(':scope>div'),name=(await details.locator('h2').boundingBox())!,tier=(await details.locator(':scope>span').boundingBox())!,account=(await details.locator('small').boundingBox())!;
+  expect(name.x-(portrait.x+portrait.width)).toBeGreaterThanOrEqual(24);expect(tier.y-(name.y+name.height)).toBeGreaterThanOrEqual(9);expect(account.y-(tier.y+tier.height)).toBeGreaterThanOrEqual(9);await page.screenshot({path:`.runtime/v139-profile-${layout}-${test.info().project.name}.png`});
+  await page.locator('#tab-ranking').click();const league=page.locator('.hub-league-switch');await expect(league.locator('small')).toHaveText('800~1,299점');await league.getByRole('button',{name:'이전 리그'}).click();const ranges=['0~799점','800~1,299점','1,300~1,799점','1,800~2,299점','2,300~2,799점','2,800~3,299점','3,300~3,799점','3,800점 이상'];for(let i=0;i<ranges.length;i++){await expect(league.locator('small')).toHaveText(ranges[i]);if(i<7)await league.getByRole('button',{name:'다음 리그'}).click();}await page.screenshot({path:`.runtime/v139-league-${layout}-${test.info().project.name}.png`});
+ }finally{await ctx.close();}
+});
