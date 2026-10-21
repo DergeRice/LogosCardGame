@@ -11,7 +11,7 @@ import {PixiResultGold} from './PixiResultGold.js';
 import './result-presentation.css';
 
 /** Rewards were already settled by the server; animation never grants currency. */
-export function PersonalResult({player,room,diamonds=0,connected,retry,home,children}:{player:PublicPlayer;room:RoomView;diamonds?:number;connected:boolean;retry:()=>void;home:()=>void;children?:ReactNode}){
+export function PersonalResult({player,room,connected,retry,home,children}:{player:PublicPlayer;room:RoomView;connected:boolean;retry:()=>void;home:()=>void;children?:ReactNode}){
  const before=player.rating-player.ratingDelta;
  const [rating,setRating]=useState(before),[phase,setPhase]=useState<'rank'|'ready'|'flight'|'credited'>('rank');
  const [balance,setBalance]=useState(Math.max(0,(player.coins??0)-(player.coinReward??0)));
@@ -29,11 +29,10 @@ export function PersonalResult({player,room,diamonds=0,connected,retry,home,chil
   <button className="result-people-trigger" aria-label="함께한 플레이어 보기" aria-expanded={peopleOpen} onClick={event=>{event.stopPropagation();setPeopleOpen(open=>!open)}}><ControlIcon name="friends"/><span>참가자</span></button>
   <div className="result-wallet" ref={wallet} aria-label="내 재화" aria-hidden={phase==='rank'||phase==='ready'}>
    <span className="wallet-gold"><CurrencyIcon currency="coin"/><AnimatedNumber value={balance} duration={1100} testId="result-gold-balance"/></span>
-   <span className="wallet-diamonds"><CurrencyIcon currency="diamond"/>{diamonds.toLocaleString()}<small>다이아</small></span>
   </div>
-  <header className="result-heading"><small>{won?'우우웅!':'끼익…'}</small><h1>{room.forfeiterId===room.you?'패배':won?'승리!':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?(room.forfeiterId===room.you?'항복으로 경기가 종료됐어요':'함께 마무리한 한 판'):won?'멋진 승리예요!':`${winner}의 승리`}</p></header>
+  <header className="result-heading"><small>{won?'':'끼익…'}</small><h1>{room.forfeiterId===room.you?'패배':won?'승리!':room.winner==null?'무승부':'패배'}</h1><p>{room.winner==null?(room.forfeiterId===room.you?'항복으로 경기가 종료됐어요':'함께 마무리한 한 판'):won?'':`${winner}의 승리`}</p></header>
   <section className={`result-rank ${player.ratingDelta<0?'rating-down':'rating-up'}`} aria-label="내 랭크">
-   <TierBadge tier={leagueFor(player.rating).tier}/><span>{leagueFor(player.rating).label}</span>
+   <TierBadge tier={leagueFor(player.rating).tier}/><span className="result-tier-name">{leagueFor(player.rating).label}</span>
    <strong><AnimatedNumber value={rating} duration={1400} testId="result-rating"/></strong>
    <small>{`${player.ratingDelta>=0?'+':''}${player.ratingDelta}`} </small>
    {player.ratingShield&&<div className="rating-shield" role="status"><img src="/brand-ui/rating-shield.png" alt=""/><b>보호막!</b><span>레이팅 감소 50%</span></div>}

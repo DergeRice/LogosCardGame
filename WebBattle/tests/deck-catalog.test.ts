@@ -37,8 +37,8 @@ test('new noun determiners and auxiliary cards reach the grammar checker',()=>{
 test('printed division and subtraction affect accepted cards and labels',()=>{
  const divided={id:'v',kind:'verb' as const,variant:'verb-div2'};
  assert.equal(effectLabel(divided),'÷2');
- assert.equal(judgeCards([divided]).points,0.5);
- assert.equal(judgeCards([divided]).formula,'1 ÷ 2 = 0.5점');
+ assert.equal(judgeCards([divided]).points,1);
+ assert.equal(judgeCards([divided]).formula,'1 ÷ 2 = 1점');
  const minus={id:'p',kind:'possessive' as const,variant:'possessive-minus2'};
  assert.equal(cardEffect(minus).add,-2);assert.equal(effectLabel(minus),'−2');
  const result=judgeCards([minus,{id:'n',kind:'count'},{id:'v',kind:'verb'}]);

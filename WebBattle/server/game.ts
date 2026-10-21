@@ -34,7 +34,7 @@ function applyGoBenefit(judgment:Judgment,go:number){
  if(!judgment.valid||go<1)return judgment;
  if(go===1){judgment.goBonus=3;judgment.points+=3;judgment.formula=`${judgment.formula?.replace(/ = .*$/,'')??judgment.points-3} + 1고 +3점 = ${judgment.points}점`;}
  else if(go===2){judgment.goBonus=6;judgment.points+=6;judgment.formula=`${judgment.formula?.replace(/ = .*$/,'')??judgment.points-6} + 2고 +6점 = ${judgment.points}점`;}
- else {judgment.goMultiplier=2;judgment.points*=2;judgment.formula=`(${judgment.formula?.replace(/ = .*$/,'')??judgment.points/2}) × 3고 ×2 = ${judgment.points}점`;}
+ else {judgment.goMultiplier=2;judgment.points=Math.round(judgment.points*2);judgment.formula=`(${judgment.formula?.replace(/ = .*$/,'')??judgment.points/2}) × 3고 ×2 = ${judgment.points}점`;}
  return judgment;
 }
 export class Game {
@@ -327,13 +327,24 @@ export class Game {
   const nextGo=r.goCount+1;
   if (nextGo > RULES.maxGo) return this.fail(p, '3고까지 선택할 수 있어요.');
   const previousLeader=d.previousLeaderId?r.players.find(x=>x.id===d.previousLeaderId):undefined;
-  if(previousLeader){previousLeader.score=Math.floor(previousLeader.score/2);previousLeader.hitBaseScore=previousLeader.score;previousLeader.calledGo=false;}
+  if(previousLeader){previousLeader.score=Math.round(previousLeader.score/2);previousLeader.hitBaseScore=previousLeader.score;previousLeader.calledGo=false;}
   p.ownGoBaseScore=p.baseScore??p.score;const paused = Date.now() - d.startedAt;p.calledGo=true;r.leaderId=p.id;r.goTarget=nextGo;
   if(r.endsAt > 0&&!r.finalRound&&r.countdownStartedAt===undefined) r.endsAt += paused; if(r.nextDealAt>0)r.nextDealAt+=paused; if(r.drawVote?.aiApproveAt)for(const id of Object.keys(r.drawVote.aiApproveAt))r.drawVote.aiApproveAt[id]+=paused; for (const x of r.players) x.nextAI += paused; r.decision = undefined;
   this.deal(r,1);
   if(nextGo>=2&&r.deck.length){p.hand.push(r.deck.pop()!);p.handVersion++;this.receivedCards(p);r.dealSerial++;}
   this.deckCountdown(r);r.rulesVersion=5;
   this.log(r, `${p.name} 님의 ${nextGo}GO 도전! 본인 카드 2장 · 나머지 각 1장 · 승리 보상 ${nextGo===2?5:15}배${previousLeader?` · ${previousLeader.name} 점수 ÷2`:''}`); this.broadcast(r);
+ }
+ superGo(p:Player,msg:Record<string,unknown>){
+  const r=p.room&&this.rooms.get(p.room),record=this.community.record(p);
+  if(!r||r.phase!=='battle'||msg.matchId!==r.matchId)return this.fail(p,'진행 중인 경기가 없어요.');
+  if(!record.superUser)return this.fail(p,'슈퍼 계정 전용 GO 패스예요.');
+  const passes=record.superGoPasses??1;
+  if(passes<1)return this.fail(p,'이번 슈퍼 GO 패스를 이미 사용했어요.');
+  if(r.decision||r.leaderId)return this.fail(p,'다른 GO 선택이 진행 중이에요.');
+  record.superGoPasses=passes-1;p.goHits=1;p.calledGo=true;p.ownGoBaseScore=p.baseScore??p.score;r.leaderId=p.id;r.goCount=1;r.goTarget=2;
+  this.startCountdown(r,'go');this.deal(r,1);this.deckCountdown(r);
+  this.log(r,`${p.name} 님이 슈퍼 GO 패스를 사용했어요. 전체 1장 드로우 · 다음 제출에 +3점!`);this.broadcast(r);this.community.send(p);
  }
  claimBasic(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room),id=typeof msg.requestId==='string'?msg.requestId:'';
@@ -585,6 +596,7 @@ export class Game {
  handle(p: Player, msg: Record<string, unknown>) {
   if(p.deleted)return;
   if(msg.type==='deleteAccount')return deleteGameAccount(this,p,msg);
+  if(msg.type==='superGo')return this.superGo(p,msg);
   if(msg.type==='googleReturnConfirm'){this.confirmGoogleReturn(p,msg.accept);return;}
   if(msg.type==='clientEvent'){const last=this.telemetryAt.get(p.id)??0;if(Date.now()-last>=250){this.telemetryAt.set(p.id,Date.now());this.audit(p,'client',msg.code==='CLIENT_ERROR'||msg.code==='SUBMIT_TIMEOUT'?'error':msg.code==='SUBMIT_BLOCKED'||msg.code==='AUDIO_FAILURE'?'warn':'info',msg);}return;}
   p.touchedAt = Date.now(); this.tick();

@@ -126,7 +126,8 @@ export function judgeCards(cards: Card[], go = 1): Judgment {
  const adds = accepted.map(cardEffect).filter(e=>e.add!==0).map(e=>e.add);
  const subtotal = result.usedLength * factors.reduce((a,b)=>a*b,1) + adds.reduce((a,b)=>a+b,0);
  const expression = [String(result.usedLength),...factors.map(x=>x<1?`÷ ${1/x}`:`× ${x}`),...adds.map(x=>x<0?`− ${-x}`:`+ ${x}`)].join(' ');
- result.points = subtotal * go;
+ // ÷2 effects must never leave a half point in the match score.
+ result.points = Math.round(subtotal * go);
  result.formula = go === 1 ? `${expression} = ${result.points}점` : `(${expression}) × ${go}고배율 = ${result.points}점`;
  return result;
 }
