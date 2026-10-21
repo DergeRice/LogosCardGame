@@ -1,0 +1,2 @@
+export const MATCH_COUNTDOWN_MS=60_000;
+export const GO_COUNTDOWN_EXTENSION_MS=20_000;

@@ -1,3 +1,4 @@
+import {MATCH_COUNTDOWN_MS} from '../shared/matchCountdown.js';
 import {migrateProfiles} from '../shared/store.js';
 import type {CommunityRecord,CommunityInvite} from './community.js';
 import {judgeCards} from '../shared/rules.js';
@@ -65,13 +66,18 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
    r.nextDealAt=Date.now()+game.dealMs;
   }
   if(r.phase==='battle'&&r.nextDealAt>Date.now()+game.dealMs)r.nextDealAt=Date.now()+game.dealMs;
-  if(game.durationMs===0&&['reveal','dealing','battle'].includes(r.phase)){if(!r.finalRound)r.endsAt=0;r.expiresAt=0;}
+  if(game.durationMs===0&&['reveal','dealing','battle'].includes(r.phase)){if(!r.finalRound&&r.countdownStartedAt===undefined)r.endsAt=0;r.expiresAt=0;}
   if(r.decision&&!players.get(r.decision.playerId)?.ai&&r.decision.expiresAt<=0)r.decision.expiresAt=(r.decision.startedAt||Date.now())+game.humanDecisionMs;
   if((r.rulesVersion??0)<4&&['battle','dealing'].includes(r.phase)){
    const oldCount=r.goCount,leader=players.get(r.leaderId??'');if(leader)leader.goHits=Math.min(3,oldCount);
    r.goTarget=oldCount?Math.min(3,oldCount+1):undefined;
    if(r.decision){const scorer=players.get(r.decision.playerId);if(scorer){const same=r.leaderId===scorer.id;scorer.goHits=Math.min(3,same?oldCount+1:1);r.decision.previousLeaderId=same?undefined:r.leaderId;r.leaderId=scorer.id;r.goCount=scorer.goHits;if(!same)r.goTarget=undefined;}}
    r.rulesVersion=4;
+  }
+  if((r.countdownVersion??0)<1&&r.phase==='battle'){
+   const exhausted=r.deck.length<r.players.length,hasGo=r.players.some(id=>(players.get(id)?.goHits??0)>0);
+   if(r.finalRound||exhausted||hasGo){r.countdownStartedAt=Date.now();r.endsAt=r.endsAt>0?Math.min(r.endsAt,Date.now()+MATCH_COUNTDOWN_MS):Date.now()+MATCH_COUNTDOWN_MS;if(exhausted){r.finalRound=true;r.nextDealAt=0;r.drawVote=undefined;}}
+   r.countdownVersion=1;
   }
   r.deck=r.deck.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
   r.discard=r.discard.filter(c=>c.kind!=='to-infinitive'&&cardEffect(c).add!==-2);
@@ -88,7 +94,7 @@ export function nextDeadline(game:Game):number|null{
   if(['reveal','dealing'].includes(r.phase)||(r.phase==='matching'&&r.players.some(p=>!p.ai&&p.socket?.readyState===1)))deadlines.push(r.stageEndsAt);
   if(['lobby','matching','reveal','dealing','battle'].includes(r.phase))for(const p of r.players)if(!p.ai&&p.disconnectedAt)deadlines.push(p.disconnectedAt+game.reconnectMs);
   if(r.phase==='battle'){
-   if(r.finalRound&&r.endsAt>0)deadlines.push(r.endsAt);
+   if((r.finalRound||r.countdownStartedAt!==undefined)&&r.endsAt>0)deadlines.push(r.endsAt);
    if(r.exchange)deadlines.push(r.exchange.expiresAt);
    if(r.nextDealAt>0&&!r.decision)deadlines.push(r.nextDealAt);
    if(!r.decision&&r.drawVote?.aiApproveAt)for(const [id,at] of Object.entries(r.drawVote.aiApproveAt))if(!r.drawVote.approved.includes(id))deadlines.push(at);

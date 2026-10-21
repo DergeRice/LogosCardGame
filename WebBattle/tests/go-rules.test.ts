@@ -33,7 +33,7 @@ test('low scores accumulate and the twenty point threshold requires a new hit ab
 test('controlled fixtures: Go authority, takeover and one-time settlement preserved',t=>{
  let now=1e6;t.mock.method(Date,'now',()=>now);const game=new Game({minimumPlayers:2,durationMs:90000}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);
  const submit=(p:typeof a,mode:20|26|13)=>{p.hand=fixture(mode);p.handVersion++;now+=1600;game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});};
- submit(a,26);const end=r.endsAt;now+=300;game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.endsAt,end+300);assert.equal(r.leaderId,a.id);assert.equal(r.goCount,1);
+ submit(a,26);const end=r.endsAt;now+=300;game.choice(a,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.endsAt,end);assert.equal(r.leaderId,a.id);assert.equal(r.goCount,1);
  a.score=27;r.highScore=27;b.score=2;submit(b,26);assert.equal(b.score,28);assert.equal(r.decision!.playerId,b.id);game.choice(b,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});assert.equal(r.goCount,1);assert.equal(r.leaderId,b.id);assert.equal(a.score,13);
  game.finish(r,'settle');assert.equal(r.winner,b.id);assert.equal(b.reward,250);const points=b.points;game.finish(r,'duplicate');assert.equal(b.points,points);
 });
@@ -44,7 +44,7 @@ test('human 20+ score gets a bounded choice and settles once if the phone suspen
  game.action(p,{requestId:randomUUID(),matchId:r.matchId,handVersion:p.handVersion,cards:p.hand.map(c=>c.id)});
  assert.equal(p.score,26);assert.equal(r.decision?.playerId,p.id);assert.equal(r.decision?.expiresAt,now+60_000);
  now+=59_999;game.tick();assert.equal(r.phase,'battle');
- now+=2;game.tick();assert.equal(r.phase,'result');assert.match(r.reason!,/자동 스톱/);assert.equal(r.decision,undefined);assert.equal(r.goCount,1);
+ now+=2;game.tick();assert.equal(r.phase,'result');assert.match(r.reason!,/제한 시간/);assert.equal(r.decision,undefined);assert.equal(r.goCount,1);
  const points=p.points;game.tick();assert.equal(p.points,points);
 });
 
