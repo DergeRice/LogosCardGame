@@ -9,12 +9,12 @@ test('first effective GO starts sixty seconds; second GO and other first GO each
  const choose=(p:typeof a)=>g.choice(p,{matchId:r.matchId,decisionId:r.decision!.id,choice:'go'});
  let msg=hit(a),deadline=now+60000;assert.equal(r.endsAt,deadline);assert.equal(nextDeadline(g),deadline);assert.equal(g.view(r,a).countdownStartedAt,now);now+=5000;choose(a);assert.equal(r.endsAt,deadline);
  msg=hit(a);deadline+=20000;assert.equal(a.goHits,2);assert.equal(r.endsAt,deadline);g.action(a,msg);assert.equal(r.endsAt,deadline);choose(a);
- hit(b);deadline+=20000;assert.equal(b.goHits,1);assert.equal(r.endsAt,deadline);assert.equal(r.decision,undefined); // A lower-scoring opponent's first effective hit also extends.
- hit(b);deadline+=20000;assert.equal(b.goHits,2);assert.equal(r.endsAt,deadline);
+ hit(b);deadline+=20000;assert.equal(b.goHits,1);assert.equal(r.endsAt,deadline);assert.equal(r.decision?.playerId,b.id); // A lower-scoring opponent also sees the GO choice.
+ choose(b);hit(b);deadline+=20000;assert.equal(b.goHits,2);assert.equal(r.endsAt,deadline);choose(b);
  hit(a);assert.equal(a.goHits,3);assert.equal(r.endsAt,deadline); // Only the requested first-opponent/second-hit bonuses apply.
 });
-test('twenty-point hit does not start the timer; actual final distribution immediately starts sixty seconds',t=>{
- let now=1e6;t.mock.method(Date,'now',()=>now);const {g,a,r}=setup();a.hand=hand(20);a.handVersion++;g.action(a,{requestId:'low-hit',matchId:r.matchId,handVersion:a.handVersion,cards:a.hand.map(c=>c.id)});assert.equal(a.judgment?.awardedPoints,20);assert.equal(r.endsAt,0);
+test('twenty-point hit opens 2GO choice and starts sixty seconds without restarting at final distribution',t=>{
+ let now=1e6;t.mock.method(Date,'now',()=>now);const {g,a,r}=setup();a.hand=hand(20);a.handVersion++;g.action(a,{requestId:'threshold-hit',matchId:r.matchId,handVersion:a.handVersion,cards:a.hand.map(c=>c.id)});assert.equal(a.judgment?.awardedPoints,20);assert.equal(a.goHits,1);assert.equal(r.decision?.playerId,a.id);assert.equal(r.endsAt,now+60000);
  r.deck=r.deck.slice(0,r.players.length);g.distribute(r,'automatic');assert.equal(r.deck.length,0);assert.equal(r.finalRound,true);assert.equal(r.endsAt,now+60000);assert.equal(nextDeadline(g),r.endsAt);now+=59999;g.tick();assert.equal(r.phase,'battle');now++;g.tick();assert.equal(r.phase,'result');assert.match(r.reason!,/제한 시간/);
 });
 test('deck exhaustion never restarts an already-running GO deadline and expiry wins over a pending choice',t=>{

@@ -562,12 +562,12 @@ export class Game {
    p.draftIds=msg.cards as string[];
    this.botEmotion(p,p.score>Math.max(...r.players.filter(x=>x!==p).map(x=>x.score))?'lead':'scored');for(const other of r.players)if(other!==p&&other.ai&&p.score>other.score)this.botEmotion(other,'surpassed');
    this.log(r, `${p.name} · ${p.judgment.label} +${p.judgment.awardedPoints}점`,p);
-   const effectiveHit=p.judgment.awardedPoints!>RULES.goThreshold;
+   const effectiveHit=p.judgment.awardedPoints!>=RULES.goThreshold;
    if(effectiveHit){const previous=p.goHits??0,otherGo=r.players.some(other=>other!==p&&(other.goHits??0)>0);p.goHits=Math.min(RULES.maxGo,previous+1);this.startCountdown(r,'go');if(previous===1||(previous===0&&otherGo)){r.endsAt+=GO_COUNTDOWN_EXTENSION_MS;this.log(r,`${p.name} 님의 ${p.goHits}GO 성공 · 제한 시간 +20초`);}}
-   if(effectiveHit&&p.score>r.highScore){
+   if(effectiveHit){
     const previousLeaderId=r.leaderId&&r.leaderId!==p.id?r.leaderId:undefined;
     if(previousLeaderId)r.goTarget=undefined;
-    r.leaderId=p.id;r.goCount=p.goHits!;r.highScore=p.score;r.rulesVersion=4;
+    r.leaderId=p.id;r.goCount=p.goHits!;r.highScore=Math.max(r.highScore,p.score);r.rulesVersion=4;
     r.decision={id:randomUUID(),playerId:p.id,previousLeaderId,startedAt:Date.now(),expiresAt:Date.now()+(p.ai?this.decisionMs:this.humanDecisionMs)};
     this.log(r,`${p.name} 님의 ${r.goCount}GO 유효타!${r.goCount<3?` ${r.goCount+1}GO 도전 / 스톱 선택`:' 3GO 성공 · 승리 보상 15배'}`);
    }
