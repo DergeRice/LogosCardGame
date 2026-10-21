@@ -43,7 +43,7 @@ await window.LogosNative.request('rewarded', {box:'silver',rewardTicket});
 
 `rewardTicket`은 서버가 짧은 유효기간으로 발급해 계정·상자와 저장한다. Unity는 LevelPlay Dynamic User ID에 이 ticket을 넣는다. S2S 콜백의 ticket·거래 ID·서명을 검증하고, 재전송 중복 방지 후 기존 상자 추첨 로직으로 지급한다. 취소·타임아웃·로드 실패·클라이언트 위조 콜백은 지급하지 않는다.
 
-`adRewardTicket`과 서명 검증을 거치는 `/ads/levelplay/callback`은 연결했다. `LEVELPLAY_S2S_PRIVATE_KEY`가 없는 서버는 ticket을 발급하지 않는다. 같은 private key를 LevelPlay S2S 설정과 Worker secret에 저장하고, callback URL을 `https://logos-card-battle-server.jesus-and-children-ranking-worker.workers.dev/ads/levelplay/callback`으로 설정해야 실제 광고 보상이 활성화된다. `iapPurchase`는 여전히 거절한다. 남은 결제 작업은 다음과 같다.
+`adRewardTicket`과 서명 검증을 거치는 `/ads/levelplay/callback`은 연결했다. LevelPlay S2S의 기존 private key와 Worker secret을 일치시켰고 callback URL을 설정했다. 실제 광고 보상은 새 Android 빌드·실기기 검증 전이다. 현재 키 길이와 운영 상태는 `../readmeAds.md`에 기록했다. `iapPurchase`는 여전히 거절한다. 남은 결제 작업은 다음과 같다.
 
 1. `iapPurchase`에서 Google Android Publisher API로 상품 ID·구매 상태·토큰을 확인한다.
 2. 계정/구매 토큰의 영구 중복 방지 레코드와 다이아 지급을 하나의 서버 트랜잭션으로 확정한다.

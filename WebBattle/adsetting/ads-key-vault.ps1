@@ -26,7 +26,8 @@ if (!(Test-Path -LiteralPath $vault)) { throw 'No local vault. Run init only aft
 $bytes = [Security.Cryptography.ProtectedData]::Unprotect([IO.File]::ReadAllBytes($vault), $entropy, $scope)
 try {
     $key = [Text.Encoding]::UTF8.GetString($bytes)
-    if ($key -notmatch '^[a-f0-9]{64}$') { throw 'Invalid vault contents.' }
+    # Existing LevelPlay callback keys can be shorter than newly generated keys.
+    if ($key -notmatch '^[a-f0-9]{6,64}$') { throw 'Invalid vault contents.' }
     if ($Action -eq 'copy') {
         Set-Clipboard -Value $key
         Write-Output 'Copied to clipboard. Paste into LevelPlay S2S Private Key, then clear the clipboard.'
@@ -51,6 +52,7 @@ try {
         try { $fingerprint = [BitConverter]::ToString($hash.ComputeHash($bytes)).Replace('-','').Substring(0,12) }
         finally { $hash.Dispose() }
         Write-Output ('Vault: ' + [IO.Path]::GetFullPath($vault))
+        Write-Output ('Key length: ' + $key.Length)
         Write-Output ('Key fingerprint (not the key): ' + $fingerprint)
     }
 } finally {

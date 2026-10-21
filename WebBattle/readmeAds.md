@@ -4,17 +4,16 @@
 
 - LevelPlay의 `Logos Card Game` Android 앱, `logos_rewarded_box` 보상형 광고 단위와 같은 이름의 placement가 등록되어 있다. Unity Ads bidding network도 연결되어 있다.
 - S2S callback URL은 `https://logos-card-battle-server.jesus-and-children-ranking-worker.workers.dev/ads/levelplay/callback?userId=[USER_ID]&rewards=[REWARDS]&eventId=[EVENT_ID]`로 등록되어 있고 콘솔 상태는 Active다.
-- **S2S Private key는 아직 확인되지 않았다.** 콘솔 편집 화면에서 64자리 키를 붙여넣은 직후에는 64자리였으나, 저장 후 새로고침하면 기존 6자리 값으로 돌아온다. 서버와 키가 다르면 광고 시청 후 보상 지급이 실패한다.
-- 이 불일치를 발견해 운영 Worker의 `LEVELPLAY_S2S_PRIVATE_KEY` secret을 제거했다. 키가 없는 서버는 광고 ticket 발급을 거절한다. 콘솔 저장이 검증되기 전에는 다시 설치하지 않는다.
-- 이 PC의 `.runtime/secrets/levelplay-s2s.dpapi`에 새 256비트 키를 DPAPI로 보관한다. Git에서 제외된다. `adsetting/ads-key-vault.ps1 status`로 지문만 확인할 수 있다. 키를 문서, 채팅, 로그, 프런트 번들에 출력하지 않는다.
+- 콘솔이 새 64자리 키를 저장하지 않아, 사용자 지시에 따라 **기존에 저장되어 있던 6자리 키**를 운영 Worker의 `LEVELPLAY_S2S_PRIVATE_KEY`와 일치시켰다. `npx wrangler secret list`에서 등록을 확인했고, 운영 `/health`는 200, 서명 없는 콜백은 403이다. 실제 광고 완료 콜백과 보상 지급은 아직 실기기로 검증하지 못했다.
+- 6자리 16진수 키는 추측에 대한 보호가 약하다. 서버의 짧은 유효기간 ticket 및 event ID 중복 방지는 유지되지만, 콘솔에서 긴 키 저장 문제가 해결되면 양쪽 키를 함께 교체해야 한다.
+- 이 PC의 `.runtime/secrets/levelplay-s2s.dpapi`에 현재 키를 DPAPI로 보관한다. 쓰이지 않은 64자리 제안 키는 `.runtime/secrets/levelplay-s2s-proposed-unused.dpapi`에 따로 남겨 두었다. 둘 다 Git에서 제외된다. `adsetting/ads-key-vault.ps1 status`로 길이와 지문만 확인할 수 있다. 키를 문서, 채팅, 로그, 프런트 번들에 출력하지 않는다.
 - `.runtime/secrets/levelplay-release.env`에 이 게임 전용 App Key와 보상형 광고 단위 ID를 로컬 보관한다. 이 파일도 Git에서 제외된다.
 
-## 콘솔 저장과 서버 활성화
+## 키 유지와 검증
 
-1. LevelPlay `Logos Card Game` → `Edit S2S reward callback`에서 Private key를 로컬 보관함의 64자리 키로 교체해 저장한다. `powershell -NoProfile -ExecutionPolicy Bypass -File adsetting/ads-key-vault.ps1 copy`로 같은 Windows 사용자의 클립보드에 복사할 수 있다. 비밀키 입력과 저장은 사용자가 직접 수행한다.
-2. 페이지를 새로고침한 뒤 Private key 길이가 64자리로 유지되는지 확인한다. 6자리로 되돌아오면 저장 실패이므로 Worker secret을 설치하지 않는다. 콜백 URL과 placement도 다시 확인한다.
-3. 콘솔 저장이 확인되면 `powershell -NoProfile -ExecutionPolicy Bypass -File adsetting/ads-key-vault.ps1 install`로 동일 키를 운영 Worker secret에 설치한다. `npx wrangler secret list`로 이름만 확인한다. 이후 `Set-Clipboard -Value ''`로 클립보드를 지운다.
-4. 콜백 서명 검증은 `server/levelPlayCallback.ts`에 있다. 앱은 서버 ticket을 Unity Dynamic User ID로 전달하고, 서버는 서명된 S2S 완료 콜백만 보상한다. 무작위 콘솔 테스트 User ID는 유효한 ticket이 아니므로 보상이 지급되지 않는다.
+1. LevelPlay `Logos Card Game`의 S2S Private key와 Worker secret은 같은 현재 키다. 콘솔에서 키를 바꾼 경우, 새로고침 후 저장값을 확인하고 Worker secret도 함께 바꾼다. 콘솔 비밀키 입력과 저장은 사용자가 직접 수행한다.
+2. `powershell -NoProfile -ExecutionPolicy Bypass -File adsetting/ads-key-vault.ps1 status`는 현재 로컬 키의 길이와 지문만 출력한다. `copy`는 클립보드로 복사하고, `install`은 같은 키를 Worker에 재설치한다. 실제 키를 출력하지 않는다. 복사 후에는 `Set-Clipboard -Value ''`로 지운다.
+3. 콜백 서명 검증은 `server/levelPlayCallback.ts`에 있다. 앱은 서버 ticket을 Unity Dynamic User ID로 전달하고, 서버는 서명된 S2S 완료 콜백만 보상한다. 무작위 콘솔 테스트 User ID는 유효한 ticket이 아니므로 보상이 지급되지 않는다.
 
 공식 참고: https://docs.unity.com/en-us/grow/levelplay/platform/settings/server-to-server-callback
 
