@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 723ab3cb6f610b746b07d7033b8465cd
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/InnerBorder Buttons/Rectangle InnerBorder
+    Buttons/256Px Rectangle InnerBorder BLUE.prefab
+  uploadId: 501689

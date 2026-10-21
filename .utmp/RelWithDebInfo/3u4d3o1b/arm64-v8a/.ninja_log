@@ -1,0 +1,10 @@
+# ninja log v5
+14	5252	1754488677050205745	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	c23b7ba7509401c2
+18	5558	1754488677353274835	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	e953ad81908e31b8
+2	5574	1754488677371430681	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	81cdacdc49fd911e
+5	5693	1754488677480227333	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	ac24a46d801655f1
+3	5720	1754488677513673738	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	50e1230f463ab460
+24	6413	1754488678209812927	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	6ead40fc35fda528
+10	6711	1754488678504120036	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	d3278440e404336c
+0	6905	1754488678699160817	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6332da1c2360051
+6905	7263	1754488679064090200	/Users/isangjin/Documents/GitHub/LogosCardGame/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3u4d3o1b/obj/arm64-v8a/libgame.so	aee1b077294773d8

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fdd671dff97f7fd41b42509fbca8132e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Resources/CardsDB.asset
+  uploadId: 744242

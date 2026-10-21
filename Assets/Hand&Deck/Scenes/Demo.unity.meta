@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ebbb174112334274b8b29c3e8e3f61be
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182857
+  packageName: Hand & Deck for TCG
+  packageVersion: 1.0
+  assetPath: Assets/Hand&Deck/Scenes/Demo.unity
+  uploadId: 405786

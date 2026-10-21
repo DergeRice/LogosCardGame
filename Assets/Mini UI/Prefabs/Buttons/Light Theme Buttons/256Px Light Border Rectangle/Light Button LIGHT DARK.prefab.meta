@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b14d6013fff08b74ba5e70c45dd80135
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Light Theme Buttons/256Px Light Border
+    Rectangle/Light Button LIGHT DARK.prefab
+  uploadId: 501689

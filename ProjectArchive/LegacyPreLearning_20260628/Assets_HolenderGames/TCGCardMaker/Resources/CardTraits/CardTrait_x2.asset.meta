@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7bff843024999d844a3add025c3994d8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Resources/CardTraits/CardTrait_Consume.asset
+  uploadId: 744242

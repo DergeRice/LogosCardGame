@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ad2f3a9aa8345084cab83be990f4bac7
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/InnerBorder Buttons/Round InnerBorder
+    Button/384Px Round InnerBorder Button DARK.prefab
+  uploadId: 501689

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 984d047b5da9bb3408ca2a8c784842af
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Toogle Slider Switch/Light Theme/Toggle Switch
+    DARK.prefab
+  uploadId: 501689

@@ -1,0 +1,934 @@
+{
+  "stages": [
+    {
+      "stage": 1,
+      "tier": 0,
+      "blanksMin": 1,
+      "blanksMax": 2,
+      "aiAnswerSeconds": 8.82,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 30
+        },
+        {
+          "patternType": 2,
+          "weight": 40
+        },
+        {
+          "patternType": 3,
+          "weight": 10
+        },
+        {
+          "patternType": 4,
+          "weight": 10
+        },
+        {
+          "patternType": 5,
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "tier": 0,
+      "blanksMin": 1,
+      "blanksMax": 2,
+      "aiAnswerSeconds": 8.64,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 20
+        },
+        {
+          "patternType": 2,
+          "weight": 35
+        },
+        {
+          "patternType": 3,
+          "weight": 20
+        },
+        {
+          "patternType": 4,
+          "weight": 15
+        },
+        {
+          "patternType": 5,
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "tier": 0,
+      "blanksMin": 1,
+      "blanksMax": 2,
+      "aiAnswerSeconds": 8.46,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 10
+        },
+        {
+          "patternType": 2,
+          "weight": 35
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 15
+        },
+        {
+          "patternType": 5,
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "stage": 4,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 2,
+      "aiAnswerSeconds": 8.28,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 10
+        },
+        {
+          "patternType": 2,
+          "weight": 30
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 18
+        },
+        {
+          "patternType": 5,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "stage": 5,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 2,
+      "aiAnswerSeconds": 8.1,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 10
+        },
+        {
+          "patternType": 2,
+          "weight": 29
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 18
+        },
+        {
+          "patternType": 5,
+          "weight": 13
+        }
+      ]
+    },
+    {
+      "stage": 6,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 7.92,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 9
+        },
+        {
+          "patternType": 2,
+          "weight": 29
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 19
+        },
+        {
+          "patternType": 5,
+          "weight": 13
+        }
+      ]
+    },
+    {
+      "stage": 7,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 7.74,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 9
+        },
+        {
+          "patternType": 2,
+          "weight": 28
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 19
+        },
+        {
+          "patternType": 5,
+          "weight": 14
+        }
+      ]
+    },
+    {
+      "stage": 8,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 7.56,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 9
+        },
+        {
+          "patternType": 2,
+          "weight": 27
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 20
+        },
+        {
+          "patternType": 5,
+          "weight": 14
+        }
+      ]
+    },
+    {
+      "stage": 9,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 7.38,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 9
+        },
+        {
+          "patternType": 2,
+          "weight": 27
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 20
+        },
+        {
+          "patternType": 5,
+          "weight": 14
+        }
+      ]
+    },
+    {
+      "stage": 10,
+      "tier": 0,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 7.2,
+      "staminaCost": 1,
+      "itemSlots": 0,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 8
+        },
+        {
+          "patternType": 2,
+          "weight": 26
+        },
+        {
+          "patternType": 3,
+          "weight": 30
+        },
+        {
+          "patternType": 4,
+          "weight": 20
+        },
+        {
+          "patternType": 5,
+          "weight": 16
+        }
+      ]
+    },
+    {
+      "stage": 11,
+      "tier": 1,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 7.02,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 8
+        },
+        {
+          "patternType": 2,
+          "weight": 25
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 21
+        },
+        {
+          "patternType": 5,
+          "weight": 17
+        }
+      ]
+    },
+    {
+      "stage": 12,
+      "tier": 1,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 6.84,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 8
+        },
+        {
+          "patternType": 2,
+          "weight": 24
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 21
+        },
+        {
+          "patternType": 5,
+          "weight": 18
+        }
+      ]
+    },
+    {
+      "stage": 13,
+      "tier": 1,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 6.66,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 8
+        },
+        {
+          "patternType": 2,
+          "weight": 24
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 21
+        },
+        {
+          "patternType": 5,
+          "weight": 18
+        }
+      ]
+    },
+    {
+      "stage": 14,
+      "tier": 1,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 6.48,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 7
+        },
+        {
+          "patternType": 2,
+          "weight": 23
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 22
+        },
+        {
+          "patternType": 5,
+          "weight": 19
+        }
+      ]
+    },
+    {
+      "stage": 15,
+      "tier": 1,
+      "blanksMin": 2,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 6.3,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 7
+        },
+        {
+          "patternType": 2,
+          "weight": 22
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 22
+        },
+        {
+          "patternType": 5,
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "stage": 16,
+      "tier": 1,
+      "blanksMin": 3,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 6.12,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 7
+        },
+        {
+          "patternType": 2,
+          "weight": 22
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 23
+        },
+        {
+          "patternType": 5,
+          "weight": 19
+        }
+      ]
+    },
+    {
+      "stage": 17,
+      "tier": 1,
+      "blanksMin": 3,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 5.94,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 6
+        },
+        {
+          "patternType": 2,
+          "weight": 21
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 23
+        },
+        {
+          "patternType": 5,
+          "weight": 21
+        }
+      ]
+    },
+    {
+      "stage": 18,
+      "tier": 1,
+      "blanksMin": 3,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 5.76,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 6
+        },
+        {
+          "patternType": 2,
+          "weight": 20
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 23
+        },
+        {
+          "patternType": 5,
+          "weight": 22
+        }
+      ]
+    },
+    {
+      "stage": 19,
+      "tier": 1,
+      "blanksMin": 3,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 5.58,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 6
+        },
+        {
+          "patternType": 2,
+          "weight": 20
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 24
+        },
+        {
+          "patternType": 5,
+          "weight": 21
+        }
+      ]
+    },
+    {
+      "stage": 20,
+      "tier": 1,
+      "blanksMin": 3,
+      "blanksMax": 3,
+      "aiAnswerSeconds": 5.4,
+      "staminaCost": 1,
+      "itemSlots": 1,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 6
+        },
+        {
+          "patternType": 2,
+          "weight": 19
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 24
+        },
+        {
+          "patternType": 5,
+          "weight": 22
+        }
+      ]
+    },
+    {
+      "stage": 21,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 5.22,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 5
+        },
+        {
+          "patternType": 2,
+          "weight": 18
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 25
+        },
+        {
+          "patternType": 5,
+          "weight": 23
+        }
+      ]
+    },
+    {
+      "stage": 22,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 5.04,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 5
+        },
+        {
+          "patternType": 2,
+          "weight": 18
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 25
+        },
+        {
+          "patternType": 5,
+          "weight": 23
+        }
+      ]
+    },
+    {
+      "stage": 23,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 4.86,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 5
+        },
+        {
+          "patternType": 2,
+          "weight": 17
+        },
+        {
+          "patternType": 3,
+          "weight": 29
+        },
+        {
+          "patternType": 4,
+          "weight": 25
+        },
+        {
+          "patternType": 5,
+          "weight": 24
+        }
+      ]
+    },
+    {
+      "stage": 24,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 4.68,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 5
+        },
+        {
+          "patternType": 2,
+          "weight": 16
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 26
+        },
+        {
+          "patternType": 5,
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "stage": 25,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 4.5,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 4
+        },
+        {
+          "patternType": 2,
+          "weight": 15
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 26
+        },
+        {
+          "patternType": 5,
+          "weight": 27
+        }
+      ]
+    },
+    {
+      "stage": 26,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 4.32,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 4
+        },
+        {
+          "patternType": 2,
+          "weight": 15
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 26
+        },
+        {
+          "patternType": 5,
+          "weight": 27
+        }
+      ]
+    },
+    {
+      "stage": 27,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 4.14,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 4
+        },
+        {
+          "patternType": 2,
+          "weight": 14
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 27
+        },
+        {
+          "patternType": 5,
+          "weight": 27
+        }
+      ]
+    },
+    {
+      "stage": 28,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 3.96,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 4
+        },
+        {
+          "patternType": 2,
+          "weight": 13
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 27
+        },
+        {
+          "patternType": 5,
+          "weight": 28
+        }
+      ]
+    },
+    {
+      "stage": 29,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 3.78,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 3
+        },
+        {
+          "patternType": 2,
+          "weight": 13
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 28
+        },
+        {
+          "patternType": 5,
+          "weight": 28
+        }
+      ]
+    },
+    {
+      "stage": 30,
+      "tier": 2,
+      "blanksMin": 3,
+      "blanksMax": 4,
+      "aiAnswerSeconds": 3.6,
+      "staminaCost": 1,
+      "itemSlots": 2,
+      "patternProbabilities": [
+        {
+          "patternType": 1,
+          "weight": 3
+        },
+        {
+          "patternType": 2,
+          "weight": 12
+        },
+        {
+          "patternType": 3,
+          "weight": 28
+        },
+        {
+          "patternType": 4,
+          "weight": 28
+        },
+        {
+          "patternType": 5,
+          "weight": 29
+        }
+      ]
+    }
+  ]
+}

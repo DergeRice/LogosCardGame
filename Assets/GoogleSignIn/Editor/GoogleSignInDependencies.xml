@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+  <!-- Android Google Sign-In dependencies are intentionally disabled.
+       Android login uses Google Play Games auth code in this project. -->
+  <iosPods>
+    <iosPod name="GoogleSignIn" version=">= 4.0.2" bitcodeEnabled="false" minTargetSdk="12.0">
+    </iosPod>
+  </iosPods>
+</dependencies>

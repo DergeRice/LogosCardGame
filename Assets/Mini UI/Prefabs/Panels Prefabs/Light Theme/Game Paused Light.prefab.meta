@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6a8a78230d1bbe04c9b33970c13217a1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Panels Prefabs/Light Theme/Game Paused Light.prefab
+  uploadId: 501689

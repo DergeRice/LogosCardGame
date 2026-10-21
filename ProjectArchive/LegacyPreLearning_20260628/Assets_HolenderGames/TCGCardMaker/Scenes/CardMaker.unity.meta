@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0f7a49bfa90885640b7d95f487df1780
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Scenes/CardMaker.unity
+  uploadId: 744242

@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6967e116eb9a402e9c16bd574529f55, type: 3}
+  m_Name: LearningBossSpriteDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::LearningBossSpriteDatabase
+  bosses:
+  - bossId: Pig
+    normalSprite: {fileID: 21300000, guid: 7396eaefe20434baeb6560287ccbfbf9, type: 3}
+    hitSprite: {fileID: 21300000, guid: b5a2970f7370145248e98cbc2be5ded3, type: 3}
+    deadSprite: {fileID: 21300000, guid: 565f7ec0f663d4d14a5c062e10760357, type: 3}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}
+  - bossId: 
+    normalSprite: {fileID: 0}
+    hitSprite: {fileID: 0}
+    deadSprite: {fileID: 0}

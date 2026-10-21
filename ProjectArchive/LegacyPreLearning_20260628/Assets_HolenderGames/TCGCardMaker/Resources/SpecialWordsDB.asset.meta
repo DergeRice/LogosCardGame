@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 06820fbd6d95fc9469331823947f1237
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Resources/SpecialWordsDB.asset
+  uploadId: 744242

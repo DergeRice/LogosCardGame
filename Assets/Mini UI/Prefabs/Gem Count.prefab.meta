@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d0d4e2668304afe4d8256093c62061f8
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Gem Count.prefab
+  uploadId: 501689

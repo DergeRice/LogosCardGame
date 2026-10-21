@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b383439ef77dbd649b439f1c014926d3
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Prefabs/TraitButton.prefab
+  uploadId: 744242

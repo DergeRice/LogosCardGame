@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 40c1a1263209708408cade532259da6d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Progress Bar/Light Theme/Light Progress Bar GREEN.prefab
+  uploadId: 501689

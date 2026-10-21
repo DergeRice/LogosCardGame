@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1f10c7b66d41d7747b83c31505babc99
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/License-sunny-spells-basic-font.txt
+  uploadId: 744242

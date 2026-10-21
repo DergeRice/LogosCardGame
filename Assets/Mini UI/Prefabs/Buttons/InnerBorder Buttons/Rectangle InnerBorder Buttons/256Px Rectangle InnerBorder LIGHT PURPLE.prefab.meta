@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a43bce055bbad7343a84a527466e23cd
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/InnerBorder Buttons/Rectangle InnerBorder
+    Buttons/256Px Rectangle InnerBorder LIGHT PURPLE.prefab
+  uploadId: 501689

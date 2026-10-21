@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ddd727311a9188347b9b4dd8001ec252
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182857
+  packageName: Hand & Deck for TCG
+  packageVersion: 1.0
+  assetPath: Assets/Hand&Deck/Animations/Demo.anim
+  uploadId: 405786

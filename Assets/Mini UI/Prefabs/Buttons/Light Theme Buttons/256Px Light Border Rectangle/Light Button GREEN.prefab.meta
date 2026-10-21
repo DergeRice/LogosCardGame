@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8d695678a64f89e45a788f7ba0f6b0b2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207873
+  packageName: Mini UI
+  packageVersion: 1.0
+  assetPath: Assets/Mini UI/Prefabs/Buttons/Light Theme Buttons/256Px Light Border
+    Rectangle/Light Button GREEN.prefab
+  uploadId: 501689

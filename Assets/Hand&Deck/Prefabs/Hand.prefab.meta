@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bd0131360d7b5e345bf86a8a48f7f457
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 182857
+  packageName: Hand & Deck for TCG
+  packageVersion: 1.0
+  assetPath: Assets/Hand&Deck/Prefabs/Hand.prefab
+  uploadId: 405786

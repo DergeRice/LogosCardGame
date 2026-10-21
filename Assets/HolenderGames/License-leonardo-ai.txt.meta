@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: cd0db5dd4b3e7a84baaed126ffbc4342
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/License-leonardo-ai.txt
+  uploadId: 744242

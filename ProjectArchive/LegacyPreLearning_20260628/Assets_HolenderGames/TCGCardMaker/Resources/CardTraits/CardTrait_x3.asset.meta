@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cced3bfbea501084599465adc6d71032
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Resources/CardTraits/CardTrait_Destroy.asset
+  uploadId: 744242

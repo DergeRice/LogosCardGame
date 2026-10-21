@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5d7d358809585c042bf12761c7ccf336
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 314345
+  packageName: TCG - Card Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/HolenderGames/TCGCardMaker/Prefabs/DeckCardView.prefab
+  uploadId: 744242
