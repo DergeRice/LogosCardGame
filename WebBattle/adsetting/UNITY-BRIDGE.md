@@ -13,6 +13,7 @@ Unity 원본은 저장소 루트이다. `main`의 Unity 프로젝트를 `web-bat
 - 전용 LevelPlay Android 앱과 보상형 단위 `logos_rewarded_box`를 생성했다. Unity Ads는 기존 연결 프로젝트 `LogosCardGame (1)`(583abf61-3c16-42c9-8709-e1a3b6c87474)의 **Android Game ID `5868669`**로 instance를 연결했다. iOS Game ID `5868668`을 Android 설정에 넣지 않는다. 비공개 앱 키와 ad unit ID는 릴리스 환경 파일만 사용한다.
 - Play Console 상품 4개 모두 대한민국 전용 `standard` 구매 옵션으로 활성화했다. 가격은 100개 ₩1,200 / 300개 ₩2,900 / 1,000개 ₩8,900 / 3,000개 ₩24,900이다. 3,000개 일괄 가격의 자동 반올림을 개별 가격 수정으로 바로잡고 저장 완료를 확인했다.
 - Google Cloud `logos-card-game`에 `logos-play-verifier` 서비스 계정을 만들고, Play Console에서 `com.baragames.logoscardgame` 앱 한정으로 구매 조회·처리 권한을 부여했다. JSON 키는 로컬 비공개 경로에만 보관한다. Android Publisher API 활성화 확인 뒤 서버가 실제 구매 토큰을 검증할 수 있다.
+- Google Play Android Developer API 활성화 및 서비스 계정의 읽기 검증을 완료했다. `GOOGLE_PLAY_SERVICE_ACCOUNT_FILE=/비공개/키.json node WebBattle/adsetting/verify-play-products.mjs`는 키·토큰을 출력하지 않고 상품 ID만 확인한다.
 - Unity Android 서명 AAB 빌드 성공: `Builds/LogosCardGame-Unity.aab`, versionCode 2 / versionName 1.0.1, 약 70MB. 기존 내부 테스트 AAB는 Capacitor 앱이며 이 Unity 브리지를 포함하지 않는다.
 
 ## 웹 → Unity API
