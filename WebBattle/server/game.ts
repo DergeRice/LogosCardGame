@@ -397,7 +397,7 @@ export class Game {
   vote.approved.push(p.id);this.send(p.socket,{type:'ack',voteId:vote.id});
   if(vote.approved.length===r.players.length)this.distribute(r,'unanimous');else this.broadcast(r);
  }
- botEmotion(p:Player,event:EmotionEvent){const r=p.room&&this.rooms.get(p.room);if(!p.ai||!r||r.phase!=='battle'||Date.now()-(p.reactionAt??0)<8000)return;const emoji=aiEmote(event,p.emoteLoadout??AI_EMOTE_LOADOUTS[0]);if(emoji){p.reactionAt=Date.now();p.reaction={id:randomUUID(),emoji:emoji as Reaction,at:Date.now()};return true;}}
+ botEmotion(p:Player,event:EmotionEvent,roll=randomInt(100)){const r=p.room&&this.rooms.get(p.room);if(!p.ai||!r||r.phase!=='battle'||Date.now()-(p.reactionAt??0)<8000||roll>=20)return;const emoji=aiEmote(event,p.emoteLoadout??AI_EMOTE_LOADOUTS[0]);if(emoji){p.reactionAt=Date.now();p.reaction={id:randomUUID(),emoji:emoji as Reaction,at:Date.now()};return true;}}
  react(p:Player,msg:Record<string,unknown>){
   const r=p.room&&this.rooms.get(p.room);
   if(!r||r.phase!=='battle'||msg.matchId!==r.matchId)return this.fail(p,'대전 중에만 감정표현을 보낼 수 있어요.');

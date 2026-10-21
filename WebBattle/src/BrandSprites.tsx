@@ -1,4 +1,5 @@
 import type {CSSProperties,ReactNode} from 'react';
+import {SettingsIcon} from './SettingsIcon.js';
 
 const atlas={width:1536,height:1024};
 const regions={
@@ -8,6 +9,7 @@ const regions={
 } as const;
 export type BrandIcon=keyof typeof regions;
 export function AtlasIcon({icon,className=''}:{icon:BrandIcon;className?:string}){
+ if(icon==='settings')return <SettingsIcon className={`brand-atlas-icon ${className}`}/>;
  const r=regions[icon];const style:CSSProperties={backgroundImage:"url('/brand-ui/ui-icons.png')",backgroundSize:`${atlas.width/r.w*100}% ${atlas.height/r.h*100}%`,backgroundPosition:`${r.x/(atlas.width-r.w)*100}% ${r.y/(atlas.height-r.h)*100}%`};
  return <span className={`brand-atlas-icon ${className}`} style={style} aria-hidden="true"/>;
 }
