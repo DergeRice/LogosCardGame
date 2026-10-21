@@ -50,3 +50,5 @@ LEVELPLAY_REWARDED_S2S_SECRET=
 - 실버와 골드의 쿨다운이 서로 독립적인지 확인한다.
 - 동일 S2S 거래가 재전송돼도 상자가 한 번만 열리는지 확인한다.
 - 오프라인/웹 브라우저/변조된 웹소켓 요청이 보상되지 않는지 확인한다.
+
+Unity 앱 구현과 웹 연결 API는 [UNITY-BRIDGE.md](UNITY-BRIDGE.md) 및 [unity-native.d.ts](unity-native.d.ts)를 기준으로 연결한다. 현재 내부 테스트 앱은 Capacitor이므로 Unity AAB를 새 버전으로 설치한 뒤 해당 API를 테스트해야 한다.

@@ -1,0 +1,5 @@
+<linker>
+  <assembly fullname="Logos.Native">
+    <type fullname="Logos.Native.LogosCommerceBridge" preserve="all" />
+  </assembly>
+</linker>
