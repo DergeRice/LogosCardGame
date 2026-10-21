@@ -39,7 +39,7 @@ button.primary:disabled{box-shadow:none}
 .table-player strong span{font-size:inherit!important;color:inherit!important}
 .compact-deck::before,.compact-deck::after{border-color:#d9c9e3;background:#eee4f3;border-radius:13px}
 .text-button{color:#776581}.empty-sentence{color:#826d92}
-@media(pointer:coarse){.hand.hand-spread .game-card{touch-action:pan-x}}
+@media(pointer:coarse){.hand.hand-spread .game-card{touch-action:none}}
 .card-preload-screen{height:100dvh;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 20% 10%,#eee2f1,transparent 65%),#f7f4ee;color:#74617f}
 .card-preload-icon{color:#aa8fbe}.card-preload-screen small{color:#8e7f97}
 .card-preload-track{background:#e5dce9}.card-preload-track>span{background:#b29bc5}

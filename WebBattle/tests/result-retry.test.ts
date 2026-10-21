@@ -10,8 +10,14 @@ test('custom rematch preserves code, host and players even after exhausted-deck 
  const g=new Game(),a=peer(g,'A'),b=peer(g,'B');g.createRoom(a.p);g.joinRoom(b.p,a.p.room!);const room=g.rooms.get(a.p.room!)!;g.reveal(room);g.begin(room);room.finalRound=true;g.finish(room,'deck finished');const matchId=room.matchId,coins=a.p.coins;
  g.handle(a.p,{type:'retryMatch',matchId});assert.equal(room.phase,'result');assert.equal(a.p.rematch,true);g.handle(b.p,{type:'retryMatch',matchId});assert.equal(room.phase,'reveal');assert.equal(a.p.room,room.code);assert.equal(room.hostId,a.p.id);assert.notEqual(room.matchId,matchId);assert.equal(room.finalRound,false);assert.ok(room.deck.length>0);assert.equal(room.players.length,2);assert.equal(a.p.coins,coins);
 });
-test('solo custom room can retry and battle-phase forged retry cannot reset game',()=>{
- const g=new Game(),a=peer(g,'A');g.createRoom(a.p);const room=g.rooms.get(a.p.room!)!;g.reveal(room);g.begin(room);const first=room.matchId;g.handle(a.p,{type:'retryMatch',matchId:first});assert.equal(room.phase,'battle');g.finish(room,'end');g.handle(a.p,{type:'retryMatch',matchId:first});assert.equal(room.phase,'reveal');assert.equal(a.p.room,room.code);
+test('solo custom room returns home on retry and battle-phase forged retry cannot reset game',()=>{
+ const g=new Game(),a=peer(g,'A');g.createRoom(a.p);const room=g.rooms.get(a.p.room!)!;g.reveal(room);g.begin(room);const first=room.matchId;g.handle(a.p,{type:'retryMatch',matchId:first});assert.equal(room.phase,'battle');g.finish(room,'end');g.handle(a.p,{type:'retryMatch',matchId:first});assert.equal(a.p.room,undefined);assert.equal(a.messages.at(-1).type,'home');assert.equal(g.rooms.has(room.code),false);
+});
+test('custom retry returns home when the other player already left',()=>{
+ const g=new Game(),a=peer(g,'A'),b=peer(g,'B');g.createRoom(a.p);g.joinRoom(b.p,a.p.room!);const room=g.rooms.get(a.p.room!)!;g.reveal(room);g.begin(room);g.finish(room,'end');const matchId=room.matchId;g.leave(b.p);assert.equal(room.players.length,1);g.handle(a.p,{type:'retryMatch',matchId});assert.equal(a.p.room,undefined);assert.equal(a.messages.at(-1).type,'home');
+});
+test('quick retry returns home when the other player already left',()=>{
+ const g=new Game({minimumPlayers:2}),a=peer(g,'A'),b=peer(g,'B');g.quick(a.p);g.quick(b.p);const room=g.rooms.get(a.p.room!)!;g.reveal(room);g.begin(room);g.finish(room,'end');const matchId=room.matchId;g.leave(b.p);g.handle(a.p,{type:'retryMatch',matchId});assert.equal(a.p.room,undefined);assert.equal(a.messages.at(-1).type,'home');
 });
 test('real two WebSocket clients can requeue together from a settled quick match',async()=>{
  const {createBattleServer}=await import('../server/index.js'),{WebSocket}=await import('ws');const app=createBattleServer({minimumPlayers:2,matchingMs:50,revealMs:10,dealingMs:10,durationMs:100});await new Promise<void>(r=>app.server.listen(0,'127.0.0.1',r));const clients:any[]=[];

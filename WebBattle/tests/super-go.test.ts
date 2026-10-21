@@ -14,5 +14,6 @@ test('super account GO button grants an immediate first hit choice once per matc
  game.superGo(owner,{matchId:room.matchId});assert.equal(owner.score,0);assert.equal(owner.goHits,1);assert.equal(owner.debugGoUsed,true);assert.equal(room.goCount,1);assert.equal(room.goTarget,undefined);assert.equal(decision()?.playerId,owner.id);
  game.superGo(owner,{matchId:room.matchId});assert.equal(decision()?.playerId,owner.id);
  game.choice(owner,{matchId:room.matchId,decisionId:decision()!.id,choice:'go'});assert.equal(room.goTarget,2);assert.equal(owner.calledGo,true);
+ other.score=40;game.finish(room,'debug winner');assert.equal(room.winner,owner.id);assert.ok(owner.reward>0);assert.equal(other.reward,0);
  game.resetPlayer(owner);assert.equal(owner.debugGoUsed,false);
 });

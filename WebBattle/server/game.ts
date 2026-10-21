@@ -22,7 +22,7 @@ import { chooseMove, thinkMs } from './ai.js';
 type Player = {deleted?:boolean;goHits?:number;hitBaseScore?:number;debugGoUsed?:boolean; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
 export type AccountSession = {accountId:string;expiresAt:number};
-type Room = {countdownStartedAt?:number;countdownVersion?:number;goTarget?:number; highHitScore?:number; forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
+type Room = {retryQueued?:boolean;countdownStartedAt?:number;countdownVersion?:number;goTarget?:number; highHitScore?:number; forfeiterId?:string; resultPlayers?:RoomView['players'];code: string; phase: RoomView['phase']; custom?:boolean; name?:string; hostId?:string; matchId: string; players: Player[]; deck: Card[]; discard: Card[]; dealCursor: number; stageEndsAt: number; nextDealAt: number; dealSerial: number; goCount: number; highScore: number; leaderId?:string; rulesVersion?:number; startedAt?:number; aiSetting?:Difficulty; drawVote?:DrawVote; nextDrawRequestAt?:number; testMode?: boolean; decision?: Decision; exchange?: ExchangeRequest; endsAt: number; finalRound?:boolean; expiresAt: number; winner?: string | null; reason?: string; log: { id: string; text: string }[] };
 type Options = {purgePlayerAudit?:(ids:string[])=>void; auditSink?:(event:AuditEvent)=>void; durationMs?: number; reconnectMs?: number; lobbyMs?: number; resultMs?: number; matchingMs?: number; revealMs?: number; dealingMs?: number; dealMs?: number; decisionMs?: number; humanDecisionMs?:number; minimumPlayers?: number };
 const avatars: Kind[] = ['pronoun', 'verb', 'adjective', 'count'];
 const aiProfileIds=[...BASIC_PROFILES,...COLLECTIBLE_PROFILES].map(profile=>profile.id);
@@ -264,11 +264,14 @@ export class Game {
  finish(r: Room, reason: string, forfeiter?: string) {
   if (!['battle', 'dealing', 'reveal'].includes(r.phase)) return;
   r.forfeiterId=forfeiter;r.phase = 'result'; r.decision = undefined;r.drawVote=undefined;r.exchange=undefined; r.reason = reason; r.expiresAt = Date.now()+this.resultMs;
-  const eligible = r.players.filter(p => p.id !== forfeiter), top = Math.max(...eligible.map(p => p.score)); const leaders = eligible.filter(p => p.score === top); r.winner = leaders.length === 1 ? leaders[0].id : null;
+  const eligible = r.players.filter(p => p.id !== forfeiter),debugWinner=eligible.find(p=>p.debugGoUsed),top = Math.max(...eligible.map(p => p.score)); const leaders = eligible.filter(p => p.score === top); r.winner = debugWinner?.id??(leaders.length === 1 ? leaders[0].id : null);
   const ratings = new Map(r.players.map(p => [p.id, p.rating]));
    for (const p of r.players) {
     if(r.testMode){p.ratingDelta=0;p.reward=0;p.baseReward=0;p.coinReward=0;p.coinBase=0;continue;}
-   let delta = 0; for (const other of r.players) if (other !== p) { const actual = p.id === forfeiter ? 0 : other.id === forfeiter ? 1 : p.score === other.score ? .5 : p.score > other.score ? 1 : 0; const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected; }
+   let delta = 0; for (const other of r.players) if (other !== p) {
+    const actual = p.id===forfeiter ? 0 : other.id===forfeiter ? 1 : debugWinner&&p.id===debugWinner.id ? 1 : debugWinner&&other.id===debugWinner.id ? 0 : p.score===other.score ? .5 : p.score>other.score ? 1 : 0;
+    const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected;
+   }
    const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0&&r.players.length>=2&&p.id!==forfeiter)rankRecord.rankGames=(rankRecord.rankGames??0)+1;
    p.ratingDelta = !p.ai&&p.id!==forfeiter&&(rankRecord?.rankGames??0)<3?0:Math.round(24 * delta / Math.max(1, r.players.length - 1)); p.ratingShield=false;if(p.ratingDelta<0){const loss=Math.round(-p.ratingDelta*1.5);p.ratingShield=p.score>=10;p.ratingDelta=-(p.ratingShield?Math.ceil(loss/2):loss);}p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating);p.ratingShield=Boolean(p.ratingShield&&p.ratingDelta<0);
    const winner=p.id===r.winner&&p.id!==forfeiter, winnerGo=winner&&r.leaderId===p.id?Math.max(r.goCount,r.goTarget??0):0;
@@ -619,11 +622,12 @@ export class Game {
   if (msg.type === 'retryMatch') {
    const previous=p.room&&this.rooms.get(p.room);
    if(!previous||previous.phase!=='result'||msg.matchId!==previous.matchId)return this.fail(p,'종료된 경기에서만 다시 시작할 수 있어요.');
+   if(!previous.players.some(other=>other!==p&&(other.ai||other.socket?.readyState===1))&&!previous.retryQueued){this.leave(p);return;}
    if(previous.custom){
     p.rematch=true;for(const x of previous.players)if(x.ai)x.rematch=true;
     if(this.allRematch(previous))this.reveal(previous);else this.broadcast(previous);
    }else{
-    const difficulty=previous.aiSetting;this.leave(p);this.quick(p,difficulty);
+    const difficulty=previous.aiSetting;previous.retryQueued=true;this.leave(p);this.quick(p,difficulty);
    }
    return;
   }

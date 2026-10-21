@@ -1,4 +1,5 @@
 .game-card,.pointer-field .sentence-card{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.hand.hand-spread .game-card.drag-holding{outline:3px solid #ffe15a;outline-offset:2px;filter:brightness(1.12);z-index:5}
 .pointer-field .sentence-card{cursor:grab;flex-shrink:0;align-self:center;margin:8px 0;min-width:78px;transition:none;background:transparent;box-shadow:0 4px 10px #20381920}
 .pointer-field .sentence-card:hover:not(:disabled){transform:none;outline:2px solid #789758;outline-offset:3px}
 .drag-source{opacity:0!important;pointer-events:none!important}

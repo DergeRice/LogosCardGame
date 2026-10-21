@@ -108,3 +108,14 @@
 .result-people-panel .result-person-row>.result-person-meta{grid-column:3;grid-row:2;display:block!important;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .result-people-panel .result-person-row>button{grid-column:4;grid-row:1/3;white-space:nowrap}
 @media(orientation:landscape) and (max-height:550px){.result-stage .result-people-panel .result-friends article.result-person-row{grid-template-columns:26px 34px minmax(0,1fr) auto;min-height:52px;gap:1px 6px;padding:5px 7px}.result-people-panel .result-person-row>.result-person-avatar{width:32px;height:32px}.result-people-panel .result-person-row .result-person-avatar .character-avatar,.result-people-panel .result-person-row .result-person-avatar .avatar-with-frame{width:30px;height:30px;--profile-size:30px}}
+.result-stage.result-credited .result-wallet .wallet-gold{color:#4aaa45;text-shadow:0 1px 0 #d5ffd1}
+.result-stage.result-credited .result-gold-origin>b{color:#b9ff96}
+.result-defeat .result-hero .result-heading{min-width:min(340px,86vw);padding:15px 32px 18px;border:3px solid #b8a37d;border-radius:12px;background:linear-gradient(160deg,#5a5763,#252935);box-shadow:inset 0 2px 1px #ffffff55,0 8px 0 #171922,0 20px 35px #0009;transform-origin:50% -18px;animation:defeat-placard 1.5s cubic-bezier(.15,.8,.24,1) both}
+.result-defeat .result-hero .result-heading::before{top:-22px;width:15px;height:15px}
+.result-defeat .result-hero .result-heading h1{font-size:clamp(42px,8vh,76px);color:#f2f2f4;text-shadow:0 4px 0 #777680,0 10px 20px #000b}
+.result-defeat .result-hero .result-rank{animation:defeat-rank-drop .75s .9s both}
+.result-defeat .result-rank>strong{color:#f5f4f0;text-shadow:0 3px 12px #000a}
+.result-defeat .result-rank.rating-down>strong{color:#ffb6ad}
+@keyframes defeat-placard{0%{opacity:0;transform:translateY(-110px) rotate(-23deg)}35%{opacity:1;transform:translateY(10px) rotate(15deg)}55%{transform:rotate(-11deg)}72%{transform:rotate(7deg)}86%{transform:rotate(-4deg)}100%{transform:rotate(3deg)}}
+@keyframes defeat-rank-drop{from{opacity:0;transform:translateY(-26px) scale(.85)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.result-defeat .result-hero .result-heading,.result-defeat .result-hero .result-rank{animation:none}}
