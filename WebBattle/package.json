@@ -26,6 +26,7 @@
     "audio:sentences": "python scripts/generate-kokoro.py",
     "cosmetics:build": "node scripts/generate-cosmetic-resources.mjs",
     "native:sync": "npm run build && cap sync",
+    "native:icon": "node scripts/generate-android-icon.mjs",
     "native:android": "cap open android",
     "native:ios": "cap open ios"
   },

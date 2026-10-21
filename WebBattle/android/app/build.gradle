@@ -1,8 +1,15 @@
 apply plugin: 'com.android.application'
 
+def signingProperties = new Properties()
+def signingPropertiesFile = rootProject.file('keystore.properties')
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+}
+
 android {
     namespace = "com.baragames.logoscardgame"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildToolsVersion = "36.0.0"
     defaultConfig {
         applicationId "com.baragames.logoscardgame"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -16,8 +23,22 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (signingPropertiesFile.exists()) {
+                storeFile rootProject.file(signingProperties['storeFile'])
+                storePassword signingProperties['storePassword']
+                keyAlias signingProperties['keyAlias']
+                keyPassword signingProperties['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (signingPropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
