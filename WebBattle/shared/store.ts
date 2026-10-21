@@ -5,7 +5,9 @@ import {HOME_CHARACTERS} from './homeCharacters.js';
 import {NARO_EMOTES,BASIC_EMOTES,DUST_EMOTE_IDS,DEFAULT_EMOTE_SLOTS,emoteSlots,type EmoteSlots} from './emotes.js';
 import {EXTRA_COSMETICS} from './cosmetic-resources.js';
 export const LEAGUES=['아이언','브론즈','실버','골드','플래티넘','에메랄드','다이아','네더라이트'] as const;
-export function leagueFor(rating:number){const value=Number.isFinite(rating)?Math.max(0,Math.floor(rating)):0,step=Math.min(39,Math.max(0,Math.floor((value-300)/100))),tier=Math.floor(step/5),division=5-step%5;return {tier,division,label:`${LEAGUES[tier]} ${division}`,floor:step===0?0:300+step*100,next:step===39?null:400+step*100};}
+export function leagueFor(rating:number){const value=Number.isFinite(rating)?Math.max(0,Math.floor(rating)):0,step=Math.min(39,Math.max(0,Math.floor((value-301)/100))),tier=Math.floor(step/5),division=5-step%5;return {tier,division,label:`${LEAGUES[tier]} ${division}`,floor:step===0?0:301+step*100,next:step===39?null:401+step*100};}
+export function leagueTierRange(tier:number){return {floor:tier===0?0:301+tier*500,ceiling:tier===LEAGUES.length-1?null:800+tier*500};}
+export function leagueTierRangeLabel(tier:number){const range=leagueTierRange(tier);return range.ceiling===null?`${range.floor.toLocaleString()}점 이상`:`${range.floor.toLocaleString()}~${range.ceiling.toLocaleString()}점`;}
 export const LOOT_WEIGHTS=[{type:'dust',name:'별가루',weight:59.5},{type:'character',name:'캐릭터',weight:1},{type:'background',name:'홈 배경',weight:7},{type:'emote',name:'감정표현',weight:13},{type:'frame',name:'프레임',weight:7},{type:'board',name:'보드판',weight:7.5},{type:'profile',name:'프로필',weight:5}] as const;
 export type LootType=typeof LOOT_WEIGHTS[number]['type'];
 export const BOX_WEIGHTS={silver:[59.5,1,7,13,7,7.5,5],gold:[25,4,16,12,17,18,8],diamond:[10,12,18,8,20,22,10]} as const;

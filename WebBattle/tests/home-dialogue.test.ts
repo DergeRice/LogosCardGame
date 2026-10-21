@@ -7,13 +7,13 @@ test('all story characters have distinct special lines, including the default Na
  }
  assert.deepEqual(CHARACTER_HOME_LINES['character-naro'],CHARACTER_HOME_LINES['character-naro-solo']);
 });
-test('special lines use a 40 percent threshold, common lines the remaining 60 percent',()=>{
+test('special lines use a 60 percent threshold, common lines the remaining 40 percent',()=>{
  const special=CHARACTER_HOME_LINES['character-hans'];
  assert.equal(pickHomeDialogue('character-hans',undefined,()=>0),special[0]);
- assert.equal(pickHomeDialogue('character-hans',undefined,()=>.399999),special.at(-1));
- assert.equal(pickHomeDialogue('character-hans',undefined,()=>.4),HOME_COMMON_LINES[0]);
+ assert.equal(pickHomeDialogue('character-hans',undefined,()=>.599999),special.at(-1));
+ assert.equal(pickHomeDialogue('character-hans',undefined,()=>.6),HOME_COMMON_LINES[0]);
  assert.equal(pickHomeDialogue('character-hans',undefined,()=>.999999),HOME_COMMON_LINES.at(-1));
  assert.notEqual(pickHomeDialogue('character-hans',special[0],()=>0),special[0]);
- assert.notEqual(pickHomeDialogue('character-hans',HOME_COMMON_LINES[0],()=>.4),HOME_COMMON_LINES[0]);
+ assert.notEqual(pickHomeDialogue('character-hans',HOME_COMMON_LINES[0],()=>.6),HOME_COMMON_LINES[0]);
  assert.equal(pickHomeDialogue('future-character',undefined,()=>0),HOME_COMMON_LINES[0]);
 });

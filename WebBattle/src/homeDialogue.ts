@@ -1,4 +1,4 @@
-/** Home lines are selected per tap: 40% character line, 60% common line. */
+/** Home lines are selected per tap: 60% character line, 40% common line. */
 export const HOME_COMMON_LINES=[
  '오늘도 재밌게 놀아보자!',
  '영문법이 쏙쏙! 같이 시작해 볼까?',
@@ -66,8 +66,8 @@ export function pickHomeDialogue(characterId:string,previous?:string,random:()=>
  const special=(CHARACTER_HOME_LINES[characterId]??[]).filter(line=>line!==previous);
  const common=HOME_COMMON_LINES.filter(line=>line!==previous);
  const roll=Math.min(1-Number.EPSILON,Math.max(0,random()));
- const useSpecial=special.length>0&&roll<.4;
+ const useSpecial=special.length>0&&roll<.6;
  const lines=useSpecial?special:common;
- const position=useSpecial?roll/.4:special.length>0?(roll-.4)/.6:roll;
+ const position=useSpecial?roll/.6:special.length>0?(roll-.6)/.4:roll;
  return lines[Math.min(lines.length-1,Math.floor(Math.max(0,position)*lines.length))];
 }
