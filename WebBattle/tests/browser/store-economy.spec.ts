@@ -16,7 +16,7 @@ for(const mobile of [false,true])test(`v96 shop odds prices and board reveal ${m
    await rates.getByRole('button',{name:'확인',exact:true}).click();
   }
   // Mock server fixture returns a board; this is a UI test.
-  await page.evaluate(()=>{Math.random=()=>.9999});await boxes.first().getByRole('button',{name:'1회 오픈 1,000 골드',exact:true}).click();
+  await page.evaluate(()=>{Math.random=()=>.9999});await boxes.first().getByRole('button',{name:'1회 오픈 1,000',exact:true}).click();
   const result=page.getByRole('dialog',{name:'상자 결과',exact:true});await expect(result).toHaveAttribute('data-phase','cards');await result.getByRole('button',{name:'전체 뒤집기',exact:true}).click();await expect(result.locator('.is-revealed')).toHaveCount(1);await expect(result.locator('.reward-flip')).toHaveAttribute('data-loot-type','board');await result.getByRole('button',{name:'확인',exact:true}).click();
   await page.screenshot({path:`.runtime/v96-shop-${mobile?'mobile':'desktop'}-${test.info().project.name}.png`});
   expect(sent.filter(m=>m.type==='storeOpen')).toHaveLength(1);expect(errors).toEqual([]);expect(await page.evaluate(()=>scrollY)).toBe(0);

@@ -11,7 +11,7 @@ export function renameNickname(game:Game,p:Player,msg:Record<string,unknown>){
  if(!validNickname(name))return reply(false,'닉네임은 한글·영문·숫자·공백·_ . -로 1~16자 입력해 주세요.');
  const key=name.toLocaleLowerCase('en-US');if(key===p.name.toLocaleLowerCase('en-US'))return reply(false,'현재 닉네임과 다른 이름을 입력해 주세요.');
  if([...game.community.records.values()].some(r=>r.id!==record.id&&r.name.toLocaleLowerCase('en-US')===key)||[...game.accounts.values()].some(a=>a.id!==p.accountId&&(a.nickname??a.username).toLocaleLowerCase('en-US')===key)||[...game.sessions.values()].some(x=>x!==p&&game.community.id(x)!==record.id&&x.name.toLocaleLowerCase('en-US')===key))return reply(false,'이미 사용 중인 닉네임이에요.');
- const cost=record.superUser?0:NICKNAME_PRICE;if(p.coins<cost)return reply(false,'골드 1,500개가 필요해요.');
+ const cost=record.superUser?0:NICKNAME_PRICE;if(p.coins<cost)return reply(false,'코인 1,500개가 필요해요.');
  p.coins-=cost;p.name=name;record.name=name;record.store.gold=p.coins;record.store.revision=(record.store.revision??0)+1;
  record.nicknameChanges=[...(record.nicknameChanges??[]),{requestId,name,cost}].slice(-20);
  const account=[...game.accounts.values()].find(a=>a.id===p.accountId);if(account){account.nickname=name;account.coins=p.coins;}

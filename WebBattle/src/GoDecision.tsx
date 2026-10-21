@@ -1,3 +1,4 @@
+import {CurrencyIcon} from './CurrencyIcon.js';
 import {useEffect,useRef} from 'react';
 import {createPortal} from 'react-dom';
 import type {RoomView} from '../shared/rules.js';
@@ -21,7 +22,7 @@ export function GoDecision({room,now,connected,onChoice}:{room:RoomView;now:numb
    <h1 id="go-event-title">{own?(complete?'3GO 성공!':`${level}GO 도전하시겠습니까?`):`${name}님의 ${achieved}GO 득점!`}</h1>
    {own&&<>
     {!complete&&<p className="go-event-cards">내 카드 2장 · 나머지 각 1장</p>}
-    <p className="go-event-reward">승리 시 골드 · 포인트 <strong>{goRewardMultiplier(complete?3:level)}배</strong></p>
+    <p className="go-event-reward">승리 시 <CurrencyIcon currency="coin"/> · 포인트 <strong>{goRewardMultiplier(complete?3:level)}배</strong></p>
    </>}
    {decision.expiresAt>0&&<p className="go-event-time">{Math.max(0,Math.ceil((decision.expiresAt-now)/1000))}초</p>}
    {own&&<div className="go-actions">{!complete&&<button className="primary" disabled={!connected} onClick={()=>onChoice('go')}>{level}GO 도전</button>}<button className="secondary" disabled={!connected} onClick={()=>onChoice('stop')}>{complete?'보상 받기':'스톱'}</button></div>}
