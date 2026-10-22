@@ -25,9 +25,9 @@ try{
  clients=await Promise.all(['A','B','C','D'].map(n=>new Client(url).hello(n)));
  clients[1].send('adRewardTicket',{box:'silver'});
  await clients[1].until(()=>clients[1].messages.some(m=>m.type==='adTicket'));
- const adTicket=clients[1].messages.find(m=>m.type==='adTicket').ticket,adEvent='WorkerAd123',adTimestamp='202610221234';
- const adSignature=createHash('md5').update(adTimestamp+adEvent+adTicket+'1'+adSecret).digest('hex');
- const adUrl=`http://localhost/ads/levelplay/callback?timestamp=${adTimestamp}&eventId=${adEvent}&userId=${adTicket}&rewards=1&placement=logos_rewarded_box&signature=${adSignature}`;
+ const adTicket=clients[1].messages.find(m=>m.type==='adTicket').ticket,adEvent='WorkerAd123',adTimestamp='202610221234',adUserId='LevelPlayUser123';
+ const adSignature=createHash('md5').update(adTimestamp+adEvent+adUserId+'1'+adSecret).digest('hex');
+ const adUrl=`http://localhost/ads/levelplay/callback?timestamp=${adTimestamp}&eventId=${adEvent}&userId=${adUserId}&dynamicUserId=${adTicket}&rewards=1&placement=logos_rewarded_box&signature=${adSignature}`;
  assert.equal((await mf.dispatchFetch(adUrl.replace('rewards=1','rewards=2'))).status,403);
  assert.equal((await mf.dispatchFetch(adUrl)).status,200);
  await clients[1].until(()=>clients[1].messages.some(m=>m.type==='storeResult'&&m.requestId===adTicket));

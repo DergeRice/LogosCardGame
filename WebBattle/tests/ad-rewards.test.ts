@@ -14,12 +14,13 @@ function fixture(){
 }
 
 test('LevelPlay callback verifies signed ticket and rejects altered reward',()=>{
- const ticket='2f9ea89f-52b8-45fb-a341-94eb54604638',event='AdEvent123',timestamp='202610221234',key='private-test-key';
- const signature=createHash('md5').update(timestamp+event+ticket+'1'+key).digest('hex');
- const url=new URL(`https://example.test/ads/levelplay/callback?timestamp=${timestamp}&eventId=${event}&userId=${ticket}&rewards=1&placement=logos_rewarded_box&signature=${signature}`);
+ const ticket='2f9ea89f52b845fba34194eb54604638',userId='LevelPlayUser123',event='AdEvent123',timestamp='202610221234',key='private-test-key';
+ const signature=createHash('md5').update(timestamp+event+userId+'1'+key).digest('hex');
+ const url=new URL(`https://example.test/ads/levelplay/callback?timestamp=${timestamp}&eventId=${event}&userId=${userId}&dynamicUserId=${ticket}&rewards=1&placement=logos_rewarded_box&signature=${signature}`);
  assert.deepEqual(verifyLevelPlayCallback(url,key),{ticket,eventId:event});
  url.searchParams.set('rewards','2');assert.equal(verifyLevelPlayCallback(url,key),null);
  url.searchParams.set('rewards','1');url.searchParams.set('placement','wrong');assert.equal(verifyLevelPlayCallback(url,key),null);
+ url.searchParams.set('placement','logos_rewarded_box');url.searchParams.set('dynamicUserId','invalid-ticket');assert.equal(verifyLevelPlayCallback(url,key),null);
 });
 
 test('reward requires signed server claim, is idempotent and limited to three per Korean day',()=>{

@@ -33,8 +33,8 @@ export class Community {
   const r=this.record(p),now=Date.now();
   if(adRemaining(r.store.adUsage,now)<=0)return this.game.fail(p,'오늘 광고 상자를 모두 열었어요.');
   const active=r.adTicket;
-  if(active&&!active.result&&active.expiresAt>now){if(active.box!==box)return this.game.fail(p,'진행 중인 광고를 마친 뒤 다시 시도해 주세요.');this.game.send(p.socket,{type:'adTicket',ticket:active.id,box,expiresAt:active.expiresAt});return;}
-  const ticket:AdTicket={id:randomUUID(),box,day:adDay(now),expiresAt:now+AD_TICKET_MS};r.adTicket=ticket;
+  if(active&&!active.result&&active.expiresAt>now&&/^[a-f0-9]{32}$/.test(active.id)){if(active.box!==box)return this.game.fail(p,'진행 중인 광고를 마친 뒤 다시 시도해 주세요.');this.game.send(p.socket,{type:'adTicket',ticket:active.id,box,expiresAt:active.expiresAt});return;}
+  const ticket:AdTicket={id:randomUUID().replaceAll('-',''),box,day:adDay(now),expiresAt:now+AD_TICKET_MS};r.adTicket=ticket;
   this.game.send(p.socket,{type:'adTicket',ticket:ticket.id,box,expiresAt:ticket.expiresAt});
  }
  adStatus(p:Player,msg:Record<string,unknown>){const ticket=String(msg.ticket??''),r=this.record(p),active=r.adTicket;if(!active||active.id!==ticket)return this.game.fail(p,'광고 요청을 찾을 수 없어요.');if(active.result){this.game.send(p.socket,{type:'storeResult',...active.result});return;}this.game.send(p.socket,{type:'adStatus',ticket,pending:active.expiresAt>Date.now()});}
