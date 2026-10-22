@@ -33,9 +33,10 @@ namespace Logos.Native.Editor
                 // signed APK needs a separate package to preserve the installed app/data.
                 PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Android,
                     appBundle ? "com.baragames.logoscardgame" : "com.baragames.logoscardgame.dev");
-                PlayerSettings.Android.bundleVersionCode=appBundle ? oldCode+1 : oldCode;
-                PlayerSettings.Android.minSdkVersion=oldMin;
-                PlayerSettings.Android.targetSdkVersion=oldTarget;
+                var explicitVersion=Environment.GetEnvironmentVariable("LOGOS_ANDROID_VERSION_CODE");
+                PlayerSettings.Android.bundleVersionCode=appBundle && int.TryParse(explicitVersion,out var versionCode) && versionCode>0 ? versionCode : appBundle ? oldCode+1 : oldCode;
+                PlayerSettings.Android.minSdkVersion=appBundle ? AndroidSdkVersions.AndroidApiLevel25 : oldMin;
+                PlayerSettings.Android.targetSdkVersion=appBundle ? AndroidSdkVersions.AndroidApiLevel36 : oldTarget;
                 EditorUserBuildSettings.buildAppBundle=appBundle;
                 var props=Environment.GetEnvironmentVariable("LOGOS_KEYSTORE_PROPERTIES");
                 if(!string.IsNullOrEmpty(props)) {
