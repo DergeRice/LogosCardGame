@@ -18,6 +18,6 @@
 
 Unity 앱은 로그인된 계정 ID의 SHA-256 해시를 Billing의 `obfuscatedAccountId`에 넣는다. 서버는 Play ProductPurchaseV2의 구매 상태·완료 시각·상품·수량·미소모 상태·해시를 검사한다. 토큰 해시를 영구 원장에 기록하고 다이아 지급을 같은 SQLite 트랜잭션으로 확정한 뒤 Play consume을 호출한다. 동일 토큰 재전송은 추가 지급하지 않는다.
 
-서버의 `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` secret과 `iapPurchase` 검증 로직은 Cloudflare에 배포했다. `LOGOS_COMMERCE_ENABLED=1`인 기기 테스트 APK에서도 구매 브리지가 활성화되어 있다. 다만 `.dev` 패키지 APK는 운영 패키지의 Play 상품 결제창을 검증할 수 없다. 운영 패키지 AAB를 기존 업로드 인증서로 서명해 내부 테스트에 올리고 Play에서 설치한 후 실제 구매·취소·재설치 복구를 확인해야 한다.
+서버의 `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` secret과 `iapPurchase` 검증 로직은 Cloudflare에 배포했다. `LOGOS_COMMERCE_ENABLED=1`인 기기 테스트 APK에서도 구매 브리지가 활성화되어 있다. 다만 `.dev` 패키지 APK는 운영 패키지의 Play 상품 결제창을 검증할 수 없다. 운영 패키지 AAB 버전 코드 14를 내부 테스트에 게시하고 Play Store에서 설치했다. Play가 처음 제공한 코드 13에서 라이선스 테스터가 `diamonds_100`을 테스트 카드로 구매했고, 서버 검증 후 앱의 다이아 잔액이 0에서 100으로 증가했다. 이어 Play Store에서 코드 14로 업데이트했으며 잔액 100이 유지됐다. 구매 취소·재설치 복구·중복 요청은 별도 실측이 필요하다.
 
 기존 업로드 키 `~/.android/logoscardgame-upload.jks`는 2026-10-21 Codex가 생성했다. 같은 때 만들어 Git에서 제외한 `WebBattle/android/keystore.properties`가 원본 프로젝트에 남아 있으며, 이 파일의 비밀번호로 키를 열어 업로드 인증서 SHA-1 `16:A5:BA:D5:79:6D:BB:FC:24:94:4C:67:4F:56:BB:88:70:1F:00:02`를 확인했다. 기존 내부 테스트 AAB와 일치하므로 업로드 키 재설정이 필요 없다. 프로젝트의 `user.keystore`는 다른 인증서이므로 업데이트 AAB 서명에 사용하지 않는다. 2026-10-22에 별도로 만든 `~/.android/logoscardgame-upload-2026.jks` 역시 현재 Play 업로드에 사용하지 않는다. 웹 상점은 가격을 보여주지만 Play 결제를 실행하지 않는다.

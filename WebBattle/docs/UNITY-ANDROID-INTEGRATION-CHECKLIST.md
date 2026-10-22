@@ -14,7 +14,7 @@
 - Unity `Application.targetFrameRate`와 `QualitySettings.vSyncCount`를 먼저 확인한다. 이 프로젝트는 Unity 표면이 5Hz를 요청한 보고가 있었고, 코드에서 15fps 제한도 발견해 60fps로 변경했다. WebView를 Unity `SurfaceView` 위에 합성하는 기기에서는 Unity 프레임 제한이 웹 화면 갱신에도 영향을 줄 수 있다.
 - `adb shell dumpsys gfxinfo <패키지> reset` 후 홈 화면에서 30초 이상 측정한다. 시작·광고 전환 중 janky frame 수치와 안정 상태를 분리한다. Chrome에서 같은 웹 URL도 재생하여 앱과 비교한다. Android `gfxinfo`는 WebView/UI 프레임 지표이므로 Unity `SurfaceView` 자체의 FPS라고 단정하지 않는다.
 - Unity 카메라의 clear flags를 `SolidColor`, 배경을 흰색으로 설정하고 `RenderSettings.skybox`를 비운다. WebView가 늦게 생성되거나 잠시 숨겨져도 스카이박스가 노출되지 않게 한다.
-- 웹뷰 표시 중 Unity 장면의 불필요한 카메라·애니메이션·렌더 루프 부하를 줄인다. 로고스의 변경 후 홈 안정 상태에서 15초 동안 `gfxinfo` 908프레임, janky 0프레임을 측정했다. 광고 전환 중 수치는 별도로 계측한다.
+- 웹뷰 표시 중 Unity 장면의 불필요한 카메라·애니메이션·렌더 루프 부하를 줄인다. 로고스의 변경 후 홈 안정 상태에서 15.16초 동안 `gfxinfo` 910프레임, janky 0프레임을 측정했다. 광고 전환 중 수치는 별도로 계측한다.
 
 ## 3. Google 로그인
 
@@ -32,6 +32,7 @@
 - 운영 상품의 결제창은 Play에서 배포·설치된 **운영 패키지**로 시험한다. `.dev` 패키지 APK에서 상품 조회가 실패해도 운영 상품 설정이 잘못됐다는 증거는 아니다.
 - Play에 올리기 전 AAB 매니페스트의 `versionCode`, `minSdkVersion`, `targetSdkVersion`을 실제로 확인한다. 로고스는 API 34 빌드가 Play 검증에서 막혔고, 최소 API 28은 이전 버전이 지원하던 기기 1,002대를 제외했다. 내부 테스트용 재빌드는 버전 코드 13, 최소 API 25, 대상 API 36으로 맞췄다.
 - 업로드 키, Play 앱 서명 키, 로컬 테스트 키는 다를 수 있다. 기존 내부 테스트 AAB의 업로드 인증서와 새 AAB 인증서가 다르면 Play가 업데이트를 거절한다. 키 비밀번호를 잃었다면 Play 업로드 키 재설정 절차를 사용한다.
+- Play 앱 서명 키가 갱신되면 이미 설치된 APK의 인증서와 새 Play 생성 APK의 인증서를 비교한다. `adb shell pm list packages -i`로 설치 출처를 확인하고 `apksigner verify --print-certs`로 양쪽 SHA-1을 비교한다. 서명이 다르면 `adb install -r`은 `INSTALL_FAILED_UPDATE_INCOMPATIBLE`로 거절되고, 기존 앱을 제거하면 기기 내 데이터가 삭제된다. 새 서명 SHA-1에 맞는 Android OAuth 클라이언트도 등록해야 한다.
 
 ## 5. 보상형 광고
 
@@ -53,9 +54,11 @@
 ## 이 프로젝트의 2026-10-23 상태
 
 - 홈·상점 이미지가 개발 APK에서 표시된다. Unity 프레임 제한은 60fps, 카메라 배경은 흰색으로 수정했다. 홈 안정 상태 15.16초 측정값은 910프레임(약 60.0fps), janky 0프레임이다. 장시간 플레이와 광고 전후의 체감 성능은 추가 확인이 필요하다.
-- 광고 SDK 초기화·준비·실제 광고 재생과 앱의 보상 완료 이벤트는 Samsung SM-N981N에서 확인했다. 개발 APK는 서버 발급 32자 ticket을 Unity에서 수신했고, ticket 설정 후 광고를 로드하는 순서로 변경했다. S2S 지급은 아직 확인되지 않았으며 상점 횟수도 3/3 그대로다. 관측된 이전 광고 콜백 재시도는 `dynamicUserId`가 8자라 거부됐고, 최신 광고의 콜백은 아직 관측되지 않았다. 서버는 빈 `userId` 대신 값이 있는 `publisherSubId`를 선택하도록 수정·배포했다.
-- 결제 상품 4개 활성 상태, 서버 검증·중복 방지·지급·소비 코드 및 Cloudflare 배포를 확인했다. Codex가 생성한 기존 업로드 키와 Git에서 제외된 비밀번호 파일을 원본 프로젝트에서 찾았고, 기존 AAB와 인증서가 일치함을 검증했다. Play 설치 운영 앱 결제는 아직 실측 전이다.
-- ticket을 광고 로드 전에 설정하는 수정이 포함된 서명 AAB versionCode 14를 빌드했다. Google Play Developer API는 AAB 업로드와 내부 트랙 수정은 허용했지만 edit commit을 권한 부족(403)으로 거절해 임시 edit을 삭제했다. 따라서 내부 테스트에는 여전히 versionCode 13이 게시돼 있으며 14는 Play Console에서 업로드·게시해야 한다.
+- 광고 SDK 초기화·준비·실제 광고 재생과 앱의 보상 완료 이벤트는 Samsung SM-N981N에서 확인했다. 개발 APK는 서버 발급 32자 ticket을 Unity에서 수신했고, ticket 설정 후 광고를 로드하는 순서로 변경했다. S2S 지급은 아직 확인되지 않았으며 상점 횟수도 3/3 그대로다. 관측된 이전 광고 콜백 재시도는 `dynamicUserId`가 8자라 거부됐고, 최신 광고의 콜백은 아직 관측되지 않았다. 서버는 빈 `userId`와 `publisherSubId` 중 실제 서명에 사용된 후보를 검증하도록 수정·배포했다.
+- 결제 상품 4개 활성 상태, 서버 검증·중복 방지·지급·소비 코드 및 Cloudflare 배포를 확인했다. Codex가 생성한 기존 업로드 키와 Git에서 제외된 비밀번호 파일을 원본 프로젝트에서 찾았고, 기존 AAB와 인증서가 일치함을 검증했다.
+- Play Store에서 설치한 코드 13 앱에서 Google 계정 선택과 로그인 후 홈·상점 그림을 확인했다. 상점의 다이아몬드 100개 상품을 누르자 Google Play의 ₩1,200 구매 시트에 `테스트 카드, 항상 승인` 및 `테스트 주문이므로 청구되지 않습니다`가 표시됐다. 사용자가 최종 테스트 구매를 완료한 뒤 앱에 `다이아몬드 100개가 지급됐어요.`가 표시되고 보유량이 0에서 100으로 증가했다. 이는 Play 결제와 서버 검증·지급 경로의 실기기 성공 사례다. 중복 결제 방지는 이 구매만으로 검증되지 않는다.
+- ticket을 광고 로드 전에 설정하는 수정이 포함된 서명 AAB versionCode 14를 빌드하고 Play Console 내부 테스트에 게시했다. API 서비스 계정은 최종 게시 권한이 없어(403) 브라우저에서 게시했다. Play Console은 버전 14를 내부 테스터에게 제공 중이라고 표시한다.
 - 개발 APK에서 Google 계정 선택창과 최초 동의 화면이 열리는 것을 확인했다. 이 과정에서 30초 제한이 먼저 만료되어 로그인 요청 제한을 5분으로 늘렸다. 새 개발 APK를 Samsung SM-N981N에 설치해 같은 Google 계정 선택 후 로그인된 홈 화면으로 돌아오는 것도 확인했다. 운영 앱용 Android OAuth 클라이언트는 Play 앱 서명 SHA-1로 등록했으며, Play 설치 앱의 로그인 실측은 아직 필요하다.
-- Play 내부 테스트 버전 코드 13을 최소 API 25·대상 API 36으로 게시했고, Play Developer API에서 `internal` 트랙 `completed`, 버전 코드 13을 재확인했다. 폰의 기존 운영 앱은 Play 앱 서명 인증서·버전 코드 11로 설치되어 있다. 같은 폰에서 테스터 참여 상태를 확인했지만, Play Store는 캐시 새로고침 후에도 `플레이`만 표시해 새 버전 설치 및 IAP 실측은 아직 못 했다.
+- Play 내부 테스트 버전 코드 14는 최소 API 25·대상 API 36이다. 폰의 기존 운영 앱 버전 코드 11은 설치 출처가 `null`이고 서명 SHA-1은 `B7:3E:30:DE:7E:69:EB:DF:F1:02:6E:EA:F6:A6:E3:EC:6F:57:CC:76`이었다. 현재 Play 서명 SHA-1 `FE:DD:30:18:FF:5F:0D:B2:BD:BF:1F:31:6F:76:4C:3A:23:DE:4B:EB`과 달라 덮어쓰기 설치가 `INSTALL_FAILED_UPDATE_INCOMPATIBLE`로 거절됐다. 사용자가 기기 내 데이터 삭제를 승인해 기존 앱을 제거하고 Play Store에서 다시 설치했다. 첫 설치는 Store 캐시/전파 상태 때문에 코드 13이었고 설치 출처 `com.android.vending`, 실제 서명은 새 Play 서명 SHA-1과 일치한다. 이후 Play Store에 `업데이트`가 나타나 코드 14를 설치했으며, 설치 출처와 다이아 100개 잔액이 유지됐다. 새 SHA-1의 운영 패키지 Android OAuth 클라이언트를 Google Cloud에 생성했고, Play 설치 앱에서 Google 계정 선택과 로그인 성공을 확인했다.
+- 코드 14 홈의 Unity `SurfaceView` 프레임 타임을 SurfaceFlinger에서 126개 연속 표본으로 확인했다. 중간값 16.66ms, 95백분위 17.65ms, 33ms 초과 0개로 약 60fps다. 반면 같은 시점 `gfxinfo`의 janky 비율은 높게 나와 Unity 표면 성능을 대신하는 지표로 쓰지 않는다. 첫 실행의 리소스 로딩과 광고 전후 성능은 별도 계측한다.
 - 이후 홈 계측에서는 약 27.8초에 1,524프레임이 기록됐지만 janky frame 비율이 99%로 높았다. 앞선 안정 상태 측정과 조건이 달라 원인을 확정하지 않았으며, 실제 화면이 매끄럽다고 판정할 수 없다. 동일한 홈 안정 조건에서 Unity 표면과 WebView/UI 지표를 따로 재측정해야 한다.

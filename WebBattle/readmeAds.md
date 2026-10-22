@@ -19,6 +19,6 @@
 
 ## Android 배포와 검증
 
-원본 Unity 프로젝트는 `/Users/isangjin/Documents/GitHub/LogosCardGame`이며 Unity Editor `6000.4.5f1`로 개발 APK를 빌드해 폰에 설치했다. `Assets/LogosNative/Editor/LogosNativeBuild.cs`는 빌드 시 `LOGOS_LEVELPLAY_APP_KEY`, `LOGOS_LEVELPLAY_REWARDED_ID`, `LOGOS_KEYSTORE_PROPERTIES`를 읽는다. Codex가 생성했던 기존 Play 업로드 키의 비밀번호 파일은 원본 프로젝트의 `WebBattle/android/keystore.properties`에서 찾았다. 기존 키로 서명한 버전 코드 13 AAB가 Play 내부 테스트 `completed` 상태다. 현재 폰의 Play 설치 운영 앱은 코드 11이고 Play Store 업데이트는 아직 노출되지 않는다.
+원본 Unity 프로젝트는 `/Users/isangjin/Documents/GitHub/LogosCardGame`이며 Unity Editor `6000.4.5f1`로 개발 APK를 빌드해 폰에 설치했다. `Assets/LogosNative/Editor/LogosNativeBuild.cs`는 빌드 시 `LOGOS_LEVELPLAY_APP_KEY`, `LOGOS_LEVELPLAY_REWARDED_ID`, `LOGOS_KEYSTORE_PROPERTIES`를 읽는다. Codex가 생성했던 기존 Play 업로드 키의 비밀번호 파일은 원본 프로젝트의 `WebBattle/android/keystore.properties`에서 찾았다. 기존 업로드 키로 서명한 버전 코드 14 AAB가 Play 내부 테스트에 게시돼 내부 테스터에게 제공 중이다. 폰의 기존 코드 11 운영 앱은 현재 Play 앱 서명 키와 달라 덮어쓰기 설치가 거절됐다. 사용자 승인 후 기존 앱을 제거하고 Play Store에서 재설치한 뒤 코드 14까지 업데이트했다. 코드 13 Play 설치 앱에서 테스트 카드의 `diamonds_100` 구매 후 다이아 100개 지급을 확인했고, 업데이트 뒤에도 잔액이 유지됐다.
 
 실기기에서 보상형 광고 완료, 닫기, 로드 실패를 확인한다. 완료 시 서버 발급 ticket 하나로 상자 1개만 열리고, 같은 LevelPlay event ID 재전송에는 중복 지급이 없어야 한다. 실버와 골드 광고 개봉 횟수는 한국 날짜 기준 합산 하루 3회다. 운영 계정에 위조 보상을 지급해 테스트하지 않는다.
