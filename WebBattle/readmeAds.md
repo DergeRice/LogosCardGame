@@ -4,7 +4,7 @@
 
 - LevelPlay의 `Logos Card Game` Android 앱, `logos_rewarded_box` 보상형 광고 단위와 같은 이름의 placement가 등록되어 있다. Unity Ads bidding network도 연결되어 있다.
 - S2S callback URL은 `https://logos-card-battle-server.jesus-and-children-ranking-worker.workers.dev/ads/levelplay/callback?userId=[USER_ID]&rewards=[REWARDS]&eventId=[EVENT_ID]`로 등록되어 있고 콘솔 상태는 Active다.
-- 콘솔이 새 64자리 키를 저장하지 않아, 기존에 저장되어 있던 6자리 키를 운영 Worker의 `LEVELPLAY_S2S_PRIVATE_KEY`와 일치시켰다. `npx wrangler secret list`에서 등록을 확인했고, 운영 `/health`는 200, 서명 없는 콜백은 403이다. Samsung SM-N981N에서 LevelPlay SDK 초기화·광고 로드·실제 광고 재생·앱의 보상 완료 이벤트까지 확인했다. Unity는 서버 발급 32자 ticket을 받지만 S2S 지급은 아직 검증하지 못했다. 관측된 이전 콜백 재시도는 8자 `dynamicUserId`여서 거부됐다. 2026-10-23 서버에서 빈 `userId` 대신 값이 있는 `publisherSubId`를 선택하도록 수정했다.
+- 콘솔이 새 64자리 키를 저장하지 않아, 기존에 저장되어 있던 6자리 키를 운영 Worker의 `LEVELPLAY_S2S_PRIVATE_KEY`와 일치시켰다. `npx wrangler secret list`에서 등록을 확인했고, 운영 `/health`는 200, 서명 없는 콜백은 403이다. Samsung SM-N981N에서 LevelPlay SDK 초기화·광고 로드·실제 광고 재생·앱의 보상 완료 이벤트까지 확인했다. Unity는 서버 발급 32자 ticket을 받지만 S2S 지급은 아직 검증하지 못했다. 관측된 이전 콜백 재시도는 8자 `dynamicUserId`여서 거부됐다. 2026-10-23 서버는 빈 `userId`와 `publisherSubId` 중 실제 서명에 사용된 후보를 검증하도록 수정했다. Play Store 코드 14에서도 실제 광고 재생과 SDK `OnAdRewarded`를 확인했지만 Worker에서 새 콜백이 관측되지 않았고 상점 횟수는 `광고 3/3` 그대로다.
 - 6자리 16진수 키는 추측에 대한 보호가 약하다. 서버의 짧은 유효기간 ticket 및 event ID 중복 방지는 유지되지만, 콘솔에서 긴 키 저장 문제가 해결되면 양쪽 키를 함께 교체해야 한다.
 - 이 PC의 `.runtime/secrets/levelplay-s2s.dpapi`에 현재 키를 DPAPI로 보관한다. 쓰이지 않은 64자리 제안 키는 `.runtime/secrets/levelplay-s2s-proposed-unused.dpapi`에 따로 남겨 두었다. 둘 다 Git에서 제외된다. `adsetting/ads-key-vault.ps1 status`로 길이와 지문만 확인할 수 있다. 키를 문서, 채팅, 로그, 프런트 번들에 출력하지 않는다.
 - `.runtime/secrets/levelplay-release.env`에 이 게임 전용 App Key와 보상형 광고 단위 ID를 로컬 보관한다. 이 파일도 Git에서 제외된다.
