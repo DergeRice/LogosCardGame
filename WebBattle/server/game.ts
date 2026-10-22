@@ -582,7 +582,7 @@ export class Game {
    const hitScore=p.score-(p.hitBaseScore??0);
    const effectiveHit=hitScore>=RULES.goThreshold&&hitScore>(r.highHitScore??0);
    if(effectiveHit){r.highHitScore=hitScore;p.hitBaseScore=p.score;}
-   if(effectiveHit){const previous=p.goHits??0,otherGo=r.players.some(other=>other!==p&&(other.goHits??0)>0);p.goHits=Math.min(RULES.maxGo,previous+1);this.startCountdown(r,'go');if(previous===1||(previous===0&&otherGo)){r.endsAt+=GO_COUNTDOWN_EXTENSION_MS;this.log(r,`${p.name} 님의 ${p.goHits}GO 성공 · 제한 시간 +20초`);}}
+   if(effectiveHit){const previous=p.goHits??0,otherGo=r.players.some(other=>other!==p&&(other.goHits??0)>0);p.goHits=Math.min(RULES.maxGo,previous+1);this.startCountdown(r,'go');if(previous===1||(previous===0&&otherGo)){r.endsAt+=GO_COUNTDOWN_EXTENSION_MS;this.log(r,`${p.name} 님의 ${p.goHits}GO 성공 · 제한 시간 +60초`);}}
    if(effectiveHit){
     const previousLeaderId=r.leaderId&&r.leaderId!==p.id?r.leaderId:undefined;
     if(previousLeaderId)r.goTarget=undefined;
