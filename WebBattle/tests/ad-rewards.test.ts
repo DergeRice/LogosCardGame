@@ -18,6 +18,14 @@ test('LevelPlay callback verifies signed ticket and rejects altered reward',()=>
  const signature=createHash('md5').update(timestamp+event+userId+'1'+key).digest('hex');
  const url=new URL(`https://example.test/ads/levelplay/callback?timestamp=${timestamp}&eventId=${event}&userId=${userId}&dynamicUserId=${ticket}&rewards=1&placement=logos_rewarded_box&signature=${signature}`);
  assert.deepEqual(verifyLevelPlayCallback(url,key),{ticket,eventId:event});
+ url.searchParams.delete('userId');url.searchParams.set('publisherSubId',userId);
+ assert.deepEqual(verifyLevelPlayCallback(url,key),{ticket,eventId:event});
+ url.searchParams.set('userId','');
+ assert.deepEqual(verifyLevelPlayCallback(url,key),{ticket,eventId:event});
+ const blankSignature=createHash('md5').update(timestamp+event+''+'1'+key).digest('hex');
+ url.searchParams.set('signature',blankSignature);
+ assert.deepEqual(verifyLevelPlayCallback(url,key),{ticket,eventId:event});
+ url.searchParams.set('signature',signature);
  url.searchParams.set('rewards','2');assert.equal(verifyLevelPlayCallback(url,key),null);
  url.searchParams.set('rewards','1');url.searchParams.set('placement','wrong');assert.equal(verifyLevelPlayCallback(url,key),null);
  url.searchParams.set('placement','logos_rewarded_box');url.searchParams.set('dynamicUserId','invalid-ticket');assert.equal(verifyLevelPlayCallback(url,key),null);

@@ -37,7 +37,13 @@ namespace Logos.Native
                 LevelPlayPrivacySettings.SetCOPPA(settings.childDirectedTreatment);
                 LevelPlay.SetMetaData("is_deviceid_optout", "true");
                 LevelPlay.OnInitSuccess += Initialized; LevelPlay.OnInitFailed += InitFailed;
-                LevelPlay.Init(settings.levelPlayAppKey);
+                var adUserId = PlayerPrefs.GetString("logos_levelplay_user_id", "");
+                if (string.IsNullOrEmpty(adUserId)) {
+                    adUserId = Guid.NewGuid().ToString("N");
+                    PlayerPrefs.SetString("logos_levelplay_user_id", adUserId);
+                    PlayerPrefs.Save();
+                }
+                LevelPlay.Init(settings.levelPlayAppKey, adUserId);
             }
         }
         public void OpenWeb() {
@@ -55,7 +61,7 @@ namespace Logos.Native
             Request request;
             try { request = JsonUtility.FromJson<Request>(payload); } catch { return; }
             if (request == null || string.IsNullOrEmpty(request.id) || request.id.Length > 80) return;
-            if (request.method == "capabilities") { Send(new Reply { id=request.id, success=true, purchaseEnabled=settings.commerceEnabled, adReady=rewarded != null && rewarded.IsAdReady() }); return; }
+            if (request.method == "capabilities") { Send(new Reply { id=request.id, success=true, purchaseEnabled=settings.commerceEnabled, adReady=rewarded != null }); return; }
             if (request.method == "googleSignIn") {
 #if UNITY_ANDROID && !UNITY_EDITOR
                 if (string.IsNullOrEmpty(request.clientId) || string.IsNullOrEmpty(request.nonce) || request.clientId.Length > 256 || request.nonce.Length != 64) { Fail(request,"Google 로그인 요청이 잘못됐어요."); return; }
@@ -102,14 +108,15 @@ namespace Logos.Native
             rewarded.OnAdRewarded += (info,reward)=>dispatch.Enqueue(()=> { Debug.Log("LOGOS_LEVELPLAY_REWARDED"); earned=true; var request=activeAd;activeAd=null;if(request!=null)Send(new Reply{id=request.id,success=true,rewarded=true,box=request.box}); });
             rewarded.OnAdDisplayFailed += (info,error)=>dispatch.Enqueue(()=>FinishAd(false,"광고를 재생하지 못했어요."));
             rewarded.OnAdClosed += _=>dispatch.Enqueue(()=> { Debug.Log("LOGOS_LEVELPLAY_AD_CLOSED: rewarded="+earned); StartCoroutine(CloseAd()); });
-            rewarded.LoadAd();
         }); }
         private void InitFailed(LevelPlayInitError error) { Debug.LogWarning("LOGOS_LEVELPLAY_INIT_FAILED: "+error); dispatch.Enqueue(()=> { if(activeAd!=null) FinishAd(false,"광고를 초기화하지 못했어요."); }); }
         private void ShowAd(Request request) {
             if((request.box!="silver"&&request.box!="gold")||string.IsNullOrEmpty(request.rewardTicket)||request.rewardTicket.Length>128||activeAd!=null||adShowing||rewarded==null) { Fail(request,"광고를 준비하지 못했거나 이미 재생 중이에요."); return; }
             if(!LevelPlay.SetDynamicUserId(request.rewardTicket)) { Fail(request,"광고 보상 요청을 연결하지 못했어요.");return; }
             activeAd=request; earned=false;
-            if(rewarded.IsAdReady()) DisplayAd(); else { rewarded.LoadAd(); StartCoroutine(AdTimeout(request.id)); }
+            // Bind the per-ad ticket before loading; some mediated networks snapshot
+            // S2S identifiers when the ad is loaded rather than when it is shown.
+            rewarded.LoadAd(); StartCoroutine(AdTimeout(request.id));
         }
         private void DisplayAd() { adShowing=true; rewarded.ShowAd(settings.rewardedPlacement); }
         private IEnumerator AdTimeout(string id) { yield return new WaitForSecondsRealtime(30); if(activeAd?.id==id&&!adShowing) FinishAd(false,"광고 로딩 시간이 초과됐어요."); }
@@ -117,7 +124,6 @@ namespace Logos.Native
         private void FinishAd(bool completed,string error) {
             var request=activeAd; activeAd=null; adShowing=false;
             if(request!=null) Send(new Reply{id=request.id,success=completed,rewarded=completed,box=request.box,error=error});
-            rewarded?.LoadAd();
         }
         private void Fail(Request request,string message) => Send(new Reply{id=request.id,error=message});
         private void Send(Reply reply) { var json=JsonUtility.ToJson(reply); Evaluate("window.dispatchEvent(new CustomEvent('logos-native-result',{detail:"+json+"}));"); }
