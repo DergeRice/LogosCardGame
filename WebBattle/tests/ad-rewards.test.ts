@@ -49,3 +49,18 @@ test('reward requires signed server claim, is idempotent and limited to three pe
  const next=new Game({adRewardsEnabled:true});restore(next,snapshot(game));
  assert.equal(next.community.records.get(game.community.id(player))?.store.adUsage?.[adDay(Date.now())],3);
 });
+
+test('completed client reward uses the same one-use ticket and accepts a later signed callback without double credit',()=>{
+ const {game,player,messages}=fixture();
+ game.handle(player,{type:'adRewardTicket',box:'gold'});
+ const ticket=messages.filter(m=>m.type==='adTicket').at(-1)?.ticket;
+ assert.ok(ticket);
+ game.handle(player,{type:'adRewardClaim',ticket:'00000000000000000000000000000000'});
+ assert.equal(game.community.record(player).store.adUsage?.[adDay(Date.now())]??0,0);
+ game.handle(player,{type:'adRewardClaim',ticket});
+ assert.equal(game.community.record(player).store.adUsage?.[adDay(Date.now())],1);
+ assert.equal(messages.filter(m=>m.type==='storeResult').length,1);
+ game.handle(player,{type:'adRewardClaim',ticket});
+ assert.equal(game.community.claimAdTicket(ticket,'LevelPlayEventLater'),'duplicate');
+ assert.equal(game.community.record(player).store.adUsage?.[adDay(Date.now())],1);
+});
