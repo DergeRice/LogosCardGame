@@ -10,7 +10,7 @@ namespace Logos.Native
     public sealed class LogosCommerceBridge : MonoBehaviour
     {
         [Serializable] public sealed class Settings { public string gameUrl, levelPlayAppKey, rewardedAdUnitId, rewardedPlacement; public bool commerceEnabled; public bool childDirectedTreatment = true; }
-        [Serializable] private sealed class Request { public string id, method, productId, box, rewardTicket, clientId, nonce; }
+        [Serializable] private sealed class Request { public string id, method, productId, accountHash, box, rewardTicket, clientId, nonce; }
         [Serializable] private sealed class Purchase { public bool success; public string productId, purchaseToken, receipt, transactionId, error; }
         [Serializable] private sealed class Reply { public string id, type = "logos-native-result", error, productId, purchaseToken, receipt, transactionId, box, credential; public bool success, rewarded, purchaseEnabled, adReady; }
         private readonly ConcurrentQueue<Action> dispatch = new ConcurrentQueue<Action>();
@@ -19,11 +19,16 @@ namespace Logos.Native
         private Request activePurchase, activeAd;
         private bool adShowing, earned;
         private void Awake() {
-            // The Unity surface hosts the Android WebView and its native bridge.
-            // The WebView owns the visible frame. Avoid rendering the hidden Unity
-            // surface at 60 Hz and competing for the same GPU tile memory.
+            // The Android WebView is composited over Unity's surface. Capping the
+            // surface at 15 Hz also throttles the visible WebView on some devices.
             QualitySettings.vSyncCount = 0;
-            Application.targetFrameRate = 15;
+            Application.targetFrameRate = 60;
+            var mainCamera = Camera.main;
+            if (mainCamera != null) {
+                mainCamera.clearFlags = CameraClearFlags.SolidColor;
+                mainCamera.backgroundColor = Color.white;
+            }
+            RenderSettings.skybox = null;
             gameObject.name = "LogosNativeBridge";
             settings = JsonUtility.FromJson<Settings>(Resources.Load<TextAsset>("LogosNativeSettings").text);
             // Credentials are injected by the release builder, never borrowed from QTlingo.
@@ -42,7 +47,7 @@ namespace Logos.Native
         }
         private void Update() { while (dispatch.TryDequeue(out var action)) action(); }
         public void OnWebReady(string ignored) {
-            var bootstrap = "(function(){if(window.LogosNative)return;var pending=new Map();window.LogosNative={platform:'android',request:function(method,args){var id=crypto.randomUUID();return new Promise(function(resolve,reject){var timer=setTimeout(function(){pending.delete(id);reject(new Error('Native request timed out'));},180000);pending.set(id,{resolve:resolve,reject:reject,timer:timer});prompt('LOGOS_NATIVE',JSON.stringify(Object.assign({},args||{},{id:id,method:method})));});}};window.addEventListener('logos-native-result',function(e){var r=e.detail,p=pending.get(r.id);if(!p)return;clearTimeout(p.timer);pending.delete(r.id);r.success?p.resolve(r):p.reject(new Error(r.error||'Native request failed'));});window.dispatchEvent(new Event('logos-native-ready'));})();";
+            var bootstrap = "(function(){if(window.LogosNative)return;var pending=new Map();window.LogosNative={platform:'android',request:function(method,args){var id=crypto.randomUUID();return new Promise(function(resolve,reject){var timeout=method==='rewarded'?600000:method==='purchase'?300000:30000;var timer=setTimeout(function(){pending.delete(id);reject(new Error('Native request timed out'));},timeout);pending.set(id,{resolve:resolve,reject:reject,timer:timer});prompt('LOGOS_NATIVE',JSON.stringify(Object.assign({},args||{},{id:id,method:method})));});}};window.addEventListener('logos-native-result',function(e){var r=e.detail,p=pending.get(r.id);if(!p)return;clearTimeout(p.timer);pending.delete(r.id);r.success?p.resolve(r):p.reject(new Error(r.error||'Native request failed'));});window.dispatchEvent(new Event('logos-native-ready'));})();";
             Evaluate(bootstrap);
         }
         // Called on Unity's main thread by UnitySendMessage.
@@ -68,10 +73,10 @@ namespace Logos.Native
         }
         private static bool ValidProduct(string product) => product == "diamonds_100" || product == "diamonds_300" || product == "diamonds_1000" || product == "diamonds_3000";
         private void Buy(Request request) {
-            if (!ValidProduct(request.productId) || activePurchase != null) { Fail(request, "상품이 잘못됐거나 다른 결제가 진행 중이에요."); return; }
+            if (!ValidProduct(request.productId) || string.IsNullOrEmpty(request.accountHash) || request.accountHash.Length != 64 || activePurchase != null) { Fail(request, "상품이나 로그인 정보가 잘못됐거나 다른 결제가 진행 중이에요."); return; }
 #if UNITY_ANDROID && !UNITY_EDITOR
             activePurchase=request;
-            try { using(var billing=new AndroidJavaClass("com.baragames.logos.nativebridge.LogosGoogleBilling")) billing.CallStatic("purchase",request.productId,gameObject.name,nameof(OnPurchaseResult)); }
+            try { using(var billing=new AndroidJavaClass("com.baragames.logos.nativebridge.LogosGoogleBilling")) billing.CallStatic("purchase",request.productId,request.accountHash,gameObject.name,nameof(OnPurchaseResult)); }
             catch(Exception) { activePurchase=null; Fail(request,"Google Play 결제를 시작하지 못했어요."); }
 #else
             Fail(request,"Google Play에서 설치한 Android 앱에서 구매해 주세요.");
@@ -90,16 +95,16 @@ namespace Logos.Native
             if(result==null || string.IsNullOrEmpty(result.id) || result.id.Length>80)return;
             Send(result);
         }
-        private void Initialized(LevelPlayConfiguration ignored) { dispatch.Enqueue(()=>{
+        private void Initialized(LevelPlayConfiguration ignored) { Debug.Log("LOGOS_LEVELPLAY_INIT_OK"); dispatch.Enqueue(()=>{
             rewarded=new LevelPlayRewardedAd(settings.rewardedAdUnitId);
-            rewarded.OnAdLoaded += _=>dispatch.Enqueue(()=> { if(activeAd!=null&&!adShowing) DisplayAd(); });
-            rewarded.OnAdLoadFailed += _=>dispatch.Enqueue(()=> { if(activeAd!=null) FinishAd(false,"광고를 불러오지 못했어요."); });
-            rewarded.OnAdRewarded += (info,reward)=>dispatch.Enqueue(()=> { earned=true; var request=activeAd;activeAd=null;if(request!=null)Send(new Reply{id=request.id,success=true,rewarded=true,box=request.box}); });
+            rewarded.OnAdLoaded += _=>dispatch.Enqueue(()=> { Debug.Log("LOGOS_LEVELPLAY_AD_READY"); if(activeAd!=null&&!adShowing) DisplayAd(); });
+            rewarded.OnAdLoadFailed += error=>dispatch.Enqueue(()=> { Debug.LogWarning("LOGOS_LEVELPLAY_AD_FAILED: "+error); if(activeAd!=null) FinishAd(false,"광고를 불러오지 못했어요."); });
+            rewarded.OnAdRewarded += (info,reward)=>dispatch.Enqueue(()=> { Debug.Log("LOGOS_LEVELPLAY_REWARDED"); earned=true; var request=activeAd;activeAd=null;if(request!=null)Send(new Reply{id=request.id,success=true,rewarded=true,box=request.box}); });
             rewarded.OnAdDisplayFailed += (info,error)=>dispatch.Enqueue(()=>FinishAd(false,"광고를 재생하지 못했어요."));
-            rewarded.OnAdClosed += _=>dispatch.Enqueue(()=>StartCoroutine(CloseAd()));
+            rewarded.OnAdClosed += _=>dispatch.Enqueue(()=> { Debug.Log("LOGOS_LEVELPLAY_AD_CLOSED: rewarded="+earned); StartCoroutine(CloseAd()); });
             rewarded.LoadAd();
         }); }
-        private void InitFailed(LevelPlayInitError ignored) { dispatch.Enqueue(()=> { if(activeAd!=null) FinishAd(false,"광고를 초기화하지 못했어요."); }); }
+        private void InitFailed(LevelPlayInitError error) { Debug.LogWarning("LOGOS_LEVELPLAY_INIT_FAILED: "+error); dispatch.Enqueue(()=> { if(activeAd!=null) FinishAd(false,"광고를 초기화하지 못했어요."); }); }
         private void ShowAd(Request request) {
             if((request.box!="silver"&&request.box!="gold")||string.IsNullOrEmpty(request.rewardTicket)||request.rewardTicket.Length>128||activeAd!=null||adShowing||rewarded==null) { Fail(request,"광고를 준비하지 못했거나 이미 재생 중이에요."); return; }
             if(!LevelPlay.SetDynamicUserId(request.rewardTicket)) { Fail(request,"광고 보상 요청을 연결하지 못했어요.");return; }

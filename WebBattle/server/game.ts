@@ -614,7 +614,7 @@ export class Game {
   if(msg.type==='friendInvite')return this.community.invite(p,msg);
   if(msg.type==='inviteReply')return this.community.acceptInvite(p,msg);
   if(msg.type==='storeOpen'||msg.type==='storeOpenFree'||msg.type==='storeRedeem')return this.community.store(p,msg);
-  if(msg.type==='iapPurchase')return this.fail(p,'Google Play 구매 검증 서버를 준비 중이에요. 결제는 완료되지 않았어요.');
+  if(msg.type==='iapPurchase')return this.fail(p,'Google Play 구매는 운영 서버에서만 검증할 수 있어요.');
   if(msg.type==='storeEmotes')return this.community.setEmotes(p,msg);
   if(msg.type==='storeEquip')return this.community.equip(p,msg);
   if(msg.type==='register'||msg.type==='login')return this.authenticate(p,msg);

@@ -211,6 +211,7 @@ function App() {
     if(msg.type==='ranking')setRankings(old=>({...old,[msg.tier]:msg.players}));
     if(msg.type==='community'){setCommunity(msg.community);setProfile(old=>({...old,coins:msg.community.store.gold}));}
     if(msg.type==='storeResult')setStoreResult({requestId:msg.requestId,source:msg.source,box:msg.box,rewards:msg.rewards});
+    if(msg.type==='iapResult')window.dispatchEvent(new CustomEvent('logos-iap-result',{detail:msg}));
     if(msg.type==='adTicket')setAdTicket(old=>({ticket:msg.ticket,box:msg.box,expiresAt:msg.expiresAt,serial:(old?.serial??0)+1}));
     if(msg.type==='accountDeleted'){for(const key of Object.keys(localStorage))if(key.startsWith('logos-'))localStorage.removeItem(key);for(const key of Object.keys(sessionStorage))if(key.startsWith('logos-'))sessionStorage.removeItem(key);location.replace('/account-deleted.html');return;}
     if(msg.type==='notice')setNotice(msg.message);

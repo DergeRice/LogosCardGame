@@ -36,5 +36,5 @@ const response = await fetch(`https://androidpublisher.googleapis.com/androidpub
 });
 if (!response.ok) throw new Error(`Android Publisher request failed: ${response.status}`);
 const body = await response.json();
-const productIds = (body.oneTimeProducts ?? []).map(product => product.productId).sort();
-console.log(JSON.stringify({ status: response.status, packageName, productIds }));
+const products = (body.oneTimeProducts ?? []).map(product => ({id:product.productId,options:(product.purchaseOptions??[]).map(option=>({id:option.purchaseOptionId,state:option.state,regionalPrices:(option.regionalPricingAndAvailabilityConfigs??[]).filter(region=>region.regionCode==='KR').map(region=>({region:region.regionCode,price:region.price?.units}))}))})).sort((a,b)=>a.id.localeCompare(b.id));
+console.log(JSON.stringify({ status: response.status, packageName, products }));

@@ -38,11 +38,12 @@ public final class LogosGoogleBilling implements PurchasesUpdatedListener {
     private static String unityObject;
     private static String unityMethod;
     private static String pendingProductId;
+    private static String pendingAccountHash;
     private static final Map<String, String> purchaseTokens = new HashMap<>();
 
     private LogosGoogleBilling() { }
 
-    public static void purchase(final String productId, final String callbackObject, final String callbackMethod) {
+    public static void purchase(final String productId, final String accountHash, final String callbackObject, final String callbackMethod) {
         final Activity activity = UnityPlayer.currentActivity;
         if (activity == null) {
             emitFailure(callbackObject, callbackMethod, productId, "현재 화면을 찾지 못했어요.");
@@ -52,8 +53,12 @@ public final class LogosGoogleBilling implements PurchasesUpdatedListener {
             emitFailure(callbackObject, callbackMethod, productId, "상품 ID가 비어있어요.");
             return;
         }
+        if (accountHash == null || !accountHash.matches("[0-9a-f]{64}")) {
+            emitFailure(callbackObject, callbackMethod, productId, "로그인 정보를 확인하지 못했어요.");
+            return;
+        }
 
-        activity.runOnUiThread(() -> startPurchase(activity, productId, callbackObject, callbackMethod));
+        activity.runOnUiThread(() -> startPurchase(activity, productId, accountHash, callbackObject, callbackMethod));
     }
 
     public static void confirm(final String productId) {
@@ -75,7 +80,7 @@ public final class LogosGoogleBilling implements PurchasesUpdatedListener {
         });
     }
 
-    private static void startPurchase(final Activity activity, final String productId, final String callbackObject, final String callbackMethod) {
+    private static void startPurchase(final Activity activity, final String productId, final String accountHash, final String callbackObject, final String callbackMethod) {
         if (pendingProductId != null) {
             emitFailure(callbackObject, callbackMethod, productId, "다른 결제가 진행 중이에요.");
             return;
@@ -85,6 +90,7 @@ public final class LogosGoogleBilling implements PurchasesUpdatedListener {
         unityObject = callbackObject;
         unityMethod = callbackMethod;
         pendingProductId = productId;
+        pendingAccountHash = accountHash;
         billingClient = BillingClient.newBuilder(activity)
             .setListener(instance)
             .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
@@ -172,6 +178,7 @@ public final class LogosGoogleBilling implements PurchasesUpdatedListener {
                 .build();
             final BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(Collections.singletonList(productParams))
+                .setObfuscatedAccountId(pendingAccountHash)
                 .build();
 
             activity.runOnUiThread(() -> {

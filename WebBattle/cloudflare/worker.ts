@@ -8,7 +8,9 @@ import {AuditStore} from './audit-store.js';
 import {adminAuthorized} from '../server/audit.js';
 import {verifyAppleCredential} from '../server/appleAuth.js';
 import {verifyLevelPlayCallback} from '../server/levelPlayCallback.js';
-interface Env { LEVELPLAY_S2S_PRIVATE_KEY?:string;GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
+import {playAccessToken,verifyPlayPurchase,consumePlayPurchase} from '../server/googlePlayPurchase.js';
+import {diamondPack} from '../shared/store.js';
+interface Env { GOOGLE_PLAY_SERVICE_ACCOUNT_JSON?:string;LEVELPLAY_S2S_PRIVATE_KEY?:string;GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
 type Attachment={googleReturn?:{identity:{sub:string;name?:string};expires:number};appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
 const bounded=(v:string,def:number,min:number,max:number)=>Number.isFinite(Number(v))?Math.min(max,Math.max(min,Number(v))):def;
@@ -45,6 +47,7 @@ export class BattleArena extends DurableObject<Env>{
  private scheduledAlarm:number|null=null;
  private connectionsCleanedAt=0;
  private pendingAdEvents:{id:string;ticket:string;at:number}[]=[];
+ private pendingIapEvents:{hash:string;account:string;product:string;at:number}[]=[];
  queue:Promise<unknown>=Promise.resolve();outbox:(()=>void)[]|null=null;
  constructor(ctx:DurableObjectState,env:Env){
   super(ctx,env);
@@ -54,6 +57,7 @@ export class BattleArena extends DurableObject<Env>{
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY,value TEXT NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS connections (ip TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL)');
    ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS ad_events (event_id TEXT PRIMARY KEY,ticket_id TEXT NOT NULL,at INTEGER NOT NULL)');
+   ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS iap_events (token_hash TEXT PRIMARY KEY,account_id TEXT NOT NULL,product_id TEXT NOT NULL,at INTEGER NOT NULL)');
    for(const row of ctx.storage.sql.exec<{key:string;value:string}>('SELECT key,value FROM records'))this.cache.set(row.key,row.value);
    this.scheduledAlarm=await ctx.storage.getAlarm();
    const players=restore(this.game,this.cache);
@@ -92,8 +96,9 @@ export class BattleArena extends DurableObject<Env>{
    for(const [key,value]of next)if(this.cache.get(key)!==value)this.ctx.storage.sql.exec('INSERT INTO records(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',key,value);
    for(const key of this.cache.keys())if(!next.has(key))this.ctx.storage.sql.exec('DELETE FROM records WHERE key=?',key);
    for(const event of this.pendingAdEvents)this.ctx.storage.sql.exec('INSERT INTO ad_events(event_id,ticket_id,at) VALUES(?,?,?)',event.id,event.ticket,event.at);
+   for(const event of this.pendingIapEvents)this.ctx.storage.sql.exec('INSERT INTO iap_events(token_hash,account_id,product_id,at) VALUES(?,?,?,?)',event.hash,event.account,event.product,event.at);
    if(now-this.connectionsCleanedAt>=60000){this.ctx.storage.sql.exec('DELETE FROM connections WHERE expires<=?',now);this.connectionsCleanedAt=now;}
-  });this.cache=next;this.pendingAdEvents=[];
+  });this.cache=next;this.pendingAdEvents=[];this.pendingIapEvents=[];
   if(deadline!==this.scheduledAlarm){if(deadline!==null)await this.ctx.storage.setAlarm(deadline);else await this.ctx.storage.deleteAlarm();this.scheduledAlarm=deadline;}
  }
  async fetch(request:Request):Promise<Response>{
@@ -206,6 +211,28 @@ export class BattleArena extends DurableObject<Env>{
       if(!challenge||challenge.expires<Date.now())throw Error('Apple 로그인 시간이 만료됐어요. 다시 시도해 주세요.');
       const identity=await verifyAppleCredential(challenge.audience,msg.credential,challenge.value);
       if(p.socket===adapter)this.game.loginApple(p,identity,msg.name);
+     }else if(msg.type==='iapPurchase'){
+      if(!this.env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON)throw Error('Google Play 구매 검증을 준비 중이에요.');
+      if(!p.accountId)throw Error('구매 전 Google 계정으로 로그인해 주세요.');
+      if(p.room)throw Error('상점은 홈에서 이용해 주세요.');
+      const productId=typeof msg.productId==='string'?msg.productId:'',purchaseToken=typeof msg.purchaseToken==='string'?msg.purchaseToken:'',requestId=typeof msg.requestId==='string'?msg.requestId:'';
+      const pack=diamondPack(productId);
+      if(!pack||purchaseToken.length<8||purchaseToken.length>4096||!requestId||requestId.length>80)throw Error('구매 정보가 잘못됐어요.');
+      const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(purchaseToken))),b=>b.toString(16).padStart(2,'0')).join('');
+      const prior=this.ctx.storage.sql.exec<{account_id:string;product_id:string}>('SELECT account_id,product_id FROM iap_events WHERE token_hash=?',hash).toArray()[0];
+      if(prior){if(prior.account_id!==p.accountId||prior.product_id!==productId)throw Error('이미 다른 계정에서 처리한 구매예요.');
+       this.game.community.send(p);this.game.send(adapter,{type:'iapResult',requestId,productId,amount:pack.amount,duplicate:true});
+       this.ctx.waitUntil(playAccessToken(this.env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON).then(token=>consumePlayPurchase(token,productId,purchaseToken)).catch(()=>{}));
+      }else{
+       const verified=await verifyPlayPurchase(this.env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON,productId,purchaseToken,p.accountId);
+       const record=this.game.community.record(p);
+       if(record.store.diamonds>100_000_000-verified.amount)throw Error('다이아몬드 보유 한도를 초과했어요.');
+       record.store.diamonds+=verified.amount;record.store.revision=(record.store.revision??0)+1;
+       this.pendingIapEvents.push({hash,account:p.accountId,product:productId,at:Date.now()});
+       this.game.community.send(p);this.game.send(adapter,{type:'iapResult',requestId,productId,amount:verified.amount,duplicate:false});
+       // serial() flushes the credit and token ledger in one SQLite transaction.
+       this.outbox?.push(()=>this.ctx.waitUntil(consumePlayPurchase(verified.accessToken,productId,purchaseToken).catch(()=>{})));
+      }
      }else this.game.handle(p,msg);
     }
    }catch(e){const message=e instanceof SyntaxError?'읽을 수 없는 요청이에요.':e instanceof Error?e.message:'요청 오류';this.game.audit(p,'server_error','error',{code:'SERVER_ERROR',reason:message});this.game.send(adapter,{type:'error',message});}
