@@ -3,3 +3,4 @@
 .go-event-cards b{color:#ffe27b}.go-event-risk{margin:9px auto 0;max-width:28rem;font-size:13px;line-height:1.45;color:#ffe9c1}.go-event-reward .go-gold{color:#ffe24f;font-weight:900}.go-event-reward .go-points{color:#ffae47;font-weight:900}.go-event .go-actions{justify-content:center}.go-event .go-actions .primary{max-width:310px;flex:0 1 310px}.go-event .go-actions .secondary{max-width:180px;flex:0 1 180px}
 
 .go-event .go-event-kicker,.go-event h1,.go-event .go-event-reward,.go-event .go-event-cards b,.go-event .go-actions button{font-family:'Changa',system-ui,sans-serif}
+.go-event-reward{display:grid;justify-items:center;gap:2px;font-weight:800}.go-event-reward-amount{display:block;line-height:1.25}.go-event-reward strong{font-size:clamp(38px,5vw,58px);line-height:1;vertical-align:middle;text-shadow:0 2px 14px #ffca5266}

@@ -13,7 +13,7 @@ for(const mobile of [false,true])test(`direct provider popup and guest return ${
   if(m.type==='hello')session(Boolean(m.authToken));
   if(m.type==='googleBegin')ws.send(JSON.stringify({type:'googleChallenge',clientId:'test.apps.googleusercontent.com',nonce}));
   if(m.type==='appleBegin')ws.send(JSON.stringify({type:'appleChallenge',clientId:'test.apple',redirectUri:'https://logos-card-battle.netlify.app/',nonce}));
-  if(m.type==='googleLogin'){if(m.intent==='link')ws.send(JSON.stringify({type:'googleReturnConfirmation',username:'원래 사용자'}));else auth();}
+  if(m.type==='googleLogin'){if(m.intent==='link')ws.send(JSON.stringify({type:'googleReturnConfirmation',username:'원래 사용자',avatar:'pronoun',profileId:'profile-naro',rating:1301}));else auth();}
   if(m.type==='googleReturnConfirm'&&m.accept)auth();
   if(m.type==='appleCredential')auth();
  }));
@@ -28,10 +28,16 @@ for(const mobile of [false,true])test(`direct provider popup and guest return ${
  await page.getByRole('button',{name:'홈 설정 열기'}).click({timeout:60000});
  const link=page.getByRole('button',{name:'Google 계정 연결하기',exact:true});await expect(link).toBeEnabled();
  const open2=context.waitForEvent('page',{timeout:15000});await link.click();const popup2=await open2;await popup2.getByRole('button',{name:'Choose Google account'}).click();
- const confirm=page.getByRole('dialog',{name:'기존 계정 복귀'});await expect(confirm).toBeVisible();
+ const confirm=page.getByRole('dialog',{name:'Google 계정 프로필 확인'});await expect(confirm).toBeVisible();
+ await expect(confirm.getByRole('heading',{name:'이 프로필로 계속하시겠습니까?'})).toBeVisible();
+ await expect(confirm.getByText('원래 사용자')).toBeVisible();
+ await expect(confirm.getByText('1,301점')).toBeVisible();
+ await expect(confirm).toHaveCSS('opacity','1');
+ await expect(confirm.locator('..')).toHaveCSS('opacity','1');
+ await page.screenshot({path:`.runtime/google-profile-confirm-${mobile?'mobile':'desktop'}-${test.info().project.name}.png`});
  if(mobile){const b=(await confirm.boundingBox())!;expect(b.y).toBeGreaterThanOrEqual(20);expect(b.y+b.height).toBeLessThanOrEqual(350);}
  await confirm.getByRole('button',{name:'게스트로 계속하기'}).click();expect(sent.some(m=>m.type==='googleReturnConfirm'&&m.accept===false)).toBe(true);
- const open3=context.waitForEvent('page',{timeout:15000});await link.click();const popup3=await open3;await popup3.getByRole('button',{name:'Choose Google account'}).click();await confirm.getByRole('button',{name:'원래 계정으로 돌아가기'}).click();await expect(confirm).toHaveCount(0);
+ const open3=context.waitForEvent('page',{timeout:15000});await link.click();const popup3=await open3;await popup3.getByRole('button',{name:'Choose Google account'}).click();await confirm.getByRole('button',{name:'이 프로필로 계속하기'}).click();await expect(confirm).toHaveCount(0);
  await expect.poll(()=>page.evaluate(()=>localStorage.getItem('logos-account-token'))).toBe('account-token');
  await page.screenshot({path:`.runtime/v116-auth-${mobile?'mobile':'desktop'}-${test.info().project.name}.png`});
 });
