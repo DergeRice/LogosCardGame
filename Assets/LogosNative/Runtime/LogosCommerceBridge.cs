@@ -10,9 +10,9 @@ namespace Logos.Native
     public sealed class LogosCommerceBridge : MonoBehaviour
     {
         [Serializable] public sealed class Settings { public string gameUrl, levelPlayAppKey, rewardedAdUnitId, rewardedPlacement; public bool commerceEnabled; public bool childDirectedTreatment = true; }
-        [Serializable] private sealed class Request { public string id, method, productId, box, rewardTicket; }
+        [Serializable] private sealed class Request { public string id, method, productId, box, rewardTicket, clientId, nonce; }
         [Serializable] private sealed class Purchase { public bool success; public string productId, purchaseToken, receipt, transactionId, error; }
-        [Serializable] private sealed class Reply { public string id, type = "logos-native-result", error, productId, purchaseToken, receipt, transactionId, box; public bool success, rewarded, purchaseEnabled, adReady; }
+        [Serializable] private sealed class Reply { public string id, type = "logos-native-result", error, productId, purchaseToken, receipt, transactionId, box, credential; public bool success, rewarded, purchaseEnabled, adReady; }
         private readonly ConcurrentQueue<Action> dispatch = new ConcurrentQueue<Action>();
         private Settings settings;
         private LevelPlayRewardedAd rewarded;
@@ -51,6 +51,16 @@ namespace Logos.Native
             try { request = JsonUtility.FromJson<Request>(payload); } catch { return; }
             if (request == null || string.IsNullOrEmpty(request.id) || request.id.Length > 80) return;
             if (request.method == "capabilities") { Send(new Reply { id=request.id, success=true, purchaseEnabled=settings.commerceEnabled, adReady=rewarded != null && rewarded.IsAdReady() }); return; }
+            if (request.method == "googleSignIn") {
+#if UNITY_ANDROID && !UNITY_EDITOR
+                if (string.IsNullOrEmpty(request.clientId) || string.IsNullOrEmpty(request.nonce) || request.clientId.Length > 256 || request.nonce.Length != 64) { Fail(request,"Google 로그인 요청이 잘못됐어요."); return; }
+                try { using (var google=new AndroidJavaClass("com.baragames.logos.nativebridge.LogosGoogleSignIn")) google.CallStatic("signIn",request.id,request.clientId,request.nonce,gameObject.name); }
+                catch (Exception) { Fail(request,"Google 로그인 화면을 열지 못했어요."); }
+#else
+                Fail(request,"Android 앱에서 로그인해 주세요.");
+#endif
+                return;
+            }
             if (request.method == "purchase") { if (settings.commerceEnabled) Buy(request); else Fail(request, "결제 서버 설정이 아직 완료되지 않았어요."); return; }
             if (request.method == "rewarded") { ShowAd(request); return; }
             // Consumption is performed server-side after verified durable credit. No client confirm endpoint.
@@ -73,6 +83,12 @@ namespace Logos.Native
             try { purchase=JsonUtility.FromJson<Purchase>(json); } catch { Fail(request,"구매 결과를 확인하지 못했어요."); return; }
             if(purchase==null||!purchase.success||purchase.productId!=request.productId||string.IsNullOrEmpty(purchase.purchaseToken)) { Fail(request,purchase?.error??"구매가 완료되지 않았어요."); return; }
             Send(new Reply {id=request.id,success=true,productId=purchase.productId,purchaseToken=purchase.purchaseToken,receipt=purchase.receipt,transactionId=purchase.transactionId});
+        }
+        public void OnGoogleSignInResult(string json) {
+            Reply result;
+            try { result=JsonUtility.FromJson<Reply>(json); } catch { return; }
+            if(result==null || string.IsNullOrEmpty(result.id) || result.id.Length>80)return;
+            Send(result);
         }
         private void Initialized(LevelPlayConfiguration ignored) { dispatch.Enqueue(()=>{
             rewarded=new LevelPlayRewardedAd(settings.rewardedAdUnitId);

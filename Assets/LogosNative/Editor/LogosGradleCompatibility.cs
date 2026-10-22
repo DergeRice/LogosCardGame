@@ -12,8 +12,21 @@ namespace Logos.Native.Editor
         public void OnPostGenerateGradleAndroidProject(string path) {
             foreach(var file in Directory.GetFiles(Directory.GetParent(path).FullName,"*.gradle",SearchOption.AllDirectories)) {
                 var source=File.ReadAllText(file);
-                var updated=source.Replace("jcenter()", "mavenCentral()");
+                // Credential Manager 1.6 requires compile SDK 35; target SDK stays at 34.
+                var updated=source.Replace("jcenter()", "mavenCentral()").Replace("compileSdk 34", "compileSdk 35");
                 if(source!=updated) File.WriteAllText(file,updated);
+            }
+            // EDM4U does not always resolve a newly added dependency XML in batch builds.
+            // Add the login libraries to the generated Unity library module itself.
+            var gradle=Path.Combine(path,"build.gradle");
+            var build=File.ReadAllText(gradle);
+            if(!build.Contains("com.google.android.libraries.identity.googleid:googleid")) {
+                build += "\n// Logos Android Google sign-in\ndependencies {\n"+
+                    "    implementation 'androidx.credentials:credentials:1.6.0'\n"+
+                    "    implementation 'androidx.credentials:credentials-play-services-auth:1.6.0'\n"+
+                    "    implementation 'com.google.android.libraries.identity.googleid:googleid:1.2.1'\n"+
+                    "}\n";
+                File.WriteAllText(gradle,build);
             }
             // Unity rewrites the custom manifest's value to false for its activities.
             // The WebView is the visible game surface and requires GPU composition.

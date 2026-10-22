@@ -3,10 +3,17 @@ import {App} from '@capacitor/app';
 import {Browser} from '@capacitor/browser';
 import {SocialLogin} from '@capgo/capacitor-social-login';
 
-export const nativePlatform=()=>Capacitor.isNativePlatform()?Capacitor.getPlatform():null;
+type LogosNativeBridge={platform:'android';request:(method:string,args:Record<string,string>)=>Promise<{credential?:string}>};
+const unityBridge=()=> (window as Window&{LogosNative?:LogosNativeBridge}).LogosNative;
+export const nativePlatform=()=>unityBridge()?.platform??(Capacitor.isNativePlatform()?Capacitor.getPlatform():null);
 export async function nativeCredential(provider:'google'|'apple',config:{clientId:string;iosClientId?:string;redirectUri?:string;nonce:string}){
  if(!nativePlatform())throw Error('앱에서만 사용할 수 있는 로그인입니다.');
  if(provider==='google'){
+  if(unityBridge()){
+   const response=await unityBridge()!.request('googleSignIn',{clientId:config.clientId,nonce:config.nonce});
+   if(!response.credential)throw Error('Google 인증 토큰을 받지 못했어요.');
+   return {credential:response.credential};
+  }
   if(nativePlatform()==='ios'&&!config.iosClientId)throw Error('iOS Google 클라이언트 설정이 필요합니다.');
   await SocialLogin.initialize({google:{webClientId:config.clientId,iOSClientId:config.iosClientId,iOSServerClientId:config.clientId,mode:'online'}});
   const response=await SocialLogin.login({provider:'google',options:{nonce:config.nonce,scopes:['openid','profile','email']}});
