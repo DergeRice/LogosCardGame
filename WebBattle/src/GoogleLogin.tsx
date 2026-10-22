@@ -1,7 +1,13 @@
 import {useEffect,useRef,useState} from 'react';
+import {createPortal} from 'react-dom';
+import type {Kind} from '../shared/rules.js';
+import {Avatar} from './MatchPresentation.js';
+import {leagueFor} from './hubModel.js';
+import './google-return.css';
 import {nativeCredential,nativePlatform,gameSocketURL} from './nativeAuth.js';
 type Provider='google'|'apple';
 type Challenge={clientId:string;iosClientId?:string;redirectUri?:string;nonce:string};
+type ReturnProfile={username:string;avatar:Kind;profileId?:string;frameId?:string;rating:number};
 type AppleAPI={auth:{init:(config:Record<string,unknown>)=>void;signIn:()=>Promise<{authorization:{id_token:string;state:string};user?:{name?:{firstName?:string;lastName?:string}}}>}};
 let appleSdk:Promise<AppleAPI>|undefined;
 function loadApple(){return appleSdk??=new Promise<AppleAPI>((resolve,reject)=>{
@@ -12,7 +18,7 @@ function loadApple(){return appleSdk??=new Promise<AppleAPI>((resolve,reject)=>{
 });}
 export function AccountLoginButtons({socket,onSuccess,linked=[],available=true}:{socket?:WebSocket|null;onSuccess:()=>void;linked?:string[];available?:boolean}){
  const own=!socket,connection=useRef<WebSocket|null>(null),configs=useRef<Partial<Record<Provider,Challenge>>>({});
- const [ready,setReady]=useState<Partial<Record<Provider,boolean>>>({}),[busy,setBusy]=useState<Provider|null>(null),[error,setError]=useState(''),[returnAccount,setReturnAccount]=useState<string|null>(null);
+ const [ready,setReady]=useState<Partial<Record<Provider,boolean>>>({}),[busy,setBusy]=useState<Provider|null>(null),[error,setError]=useState(''),[returnAccount,setReturnAccount]=useState<ReturnProfile|null>(null);
  const busyRef=useRef<Provider|null>(null),popup=useRef<Window|null>(null),popupState=useRef(''),apple=useRef<AppleAPI|null>(null),nativePending=useRef<Provider|null>(null),success=useRef(onSuccess);success.current=onSuccess;
  const setWorking=(value:Provider|null)=>{busyRef.current=value;setBusy(value);};
  useEffect(()=>{
@@ -44,7 +50,7 @@ export function AccountLoginButtons({socket,onSuccess,linked=[],available=true}:
     }else if(nativePlatform())setReady(old=>({...old,apple:true}));
     else try{const sdk=await loadApple();if(!active)return;apple.current=sdk;sdk.auth.init({clientId:msg.clientId,scope:'name email',redirectURI:msg.redirectUri,nonce:msg.nonce,state:msg.nonce,usePopup:true});setReady(old=>({...old,apple:true}));}catch(e){fail(e instanceof Error?e.message:'Apple 로그인 오류');}
    }
-   if(msg.type==='googleReturnConfirmation'){setWorking(null);setReturnAccount(msg.username);}
+   if(msg.type==='googleReturnConfirmation'){setWorking(null);setReturnAccount({username:String(msg.username??''),avatar:msg.avatar??'pronoun',profileId:msg.profileId,frameId:msg.frameId,rating:Number(msg.rating)||0});}
    if(msg.type==='auth'&&msg.authToken){localStorage.setItem('logos-account-token',msg.authToken);sessionStorage.setItem('logos-entry','guest');success.current();}
    if(msg.type==='error')fail(msg.message);
   };
@@ -77,5 +83,5 @@ export function AccountLoginButtons({socket,onSuccess,linked=[],available=true}:
  return <><div className="account-login-buttons" aria-label={own?'계정 로그인':'계정 연결'}>{(['google','apple'] as const).map(provider=>{
   const label=provider==='google'?'Google':'Apple',connected=linked.includes(provider);
   return <button key={provider} type="button" className={`provider-login ${provider}-login`} disabled={connected||!available||!ready[provider]||busy!==null} onClick={()=>start(provider)} aria-label={own?`${label}로 로그인`:`${label} 계정 ${connected?'연동됨':'연결하기'}`}><span className={`provider-icon ${provider}`} aria-hidden="true"><img src={`/icons/auth/${provider}.png`} alt=""/></span><span>{connected?'연동됨':busy===provider?'로그인 확인 중…':own?`${label}로 로그인`:`${label} 계정 연결하기`}</span></button>;
- })}</div>{error&&<p className="provider-error" role="alert">{error}</p>}{returnAccount!==null&&<div className="account-backdrop"><section className="account-dialog google-return-confirmation" role="dialog" aria-modal="true" aria-label="기존 계정 복귀"><h2>원래 계정으로 돌아가시겠습니까?</h2><p>{returnAccount} 계정의 기존 기록과 보유 아이템을 불러옵니다. 현재 게스트 기록과 합쳐지지 않습니다.</p><button disabled={busy!==null} onClick={()=>{setWorking('google');connection.current?.send(JSON.stringify({type:'googleReturnConfirm',accept:true}));}}>원래 계정으로 돌아가기</button><button disabled={busy!==null} onClick={()=>{connection.current?.send(JSON.stringify({type:'googleReturnConfirm',accept:false}));setReturnAccount(null);}}>게스트로 계속하기</button></section></div>}</>;
+ })}</div>{error&&<p className="provider-error" role="alert">{error}</p>}{returnAccount&&createPortal(<div className="account-backdrop google-return-backdrop"><section className="account-dialog google-return-confirmation" role="dialog" aria-modal="true" aria-label="Google 계정 프로필 확인"><h2>이 프로필로 계속하시겠습니까?</h2><div className="google-return-profile"><Avatar kind={returnAccount.avatar} profileId={returnAccount.profileId} frameId={returnAccount.frameId}/><div><strong>{returnAccount.username}</strong><span>{leagueFor(returnAccount.rating).label} · {returnAccount.rating.toLocaleString()}점</span></div></div><p>이 Google 계정에 저장된 기록과 보유 아이템을 불러옵니다. 현재 게스트 기록은 합쳐지지 않습니다.</p><div className="google-return-actions"><button type="button" disabled={busy!==null} onClick={()=>{setWorking('google');connection.current?.send(JSON.stringify({type:'googleReturnConfirm',accept:true}));}}>이 프로필로 계속하기</button><button type="button" disabled={busy!==null} onClick={()=>{connection.current?.send(JSON.stringify({type:'googleReturnConfirm',accept:false}));setReturnAccount(null);}}>게스트로 계속하기</button></div></section></div>,document.body)}</>;
 }

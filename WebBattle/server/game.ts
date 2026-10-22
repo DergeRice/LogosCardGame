@@ -124,7 +124,8 @@ export class Game {
   if(p.accountId&&account&&p.accountId!==account.id)return this.fail(p,'이 Google 계정은 다른 게임 계정에 연결되어 있어요.');
   if(account&&!p.accountId&&confirmReturn){
    this.googleReturns.set(p.id,{identity,socket:p.socket,expires:Date.now()+5*60_000});
-   this.send(p.socket,{type:'googleReturnConfirmation',username:account.nickname??account.username});return true;
+   const saved=this.community.records.get(account.id);
+   this.send(p.socket,{type:'googleReturnConfirmation',username:account.nickname??account.username,avatar:account.avatar??saved?.avatar??'pronoun',profileId:saved?.store.profile,frameId:saved?.store.frame,rating:account.rating});return true;
   }
   if(!account&&p.accountId){
    account=[...this.accounts.values()].find(a=>a.id===p.accountId);
