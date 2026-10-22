@@ -38,19 +38,10 @@ export class Community {
   this.game.send(p.socket,{type:'adTicket',ticket:ticket.id,box,expiresAt:ticket.expiresAt});
  }
  adStatus(p:Player,msg:Record<string,unknown>){const ticket=String(msg.ticket??''),r=this.record(p),active=r.adTicket;if(!active||active.id!==ticket)return this.game.fail(p,'광고 요청을 찾을 수 없어요.');if(active.result){this.game.send(p.socket,{type:'storeResult',...active.result});return;}this.game.send(p.socket,{type:'adStatus',ticket,pending:active.expiresAt>Date.now()});}
- claimClientAd(p:Player,msg:Record<string,unknown>){
-  const ticketId=String(msg.ticket??''),r=this.record(p);
-  if(!/^[a-f0-9]{32}$/.test(ticketId)||r.adTicket?.id!==ticketId)return this.game.fail(p,'광고 요청을 찾을 수 없어요.');
-  // The LevelPlay client reward event is used when its S2S callback does not arrive.
-  // Ticket ownership, expiry, one-use credit and the daily cap remain server enforced.
-  const result=this.claimAdTicket(ticketId,`client${ticketId}`);
-  if(result==='granted'||result==='duplicate')return;
-  this.game.fail(p,result==='expired'?'광고 요청 시간이 지났어요. 다시 시도해 주세요.':'광고 보상을 지급할 수 없어요.');
- }
  claimAdTicket(ticketId:string,eventId:string,now=Date.now()):'granted'|'duplicate'|'missing'|'expired'|'limit'{
   const r=[...this.records.values()].find(record=>record.adTicket?.id===ticketId),ticket=r?.adTicket;
   if(!r||!ticket)return 'missing';
-  if(ticket.result)return ticket.eventId===eventId||ticket.eventId===`client${ticketId}`?'duplicate':'missing';
+  if(ticket.result)return ticket.eventId===eventId?'duplicate':'missing';
   if(now>ticket.expiresAt+60_000)return 'expired';
   if((r.store.adUsage?.[ticket.day]??0)>=AD_DAILY_LIMIT)return 'limit';
   const opened=openDemoBox(r.store,ticket.box,1,()=>randomInt(1000000000)/1000000000,true);

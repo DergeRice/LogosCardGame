@@ -29,7 +29,7 @@ export function StorePanel({accountId,adTicket,adEnabled=false,save,result,send,
  useEffect(()=>{let live=true;const refresh=()=>{void rewardedAdReady().then(ready=>{if(live)setAdReady(ready)})};refresh();const timer=setInterval(refresh,5000);addEventListener('logos-native-ready',refresh);return()=>{live=false;clearInterval(timer);removeEventListener('logos-native-ready',refresh)}},[]);
  useEffect(()=>{if(!adTicket||!adPending||!awaitingAdTicket.current)return;awaitingAdTicket.current=false;let live=true;const ticket=adTicket.ticket;const alreadyStarted=sessionStorage.getItem('logos-ad-started')===ticket;
   const poll=()=>{if(live&&connected)send('adRewardStatus',{ticket})};
-  void(async()=>{try{if(!alreadyStarted){sessionStorage.setItem('logos-ad-started',ticket);await showRewardedAd(adTicket.box,ticket);sessionStorage.setItem('logos-ad-completed',ticket);}if(sessionStorage.getItem('logos-ad-completed')===ticket)send('adRewardClaim',{ticket});poll();}catch(error){if(!live)return;sessionStorage.removeItem('logos-ad-started');setAdError(error instanceof Error?error.message:'광고를 재생하지 못했어요.');setAdPending(false);}})();
+  void(async()=>{try{if(!alreadyStarted){sessionStorage.setItem('logos-ad-started',ticket);await showRewardedAd(adTicket.box,ticket);}poll();}catch(error){if(!live)return;sessionStorage.removeItem('logos-ad-started');setAdError(error instanceof Error?error.message:'광고를 재생하지 못했어요.');setAdPending(false);}})();
   const timer=setInterval(poll,1500);return()=>{live=false;clearInterval(timer)};
  },[adTicket?.serial,adPending,connected]);
  useEffect(()=>{if(!adPending)return;const timer=setTimeout(()=>{setAdPending(false);setAdError('광고 보상 확인이 지연되고 있어요. 잠시 후 다시 확인해 주세요.');},10*60_000);return()=>clearTimeout(timer)},[adPending]);
