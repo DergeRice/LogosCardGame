@@ -58,7 +58,7 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
 .store-box-rows .store-open-options{grid-template-columns:minmax(0,1fr)}
 .store-box-rows .store-box-timer{width:100%;font-size:11px;line-height:1.4;color:#697e60;word-break:keep-all}
 .store-box-rows .store-offers .store-free-open{background:#e7f4d9!important;border-color:#8eb86d!important}
-.store-box-rows .store-offers .store-ad-open{background:#e8e1f1!important}
+.store-box-rows .store-offers .store-ad-open{background:#e9eedf!important}
 .store-box-rows>article:not([data-box=diamond]) .store-offers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;gap:6px}
 .store-box-rows>article:not([data-box=diamond]) .store-offers>button{min-width:0;min-height:58px;padding:8px 3px;white-space:normal}
 .store-box-rows>article:not([data-box=diamond]) .store-offers b{font-size:13px;white-space:nowrap}
@@ -103,20 +103,9 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
  .hub-shop .store-box-rows>article[data-box=diamond] .store-offers>button{flex:0 0 calc(40% - 2px);min-height:50px;padding:5px 1px;white-space:normal}
 }
 
-/* The reward action must look tappable; the supplied icon is white on transparency. */
-.hub-shop .store-box-rows .store-offers .store-ad-open{
- display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;
- min-height:64px!important;padding:6px 3px!important;border:2px solid #4b35a5!important;border-bottom-width:4px!important;
- border-radius:12px;background:linear-gradient(160deg,#8063ef,#5d3ac9)!important;color:#fff!important;
- box-shadow:0 4px 0 #39267f,0 7px 14px #5940aa55;cursor:pointer;
- transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;
-}
-.hub-shop .store-box-rows .store-offers .store-ad-open-main{display:flex;align-items:center;justify-content:center;gap:4px;max-width:100%}
-.hub-shop .store-box-rows .store-offers .store-ad-open-main img{width:21px;height:21px;flex:none;object-fit:contain;filter:drop-shadow(0 1px 1px #34216c55)}
-.hub-shop .store-box-rows .store-offers .store-ad-open b{color:#fff!important;font-size:11px!important;line-height:1.15;white-space:normal;word-break:keep-all}
-.hub-shop .store-box-rows .store-offers .store-ad-open small{color:#efe8ff!important;font-size:10px!important;line-height:1.15}
-.hub-shop .store-box-rows .store-offers .store-ad-open:hover:not(:disabled){filter:brightness(1.08)}
-.hub-shop .store-box-rows .store-offers .store-ad-open:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #39267f,0 2px 5px #5940aa40}
-.hub-shop .store-box-rows .store-offers .store-ad-open:focus-visible{outline:3px solid #ffcf53;outline-offset:3px}
-.hub-shop .store-box-rows .store-offers .store-ad-open:disabled{cursor:not-allowed;filter:grayscale(.8);opacity:.52;box-shadow:none}
-@media(prefers-reduced-motion:reduce){.hub-shop .store-box-rows .store-offers .store-ad-open{transition:none}}
+/* Match the neighboring purchase buttons; tint the supplied white icon gray. */
+.hub-shop .store-box-rows .store-offers .store-ad-open{display:grid;align-content:center;justify-items:center;gap:3px;cursor:pointer}
+.hub-shop .store-box-rows .store-offers .store-ad-open-main{display:flex;align-items:center;justify-content:center;gap:3px;max-width:100%}
+.hub-shop .store-box-rows .store-offers .store-ad-open-main img{width:17px;height:17px;flex:none;object-fit:contain;filter:brightness(0);opacity:.55}
+.hub-shop .store-box-rows .store-offers .store-ad-open b{color:#48614a;line-height:1.15;white-space:normal;word-break:keep-all}
+.hub-shop .store-box-rows .store-offers .store-ad-open small{color:#657466;line-height:1.15}
