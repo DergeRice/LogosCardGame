@@ -19,7 +19,12 @@ export default {
  async fetch(request:Request,env:Env):Promise<Response>{
   const url=new URL(request.url);
   if(url.pathname==='/auth/apple/android')return appleAndroidCallback(request);
-  if(url.pathname==='/ads/levelplay/callback')return env.BATTLE.getByName('public-arena-v1').fetch(request);
+  if(url.pathname==='/ads/levelplay/callback'){
+   const callback=request.method==='GET'?verifyLevelPlayCallback(url,env.LEVELPLAY_S2S_PRIVATE_KEY??''):null;
+   // Dashboard test callbacks have no real ad ticket and must never grant one.
+   if(callback?.ticket==='a4c9d2e81b7f4036a57c912e2f04b830'&&!url.searchParams.has('dynamicUserId'))return new Response(`${callback.eventId}:OK`);
+   return env.BATTLE.getByName('public-arena-v1').fetch(request);
+  }
   if(url.pathname.startsWith('/admin/logs')||url.pathname==='/admin/accounts'||url.pathname==='/admin/grants/super'||(url.pathname==='/admin/grants/gold'||url.pathname==='/admin/grants/test-friends'||url.pathname==='/admin/grants/items')){
    const origin=request.headers.get('Origin'),allowed=!origin||env.ALLOWED_ORIGINS.split(',').includes(origin);
    const headers=new Headers({'Cache-Control':'no-store','Vary':'Origin'});
@@ -109,6 +114,9 @@ export class BattleArena extends DurableObject<Env>{
    if(!this.env.LEVELPLAY_S2S_PRIVATE_KEY)return new Response('Ad rewards unavailable',{status:503});
    const callback=verifyLevelPlayCallback(url,this.env.LEVELPLAY_S2S_PRIVATE_KEY);
    if(!callback)return new Response('Invalid callback',{status:403});
+   // The LevelPlay dashboard sends a signed test with no issued ad ticket.
+   // Acknowledge only this dedicated synthetic ID, without granting a box.
+   if(callback.ticket==='a4c9d2e81b7f4036a57c912e2f04b830'&&!url.searchParams.has('dynamicUserId'))return new Response(`${callback.eventId}:OK`);
    return this.serial(()=>{
     const previous=this.ctx.storage.sql.exec<{ticket_id:string}>('SELECT ticket_id FROM ad_events WHERE event_id=?',callback.eventId).toArray()[0];
     if(previous)return new Response(previous.ticket_id===callback.ticket?`${callback.eventId}:OK`:'Event already used',{status:previous.ticket_id===callback.ticket?200:409});
