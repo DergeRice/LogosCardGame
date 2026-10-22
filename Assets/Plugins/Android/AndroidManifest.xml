@@ -5,6 +5,8 @@
     <application>
         <!--Used when Application Entry is set to Activity, otherwise remove this activity block-->
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
+                  android:hardwareAccelerated="true"
+                  tools:replace="android:hardwareAccelerated"
                   android:theme="@style/UnityThemeSelector">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -14,6 +16,8 @@
         </activity>
         <!--Used when Application Entry is set to GameActivity, otherwise remove this activity block-->
         <activity android:name="com.unity3d.player.UnityPlayerGameActivity"
+                  android:hardwareAccelerated="true"
+                  tools:replace="android:hardwareAccelerated"
                   android:theme="@style/BaseUnityGameActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

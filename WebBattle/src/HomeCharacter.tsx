@@ -3,6 +3,7 @@ import type {Application,Sprite} from 'pixi.js';
 import {homeCharacterLayout} from './homeCharacterLayout.js';
 import {HOME_CHARACTERS} from '../shared/homeCharacters.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
+import {isUnityWebView} from './unityWebView.js';
 import './home-character.css';
 
 export function HomeCharacter({character,speech,onInteract}:{character:{id:string;name:string;image:string};speech?:{text:string;serial:number};onInteract:()=>void}){
@@ -15,9 +16,12 @@ export function HomeCharacter({character,speech,onInteract}:{character:{id:strin
  useEffect(()=>{const image=imageRef.current,stage=host.current?.parentElement?.parentElement;if(!image||!stage)return;const sync=()=>{if(!image.naturalWidth)return;const layout=homeCharacterLayout(stage.clientWidth,stage.clientHeight,image.naturalWidth,image.naturalHeight,matchMedia('(orientation:portrait) and (max-width:750px)').matches,matchMedia('(orientation:landscape) and (max-height:540px)').matches);Object.assign(image.style,{width:layout.width+'px',height:layout.height+'px',left:layout.x-layout.width/2+'px',top:layout.head+'px',right:'auto',bottom:'auto',transform:'none'});stage.style.setProperty('--home-head-y',layout.head+'px');};image.addEventListener('load',sync);const observer=new ResizeObserver(sync);observer.observe(stage);sync();return()=>{image.removeEventListener('load',sync);observer.disconnect()};},[source.image]);
  useEffect(()=>{
   const node=host.current;if(!node)return;
+  if(isUnityWebView()){setRenderer('fallback');return;}
   let disposed=false,initialized=false,app:Application|undefined,sprite:Sprite|undefined,sequence=0,elapsed=0,failed=false,unwatch=()=>{},observer:ResizeObserver|undefined;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),landscapeMedia=matchMedia('(orientation:landscape) and (max-height:540px)'),portraitMedia=matchMedia('(orientation:portrait) and (max-width:750px)');
   const fallback=()=>{if(disposed)return;failed=true;app?.ticker?.stop();setRenderer('fallback')};
+  const nativeReady=()=>{if(isUnityWebView())fallback()};
+  window.addEventListener('logos-native-ready',nativeReady);
   const watchdog=setTimeout(fallback,3000);
   const visibility=()=>{if(!app||!initialized)return;if(document.hidden||reduced.matches||failed)app.ticker.stop();else app.ticker.start();};
   void(async()=>{try{
@@ -48,7 +52,7 @@ export function HomeCharacter({character,speech,onInteract}:{character:{id:strin
    unwatch=watchContextLoss(instance.canvas,fallback);document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',visibility);
    await load(sourceRef.current);
   }catch{fallback()}})();
-  return()=>{disposed=true;loadRef.current=null;speakRef.current=null;clearTimeout(watchdog);observer?.disconnect();unwatch();document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',visibility);if(initialized)app?.destroy(true,{children:true});};
+  return()=>{disposed=true;window.removeEventListener('logos-native-ready',nativeReady);loadRef.current=null;speakRef.current=null;clearTimeout(watchdog);observer?.disconnect();unwatch();document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',visibility);if(initialized)app?.destroy(true,{children:true});};
  },[]);
  return <div className="hub-character-stage" data-character-id={character.id} data-renderer={renderer} aria-label="메인 캐릭터"><button type="button" className="home-character-touch" aria-label={`${character.name} 다음 표정`} data-renderer={renderer} data-pose-index={index%poses.length} onClick={()=>{pressed.current=performance.now();setIndex(old=>(old+1)%poses.length);onInteract()}}><img ref={imageRef} className="hub-main-character" data-character-layer="base" src={source.image} alt={source.name} draggable={false}/><div className="home-character-canvas" ref={host} aria-hidden="true"/></button>{speech&&<div key={speech.serial} className="home-character-speech" role="status" aria-live="polite" aria-atomic="true" data-speech-serial={speech.serial}>{speech.text}</div>}</div>;
 }

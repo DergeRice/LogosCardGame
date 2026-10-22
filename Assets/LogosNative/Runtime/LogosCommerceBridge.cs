@@ -19,6 +19,11 @@ namespace Logos.Native
         private Request activePurchase, activeAd;
         private bool adShowing, earned;
         private void Awake() {
+            // The Unity surface hosts the Android WebView and its native bridge.
+            // The WebView owns the visible frame. Avoid rendering the hidden Unity
+            // surface at 60 Hz and competing for the same GPU tile memory.
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 15;
             gameObject.name = "LogosNativeBridge";
             settings = JsonUtility.FromJson<Settings>(Resources.Load<TextAsset>("LogosNativeSettings").text);
             // Credentials are injected by the release builder, never borrowed from QTlingo.

@@ -7,8 +7,8 @@ export const GAME_ASSET_URLS=[...new Set([...NARO_CHARACTER_POSES.map(p=>p.image
  '/landing/background.jpg','/landing/cards.png','/landing/mascots.png','/landing/cards-mobile.webp','/landing/mascots-mobile.webp',
  '/brand-ui/game-back.png','/brand-ui/panels.png','/brand-ui/ui-icons.png','/brand-ui/start-button.png'
 ])];
-const images:HTMLImageElement[]=[],listeners=new Set<(done:number,total:number)=>void>();
+const listeners=new Set<(done:number,total:number)=>void>();
 let loading:Promise<{failed:number}>|undefined,completed=0,failed=0;
-function decode(url:string){return new Promise<void>(resolve=>{const image=new Image();images.push(image);let settled=false;const done=(ok:boolean)=>{if(settled)return;settled=true;if(!ok)failed++;completed++;for(const listener of listeners)listener(completed,GAME_ASSET_URLS.length);resolve()};image.onload=()=>{void image.decode().then(()=>done(true),()=>done(false))};image.onerror=()=>done(false);image.src=url;});}
+async function preload(url:string){try{const response=await fetch(url,{cache:'force-cache'});await response.blob();if(!response.ok)failed++;}catch{failed++;}completed++;for(const listener of listeners)listener(completed,GAME_ASSET_URLS.length);}
 /** Subscribers share one download and receive cached progress, including when entry warmed images first. */
-export function preloadGameAssets(onProgress:(done:number,total:number)=>void=()=>{}){listeners.add(onProgress);onProgress(completed,GAME_ASSET_URLS.length);if(!loading){let next=0;const worker=async()=>{while(next<GAME_ASSET_URLS.length)await decode(GAME_ASSET_URLS[next++])};loading=Promise.all(Array.from({length:Math.min(6,GAME_ASSET_URLS.length)},worker)).then(()=>({failed}));}return loading.finally(()=>listeners.delete(onProgress));}
+export function preloadGameAssets(onProgress:(done:number,total:number)=>void=()=>{}){listeners.add(onProgress);onProgress(completed,GAME_ASSET_URLS.length);if(!loading){let next=0;const worker=async()=>{while(next<GAME_ASSET_URLS.length)await preload(GAME_ASSET_URLS[next++])};const workers=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches?2:6;loading=Promise.all(Array.from({length:Math.min(workers,GAME_ASSET_URLS.length)},worker)).then(()=>({failed}));}return loading.finally(()=>listeners.delete(onProgress));}

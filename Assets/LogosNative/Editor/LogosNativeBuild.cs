@@ -9,7 +9,10 @@ namespace Logos.Native.Editor
 {
     public static class LogosNativeBuild
     {
-        public static void Android() {
+        public static void Android() => Build(true);
+        public static void AndroidDeviceTest() => Build(false);
+
+        private static void Build(bool appBundle) {
             var settingsPath="Assets/LogosNative/Resources/LogosNativeSettings.json";
             var original=File.ReadAllText(settingsPath);
             var originalPlayerSettings=File.ReadAllBytes("ProjectSettings/ProjectSettings.asset");
@@ -26,11 +29,14 @@ namespace Logos.Native.Editor
                 config.rewardedAdUnitId=Environment.GetEnvironmentVariable("LOGOS_LEVELPLAY_REWARDED_ID")??config.rewardedAdUnitId;
                 config.commerceEnabled=Environment.GetEnvironmentVariable("LOGOS_COMMERCE_ENABLED")=="1";
                 File.WriteAllText(settingsPath,JsonUtility.ToJson(config));AssetDatabase.ImportAsset(settingsPath);
-                PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Android,"com.baragames.logoscardgame");
-                PlayerSettings.Android.bundleVersionCode=2;PlayerSettings.bundleVersion="1.0.1";
-                PlayerSettings.Android.minSdkVersion=AndroidSdkVersions.AndroidApiLevel25;
-                PlayerSettings.Android.targetSdkVersion=AndroidSdkVersions.AndroidApiLevel36;
-                EditorUserBuildSettings.buildAppBundle=true;
+                // Play-installed apps use Google's app-signing certificate, so a locally
+                // signed APK needs a separate package to preserve the installed app/data.
+                PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Android,
+                    appBundle ? "com.baragames.logoscardgame" : "com.baragames.logoscardgame.dev");
+                PlayerSettings.Android.bundleVersionCode=appBundle ? oldCode+1 : oldCode;
+                PlayerSettings.Android.minSdkVersion=oldMin;
+                PlayerSettings.Android.targetSdkVersion=oldTarget;
+                EditorUserBuildSettings.buildAppBundle=appBundle;
                 var props=Environment.GetEnvironmentVariable("LOGOS_KEYSTORE_PROPERTIES");
                 if(!string.IsNullOrEmpty(props)) {
                     var entries=File.ReadAllLines(props).Where(l=>l.Contains("=")).Select(l=>l.Split(new[]{'='},2)).ToDictionary(p=>p[0].Trim(),p=>p[1].Trim());
@@ -39,10 +45,10 @@ namespace Logos.Native.Editor
                     PlayerSettings.Android.keystorePass=entries["storePassword"];
                     PlayerSettings.Android.keyaliasName=entries["keyAlias"];
                     PlayerSettings.Android.keyaliasPass=entries["keyPassword"];
-                }
+                } else if(!appBundle) PlayerSettings.Android.useCustomKeystore=false;
                 PlayerSettings.SetPreloadedAssets(Array.Empty<UnityEngine.Object>());
                 Directory.CreateDirectory("Builds");
-                var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes=new[]{"Assets/01.Scene/6.WebBattleScreen.unity"},target=BuildTarget.Android,locationPathName="Builds/LogosCardGame-Unity.aab",options=BuildOptions.None });
+                var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes=new[]{"Assets/01.Scene/6.WebBattleScreen.unity"},target=BuildTarget.Android,locationPathName=appBundle ? "Builds/LogosCardGame-Unity.aab" : "Builds/LogosCardGame-DeviceTest.apk",options=BuildOptions.None });
                 if(result.summary.result!=BuildResult.Succeeded)throw new Exception("Unity Android build failed: "+result.summary.result);
                 Debug.Log("LOGOS_UNITY_BUILD_OK");
             } finally {

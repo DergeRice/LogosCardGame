@@ -1,6 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import type {Application,Particle,Sprite} from 'pixi.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
+import {isUnityWebView} from './unityWebView.js';
 
 const desktopAssets=['/landing/cards.png','/landing/title.png','/landing/mascots.png'];
 const mobileAssets=['/landing/cards-mobile.webp','/landing/title-mobile.webp','/landing/mascots-mobile.webp'];
@@ -8,12 +9,15 @@ const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const spring=(t:number)=>1-Math.exp(-5*t)*Math.cos(2.5*Math.PI*t);
 
 export function PixiLanding({onReady,showTitle=true}:{onReady:()=>void;showTitle?:boolean}){
- const host=useRef<HTMLDivElement>(null),[fallback,setFallback]=useState(false);
+ const host=useRef<HTMLDivElement>(null),[fallback,setFallback]=useState(isUnityWebView);
  const assets=isMobileGraphics()?mobileAssets:desktopAssets;
  useEffect(()=>{
   const node=host.current;if(!node)return;
+  if(isUnityWebView()){setFallback(true);onReady();return;}
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){setFallback(true);onReady();return;}
   let cancelled=false,app:Application|undefined,observer:ResizeObserver|undefined,unwatch=()=>{},resizeFrame=0,visibility=()=>{};
+  const nativeReady=()=>{if(!isUnityWebView())return;cancelled=true;app?.ticker.stop();setFallback(true);onReady();};
+  window.addEventListener('logos-native-ready',nativeReady);
   void (async()=>{
    try{
     const {Application,Assets,Sprite,Particle,ParticleContainer,Texture}=await import('pixi.js');
@@ -67,7 +71,7 @@ export function PixiLanding({onReady,showTitle=true}:{onReady:()=>void;showTitle
     if(document.hidden)visibility();else instance.ticker.start();
    }catch{if(!cancelled){setFallback(true);onReady();}}
   })();
-  return()=>{cancelled=true;cancelAnimationFrame(resizeFrame);document.removeEventListener('visibilitychange',visibility);unwatch();observer?.disconnect();app?.destroy(true,{children:true});};
+  return()=>{cancelled=true;window.removeEventListener('logos-native-ready',nativeReady);cancelAnimationFrame(resizeFrame);document.removeEventListener('visibilitychange',visibility);unwatch();observer?.disconnect();app?.destroy(true,{children:true});};
  },[onReady]);
  return <div className={`landing-art ${fallback?'landing-art-fallback':''}`} ref={host} aria-hidden="true">
   {fallback&&<><img className="landing-cards" src={assets[0]} alt=""/>{showTitle&&<img className="landing-title" src={assets[1]} alt=""/>}<img className="landing-mascots" src={assets[2]} alt=""/></>}

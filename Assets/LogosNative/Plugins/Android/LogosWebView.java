@@ -23,6 +23,7 @@ public final class LogosWebView {
         activity.runOnUiThread(() -> {
             if (view != null) return;
             view = new WebView(activity);
+            view.getSettings().setUserAgentString(view.getSettings().getUserAgentString() + " LogosUnityWebView/1");
             view.getSettings().setJavaScriptEnabled(true);
             view.getSettings().setDomStorageEnabled(true);
             view.getSettings().setAllowFileAccess(false);
