@@ -1,5 +1,7 @@
 # Unity 웹뷰 결제·광고 연결 계약
 
+> 최신 구현·실기기 검증·남은 위험은 [`../docs/UNITY-WEBVIEW-IAP-ADS-LESSONS.md`](../docs/UNITY-WEBVIEW-IAP-ADS-LESSONS.md)에 정리했다. 아래 2026-10-22 상태 기록은 초기 연결 당시의 이력이다.
+
 Unity 원본은 저장소 루트이다. `main`의 Unity 프로젝트를 `web-battle`에 병합했다. 새 구현은 `Assets/LogosNative/`, 적용 씬은 기존 별도 `Assets/01.Scene/6.WebBattleScreen.unity`이다. 웹 담당자는 아래 API를 연결한다.
 
 ## 실제 상태 (2026-10-22)
@@ -33,7 +35,8 @@ const purchase = await window.LogosNative.request('purchase', {productId:'diamon
 
 // 서버가 계정/상자에 묶어 발행한 일회성 rewardTicket만 사용한다.
 await window.LogosNative.request('rewarded', {box:'silver',rewardTicket});
-// 완료 후 서버의 S2S 검증 완료를 조회한다. 이 응답만으로 상자를 열지 않는다.
+// 현재 운영 경로는 OnAdRewarded 성공 후 인증 WebSocket으로 adRewardClaim(ticket)을 보낸다.
+// 서버가 ticket·일일 제한을 확인한 storeResult가 와야 상자를 연다.
 ```
 
 브리지는 로드 후 `logos-native-ready` 이벤트를 보낸다. `request()`는 Promise이며 취소/실패 시 reject한다. 앱 백그라운드/복귀 시 WebView 생명주기를 전달하고, Android 뒤로가기는 웹 히스토리 또는 앱 백그라운드 이동으로 처리한다.
@@ -42,13 +45,12 @@ await window.LogosNative.request('rewarded', {box:'silver',rewardTicket});
 
 보상형 광고 단위는 하나다. 실버 12시간/골드 24시간은 기존 서버 규칙을 따른다. 무료 정기 개봉과 추가 광고 슬롯은 별도다. 실버·골드 광고 개봉을 합해 한국 날짜 기준 하루 최대 3회다.
 
-`rewardTicket`은 서버가 짧은 유효기간으로 발급해 계정·상자와 저장한다. Unity는 LevelPlay Dynamic User ID에 이 ticket을 넣는다. S2S 콜백의 ticket·거래 ID·서명을 검증하고, 재전송 중복 방지 후 기존 상자 추첨 로직으로 지급한다. 취소·타임아웃·로드 실패·클라이언트 위조 콜백은 지급하지 않는다.
+`rewardTicket`은 서버가 15분 유효기간으로 발급해 계정·상자와 저장한다. Unity는 LevelPlay Dynamic User ID에 이 ticket을 넣는다. 실제 S2S 전송이 확인되지 않아 현재는 `OnAdRewarded` 후 웹이 `adRewardClaim(ticket)`을 보내고 서버가 ticket·하루 3회·중복 지급을 검사한다. 이 클라이언트 신호는 위조될 수 있으므로 광고 시청의 암호학적 증명이 아니다. 서명된 S2S 콜백도 유지하며 나중에 도착하면 중복 지급하지 않는다.
 
-`adRewardTicket`과 서명 검증을 거치는 `/ads/levelplay/callback`은 연결했다. LevelPlay S2S의 기존 private key와 Worker secret을 일치시켰고 callback URL을 설정했다. 2026-10-22 Samsung SM-N981N에서 SDK 초기화·광고 준비·실제 광고 재생·앱의 `OnAdRewarded`까지 확인했다. 하지만 서버 지급은 확인되지 않아, 콜백의 서명 대상인 `userId`와 광고별 ticket이 들어오는 `dynamicUserId`를 구분하고 ticket을 영숫자 32자로 바꿨다. 광고 요청의 3분 타임아웃은 일부 재생형 광고보다 짧아 10분으로 늘렸다. 현재 키 길이와 운영 상태는 `../readmeAds.md`에 기록했다. `iapPurchase` 서버 검증·영구 지급·consume이 배포됐다. 남은 검증은 다음과 같다.
+`adRewardTicket`과 서명 검증을 거치는 `/ads/levelplay/callback`은 연결했다. LevelPlay S2S의 기존 private key와 Worker secret을 일치시켰고 callback URL을 설정했다. 초기에는 SDK 광고 완료만 확인되고 지급이 없었다. 콜백의 서명 대상 `userId`와 광고별 `dynamicUserId`를 구분하고 ticket을 영숫자 32자로 바꿨다. 광고 요청의 3분 타임아웃은 10분으로 늘렸다. 2026-10-23에는 Play 코드 14와 운영 웹 v0.9.169에서 SDK 완료→서버 지급을 실기기로 확인했다. 실제 S2S 발송은 미확인이다. 현재 키 길이와 운영 상태는 `../readmeAds.md`에 기록했다. `iapPurchase` 서버 검증·영구 지급·consume도 배포됐다. 남은 검증은 다음과 같다.
 
-1. 원본 프로젝트에 남아 있는 기존 업로드 키와 `WebBattle/android/keystore.properties`로 운영 패키지 AAB를 서명해 Play 내부 테스트에 올린다.
-2. Play 설치 앱에서 구매 완료·취소·복구와 이중 지급 방지를 확인한다.
-3. 광고를 끝까지 시청해 S2S 지급을 확인하고 취소·재전송도 확인한다.
+1. Play 설치 앱에서 IAP 취소·재설치 복구·중복 결제의 실기기 경계 사례를 확인한다. 100개 상품 완료·지급은 확인했다.
+2. 실제 광고 S2S 콜백의 전송·서명·재시도를 확인한다. 현재 운영 지급은 SDK 완료 신호 기반이고 클라이언트 변조 위험이 남는다.
 
 ## 빌드
 
