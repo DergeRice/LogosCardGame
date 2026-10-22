@@ -8,6 +8,7 @@
 - 6자리 16진수 키는 추측에 대한 보호가 약하다. 서버의 짧은 유효기간 ticket 및 event ID 중복 방지는 유지되지만, 콘솔에서 긴 키 저장 문제가 해결되면 양쪽 키를 함께 교체해야 한다.
 - QTLingo의 실제 구현을 확인했다. QTLingo는 LevelPlay `OnAdRewarded`를 완료 신호로 삼고 웹에 성공을 전달해 다음 서버 요청을 진행한다. 로고스도 같은 완료 신호를 받은 뒤 서버 발급 ticket으로 `adRewardClaim`을 보낸다. 서버는 ticket 소유 계정, 1회 지급, 한국 날짜 기준 하루 3회를 확인한다. S2S가 늦게 와도 추가 지급하지 않고 ACK한다. 이 경로는 SDK 콜백을 웹이 전달하므로 암호학적 광고 시청 증명은 아니다. 클라이언트를 변조하면 하루 제한 내 무료 보상을 요청할 수 있다는 위험이 남는다. LevelPlay S2S 실전송이 정상화되면 서버 검증 전용으로 전환하는 것이 안전하다.
 - 실기기 상점에서는 Unity 로그가 광고 준비 완료를 기록했지만 웹의 별도 `capabilities.adReady` 사전 검사로 광고 버튼이 비활성화되었다. 버튼 사전 검사를 제거하고 서버 연결·일일 횟수만 확인한 뒤, 실제 광고 요청 시 Unity SDK가 준비 상태를 판정하도록 변경했다.
+- 2026-10-23 Play 코드 14 앱과 운영 웹 v0.9.169에서 UnityAds 광고를 끝까지 시청했다. logcat에 `LOGOS_LEVELPLAY_REWARDED`, `LOGOS_LEVELPLAY_AD_CLOSED: rewarded=True`가 기록됐고, 상점은 `광고 3/3 → 2/3`, 별가루는 `11,457 → 11,487`로 바뀌었다. 이로써 SDK 완료 신호부터 서버 지급까지 실기기에서 확인했다. 다만 S2S 실전송 자체는 여전히 확인되지 않았다.
 - 이 PC의 `.runtime/secrets/levelplay-s2s.dpapi`에 현재 키를 DPAPI로 보관한다. 쓰이지 않은 64자리 제안 키는 `.runtime/secrets/levelplay-s2s-proposed-unused.dpapi`에 따로 남겨 두었다. 둘 다 Git에서 제외된다. `adsetting/ads-key-vault.ps1 status`로 길이와 지문만 확인할 수 있다. 키를 문서, 채팅, 로그, 프런트 번들에 출력하지 않는다.
 - `.runtime/secrets/levelplay-release.env`에 이 게임 전용 App Key와 보상형 광고 단위 ID를 로컬 보관한다. 이 파일도 Git에서 제외된다.
 
