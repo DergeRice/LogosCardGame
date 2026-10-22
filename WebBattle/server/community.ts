@@ -38,10 +38,22 @@ export class Community {
   this.game.send(p.socket,{type:'adTicket',ticket:ticket.id,box,expiresAt:ticket.expiresAt});
  }
  adStatus(p:Player,msg:Record<string,unknown>){const ticket=String(msg.ticket??''),r=this.record(p),active=r.adTicket;if(!active||active.id!==ticket)return this.game.fail(p,'광고 요청을 찾을 수 없어요.');if(active.result){this.game.send(p.socket,{type:'storeResult',...active.result});return;}this.game.send(p.socket,{type:'adStatus',ticket,pending:active.expiresAt>Date.now()});}
+ claimClientAdReward(p:Player,msg:Record<string,unknown>){
+  if(!this.game.adRewardsEnabled||p.room)return this.game.fail(p,'광고 보상을 받을 수 없어요.');
+  const ticketId=typeof msg.ticket==='string'?msg.ticket:'';
+  const ticket=this.record(p).adTicket;
+  if(!/^[a-f0-9]{32}$/.test(ticketId)||ticket?.id!==ticketId)return this.game.fail(p,'광고 요청을 찾을 수 없어요.');
+  if(ticket.result){this.adStatus(p,{ticket:ticketId});return;}
+  // LevelPlay's OnAdRewarded event is the completion signal used by QTlingo.
+  // Keep the server-issued ticket, one-time result, and daily cap in charge of credit.
+  const result=this.claimAdTicket(ticketId,`sdk-${ticketId}`);
+  if(result!=='granted'&&result!=='duplicate')this.game.fail(p,result==='expired'?'광고 요청이 만료됐어요.':'광고 보상을 지급하지 못했어요.');
+ }
  claimAdTicket(ticketId:string,eventId:string,now=Date.now()):'granted'|'duplicate'|'missing'|'expired'|'limit'{
   const r=[...this.records.values()].find(record=>record.adTicket?.id===ticketId),ticket=r?.adTicket;
   if(!r||!ticket)return 'missing';
-  if(ticket.result)return ticket.eventId===eventId?'duplicate':'missing';
+  // A late signed S2S callback may follow the SDK reward. Acknowledge it without paying twice.
+  if(ticket.result)return 'duplicate';
   if(now>ticket.expiresAt+60_000)return 'expired';
   if((r.store.adUsage?.[ticket.day]??0)>=AD_DAILY_LIMIT)return 'limit';
   const opened=openDemoBox(r.store,ticket.box,1,()=>randomInt(1000000000)/1000000000,true);

@@ -31,7 +31,7 @@ test('LevelPlay callback verifies signed ticket and rejects altered reward',()=>
  url.searchParams.set('placement','logos_rewarded_box');url.searchParams.set('dynamicUserId','invalid-ticket');assert.equal(verifyLevelPlayCallback(url,key),null);
 });
 
-test('reward requires signed server claim, is idempotent and limited to three per Korean day',()=>{
+test('server ad ticket is idempotent and limited to three per Korean day',()=>{
  const {game,player,messages}=fixture();
  assert.equal(game.community.view(player).adEnabled,true);
  for(let i=0;i<3;i++){
@@ -41,11 +41,26 @@ test('reward requires signed server claim, is idempotent and limited to three pe
   assert.equal(game.community.record(player).results.length,i);
   assert.equal(game.community.claimAdTicket(ticket,`event${i}`),'granted');
   assert.equal(game.community.claimAdTicket(ticket,`event${i}`),'duplicate');
-  assert.equal(game.community.claimAdTicket(ticket,`other${i}`),'missing');
+  assert.equal(game.community.claimAdTicket(ticket,`other${i}`),'duplicate');
   assert.equal(game.community.record(player).store.adUsage?.[adDay(Date.now())],i+1);
  }
  game.handle(player,{type:'adRewardTicket',box:'silver'});
  assert.equal(messages.filter(m=>m.type==='adTicket').length,3);
  const next=new Game({adRewardsEnabled:true});restore(next,snapshot(game));
  assert.equal(next.community.records.get(game.community.id(player))?.store.adUsage?.[adDay(Date.now())],3);
+});
+
+test('SDK rewarded event credits only the ticket owner once and a later S2S callback cannot credit again',()=>{
+ const owner=fixture(),stranger=fixture();
+ owner.game.handle(owner.player,{type:'adRewardTicket',box:'gold'});
+ const ticket=owner.messages.find(m=>m.type==='adTicket')?.ticket;
+ assert.ok(ticket);
+ stranger.game.handle(stranger.player,{type:'adRewardClaim',ticket});
+ assert.equal(stranger.game.community.record(stranger.player).store.adUsage?.[adDay(Date.now())]??0,0);
+ owner.game.handle(owner.player,{type:'adRewardClaim',ticket});
+ assert.equal(owner.game.community.record(owner.player).store.adUsage?.[adDay(Date.now())],1);
+ owner.game.handle(owner.player,{type:'adRewardClaim',ticket});
+ assert.equal(owner.game.community.record(owner.player).store.adUsage?.[adDay(Date.now())],1);
+ assert.equal(owner.game.community.claimAdTicket(ticket,'signed-network-event'),'duplicate');
+ assert.equal(owner.game.community.record(owner.player).store.adUsage?.[adDay(Date.now())],1);
 });

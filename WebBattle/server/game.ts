@@ -609,6 +609,7 @@ export class Game {
   if(msg.type==='community')return this.community.send(p);
   if(msg.type==='adRewardTicket')return this.community.issueAdTicket(p,msg);
   if(msg.type==='adRewardStatus')return this.community.adStatus(p,msg);
+  if(msg.type==='adRewardClaim')return this.community.claimClientAdReward(p,msg);
   if(msg.type==='friendRequest')return this.community.request(p,msg);
   if(msg.type==='friendReply')return this.community.reply(p,msg);
   if(msg.type==='friendInvite')return this.community.invite(p,msg);
