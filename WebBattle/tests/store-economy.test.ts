@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import {BOX_WEIGHTS,LOOT_WEIGHTS,BOX_DUST,DUST_PRICES,DUPLICATE_DUST,COSMETICS,defaultHubSave,lootType,openDemoBox} from '../shared/store.js';
 import {Game,type GameSocket} from '../server/game.js';
 
-test('v110 odds include profiles and boards, 1% silver characters and no pity boost',()=>{
- assert.deepEqual(BOX_WEIGHTS,{silver:[59.5,1,7,13,7,7.5,5],gold:[25,4,16,12,17,18,8],diamond:[10,12,18,8,20,22,10]});
+test('silver and gold dust odds rise five points while all box weights total 100',()=>{
+ assert.deepEqual(BOX_WEIGHTS,{silver:[64.5,0.9,6.1,11.4,6.1,6.6,4.4],gold:[30,3.7,14.9,11.2,15.9,16.8,7.5],diamond:[10,12,18,8,20,22,10]});
  for(const id of ['silver','gold','diamond'] as const){
   assert.equal(BOX_WEIGHTS[id].reduce((a,b)=>a+b,0),100);
   const counts=LOOT_WEIGHTS.map(x=>Array.from({length:10000},(_,i)=>lootType((i+.5)/10000,id)).filter(t=>t===x.type).length);
-  assert.deepEqual(counts,BOX_WEIGHTS[id].map(w=>w*100));
+  assert.deepEqual(counts,BOX_WEIGHTS[id].map(w=>Math.round(w*100)));
   // Even the hundredth draw uses the supplied random value; no hidden guarantee.
   const opened=openDemoBox({...defaultHubSave(),diamonds:6000},id,id==='diamond'?100:10,()=>0);
   assert.ok(opened.rewards.every(r=>r.type==='dust'));

@@ -8,9 +8,9 @@ export const LEAGUES=['아이언','브론즈','실버','골드','플래티넘','
 export function leagueFor(rating:number){const value=Number.isFinite(rating)?Math.max(0,Math.floor(rating)):0,step=Math.min(39,Math.max(0,Math.floor((value-301)/100))),tier=Math.floor(step/5),division=5-step%5;return {tier,division,label:`${LEAGUES[tier]} ${division}`,floor:step===0?0:301+step*100,next:step===39?null:401+step*100};}
 export function leagueTierRange(tier:number){return {floor:tier===0?0:301+tier*500,ceiling:tier===LEAGUES.length-1?null:800+tier*500};}
 export function leagueTierRangeLabel(tier:number){const range=leagueTierRange(tier);return range.ceiling===null?`${range.floor.toLocaleString()}점 이상`:`${range.floor.toLocaleString()}~${range.ceiling.toLocaleString()}점`;}
-export const LOOT_WEIGHTS=[{type:'dust',name:'별가루',weight:59.5},{type:'character',name:'캐릭터',weight:1},{type:'background',name:'홈 배경',weight:7},{type:'emote',name:'감정표현',weight:13},{type:'frame',name:'프레임',weight:7},{type:'board',name:'보드판',weight:7.5},{type:'profile',name:'프로필',weight:5}] as const;
+export const LOOT_WEIGHTS=[{type:'dust',name:'별가루',weight:64.5},{type:'character',name:'캐릭터',weight:0.9},{type:'background',name:'홈 배경',weight:6.1},{type:'emote',name:'감정표현',weight:11.4},{type:'frame',name:'프레임',weight:6.1},{type:'board',name:'보드판',weight:6.6},{type:'profile',name:'프로필',weight:4.4}] as const;
 export type LootType=typeof LOOT_WEIGHTS[number]['type'];
-export const BOX_WEIGHTS={silver:[59.5,1,7,13,7,7.5,5],gold:[25,4,16,12,17,18,8],diamond:[10,12,18,8,20,22,10]} as const;
+export const BOX_WEIGHTS={silver:[64.5,0.9,6.1,11.4,6.1,6.6,4.4],gold:[30,3.7,14.9,11.2,15.9,16.8,7.5],diamond:[10,12,18,8,20,22,10]} as const;
 export const DUST_PRICES={profile:300,character:850,board:500,background:400,frame:300,emote:200} as const;
 export const DUPLICATE_DUST={profile:25,character:70,board:40,background:30,frame:25,emote:15} as const;
 export const BOX_DUST={silver:{min:4,max:12},gold:{min:12,max:28},diamond:{min:24,max:48}} as const;

@@ -109,3 +109,7 @@ html:has(.game-hub,.battle,.modern-lobby,.result),body:has(.game-hub,.battle,.mo
 .hub-shop .store-box-rows .store-offers .store-ad-open-main img{width:17px;height:17px;flex:none;object-fit:contain;filter:brightness(0);opacity:.55}
 .hub-shop .store-box-rows .store-offers .store-ad-open b{color:#48614a;line-height:1.15;white-space:normal;word-break:keep-all}
 .hub-shop .store-box-rows .store-offers .store-ad-open small{color:#657466;line-height:1.15}
+
+/* Reserve the first action slot and match its neighboring button height. */
+.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers>.store-ad-open{grid-column:1;grid-row:2;align-self:stretch;height:100%;box-sizing:border-box;width:100%;text-align:center}
+.hub-shop .store-box-rows>article:not([data-box=diamond]) .store-offers>button{align-self:stretch;height:100%}

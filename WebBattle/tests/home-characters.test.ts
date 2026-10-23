@@ -5,7 +5,7 @@ test('nine emote characters use first artwork and ten preloaded poses; character
  assert.equal(HOME_CHARACTERS.length,9);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,COSMETICS.length);
  const pool=COSMETICS.filter(c=>c.type==='character');
  for(const c of HOME_CHARACTERS){assert.equal(c.poses.length,10);assert.equal(new Set(c.poses.map(p=>p.id)).size,10);assert.equal(c.image,c.poses[0].image);assert.equal(defaultHubSave().owned.includes(c.id),false);assert.equal(dustPrice(c.type),850);assert.ok(c.poses.every(p=>GAME_ASSET_URLS.includes(p.image)));
-  let n=0;const result=openDemoBox({...defaultHubSave(),owned:[]},'silver',1,()=>n++===0?.6:(pool.findIndex(p=>p.id===c.id)+.5)/pool.length);assert.equal(result.rewards[0].itemId,c.id);
+  let n=0;const result=openDemoBox({...defaultHubSave(),owned:[]},'silver',1,()=>n++===0?.65:(pool.findIndex(p=>p.id===c.id)+.5)/pool.length);assert.equal(result.rewards[0].itemId,c.id);
  }
 });
 test('character redemption and equip persist without granting its expression collectibles',()=>{

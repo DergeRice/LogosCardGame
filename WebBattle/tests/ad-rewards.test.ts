@@ -31,10 +31,10 @@ test('LevelPlay callback verifies signed ticket and rejects altered reward',()=>
  url.searchParams.set('placement','logos_rewarded_box');url.searchParams.set('dynamicUserId','invalid-ticket');assert.equal(verifyLevelPlayCallback(url,key),null);
 });
 
-test('server ad ticket is idempotent and limited to three per Korean day',()=>{
+test('server ad ticket is idempotent and limited to two per Korean day',()=>{
  const {game,player,messages}=fixture();
  assert.equal(game.community.view(player).adEnabled,true);
- for(let i=0;i<3;i++){
+ for(let i=0;i<2;i++){
   game.handle(player,{type:'adRewardTicket',box:i%2?'gold':'silver'});
   const ticket=messages.filter(m=>m.type==='adTicket').at(-1)?.ticket;
   assert.ok(ticket);
@@ -45,9 +45,9 @@ test('server ad ticket is idempotent and limited to three per Korean day',()=>{
   assert.equal(game.community.record(player).store.adUsage?.[adDay(Date.now())],i+1);
  }
  game.handle(player,{type:'adRewardTicket',box:'silver'});
- assert.equal(messages.filter(m=>m.type==='adTicket').length,3);
+ assert.equal(messages.filter(m=>m.type==='adTicket').length,2);
  const next=new Game({adRewardsEnabled:true});restore(next,snapshot(game));
- assert.equal(next.community.records.get(game.community.id(player))?.store.adUsage?.[adDay(Date.now())],3);
+ assert.equal(next.community.records.get(game.community.id(player))?.store.adUsage?.[adDay(Date.now())],2);
 });
 
 test('SDK rewarded event credits only the ticket owner once and a later S2S callback cannot credit again',()=>{

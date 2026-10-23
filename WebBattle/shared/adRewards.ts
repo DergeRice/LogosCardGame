@@ -1,4 +1,4 @@
-export const AD_DAILY_LIMIT=3;
+export const AD_DAILY_LIMIT=2;
 export const AD_TICKET_MS=15*60_000;
 export type AdBox='silver'|'gold';
 export type AdTicketResponse={ticket:string;box:AdBox;expiresAt:number;serial?:number};
