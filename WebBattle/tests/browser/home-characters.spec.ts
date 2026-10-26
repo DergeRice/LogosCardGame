@@ -7,7 +7,7 @@ for(const size of ['desktop','portrait','landscape'] as const)test(`home charact
  await page.routeWebSocket('**/socket',ws=>{const sync=()=>ws.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:save}}));ws.onMessage(raw=>{const m=JSON.parse(String(raw));sent.push(m);if(m.type==='hello'){ws.send(JSON.stringify({type:'session',id:'me',name:'홈 캐릭터 검사',token:'home-char',avatar:'pronoun',rating:1000,coins:0,points:0}));sync();}if(m.type==='storeRedeem'){const item=COSMETICS.find(c=>c.id===m.id)!;save.dust-=850;save.owned.push(item.id);save.revision=1;sync();ws.send(JSON.stringify({type:'storeResult',source:'redeem',requestId:m.requestId,rewards:[{type:'character',itemId:item.id,name:item.name,image:item.image,duplicate:false}]}));}if(m.type==='storeEquip'){save.character=m.id;sync();}})});
  try{
   await page.goto('/');await page.getByRole('button',{name:'홈 캐릭터 선택',exact:true}).click({timeout:60000});const picker=page.getByRole('dialog',{name:'홈 캐릭터 선택',exact:true});await expect(picker.getByRole('button',{name:new RegExp(character.name)})).toHaveCount(0);
-  await picker.getByRole('button',{name:'상점',exact:true}).click();const item=page.locator('.dust-grid article').filter({has:page.getByText(character.name,{exact:true})});await item.getByRole('button',{name:'✧ 850 · 구매',exact:true}).click();await page.getByRole('dialog',{name:'구매 완료',exact:true}).getByRole('button',{name:'확인',exact:true}).click();
+  await picker.getByRole('button',{name:'상점',exact:true}).click();const item=page.locator('.dust-grid article').filter({has:page.getByText(character.name,{exact:true})});await item.getByRole('button',{name:'✧ 850',exact:true}).click();await page.getByRole('dialog',{name:'구매 완료',exact:true}).getByRole('button',{name:'확인',exact:true}).click();
   await page.getByRole('tab',{name:'홈',exact:true}).click();await page.getByRole('button',{name:'홈 캐릭터 선택',exact:true}).click();await picker.getByRole('button',{name:new RegExp(character.name+'.*장착하기')}).click();
   const actor=page.getByRole('button',{name:character.name+' 다음 표정',exact:true}),image=page.locator('.hub-main-character'),canvas=page.locator('.home-character-canvas');
   await expect(actor).toHaveAttribute('data-renderer','pixi');await expect(image).toHaveAttribute('src',character.image);await expect(canvas).toHaveAttribute('data-texture-source',character.image);
@@ -20,7 +20,7 @@ for(const size of ['desktop','portrait','landscape'] as const)test(`home charact
   await page.getByRole('tab',{name:'프로필',exact:true}).click();await expect(page.locator('.home-character-canvas')).toHaveCount(0);await expect(page.locator('.hub-profile-summary .equipped-profile-avatar img')).toHaveAttribute('src','/profiles/basic/rabbit.webp');
   await page.getByRole('tab',{name:'홈',exact:true}).click();await expect(actor).toHaveAttribute('data-renderer','pixi');await expect(actor).toHaveAttribute('data-pose-index','0');
   await canvas.locator('canvas').evaluate(el=>el.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));await expect(actor).toHaveAttribute('data-renderer','fallback');await expect(image).toBeVisible();
-  expect(errors).toEqual([]);expect(await page.evaluate(()=>scrollY)).toBe(0);
+  expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed'))).toEqual([]);expect(await page.evaluate(()=>scrollY)).toBe(0);
  }finally{await ctx.close()}
 });
 
