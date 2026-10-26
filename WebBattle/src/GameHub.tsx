@@ -29,7 +29,8 @@ export function GameHub(p:Props){
  const [collectionFilter,setCollectionFilter]=useState<'profile'|'character'|'background'|'board'|'frame'>('profile');
  const [compact,setCompact]=useState(()=>matchMedia('(max-width: 1023px), (pointer: coarse)').matches),[roomsOpen,setRoomsOpen]=useState(false);
  useEffect(()=>{const media=matchMedia('(max-width: 1023px), (pointer: coarse)');const update=()=>{setCompact(media.matches);setRoomsOpen(false)};media.addEventListener('change',update);return()=>media.removeEventListener('change',update);},[]);
- const key='logos-hub-demo-v1:'+encodeURIComponent(p.account??p.name),[save,setSave]=useState<HubSave>(()=>readHubSave(key));
+ const key='logos-hub-demo-v1:'+encodeURIComponent(p.account??p.name),[cachedSave,setSave]=useState<HubSave>(()=>readHubSave(key));
+ const save=p.community?{...cachedSave,...p.community.store}:cachedSave;
  useEffect(()=>setSave(p.community?{...readHubSave(key),...p.community.store}:readHubSave(key)),[key]);
  useEffect(()=>{if(p.community)setSave(old=>({...old,...p.community!.store}));},[p.community]);
  useEffect(()=>{const board=p.community?.store.board??save.board;if(board)sessionStorage.setItem('logos-equipped-board-id',board);},[p.community?.store.board,save.board]);

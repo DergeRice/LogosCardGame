@@ -23,3 +23,26 @@ for(const size of ['desktop','portrait','landscape'] as const)test(`home charact
   expect(errors).toEqual([]);expect(await page.evaluate(()=>scrollY)).toBe(0);
  }finally{await ctx.close()}
 });
+
+test('home waits for server cosmetics before its first render',async({browser})=>{
+ const ctx=await guestContext(browser,{viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const page=await ctx.newPage(),save=defaultHubSave(),background=COSMETICS.find(item=>item.type==='background'&&item.id!==save.background)!;
+ save.character='character-hans';save.background=background.id;save.owned.push(save.character,save.background);
+ let sendCommunity:(()=>void)|undefined;
+ await page.routeWebSocket('**/socket',ws=>{ws.onMessage(raw=>{const msg=JSON.parse(String(raw));if(msg.type==='hello'){ws.send(JSON.stringify({type:'session',id:'me',name:'첫 화면 검사',token:'home-ready',avatar:'pronoun',rating:1000,coins:0,points:0}));sendCommunity=()=>ws.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:save}}));}})});
+ try{
+  await page.goto('/');await expect(page.getByText(/내 홈 불러오는 중/)).toBeVisible({timeout:60000});await expect(page.locator('.game-hub')).toHaveCount(0);
+  sendCommunity!();await expect(page.locator('.game-hub')).toBeVisible();await expect(page.locator('.hub-character-stage')).toHaveAttribute('data-character-id',save.character);await expect(page.locator('.hub-main-character')).toHaveAttribute('src',HOME_CHARACTERS.find(item=>item.id===save.character)!.image);expect(await page.locator('.game-hub').evaluate(el=>getComputedStyle(el).getPropertyValue('--hub-background'))).toContain(background.image);
+  await page.getByRole('button',{name:'홈 캐릭터 선택',exact:true}).click();await page.getByRole('dialog',{name:'홈 캐릭터 선택'}).getByRole('button',{name:'상점',exact:true}).click();await expect(page.getByRole('tab',{name:'상점',exact:true})).toHaveAttribute('aria-selected','true');
+ }finally{await ctx.close()}
+});
+
+test('home pose responds in Pixi and image fallback',async({browser})=>{
+ const ctx=await guestContext(browser,{viewport:{width:390,height:844},isMobile:true,hasTouch:true});const page=await ctx.newPage(),save=defaultHubSave();save.character='character-naro-solo';save.owned.push(save.character);
+ await page.routeWebSocket('**/socket',ws=>ws.onMessage(raw=>{if(JSON.parse(String(raw)).type==='hello'){ws.send(JSON.stringify({type:'session',id:'me',name:'표정 검사',token:'pose',avatar:'pronoun',rating:1000,coins:0,points:0}));ws.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:save}}));}}));
+ try{
+  await page.goto('/');const actor=page.getByRole('button',{name:'나로 다음 표정',exact:true}),image=page.locator('.hub-main-character'),canvas=page.locator('.home-character-canvas');await expect(actor).toHaveAttribute('data-renderer','pixi',{timeout:60000});
+  await actor.click();await expect(actor).toHaveAttribute('data-pose-index','1');await expect(image).toHaveAttribute('src',HOME_CHARACTERS.find(item=>item.id===save.character)!.poses[1].image);await expect(canvas).toHaveAttribute('data-texture-source',HOME_CHARACTERS.find(item=>item.id===save.character)!.poses[1].image);
+  await canvas.locator('canvas').evaluate(el=>el.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));await expect(actor).toHaveAttribute('data-renderer','fallback');await actor.click();const frames=await image.evaluate(el=>el.getAnimations().flatMap(animation=>animation.effect?.getKeyframes()??[]));expect(frames).toEqual(expect.arrayContaining([expect.objectContaining({translate:expect.stringContaining('-13px')})]));await expect(actor).toHaveAttribute('data-pose-index','2');await expect(image).toHaveAttribute('src',HOME_CHARACTERS.find(item=>item.id===save.character)!.poses[2].image);await expect(image).toBeVisible();
+ }finally{await ctx.close()}
+});

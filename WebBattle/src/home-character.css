@@ -3,6 +3,7 @@
 .home-character-canvas{position:absolute;inset:-24px 0 -32px;pointer-events:none}
 .home-character-canvas canvas{display:block;width:100%!important;height:100%!important}
 .home-character-touch[data-renderer=pixi]>.hub-main-character{visibility:hidden}
+.home-character-touch[data-renderer=loading]>.home-character-canvas{visibility:hidden}
 .home-character-touch[data-renderer=fallback]>.home-character-canvas{visibility:hidden}
 .home-character-touch[data-renderer=fallback]>.hub-main-character{animation:home-character-breathe 3s ease-in-out infinite}
 @keyframes home-character-breathe{0%,100%{transform:none}50%{transform:translateY(-3px) scale(1.008)}}
