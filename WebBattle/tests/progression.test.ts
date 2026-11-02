@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {aiDifficulty,availableAIDifficulties,aiOpponentTier,normalizeAIDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
+import {aiDifficulty,availableAIDifficulties,aiOpponentTier,aiTierBonusPercent,normalizeAIDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {Game,type GameSocket} from '../server/game.js';
 import {snapshot,restore,nextDeadline} from '../server/persistence.js';
 import {leagueFor} from '../shared/store.js';
@@ -28,12 +28,19 @@ test('AI difficulty choices follow the player league',()=>{
  const game=new Game({minimumPlayers:2});const player=game.hello(socket(),null,'tier');player.rating=3301;game.quick(player,'easy');const room=game.rooms.get(player.room!)!;assert.equal(room.aiSetting,'veryHard');game.reveal(room);assert.equal(room.players.find(p=>p.ai)?.ai,'veryHard');assert.equal(room.deck.filter(c=>c.kind==='to-infinitive').length,4);assert.equal(game.view(room,player).deckTotal,75);
  const challenger=new Game({minimumPlayers:2}),human=challenger.hello(socket(),null,'challenger');human.rating=1000;challenger.quick(human,'veryHard');const challenge=challenger.rooms.get(human.room!)!;challenger.reveal(challenge);assert.equal(challenge.aiSetting,'veryHard');assert.equal(leagueFor(challenge.players.find(p=>p.ai)!.rating).tier,aiOpponentTier(human.rating,'veryHard'));
 });
-test('higher-tier AI victory grants 25 percent more points and coins',()=>{
- for(const higher of [false,true]){const game=new Game({minimumPlayers:2}),player=game.hello(socket(),null,'human');game.quick(player,'hard');const room=game.rooms.get(player.room!)!;game.reveal(room);game.begin(room);const bot=room.players.find(p=>p.ai)!;player.rating=1000;bot.rating=higher?1400:1050;game.community.record(player).rankGames=3;player.score=25;bot.score=0;game.finish(room,'done');assert.equal(player.ratingDelta,higher?28:14);assert.equal(player.reward,higher?63:50);assert.equal(player.coinReward,higher?213:170);assert.equal(player.rewardRatio,higher?1.25:1);}
+test('higher-tier AI victory scales coins, points and rating by league difference',()=>{
+ for(const [botRating,percent,expectedReward,expectedCoin,expectedRating] of [
+  [1050,0,50,170,14],[1400,10,55,187,24],[1900,15,58,196,28],[2400,20,60,204,29]
+ ] as const){
+  const game=new Game({minimumPlayers:2}),player=game.hello(socket(),null,'human');game.quick(player,'hard');const room=game.rooms.get(player.room!)!;game.reveal(room);game.begin(room);
+  const bot=room.players.find(p=>p.ai)!;player.rating=1000;bot.rating=botRating;game.community.record(player).rankGames=3;player.score=25;bot.score=0;game.finish(room,'done');
+  assert.equal(aiTierBonusPercent(leagueFor(1000).tier,leagueFor(botRating).tier),percent);
+  assert.equal(player.ratingDelta,expectedRating);assert.equal(player.reward,expectedReward);assert.equal(player.coinReward,expectedCoin);assert.equal(player.rewardRatio,1+percent/100);
+ }
 });
 test('a naturally matched very-hard AI pays the displayed bonus',()=>{
  const game=new Game({minimumPlayers:2}),player=game.hello(socket(),null,'challenger');player.rating=1000;game.quick(player,'veryHard');const room=game.rooms.get(player.room!)!;game.reveal(room);game.begin(room);
  const bot=room.players.find(p=>p.ai)!;assert.equal(leagueFor(bot.rating).tier,aiOpponentTier(player.rating,'veryHard'));
  game.community.record(player).rankGames=3;player.score=25;bot.score=0;game.finish(room,'won');
- assert.equal(player.rewardRatio,1.25);assert.equal(player.reward,63);assert.equal(player.coinReward,213);assert.ok(player.ratingDelta>0);
+ assert.equal(player.rewardRatio,1.15);assert.equal(player.reward,58);assert.equal(player.coinReward,196);assert.ok(player.ratingDelta>0);
 });

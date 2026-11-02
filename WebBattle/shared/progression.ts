@@ -21,6 +21,10 @@ export function aiOpponentTier(rating:number,difficulty:Difficulty):number{
  const tier=leagueFor(rating).tier;
  return Math.max(0,Math.min(7,tier+(difficulty==='easy'?-1:difficulty==='hard'?1:difficulty==='veryHard'?2:0)));
 }
+export function aiTierBonusPercent(playerTier:number,opponentTier:number):number{
+ const difference=Math.max(0,opponentTier-playerTier);
+ return difference===0?0:5+difference*5;
+}
 export function normalizeAIDifficulty(rating:number,value:unknown):Difficulty{
  const available=availableAIDifficulties(rating);
  return available.includes(value as Difficulty)?value as Difficulty:available[0];

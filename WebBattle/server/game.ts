@@ -9,7 +9,7 @@ import {Community} from './community.js';
 import {availableGuestName,GUEST_NAME_COUNT} from '../shared/guestNames.js';
 import {matchGold,goPointReward} from '../shared/matchRewards.js';
 import {aiGoChoice} from './aiStrategy.js';
-import {compatibleRatings,roomRating,aiDifficulty,normalizeAIDifficulty,availableAIDifficulties,aiOpponentTier,GUEST_RETENTION_MS} from '../shared/progression.js';
+import {compatibleRatings,roomRating,aiDifficulty,normalizeAIDifficulty,availableAIDifficulties,aiOpponentTier,aiTierBonusPercent,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {BUILD_VERSION} from '../src/buildVersion.js';
 import {makeAudit,safeDetails,type AuditEvent} from './audit.js';
 import {fieldCards,canTransferCard} from '../shared/cardViews.js';
@@ -283,11 +283,13 @@ export class Game {
     const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected;
    }
    const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0&&r.players.length>=2&&p.id!==forfeiter)rankRecord.rankGames=(rankRecord.rankGames??0)+1;
-   const higherTierBonus=p.id===r.winner&&!p.ai&&r.players.some(other=>other.ai&&leagueFor(ratings.get(other.id)!).tier>leagueFor(ratings.get(p.id)!).tier)?1.25:1;
-   p.ratingDelta = !p.ai&&p.id!==forfeiter&&(rankRecord?.rankGames??0)<3?0:Math.round(24 * delta / Math.max(1, r.players.length - 1));if(p.ratingDelta>0)p.ratingDelta=Math.round(p.ratingDelta*higherTierBonus); p.ratingShield=false;if(p.ratingDelta<0){const loss=Math.round(-p.ratingDelta*1.5);p.ratingShield=p.score>=10;p.ratingDelta=-(p.ratingShield?Math.ceil(loss/2):loss);}p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating);p.ratingShield=Boolean(p.ratingShield&&p.ratingDelta<0);
+   const playerTier=leagueFor(ratings.get(p.id)!).tier;
+   const aiBonusPercent=p.id===r.winner&&!p.ai?Math.max(0,...r.players.filter(other=>other.ai).map(other=>aiTierBonusPercent(playerTier,leagueFor(ratings.get(other.id)!).tier))):0;
+   const higherTierBonus=1+aiBonusPercent/100;
+   p.ratingDelta = !p.ai&&p.id!==forfeiter&&(rankRecord?.rankGames??0)<3?0:Math.round(24 * delta / Math.max(1, r.players.length - 1));if(p.ratingDelta>0)p.ratingDelta=Math.round(p.ratingDelta*(100+aiBonusPercent)/100); p.ratingShield=false;if(p.ratingDelta<0){const loss=Math.round(-p.ratingDelta*1.5);p.ratingShield=p.score>=10;p.ratingDelta=-(p.ratingShield?Math.ceil(loss/2):loss);}p.rating = Math.max(0, p.rating + p.ratingDelta); p.ratingDelta=p.rating-(ratings.get(p.id)??p.rating);p.ratingShield=Boolean(p.ratingShield&&p.ratingDelta<0);
    const winner=p.id===r.winner&&p.id!==forfeiter, winnerGo=winner&&r.leaderId===p.id?Math.max(r.goCount,r.goTarget??0):0;
-   p.baseReward=winner?goPointReward(winnerGo):0;p.opponentRating=roomRating(r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!));const bonus=higherTierBonus;p.rewardRatio=bonus;p.reward=winner?Math.round(goPointReward(winnerGo)*bonus):0;p.points+=p.reward;
-   const gold=matchGold({go:winnerGo,finalCards:p.lastPlayed?.length??0,rating:ratings.get(p.id)!,opponents:r.players.filter(x=>x!==p).map(x=>ratings.get(x.id)!),score:p.score,scores:r.players.map(x=>x.score),elapsedMs:Math.max(0,Date.now()-(r.startedAt??Date.now())),difficulty:r.aiSetting,custom:r.custom});p.coinBase=winner?gold.base:0;p.coinAdjustment=winner?gold.adjustment:0;p.coinReward=winner?Math.round(gold.total*bonus):0;p.coins=(p.coins??0)+p.coinReward;
+   p.baseReward=winner?goPointReward(winnerGo):0;p.opponentRating=roomRating(r.players.filter(other=>other!==p).map(other=>ratings.get(other.id)!));const bonus=higherTierBonus;p.rewardRatio=bonus;p.reward=winner?Math.round(goPointReward(winnerGo)*(100+aiBonusPercent)/100):0;p.points+=p.reward;
+   const gold=matchGold({go:winnerGo,finalCards:p.lastPlayed?.length??0,rating:ratings.get(p.id)!,opponents:r.players.filter(x=>x!==p).map(x=>ratings.get(x.id)!),score:p.score,scores:r.players.map(x=>x.score),elapsedMs:Math.max(0,Date.now()-(r.startedAt??Date.now())),difficulty:r.aiSetting,custom:r.custom});p.coinBase=winner?gold.base:0;p.coinAdjustment=winner?gold.adjustment:0;p.coinReward=winner?Math.round(gold.total*(100+aiBonusPercent)/100):0;p.coins=(p.coins??0)+p.coinReward;
    if(p.accountId){const account=[...this.accounts.values()].find(a=>a.id===p.accountId);if(account){account.rating=p.rating;account.points=p.points;account.coins=p.coins??0;}}
   }
   r.resultPlayers=this.view(r,r.players[0]).players;this.log(r, reason); this.broadcast(r);for(const p of r.players)if(!p.ai)this.community.send(p);
