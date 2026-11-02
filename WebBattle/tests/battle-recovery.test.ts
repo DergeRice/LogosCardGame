@@ -36,8 +36,15 @@ test('restored battle at three Go remains playable and result state is resent on
  const{game,a,b,r}=fixture();a.score=30;b.score=60;r.goCount=3;r.leaderId=b.id;r.decision=undefined;const fresh=new Game({minimumPlayers:2});restore(fresh,snapshot(game));const room=fresh.rooms.get(r.code)!;fresh.tick();assert.equal(room.phase,'battle');
  fresh.finish(room,'manual');const peer=socket(),p=fresh.hello(peer,a.token,'ignored'),points=p.points;peer.messages=[];fresh.handle(p,{type:'ping'});assert.equal(peer.messages.find(m=>m.type==='state')?.room.phase,'result');assert.equal(p.points,points);
 });
-test('AI stop probability uses integer percent and reacts to lead, hand and exhausted deck',()=>{
- const state={score:40,rivals:[25],handCount:5,deckAvailable:true,goCount:0,difficulty:'normal' as const};assert.equal(aiStopChance(state),30);assert.equal(Array.from({length:100},(_,roll)=>aiGoChoice(state,roll)).filter(x=>x==='stop').length,0);assert.equal(aiStopChance({...state,goCount:1}),30);assert.equal(aiStopChance({...state,goCount:2}),48);assert.equal(aiGoChoice({...state,goCount:3},99),'stop');assert.ok(aiStopChance({...state,handCount:0,deckAvailable:false})>30);assert.equal(Array.from({length:100},(_,roll)=>aiGoChoice({...state,goCount:1},roll)).filter(x=>x==='stop').length,0);assert.equal(Array.from({length:100},(_,roll)=>aiGoChoice({...state,goCount:2},roll)).filter(x=>x==='stop').length,48);
+test('AI first Go stop probability follows difficulty exactly',()=>{
+ const state={score:40,rivals:[25],handCount:5,deckAvailable:true,goCount:1,difficulty:'normal' as const};
+ for(const [difficulty,percent] of [['easy',0],['normal',10],['hard',50],['veryHard',60]] as const){
+  const withDifficulty={...state,difficulty};
+  assert.equal(aiStopChance(withDifficulty),percent);
+  assert.equal(Array.from({length:100},(_,roll)=>aiGoChoice(withDifficulty,roll)).filter(x=>x==='stop').length,percent);
+ }
+ assert.equal(aiGoChoice({...state,goCount:3},99),'stop');
+ assert.equal(aiStopChance({...state,goCount:2}),48);
 });
 test('score sounds follow every score beat and never catch up by replaying old beats',()=>{
  assert.deepEqual(scoreChimeDelays(1000,900,3,1000),[.3,.6,.9]);assert.deepEqual(scoreChimeDelays(1000,900,3,1500),[.1,.4]);assert.deepEqual(scoreChimeDelays(1000,900,3,3000),[]);

@@ -1,4 +1,5 @@
 import type {Difficulty} from './rules.js';
+import {leagueFor} from './store.js';
 export const BASE_MATCH_POINTS=300;
 export const GUEST_RETENTION_MS=30*24*60*60_000;
 export function victoryPoints(rating:number,opponents:readonly number[]){
@@ -12,3 +13,11 @@ export function compatibleRatings(ratings:readonly number[],joining:number){
  return ratings.every(r=>Math.abs(r-joining)<=Math.max(50,Math.max(r,joining)*.1));
 }
 export function aiDifficulty(rating:number):Difficulty{return rating<975?'easy':rating<1300?'normal':'hard'}
+export function availableAIDifficulties(rating:number):readonly Difficulty[]{
+ const tier=leagueFor(rating).tier;
+ return tier>=6?['veryHard']:tier>=5?['hard']:tier>=3?['normal','hard']:['easy','normal','hard'];
+}
+export function normalizeAIDifficulty(rating:number,value:unknown):Difficulty{
+ const available=availableAIDifficulties(rating);
+ return available.includes(value as Difficulty)?value as Difficulty:available[0];
+}

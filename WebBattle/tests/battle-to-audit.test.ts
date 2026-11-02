@@ -6,10 +6,10 @@ import {judge,judgeCards,DECK_FACES,cardEffect} from '../shared/rules.js';
 import {CheckPlayableSegment,LearningPosType as P} from '../shared/LearningLocalGrammarChecker.js';
 import {safeDetails,adminAuthorized} from '../server/audit.js';
 
-test('battle To is a bundled verb only after an object, while original Unity entry stays compatible',()=>{
+test('battle To is a bundled verb in a valid complement position, while original Unity entry stays compatible',()=>{
  for(const s of [['pronoun','verb','pronoun','to-infinitive'],['pronoun','verb','article','count','to-infinitive'],['pronoun','modal','verb','mass','to-infinitive']] as const){const r=judge([...s]);assert.equal(r.valid,true);assert.equal(r.patternType,5);assert.equal(r.usedLength,s.length)}
- assert.equal(judge(['pronoun','verb','to-infinitive']).usedLength,2);
- assert.equal(judge(['pronoun','verb','to-infinitive','verb']).usedLength,2);
+ assert.equal(judge(['pronoun','verb','to-infinitive']).usedLength,3);
+ assert.equal(judge(['pronoun','verb','to-infinitive','verb']).usedLength,3);
  const trailing=judge(['pronoun','verb','pronoun','to-infinitive','verb']);assert.equal(trailing.usedLength,4);assert.equal(trailing.patternType,5);
  assert.equal(judge(['to-infinitive']).valid,false);assert.equal(judge(['to-infinitive','pronoun','verb']).usedStartIndex,1);
  assert.equal(CheckPlayableSegment([P.PRP,P.VB,P.TO_VB,P.VB],false).usedLength,4);

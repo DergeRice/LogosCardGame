@@ -1,3 +1,5 @@
+import {normalizeAIDifficulty} from '../shared/progression.js';
+import type {Difficulty} from '../shared/rules.js';
 import {GoDecision} from './GoDecision.js';
 import './changa.css';
 import {CardStorage} from './CardStorage.js';
@@ -113,7 +115,7 @@ function App() {
  const [name, setName] = useState(guestName);
  const [connected, setConnected] = useState(false), [status, setStatus] = useState('연결 준비 중');
  const [room, setRoom] = useState<RoomView | null>(null), roomRef = useRef<RoomView | null>(null);
- const [aiSetting,setAiSetting]=useState<'easy'|'normal'|'hard'>(()=>{const value=localStorage.getItem('logos-ai-difficulty');return value==='easy'||value==='hard'?value:'normal'});
+ const [aiSetting,setAiSetting]=useState<Difficulty>(()=>{const value=localStorage.getItem('logos-ai-difficulty');return value==='easy'||value==='hard'||value==='veryHard'?value:'normal'});
  const [profile, setProfile] = useState({avatar:'pronoun' as Kind, rating:1000, points:0, coins:0});
  const [rankings,setRankings]=useState<Record<number,RankedPeer[]>>({});
  const [nicknameResult,setNicknameResult]=useState<NicknameResult|null>(null);
@@ -304,7 +306,7 @@ function App() {
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}
   {!room&&<InviteNotice data={community} send={send}/>}
-  {(!room||room.phase==='lobby') && <GameHub adTicket={adTicket} nicknameResult={nicknameResult} communityId={uuid} rankings={rankings} community={community} storeResult={storeResult} name={name} account={account} profile={profile} rooms={rooms} connected={connected} aiSetting={aiSetting} onDifficulty={value=>{setAiSetting(value);localStorage.setItem('logos-ai-difficulty',value)}} onQuick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick',{difficulty:aiSetting});}} send={send} onSettings={()=>setSettingsOpen(true)} onLogin={()=>setAuthMode('login')} onRegister={()=>setAuthMode('register')} onLogout={()=>send('logout')}/>}
+  {(!room||room.phase==='lobby') && <GameHub adTicket={adTicket} nicknameResult={nicknameResult} communityId={uuid} rankings={rankings} community={community} storeResult={storeResult} name={name} account={account} profile={profile} rooms={rooms} connected={connected} aiSetting={normalizeAIDifficulty(profile.rating,aiSetting)} onDifficulty={value=>{setAiSetting(value);localStorage.setItem('logos-ai-difficulty',value)}} onQuick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick',{difficulty:normalizeAIDifficulty(profile.rating,aiSetting)});}} send={send} onSettings={()=>setSettingsOpen(true)} onLogin={()=>setAuthMode('login')} onRegister={()=>setAuthMode('register')} onLogout={()=>send('logout')}/>}
   {!room&&roomBrowserOpen&&<RoomBrowser rooms={rooms} connected={connected} onClose={()=>setRoomBrowserOpen(false)} send={send}/>}
   {room?.phase==='lobby'&&<RoomLobby community={community} room={room} connected={connected} send={send}/>}
   {authMode&&!room&&<div className="account-backdrop" onClick={()=>setAuthMode(null)}><form className="account-dialog" role="dialog" aria-label={authMode==='register'?'계정 만들기':'계정 로그인'} onClick={e=>e.stopPropagation()} onSubmit={e=>{e.preventDefault();send(authMode,{username:authName,password:authPassword});}}><h2>{authMode==='register'?'계정 만들기':'계정 로그인'}</h2><p>같은 계정으로 웹과 Unity 웹뷰에서 레이팅을 이어갑니다.</p><label htmlFor="account-name">아이디</label><input id="account-name" autoComplete="username" minLength={3} maxLength={16} value={authName} onChange={e=>setAuthName(e.target.value)} required/><label htmlFor="account-password">비밀번호</label><input id="account-password" type="password" autoComplete={authMode==='register'?'new-password':'current-password'} minLength={10} maxLength={128} value={authPassword} onChange={e=>setAuthPassword(e.target.value)} required/><div className="account-dialog-actions"><button type="button" onClick={()=>setAuthMode(null)}>취소</button><button className="primary" disabled={!connected} type="submit">{authMode==='register'?'만들고 연동':'로그인'}</button></div></form></div>}

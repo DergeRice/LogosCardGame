@@ -29,7 +29,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function pp(s:number,e:number):PP|null{if(seq[s]!=='preposition')return null;const noun=np(s+1,e);return noun?{start:s,end:noun.end,np:noun}:null;}
  function comp(s:number,e:number,object=false):Complement|null{
   const a=skip(s,e);if(seq[a]==='adjective'){let next=a+1;while(next<e&&seq[next]==='adjective'&&next-a<3)next++;return {start:s,end:next,kind:'adjective'};}
-  if(seq[s]==='to-infinitive'&&object)return {start:s,end:s+1,kind:'to'};
+  if(seq[s]==='to-infinitive')return {start:s,end:s+1,kind:'to'};
   if(seq[s]==='verb'||seq[s]==='modal')return {start:s,end:s+1,kind:seq[s]};return null;
  }
  function afterVerb(s:number,e:number):Tail|null{
@@ -86,7 +86,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  function tail(t:Tail,verb:number,finite:boolean,embedded=false):string|null{
   if(t.legacy)return t.legacy;
   if(t.complement?.kind==='modal'||t.complement?.kind==='verb')return '원본이 허용하는 일반동사·조동사 주격 보어 조합';
-  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?'look':t.pattern===3?(contractedNegativeQuestion&&t.object?.start===t.object?.head&&seq[t.object?.head??-1]==='count'?'like':seq[t.object?.head??-1]==='pronoun'||seq[t.object?.head??-1]==='proper'?'help':seq[t.object?.head??-1]==='mass'?'enjoy':embedded||imperative||aux>=0&&seq[aux]==='modal'?'read':'need'):t.pattern===4?(seq[t.second?.head??-1]==='proper'?'show':'give'):t.complement?.kind==='to'?'want':t.vp?'make':'make';
+  let stem=t.pattern===1?(!embedded&&seq[subject?.head??-1]==='mass'?'flow':'work'):t.pattern===2?(t.complement?.kind==='to'?'want':'look'):t.pattern===3?(contractedNegativeQuestion&&t.object?.start===t.object?.head&&seq[t.object?.head??-1]==='count'?'like':seq[t.object?.head??-1]==='pronoun'||seq[t.object?.head??-1]==='proper'?'help':seq[t.object?.head??-1]==='mass'?'enjoy':embedded||imperative||aux>=0&&seq[aux]==='modal'?'read':'need'):t.pattern===4?(seq[t.second?.head??-1]==='proper'?'show':'give'):t.complement?.kind==='to'?'want':t.vp?'make':'make';
   if(seq[verb]==='be')stem='be';
   const verbWord=stem==='be'?(imperative||!finite?'be':person1?'am':singular?'is':'are'):finite&&singular?stem+'s':stem;
   put(verb,'verb',verbWord,({flow:'흐르다',work:'일하다',look:'보이다',need:'필요로 하다',give:'주다',want:'원하다',make:'만들다',be:'이다',read:'읽다',help:'돕다',enjoy:'즐기다',show:'보여주다',like:'좋아하다'} as Record<string,string>)[stem]);
@@ -94,12 +94,12 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
   if(t.vp){const reason=tail(t.vp.tail,t.vp.start,false,true);if(reason)return reason;roles[t.vp.start]='objectComplement';}
   return null;
  }
- let start=skip(0,end),stop=end;while(stop>start&&adv(seq[stop-1])&&!(seq[start]==='pronoun'&&seq[start+1]==='be'&&stop===start+3&&seq[stop-1]==='adverb'))stop--;
+ let start=skip(0,end),stop=end;while(stop>start&&adv(seq[stop-1])&&!(seq[start]==='pronoun'&&seq[start+1]==='be'&&stop===start+3&&seq[stop-1]==='adverb')&&!(seq[start]==='be'&&stop===start+2&&seq[stop-1]==='adverb'))stop--;
  let subject:NP|null=null,result:Tail|null=null,aux=-1;
  if(seq[start]==='verb'){imperative=true;main=start;result=afterVerb(main+1,stop);if(!result)return fail('명령문 동사 뒤 구성을 분석할 수 없습니다.');pattern=result.pattern;const reason=tail(result,main,false);if(reason)return fail(reason);if(end===1){put(main,'verb','run','달려');}}
  else if(seq[start]==='be'){
   const parsed=np(start+1,stop),c=parsed?.pps.length&&parsed.end===stop?{...parsed,end:parsed.baseEnd,pps:[]}:parsed;main=start;
-  if(!c){imperative=true;let s=skip(start+1,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};if(!result)return fail('BE 명령문 보어를 분석할 수 없습니다.');const reason=tail(result,main,false);if(reason)return fail(reason);}
+  if(!c){imperative=true;let s=seq[start+1]==='adverb'&&start+2===stop?start+1:skip(start+1,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if((a?.kind==='adjective'||a?.kind==='to')&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};else if(seq[s]==='adverb'&&s+1===stop){result={pattern:2,location:s};put(s,'place','there','거기');}if(!result)return fail('BE 명령문 보어를 분석할 수 없습니다.');const reason=tail(result,main,false);if(reason)return fail(reason);}
   else if(c.end===stop){imperative=true;put(main,'verb','be','되어라');noun(c,'subjectComplement');}
   else{question=true;subject=c;noun(subject,'subject');person1=words[subject.head]==='I';singular=seq[subject.head]!=='pronoun'||words[subject.head]==='she';let s=seq[c.end]==='adverb'&&c.end+1===stop?c.end:skip(c.end,stop);if(seq[s]==='not')s=skip(s+1,stop);const n=np(s,stop),a=comp(s,stop),p=pp(s,stop);if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}else if(a?.kind==='adjective'&&skip(a.end,stop)===stop)result={pattern:2,complement:a};else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};else if(seq[s]==='adverb'&&s+1===stop){result={pattern:2,location:s};put(s,'place','there','거기');}if(!result)return fail('BE 의문문 보어를 분석할 수 없습니다.');const reason=tail(result,main,true);if(reason)return fail(reason);}
  }else{
@@ -114,7 +114,7 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
    let s=seq[main+1]==='adverb'&&main+2===stop?main+1:skip(main+1,stop);if(seq[s]==='not')s=skip(s+1,stop);
    const n=np(s,stop),c=comp(s,stop),p=pp(s,stop);
    if(n&&skip(n.end,stop)===stop){result={pattern:2};noun(n,'subjectComplement');}
-   else if(c?.kind==='adjective'&&skip(c.end,stop)===stop)result={pattern:2,complement:c};
+   else if((c?.kind==='adjective'||c?.kind==='to')&&skip(c.end,stop)===stop)result={pattern:2,complement:c};
    else if(p&&skip(p.end,stop)===stop)result={pattern:2,pp:p};
    else if(seq[s]==='adverb'&&s+1===stop){result={pattern:2,location:s};put(s,'place','there','거기');}
   }else if(seq[main]==='verb')result=afterVerb(main+1,stop);

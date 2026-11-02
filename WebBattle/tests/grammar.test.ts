@@ -42,3 +42,7 @@ test('to-infinitive participates in a playable clause with a base verb',()=>{
  assert.equal(judge(['pronoun','verb','preposition','verb']).usedLength<4,true);
 });
 
+
+test('indefinite adjective count, be adverb, and one-card To are valid in their positions',()=>{
+ for(const kinds of [['indefinite','adjective','count','verb'],['pronoun','be','adverb'],['be','adverb'],['pronoun','verb','to-infinitive'],['pronoun','be','to-infinitive']] as Kind[][]){const r=judge(kinds);assert.equal(r.valid,true,kinds.join(','));assert.equal(r.usedLength,kinds.length)}
+});

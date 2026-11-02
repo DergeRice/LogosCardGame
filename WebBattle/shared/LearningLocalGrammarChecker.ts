@@ -70,7 +70,7 @@ class CheckContext {
  private TryMatchClause(seq: Sequence, start: number, end: number): SentencePatternType | null {
   while (start < end && this.IsAdverb(seq[start])) start++;
   // A final RB can be a locative complement after BE ("They are there").
-  while (end > start && this.IsAdverb(seq[end - 1]) && !(seq[start]===P.PRP&&seq[start+1]===P.BE&&end===start+3&&seq[end-1]===P.RB)) end--;
+  while (end > start && this.IsAdverb(seq[end - 1]) && !(seq[start]===P.PRP&&seq[start+1]===P.BE&&end===start+3&&seq[end-1]===P.RB) && !(seq[start]===P.BE&&end===start+2&&seq[end-1]===P.RB)) end--;
   // An imperative may reduce to a single VB after stripping its adjuncts.
   if(this.battleAdjectiveChains&&start<end&&seq[start]===P.VB)return this.MatchAfterVerb(seq,start+1,end);
   if (end - start < 2) return null;
@@ -184,6 +184,7 @@ class CheckContext {
   if(seq[start]===P.RB&&start+1===end)return T.Type2;
   start = this.SkipAdverbs(seq, start, end);
   if (start >= end) return null;
+  if(seq[start]===P.TO_VB&&start+1===end)return T.Type2;
   if (seq[start] === P.RB_NOT) start = this.SkipAdverbs(seq, start + 1, end);
   const npEnd = this.TryParseNP(seq, start, end);
   if (npEnd !== null && this.SkipAdverbs(seq, npEnd, end) === end) return T.Type2;
@@ -236,7 +237,7 @@ class CheckContext {
   if (next !== null) return next;
   // Battle rule: this physical card already contains the infinitive verb.
   // Keep the original Unity behavior when this explicit battle option is off.
-  if (start < end && seq[start] === P.TO_VB && this.battleToObjectOnly) return objectComplement ? start + 1 : null;
+  if (start < end && seq[start] === P.TO_VB && this.battleToObjectOnly) return start + 1;
   if (start + 1 < end && seq[start] === P.TO_VB && seq[start + 1] === P.VB) return start + 2;
   if (start < end && seq[start] === P.TO_VB) return start + 1;
   if (start < end && (seq[start] === P.VB || seq[start] === P.MODAL)) return start + 1;

@@ -5,7 +5,7 @@ const nounPhrases: Kind[][] = [['pronoun'], ['mass']];
 for (const d of ['article', 'indefinite', 'possessive'] as const) for (const n of ['count', 'mass'] as const) nounPhrases.push([d, n], [d, 'adjective', n]);
 const templates: Kind[][] = [['verb']];
 for (const s of nounPhrases) {
- templates.push([...s, 'verb'], [...s, 'be', 'adjective']);
+ templates.push([...s, 'verb'], [...s, 'be', 'adjective'], [...s, 'verb', 'to-infinitive'], [...s, 'be', 'to-infinitive']);
  for (const o of nounPhrases) {
   templates.push([...s, 'be', ...o], [...s, 'verb', ...o], [...s, 'verb', ...o, 'adjective'],[...s,'verb',...o,'to-infinitive']);
   for (const o2 of nounPhrases) templates.push([...s, 'verb', ...o, ...o2]);
@@ -24,7 +24,7 @@ for(const template of templates){
 }
 const candidates = expanded.filter(t => t.length <= 8).sort((a, b) => a.length - b.length);
 export function chooseMove(hand: Card[], difficulty: Difficulty): string[] | null {
- const budget = { easy: 450, normal: 900, hard: 5000 }[difficulty];
+ const budget = { easy: 450, normal: 900, hard: 5000, veryHard: 7500 }[difficulty];
  const started = performance.now(); let nodes = 0, best: string[] | null = null, score = -1;
  const ranked = [...hand].sort((a,b)=>{const x=cardEffect(a),y=cardEffect(b);return (y.multiply-x.multiply)*100+y.add-x.add;});
  for (const candidate of candidates) {
@@ -44,5 +44,5 @@ export function chooseMove(hand: Card[], difficulty: Difficulty): string[] | nul
  }
  return best;
 }
-export const thinkMs = (d: Difficulty) => ({ easy: 12000, normal: 9500, hard: 7000 }[d]);
+export const thinkMs = (d: Difficulty) => ({ easy: 12000, normal: 9500, hard: 2400, veryHard: 1100 }[d]);
 

@@ -12,7 +12,7 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  adverb: { name: '부사', symbol: 'ADV', example: 'now · then · soon', sheet: 5, col: 1, row: 2, tone: 'pink' },
  preposition: { name: '전치사', symbol: 'PREP', example: 'in · on · at · by · to', sheet: 4, col: 1, row: 1, tone: 'gold' },
  very: { name: 'Very', symbol: 'VERY', example: 'very', sheet: 5, col: 3, row: 2, tone: 'pink' },
- 'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to + 동사 포함 · 5형식 목적격 보어 전용', sheet: 6, col: 0, row: 0, tone: 'green' },
+ 'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to + 일반동사 포함 · 보어 자리에서 한 장으로 사용', sheet: 6, col: 0, row: 0, tone: 'green' },
  pronoun: { name: '대명사', symbol: 'P', example: 'I · you · we', sheet: 1, col: 2, row: 0, tone: 'coral' },
  proper: { name: '고유명사', symbol: 'PROPN', example: 'Naro', sheet: 2, col: 2, row: 0, tone: 'blue' },
  count: { name: '셀 수 있는 명사', symbol: 'N', example: 'book · cat', sheet: 2, col: 2, row: 0, tone: 'blue' },
@@ -98,6 +98,10 @@ export const DECK_FACES: Omit<Card,'id'>[] = [
  ...Object.entries(VARIANTS).filter(([,face])=>face.kind!=='very'&&face.kind!=='to-infinitive'&&face.add!==-2).map(([variant,face])=>({kind:face.kind,variant})),
  ...Object.entries(EXTRA_DECK_COPIES).flatMap(([kind,count])=>Array.from({length:count!},()=>({kind:kind as Kind})))
 ];
+export const ADVANCED_DECK_FACES: Omit<Card,'id'>[] = [
+ {kind:'to-infinitive'},
+ ...Object.entries(VARIANTS).filter(([,face])=>face.kind==='to-infinitive'&&face.sheet===6).map(([variant])=>({kind:'to-infinitive' as const,variant}))
+];
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }
 export function cardFace(card: Card) { const variant = card.variant ? VARIANTS[card.variant] : undefined; return variant?.kind === card.kind ? { ...CATALOG[card.kind], ...variant } : CATALOG[card.kind]; }
@@ -133,7 +137,7 @@ export function judgeCards(cards: Card[], go = 1): Judgment {
 }
 export const RULES = { handSize: 5, minPlayers: 4, maxPlayers: 6, maxSelected: 15, matchSeconds: 0, reconnectSeconds: 180, humanDecisionSeconds: 45, actionCooldownMs: 1500, exchangeCooldownMs: 6000, dealMs: 30_000, matchingMs: 6000, revealMs: 3000, dealingMs: 2400, decisionMs: 10_000, goThreshold: 20, maxGo: 3 };
 export const goMultiplier = (goCount: number) => Math.max(1,Math.min(3,Math.floor(goCount)));
-export type Difficulty = 'easy' | 'normal' | 'hard';
+export type Difficulty = 'easy' | 'normal' | 'hard' | 'veryHard';
 export const REACTIONS=['👍','👏','😮','🔥'] as const;
 export type Reaction=typeof REACTIONS[number]|`emote-${string}`;
 export type DrawVote={id:string;approved:string[];aiApproveAt?:Record<string,number>};
