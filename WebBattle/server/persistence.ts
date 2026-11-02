@@ -32,11 +32,15 @@ export function snapshot(game:Game):Map<string,string>{
  for(const [hash,session] of game.accountSessions)records.set('auth:'+hash,JSON.stringify(session));
  for(const [id,invite]of game.community.invites)if(invite.expiresAt>Date.now())records.set('invite:'+id,JSON.stringify(invite));
  for(const [id,r]of game.community.records)records.set('community:'+id,JSON.stringify(r));
+ records.set('user-stats:since',String(game.userStatsSince));
+ for(const [day,stats]of game.userStats)records.set('user-stats:'+day,JSON.stringify(stats));
  return records;
 }
 export function restore(game:Game,records:Map<string,string>):Map<string,Player>{
- game.community.records.clear();game.community.invites.clear();game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();const players=new Map<string,Player>();
+ game.community.records.clear();game.community.invites.clear();game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();game.userStats.clear();const players=new Map<string,Player>();
  for(const [key,json] of records){
+  if(key==='user-stats:since'){const since=Number(json);if(Number.isFinite(since)&&since>0)game.userStatsSince=since;}
+  else if(key.startsWith('user-stats:')){const stats=JSON.parse(json);if(Number.isSafeInteger(stats.newGuestSessions)&&Number.isSafeInteger(stats.newAccounts)&&stats.newGuestSessions>=0&&stats.newAccounts>=0)game.userStats.set(key.slice(11),stats);}
   if(key.startsWith('invite:')){const invite=JSON.parse(json) as CommunityInvite;if(invite.expiresAt>Date.now())game.community.invites.set(key.slice(7),invite);}
   if(key.startsWith('community:')){const record=JSON.parse(json) as CommunityRecord;migrateProfiles(record.store,record.id);game.community.records.set(key.slice(10),record);}
   if(key.startsWith('account:'))game.accounts.set(key.slice(8),JSON.parse(json));

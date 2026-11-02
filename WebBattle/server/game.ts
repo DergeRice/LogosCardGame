@@ -18,6 +18,7 @@ export interface GameSocket { readonly readyState: number; readonly bufferedAmou
 type WebSocket = GameSocket;
 import { judgeCards, DECK_FACES, ADVANCED_DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
+import {kstDay,type DailyUserStats} from './userStats.js';
 
 type Player = {deleted?:boolean;goHits?:number;hitBaseScore?:number;debugGoUsed?:boolean; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
@@ -44,6 +45,7 @@ export class Game {
  minimumPlayers = RULES.minPlayers;
  rooms = new Map<string, Room>(); sessions = new Map<string, Player>();
  accounts = new Map<string,Account>(); accountSessions = new Map<string,AccountSession>();
+ userStats = new Map<string,DailyUserStats>(); userStatsSince=Date.now();
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number; humanDecisionMs:number;
  constructor(options: Options = {}) { this.adRewardsEnabled=options.adRewardsEnabled??false;this.purgePlayerAudit=options.purgePlayerAudit; this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 30 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs;this.humanDecisionMs=options.humanDecisionMs??RULES.humanDecisionSeconds*1000; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
@@ -57,6 +59,7 @@ export class Game {
  fail(p: Player, message: string, requestId?: string) { this.audit(p,'rejected','warn',{reason:message,requestId});this.send(p.socket, { type: 'error', message, requestId });const r=p.room&&this.rooms.get(p.room);if(requestId&&r)this.send(p.socket,{type:'state',room:this.view(r,p)}); }
  newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, profileId:BASIC_PROFILES[randomInt(BASIC_PROFILES.length)].id, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, coins:0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
  newBot(name:string,r:Room):Player{const bot=this.newPlayer(name),used=new Set(r.players.map(player=>player.profileId)),available=aiProfileIds.filter(id=>!used.has(id)),pool=available.length?available:aiProfileIds;bot.profileId=pool[randomInt(pool.length)];bot.token='';bot.ai=r.aiSetting??'normal';bot.room=r.code;bot.avatar=avatars[r.players.length%avatars.length];return bot;}
+ trackNewUser(kind:keyof DailyUserStats){const day=kstDay();const stats=this.userStats.get(day)??{newGuestSessions:0,newAccounts:0};stats[kind]++;this.userStats.set(day,stats);}
  hello(socket: WebSocket, token: unknown, name: unknown, authToken?:unknown,readableGuest?:unknown): Player {
   this.tick();
   const auth=typeof authToken==='string'?this.accountSessions.get(createHash('sha256').update(authToken).digest('hex')):undefined;
@@ -65,7 +68,7 @@ export class Game {
   if(p?.accountId&&!account)p=undefined;
   const expired = Boolean(token && !p);
   if(account&&!p){p=this.newPlayer(account.nickname??account.username);p.accountId=account.id;p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;this.sessions.set(p.token,p);}
-  if (!p) { if (this.sessions.size >= 2000) throw Error('서버가 붐빕니다. 잠시 후 다시 시도하세요.'); const cleaned = readableGuest===true?availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].map(p=>p.name))):typeof name === 'string' ? name.trim().replace(/[\u0000-\u001f\u007f]/g, '') : ''; if (!cleaned || cleaned.length > 16) throw Error('닉네임은 1~16자로 입력해 주세요.'); p = this.newPlayer(cleaned); this.sessions.set(p.token, p); }
+  if (!p) { if (this.sessions.size >= 2000) throw Error('서버가 붐빕니다. 잠시 후 다시 시도하세요.'); const cleaned = readableGuest===true?availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].map(p=>p.name))):typeof name === 'string' ? name.trim().replace(/[\u0000-\u001f\u007f]/g, '') : ''; if (!cleaned || cleaned.length > 16) throw Error('닉네임은 1~16자로 입력해 주세요.'); p = this.newPlayer(cleaned); this.sessions.set(p.token, p);this.trackNewUser('newGuestSessions'); }
   if(readableGuest===true&&!p.accountId&&/^게스트\s*\d+$/.test(p.name))p.name=availableGuestName(randomInt(GUEST_NAME_COUNT),new Set([...this.sessions.values()].filter(x=>x!==p).map(x=>x.name)));
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
@@ -86,7 +89,7 @@ export class Game {
   if(msg.type==='register'){
    if(p.accountId)return this.fail(p,'이미 계정에 로그인했어요.');
    if(account)return this.fail(p,'이미 사용 중인 아이디예요.');
-   const salt=Buffer.from(randomBytes(16)).toString('hex');account={avatar:p.avatar,id:randomUUID(),username,salt,passwordHash:Buffer.from(scryptSync(password,salt,32)).toString('hex'),rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};this.accounts.set(key,account);
+   const salt=Buffer.from(randomBytes(16)).toString('hex');account={avatar:p.avatar,id:randomUUID(),username,salt,passwordHash:Buffer.from(scryptSync(password,salt,32)).toString('hex'),rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};this.accounts.set(key,account);this.trackNewUser('newAccounts');
   }else{
    if(!account||(account.provider==='apple'||account.provider==='google'))return this.fail(p,'아이디 또는 비밀번호가 맞지 않아요.');
    if(account.lockedUntil>Date.now())return this.fail(p,'로그인 시도가 많아요. 잠시 후 다시 시도해 주세요.');
@@ -135,7 +138,7 @@ export class Game {
   if(!account){
    const clean=(identity.name??'').trim().normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,'').slice(0,16);
    account={id:randomUUID(),username:clean||`Google 사용자 ${subHash.slice(0,4)}`,avatar:p.avatar,salt:'',passwordHash:'',provider:'google',googleSubHash:subHash,rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};
-   this.accounts.set(`google:${subHash}`,account);
+   this.accounts.set(`google:${subHash}`,account);this.trackNewUser('newAccounts');
   }else{
    const previous=[...this.sessions.values()].find(other=>other!==p&&other.accountId===account!.id);
    if(previous?.room)return this.fail(p,'이 Google 계정은 다른 대전에서 사용 중이에요.');
@@ -156,7 +159,7 @@ export class Game {
   if(!account){
    const clean=typeof suggestedName==='string'?suggestedName.trim().normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,'').slice(0,16):'';
    account={id:randomUUID(),username:clean||`Apple 사용자 ${subHash.slice(0,4)}`,salt:'',passwordHash:'',provider:'apple',appleSubHash:subHash,rating:p.rating,points:p.points,coins:p.coins??0,failedLogins:0,lockedUntil:0};
-   this.accounts.set(key,account);
+   this.accounts.set(key,account);this.trackNewUser('newAccounts');
   }else{
    const accountId=account.id;
    const previous=[...this.sessions.values()].find(other=>other!==p&&other.accountId===accountId);

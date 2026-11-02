@@ -10,6 +10,7 @@ import {verifyAppleCredential} from '../server/appleAuth.js';
 import {verifyLevelPlayCallback} from '../server/levelPlayCallback.js';
 import {playAccessToken,verifyPlayPurchase,consumePlayPurchase} from '../server/googlePlayPurchase.js';
 import {diamondPack} from '../shared/store.js';
+import {kstDay,validKstDay} from '../server/userStats.js';
 interface Env { GOOGLE_PLAY_SERVICE_ACCOUNT_JSON?:string;LEVELPLAY_S2S_PRIVATE_KEY?:string;GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
 type Attachment={googleReturn?:{identity:{sub:string;name?:string};expires:number};appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
 type Player=ReturnType<Game['newPlayer']>;
@@ -35,7 +36,7 @@ export default {
    for(const [key,value]of response.headers)headers.set(key,value);
    return new Response(response.body,{status:response.status,headers});
   }
-  if(url.pathname!=='/health'&&url.pathname!=='/socket')return new Response('Not found',{status:404});
+  if(url.pathname!=='/health'&&url.pathname!=='/socket'&&url.pathname!=='/stats/new-users')return new Response('Not found',{status:404});
   if(url.pathname==='/socket'){
    if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return new Response('WebSocket required',{status:426});
    const origin=request.headers.get('Origin');
@@ -109,6 +110,13 @@ export class BattleArena extends DurableObject<Env>{
  async fetch(request:Request):Promise<Response>{
   const url=new URL(request.url);
   if(url.pathname==='/health')return Response.json({status:'ok',provider:'cloudflare',storage:'sqlite',rooms:this.game.rooms.size});
+  if(url.pathname==='/stats/new-users'){
+   if(request.method!=='GET')return new Response('GET required',{status:405});
+   const day=url.searchParams.get('day')??kstDay();
+   if(!validKstDay(day))return Response.json({error:'day는 YYYY-MM-DD 형식의 실제 한국 날짜여야 합니다.'},{status:400});
+   const stats=this.game.userStats.get(day)??{newGuestSessions:0,newAccounts:0};
+   return Response.json({dayKst:day,trackingSince:this.game.userStatsSince,...stats,definition:'새 게스트 세션 수와 새 계정 수는 겹칠 수 있으므로 합산하지 않습니다. 게스트 토큰이 사라지면 새 세션으로 집계됩니다.'},{headers:{'Cache-Control':'no-store'}});
+  }
   if(url.pathname==='/ads/levelplay/callback'){
    if(request.method!=='GET')return new Response('GET required',{status:405});
    if(!this.env.LEVELPLAY_S2S_PRIVATE_KEY)return new Response('Ad rewards unavailable',{status:503});

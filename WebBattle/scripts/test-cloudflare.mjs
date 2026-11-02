@@ -22,7 +22,13 @@ try{
  assert.equal((await mf.dispatchFetch('http://localhost/socket',{headers:{Upgrade:'websocket',Origin:'https://untrusted.example'}})).status,403);
  assert.equal((await mf.dispatchFetch('http://localhost/admin/accounts?name=dergerice%20dev')).status,401);
  assert.equal((await mf.dispatchFetch('http://localhost/admin/grants/super',{method:'POST',body:JSON.stringify({name:'dergerice dev',id:'forged'})})).status,401);
+ assert.equal((await mf.dispatchFetch('http://localhost/stats/new-users?day=2026-02-30')).status,400);
+ assert.equal((await mf.dispatchFetch('http://localhost/stats/new-users?day=2026-13-01')).status,400);
+ const userDay=new Date(Date.now()+9*3600000).toISOString().slice(0,10);
+ const userStats=async()=> (await(await mf.dispatchFetch(`http://localhost/stats/new-users?day=${userDay}`)).json());
+ assert.deepEqual([(await userStats()).newGuestSessions,(await userStats()).newAccounts],[0,0]);
  clients=await Promise.all(['A','B','C','D'].map(n=>new Client(url).hello(n)));
+ assert.equal((await userStats()).newGuestSessions,4);
  clients[1].send('adRewardTicket',{box:'silver'});
  await clients[1].until(()=>clients[1].messages.some(m=>m.type==='adTicket'));
  const adTicket=clients[1].messages.find(m=>m.type==='adTicket').ticket,adEvent='WorkerAd123',adTimestamp='202610221234',adUserId='LevelPlayUser123';
@@ -36,6 +42,7 @@ try{
  assert.equal(clients[1].messages.filter(m=>m.type==='community').at(-1).community.store.adUsage[new Date(Date.now()+9*3600000).toISOString().slice(0,10)],1);
  clients[0].send('register',{username:'cloud_player',password:'a strong cloud password'});
  await clients[0].until(()=>clients[0].messages.some(m=>m.type==='auth'));
+ assert.deepEqual([(await userStats()).newGuestSessions,(await userStats()).newAccounts],[4,1]);
  const accountToken=clients[0].messages.find(m=>m.type==='auth').authToken;
  for(const c of clients){c.send('quick');await c.until(()=>!!c.room);}
  for(const c of clients)await c.until(()=>c.room?.phase==='battle');
@@ -81,6 +88,7 @@ try{
  const saved=clients.map(c=>({token:c.token,room:c.room}));for(const c of clients)c.ws.close();await wait(250);await mf.dispose();
  mf=make();url=new URL('/socket',await mf.ready);url.protocol='ws:';
  clients=await Promise.all(saved.map((s,i)=>new Client(url).hello('resumed',s.token,i===0?accountToken:undefined)));
+ assert.deepEqual([(await userStats()).newGuestSessions,(await userStats()).newAccounts],[4,1]);
  for(let i=0;i<4;i++){await clients[i].until(()=>clients[i].room?.phase==='battle');assert.equal(clients[i].room.matchId,saved[i].room.matchId);assert.deepEqual(clients[i].room.hand,saved[i].room.hand);}
  assert.equal(clients[saved.findIndex(s=>s.token===actor.token)].room.storage[0].id,trashCard.id);
  const persistedAudit=await (await mf.dispatchFetch('http://localhost/admin/logs?q='+message.requestId,{headers:adminHeaders})).json();assert.ok(persistedAudit.logs.some(e=>e.id===auditId&&e.note==='재시작 저장 검사'));
@@ -116,7 +124,9 @@ try{
  // A distinct synthetic account verifies destructive account deletion locally.
  // No production account or real user data is involved.
  const victim=await new Client(url).hello('Deletion fixture');clients.push(victim);
+ assert.equal((await userStats()).newGuestSessions,5);
  victim.send('register',{username:'cloud_delete',password:'synthetic delete password'});await victim.until(()=>victim.messages.some(m=>m.type==='auth'));
+ assert.equal((await userStats()).newAccounts,2);
  const deletionAuth=victim.messages.find(m=>m.type==='auth').authToken,deletedToken=victim.token;
  victim.send('deleteAccount',{authToken:deletionAuth,confirmation:'탈퇴',acknowledge:false});await victim.until(()=>victim.messages.some(m=>m.type==='accountDeletionResult'&&m.ok===false));
  victim.send('deleteAccount',{authToken:deletionAuth,confirmation:'탈퇴',acknowledge:true});await victim.until(()=>victim.messages.some(m=>m.type==='accountDeleted'));
