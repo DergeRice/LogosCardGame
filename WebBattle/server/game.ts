@@ -2,14 +2,14 @@ import {MATCH_COUNTDOWN_MS,GO_COUNTDOWN_EXTENSION_MS} from '../shared/matchCount
 import {deleteGameAccount} from './accountDeletion.js';
 import {renameNickname} from './nickname.js';
 import {BASIC_PROFILES,COLLECTIBLE_PROFILES} from '../shared/profiles.js';
-import {showcaseFrame,leagueFor} from '../shared/store.js';
+import {showcaseFrame,leagueFor,leagueTierRange} from '../shared/store.js';
 import {emoteSlots,aiEmote,AI_EMOTE_LOADOUTS,type EmotionEvent} from '../shared/emotes.js';
 import {BASIC_SUPPLY_KINDS} from '../shared/basicSupply.js';
 import {Community} from './community.js';
 import {availableGuestName,GUEST_NAME_COUNT} from '../shared/guestNames.js';
 import {matchGold,goPointReward} from '../shared/matchRewards.js';
 import {aiGoChoice} from './aiStrategy.js';
-import {compatibleRatings,roomRating,aiDifficulty,normalizeAIDifficulty,availableAIDifficulties,GUEST_RETENTION_MS} from '../shared/progression.js';
+import {compatibleRatings,roomRating,aiDifficulty,normalizeAIDifficulty,availableAIDifficulties,aiOpponentTier,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {BUILD_VERSION} from '../src/buildVersion.js';
 import {makeAudit,safeDetails,type AuditEvent} from './audit.js';
 import {fieldCards,canTransferCard} from '../shared/cardViews.js';
@@ -241,7 +241,15 @@ export class Game {
   while(!r.custom&&r.players.length<this.minimumPlayers){
    r.players.push(this.newBot(`로고스 AI ${r.players.filter(p=>p.ai).length+1}`,r));
   }
-  const center=roomRating(r.players.filter(x=>!x.ai).map(x=>x.rating)),bots=r.players.filter(x=>x.ai);bots.forEach((bot,i)=>{const offset=(bots.length===1?0:bots.length===2?[-.05,.05][i]:[-.08,0,.08][i%3])+randomInt(-10,11)/1000;bot.rating=Math.max(0,Math.round(center*(1+offset)));bot.ai=r.custom?normalizeAIDifficulty(r.players.find(x=>x.id===r.hostId)?.rating??center,bot.ai??r.aiSetting):(r.aiSetting??aiDifficulty(bot.rating));bot.rating=Math.max(0,Math.round(bot.rating*(bot.ai==='easy'?.85:bot.ai==='hard'?1.25:bot.ai==='veryHard'?1.4:1)));});
+  const humanRatings=r.players.filter(x=>!x.ai).map(x=>x.rating),center=roomRating(humanRatings),bots=r.players.filter(x=>x.ai);
+  bots.forEach((bot,i)=>{
+   const offset=(bots.length===1?0:bots.length===2?[-.05,.05][i]:[-.08,0,.08][i%3])+randomInt(-10,11)/1000;
+   bot.ai=r.custom?normalizeAIDifficulty(r.players.find(x=>x.id===r.hostId)?.rating??center,bot.ai??r.aiSetting):(r.aiSetting??aiDifficulty(center));
+   const reference=r.custom?(r.players.find(x=>x.id===r.hostId)?.rating??center):bot.ai==='hard'||bot.ai==='veryHard'?Math.max(...humanRatings):Math.min(...humanRatings);
+   const range=leagueTierRange(aiOpponentTier(reference,bot.ai));
+   const candidate=Math.round(center*(1+offset)*(bot.ai==='easy'?.85:bot.ai==='hard'?1.25:bot.ai==='veryHard'?1.4:1));
+   bot.rating=Math.max(range.floor,Math.min(range.ceiling??Infinity,candidate));
+  });
   r.countdownStartedAt=undefined;r.countdownVersion=1;r.forfeiterId=undefined;r.resultPlayers=undefined;r.rulesVersion=6;r.goTarget=undefined;r.startedAt=0; r.phase = 'reveal'; r.matchId = randomUUID(); r.stageEndsAt = Date.now() + this.revealMs; r.endsAt = 0; r.finalRound=false; r.goCount = 0; r.highScore = 0; r.highHitScore=0; r.leaderId=undefined; r.drawVote=undefined; r.nextDrawRequestAt=0; r.testMode = false; r.decision = undefined; r.exchange=undefined; r.winner = undefined; r.reason = undefined; r.dealSerial = 0; r.log = []; r.discard = [];
   const deckFaces=r.players.some(p=>p.ai==='hard'||p.ai==='veryHard')?[...DECK_FACES,...ADVANCED_DECK_FACES]:DECK_FACES;r.deckTotal=deckFaces.length;r.deck = shuffle(deckFaces.map(face=>({...face,id:randomUUID()}))); r.dealCursor=randomInt(r.players.length);
   for (const p of r.players) this.resetPlayer(p);

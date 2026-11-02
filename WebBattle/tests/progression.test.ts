@@ -1,8 +1,9 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {aiDifficulty,availableAIDifficulties,normalizeAIDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
+import {aiDifficulty,availableAIDifficulties,aiOpponentTier,normalizeAIDifficulty,GUEST_RETENTION_MS} from '../shared/progression.js';
 import {Game,type GameSocket} from '../server/game.js';
 import {snapshot,restore,nextDeadline} from '../server/persistence.js';
+import {leagueFor} from '../shared/store.js';
 const socket=()=>({readyState:1,bufferedAmount:0,send(){},close(){},terminate(){}} as GameSocket);
 test('only the unique winner receives fixed Go rank points',()=>{
  for(const go of [0,1,2,3]){const game=new Game({minimumPlayers:2}),a=game.hello(socket(),null,'A'),b=game.hello(socket(),null,'B');game.quick(a);game.quick(b);const r=game.rooms.get(a.room!)!;game.reveal(r);game.begin(r);a.score=50;b.score=10;r.leaderId=a.id;r.goCount=go;game.finish(r,'finish');assert.equal(a.reward,go>=3?750:go===2?250:50);assert.equal(b.reward,0);}
@@ -15,13 +16,24 @@ test('guest points and rating survive return and snapshot; expiry is separate fr
 });
 
 test('AI difficulty choices follow the player league',()=>{
- assert.deepEqual(availableAIDifficulties(1800),['easy','normal','hard']);
- assert.deepEqual(availableAIDifficulties(1801),['normal','hard']);
- assert.deepEqual(availableAIDifficulties(2801),['hard']);
+ assert.deepEqual(availableAIDifficulties(1800),['easy','normal','hard','veryHard']);
+ assert.deepEqual(availableAIDifficulties(1801),['normal','hard','veryHard']);
+ assert.deepEqual(availableAIDifficulties(2801),['hard','veryHard']);
  assert.deepEqual(availableAIDifficulties(3301),['veryHard']);
  assert.equal(normalizeAIDifficulty(3301,'easy'),'veryHard');
+ assert.equal(aiOpponentTier(1000,'normal'),leagueFor(1000).tier);
+ assert.equal(aiOpponentTier(1000,'hard'),leagueFor(1000).tier+1);
+ assert.equal(aiOpponentTier(1000,'veryHard'),leagueFor(1000).tier+2);
+ assert.equal(aiOpponentTier(3900,'veryHard'),7);
  const game=new Game({minimumPlayers:2});const player=game.hello(socket(),null,'tier');player.rating=3301;game.quick(player,'easy');const room=game.rooms.get(player.room!)!;assert.equal(room.aiSetting,'veryHard');game.reveal(room);assert.equal(room.players.find(p=>p.ai)?.ai,'veryHard');assert.equal(room.deck.filter(c=>c.kind==='to-infinitive').length,4);assert.equal(game.view(room,player).deckTotal,75);
+ const challenger=new Game({minimumPlayers:2}),human=challenger.hello(socket(),null,'challenger');human.rating=1000;challenger.quick(human,'veryHard');const challenge=challenger.rooms.get(human.room!)!;challenger.reveal(challenge);assert.equal(challenge.aiSetting,'veryHard');assert.equal(leagueFor(challenge.players.find(p=>p.ai)!.rating).tier,aiOpponentTier(human.rating,'veryHard'));
 });
 test('higher-tier AI victory grants 25 percent more points and coins',()=>{
  for(const higher of [false,true]){const game=new Game({minimumPlayers:2}),player=game.hello(socket(),null,'human');game.quick(player,'hard');const room=game.rooms.get(player.room!)!;game.reveal(room);game.begin(room);const bot=room.players.find(p=>p.ai)!;player.rating=1000;bot.rating=higher?1400:1050;game.community.record(player).rankGames=3;player.score=25;bot.score=0;game.finish(room,'done');assert.equal(player.ratingDelta,higher?28:14);assert.equal(player.reward,higher?63:50);assert.equal(player.coinReward,higher?213:170);assert.equal(player.rewardRatio,higher?1.25:1);}
+});
+test('a naturally matched very-hard AI pays the displayed bonus',()=>{
+ const game=new Game({minimumPlayers:2}),player=game.hello(socket(),null,'challenger');player.rating=1000;game.quick(player,'veryHard');const room=game.rooms.get(player.room!)!;game.reveal(room);game.begin(room);
+ const bot=room.players.find(p=>p.ai)!;assert.equal(leagueFor(bot.rating).tier,aiOpponentTier(player.rating,'veryHard'));
+ game.community.record(player).rankGames=3;player.score=25;bot.score=0;game.finish(room,'won');
+ assert.equal(player.rewardRatio,1.25);assert.equal(player.reward,63);assert.equal(player.coinReward,213);assert.ok(player.ratingDelta>0);
 });

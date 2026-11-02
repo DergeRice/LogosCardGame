@@ -15,7 +15,11 @@ export function compatibleRatings(ratings:readonly number[],joining:number){
 export function aiDifficulty(rating:number):Difficulty{return rating<975?'easy':rating<1300?'normal':'hard'}
 export function availableAIDifficulties(rating:number):readonly Difficulty[]{
  const tier=leagueFor(rating).tier;
- return tier>=6?['veryHard']:tier>=5?['hard']:tier>=3?['normal','hard']:['easy','normal','hard'];
+ return tier>=6?['veryHard']:tier>=5?['hard','veryHard']:tier>=3?['normal','hard','veryHard']:['easy','normal','hard','veryHard'];
+}
+export function aiOpponentTier(rating:number,difficulty:Difficulty):number{
+ const tier=leagueFor(rating).tier;
+ return Math.max(0,Math.min(7,tier+(difficulty==='easy'?-1:difficulty==='hard'?1:difficulty==='veryHard'?2:0)));
 }
 export function normalizeAIDifficulty(rating:number,value:unknown):Difficulty{
  const available=availableAIDifficulties(rating);
