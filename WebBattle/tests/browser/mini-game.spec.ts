@@ -12,15 +12,37 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
    socket.send(JSON.stringify({type:'session',id:'me',name:'미니 검사',token:'mini-token',avatar:'pronoun',rating:1000,coins:0,points:0}));
    socket.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:defaultHubSave()}}));
   }
-  if(message.type==='miniGameStatus'||message.type==='miniGameStart')socket.send(JSON.stringify({type:'miniGameState',data:{serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,best:0,plays:0,history:[],ranking:[],...(message.type==='miniGameStart'?{run:{id:'run-1',endsAt:Date.now()+60000,lockedUntil:0,correct:0,wrong:0,left:{id:'move',line:1,label:'움직임'},right:{id:'think',line:2,label:'생각하기'},card:{id:1,word:'run'}}}:{})}}));
+  if(message.type==='miniGameStatus'||message.type==='miniGameStart'){
+   const started=Date.now()+3500;
+   socket.send(JSON.stringify({type:'miniGameState',data:{serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,best:0,plays:0,history:[],ranking:Array.from({length:4},(_,i)=>({id:`rank-${i}`,name:`유저 ${i+1}`,score:12-i})),...(message.type==='miniGameStart'?{run:{id:'run-1',startsAt:started,endsAt:started+60000,lockedUntil:0,correct:0,wrong:0,left:{id:'move',line:1,label:'움직임'},right:{id:'think',line:2,label:'생각하기'},card:{id:1,word:'run'}}}:{})}}));
+  }
  }));
  try{
-  await page.goto('/');await page.getByRole('tab',{name:'미니게임',exact:true}).click();
+  await page.goto('/');await page.getByRole('tab',{name:'랭킹',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'시즌 I'})).toBeVisible();
+  await expect(page.locator('.hub-season-countdown')).toContainText(/\d{2}:\d{2}:\d{2} 후 시즌 종료/);
+  await page.getByRole('tab',{name:'미니게임',exact:true}).click();
+  await expect(page.locator('.mini-page .hub-daily-mission')).toBeVisible();
   const tiles=page.locator('.mini-tile');await expect(tiles).toHaveCount(3);
   const boxes=await tiles.evaluateAll(elements=>elements.map(element=>{const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}));
   if(viewport.width<viewport.height){expect(boxes[0].y).toBeLessThan(boxes[1].y);expect(boxes[1].y).toBeLessThan(boxes[2].y);}else{expect(boxes[0].x).toBeLessThan(boxes[1].x);expect(boxes[1].x).toBeLessThan(boxes[2].x);}
-  await page.getByRole('button',{name:/동사 분류/}).click();await page.getByRole('button',{name:'60초 시작'}).click();
+  await page.getByRole('button',{name:/동사 분류/}).click();
+  await expect(page.getByRole('button',{name:'미니게임 목록으로'})).toBeVisible();
+  await expect(page.locator('.mini-ranking li')).toHaveCount(3);
+  const rankBounds=await page.locator('.mini-ranking li').evaluateAll(elements=>elements.map(element=>{const r=element.getBoundingClientRect();return {top:r.top,bottom:r.bottom};}));
+  const rankingPanel=await page.locator('.mini-ranking').boundingBox();
+  expect(rankBounds[2].bottom).toBeLessThanOrEqual(rankingPanel!.y+rankingPanel!.height+1);
+  const moreBox=await page.getByRole('button',{name:'더보기'}).boundingBox(),launchBox=await page.getByRole('button',{name:'시작',exact:true}).boundingBox();
+  expect(moreBox!.y+moreBox!.height).toBeLessThanOrEqual(launchBox!.y+1);
+  await page.screenshot({path:`.runtime/v181-mini-ready-${viewport.width}-${test.info().project.name}.png`});
+  await page.getByRole('button',{name:'더보기'}).click();await expect(page.locator('.mini-ranking li')).toHaveCount(10);
+  await page.getByRole('button',{name:'시작',exact:true}).click();
+  await expect(page.locator('.mini-countdown')).toBeVisible();
+  await expect(page.locator('.mini-ranking')).toHaveCount(0);
   await expect(page.getByRole('button',{name:'run 발음 듣기'})).toBeVisible();
+  await expect(page.locator('.mini-time')).toContainText('남은 시간');
+  await page.screenshot({path:`.runtime/v181-mini-playing-${viewport.width}-${test.info().project.name}.png`});
+  expect(await page.locator('.mini-card-stack').evaluate(element=>getComputedStyle(element,'::before').content)).not.toBe('none');
   await page.locator('.mini-side').first().click();await expect.poll(()=>sent.filter(m=>m.type==='miniGameChoose').length).toBe(1);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed')&&!error.includes('due to access control checks.'))).toEqual([]);

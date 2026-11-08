@@ -45,7 +45,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
   else if(key==='ranking-season:id'&&/^\d{4}-\d{2}-\d{2}$/.test(json))game.rankingSeasonId=json;
   else if(key.startsWith('user-stats:')){const stats=JSON.parse(json);if(Number.isSafeInteger(stats.newGuestSessions)&&Number.isSafeInteger(stats.newAccounts)&&stats.newGuestSessions>=0&&stats.newAccounts>=0)game.userStats.set(key.slice(11),stats);}
   if(key.startsWith('invite:')){const invite=JSON.parse(json) as CommunityInvite;if(invite.expiresAt>Date.now())game.community.invites.set(key.slice(7),invite);}
-  if(key.startsWith('community:')){const record=JSON.parse(json) as CommunityRecord;migrateProfiles(record.store,record.id);game.community.records.set(key.slice(10),record);}
+  if(key.startsWith('community:')){const record=JSON.parse(json) as CommunityRecord&{playTimeMs?:number};delete record.playTimeMs;migrateProfiles(record.store,record.id);game.community.records.set(key.slice(10),record);}
   if(key.startsWith('account:'))game.accounts.set(key.slice(8),JSON.parse(json));
   if(key.startsWith('auth:'))game.accountSessions.set(key.slice(5),JSON.parse(json));
  }

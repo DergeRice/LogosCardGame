@@ -87,7 +87,7 @@ export class Game {
   if (p.socket && p.socket !== socket) p.socket.close(4001, '다른 창에서 세션을 사용 중입니다.');
   p.socket = socket; p.disconnectedAt = undefined; p.touchedAt = Date.now();
   this.send(socket, { type: 'session', token: p.token, id: p.id, uuid:p.accountId??p.id, name: p.name, avatar: p.avatar, rating: p.rating, points: p.points, coins:p.coins??0, account:p.accountId?{linkedProviders:[...(account?.googleSubHash?['google']:[]),...(account?.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account?.googleSubHash?'google':account?.provider??'password'}:null });
-  this.community.record(p);this.community.publish();
+  this.community.markActive(p);this.community.publish();
   this.sendRoomList(socket);
   const room = p.room && this.rooms.get(p.room);
   if (room) { if (room.phase === 'result' && !room.finalRound && this.allRematch(room)) this.reveal(room); else this.broadcast(room); }
@@ -120,7 +120,7 @@ export class Game {
    if(p.accountId&&p.accountId!==account.id)return this.fail(p,'현재 계정에서 로그아웃한 뒤 다시 로그인해 주세요.');
    p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
-  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.markActive(p);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
   this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
@@ -159,7 +159,7 @@ export class Game {
    if(previous){previous.socket?.close(4001,'다른 창에서 Google 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
    p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
-  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.markActive(p);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
   this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:'google'}});
@@ -181,7 +181,7 @@ export class Game {
    if(previous){previous.socket?.close(4001,'다른 창에서 Apple 계정에 로그인했습니다.');this.sessions.delete(previous.token);}
    p.avatar=account.avatar??p.avatar;p.rating=account.rating;p.points=account.points;p.coins=account.coins??0;
   }
-  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.publish();
+  const oldIdentity=this.community.id(p);p.accountId=account.id;p.name=account.nickname??account.username;this.community.migrate(p,oldIdentity);this.community.markActive(p);this.community.publish();
   const authToken=Buffer.from(randomBytes(32)).toString('hex');this.accountSessions.set(createHash('sha256').update(authToken).digest('hex'),{accountId:account.id,expiresAt:Date.now()+30*24*60*60_000});
   this.send(p.socket,{type:'auth',username:account.username,authToken,rating:p.rating,points:p.points,coins:p.coins??0});
   this.send(p.socket,{type:'session',token:p.token,id:p.id,uuid:p.accountId??p.id,name:p.name,avatar:p.avatar,rating:p.rating,points:p.points,coins:p.coins??0,account:{linkedProviders:[...(account.googleSubHash?['google']:[]),...(account.appleSubHash?['apple']:[])],username:account?.username??p.name,provider:account.googleSubHash?'google':account.provider??'password'}});
@@ -299,7 +299,7 @@ export class Game {
     const actual = p.id===forfeiter ? 0 : other.id===forfeiter ? 1 : debugWinner&&p.id===debugWinner.id ? 1 : debugWinner&&other.id===debugWinner.id ? 0 : p.score===other.score ? .5 : p.score>other.score ? 1 : 0;
     const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected;
    }
-   const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0){rankRecord.gamesPlayed=(rankRecord.gamesPlayed??0)+1;rankRecord.playTimeMs=(rankRecord.playTimeMs??0)+Math.min(2*60*60_000,Math.max(0,Date.now()-(r.startedAt??Date.now())));if(r.players.length>=2&&p.id!==forfeiter){rankRecord.rankGames=(rankRecord.rankGames??0)+1;rankRecord.seasonGames=(rankRecord.seasonGames??0)+1;}}
+   const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0){rankRecord.gamesPlayed=(rankRecord.gamesPlayed??0)+1;if(r.players.length>=2&&p.id!==forfeiter){rankRecord.rankGames=(rankRecord.rankGames??0)+1;rankRecord.seasonGames=(rankRecord.seasonGames??0)+1;}}
    const playerTier=leagueFor(ratings.get(p.id)!).tier;
    const aiBonusPercent=p.id===r.winner&&!p.ai?Math.max(0,...r.players.filter(other=>other.ai).map(other=>aiTierBonusPercent(playerTier,leagueFor(ratings.get(other.id)!).tier))):0;
    const higherTierBonus=1+aiBonusPercent/100;

@@ -124,11 +124,10 @@ export class BattleArena extends DurableObject<Env>{
    const bands=[{label:'0판',min:0,max:0},{label:'1~2판',min:1,max:2},{label:'3~9판',min:3,max:9},{label:'10~29판',min:10,max:29},{label:'30판 이상',min:30,max:Infinity}];
    const summarize=(users:typeof rows)=>{const extra=users.map(record=>record.store.owned.filter(id=>catalog.has(id)&&!baseline.has(id)).length);return {users:users.length,withExtraCosmetics:extra.filter(count=>count>0).length,averageExtraCosmetics:users.length?Math.round(extra.reduce((a,b)=>a+b,0)/users.length*10)/10:0};};
    const byGames=bands.map(band=>({games:band.label,...summarize(rows.filter(record=>(record.rankGames??0)>=band.min&&(record.rankGames??0)<=band.max))}));
-   const trackedTime=rows.filter(record=>Number.isFinite(record.playTimeMs));
-   const timeBands=[{label:'1시간 미만',min:0,max:3600000},{label:'1~5시간',min:3600000,max:21600000},{label:'6~19시간',min:21600000,max:72000000},{label:'20시간 이상',min:72000000,max:Infinity}];
-   const byTrackedPlayTime=timeBands.map(band=>({time:band.label,...summarize(trackedTime.filter(record=>(record.playTimeMs??0)>=band.min&&(record.playTimeMs??0)<band.max))}));
+   const activeBands=[{label:'미집계',min:0,max:0},{label:'1일',min:1,max:1},{label:'2~3일',min:2,max:3},{label:'4~7일',min:4,max:7},{label:'8일 이상',min:8,max:Infinity}];
+   const byActiveDays=activeBands.map(band=>({days:band.label,...summarize(rows.filter(record=>(record.activeDays??0)>=band.min&&(record.activeDays??0)<=band.max))}));
    const byCosmeticType=Object.fromEntries(['profile','character','background','emote','frame','board'].map(type=>[type,rows.filter(record=>record.store.owned.some(id=>!baseline.has(id)&&COSMETICS.some(item=>item.id===id&&item.type===type))).length]));
-   return Response.json({users:rows.length,byQualifiedGames:byGames,byTrackedPlayTime,byCosmeticType,playTimeTrackedUsers:trackedTime.length,playTimeHours:Math.round(trackedTime.reduce((sum,record)=>sum+(record.playTimeMs??0),0)/3600000*10)/10,definition:'기존 rankGames는 유효 대전 수이며 전체 플레이 횟수·시간은 이번 기능 배포 이후부터 기록됩니다. 기본 지급 치장을 제외한 추가 보유 수를 비교합니다.'},{headers:{'Cache-Control':'no-store'}});
+   return Response.json({users:rows.length,byQualifiedGames:byGames,byActiveDays,byCosmeticType,activeDaysTrackedUsers:rows.filter(record=>(record.activeDays??0)>0).length,definition:'기존 rankGames는 유효 대전 수입니다. 활성화 일수는 이번 기능 배포 뒤 한국시간 기준 접속한 날짜를 하루에 한 번씩 기록합니다. 기본 지급 치장을 제외한 추가 보유 수를 비교합니다.'},{headers:{'Cache-Control':'no-store'}});
   }
   if(url.pathname==='/ads/levelplay/callback'){
    if(request.method!=='GET')return new Response('GET required',{status:405});

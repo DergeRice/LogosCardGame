@@ -15,6 +15,10 @@ test('a one-minute verb run validates sides, blocks repeated wrong taps and surv
  assert.ok(first.card.word);assert.notEqual(first.left.id,first.right.id);
  const record=game.community.record(p),answer=record.miniGame!.run!.queue[0].categoryId;
  const wrong=first.left.id===answer?'right':'left',right=wrong==='left'?'right':'left';
+ assert.ok(first.startsAt>Date.now());
+ game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
+ assert.equal(mini(messages).run?.wrong,0);
+ record.miniGame!.run!.startsAt=0;
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
  assert.equal(mini(messages).run?.wrong,1);
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
@@ -30,6 +34,21 @@ test('a one-minute verb run validates sides, blocks repeated wrong taps and surv
  assert.equal(mini(messages).best,1);assert.equal(mini(messages).plays,1);assert.equal(mini(messages).ranking[0].id,p.id);
  const restored=new Game();restore(restored,snapshot(game));
  assert.equal(restored.community.records.get(p.id)?.miniGame?.best,1);
+});
+
+test('active days count distinct Korean calendar dates, not reconnects or play time',t=>{
+ let now=Date.parse('2026-11-08T23:50:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p}=player(game,'활성 일수 검사');
+ assert.equal(game.community.record(p).activeDays,1);
+ game.community.markActive(p);assert.equal(game.community.record(p).activeDays,1);
+ now=Date.parse('2026-11-09T00:01:00+09:00');game.community.markActive(p);
+ assert.equal(game.community.record(p).activeDays,2);
+ const saved=snapshot(game),restored=new Game();restore(restored,saved);
+ assert.equal(restored.community.records.get(p.id)?.activeDays,2);
+ assert.equal(saved.get('community:'+p.id)?.includes('playTimeMs'),false);
+ const legacy=new Map(saved),record=JSON.parse(legacy.get('community:'+p.id)!);record.playTimeMs=12345;legacy.set('community:'+p.id,JSON.stringify(record));
+ const migrated=new Game();restore(migrated,legacy);
+ assert.equal(snapshot(migrated).get('community:'+p.id)?.includes('playTimeMs'),false);
 });
 
 test('the November 15 KST season carries 40 percent with the requested floors',()=>{

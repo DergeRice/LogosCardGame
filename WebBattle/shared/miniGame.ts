@@ -9,7 +9,7 @@ export const VERB_CATEGORIES:readonly VerbCategory[]=[
  {id:'feel',line:2,label:'느끼기',description:'느끼는',words:['love','hate','enjoy','fear','worry','miss','feel','prefer','like','admire']},
 ];
 export type MiniGameCard={id:number;word:string;categoryId:string};
-export type MiniGameRun={id:string;startedAt:number;endsAt:number;lockedUntil:number;correct:number;wrong:number;pair:[string,string];queue:MiniGameCard[];nextCardId:number;lastPair?:string;feedback?:string};
+export type MiniGameRun={id:string;startedAt:number;startsAt?:number;endsAt:number;lockedUntil:number;correct:number;wrong:number;pair:[string,string];queue:MiniGameCard[];nextCardId:number;lastPair?:string;feedback?:string};
 export type MiniGameSeasonRecord={season:string;best:number;rank:number|null;plays:number;correct:number;wrong:number};
 export type MiniGameProgress={season:string;best:number;plays:number;correct:number;wrong:number;history:MiniGameSeasonRecord[];run?:MiniGameRun};
-export type MiniGameView={serverNow:number;season:string;seasonEndsAt:number;best:number;plays:number;history:MiniGameSeasonRecord[];run?:{id:string;endsAt:number;lockedUntil:number;correct:number;wrong:number;left:Pick<VerbCategory,'id'|'label'|'line'>;right:Pick<VerbCategory,'id'|'label'|'line'>;card:{id:number;word:string};feedback?:string};ranking:{id:string;name:string;profileId?:string;frameId?:string;score:number}[]};
+export type MiniGameView={serverNow:number;season:string;seasonEndsAt:number;best:number;plays:number;history:MiniGameSeasonRecord[];run?:{id:string;startsAt:number;endsAt:number;lockedUntil:number;correct:number;wrong:number;left:Pick<VerbCategory,'id'|'label'|'line'>;right:Pick<VerbCategory,'id'|'label'|'line'>;card:{id:number;word:string};feedback?:string};ranking:{id:string;name:string;profileId?:string;frameId?:string;score:number}[]};
