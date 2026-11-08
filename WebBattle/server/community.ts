@@ -7,9 +7,11 @@ import {randomInt,randomUUID} from 'node:crypto';
 import type {Game} from './game.js';
 import type {Peer,CommunityView,Invitation,StoreResult} from '../shared/community.js';
 import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
+import {seasonAt} from '../shared/season.js';
+import {VERB_CATEGORIES,type MiniGameCard,type MiniGameProgress,type MiniGameRun,type MiniGameView} from '../shared/miniGame.js';
 type Player=ReturnType<Game['newPlayer']>;
 export type AdTicket={id:string;box:AdBox;day:string;expiresAt:number;eventId?:string;result?:StoreResult};
-export type CommunityRecord={adTicket?:AdTicket;superUser?:boolean;superCatalogSize?:number;nicknameChanges?:{requestId:string;name:string;cost:number}[];id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;rating?:number;grants?:string[]};
+export type CommunityRecord={adTicket?:AdTicket;superUser?:boolean;superCatalogSize?:number;nicknameChanges?:{requestId:string;name:string;cost:number}[];id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;seasonGames?:number;gamesPlayed?:number;playTimeMs?:number;rating?:number;ratingHistory?:{season:string;rating:number;rank:number|null;games:number}[];miniGame?:MiniGameProgress;grants?:string[]};
 export type CommunityInvite=Invitation & {to:string};
 export class Community {
  records=new Map<string,CommunityRecord>();invites=new Map<string,CommunityInvite>();
@@ -18,7 +20,7 @@ export class Community {
  record(p:Player){const id=this.id(p);let record=this.records.get(id);if(!record){const initial=defaultHubSave();initial.profile=p.profileId??BASIC_PROFILES[randomInt(BASIC_PROFILES.length)].id;initial.gold=0;initial.diamonds=0;record={id,name:p.name,avatar:p.avatar,friends:[],incoming:[],store:initial,results:[]};this.records.set(id,record);}migrateProfiles(record.store,id);record.store.board??='board-classic';record.store.emote??='emote-hello';migrateEmoteCatalog(record.store);if(!record.store.owned.includes('board-classic'))record.store.owned.push('board-classic');if(record.superUser&&record.superCatalogSize!==COSMETICS.length){record.store.owned=[...new Set([...record.store.owned,...COSMETICS.map(c=>c.id)])];record.superCatalogSize=COSMETICS.length;}record.rating=p.rating;record.name=p.name;record.avatar=p.avatar;return record;}
  player(id:string){return [...this.game.sessions.values()].find(p=>this.id(p)===id);}
  peer(id:string):Peer|undefined{const p=this.player(id),r=p?this.record(p):this.records.get(id);return r?{id,name:r.name,avatar:r.avatar,profileId:r.store.profile,characterId:r.store.character,frameId:r.store.frame,online:Boolean(p?.socket?.readyState===1)}:undefined;}
- view(p:Player):CommunityView{const r=this.record(p);return {serverNow:Date.now(),adEnabled:this.game.adRewardsEnabled,...(r.superUser?{superUser:true}:{}),rankGames:r.rankGames??0,friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
+ view(p:Player):CommunityView{const r=this.record(p);this.rollMiniSeason();return {serverNow:Date.now(),adEnabled:this.game.adRewardsEnabled,...(r.superUser?{superUser:true}:{}),rankGames:r.rankGames??0,gamesPlayed:r.gamesPlayed??0,playTimeMs:r.playTimeMs??0,ratingHistory:r.ratingHistory??[],miniGameHistory:r.miniGame?.history??[],friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
  send(p:Player){this.game.send(p.socket,{type:'community',community:this.view(p)});}
  publish(){for(const p of this.game.sessions.values())if(p.socket?.readyState===1)this.send(p);}
  migrate(p:Player,oldId:string){const nextId=this.id(p),old=this.records.get(oldId);if(oldId===nextId||!old)return;const target=this.records.get(nextId);if(!target){old.id=nextId;this.records.set(nextId,old);}else{target.friends=[...new Set([...target.friends,...old.friends])].filter(x=>x!==nextId);target.incoming=[...new Set([...target.incoming,...old.incoming])].filter(x=>x!==nextId);}this.records.delete(oldId);for(const r of this.records.values()){r.friends=[...new Set(r.friends.map(x=>x===oldId?nextId:x))].filter(x=>x!==r.id);r.incoming=[...new Set(r.incoming.map(x=>x===oldId?nextId:x))].filter(x=>x!==r.id);}}
@@ -77,7 +79,7 @@ export class Community {
  }
  equip(p:Player,msg:Record<string,unknown>){const r=this.record(p),item=COSMETICS.find(c=>c.id===msg.id);if(!item||!r.store.owned.includes(item.id))return this.game.fail(p,'보유한 치장만 장착할 수 있어요.');if(item.type==='emote'){const slots=emoteSlots(r.store).map(id=>id===item.id?null:id);slots[0]=item.id;return this.setEmotes(p,{slots});}if(item.type==='profile'||item.type==='character'||item.type==='background'||item.type==='frame'||item.type==='board')r.store[item.type]=item.id;this.send(p);}
 
- ranking(p:Player,tier:unknown){if(!Number.isInteger(tier)||Number(tier)<0||Number(tier)>7)return this.game.fail(p,'올바른 리그를 선택해 주세요.');for(const player of this.game.sessions.values())this.record(player);const rows=[...this.records.values()].filter(r=>(r.rankGames??0)>=3&&leagueFor(r.rating??1000).tier===tier).map(r=>({id:r.id,name:r.name,avatar:r.avatar,profileId:r.store.profile,characterId:r.store.character,frameId:r.store.frame,rating:r.rating??1000})).sort((a,b)=>b.rating-a.rating||a.id.localeCompare(b.id));this.game.send(p.socket,{type:'ranking',tier,players:rows.slice(0,100),total:rows.length});}
+ ranking(p:Player,tier:unknown){if(!Number.isInteger(tier)||Number(tier)<0||Number(tier)>7)return this.game.fail(p,'올바른 리그를 선택해 주세요.');for(const player of this.game.sessions.values())this.record(player);const rows=[...this.records.values()].filter(r=>(r.rankGames??0)>=3&&(r.seasonGames===undefined||r.seasonGames>0)&&leagueFor(r.rating??1000).tier===tier).map(r=>({id:r.id,name:r.name,avatar:r.avatar,profileId:r.store.profile,characterId:r.store.character,frameId:r.store.frame,rating:r.rating??1000})).sort((a,b)=>b.rating-a.rating||a.id.localeCompare(b.id));this.game.send(p.socket,{type:'ranking',tier,season:this.game.rankingSeasonId,players:rows.slice(0,100),total:rows.length});}
  grantGold(name:string,amount:number,grantId:string,playerId?:string){const candidates=[...this.game.sessions.values()].filter(p=>!p.ai&&p.name===name&&(!playerId||p.id===playerId));if(candidates.length!==1)throw Error(`대상 ${candidates.length}명: 고유한 닉네임/ID 확인이 필요합니다.`);const p=candidates[0],record=this.record(p);if(!Number.isSafeInteger(amount)||amount<0||amount>99999999||!grantId||grantId.length>80)throw Error('잘못된 지급 요청');if(record.grants?.includes(grantId))return {id:p.id,name:p.name,gold:p.coins,duplicate:true};p.coins=amount;const account=[...this.game.accounts.values()].find(a=>a.id===p.accountId);if(account)account.coins=amount;record.grants=[...(record.grants??[]),grantId].slice(-50);this.game.audit(p,'admin_gold_grant','info',{reason:`관리자 테스트 골드 잔액 ${amount}`,requestId:grantId});this.send(p);return {id:p.id,name:p.name,gold:p.coins,duplicate:false};}
  seedTestFriends(name:string,grantId:string,playerId?:string){
   if(typeof name!=='string'||!grantId||typeof grantId!=='string'||grantId.length>80)throw Error('잘못된 테스트 친구 요청');
@@ -102,5 +104,32 @@ export class Community {
   r.grants=[...(r.grants??[]),grantId].slice(-50);
   this.game.audit(p,'admin_items_grant','info',{reason:`관리자 아이템 ${added.length}개 지급`,requestId:grantId});this.send(p);return response(added,false);
  }
+ private finishMiniRun(progress:MiniGameProgress){const run=progress.run;if(!run)return;progress.best=Math.max(progress.best,run.correct);progress.plays++;progress.correct+=run.correct;progress.wrong+=run.wrong;progress.run=undefined;}
+ rollMiniSeason(now=Date.now()){
+  const season=seasonAt(now);
+  const ending=[...this.records.values()].filter(r=>r.miniGame&&r.miniGame.season!==season.id);
+  if(!ending.length)return;
+  for(const record of ending)this.finishMiniRun(record.miniGame!);
+  const ranked=ending.filter(r=>(r.miniGame?.best??0)>0).sort((a,b)=>(b.miniGame?.best??0)-(a.miniGame?.best??0)||a.id.localeCompare(b.id));
+  for(const record of ending){const progress=record.miniGame!,rank=ranked.findIndex(r=>r.id===record.id);progress.history=[...progress.history,{season:progress.season,best:progress.best,rank:rank<0?null:rank+1,plays:progress.plays,correct:progress.correct,wrong:progress.wrong}].slice(-12);progress.season=season.id;progress.best=0;progress.plays=0;progress.correct=0;progress.wrong=0;}
+ }
+ private miniProgress(p:Player){this.rollMiniSeason();const record=this.record(p),season=seasonAt();return record.miniGame??(record.miniGame={season:season.id,best:0,plays:0,correct:0,wrong:0,history:[]});}
+ private nextMiniPair(run:MiniGameRun){
+  const first=VERB_CATEGORIES.filter(c=>c.line===1),second=VERB_CATEGORIES.filter(c=>c.line===2);
+  let a=first[randomInt(first.length)],b=second[randomInt(second.length)];
+  for(let tries=0;tries<6&&run.lastPair===a.id+':'+b.id;tries++){a=first[randomInt(first.length)];b=second[randomInt(second.length)];}
+  run.lastPair=a.id+':'+b.id;run.pair=randomInt(2)?[a.id,b.id]:[b.id,a.id];
+  const cards:MiniGameCard[]=[...a.words.map(word=>({id:run.nextCardId++,word,categoryId:a.id})),...b.words.map(word=>({id:run.nextCardId++,word,categoryId:b.id}))];
+  for(let i=cards.length-1;i>0;i--){const j=randomInt(i+1);[cards[i],cards[j]]=[cards[j],cards[i]];}run.queue=cards;
+ }
+ private miniView(progress:MiniGameProgress):MiniGameView{
+  const season=seasonAt(),run=progress.run;
+  const visibleCategory=(id:string)=>{const category=VERB_CATEGORIES.find(c=>c.id===id)!;return {id:category.id,label:category.label,line:category.line};};
+  const ranking=[...this.records.values()].filter(r=>r.miniGame?.season===season.id&&(r.miniGame?.best??0)>0).map(r=>({id:r.id,name:r.name,profileId:r.store.profile,frameId:r.store.frame,score:r.miniGame!.best})).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id)).slice(0,100);
+  return {serverNow:Date.now(),season:season.id,seasonEndsAt:season.endAt,best:progress.best,plays:progress.plays,history:progress.history,ranking,...(run&&run.queue[0]?{run:{id:run.id,endsAt:run.endsAt,lockedUntil:run.lockedUntil,correct:run.correct,wrong:run.wrong,left:visibleCategory(run.pair[0]),right:visibleCategory(run.pair[1]),card:{id:run.queue[0].id,word:run.queue[0].word},feedback:run.feedback}}:{})};
+ }
+ miniStatus(p:Player){const progress=this.miniProgress(p);if(progress.run&&Date.now()>=progress.run.endsAt){this.finishMiniRun(progress);this.send(p);}this.game.send(p.socket,{type:'miniGameState',data:this.miniView(progress)});}
+ miniStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.miniProgress(p),now=Date.now(),season=seasonAt(now);if(progress.run&&now>=progress.run.endsAt)this.finishMiniRun(progress);if(!progress.run){if(season.endAt-now<60_000)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');const run:MiniGameRun={id:randomUUID(),startedAt:now,endsAt:now+60_000,lockedUntil:0,correct:0,wrong:0,pair:['',''],queue:[],nextCardId:0};this.nextMiniPair(run);progress.run=run;}this.miniStatus(p);}
+ miniChoose(p:Player,msg:Record<string,unknown>){const progress=this.miniProgress(p),run=progress.run;if(!run)return this.miniStatus(p);const now=Date.now();if(now>=run.endsAt)return this.miniStatus(p);if(msg.runId!==run.id||msg.cardId!==run.queue[0]?.id||!['left','right'].includes(String(msg.side)))return this.miniStatus(p);if(now<run.lockedUntil)return this.miniStatus(p);const card=run.queue[0],chosen=run.pair[msg.side==='left'?0:1];if(card.categoryId===chosen){run.correct++;run.queue.shift();run.feedback=undefined;if(!run.queue.length)this.nextMiniPair(run);}else{run.wrong++;run.lockedUntil=now+1000;const category=VERB_CATEGORIES.find(c=>c.id===card.categoryId)!;run.feedback=`${card.word}은 ${category.description} 동사 카드예요.`;}this.miniStatus(p);}
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}
 }

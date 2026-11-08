@@ -9,7 +9,7 @@ import {adminAuthorized} from '../server/audit.js';
 import {verifyAppleCredential} from '../server/appleAuth.js';
 import {verifyLevelPlayCallback} from '../server/levelPlayCallback.js';
 import {playAccessToken,verifyPlayPurchase,consumePlayPurchase} from '../server/googlePlayPurchase.js';
-import {diamondPack} from '../shared/store.js';
+import {COSMETICS,defaultHubSave,diamondPack} from '../shared/store.js';
 import {kstDay,validKstDay} from '../server/userStats.js';
 interface Env { GOOGLE_PLAY_SERVICE_ACCOUNT_JSON?:string;LEVELPLAY_S2S_PRIVATE_KEY?:string;GOOGLE_CLIENT_ID?:string;GOOGLE_IOS_CLIENT_ID?:string;APPLE_APP_ID?:string;APPLE_ANDROID_REDIRECT_URI?:string; BATTLE:DurableObjectNamespace<BattleArena>;ALLOWED_ORIGINS:string;MATCH_SECONDS:string;RECONNECT_SECONDS:string;CAPTURE_DIAGNOSTICS?:string;ADMIN_LOG_TOKEN?:string;APPLE_CLIENT_ID?:string;APPLE_TEAM_ID?:string;APPLE_KEY_ID?:string;APPLE_PRIVATE_KEY?:string;APPLE_REDIRECT_URI?:string }
 type Attachment={googleReturn?:{identity:{sub:string;name?:string};expires:number};appleNonce?:{value:string;expires:number;audience:string};googleNonce?:{value:string;expires:number};id?:string;opened:number;tokens:number;at:number};
@@ -36,7 +36,7 @@ export default {
    for(const [key,value]of response.headers)headers.set(key,value);
    return new Response(response.body,{status:response.status,headers});
   }
-  if(url.pathname!=='/health'&&url.pathname!=='/socket'&&url.pathname!=='/stats/new-users')return new Response('Not found',{status:404});
+  if(url.pathname!=='/health'&&url.pathname!=='/socket'&&url.pathname!=='/stats/new-users'&&url.pathname!=='/stats/player-progress')return new Response('Not found',{status:404});
   if(url.pathname==='/socket'){
    if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return new Response('WebSocket required',{status:426});
    const origin=request.headers.get('Origin');
@@ -116,6 +116,19 @@ export class BattleArena extends DurableObject<Env>{
    if(!validKstDay(day))return Response.json({error:'day는 YYYY-MM-DD 형식의 실제 한국 날짜여야 합니다.'},{status:400});
    const stats=this.game.userStats.get(day)??{newGuestSessions:0,newAccounts:0};
    return Response.json({dayKst:day,trackingSince:this.game.userStatsSince,...stats,definition:'새 게스트 세션 수와 새 계정 수는 겹칠 수 있으므로 합산하지 않습니다. 게스트 토큰이 사라지면 새 세션으로 집계됩니다.'},{headers:{'Cache-Control':'no-store'}});
+  }
+  if(url.pathname==='/stats/player-progress'){
+   if(request.method!=='GET')return new Response('GET required',{status:405});
+   const baseline=new Set(defaultHubSave().owned),catalog=new Set(COSMETICS.map(item=>item.id));
+   const rows=[...this.game.community.records.values()].filter(record=>!record.id.startsWith('test-friend-'));
+   const bands=[{label:'0판',min:0,max:0},{label:'1~2판',min:1,max:2},{label:'3~9판',min:3,max:9},{label:'10~29판',min:10,max:29},{label:'30판 이상',min:30,max:Infinity}];
+   const summarize=(users:typeof rows)=>{const extra=users.map(record=>record.store.owned.filter(id=>catalog.has(id)&&!baseline.has(id)).length);return {users:users.length,withExtraCosmetics:extra.filter(count=>count>0).length,averageExtraCosmetics:users.length?Math.round(extra.reduce((a,b)=>a+b,0)/users.length*10)/10:0};};
+   const byGames=bands.map(band=>({games:band.label,...summarize(rows.filter(record=>(record.rankGames??0)>=band.min&&(record.rankGames??0)<=band.max))}));
+   const trackedTime=rows.filter(record=>Number.isFinite(record.playTimeMs));
+   const timeBands=[{label:'1시간 미만',min:0,max:3600000},{label:'1~5시간',min:3600000,max:21600000},{label:'6~19시간',min:21600000,max:72000000},{label:'20시간 이상',min:72000000,max:Infinity}];
+   const byTrackedPlayTime=timeBands.map(band=>({time:band.label,...summarize(trackedTime.filter(record=>(record.playTimeMs??0)>=band.min&&(record.playTimeMs??0)<band.max))}));
+   const byCosmeticType=Object.fromEntries(['profile','character','background','emote','frame','board'].map(type=>[type,rows.filter(record=>record.store.owned.some(id=>!baseline.has(id)&&COSMETICS.some(item=>item.id===id&&item.type===type))).length]));
+   return Response.json({users:rows.length,byQualifiedGames:byGames,byTrackedPlayTime,byCosmeticType,playTimeTrackedUsers:trackedTime.length,playTimeHours:Math.round(trackedTime.reduce((sum,record)=>sum+(record.playTimeMs??0),0)/3600000*10)/10,definition:'기존 rankGames는 유효 대전 수이며 전체 플레이 횟수·시간은 이번 기능 배포 이후부터 기록됩니다. 기본 지급 치장을 제외한 추가 보유 수를 비교합니다.'},{headers:{'Cache-Control':'no-store'}});
   }
   if(url.pathname==='/ads/levelplay/callback'){
    if(request.method!=='GET')return new Response('GET required',{status:405});

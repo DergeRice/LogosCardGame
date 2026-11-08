@@ -7,6 +7,7 @@ import {cardEffect} from '../shared/rules.js';
 import { randomUUID } from 'node:crypto';
 import { Game } from './game.js';
 import {thinkMs} from './ai.js';
+import {seasonAt} from '../shared/season.js';
 type Player=ReturnType<Game['newPlayer']>;
 type Room=Game['rooms'] extends Map<string,infer R>?R:never;
 type StoredPlayer=Omit<Player,'socket'|'seen'|'nextAI'|'reaction'|'reactionAt'|'lastAction'> & {seen:string[]};
@@ -33,6 +34,7 @@ export function snapshot(game:Game):Map<string,string>{
  for(const [id,invite]of game.community.invites)if(invite.expiresAt>Date.now())records.set('invite:'+id,JSON.stringify(invite));
  for(const [id,r]of game.community.records)records.set('community:'+id,JSON.stringify(r));
  records.set('user-stats:since',String(game.userStatsSince));
+ records.set('ranking-season:id',game.rankingSeasonId);
  for(const [day,stats]of game.userStats)records.set('user-stats:'+day,JSON.stringify(stats));
  return records;
 }
@@ -40,6 +42,7 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
  game.community.records.clear();game.community.invites.clear();game.rooms.clear();game.sessions.clear();game.accounts.clear();game.accountSessions.clear();game.userStats.clear();const players=new Map<string,Player>();
  for(const [key,json] of records){
   if(key==='user-stats:since'){const since=Number(json);if(Number.isFinite(since)&&since>0)game.userStatsSince=since;}
+  else if(key==='ranking-season:id'&&/^\d{4}-\d{2}-\d{2}$/.test(json))game.rankingSeasonId=json;
   else if(key.startsWith('user-stats:')){const stats=JSON.parse(json);if(Number.isSafeInteger(stats.newGuestSessions)&&Number.isSafeInteger(stats.newAccounts)&&stats.newGuestSessions>=0&&stats.newAccounts>=0)game.userStats.set(key.slice(11),stats);}
   if(key.startsWith('invite:')){const invite=JSON.parse(json) as CommunityInvite;if(invite.expiresAt>Date.now())game.community.invites.set(key.slice(7),invite);}
   if(key.startsWith('community:')){const record=JSON.parse(json) as CommunityRecord;migrateProfiles(record.store,record.id);game.community.records.set(key.slice(10),record);}
@@ -101,7 +104,8 @@ export function restore(game:Game,records:Map<string,string>):Map<string,Player>
 }
 // Schedule only actual game deadlines; no always-running polling loop in the cloud.
 export function nextDeadline(game:Game):number|null{
- const deadlines:number[]=[...game.community.invites.values()].map(i=>i.expiresAt);
+ const season=seasonAt(),deadlines:number[]=[...game.community.invites.values()].map(i=>i.expiresAt);
+ if((game.community.records.size>0||game.accounts.size>0)&&Date.now()>=season.startAt)deadlines.push(season.endAt);
  for(const r of game.rooms.values()){
   if(r.expiresAt>0)deadlines.push(r.expiresAt);
   if(['reveal','dealing'].includes(r.phase)||(r.phase==='matching'&&r.players.some(p=>!p.ai&&p.socket?.readyState===1)))deadlines.push(r.stageEndsAt);

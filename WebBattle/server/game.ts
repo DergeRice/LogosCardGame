@@ -19,6 +19,7 @@ type WebSocket = GameSocket;
 import { judgeCards, DECK_FACES, ADVANCED_DECK_FACES, RULES, EXCHANGE_REPLIES, type Card, type Kind, type Difficulty, type Judgment, type RoomView, type RoomListing, type Decision, type ExchangeRequest, type Reaction, type DrawVote, type RobNotice } from '../shared/rules.js';
 import { chooseMove, thinkMs } from './ai.js';
 import {kstDay,type DailyUserStats} from './userStats.js';
+import {seasonAt,nextSeason,seasonStartingRating} from '../shared/season.js';
 
 type Player = {deleted?:boolean;goHits?:number;hitBaseScore?:number;debugGoUsed?:boolean; storage?:Card[];storageVersion?:number;aiReadyAt?:number; profileId?:string; accountId?:string; robNotices?:RobNotice[]; id: string; emoteLoadout?:string[]; calledGo?:boolean;ratingShield?:boolean;basicSupplyUsed?:boolean; basicSupplyAt?:number; coinReward?:number; coinBase?:number; coinAdjustment?:number; token: string; name: string; avatar: Kind; rating: number; ratingDelta: number; points: number; coins:number; reward: number; baseReward?:number; opponentRating?:number; rewardRatio?:number; resumeNotice?:string; socket?: WebSocket; room?: string; hand: Card[]; handVersion: number; fieldVersion: number; draftIds?:string[]; scoreClaims?:{ids:string[];points:number;basePoints?:number}[]; submittedSequences?:string[]; baseScore?:number; ownGoBaseScore?:number; score: number; ready: boolean; rematch: boolean; ai?: Difficulty; disconnectedAt?: number; seen: Set<string>; actionAt: number; exchangeAt: number; nextAI: number; judgment?: Judgment; lastPlayed?: Card[]; playedSentences?: Card[][]; lastAction?: { id: string; text: string; flights?:{fromId:string;toId:string;card:Card}[] }; reaction?: {id:string;emoji:Reaction;at:number}; reactionAt?:number; touchedAt: number };
 export type Account = {nickname?:string;avatar?:Kind;id:string;username:string;salt:string;passwordHash:string;rating:number;points:number;coins?:number;provider?:'apple'|'google';appleSubHash?:string;googleSubHash?:string;failedLogins:number;lockedUntil:number};
@@ -46,6 +47,7 @@ export class Game {
  rooms = new Map<string, Room>(); sessions = new Map<string, Player>();
  accounts = new Map<string,Account>(); accountSessions = new Map<string,AccountSession>();
  userStats = new Map<string,DailyUserStats>(); userStatsSince=Date.now();
+ rankingSeasonId=seasonAt().id;
  durationMs: number; reconnectMs: number; lobbyMs: number; resultMs: number; matchingMs: number; revealMs: number; dealingMs: number; dealMs: number; decisionMs: number; humanDecisionMs:number;
  constructor(options: Options = {}) { this.adRewardsEnabled=options.adRewardsEnabled??false;this.purgePlayerAudit=options.purgePlayerAudit; this.auditSink=options.auditSink; this.minimumPlayers = options.minimumPlayers ?? RULES.minPlayers; this.durationMs = options.durationMs ?? RULES.matchSeconds * 1000; this.reconnectMs = options.reconnectMs ?? RULES.reconnectSeconds * 1000; this.lobbyMs = options.lobbyMs ?? 15 * 60_000; this.resultMs = options.resultMs ?? 30 * 60_000; this.matchingMs = options.matchingMs ?? RULES.matchingMs; this.revealMs = options.revealMs ?? RULES.revealMs; this.dealingMs = options.dealingMs ?? RULES.dealingMs; this.dealMs = options.dealMs ?? RULES.dealMs; this.decisionMs = options.decisionMs ?? RULES.decisionMs;this.humanDecisionMs=options.humanDecisionMs??RULES.humanDecisionSeconds*1000; }
  send(socket: WebSocket | undefined, payload: unknown) { if (socket?.readyState === 1) { if (socket.bufferedAmount > 256_000) socket.terminate(); else socket.send(JSON.stringify(payload)); } }
@@ -60,6 +62,18 @@ export class Game {
  newPlayer(name: string): Player { return { id: randomUUID(), token: Array.from(randomBytes(32),x=>x.toString(16).padStart(2,'0')).join(''), name, profileId:BASIC_PROFILES[randomInt(BASIC_PROFILES.length)].id, avatar: avatars[randomInt(avatars.length)], rating: 1000, ratingDelta: 0, points: 0, coins:0, reward: 0, hand: [], handVersion: 0, fieldVersion: 0, draftIds:[], score: 0, ready: true, rematch: false, seen: new Set(), actionAt: 0, exchangeAt: 0, nextAI: 0, touchedAt: Date.now() }; }
  newBot(name:string,r:Room):Player{const bot=this.newPlayer(name),used=new Set(r.players.map(player=>player.profileId)),available=aiProfileIds.filter(id=>!used.has(id)),pool=available.length?available:aiProfileIds;bot.profileId=pool[randomInt(pool.length)];bot.token='';bot.ai=r.aiSetting??'normal';bot.room=r.code;bot.avatar=avatars[r.players.length%avatars.length];return bot;}
  trackNewUser(kind:keyof DailyUserStats){const day=kstDay();const stats=this.userStats.get(day)??{newGuestSessions:0,newAccounts:0};stats[kind]++;this.userStats.set(day,stats);}
+ rollRankingSeason(now=Date.now()){
+  let next=nextSeason(this.rankingSeasonId),changed=false;
+  while(next.startAt<=now){
+   const records=[...this.community.records.values()],accounts=new Map([...this.accounts.values()].map(a=>[a.id,a]));
+   const eligible=records.filter(r=>(r.rankGames??0)>=3&&(r.seasonGames===undefined||r.seasonGames>0)).sort((a,b)=>(b.rating??1000)-(a.rating??1000)||a.id.localeCompare(b.id));
+   for(const record of records){const account=accounts.get(record.id),session=[...this.sessions.values()].find(p=>(p.accountId??p.id)===record.id),previous=account?.rating??session?.rating??record.rating??1000,rank=eligible.findIndex(r=>r.id===record.id);record.ratingHistory=[...(record.ratingHistory??[]),{season:this.rankingSeasonId,rating:previous,rank:rank<0?null:rank+1,games:record.seasonGames??record.rankGames??0}].slice(-12);record.rating=seasonStartingRating(previous);record.seasonGames=0;if(account)account.rating=record.rating;if(session)session.rating=record.rating;}
+   for(const account of this.accounts.values())if(!this.community.records.has(account.id))account.rating=seasonStartingRating(account.rating);
+   for(const session of this.sessions.values())if(!this.community.records.has(session.accountId??session.id))session.rating=seasonStartingRating(session.rating);
+   this.rankingSeasonId=next.id;next=nextSeason(this.rankingSeasonId);changed=true;
+  }
+  if(changed)for(const p of this.sessions.values())if(p.socket?.readyState===1){this.send(p.socket,{type:'seasonReset',rating:p.rating,season:this.rankingSeasonId});this.community.send(p);}
+ }
  hello(socket: WebSocket, token: unknown, name: unknown, authToken?:unknown,readableGuest?:unknown): Player {
   this.tick();
   const auth=typeof authToken==='string'?this.accountSessions.get(createHash('sha256').update(authToken).digest('hex')):undefined;
@@ -285,7 +299,7 @@ export class Game {
     const actual = p.id===forfeiter ? 0 : other.id===forfeiter ? 1 : debugWinner&&p.id===debugWinner.id ? 1 : debugWinner&&other.id===debugWinner.id ? 0 : p.score===other.score ? .5 : p.score>other.score ? 1 : 0;
     const expected = 1 / (1 + 10 ** ((ratings.get(other.id)! - ratings.get(p.id)!) / 400)); delta += actual - expected;
    }
-   const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0&&r.players.length>=2&&p.id!==forfeiter)rankRecord.rankGames=(rankRecord.rankGames??0)+1;
+   const rankRecord=p.ai?undefined:this.community.record(p);if(rankRecord&&!r.testMode&&(r.startedAt??0)>0){rankRecord.gamesPlayed=(rankRecord.gamesPlayed??0)+1;rankRecord.playTimeMs=(rankRecord.playTimeMs??0)+Math.min(2*60*60_000,Math.max(0,Date.now()-(r.startedAt??Date.now())));if(r.players.length>=2&&p.id!==forfeiter){rankRecord.rankGames=(rankRecord.rankGames??0)+1;rankRecord.seasonGames=(rankRecord.seasonGames??0)+1;}}
    const playerTier=leagueFor(ratings.get(p.id)!).tier;
    const aiBonusPercent=p.id===r.winner&&!p.ai?Math.max(0,...r.players.filter(other=>other.ai).map(other=>aiTierBonusPercent(playerTier,leagueFor(ratings.get(other.id)!).tier))):0;
    const higherTierBonus=1+aiBonusPercent/100;
@@ -619,6 +633,9 @@ export class Game {
   p.touchedAt = Date.now(); this.tick();
   if(msg.type!=='ping')this.audit(p,'request','info',msg);
   if(msg.type==='ranking')return this.community.ranking(p,msg.tier);
+  if(msg.type==='miniGameStatus')return this.community.miniStatus(p);
+  if(msg.type==='miniGameStart')return this.community.miniStart(p);
+  if(msg.type==='miniGameChoose')return this.community.miniChoose(p,msg);
   if(msg.type==='renameNickname')return renameNickname(this,p,msg);
   if(msg.type==='community')return this.community.send(p);
   if(msg.type==='adRewardTicket')return this.community.issueAdTicket(p,msg);
@@ -680,7 +697,7 @@ export class Game {
   this.fail(p, '현재 상태에서는 할 수 없는 행동이에요.');
  }
  tick() {
-  const now = Date.now(); this.community.cleanup();let aiSpent = 0;
+  const now = Date.now(); this.rollRankingSeason(now);this.community.cleanup();let aiSpent = 0;
   for (const r of this.rooms.values()) {
    if (r.expiresAt > 0 && now >= r.expiresAt) { const message=r.phase==='result'?'경기 결과 보관 시간이 끝났어요. 다시 시작해 주세요.':'방이 만료되었어요.';for (const p of r.players) { p.room = undefined;if(p.ai)continue;p.resumeNotice=message;this.send(p.socket, { type: 'home', message, rating: p.rating, coins:p.coins??0, points: p.points });if(p.socket?.readyState===1)p.resumeNotice=undefined; } this.rooms.delete(r.code); continue; }
    if (r.phase === 'lobby') {for(const p of [...r.players])if(!p.ai&&p.disconnectedAt&&now-p.disconnectedAt>=this.reconnectMs)this.leave(p);}
