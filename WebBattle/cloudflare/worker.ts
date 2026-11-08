@@ -120,7 +120,7 @@ export class BattleArena extends DurableObject<Env>{
   if(url.pathname==='/stats/player-progress'){
    if(request.method!=='GET')return new Response('GET required',{status:405});
    const baseline=new Set(defaultHubSave().owned),catalog=new Set(COSMETICS.map(item=>item.id));
-   const rows=[...this.game.community.records.values()].filter(record=>!record.id.startsWith('test-friend-'));
+   const rows=[...this.game.community.records.values()].filter(record=>!record.id.startsWith('test-friend-')&&!record.superUser);
    const bands=[{label:'0판',min:0,max:0},{label:'1~2판',min:1,max:2},{label:'3~9판',min:3,max:9},{label:'10~29판',min:10,max:29},{label:'30판 이상',min:30,max:Infinity}];
    const summarize=(users:typeof rows)=>{const extra=users.map(record=>record.store.owned.filter(id=>catalog.has(id)&&!baseline.has(id)).length);return {users:users.length,withExtraCosmetics:extra.filter(count=>count>0).length,averageExtraCosmetics:users.length?Math.round(extra.reduce((a,b)=>a+b,0)/users.length*10)/10:0};};
    const byGames=bands.map(band=>({games:band.label,...summarize(rows.filter(record=>(record.rankGames??0)>=band.min&&(record.rankGames??0)<=band.max))}));
