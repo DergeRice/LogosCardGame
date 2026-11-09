@@ -10,7 +10,7 @@ import {VERB_CATEGORIES,type MiniGameView} from '../shared/miniGame.js';
 function player(game:Game,name:string){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,name),messages};}
 function mini(messages:Record<string,unknown>[]):MiniGameView{return messages.filter(message=>message.type==='miniGameState').at(-1)?.data as MiniGameView;}
 
-test('a one-minute verb run validates sides, blocks repeated wrong taps and survives restore',()=>{
+test('a wrong tap advances after one second, rejects stale taps and survives restore',()=>{
  const game=new Game(),{player:p,messages}=player(game,'미니 게임 검사');
  game.community.miniStart(p);
  const first=mini(messages).run!;
@@ -23,12 +23,18 @@ test('a one-minute verb run validates sides, blocks repeated wrong taps and surv
  record.miniGame!.run!.startsAt=0;
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
  assert.equal(mini(messages).run?.wrong,1);
+ const next=mini(messages).run!.card;
+ assert.notEqual(next.id,first.card.id);
+ assert.equal(mini(messages).run?.missedWord,first.card.word);
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
  assert.equal(mini(messages).run?.wrong,1);
+ game.community.miniChoose(p,{runId:first.id,cardId:next.id,side:'left'});
+ assert.equal(mini(messages).run?.correct,0);
  record.miniGame!.run!.lockedUntil=0;
- game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:right});
+ const nextAnswer=record.miniGame!.run!.queue[0].categoryId;
+ game.community.miniChoose(p,{runId:first.id,cardId:next.id,side:mini(messages).run!.left.id===nextAnswer?'left':'right'});
  assert.equal(mini(messages).run?.correct,1);
- assert.notEqual(mini(messages).run?.card.id,first.card.id);
+ assert.notEqual(mini(messages).run?.card.id,next.id);
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:right});
  assert.equal(mini(messages).run?.correct,1);
  record.miniGame!.run!.endsAt=Date.now()-1;
@@ -61,15 +67,11 @@ test('18 supplied verb categories form unambiguous pairs and accept correct taps
  }
 });
 
-test('every supplied card has a pre-recorded local audio segment',()=>{
- const manifest=JSON.parse(readFileSync(resolve('public/audio/mini/manifest-v1.json'),'utf8')) as {sampleRate:number;segments:Record<string,{start:number;length:number}>};
- const wav=readFileSync(resolve('public/audio/mini/voice-v1.wav'));
- assert.equal(wav.toString('ascii',0,4),'RIFF');
- assert.equal(wav.toString('ascii',8,12),'WAVE');
- const samples=(wav.length-44)/2;
+test('every supplied card has a small pre-recorded local audio file',()=>{
+ const manifest=JSON.parse(readFileSync(resolve('public/audio/mini/manifest-v2.json'),'utf8')) as {clips:Record<string,string>};
  const words=new Set(VERB_CATEGORIES.flatMap(category=>category.words));
- assert.equal(Object.keys(manifest.segments).length,words.size);
- for(const word of words){const segment=manifest.segments[word];assert.ok(segment,word);assert.ok(segment.length>manifest.sampleRate*.1,word);assert.ok(segment.start>=0&&segment.start+segment.length<=samples,word);}
+ assert.equal(Object.keys(manifest.clips).length,words.size);
+ for(const word of words){const file=manifest.clips[word];assert.match(file,/^[a-f0-9]{16}\.wav$/);const wav=readFileSync(resolve('public/audio/mini/clips',file));assert.equal(wav.toString('ascii',0,4),'RIFF');assert.equal(wav.toString('ascii',8,12),'WAVE');assert.ok(wav.length>1000&&wav.length<200_000,word);}
 });
 
 test('active days count distinct Korean calendar dates, not reconnects or play time',t=>{

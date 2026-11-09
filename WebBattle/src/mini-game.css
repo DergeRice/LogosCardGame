@@ -18,12 +18,13 @@
 .mini-arena{display:flex;flex:1;flex-direction:column;gap:10px;min-height:0;max-height:560px}
 .mini-card-stack{position:relative;flex:1;min-height:185px;isolation:isolate}
 .mini-card-stack::before,.mini-card-stack::after{content:none}
-.mini-next-card,.mini-word{position:absolute;left:8%;width:84%;height:calc(100% - 66px);min-height:115px;border:2px solid #d9c895;border-radius:19px;background:#fffdf5;box-shadow:0 9px 18px #76634024}
+.mini-next-card,.mini-word,.mini-wrong-card{position:absolute;left:8%;width:84%;height:calc(100% - 66px);min-height:115px;border:2px solid #d9c895;border-radius:19px;background:#fffdf5;box-shadow:0 9px 18px #76634024}
 .mini-next-card{display:flex;align-items:flex-start;justify-content:center;padding:5px 10px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#6f775c;font-size:14px;font-weight:850}
 .mini-next-card span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .mini-next-0{bottom:48px;z-index:0;background:#e9efdf}
 .mini-next-1{bottom:24px;z-index:1;background:#f5f1df}
 .mini-word{bottom:0;z-index:2;transition:transform .045s ease-out,opacity .045s ease-out;touch-action:manipulation}
+.mini-wrong-card{bottom:0;z-index:3;display:grid;place-items:center;padding:15px;border-color:#d87972;background:#fff3ed;color:#a44742;font-size:clamp(24px,5vw,42px);font-weight:900;text-align:center;overflow-wrap:anywhere;pointer-events:none}
 .mini-word span{font-size:clamp(24px,5vw,42px);overflow-wrap:anywhere;text-align:center}
 .mini-word.to-left{transform:translateX(-24%) rotate(-5deg);opacity:.55}
 .mini-word.to-right{transform:translateX(24%) rotate(5deg);opacity:.55}
@@ -33,4 +34,4 @@
 .mini-feedback{min-height:20px;margin:0}
 .mini-current-score{line-height:1.2}
 @media(max-width:750px) and (orientation:portrait){.mini-game-stage{gap:5px}.mini-arena{gap:7px}.mini-card-stack{min-height:230px}.mini-sides{flex-basis:74px;gap:7px}.mini-side strong{font-size:15px}.mini-word span{font-size:clamp(23px,8vw,34px)}}
-@media(orientation:landscape) and (max-height:540px){.mini-game-stage{gap:2px;padding-top:0}.mini-arena{gap:3px;min-height:0;max-height:none}.mini-card-stack{min-height:82px}.mini-next-card,.mini-word{height:calc(100% - 34px);min-height:50px;border-radius:9px}.mini-next-card{font-size:10px;padding:1px 5px}.mini-next-0{bottom:24px}.mini-next-1{bottom:12px}.mini-word span{font-size:20px}.mini-word small{display:none}.mini-sides{flex-basis:42px;gap:6px}.mini-side{gap:0}.mini-side small{font-size:9px}.mini-side strong{font-size:11px}.mini-feedback{min-height:12px;font-size:10px}.mini-current-score{font-size:12px}}
+@media(orientation:landscape) and (max-height:540px){.mini-game-stage{gap:2px;padding-top:0}.mini-arena{gap:3px;min-height:0;max-height:none}.mini-card-stack{min-height:82px}.mini-next-card,.mini-word,.mini-wrong-card{height:calc(100% - 34px);min-height:50px;border-radius:9px}.mini-next-card{font-size:10px;padding:1px 5px}.mini-next-0{bottom:24px}.mini-next-1{bottom:12px}.mini-word span,.mini-wrong-card{font-size:20px}.mini-word small{display:none}.mini-sides{flex-basis:42px;gap:6px}.mini-side{gap:0}.mini-side small{font-size:9px}.mini-side strong{font-size:11px}.mini-feedback{min-height:12px;font-size:10px}.mini-current-score{font-size:12px}}
