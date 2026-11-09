@@ -44,3 +44,6 @@
 .mini-countdown-number{font-size:clamp(72px,15vw,150px);line-height:1;animation:mini-count-pop .3s ease-out;text-shadow:0 5px 0 #fff,0 15px 28px #28413030}
 @media(max-width:750px) and (orientation:portrait){.mini-next-card,.mini-word,.mini-wrong-card{height:min(calc(100% - 66px),250px)}.mini-countdown{gap:18px}.mini-countdown-pair{font-size:17px;gap:6px}.mini-countdown-pair span{padding:8px 10px}}
 @media(orientation:landscape) and (max-height:540px){.mini-next-card,.mini-word,.mini-wrong-card{height:calc(100% - 34px)}.mini-countdown{gap:8px}.mini-countdown-pair{font-size:13px;gap:6px}.mini-countdown-pair span{padding:3px 8px}.mini-countdown-number{font-size:62px}}
+.mini-word .mini-combo{position:absolute;top:8px;right:8px;z-index:5;padding:5px 12px;border-radius:999px;background:#ffe08b;color:#8d4b18;font-size:clamp(15px,3vw,22px);font-weight:950;letter-spacing:0;box-shadow:0 3px 0 #c88855;pointer-events:none;animation:mini-count-pop .12s ease-out}
+.mini-between-pairs{display:grid;place-items:center;color:#71836f;font-size:18px;font-weight:850}
+@media(orientation:landscape) and (max-height:540px){.mini-word .mini-combo{top:2px;padding:2px 8px;font-size:11px}}

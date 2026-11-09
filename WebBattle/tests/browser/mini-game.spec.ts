@@ -17,15 +17,18 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   }
   if(message.type==='miniGameStart'){
    const started=Date.now()+3500;
-   activeRun={id:'run-1',startsAt:started,endsAt:started+60000,lockedUntil:0,correct:0,wrong:0,left:{id:'intransitive',line:1,label:'자동사'},right:{id:'married',line:2,label:'Married 타동사'},card:{id:1,word:'run'},upcoming:[{id:2,word:'walk'},{id:3,word:'sleep'}],audioWords:['run','walk','sleep','go','stand','sit','swim','talk']};
+   const words=['run','walk','sleep','go','stand','sit','swim','talk','come','arrive'];
+   const cards=words.map((word,index)=>({id:index+1,word,categoryId:'intransitive'}));
+   activeRun={id:'run-1',startsAt:started,endsAt:started+60000,lockedUntil:0,correct:0,wrong:0,combo:0,lastClientSeq:0,left:{id:'intransitive',line:1,label:'자동사'},right:{id:'married',line:2,label:'Married 타동사'},card:cards[0],cards,upcoming:cards.slice(1,3),audioWords:words};
   }
   if(message.type==='miniGameStatus'||message.type==='miniGameStart')socket.send(JSON.stringify({type:'miniGameState',data:miniState(activeRun)}));
   if(message.type==='miniGameChoose'&&activeRun){
-   const card=activeRun.card as {id:number;word:string};if(message.cardId!==card.id)return;
-   const next=card.id+1;
+   const cards=activeRun.cards as {id:number;word:string;categoryId:string}[],card=cards[0];if(!card||message.cardId!==card.id||Date.now()<Number(activeRun.lockedUntil))return;
+   const nextCards=cards.slice(1);
    const wrong=message.side==='right';
-   activeRun={...activeRun,correct:wrong?activeRun.correct:next-1,wrong:wrong?Number(activeRun.wrong)+1:activeRun.wrong,lockedUntil:wrong?Date.now()+1000:0,feedback:wrong?`${card.word}은 자동사 카드예요.`:undefined,missedWord:wrong?card.word:undefined,card:{id:next,word:['run','walk','sleep','go','stand','sit','swim','talk','come'][Math.min(next-1,8)]},upcoming:[{id:next+1,word:'come'},{id:next+2,word:'arrive'}]};
-   setTimeout(()=>socket.send(JSON.stringify({type:'miniGameState',data:miniState(activeRun)})),5);
+   activeRun={...activeRun,correct:Number(activeRun.correct)+(wrong?0:1),wrong:Number(activeRun.wrong)+(wrong?1:0),combo:wrong?0:Number(activeRun.combo)+1,lastClientSeq:Number(message.seq),lockedUntil:wrong?Date.now()+1000:0,feedback:wrong?`${card.word}은 자동사 카드예요.`:undefined,missedWord:wrong?card.word:undefined,card:nextCards[0],cards:nextCards,upcoming:nextCards.slice(1,3)};
+   const acknowledged=activeRun;
+   setTimeout(()=>socket.send(JSON.stringify({type:'miniGameState',data:miniState(acknowledged)})),250);
   }
  }));
  try{
@@ -63,11 +66,16 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   expect(stack!.y+stack!.height).toBeLessThanOrEqual(buttons!.y+1);
   if(viewport.width<viewport.height)expect((await page.locator('.mini-word').boundingBox())!.height).toBeLessThanOrEqual(251);
   expect(await page.locator('.mini-next-card').first().evaluate(element=>getComputedStyle(element).bottom)).not.toBe('0px');
-  await page.evaluate(async()=>{for(let i=0;i<6;i++){document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>setTimeout(resolve,50));}});
+  const immediate=await page.evaluate(async()=>{document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>requestAnimationFrame(resolve));return document.querySelector('.mini-word span')?.textContent;});
+  expect(immediate).toBe('walk');
+  await page.evaluate(async()=>{for(let i=0;i<2;i++){document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>setTimeout(resolve,50));}});
+  await expect(page.locator('.mini-combo')).toContainText('Combo x3');
+  await page.evaluate(async()=>{for(let i=0;i<3;i++){document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>setTimeout(resolve,50));}});
   await expect.poll(()=>sent.filter(m=>m.type==='miniGameChoose').length).toBe(6);
   expect(new Set(sent.filter(m=>m.type==='miniGameChoose').map(m=>m.cardId)).size).toBe(6);
   await page.locator('.mini-side').last().click();
   await expect(page.locator('.mini-wrong-card')).toContainText('swim');
+  await expect(page.locator('.mini-combo')).toHaveCount(0);
   await expect(page.locator('.mini-side').first()).toBeDisabled();
   await expect(page.locator('.mini-wrong-card')).toHaveCount(0,{timeout:2000});
   await expect(page.getByRole('button',{name:'talk 발음 듣기'})).toBeVisible();

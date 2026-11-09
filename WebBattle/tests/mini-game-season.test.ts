@@ -26,6 +26,7 @@ test('a wrong tap advances after one second, rejects stale taps and survives res
  record.miniGame!.run!.startsAt=0;
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
  assert.equal(mini(messages).run?.wrong,1);
+ assert.equal(mini(messages).run?.combo,0);
  const next=mini(messages).run!.card;
  assert.notEqual(next.id,first.card.id);
  assert.equal(mini(messages).run?.missedWord,first.card.word);
@@ -63,8 +64,10 @@ test('18 supplied verb categories keep their order and accept correct taps 50 ms
   now=run.startsAt!;
   for(let tap=0;tap<6;tap++){
    const card=run.queue[0],side=run.pair[0]===card.categoryId?'left':'right';
-   game.community.miniChoose(p,{runId:run.id,cardId:card.id,side});
+   game.community.miniChoose(p,{runId:run.id,cardId:card.id,side,seq:tap+1});
    assert.equal(run.correct,tap+1);
+   assert.equal(run.combo,tap+1);
+   assert.equal(mini(messages).run?.lastClientSeq,tap+1);
    now+=50;
   }
   run.endsAt=now-1;game.community.miniStatus(p);
