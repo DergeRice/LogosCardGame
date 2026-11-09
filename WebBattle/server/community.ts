@@ -8,7 +8,7 @@ import type {Game} from './game.js';
 import type {Peer,CommunityView,Invitation,StoreResult} from '../shared/community.js';
 import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
 import {seasonAt} from '../shared/season.js';
-import {VERB_CATEGORIES,type MiniGameCard,type MiniGameProgress,type MiniGameRun,type MiniGameView} from '../shared/miniGame.js';
+import {VERB_CATEGORIES,interleaveVerbCards,type MiniGameProgress,type MiniGameRun,type MiniGameView} from '../shared/miniGame.js';
 import {kstDay} from './userStats.js';
 type Player=ReturnType<Game['newPlayer']>;
 export type AdTicket={id:string;box:AdBox;day:string;expiresAt:number;eventId?:string;result?:StoreResult};
@@ -117,13 +117,11 @@ export class Community {
  }
  private miniProgress(p:Player){this.rollMiniSeason();const record=this.record(p),season=seasonAt();return record.miniGame??(record.miniGame={season:season.id,best:0,plays:0,correct:0,wrong:0,history:[]});}
  private nextMiniPair(run:MiniGameRun){
-  const first=VERB_CATEGORIES.filter(c=>c.line===1),second=VERB_CATEGORIES.filter(c=>c.line===2);
-  const pairs=first.flatMap(a=>second.filter(b=>!a.words.some(word=>b.words.some(other=>other.toLowerCase()===word.toLowerCase()))).map(b=>[a,b] as const));
+  const pairs=VERB_CATEGORIES.flatMap((a,index)=>VERB_CATEGORIES.slice(index+1).map(b=>[a,b] as const));
   const choices=pairs.filter(([a,b])=>run.lastPair!==a.id+':'+b.id);
   const [a,b]=(choices.length?choices:pairs)[randomInt(choices.length||pairs.length)];
-  run.lastPair=a.id+':'+b.id;run.pair=randomInt(2)?[a.id,b.id]:[b.id,a.id];
-  const cards:MiniGameCard[]=[...a.words.map(word=>({id:run.nextCardId++,word,categoryId:a.id})),...b.words.map(word=>({id:run.nextCardId++,word,categoryId:b.id}))];
-  for(let i=cards.length-1;i>0;i--){const j=randomInt(i+1);[cards[i],cards[j]]=[cards[j],cards[i]];}run.queue=cards;
+  run.lastPair=a.id+':'+b.id;run.pair=[a.id,b.id];
+  run.queue=interleaveVerbCards(a,b,run.nextCardId);run.nextCardId+=run.queue.length;
  }
  private miniView(progress:MiniGameProgress):MiniGameView{
   const season=seasonAt(),run=progress.run;
@@ -133,6 +131,6 @@ export class Community {
  }
  miniStatus(p:Player){const progress=this.miniProgress(p);if(progress.run&&Date.now()>=progress.run.endsAt){this.finishMiniRun(progress);this.send(p);}this.game.send(p.socket,{type:'miniGameState',data:this.miniView(progress)});}
  miniStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.miniProgress(p),now=Date.now(),season=seasonAt(now);if(progress.run&&now>=progress.run.endsAt)this.finishMiniRun(progress);if(!progress.run){if(season.endAt-now<64_000)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');const startsAt=now+3500,run:MiniGameRun={id:randomUUID(),startedAt:now,startsAt,endsAt:startsAt+60_000,lockedUntil:0,correct:0,wrong:0,pair:['',''],queue:[],nextCardId:0};this.nextMiniPair(run);progress.run=run;}this.miniStatus(p);}
- miniChoose(p:Player,msg:Record<string,unknown>){const progress=this.miniProgress(p),run=progress.run;if(!run)return this.miniStatus(p);const now=Date.now();if(now>=run.endsAt)return this.miniStatus(p);if(now<(run.startsAt??run.startedAt))return this.miniStatus(p);if(msg.runId!==run.id||msg.cardId!==run.queue[0]?.id||!['left','right'].includes(String(msg.side)))return this.miniStatus(p);if(now<run.lockedUntil)return this.miniStatus(p);const card=run.queue[0],chosen=run.pair[msg.side==='left'?0:1];run.queue.shift();if(!run.queue.length)this.nextMiniPair(run);if(card.categoryId===chosen){run.correct++;run.feedback=undefined;run.missedWord=undefined;}else{run.wrong++;run.lockedUntil=now+1000;const category=VERB_CATEGORIES.find(c=>c.id===card.categoryId)!;run.feedback=`${card.word}은 ${category.description} 카드예요.`;run.missedWord=card.word;}this.miniStatus(p);}
+ miniChoose(p:Player,msg:Record<string,unknown>){const progress=this.miniProgress(p),run=progress.run;if(!run)return this.miniStatus(p);const now=Date.now();if(now>=run.endsAt)return this.miniStatus(p);if(now<(run.startsAt??run.startedAt))return this.miniStatus(p);if(msg.runId!==run.id||msg.cardId!==run.queue[0]?.id||!['left','right'].includes(String(msg.side)))return this.miniStatus(p);if(now<run.lockedUntil)return this.miniStatus(p);const card=run.queue[0],chosen=run.pair[msg.side==='left'?0:1],chosenCategory=VERB_CATEGORIES.find(category=>category.id===chosen)!;run.queue.shift();if(!run.queue.length)this.nextMiniPair(run);if(chosenCategory.words.some(word=>word.toLowerCase()===card.word.toLowerCase())){run.correct++;run.feedback=undefined;run.missedWord=undefined;}else{run.wrong++;run.lockedUntil=now+1000;const category=VERB_CATEGORIES.find(c=>c.id===card.categoryId)!;run.feedback=`${card.word}은 ${category.description} 카드예요.`;run.missedWord=card.word;}this.miniStatus(p);}
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}
 }

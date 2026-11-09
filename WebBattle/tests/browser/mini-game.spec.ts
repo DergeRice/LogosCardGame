@@ -50,6 +50,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   await page.getByRole('button',{name:'더보기'}).click();await expect(page.locator('.mini-ranking li')).toHaveCount(10);
   await page.getByRole('button',{name:'시작',exact:true}).click();
   await expect(page.locator('.mini-countdown')).toBeVisible();
+  await expect(page.locator('.mini-countdown-pair')).toContainText('자동사');
+  await expect(page.locator('.mini-countdown-pair')).toContainText('Married 타동사');
+  await page.screenshot({path:`.runtime/v184-mini-countdown-${viewport.width}-${test.info().project.name}.png`});
   await expect(page.locator('.mini-ranking')).toHaveCount(0);
   await expect(page.getByRole('button',{name:'run 발음 듣기'})).toBeVisible();
   await expect(page.locator('.mini-time')).toContainText('남은 시간');
@@ -58,6 +61,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   await expect(page.locator('.mini-next-card')).toHaveCount(2);
   const stack=await page.locator('.mini-card-stack').boundingBox(),buttons=await page.locator('.mini-sides').boundingBox();
   expect(stack!.y+stack!.height).toBeLessThanOrEqual(buttons!.y+1);
+  if(viewport.width<viewport.height)expect((await page.locator('.mini-word').boundingBox())!.height).toBeLessThanOrEqual(251);
   expect(await page.locator('.mini-next-card').first().evaluate(element=>getComputedStyle(element).bottom)).not.toBe('0px');
   await page.evaluate(async()=>{for(let i=0;i<6;i++){document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>setTimeout(resolve,50));}});
   await expect.poll(()=>sent.filter(m=>m.type==='miniGameChoose').length).toBe(6);

@@ -20,6 +20,19 @@ export const VERB_CATEGORIES:readonly VerbCategory[]=[
  {id:'married',line:2,label:'Married 타동사',description:'Married 타동사',words:['marry','attend','reach','resemble','interest','enter','discuss']},
 ];
 export type MiniGameCard={id:number;word:string;categoryId:string};
+/** Keep each supplied list in order, deal two from each list, and show shared words once. */
+export function interleaveVerbCards(a:VerbCategory,b:VerbCategory,startId=0):MiniGameCard[]{
+ const cards:MiniGameCard[]=[],seen=new Set<string>();
+ const lists=[a,b] as const,positions=[0,0];
+ while(positions[0]<a.words.length||positions[1]<b.words.length){
+  for(let side=0;side<2;side++)for(let dealt=0;dealt<2&&positions[side]<lists[side].words.length;dealt++){
+   const word=lists[side].words[positions[side]++],key=word.trim().toLowerCase();
+   if(seen.has(key))continue;
+   seen.add(key);cards.push({id:startId+cards.length,word,categoryId:lists[side].id});
+  }
+ }
+ return cards;
+}
 export type MiniGameRun={id:string;startedAt:number;startsAt?:number;endsAt:number;lockedUntil:number;correct:number;wrong:number;pair:[string,string];queue:MiniGameCard[];nextCardId:number;lastPair?:string;feedback?:string;missedWord?:string};
 export type MiniGameSeasonRecord={season:string;best:number;rank:number|null;plays:number;correct:number;wrong:number};
 export type MiniGameProgress={season:string;best:number;plays:number;correct:number;wrong:number;history:MiniGameSeasonRecord[];run?:MiniGameRun};

@@ -35,3 +35,12 @@
 .mini-current-score{line-height:1.2}
 @media(max-width:750px) and (orientation:portrait){.mini-game-stage{gap:5px}.mini-arena{gap:7px}.mini-card-stack{min-height:230px}.mini-sides{flex-basis:74px;gap:7px}.mini-side strong{font-size:15px}.mini-word span{font-size:clamp(23px,8vw,34px)}}
 @media(orientation:landscape) and (max-height:540px){.mini-game-stage{gap:2px;padding-top:0}.mini-arena{gap:3px;min-height:0;max-height:none}.mini-card-stack{min-height:82px}.mini-next-card,.mini-word,.mini-wrong-card{height:calc(100% - 34px);min-height:50px;border-radius:9px}.mini-next-card{font-size:10px;padding:1px 5px}.mini-next-0{bottom:24px}.mini-next-1{bottom:12px}.mini-word span,.mini-wrong-card{font-size:20px}.mini-word small{display:none}.mini-sides{flex-basis:42px;gap:6px}.mini-side{gap:0}.mini-side small{font-size:9px}.mini-side strong{font-size:11px}.mini-feedback{min-height:12px;font-size:10px}.mini-current-score{font-size:12px}}
+.mini-next-card,.mini-word,.mini-wrong-card{height:min(calc(100% - 66px),290px)}
+.mini-countdown{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;animation:none;text-shadow:none}
+.mini-countdown-pair{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;max-width:100%;font-size:clamp(16px,3vw,24px);font-weight:850;text-align:center;text-shadow:none}
+.mini-countdown-pair span{padding:10px 14px;border-radius:13px;background:#edf3e6;color:#385b43}
+.mini-countdown-pair span:last-child{background:#eae5f4;color:#54486e}
+.mini-countdown-pair b{font-size:13px;color:#889482}
+.mini-countdown-number{font-size:clamp(72px,15vw,150px);line-height:1;animation:mini-count-pop .3s ease-out;text-shadow:0 5px 0 #fff,0 15px 28px #28413030}
+@media(max-width:750px) and (orientation:portrait){.mini-next-card,.mini-word,.mini-wrong-card{height:min(calc(100% - 66px),250px)}.mini-countdown{gap:18px}.mini-countdown-pair{font-size:17px;gap:6px}.mini-countdown-pair span{padding:8px 10px}}
+@media(orientation:landscape) and (max-height:540px){.mini-next-card,.mini-word,.mini-wrong-card{height:calc(100% - 34px)}.mini-countdown{gap:8px}.mini-countdown-pair{font-size:13px;gap:6px}.mini-countdown-pair span{padding:3px 8px}.mini-countdown-number{font-size:62px}}

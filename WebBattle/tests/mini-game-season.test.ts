@@ -5,7 +5,7 @@ import {resolve} from 'node:path';
 import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import {seasonAt,seasonStartingRating} from '../shared/season.js';
-import {VERB_CATEGORIES,type MiniGameView} from '../shared/miniGame.js';
+import {VERB_CATEGORIES,interleaveVerbCards,type MiniGameView} from '../shared/miniGame.js';
 
 function player(game:Game,name:string){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,name),messages};}
 function mini(messages:Record<string,unknown>[]):MiniGameView{return messages.filter(message=>message.type==='miniGameState').at(-1)?.data as MiniGameView;}
@@ -13,9 +13,12 @@ function mini(messages:Record<string,unknown>[]):MiniGameView{return messages.fi
 test('a wrong tap advances after one second, rejects stale taps and survives restore',()=>{
  const game=new Game(),{player:p,messages}=player(game,'미니 게임 검사');
  game.community.miniStart(p);
+ const record=game.community.record(p),run=record.miniGame!.run!;
+ const a=VERB_CATEGORIES[0],b=VERB_CATEGORIES[17];run.pair=[a.id,b.id];run.queue=interleaveVerbCards(a,b,run.nextCardId);run.nextCardId+=run.queue.length;
+ game.community.miniStatus(p);
  const first=mini(messages).run!;
  assert.ok(first.card.word);assert.notEqual(first.left.id,first.right.id);
- const record=game.community.record(p),answer=record.miniGame!.run!.queue[0].categoryId;
+ const answer=run.queue[0].categoryId;
  const wrong=first.left.id===answer?'right':'left',right=wrong==='left'?'right':'left';
  assert.ok(first.startsAt>Date.now());
  game.community.miniChoose(p,{runId:first.id,cardId:first.card.id,side:wrong});
@@ -44,7 +47,7 @@ test('a wrong tap advances after one second, rejects stale taps and survives res
  assert.equal(restored.community.records.get(p.id)?.miniGame?.best,1);
 });
 
-test('18 supplied verb categories form unambiguous pairs and accept correct taps 50 ms apart',t=>{
+test('18 supplied verb categories keep their order and accept correct taps 50 ms apart',t=>{
  assert.equal(VERB_CATEGORIES.length,18);
  assert.deepEqual(VERB_CATEGORIES.map(category=>category.line),[...Array(9).fill(1),...Array(9).fill(2)]);
  assert.deepEqual(VERB_CATEGORIES.find(category=>category.id==='whether-clause')?.words.slice(-3),["I don't know","I'm not sure",'I have no idea']);
@@ -54,7 +57,8 @@ test('18 supplied verb categories form unambiguous pairs and accept correct taps
   game.community.miniStart(p);
   const run=game.community.record(p).miniGame!.run!;
   const [left,right]=run.pair.map(id=>VERB_CATEGORIES.find(category=>category.id===id)!);
-  assert.equal(left.words.some(word=>right.words.some(other=>other.toLowerCase()===word.toLowerCase())),false);
+  assert.ok(VERB_CATEGORIES.indexOf(left)<VERB_CATEGORIES.indexOf(right));
+  assert.deepEqual(run.queue.map(card=>card.word),interleaveVerbCards(left,right,run.queue[0].id).map(card=>card.word));
   assert.equal(mini(messages).run?.upcoming.length,2);
   now=run.startsAt!;
   for(let tap=0;tap<6;tap++){
@@ -64,6 +68,21 @@ test('18 supplied verb categories form unambiguous pairs and accept correct taps
    now+=50;
   }
   run.endsAt=now-1;game.community.miniStatus(p);
+ }
+});
+
+test('shared words appear once and either category scores them',()=>{
+ const [a,b]=VERB_CATEGORIES;
+ const cards=interleaveVerbCards(a,b);
+ assert.deepEqual(cards.slice(0,5).map(card=>card.word),['go','come','grow','become','arrive']);
+ assert.equal(cards.filter(card=>card.word==='go').length,1);
+ for(const side of ['left','right'] as const){
+  const game=new Game(),{player:p,messages}=player(game,'중복 정답 검사');game.community.miniStart(p);
+  const run=game.community.record(p).miniGame!.run!;run.pair=[a.id,b.id];run.queue=interleaveVerbCards(a,b,run.nextCardId);run.startsAt=0;
+  game.community.miniChoose(p,{runId:run.id,cardId:run.queue[0].id,side});
+  assert.equal(mini(messages).run?.correct,1);
+  assert.equal(mini(messages).run?.wrong,0);
+  assert.equal(mini(messages).run?.card.word,'come');
  }
 });
 
