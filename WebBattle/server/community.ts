@@ -118,8 +118,9 @@ export class Community {
  private miniProgress(p:Player){this.rollMiniSeason();const record=this.record(p),season=seasonAt();return record.miniGame??(record.miniGame={season:season.id,best:0,plays:0,correct:0,wrong:0,history:[]});}
  private nextMiniPair(run:MiniGameRun){
   const first=VERB_CATEGORIES.filter(c=>c.line===1),second=VERB_CATEGORIES.filter(c=>c.line===2);
-  let a=first[randomInt(first.length)],b=second[randomInt(second.length)];
-  for(let tries=0;tries<6&&run.lastPair===a.id+':'+b.id;tries++){a=first[randomInt(first.length)];b=second[randomInt(second.length)];}
+  const pairs=first.flatMap(a=>second.filter(b=>!a.words.some(word=>b.words.some(other=>other.toLowerCase()===word.toLowerCase()))).map(b=>[a,b] as const));
+  const choices=pairs.filter(([a,b])=>run.lastPair!==a.id+':'+b.id);
+  const [a,b]=(choices.length?choices:pairs)[randomInt(choices.length||pairs.length)];
   run.lastPair=a.id+':'+b.id;run.pair=randomInt(2)?[a.id,b.id]:[b.id,a.id];
   const cards:MiniGameCard[]=[...a.words.map(word=>({id:run.nextCardId++,word,categoryId:a.id})),...b.words.map(word=>({id:run.nextCardId++,word,categoryId:b.id}))];
   for(let i=cards.length-1;i>0;i--){const j=randomInt(i+1);[cards[i],cards[j]]=[cards[j],cards[i]];}run.queue=cards;
@@ -128,7 +129,7 @@ export class Community {
   const season=seasonAt(),run=progress.run;
   const visibleCategory=(id:string)=>{const category=VERB_CATEGORIES.find(c=>c.id===id)!;return {id:category.id,label:category.label,line:category.line};};
   const ranking=[...this.records.values()].filter(r=>r.miniGame?.season===season.id&&(r.miniGame?.best??0)>0).map(r=>({id:r.id,name:r.name,profileId:r.store.profile,frameId:r.store.frame,score:r.miniGame!.best})).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id)).slice(0,100);
-  return {serverNow:Date.now(),season:season.id,seasonEndsAt:season.endAt,best:progress.best,plays:progress.plays,history:progress.history,ranking,...(run&&run.queue[0]?{run:{id:run.id,startsAt:run.startsAt??run.startedAt,endsAt:run.endsAt,lockedUntil:run.lockedUntil,correct:run.correct,wrong:run.wrong,left:visibleCategory(run.pair[0]),right:visibleCategory(run.pair[1]),card:{id:run.queue[0].id,word:run.queue[0].word},feedback:run.feedback}}:{})};
+  return {serverNow:Date.now(),season:season.id,seasonEndsAt:season.endAt,best:progress.best,plays:progress.plays,history:progress.history,ranking,...(run&&run.queue[0]?{run:{id:run.id,startsAt:run.startsAt??run.startedAt,endsAt:run.endsAt,lockedUntil:run.lockedUntil,correct:run.correct,wrong:run.wrong,left:visibleCategory(run.pair[0]),right:visibleCategory(run.pair[1]),card:{id:run.queue[0].id,word:run.queue[0].word},upcoming:run.queue.slice(1,3).map(card=>({id:card.id,word:card.word})),feedback:run.feedback}}:{})};
  }
  miniStatus(p:Player){const progress=this.miniProgress(p);if(progress.run&&Date.now()>=progress.run.endsAt){this.finishMiniRun(progress);this.send(p);}this.game.send(p.socket,{type:'miniGameState',data:this.miniView(progress)});}
  miniStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.miniProgress(p),now=Date.now(),season=seasonAt(now);if(progress.run&&now>=progress.run.endsAt)this.finishMiniRun(progress);if(!progress.run){if(season.endAt-now<64_000)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');const startsAt=now+3500,run:MiniGameRun={id:randomUUID(),startedAt:now,startsAt,endsAt:startsAt+60_000,lockedUntil:0,correct:0,wrong:0,pair:['',''],queue:[],nextCardId:0};this.nextMiniPair(run);progress.run=run;}this.miniStatus(p);}

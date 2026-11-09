@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import {seasonAt,seasonStartingRating} from '../shared/season.js';
-import type {MiniGameView} from '../shared/miniGame.js';
+import {VERB_CATEGORIES,type MiniGameView} from '../shared/miniGame.js';
 
 function player(game:Game,name:string){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,name),messages};}
 function mini(messages:Record<string,unknown>[]):MiniGameView{return messages.filter(message=>message.type==='miniGameState').at(-1)?.data as MiniGameView;}
@@ -34,6 +36,40 @@ test('a one-minute verb run validates sides, blocks repeated wrong taps and surv
  assert.equal(mini(messages).best,1);assert.equal(mini(messages).plays,1);assert.equal(mini(messages).ranking[0].id,p.id);
  const restored=new Game();restore(restored,snapshot(game));
  assert.equal(restored.community.records.get(p.id)?.miniGame?.best,1);
+});
+
+test('18 supplied verb categories form unambiguous pairs and accept correct taps 50 ms apart',t=>{
+ assert.equal(VERB_CATEGORIES.length,18);
+ assert.deepEqual(VERB_CATEGORIES.map(category=>category.line),[...Array(9).fill(1),...Array(9).fill(2)]);
+ assert.deepEqual(VERB_CATEGORIES.find(category=>category.id==='whether-clause')?.words.slice(-3),["I don't know","I'm not sure",'I have no idea']);
+ let now=Date.parse('2026-11-09T12:00:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p,messages}=player(game,'빠른 분류 검사');
+ for(let round=0;round<20;round++){
+  game.community.miniStart(p);
+  const run=game.community.record(p).miniGame!.run!;
+  const [left,right]=run.pair.map(id=>VERB_CATEGORIES.find(category=>category.id===id)!);
+  assert.equal(left.words.some(word=>right.words.some(other=>other.toLowerCase()===word.toLowerCase())),false);
+  assert.equal(mini(messages).run?.upcoming.length,2);
+  now=run.startsAt!;
+  for(let tap=0;tap<6;tap++){
+   const card=run.queue[0],side=run.pair[0]===card.categoryId?'left':'right';
+   game.community.miniChoose(p,{runId:run.id,cardId:card.id,side});
+   assert.equal(run.correct,tap+1);
+   now+=50;
+  }
+  run.endsAt=now-1;game.community.miniStatus(p);
+ }
+});
+
+test('every supplied card has a pre-recorded local audio segment',()=>{
+ const manifest=JSON.parse(readFileSync(resolve('public/audio/mini/manifest-v1.json'),'utf8')) as {sampleRate:number;segments:Record<string,{start:number;length:number}>};
+ const wav=readFileSync(resolve('public/audio/mini/voice-v1.wav'));
+ assert.equal(wav.toString('ascii',0,4),'RIFF');
+ assert.equal(wav.toString('ascii',8,12),'WAVE');
+ const samples=(wav.length-44)/2;
+ const words=new Set(VERB_CATEGORIES.flatMap(category=>category.words));
+ assert.equal(Object.keys(manifest.segments).length,words.size);
+ for(const word of words){const segment=manifest.segments[word];assert.ok(segment,word);assert.ok(segment.length>manifest.sampleRate*.1,word);assert.ok(segment.start>=0&&segment.start+segment.length<=samples,word);}
 });
 
 test('active days count distinct Korean calendar dates, not reconnects or play time',t=>{
