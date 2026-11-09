@@ -47,3 +47,20 @@
 .mini-word .mini-combo{position:absolute;top:8px;right:8px;z-index:5;padding:5px 12px;border-radius:999px;background:#ffe08b;color:#8d4b18;font-size:clamp(15px,3vw,22px);font-weight:950;letter-spacing:0;box-shadow:0 3px 0 #c88855;pointer-events:none;animation:mini-count-pop .12s ease-out}
 .mini-between-pairs{display:grid;place-items:center;color:#71836f;font-size:18px;font-weight:850}
 @media(orientation:landscape) and (max-height:540px){.mini-word .mini-combo{top:2px;padding:2px 8px;font-size:11px}}
+.mini-game-stage{position:relative}
+.mini-combo-stage{position:absolute;top:4px;left:0;right:0;z-index:8;display:grid;place-items:center;height:45px;pointer-events:none}
+.mini-combo-stage .mini-combo{position:relative;z-index:1;display:block;padding:3px 18px;border-radius:999px;background:linear-gradient(180deg,#fff5b6,#ffca5e);border:2px solid #fff8d4;color:#954618;font-size:clamp(21px,4vw,33px);font-weight:1000;line-height:1.15;white-space:nowrap;text-shadow:0 1px #fff9d4;box-shadow:0 4px 0 #b86a35,0 7px 18px #63381450;animation:mini-combo-pop .22s cubic-bezier(.17,1.6,.37,1) both}
+.mini-combo-burst{position:absolute;left:50%;top:50%;z-index:2;width:280px;height:130px;transform:translate(-50%,-50%);pointer-events:none}
+.mini-combo-burst canvas{display:block;width:100%;height:100%}
+.mini-combo-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#ffc65c;font-size:40px;text-shadow:0 0 8px #fff;animation:mini-combo-fallback .35s ease-out both}
+@keyframes mini-combo-pop{from{transform:scale(.45) rotate(-8deg);opacity:.2}60%{transform:scale(1.17) rotate(3deg)}to{transform:scale(1) rotate(0);opacity:1}}
+@keyframes mini-combo-fallback{from{transform:scale(.35);opacity:1}to{transform:scale(1.7);opacity:0}}
+.mini-word-enter{animation:mini-card-enter .08s cubic-bezier(.15,.9,.2,1) both}
+.mini-flying-card{position:absolute;left:8%;bottom:0;width:84%;height:min(calc(100% - 66px),290px);min-height:115px;z-index:5;display:grid;place-items:center;border:2px solid #d9c895;border-radius:19px;background:#fffdf5;color:#263b2d;box-shadow:0 9px 18px #76634024;font-size:clamp(24px,5vw,42px);font-weight:900;overflow-wrap:anywhere;pointer-events:none}
+.mini-fly-left{animation:mini-card-left .13s cubic-bezier(.2,.7,.3,1) forwards}
+.mini-fly-right{animation:mini-card-right .13s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes mini-card-enter{from{transform:translateY(15px) scale(.94);opacity:.72}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes mini-card-left{40%{opacity:.1}to{transform:translate(-100%,-9%) rotate(-15deg) scale(.72);opacity:0}}
+@keyframes mini-card-right{40%{opacity:.1}to{transform:translate(100%,-9%) rotate(15deg) scale(.72);opacity:0}}
+@media(orientation:landscape) and (max-height:540px){.mini-combo-stage{top:0;height:27px}.mini-combo-stage .mini-combo{font-size:15px;padding:1px 10px}.mini-combo-burst{transform:translate(-50%,-50%) scale(.7)}.mini-flying-card{height:calc(100% - 34px);min-height:50px;border-radius:9px;font-size:20px}}
+@media(prefers-reduced-motion:reduce){.mini-word-enter,.mini-flying-card,.mini-combo-stage .mini-combo,.mini-combo-fallback{animation:none}.mini-flying-card{display:none}}
