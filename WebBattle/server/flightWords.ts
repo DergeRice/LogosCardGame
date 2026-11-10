@@ -4,7 +4,7 @@ ride|자전거 타다|rode|ridden
 rise|오르다|rose|risen
 wake|깨우다, 일어나다|woke|woken
 wear|옷을 입다|wore|worn
-break|깨뜨리다, 부수다|broke|broken
+break|깨다|broke|broken
 drive|운전하다|drove|driven
 speak|말하다|spoke|spoken
 steal|훔치다|stole|stolen
