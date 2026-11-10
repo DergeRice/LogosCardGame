@@ -3,10 +3,10 @@ import type {Application} from 'pixi.js';
 import type {FlightPublicChallenge} from '../shared/flightGame.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
 
-type Props={challenge:FlightPublicChallenge;speed:number;progress:number;planeX:number};
-export function FlightScene({challenge,speed,progress,planeX}:Props){
- const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,progress,planeX}),[fallback,setFallback]=useState(false);
- live.current={challenge,speed,progress,planeX};
+type Props={challenge:FlightPublicChallenge;speed:number;progress:number;planeX:number;coinResolved:boolean};
+export function FlightScene({challenge,speed,progress,planeX,coinResolved}:Props){
+ const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,progress,planeX,coinResolved}),[fallback,setFallback]=useState(false);
+ live.current={challenge,speed,progress,planeX,coinResolved};
  useEffect(()=>{
   const node=host.current;if(!node)return;
   let disposed=false,app:Application|undefined,observer:ResizeObserver|undefined,unwatch=()=>{},cleanupVisibility=()=>{};
@@ -31,13 +31,16 @@ export function FlightScene({challenge,speed,progress,planeX}:Props){
      for(let i=0;i<8;i++){const y=((i/8+stripe)%1)*h;art.roundRect(w*.495,y,w*.01,Math.max(11,h*.045),3).fill({color:0xc9ecf6,alpha:.38});}
      art.rect(w*.5-2,gateY-h*.15,4,h*.3).fill({color:0xe6f7ff,alpha:.9});
      for(const [index,lane] of (['left','right'] as const).entries()){
-      const cx=w*(index===0?.275:.725),value=info.challenge[lane],isCoin=value==='코인',isObstacle=value==='장애물',color=isCoin?0xffd458:isObstacle?0xff7776:0xb9efff;
-      art.roundRect(cx-gateW/2,gateY-gateH/2,gateW,gateH,5).fill({color,alpha:.95}).stroke({width:3,color:0xffffff});
-      labels[index].text=isCoin||isObstacle?'':value;
-      labels[index].style.fontSize=Math.max(12,Math.min(29,w*.056,h*.14));labels[index].style.fill=isObstacle?0xffe0dd:0xffffff;
+      const cx=w*(index===0?.275:.725),value=info.challenge[lane];
+      art.roundRect(cx-gateW/2,gateY-gateH/2,gateW,gateH,5).fill({color:0xb9efff,alpha:.95}).stroke({width:3,color:0xffffff});
+      labels[index].text=value;
+      labels[index].style.fontSize=Math.max(12,Math.min(29,w*.056,h*.14));labels[index].style.fill=0xffffff;
       labels[index].anchor.set(.5,1);labels[index].position.set(cx,gateY-gateH/2-9);
-      if(isCoin){art.circle(cx,gateY-h*.09,Math.min(21,w*.055)).fill(0xffd253).stroke({width:3,color:0xfff2a8});art.circle(cx,gateY-h*.09,Math.min(11,w*.027)).stroke({width:3,color:0xe5a435});}
-      if(isObstacle){const size=Math.min(20,w*.05);art.moveTo(cx,gateY-h*.09-size).lineTo(cx+size,gateY-h*.09+size).lineTo(cx-size,gateY-h*.09+size).closePath().fill(0xf15d62).stroke({width:2,color:0xffd5d5});}
+     }
+     if(info.challenge.coinLane&&!info.coinResolved&&info.progress>=.25&&info.progress<=.72){
+      const cx=w*(info.challenge.coinLane==='left'?.275:.725),cy=h*(-.1+(info.progress-.25)*2.045),radius=Math.min(17,w*.045,h*.095);
+      art.circle(cx,cy,radius).fill(0xffd458).stroke({width:3,color:0xfff4ba});
+      art.circle(cx,cy,radius*.57).stroke({width:2,color:0xd49524});
      }
      const px=w*info.planeX,u=Math.max(.45,Math.min(1.5,w/360,h/240));
      art.ellipse(px,planeY+30*u,37*u,12*u).fill({color:0x092c4a,alpha:.28});
