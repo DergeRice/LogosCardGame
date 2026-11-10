@@ -8,7 +8,7 @@ let active:AudioBufferSourceNode|null=null,activeElement:HTMLAudioElement|null=n
 // Download and decode the complete recorded vocabulary before enabling Start.
 // Gate transitions use offsets into this resident buffer, so they never fetch a word.
 export function preloadFlightAudio(){
- return pack??=Promise.all([fetch('/audio/flight/manifest-v2.json'),fetch('/audio/flight/flight-voice-v2.wav')]).then(async([manifestResponse,voiceResponse])=>{
+ return pack??=Promise.all([fetch('/audio/flight/manifest-v2.json'),fetch('/audio/flight/flight-voice-v2.mp3')]).then(async([manifestResponse,voiceResponse])=>{
   if(!manifestResponse.ok||!voiceResponse.ok)throw Error('Flight recordings unavailable');
   const manifest=await manifestResponse.json() as Manifest,bytes=await voiceResponse.arrayBuffer();
   const context=unlockGameAudio();

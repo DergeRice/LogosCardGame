@@ -44,7 +44,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   console.log(`flight ${viewport.width}x${viewport.height} ${test.info().project.name}: frame p95 ${frameP95.toFixed(1)}ms`);
   expect(frameP95).toBeLessThan(100);
   await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v2.json'))).toBe(true);
-  await expect.poll(()=>audioResponses.some(url=>url.includes('flight-voice-v2.wav'))).toBe(true);
+  await expect.poll(()=>audioResponses.some(url=>url.includes('flight-voice-v2.mp3'))).toBe(true);
   for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects-layer.webp','clouds-layer.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
   await page.waitForTimeout(150);
   await page.screenshot({path:`.runtime/v196-flight-opening-${viewport.width}-${test.info().project.name}.png`});

@@ -66,5 +66,8 @@ for index, word in enumerate(words, 1):
 manifest = {'version': 1, 'engine': 'Kokoro-82M v1.0', 'voice': 'af_heart', 'clips': clips}
 (output / 'manifest-v1.json').write_text(json.dumps(manifest, ensure_ascii=False), encoding='utf-8')
 (output / 'manifest-v2.json').write_text(json.dumps({'version': 2, 'engine': 'Kokoro-82M v1.0', 'voice': 'af_heart', 'sampleRate': sample_rate, 'segments': segments, 'clips': clips}, ensure_ascii=False), encoding='utf-8')
-sf.write(output / 'flight-voice-v2.wav', np.concatenate(packed), sample_rate, format='WAV', subtype='PCM_16')
+sf.write(output / 'flight-voice-v2.mp3', np.concatenate(packed), sample_rate, format='MP3', bitrate_mode='CONSTANT')
+decoded, decoded_rate = sf.read(output / 'flight-voice-v2.mp3', dtype='float32')
+if decoded_rate != sample_rate or len(decoded) != cursor:
+    raise RuntimeError('Packed flight audio offsets do not match the decoded file')
 print(f'Generated and verified {len(clips)} flight word recordings', flush=True)

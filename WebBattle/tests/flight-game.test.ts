@@ -25,12 +25,12 @@ test('every base, past and participle has a prerecorded Kokoro flight clip',()=>
 
 test('flight recordings are also packed for immediate gate playback',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../public/audio/flight/manifest-v2.json',import.meta.url),'utf8')) as {sampleRate:number;segments:Record<string,{start:number;length:number}>};
- const wav=readFileSync(new URL('../public/audio/flight/flight-voice-v2.wav',import.meta.url));
- assert.equal(manifest.sampleRate,24000);assert.equal(wav.subarray(0,4).toString(),'RIFF');assert.equal(wav.subarray(8,12).toString(),'WAVE');
+ const audio=readFileSync(new URL('../public/audio/flight/flight-voice-v2.mp3',import.meta.url));
+ assert.equal(manifest.sampleRate,24000);assert.ok(audio.subarray(0,3).toString()==='ID3'||(audio[0]===0xff&&(audio[1]&0xe0)===0xe0));
  const required=new Set(FLIGHT_VERBS.flatMap(verb=>[verb.base,verb.past,verb.participle]));
  assert.deepEqual(new Set(Object.keys(manifest.segments)),required);
- const samples=(wav.length-44)/2;
- for(const word of required){const {start,length}=manifest.segments[word];assert.ok(start>=0&&length>2400&&start+length<=samples,word);}
+ assert.ok(audio.length<1000000,'packed audio should load quickly');
+ for(const word of required){const {start,length}=manifest.segments[word];assert.ok(start>=0&&length>2400,word);}
 });
 
 function player(game:Game){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,'비행 검사'),messages};}
