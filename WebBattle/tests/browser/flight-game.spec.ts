@@ -7,7 +7,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
  await context.addInitScript(({width,height})=>Object.defineProperty(window,'visualViewport',{value:Object.assign(new EventTarget(),{width,height:height-40,offsetTop:20,offsetLeft:0,scale:1})}),viewport);
  const page=await context.newPage(),errors:string[]=[],audioResponses:string[]=[],artResponses:string[]=[],actions:string[]=[];let run:FlightRun|undefined,finishedResult:FlightResult|undefined,sendState=()=>{},holdChoice=true,pendingChoice=false,serverClockJitter=0;
  page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.url().includes('/audio/flight/')&&response.ok())audioResponses.push(response.url());if(response.url().includes('/flight/')&&response.ok()&&response.headers()['content-type']?.includes('image/'))artResponses.push(response.url());});
- const state=()=>{const publicRun=run?(()=>{const {correctLane:_secret,...challenge}=run.challenge,{verbIndex:_index,...visible}=run;return {...visible,challenge,verb:{base:'break',meaning:'깨다'}};})():undefined;return {serverNow:Date.now()+serverClockJitter,season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:100,bestScore:30,plays:0,history:[],ranking:[],...(publicRun?{run:publicRun}:{}),...(finishedResult?{lastResult:finishedResult}:{})};};
+ const state=()=>{const publicRun=run?(()=>{const {correctLane:_secret,...challenge}=run.challenge,{verbIndex:_index,...visible}=run;return {...visible,challenge,verb:{base:'break',meaning:'깨다'}};})():undefined;return {serverNow:Date.now()+serverClockJitter,season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:100,bestScore:30,plays:0,history:[],ranking:[{id:'rival',name:'프레임 검사',frameId:'frame-style-01',distance:1234,score:540}],...(publicRun?{run:publicRun}:{}),...(finishedResult?{lastResult:finishedResult}:{})};};
  await page.routeWebSocket('**/socket',socket=>{sendState=()=>socket.send(JSON.stringify({type:'flightState',data:state()}));socket.onMessage(raw=>{
   const message=JSON.parse(String(raw));
   actions.push(message.type);
@@ -32,6 +32,13 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-ready-intro h2')).toHaveText('불규칙 동사 플라이트');
   await expect(page.locator('.flight-ready-intro')).toContainText('과거형·과거분사');
   await expect(page.locator('.flight-ranking')).toBeVisible();
+  const rankAvatar=page.locator('.flight-ranking li .avatar-with-frame'),rankPortrait=rankAvatar.locator('.character-avatar'),rankFrame=rankAvatar.locator('.avatar-frame-art');
+  await expect(rankFrame).toBeVisible();
+  const avatarBox=await rankAvatar.boundingBox(),portraitBox=await rankPortrait.boundingBox(),frameBox=await rankFrame.boundingBox();
+  expect(Math.abs(avatarBox!.x+avatarBox!.width/2-frameBox!.x-frameBox!.width/2)).toBeLessThan(1);
+  expect(Math.abs(avatarBox!.y+avatarBox!.height/2-frameBox!.y-frameBox!.height/2)).toBeLessThan(1);
+  expect(Math.abs(avatarBox!.x-portraitBox!.x)).toBeLessThan(1);
+  await page.screenshot({path:`.runtime/flight-ready-frame-${viewport.width}-${test.info().project.name}.png`});
   await expect(page.getByRole('button',{name:'다시 비행'})).toHaveCount(0);
   const introBox=await page.locator('.flight-ready-intro').boundingBox(),rankingBox=await page.locator('.flight-ranking').boundingBox(),startBox=await page.getByRole('button',{name:'게임 시작'}).boundingBox();
   expect(introBox!.y+introBox!.height).toBeLessThan(rankingBox!.y+1);
@@ -70,9 +77,11 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   expect(await page.locator('.game-hub .flight-page').count()).toBe(1);
   const steer=async(x:number)=>{const box=await page.locator('.flight-field').boundingBox();await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.75);await page.mouse.down();await page.mouse.move(box!.x+box!.width*x,box!.y+box!.height*.75,{steps:5});await page.mouse.up();await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',x<.5?/0\.2/:/0\.7/);};
   const firstField=await page.locator('.flight-field').boundingBox();
+  const correctImpact=page.locator('.flight-scene[data-impact="correct"]').waitFor({state:'attached'});
   await page.mouse.move(firstField!.x+firstField!.width*.58,firstField!.y+firstField!.height*.75);await page.mouse.down();await page.mouse.up();
   await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x','0.580');
   await expect(page.locator('.flight-answer-cue')).toHaveText('broke',{timeout:5000});
+  await correctImpact;
   await expect(page.locator('.flight-score')).toHaveText('30');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
   await expect(page.locator('.flight-question')).toHaveCount(0);
@@ -91,9 +100,11 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    await steer(.73);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','right');
   }
   const firstCrash=page.locator('.flight-crash').waitFor({state:'attached'});
+  const wrongImpact=page.locator('.flight-scene[data-impact="collision"]').waitFor({state:'attached'});
   await steer(.73);
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await firstCrash;
+  await wrongImpact;
   await expect(page.locator('.flight-answer-cue')).toHaveText('break');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   holdChoice=false;pendingChoice=false;sendState();

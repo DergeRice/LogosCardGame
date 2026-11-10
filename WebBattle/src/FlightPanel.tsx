@@ -4,13 +4,12 @@ import {flightLaneAt,flightWindow,FLIGHT_ARRIVAL_GRACE_MS} from '../shared/fligh
 import {Avatar} from './MatchPresentation.js';
 import {FlightScene,preloadFlightArt} from './FlightScene.js';
 import {playFlightAudioSequence,preloadFlightAudio,prepareFlightAudio,stopFlightAudio} from './flightAudio.js';
-import {unlockGameAudio} from './exampleAudio.js';
+import {playFlightImpactSound} from './flightFeedback.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
 import './flight-game.css';
 
 type Props={data:FlightView|null;connected:boolean;myId:string;send:(type:string,extra?:Record<string,unknown>)=>boolean;onBack:()=>void};
 const FLIGHT_GAME_OVER_MS=1700;
-function crash(){const audio=unlockGameAudio();if(!audio)return;const tone=audio.createOscillator(),gain=audio.createGain(),time=audio.currentTime;tone.type='sawtooth';tone.frequency.setValueAtTime(180,time);tone.frequency.exponentialRampToValueAtTime(65,time+.24);gain.gain.setValueAtTime(.08,time);gain.gain.exponentialRampToValueAtTime(.0001,time+.28);tone.connect(gain).connect(audio.destination);tone.start(time);tone.stop(time+.28);}
 export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const [clock,setClock]=useState(Date.now()),[planeX,setPlaneX]=useState(.5),[expanded,setExpanded]=useState(false),[artReady,setArtReady]=useState(false),[audioReady,setAudioReady]=useState(false);
  const [answerCue,setAnswerCue]=useState<{id:number;text:string;kind:'correct'|'collision'}|null>(null);
@@ -41,7 +40,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
   const nextBase=run.lastResult==='correct'&&run.stage==='past';
   const words=run.lastResult==='correct'&&run.lastWord?[run.lastWord,...(nextBase?[verb.base]:[])]:[verb.base];
   if(run.lastResult==='correct'&&run.lastWord){setAnswerCue({id:challenge.id,text:run.lastWord,kind:'correct'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
-  else if(run.lastResult==='collision'){crash();setAnswerCue({id:challenge.id,text:verb.base,kind:'collision'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
+  else if(run.lastResult==='collision'){playFlightImpactSound('collision');setAnswerCue({id:challenge.id,text:verb.base,kind:'collision'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
   else setAnswerCue(null);
   void playFlightAudioSequence(words);
  },[run?.id,challenge?.id]);
@@ -55,7 +54,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
    clearTimeout(cueTimer.current);setAnswerCue({id:challenge.id,text:word,kind:correct?'correct':'collision'});
    cueTimer.current=window.setTimeout(()=>setAnswerCue(null),850);
    setPreview({key,hearts:run.hearts-(correct?0:1),score:run.score+(correct?30:0),at:Date.now()});
-   if(!correct)crash();
+   playFlightImpactSound(correct?'correct':'collision');
    contactRef.current={key,correct,audio:playFlightAudioSequence([word])};
   },Math.max(0,until));
   const recovery=window.setTimeout(()=>{if(requestRef.current===key)return;requestRef.current=key;sendRef.current('flightStatus');},Math.max(0,until+FLIGHT_ARRIVAL_GRACE_MS+100));
@@ -75,11 +74,12 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const previousContactKey=run&&challenge?`${run.id}:${challenge.id-1}`:null;
  const serverHit=Boolean(run?.lastResult==='collision'&&contactRef.current?.key!==previousContactKey);
  const hitKey=localHit?contactKey:serverHit?previousContactKey:null;
+ const impact=contactKey&&preview?.key===contactKey&&clock-preview.at<450?{at:preview.at,kind:preview.hearts<displayRun!.hearts?'collision' as const:'correct' as const}:undefined;
  return <section className={`hub-page flight-page ${displayRun?'is-playing':finishedResult?'is-finished':''}`} aria-label="불규칙 동사 플라이트">
   <header className="flight-header"><button aria-label="미니게임 목록으로" onClick={onBack}>←</button><h1>불규칙 동사 플라이트</h1></header>
   {displayRun&&displayChallenge&&displayVerb?<div className="flight-play">
    <div className="flight-timer" aria-label={`게이트까지 ${Math.ceil(left/1000)}초`}><span style={{width:`${Math.max(0,Math.min(100,left/total*100))}%`}}/></div>
-   <div className="flight-field" ref={fieldRef} role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 현재 ${displayVerb.base}. 왼쪽 ${displayChallenge.left}, 오른쪽 ${displayChallenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{if(!run)return;pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene word={displayVerb.base} meaning={displayVerb.meaning} showWord={showPlaneWord} crashStartedAt={crashStartedAt} challenge={displayChallenge} speed={displayRun.speed} startsAt={displayChallenge.startsAt??displayChallenge.deadline-total} serverOffset={offset} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${shownHearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<(shownHearts)?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${shownScore}점`}>{shownScore.toLocaleString()}</strong></div><span className="flight-stage">{displayRun.stage==='past'?'과거형':'과거분사'}</span>{run&&run.stage==='past'&&run.lastResult!=='collision'&&preview?.key!==`${run.id}:${challenge?.id}`&&!showCue&&<div className="flight-question" style={{opacity:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{displayVerb.base[0].toUpperCase()+displayVerb.base.slice(1)}</strong><small>{displayVerb.meaning}</small></div>}{showCue&&answerCue&&<div key={`cue-${answerCue.id}`} className={`flight-answer-cue ${answerCue.kind}`} role="status">{answerCue.text}</div>}{hitKey&&<span key={`crash-${hitKey}`} className="flight-crash" aria-hidden="true"/>}</div>
+   <div className="flight-field" ref={fieldRef} role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 현재 ${displayVerb.base}. 왼쪽 ${displayChallenge.left}, 오른쪽 ${displayChallenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{if(!run)return;pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene word={displayVerb.base} meaning={displayVerb.meaning} showWord={showPlaneWord} impact={impact} crashStartedAt={crashStartedAt} challenge={displayChallenge} speed={displayRun.speed} startsAt={displayChallenge.startsAt??displayChallenge.deadline-total} serverOffset={offset} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${shownHearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<(shownHearts)?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${shownScore}점`}>{shownScore.toLocaleString()}</strong></div><span className="flight-stage">{displayRun.stage==='past'?'과거형':'과거분사'}</span>{run&&run.stage==='past'&&run.lastResult!=='collision'&&preview?.key!==`${run.id}:${challenge?.id}`&&!showCue&&<div className="flight-question" style={{opacity:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{displayVerb.base[0].toUpperCase()+displayVerb.base.slice(1)}</strong><small>{displayVerb.meaning}</small></div>}{showCue&&answerCue&&<div key={`cue-${answerCue.id}`} className={`flight-answer-cue ${answerCue.kind}`} role="status">{answerCue.text}</div>}{hitKey&&<span key={`crash-${hitKey}`} className="flight-crash" aria-hidden="true"/>}</div>
   </div>:finishedResult?<div className="flight-finished" role="dialog" aria-labelledby="flight-finished-title">
    <div className="flight-finished-clouds" aria-hidden="true"/>
    <div className="flight-finished-card">
