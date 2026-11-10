@@ -56,8 +56,7 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
   for(const [form,wrong] of [[verb.past,verb.wrongPast],[verb.participle,verb.wrongParticiple]] as const){assert.equal(wrong.length,4,verb.base);assert.equal(new Set(wrong).size,4,verb.base);assert.ok(!wrong.includes(form),verb.base);}
  }
  assert.equal(flightSpeed(0),1);assert.equal(flightSpeed(100000),2.4);
- assert.deepEqual([.25,.5,.75].map(x=>flightLaneAt(x)),['left','center','right']);
- assert.deepEqual([.35,.42,.58,.65].map(x=>flightLaneAt(x,.2)),['left','center','center','right']);
+ assert.deepEqual([.25,.49,.5,.58,.75].map(x=>flightLaneAt(x)),['left','left','right','right','right']);
 });
 
 test('word gates start immediately, connect without pickups, and score 30 each',t=>{

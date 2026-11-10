@@ -1,4 +1,4 @@
-import {useEffect,useMemo,useRef,useState} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import type {FlightView} from '../shared/flightGame.js';
 import {flightLaneAt,flightWindow,FLIGHT_ARRIVAL_GRACE_MS} from '../shared/flightGame.js';
 import {Avatar} from './MatchPresentation.js';
@@ -16,9 +16,11 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const [preview,setPreview]=useState<{key:string;hearts:number;score:number}|null>(null);
  const requestRef=useRef(''),arrivalRef=useRef(''),playedRef=useRef(''),cueTimer=useRef<number|undefined>(undefined),pointerRef=useRef<number|null>(null),planeRef=useRef(.5),fieldRef=useRef<HTMLDivElement>(null),sendRef=useRef(send);
  const contactRef=useRef<{key:string;correct:boolean;audio:Promise<void>}|null>(null);
- const lastRunRef=useRef<NonNullable<FlightView['run']>|null>(null),finishUntilRef=useRef(0);
+ const lastRunRef=useRef<NonNullable<FlightView['run']>|null>(null),finishUntilRef=useRef(0),clockSyncRef=useRef<{runId:string;offset:number}|null>(null);
  sendRef.current=send;
- const offset=useMemo(()=>(data?.serverNow??Date.now())-Date.now(),[data?.serverNow]),run=data?.run,challenge=run?.challenge,verb=run?.verb;
+ const run=data?.run,challenge=run?.challenge,verb=run?.verb;
+ if(run&&clockSyncRef.current?.runId!==run.id)clockSyncRef.current={runId:run.id,offset:(data?.serverNow??Date.now())-Date.now()};
+ const offset=clockSyncRef.current?.offset??0;
  if(run){lastRunRef.current=run;finishUntilRef.current=0;}
  else if(data?.lastResult&&lastRunRef.current&&!finishUntilRef.current)finishUntilRef.current=Date.now()+1050;
  const displayRun=run??(data?.lastResult&&clock<finishUntilRef.current?lastRunRef.current:null),displayChallenge=displayRun?.challenge,displayVerb=displayRun?.verb;
@@ -42,7 +44,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
   void playFlightAudioSequence(words);
  },[run?.id,challenge?.id]);
  useEffect(()=>{if(!challenge||!run||!connected)return;const key=`${run.id}:${challenge.id}`,until=challenge.deadline-(Date.now()+offset);
-  const arrival=window.setTimeout(()=>{if(arrivalRef.current===key)return;const w=fieldRef.current?.clientWidth??390,h=fieldRef.current?.clientHeight??600,planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15)));const side=flightLaneAt(planeRef.current,planeSize/w);
+  const arrival=window.setTimeout(()=>{if(arrivalRef.current===key)return;const side=flightLaneAt(planeRef.current);
    if(!sendRef.current('flightChoose',{runId:run.id,challengeId:challenge.id,side}))return;
    arrivalRef.current=key;
    const expected=FLIGHT_VERBS.find(item=>item.base===verb?.base)?.[run.stage];if(!expected)return;
@@ -68,7 +70,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
   <header className="flight-header"><button aria-label="미니게임 목록으로" onClick={onBack}>←</button><h1>불규칙 동사 플라이트</h1></header>
   {displayRun&&displayChallenge&&displayVerb?<div className="flight-play">
    <div className="flight-timer" aria-label={`게이트까지 ${Math.ceil(left/1000)}초`}><span style={{width:`${Math.max(0,Math.min(100,left/total*100))}%`}}/></div>
-   <div className="flight-field" ref={fieldRef} role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 왼쪽 ${displayChallenge.left}, 오른쪽 ${displayChallenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{if(!run)return;pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene challenge={displayChallenge} speed={displayRun.speed} progress={1-remaining/total} startsAt={displayChallenge.startsAt??displayChallenge.deadline-total} serverOffset={offset} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${shownHearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<(shownHearts)?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${shownScore}점`}>{shownScore.toLocaleString()}</strong></div><span className="flight-stage">{displayRun.stage==='past'?'과거형':'과거분사'}</span>{run&&!showCue&&<div className="flight-question" style={{opacity:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{displayVerb.base[0].toUpperCase()+displayVerb.base.slice(1)}</strong><small>{displayVerb.meaning}</small></div>}{showCue&&answerCue&&<div key={`cue-${answerCue.id}`} className={`flight-answer-cue ${answerCue.kind}`} role="status">{answerCue.text}</div>}{run?.lastResult==='collision'&&<span key={`crash-${displayChallenge.id}`} className="flight-crash" aria-hidden="true"/>}</div>
+   <div className="flight-field" ref={fieldRef} role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 왼쪽 ${displayChallenge.left}, 오른쪽 ${displayChallenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{if(!run)return;pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene challenge={displayChallenge} speed={displayRun.speed} startsAt={displayChallenge.startsAt??displayChallenge.deadline-total} serverOffset={offset} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${shownHearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<(shownHearts)?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${shownScore}점`}>{shownScore.toLocaleString()}</strong></div><span className="flight-stage">{displayRun.stage==='past'?'과거형':'과거분사'}</span>{run&&!showCue&&<div className="flight-question" style={{opacity:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{displayVerb.base[0].toUpperCase()+displayVerb.base.slice(1)}</strong><small>{displayVerb.meaning}</small></div>}{showCue&&answerCue&&<div key={`cue-${answerCue.id}`} className={`flight-answer-cue ${answerCue.kind}`} role="status">{answerCue.text}</div>}{run?.lastResult==='collision'&&<span key={`crash-${displayChallenge.id}`} className="flight-crash" aria-hidden="true"/>}</div>
   </div>:data?.lastResult?<div className="flight-finished" role="dialog" aria-labelledby="flight-finished-title">
    <div className="flight-finished-clouds" aria-hidden="true"/>
    <div className="flight-finished-card">

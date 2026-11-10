@@ -1,19 +1,20 @@
-import {useEffect,useRef,useState} from 'react';
+import {memo,useEffect,useRef,useState} from 'react';
 import type {Application} from 'pixi.js';
 import type {FlightPublicChallenge} from '../shared/flightGame.js';
 import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 import {pixiResolution,watchContextLoss} from './pixiRuntime.js';
 
-type Props={challenge:FlightPublicChallenge;speed:number;progress:number;startsAt:number;serverOffset:number;planeX:number};
+type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number};
 const FLIGHT_ART=['/flight/land.webp','/flight/objects-layer.webp','/flight/clouds-layer.webp','/flight/gate.webp','/flight/plane-banking.webp','/flight/plane.webp'];
 let artPromise:Promise<unknown[]>|undefined;
 export function preloadFlightArt(){return artPromise??=import('pixi.js').then(({Assets})=>Promise.all(FLIGHT_ART.map(path=>Assets.load(path)))).catch(error=>{artPromise=undefined;throw error;});}
 
-export function FlightScene({challenge,speed,progress,startsAt,serverOffset,planeX}:Props){
- const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,progress,startsAt,serverOffset,planeX}),[fallback,setFallback]=useState(true);
+function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
+ const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,startsAt,serverOffset,planeX}),[fallback,setFallback]=useState(true),[fallbackClock,setFallbackClock]=useState(Date.now());
  const previous=useRef({challenge,startsAt}),outgoing=useRef<{challenge:FlightPublicChallenge;startsAt:number}[]>([]);
  if(previous.current.challenge.id!==challenge.id){outgoing.current.push(previous.current);previous.current={challenge,startsAt};}
- live.current={challenge,speed,progress,startsAt,serverOffset,planeX};
+ live.current={challenge,speed,startsAt,serverOffset,planeX};
+ useEffect(()=>{if(!fallback)return;const timer=setInterval(()=>setFallbackClock(Date.now()),50);return()=>clearInterval(timer);},[fallback]);
  useEffect(()=>{
   const node=host.current;if(!node)return;node.dataset.renderer='fallback';
   let disposed=false,app:Application|undefined,observer:ResizeObserver|undefined,unwatch=()=>{},cleanupVisibility=()=>{};
@@ -44,6 +45,7 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=60;
     let scroll=0,scrollSpeed=live.current.speed,lastPlaneX=.5,bankDirection=0,bankUntil=0;
+    let layoutW=0,layoutH=0,landH=0,landY=0,objectHeight=0,objectStride=0,objectY=0,cloudHeight=0,cloudStride=0,cloudY=0;
     const drawGate=(gate:ReturnType<typeof makeGate>,w:number,h:number,y:number,words:{left:string;right:string;stage:string})=>{
      const gateH=Math.max(37,Math.min(65,h*.09)),gateWidth=w*.49;
      gate.group.y=y;
@@ -61,13 +63,21 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
      if(info.challenge.id!==gateId){departing.push({gate:current,wave:currentWave});current=makeGate();instance.stage.addChildAt(current.group,instance.stage.getChildIndex(plane));gateId=info.challenge.id;}
      currentWave={challenge:info.challenge,startsAt:info.startsAt};
      scrollSpeed+=(info.speed-scrollSpeed)*Math.min(1,tick.deltaMS/350);
-     scroll+=Math.min(tick.deltaMS,50)*scrollSpeed*.058;
-     const landCover=Math.max(w/landTexture.width,h/landTexture.height),landH=landTexture.height*landCover,landX=(w-landTexture.width*landCover)/2,landY=(h-landH)/2;
-     land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible){sprite.scale.set(landCover);sprite.position.set(landX,top);}});
-     const objectScale=Math.min(w/1024,h/500),objectHeight=1536*objectScale,objectStride=(1536-170)*objectScale,objectY=Math.min(0,(h-objectHeight)/2);
-     objects.forEach((row,side)=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.visible=top<h&&top+objectHeight>0;if(sprite.visible){sprite.scale.set(objectScale);sprite.position.set(side===0?0:w-512*objectScale,top);}}));
-     const cloudCover=w<h?w/cloudTexture.width:Math.max(w/cloudTexture.width,h/cloudTexture.height),cloudHeight=cloudTexture.height*cloudCover,cloudStride=(cloudTexture.height-220)*cloudCover,cloudX=(w-cloudTexture.width*cloudCover)/2,cloudY=Math.min(0,(h-cloudHeight)/2);
-     clouds.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*1.06,cloudStride,cloudY,j-1);sprite.visible=top<h&&top+cloudHeight>0;if(sprite.visible){sprite.scale.set(cloudCover);sprite.position.set(cloudX,top);}});
+     scroll+=Math.min(tick.deltaMS,100)*scrollSpeed*.058;
+     if(w!==layoutW||h!==layoutH){
+      layoutW=w;layoutH=h;
+      const landCover=Math.max(w/landTexture.width,h/landTexture.height),landX=(w-landTexture.width*landCover)/2;
+      landH=landTexture.height*landCover;landY=(h-landH)/2;
+      land.forEach(sprite=>{sprite.scale.set(landCover);sprite.x=landX;});
+      const objectScale=Math.min(w/1024,h/500);objectHeight=1536*objectScale;objectStride=(1536-170)*objectScale;objectY=Math.min(0,(h-objectHeight)/2);
+      objects.forEach((row,side)=>row.forEach(sprite=>{sprite.scale.set(objectScale);sprite.x=side===0?0:w-512*objectScale;}));
+      const cloudCover=w<h?w/cloudTexture.width:Math.max(w/cloudTexture.width,h/cloudTexture.height),cloudX=(w-cloudTexture.width*cloudCover)/2;
+      cloudHeight=cloudTexture.height*cloudCover;cloudStride=(cloudTexture.height-220)*cloudCover;cloudY=Math.min(0,(h-cloudHeight)/2);
+      clouds.forEach(sprite=>{sprite.scale.set(cloudCover);sprite.x=cloudX;});
+     }
+     land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible)sprite.y=top;});
+     objects.forEach(row=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.visible=top<h&&top+objectHeight>0;if(sprite.visible)sprite.y=top;}));
+     clouds.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*1.06,cloudStride,cloudY,j-1);sprite.visible=top<h&&top+cloudHeight>0;if(sprite.visible)sprite.y=top;});
      const gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),nowServer=Date.now()+info.serverOffset;
      const y=flightGateCenterY(nowServer,info.startsAt,info.challenge.deadline,h,gateH,planeSize);
      drawGate(current,w,h,y,info.challenge);current.group.visible=y<h+gateH*2;
@@ -81,14 +91,15 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
     });
     const visible=()=>{if(document.hidden)instance.ticker.stop();else if(node.dataset.renderer==='pixi')instance.ticker.start();};document.addEventListener('visibilitychange',visible);cleanupVisibility=()=>document.removeEventListener('visibilitychange',visible);
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.renderer='fallback';setFallback(true);});
-    observer=new ResizeObserver(()=>{if(!disposed)instance.renderer.resize(Math.max(1,node.clientWidth),Math.max(1,node.clientHeight));});observer.observe(node);
+    observer=new ResizeObserver(()=>{if(disposed)return;const width=Math.max(1,node.clientWidth),height=Math.max(1,node.clientHeight);if(width!==instance.screen.width||height!==instance.screen.height)instance.renderer.resize(width,height);});observer.observe(node);
     if(document.hidden)instance.ticker.stop();
    }catch{if(!disposed){node.dataset.renderer='fallback';setFallback(true);}}
   })();
   return()=>{disposed=true;observer?.disconnect();cleanupVisibility();unwatch();app?.destroy(true,{children:true});};
  },[]);
- const h=host.current?.clientHeight??600,w=host.current?.clientWidth??390,gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),now=Date.now()+serverOffset;
+ const h=host.current?.clientHeight??600,w=host.current?.clientWidth??390,gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),now=fallbackClock+serverOffset;
  const fallbackGates=[...outgoing.current,{challenge,startsAt}].filter(wave=>flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)<h+gateH*2);
  outgoing.current=fallbackGates.filter(wave=>wave.challenge.id!==challenge.id);
  return <div className="flight-scene" ref={host} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
 }
+export const FlightScene=memo(FlightSceneView);
