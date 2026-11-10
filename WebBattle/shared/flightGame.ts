@@ -1,4 +1,5 @@
 export type FlightLane='left'|'right';
+export type FlightSteeringLane=FlightLane|'center';
 export type FlightStage='past'|'participle';
 export type FlightChallenge={id:number;kind:'approach'|'gate';verbIndex:number;stage:FlightStage;left:string;right:string;correctLane:FlightLane;deadline:number};
 export type FlightRun={id:string;startedAt:number;hearts:number;distance:number;score:number;coins:number;speed:number;verbIndex:number;stage:FlightStage;challengeId:number;challenge:FlightChallenge;lastActionAt:number;lastResult?:'correct'|'coin'|'collision';lastWord?:string};
@@ -10,3 +11,5 @@ export type FlightProgress={season:string;bestDistance:number;bestScore:number;p
 export type FlightView={serverNow:number;season:string;seasonEndsAt:number;bestDistance:number;bestScore:number;plays:number;history:FlightSeasonRecord[];run?:FlightPublicRun;lastResult?:FlightResult;ranking:{id:string;name:string;profileId?:string;frameId?:string;distance:number;score:number}[]};
 export function flightSpeed(distance:number){return Math.min(2.4,1+distance/500*0.12);}
 export function flightWindow(speed:number){return Math.max(1250,Math.round(3200/speed));}
+export function flightLaneAt(x:number):FlightSteeringLane{return x<.46?'left':x>.54?'right':'center';}
+export const FLIGHT_ARRIVAL_GRACE_MS=450;

@@ -14,12 +14,12 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    socket.send(JSON.stringify({type:'session',id:'me',name:'비행 검사',token:'flight-token',avatar:'pronoun',rating:1000,coins:0,points:0}));
    socket.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:defaultHubSave()}}));
   }
-  if(message.type==='flightStart')run={id:'flight-1',startedAt:Date.now(),hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,challenge:{id:1,kind:'approach',verbIndex:5,stage:'past',left:'코인',right:'장애물',correctLane:'left',deadline:Date.now()+15000},lastActionAt:0};
+  if(message.type==='flightStart')run={id:'flight-1',startedAt:Date.now(),hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,challenge:{id:1,kind:'approach',verbIndex:5,stage:'past',left:'코인',right:'장애물',correctLane:'left',deadline:Date.now()+1700},lastActionAt:0};
   if(message.type==='flightChoose'&&run&&message.challengeId===run.challenge.id){
    const correct=message.side===run.challenge.correctLane,current=run.challenge,stage=run.stage,verbIndex=run.verbIndex;
-   if(!correct){run={...run,hearts:run.hearts-1,speed:1,stage:'past',challengeId:current.id+1,challenge:{id:current.id+1,kind:'approach',verbIndex,stage:'past',left:'장애물',right:'코인',correctLane:'right',deadline:Date.now()+15000},lastResult:'collision'};}
-   else if(current.kind==='approach')run={...run,score:run.score+1,coins:run.coins+1,challengeId:current.id+1,challenge:{id:current.id+1,kind:'gate',verbIndex,stage,left:stage==='past'?'breaked':'broken',right:stage==='past'?'broke':'broke',correctLane:stage==='past'?'right':'left',deadline:Date.now()+15000},lastResult:'coin'};
-   else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,challenge:{id:current.id+1,kind:'approach',verbIndex,stage:stage==='past'?'participle':'past',left:'코인',right:'장애물',correctLane:'left',deadline:Date.now()+15000},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
+   if(!correct){run={...run,hearts:run.hearts-1,speed:1,stage:'past',challengeId:current.id+1,challenge:{id:current.id+1,kind:'approach',verbIndex,stage:'past',left:'장애물',right:'코인',correctLane:'right',deadline:Date.now()+1700},lastResult:'collision'};}
+   else if(current.kind==='approach')run={...run,score:run.score+1,coins:run.coins+1,challengeId:current.id+1,challenge:{id:current.id+1,kind:'gate',verbIndex,stage,left:stage==='past'?'breaked':'broken',right:stage==='past'?'broke':'broke',correctLane:stage==='past'?'right':'left',deadline:Date.now()+1700},lastResult:'coin'};
+   else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,challenge:{id:current.id+1,kind:'approach',verbIndex,stage:stage==='past'?'participle':'past',left:'코인',right:'장애물',correctLane:'left',deadline:Date.now()+1700},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
   }
   if(['flightStatus','flightStart','flightChoose'].includes(message.type))socket.send(JSON.stringify({type:'flightState',data:state()}));
  }));
@@ -34,21 +34,22 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-renderer',/pixi|fallback/);
   await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
   await page.waitForTimeout(150);
-  await page.screenshot({path:`.runtime/v187-flight-approach-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v188-flight-approach-${viewport.width}-${test.info().project.name}.png`});
   const pageBox=await page.locator('.flight-page').boundingBox(),fieldBox=await page.locator('.flight-field').boundingBox();
   expect(fieldBox!.y+fieldBox!.height).toBeLessThanOrEqual(pageBox!.y+pageBox!.height+1);
-  await page.getByRole('button',{name:'왼쪽 코인'}).click();
-  await expect(page.locator('.flight-hud')).toContainText('1');
-  await expect(page.getByRole('button',{name:'오른쪽 broke'})).toBeVisible();
-  await page.screenshot({path:`.runtime/v187-flight-gate-${viewport.width}-${test.info().project.name}.png`});
-  await page.getByRole('button',{name:'오른쪽 broke'}).click();
+  const steer=async(x:number)=>{const box=await page.locator('.flight-field').boundingBox();await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.75);await page.mouse.down();await page.mouse.move(box!.x+box!.width*x,box!.y+box!.height*.75,{steps:5});await page.mouse.up();await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',x<.5?/0\.2/:/0\.7/);};
+  await steer(.27);
+  await expect(page.locator('.flight-gate')).toHaveCount(0);
+  await expect(page.locator('.flight-hud span').nth(1).locator('b')).toHaveText('1');
+  await page.screenshot({path:`.runtime/v188-flight-gate-${viewport.width}-${test.info().project.name}.png`});
+  await steer(.73);
   await expect(page.locator('.flight-question')).toContainText('Break의 과거분사');
-  await expect(page.locator('.flight-hud')).toContainText('31');
-  await page.getByRole('button',{name:'오른쪽 장애물'}).click();
+  await expect(page.locator('.flight-hud span').nth(1).locator('b')).toHaveText('31');
+  await steer(.73);
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await expect(page.locator('.flight-question')).toContainText('Break의 과거형');
-  const field=await page.locator('.flight-field').boundingBox(),gates=await page.locator('.flight-gates').boundingBox();
-  expect(field!.width).toBeGreaterThan(gates!.width);expect(field!.height).toBeGreaterThan(100);
+  const field=await page.locator('.flight-field').boundingBox();
+  expect(field!.width).toBeGreaterThan(100);expect(field!.height).toBeGreaterThan(100);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed')&&!error.includes('due to access control checks.'))).toEqual([]);
  }finally{await context.close();}

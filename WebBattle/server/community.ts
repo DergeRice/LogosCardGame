@@ -9,7 +9,7 @@ import type {Peer,CommunityView,Invitation,StoreResult} from '../shared/communit
 import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
 import {seasonAt} from '../shared/season.js';
 import {VERB_CATEGORIES,interleaveVerbCards,type MiniGameProgress,type MiniGameRun,type MiniGameView} from '../shared/miniGame.js';
-import {flightSpeed,flightWindow,type FlightChallenge,type FlightLane,type FlightProgress,type FlightRun,type FlightView} from '../shared/flightGame.js';
+import {flightSpeed,flightWindow,FLIGHT_ARRIVAL_GRACE_MS,type FlightChallenge,type FlightLane,type FlightProgress,type FlightRun,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from './flightWords.js';
 import {kstDay} from './userStats.js';
 type Player=ReturnType<Game['newPlayer']>;
@@ -158,11 +158,12 @@ export class Community {
   run.hearts--;run.speed=1;run.stage='past';run.lastActionAt=now;run.lastResult='collision';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length].base;
   if(run.hearts<=0)this.finishFlight(progress);else this.nextFlightChallenge(run,'approach',now);
  }
- flightStatus(p:Player){const progress=this.flightProgress(p);if(progress.run&&Date.now()>progress.run.challenge.deadline)this.flightCollision(progress);this.game.send(p.socket,{type:'flightState',data:this.flightView(progress)});}
+ flightStatus(p:Player){const progress=this.flightProgress(p);if(progress.run&&Date.now()>progress.run.challenge.deadline+FLIGHT_ARRIVAL_GRACE_MS)this.flightCollision(progress);this.game.send(p.socket,{type:'flightState',data:this.flightView(progress)});}
  flightStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.flightProgress(p);if(progress.run)return this.flightStatus(p);if(seasonAt().endAt-Date.now()<60_000)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');progress.lastResult=undefined;const now=Date.now(),initial:FlightChallenge={id:0,kind:'approach',verbIndex:5,stage:'past',left:'',right:'',correctLane:'left',deadline:now};const run:FlightRun={id:randomUUID(),startedAt:now,hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:0,challenge:initial,lastActionAt:0};this.nextFlightChallenge(run,'approach',now);progress.run=run;this.flightStatus(p);}
  flightChoose(p:Player,msg:Record<string,unknown>){const progress=this.flightProgress(p),run=progress.run;if(!run)return this.flightStatus(p);const now=Date.now(),challenge=run.challenge;
-  if(msg.runId!==run.id||msg.challengeId!==challenge.id||!['left','right'].includes(String(msg.side)))return this.flightStatus(p);
-  if(now>challenge.deadline){this.flightCollision(progress,now);return this.flightStatus(p);}
+  if(msg.runId!==run.id||msg.challengeId!==challenge.id||!['left','right','center'].includes(String(msg.side)))return this.flightStatus(p);
+  if(now<challenge.deadline-Math.round(flightWindow(run.speed)*.28))return this.flightStatus(p);
+  if(now>challenge.deadline+FLIGHT_ARRIVAL_GRACE_MS){this.flightCollision(progress,now);return this.flightStatus(p);}
   const side=msg.side as FlightLane;run.lastActionAt=now;
   if(side!==challenge.correctLane){this.flightCollision(progress,now);return this.flightStatus(p);}
   if(challenge.kind==='approach'){run.coins++;run.score++;run.lastResult='coin';run.lastWord=undefined;this.nextFlightChallenge(run,'gate',now);}
