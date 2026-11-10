@@ -57,7 +57,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   const steer=async(x:number)=>{const box=await page.locator('.flight-field').boundingBox();await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.75);await page.mouse.down();await page.mouse.move(box!.x+box!.width*x,box!.y+box!.height*.75,{steps:5});await page.mouse.up();await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',x<.5?/0\.2/:/0\.7/);};
   await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',/0\.7/);
   await expect(page.locator('.flight-answer-cue')).toHaveText('broke',{timeout:5000});
-  await expect(page.locator('.flight-question')).toHaveCSS('opacity','0');
+  await expect(page.locator('.flight-question')).toHaveCount(0);
   await page.screenshot({path:`.runtime/v197-flight-answer-${viewport.width}-${test.info().project.name}.png`});
   await page.waitForTimeout(1100);
   await page.screenshot({path:`.runtime/v196-flight-gate-${viewport.width}-${test.info().project.name}.png`});
@@ -71,6 +71,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await steer(.73);
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await expect(page.locator('.flight-answer-cue')).toHaveText('break');
+  await page.waitForTimeout(700);
+  await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   await page.screenshot({path:`.runtime/v196-flight-retry-${viewport.width}-${test.info().project.name}.png`});

@@ -2,3 +2,9 @@ export function descendingFlightTile(offset:number,tileHeight:number,baseY:numbe
  const fraction=offset%tileHeight;
  return {top:baseY+tile*tileHeight+fraction};
 }
+
+export function flightGateCenterY(now:number,startsAt:number,deadline:number,fieldHeight:number,gateHeight:number,planeSize:number){
+ const start=-gateHeight*.6;
+ const contact=fieldHeight*.83-(planeSize+gateHeight)/2;
+ return start+Math.max(0,now-startsAt)/Math.max(1,deadline-startsAt)*(contact-start);
+}

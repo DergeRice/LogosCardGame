@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import type {Application} from 'pixi.js';
 import type {FlightPublicChallenge} from '../shared/flightGame.js';
-import {descendingFlightTile} from '../shared/flightVisual.js';
+import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 import {pixiResolution,watchContextLoss} from './pixiRuntime.js';
 
 type Props={challenge:FlightPublicChallenge;speed:number;progress:number;startsAt:number;serverOffset:number;planeX:number};
@@ -11,6 +11,8 @@ export function preloadFlightArt(){return artPromise??=import('pixi.js').then(({
 
 export function FlightScene({challenge,speed,progress,startsAt,serverOffset,planeX}:Props){
  const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,progress,startsAt,serverOffset,planeX}),[fallback,setFallback]=useState(true);
+ const previous=useRef({challenge,startsAt}),outgoing=useRef<{challenge:FlightPublicChallenge;startsAt:number}[]>([]);
+ if(previous.current.challenge.id!==challenge.id){outgoing.current.push(previous.current);previous.current={challenge,startsAt};}
  live.current={challenge,speed,progress,startsAt,serverOffset,planeX};
  useEffect(()=>{
   const node=host.current;if(!node)return;node.dataset.renderer='fallback';
@@ -36,14 +38,15 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
      group.addChild(...panels,...labels,stageLabel);
      return {group,panels,labels,stageLabel,layoutWidth:0,layoutHeight:0};
     };
-    let current=makeGate(),gateId=live.current.challenge.id;const plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
+    let current=makeGate(),gateId=live.current.challenge.id,currentWave={challenge:live.current.challenge,startsAt:live.current.startsAt};const departing:{gate:ReturnType<typeof makeGate>;wave:typeof currentWave}[]=[];
+    const plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
     instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=60;
     let scroll=0,lastPlaneX=.5,bankDirection=0,bankUntil=0;
     const drawGate=(gate:ReturnType<typeof makeGate>,w:number,h:number,y:number,words:{left:string;right:string;stage:string})=>{
      const gateH=Math.max(37,Math.min(65,h*.09)),gateWidth=w*.49;
-     gate.group.y=y*h;
+     gate.group.y=y;
      if(gate.layoutWidth!==w||gate.layoutHeight!==h){
       gate.layoutWidth=w;gate.layoutHeight=h;
       gate.panels.forEach((panel,index)=>{panel.width=gateWidth;panel.height=gateH;panel.position.set(w*(index===0?.25:.75),0);});
@@ -51,11 +54,12 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
       gate.stageLabel.style.fontSize=Math.max(14,Math.min(21,w*.045));gate.stageLabel.position.set(w*.5,-gateH*1.3-4);
      }
      gate.labels.forEach((label,index)=>{const value=index===0?words.left:words.right;if(label.text!==value)label.text=value;});
-     const stage=words.stage==='participle'?'과거분사':'과거형';if(gate.stageLabel.text!==stage)gate.stageLabel.text=stage;gate.stageLabel.visible=y*h>Math.max(61,gateH*.7);
+     const stage=words.stage==='participle'?'과거분사':'과거형';if(gate.stageLabel.text!==stage)gate.stageLabel.text=stage;gate.stageLabel.visible=y>Math.max(61,gateH*.7);
     };
     instance.ticker.add(tick=>{
      const w=instance.screen.width,h=instance.screen.height,info=live.current;
-     if(info.challenge.id!==gateId){instance.stage.removeChild(current.group);current.group.destroy({children:true});current=makeGate();instance.stage.addChildAt(current.group,instance.stage.getChildIndex(plane));gateId=info.challenge.id;}
+     if(info.challenge.id!==gateId){departing.push({gate:current,wave:currentWave});current=makeGate();instance.stage.addChildAt(current.group,instance.stage.getChildIndex(plane));gateId=info.challenge.id;}
+     currentWave={challenge:info.challenge,startsAt:info.startsAt};
      scroll+=Math.min(tick.deltaMS,50)*info.speed*.058;
      const landCover=Math.max(w/landTexture.width,h/landTexture.height),landH=landTexture.height*landCover,landX=(w-landTexture.width*landCover)/2,landY=(h-landH)/2;
      land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible){sprite.scale.set(landCover);sprite.position.set(landX,top);}});
@@ -63,10 +67,12 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
      objects.forEach((row,side)=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.visible=top<h&&top+objectHeight>0;if(sprite.visible){sprite.scale.set(objectScale);sprite.position.set(side===0?0:w-512*objectScale,top);}}));
      const cloudCover=w<h?w/cloudTexture.width:Math.max(w/cloudTexture.width,h/cloudTexture.height),cloudHeight=cloudTexture.height*cloudCover,cloudStride=(cloudTexture.height-220)*cloudCover,cloudX=(w-cloudTexture.width*cloudCover)/2,cloudY=Math.min(0,(h-cloudHeight)/2);
      clouds.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*1.06,cloudStride,cloudY,j-1);sprite.visible=top<h&&top+cloudHeight>0;if(sprite.visible){sprite.scale.set(cloudCover);sprite.position.set(cloudX,top);}});
-     const duration=Math.max(1,info.challenge.deadline-info.startsAt),p=Math.max(0,Math.min(1.25,(Date.now()+info.serverOffset-info.startsAt)/duration));
-     const gateH=Math.max(48,Math.min(94,h*.115)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15)));
-     const startY=-gateH*.6/h,contactY=.83-(planeSize+gateH)/(2*h),y=startY+p*(contactY-startY);
-     drawGate(current,w,h,y,info.challenge);current.group.visible=info.progress>=0;
+     const gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),nowServer=Date.now()+info.serverOffset;
+     const y=flightGateCenterY(nowServer,info.startsAt,info.challenge.deadline,h,gateH,planeSize);
+     drawGate(current,w,h,y,info.challenge);current.group.visible=y<h+gateH*2;
+     for(let i=departing.length-1;i>=0;i--){const {gate,wave}=departing[i],oldY=flightGateCenterY(nowServer,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize);
+      if(oldY>h+gateH*2){instance.stage.removeChild(gate.group);gate.group.destroy({children:true});departing.splice(i,1);}else drawGate(gate,w,h,oldY,wave.challenge);
+     }
      const size=planeSize;plane.width=size;plane.height=size;plane.position.set(w*info.planeX,h*.83);
      const now=performance.now();if(Math.abs(info.planeX-lastPlaneX)>.012){bankDirection=info.planeX<lastPlaneX?-1:1;bankUntil=now+360;}lastPlaneX=info.planeX;
      const banked=now<bankUntil,bankState=banked?(bankDirection<0?'left':'right'):'straight';if(node.dataset.bank!==bankState)node.dataset.bank=bankState;
@@ -80,5 +86,8 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
   })();
   return()=>{disposed=true;observer?.disconnect();cleanupVisibility();unwatch();app?.destroy(true,{children:true});};
  },[]);
- return <div className="flight-scene" ref={host} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{progress>=0&&<div className="flight-fallback-gates" style={{top:`${Math.max(-22,-22+Math.min(1.25,progress)*105)}%`}}><b className="flight-fallback-stage">{challenge.stage==='past'?'과거형':'과거분사'}</b><span>{challenge.left}</span><span>{challenge.right}</span></div>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
+ const h=host.current?.clientHeight??600,w=host.current?.clientWidth??390,gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),now=Date.now()+serverOffset;
+ const fallbackGates=[...outgoing.current,{challenge,startsAt}].filter(wave=>flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)<h+gateH*2);
+ outgoing.current=fallbackGates.filter(wave=>wave.challenge.id!==challenge.id);
+ return <div className="flight-scene" ref={host} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
 }

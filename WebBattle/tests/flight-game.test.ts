@@ -5,7 +5,7 @@ import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import {flightLaneAt,flightSpeed,flightWindow,FLIGHT_ARRIVAL_GRACE_MS,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
-import {descendingFlightTile} from '../shared/flightVisual.js';
+import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 
 test('flight art moves downward and loops without a jump',()=>{
  const first=descendingFlightTile(99,500,0,0),next=descendingFlightTile(109,500,0,0);
@@ -13,6 +13,17 @@ test('flight art moves downward and loops without a jump',()=>{
  const beforeSeam=descendingFlightTile(499,500,0,-1),afterSeam=descendingFlightTile(501,500,0,0);
  assert.equal(afterSeam.top-beforeSeam.top,2);
  assert.equal('flipped' in afterSeam,false);
+});
+
+test('a word gate keeps moving below the plane after contact until it exits the field',()=>{
+ const start=1000,deadline=4800,h=600,gateH=54,plane=70;
+ const before=flightGateCenterY(deadline-50,start,deadline,h,gateH,plane);
+ const contact=flightGateCenterY(deadline,start,deadline,h,gateH,plane);
+ const after=flightGateCenterY(deadline+500,start,deadline,h,gateH,plane);
+ const exit=flightGateCenterY(deadline+2000,start,deadline,h,gateH,plane);
+ assert.ok(before<contact&&contact<after&&after<exit);
+ assert.equal(contact+gateH/2,h*.83-plane/2);
+ assert.ok(exit>h);
 });
 
 test('every base, past and participle has a prerecorded Kokoro flight clip',()=>{
@@ -82,6 +93,8 @@ test('wrong word gate removes one heart and repeats the exact same gate while re
  game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.coinLane});assert.equal(view(messages).run?.coins,0);
  const missed=run.challenge,wrong=answer(game,p.id)==='left'?'right':'left';choose(wrong);run=view(messages).run!;
  assert.equal(run.hearts,2);assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.speed,1);assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
+ game.community.flightChoose(p,{runId:run.id,challengeId:missed.id,side:wrong});game.community.flightStatus(p);
+ assert.equal(view(messages).run?.hearts,2,'stale answer and immediate status must not spend another heart');
  choose(answer(game,p.id)==='left'?'right':'left');run=view(messages).run!;assert.equal(run.hearts,1);
  now=run.challenge.deadline+FLIGHT_ARRIVAL_GRACE_MS+1;game.community.flightStatus(p);
  assert.equal(view(messages).run,undefined);assert.deepEqual(view(messages).lastResult,{distance:100,score:30,coins:0});assert.equal(view(messages).ranking[0].distance,100);
