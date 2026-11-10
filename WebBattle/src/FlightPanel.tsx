@@ -30,16 +30,26 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const steerPointer=(event:React.PointerEvent<HTMLDivElement>)=>{const bounds=event.currentTarget.getBoundingClientRect();steer((event.clientX-bounds.left)/bounds.width);};
  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(!run)return;if(event.key==='ArrowLeft'||event.key==='a'){event.preventDefault();steer(.275);}if(event.key==='ArrowRight'||event.key==='d'){event.preventDefault();steer(.725);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[Boolean(run)]);
  const myRank=data?.ranking.findIndex(item=>item.id===myId)??-1;
- return <section className={`hub-page flight-page ${run?'is-playing':''}`} aria-label="불규칙 동사 플라이트">
+ return <section className={`hub-page flight-page ${run?'is-playing':data?.lastResult?'is-finished':''}`} aria-label="불규칙 동사 플라이트">
   <header className="flight-header"><button aria-label="미니게임 목록으로" onClick={onBack}>←</button><h1>불규칙 동사 플라이트</h1></header>
   {run&&challenge&&verb?<div className="flight-play">
    <div className="flight-timer" aria-label={`게이트까지 ${Math.ceil(left/1000)}초`}><span style={{width:`${Math.max(0,Math.min(100,left/total*100))}%`}}/></div>
    <div className="flight-field" role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 왼쪽 ${challenge.left}, 오른쪽 ${challenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene challenge={challenge} speed={run.speed} progress={1-remaining/total} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${run.hearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<run.hearts?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${run.score}점`}>{run.score.toLocaleString()}</strong></div><span className="flight-stage">{run.stage==='past'?'과거형':'과거분사'}</span><div className="flight-question" style={{opacity:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{verb.base[0].toUpperCase()+verb.base.slice(1)}</strong><small>{verb.meaning}</small></div>{run.lastResult==='collision'&&<span key={challenge.id} className="flight-crash" aria-hidden="true"/>}</div>
    {impact&&<span key={impact.serial} className="flight-impact score" aria-live="polite">{impact.text}</span>}
+  </div>:data?.lastResult?<div className="flight-finished" role="dialog" aria-labelledby="flight-finished-title">
+   <div className="flight-finished-clouds" aria-hidden="true"/>
+   <div className="flight-finished-card">
+    <span className="flight-finished-plane" aria-hidden="true"/>
+    <small>FLIGHT COMPLETE</small>
+    <h2 id="flight-finished-title">비행 종료</h2>
+    <div className="flight-finished-stats"><span><small>점수</small><strong>{data.lastResult.score.toLocaleString()}</strong></span><span><small>비행 거리</small><strong>{data.lastResult.distance.toLocaleString()}<em>m</em></strong></span></div>
+    <p>최고 기록 {data.bestScore.toLocaleString()}점{myRank>=0?` · 이번 시즌 ${myRank+1}위`:''}</p>
+    <button className="flight-start" disabled={!connected||!artReady} onClick={()=>{prepareMiniAudio();send('flightStart')}}>{!artReady?'준비 중…':'다시 비행'}</button>
+    <button className="flight-finished-back" onClick={onBack}>미니게임으로</button>
+   </div>
   </div>:<div className="flight-ready">
-   {data?.lastResult&&<div className="flight-result"><strong>비행 종료</strong><span>{data.lastResult.distance.toLocaleString()}m · {data.lastResult.score.toLocaleString()}점</span></div>}
    <div className="flight-ranking"><div><h2>비행 랭킹</h2><small>최고 {data?.bestDistance??0}m</small></div><ol>{(data?.ranking??[]).slice(0,expanded?10:3).map((entry,index)=><li key={entry.id}><b>{index+1}</b><Avatar kind="verb" profileId={entry.profileId} frameId={entry.frameId}/><span>{entry.name}</span><strong>{entry.distance.toLocaleString()}m</strong><small>{entry.score}점</small></li>)}</ol>{!data?.ranking.length&&<p>첫 비행 기록을 남겨보세요.</p>}{(data?.ranking.length??0)>3&&<button className="flight-more" onClick={()=>setExpanded(value=>!value)}>{expanded?'접기':'더보기'}</button>}{myRank>=10&&<p>내 순위 {myRank+1}위</p>}</div>
-   <button className="flight-start" disabled={!connected||!artReady} onClick={()=>{prepareMiniAudio();send('flightStart')}}>{!artReady?'준비 중…':data?.lastResult?'다시 비행':'시작'}</button>
+   <button className="flight-start" disabled={!connected||!artReady} onClick={()=>{prepareMiniAudio();send('flightStart')}}>{!artReady?'준비 중…':'시작'}</button>
   </div>}
  </section>;
 }

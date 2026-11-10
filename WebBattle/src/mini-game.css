@@ -57,10 +57,10 @@
 @keyframes mini-combo-fallback{from{transform:scale(.35);opacity:1}to{transform:scale(1.7);opacity:0}}
 .mini-word-enter{animation:mini-card-enter .08s cubic-bezier(.15,.9,.2,1) both}
 .mini-flying-card{position:absolute;left:8%;bottom:0;width:84%;height:min(calc(100% - 66px),290px);min-height:115px;z-index:5;display:grid;place-items:center;border:2px solid #d9c895;border-radius:19px;background:#fffdf5;color:#263b2d;box-shadow:0 9px 18px #76634024;font-size:clamp(24px,5vw,42px);font-weight:900;overflow-wrap:anywhere;pointer-events:none}
-.mini-fly-left{animation:mini-card-left .13s cubic-bezier(.2,.7,.3,1) forwards}
-.mini-fly-right{animation:mini-card-right .13s cubic-bezier(.2,.7,.3,1) forwards}
+.mini-fly-left{animation:mini-card-left .22s cubic-bezier(.18,.72,.25,1) forwards}
+.mini-fly-right{animation:mini-card-right .22s cubic-bezier(.18,.72,.25,1) forwards}
 @keyframes mini-card-enter{from{transform:translateY(15px) scale(.94);opacity:.72}to{transform:translateY(0) scale(1);opacity:1}}
-@keyframes mini-card-left{40%{opacity:.1}to{transform:translate(-100%,-9%) rotate(-15deg) scale(.72);opacity:0}}
-@keyframes mini-card-right{40%{opacity:.1}to{transform:translate(100%,-9%) rotate(15deg) scale(.72);opacity:0}}
+@keyframes mini-card-left{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}40%{transform:translate(-55%,-5%) rotate(-9deg) scale(.93);opacity:1}75%{opacity:.85}to{transform:translate(-185%,-16%) rotate(-23deg) scale(.68);opacity:0}}
+@keyframes mini-card-right{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}40%{transform:translate(55%,-5%) rotate(9deg) scale(.93);opacity:1}75%{opacity:.85}to{transform:translate(185%,-16%) rotate(23deg) scale(.68);opacity:0}}
 @media(orientation:landscape) and (max-height:540px){.mini-combo-stage{top:0;height:27px}.mini-combo-stage .mini-combo{font-size:15px;padding:1px 10px}.mini-combo-burst{transform:translate(-50%,-50%) scale(.7)}.mini-flying-card{height:calc(100% - 34px);min-height:50px;border-radius:9px;font-size:20px}}
 @media(prefers-reduced-motion:reduce){.mini-word-enter,.mini-flying-card,.mini-combo-stage .mini-combo,.mini-combo-fallback{animation:none}.mini-flying-card{display:none}}

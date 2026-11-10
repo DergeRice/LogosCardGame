@@ -68,6 +68,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   expect(await page.locator('.mini-next-card').first().evaluate(element=>getComputedStyle(element).bottom)).not.toBe('0px');
   const immediate=await page.evaluate(async()=>{document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>requestAnimationFrame(resolve));return {word:document.querySelector('.mini-word span')?.textContent,flying:document.querySelector('.mini-flying-card span')?.textContent};});
   expect(immediate).toEqual({word:'walk',flying:'run'});
+  await page.waitForTimeout(55);
+  const flyingMotion=await page.locator('.mini-flying-card').first().evaluate(element=>{const style=getComputedStyle(element);return {opacity:Number(style.opacity),x:new DOMMatrixReadOnly(style.transform).m41};});
+  expect(flyingMotion.opacity).toBeGreaterThan(.75);expect(flyingMotion.x).toBeLessThan(0);
   await page.evaluate(async()=>{for(let i=0;i<2;i++){document.querySelector<HTMLButtonElement>('.mini-side')?.click();await new Promise(resolve=>setTimeout(resolve,50));}});
   await expect(page.locator('.mini-combo')).toContainText('Combo x3');
   const comboBox=await page.locator('.mini-combo').boundingBox(),stageBox=await page.locator('.mini-game-stage').boundingBox();

@@ -1,14 +1,14 @@
 import {test,expect,guestContext} from './fixtures.js';
 import {defaultHubSave} from '../../shared/store.js';
-import type {FlightRun} from '../../shared/flightGame.js';
+import type {FlightResult,FlightRun} from '../../shared/flightGame.js';
 
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irregular verb flight ${viewport.width}x${viewport.height}`,async({browser})=>{
  const context=await guestContext(browser,{viewport,isMobile:true,hasTouch:true});
  await context.addInitScript(({width,height})=>Object.defineProperty(window,'visualViewport',{value:Object.assign(new EventTarget(),{width,height:height-40,offsetTop:20,offsetLeft:0,scale:1})}),viewport);
- const page=await context.newPage(),errors:string[]=[],audioResponses:string[]=[],artResponses:string[]=[],actions:string[]=[];let run:FlightRun|undefined;
+ const page=await context.newPage(),errors:string[]=[],audioResponses:string[]=[],artResponses:string[]=[],actions:string[]=[];let run:FlightRun|undefined,finishedResult:FlightResult|undefined,sendState=()=>{};
  page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.url().includes('/audio/mini/')&&response.ok())audioResponses.push(response.url());if(response.url().includes('/flight/')&&response.ok()&&response.headers()['content-type']?.includes('image/'))artResponses.push(response.url());});
- const state=()=>{const publicRun=run?(()=>{const {correctLane:_secret,...challenge}=run.challenge,{verbIndex:_index,...visible}=run;return {...visible,challenge,verb:{base:'break',meaning:'깨다'}};})():undefined;return {serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:0,bestScore:0,plays:0,history:[],ranking:[],...(publicRun?{run:publicRun}:{})};};
- await page.routeWebSocket('**/socket',socket=>socket.onMessage(raw=>{
+ const state=()=>{const publicRun=run?(()=>{const {correctLane:_secret,...challenge}=run.challenge,{verbIndex:_index,...visible}=run;return {...visible,challenge,verb:{base:'break',meaning:'깨다'}};})():undefined;return {serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:100,bestScore:30,plays:0,history:[],ranking:[],...(publicRun?{run:publicRun}:{}),...(finishedResult?{lastResult:finishedResult}:{})};};
+ await page.routeWebSocket('**/socket',socket=>{sendState=()=>socket.send(JSON.stringify({type:'flightState',data:state()}));socket.onMessage(raw=>{
   const message=JSON.parse(String(raw));
   actions.push(message.type);
   if(message.type==='hello'){
@@ -21,8 +21,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    if(!correct){run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now(),deadline:Date.now()+3800},lastResult:'collision',collisionReason:'gate'};}
    else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,coinResolved:true,hazardResolved:true,challenge:{id:current.id+1,kind:'gate',verbIndex,stage:stage==='past'?'participle':'past',left:stage==='past'?'broken':'breaked',right:stage==='past'?'breaken':'broke',correctLane:'left',startsAt:Date.now(),deadline:Date.now()+3800},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
   }
-  if(['flightStatus','flightStart','flightChoose'].includes(message.type))socket.send(JSON.stringify({type:'flightState',data:state()}));
- }));
+  if(['flightStatus','flightStart','flightChoose'].includes(message.type))sendState();
+ });});
  try{
   await page.goto('/');await page.getByRole('tab',{name:'미니게임',exact:true}).click();
   await page.getByRole('button',{name:/불규칙 동사 플라이트/}).click();
@@ -40,9 +40,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-play')).not.toContainText('거리');
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-renderer',/pixi|fallback/);
   await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
-  for(const art of ['plane','gate','land','objects','clouds'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}.webp`))).toBe(true);
+  for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects/tree-a.webp','clouds/cloud-a.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
   await page.waitForTimeout(150);
-  await page.screenshot({path:`.runtime/v193-flight-opening-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v195-flight-opening-${viewport.width}-${test.info().project.name}.png`});
   const pageBox=await page.locator('.flight-page').boundingBox(),fieldBox=await page.locator('.flight-field').boundingBox();
   expect(fieldBox!.y+fieldBox!.height).toBeLessThanOrEqual(pageBox!.y+pageBox!.height+1);
   const heartsBox=await page.locator('.flight-hearts').boundingBox(),scoreBox=await page.locator('.flight-score').boundingBox();
@@ -51,8 +51,13 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   expect(await page.locator('.game-hub .flight-page').count()).toBe(1);
   const steer=async(x:number)=>{const box=await page.locator('.flight-field').boundingBox();await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.75);await page.mouse.down();await page.mouse.move(box!.x+box!.width*x,box!.y+box!.height*.75,{steps:5});await page.mouse.up();await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',x<.5?/0\.2/:/0\.7/);};
   await steer(.73);
+  if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
+   await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','right');
+   await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
+   await steer(.73);
+  }
   await page.waitForTimeout(1100);
-  await page.screenshot({path:`.runtime/v193-flight-gate-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v195-flight-gate-${viewport.width}-${test.info().project.name}.png`});
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-score')).toHaveText('30');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
@@ -60,11 +65,18 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
-  await page.screenshot({path:`.runtime/v193-flight-retry-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v195-flight-retry-${viewport.width}-${test.info().project.name}.png`});
   expect(actions).not.toContain('flightHazard');expect(actions).not.toContain('flightPickup');
   const field=await page.locator('.flight-field').boundingBox();
   expect(field!.width).toBeGreaterThan(100);expect(field!.height).toBeGreaterThan(100);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  run=undefined;finishedResult={distance:100,score:30,coins:0};sendState();
+  await expect(page.getByRole('dialog',{name:'비행 종료'})).toBeVisible();
+  await expect(page.getByRole('dialog',{name:'비행 종료'})).toContainText('30');
+  await expect(page.getByRole('button',{name:'다시 비행'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'미니게임으로'})).toBeVisible();
+  await page.waitForTimeout(450);
+  await page.screenshot({path:`.runtime/v195-flight-finished-${viewport.width}-${test.info().project.name}.png`});
   expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed')&&!error.includes('due to access control checks.'))).toEqual([]);
  }finally{await context.close();}
 });
