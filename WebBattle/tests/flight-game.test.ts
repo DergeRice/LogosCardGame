@@ -24,8 +24,9 @@ test('word gates start immediately; a separate coin is 1 point and each correct 
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.handle(p,{type:'flightStart'});
  let run=view(messages).run!;assert.equal(run.verb.base,'break');assert.equal(run.hearts,3);assert.equal(run.challenge.kind,'gate');assert.ok([run.challenge.left,run.challenge.right].includes('broke'));assert.equal('correctLane' in run.challenge,false);
- const choose=(side:'left'|'right')=>{const current=view(messages).run!;now=current.challenge.deadline-100;game.handle(p,{type:'flightChoose',runId:current.id,challengeId:current.challenge.id,side});};
- const pickup=()=>{const current=view(messages).run!;now=current.challenge.deadline-Math.round(flightWindow(current.speed)*.3);game.handle(p,{type:'flightPickup',runId:current.id,challengeId:current.challenge.id,side:current.challenge.coinLane});};
+ const avoid=()=>{const current=view(messages).run!;if(current.hazardResolved)return;now=current.challenge.deadline-Math.round(flightWindow(current.speed)*.65);game.handle(p,{type:'flightHazard',runId:current.id,challengeId:current.challenge.id,side:current.challenge.hazardLane==='left'?'right':'left'});};
+ const choose=(side:'left'|'right')=>{avoid();const current=view(messages).run!;now=current.challenge.deadline-100;game.handle(p,{type:'flightChoose',runId:current.id,challengeId:current.challenge.id,side});};
+ const pickup=()=>{avoid();const current=view(messages).run!;now=current.challenge.deadline-Math.round(flightWindow(current.speed)*.3);game.handle(p,{type:'flightPickup',runId:current.id,challengeId:current.challenge.id,side:current.challenge.coinLane});};
  game.handle(p,{type:'flightChoose',runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});assert.equal(view(messages).run?.score,0);
  pickup();run=view(messages).run!;assert.equal(run.coins,1);assert.equal(run.score,1);
  game.handle(p,{type:'flightPickup',runId:run.id,challengeId:run.challenge.id,side:run.challenge.coinLane});assert.equal(view(messages).run?.score,1);
@@ -40,7 +41,7 @@ test('word gates start immediately; a separate coin is 1 point and each correct 
 test('wrong word gate removes one heart, restarts the same verb and resets speed',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const choose=(side:'left'|'right')=>{const run=view(messages).run!;now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side});};
+ const choose=(side:'left'|'right')=>{let run=view(messages).run!;if(!run.hazardResolved){now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});run=view(messages).run!;}now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side});};
  let run=view(messages).run!;choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);
  game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.coinLane});assert.equal(view(messages).run?.coins,0);
  choose(answer(game,p.id)==='left'?'right':'left');run=view(messages).run!;
@@ -54,9 +55,17 @@ test('wrong word gate removes one heart, restarts the same verb and resets speed
 test('staying on the center divider at gate arrival causes a collision',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const run=view(messages).run!;now=run.challenge.deadline-100;
+ const run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;
  game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});
  assert.equal(view(messages).run?.hearts,2);assert.equal(view(messages).run?.score,0);
+});
+
+test('flying through the moving hazard costs a heart before the word gate',t=>{
+ let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
+ const run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);
+ game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane});
+ const next=view(messages).run!;assert.equal(next.hearts,2);assert.equal(next.stage,'past');assert.notEqual(next.challenge.id,run.challenge.id);
 });
 
 test('a saved coin-or-obstacle challenge resumes as a word gate',t=>{
@@ -70,9 +79,9 @@ test('a saved coin-or-obstacle challenge resumes as a word gate',t=>{
 test('flight ranking resets separately each season and retains the prior result',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- for(let i=0;i<1;i++){const run=view(messages).run!;now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});}
+ for(let i=0;i<1;i++){const run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});}
  let run=view(messages).run!;assert.equal(run.distance,100);
- for(let i=0;i<3;i++){run=view(messages).run!;now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)==='left'?'right':'left'});}
+ for(let i=0;i<3;i++){run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)==='left'?'right':'left'});}
  assert.equal(view(messages).bestDistance,100);
  now=Date.parse('2026-11-15T00:00:00+09:00');game.community.rollFlightSeason(now);game.community.flightStatus(p);
  const next=view(messages);assert.equal(next.bestDistance,0);assert.equal(next.ranking.length,0);assert.deepEqual(next.history.map(item=>({distance:item.bestDistance,rank:item.rank})),[{distance:100,rank:1}]);

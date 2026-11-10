@@ -1,8 +1,8 @@
 export type FlightLane='left'|'right';
 export type FlightSteeringLane=FlightLane|'center';
 export type FlightStage='past'|'participle';
-export type FlightChallenge={id:number;kind:'approach'|'gate';verbIndex:number;stage:FlightStage;left:string;right:string;correctLane:FlightLane;coinLane?:FlightLane;deadline:number};
-export type FlightRun={id:string;startedAt:number;hearts:number;distance:number;score:number;coins:number;speed:number;verbIndex:number;stage:FlightStage;challengeId:number;challenge:FlightChallenge;coinResolved?:boolean;lastActionAt:number;lastResult?:'correct'|'coin'|'collision';lastWord?:string};
+export type FlightChallenge={id:number;kind:'approach'|'gate';verbIndex:number;stage:FlightStage;left:string;right:string;correctLane:FlightLane;coinLane?:FlightLane;hazardLane?:FlightLane;deadline:number};
+export type FlightRun={id:string;startedAt:number;hearts:number;distance:number;score:number;coins:number;speed:number;verbIndex:number;stage:FlightStage;challengeId:number;challenge:FlightChallenge;coinResolved?:boolean;hazardResolved?:boolean;lastActionAt:number;lastResult?:'correct'|'coin'|'collision';lastWord?:string};
 export type FlightPublicChallenge=Omit<FlightChallenge,'correctLane'>;
 export type FlightPublicRun=Omit<FlightRun,'challenge'|'verbIndex'> & {verb:{base:string;meaning:string};challenge:FlightPublicChallenge};
 export type FlightSeasonRecord={season:string;bestDistance:number;bestScore:number;rank:number|null;plays:number};
