@@ -1,5 +1,4 @@
 import {useEffect,useMemo,useRef,useState} from 'react';
-import {createPortal} from 'react-dom';
 import type {FlightView} from '../shared/flightGame.js';
 import {flightLaneAt,flightWindow,FLIGHT_ARRIVAL_GRACE_MS} from '../shared/flightGame.js';
 import {Avatar} from './MatchPresentation.js';
@@ -19,7 +18,6 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const offset=useMemo(()=>(data?.serverNow??Date.now())-Date.now(),[data?.serverNow]),run=data?.run,challenge=run?.challenge,verb=run?.verb;
  const remaining=(challenge?.deadline??0)-(clock+offset),left=Math.max(0,remaining),total=run?flightWindow(run.speed):3200;
  useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),30);return()=>{clearInterval(timer);stopMiniAudio();clearTimeout(soundTimer.current);clearTimeout(impactTimer.current);};},[]);
- useEffect(()=>{const before=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{document.body.style.overflow=before;};},[]);
  useEffect(()=>{void preloadMiniAudio().catch(()=>{});const plane=new Image();plane.src='/flight/plane.png';},[]);
  useEffect(()=>{if(!challenge||!run)return;if(run.lastResult==='collision')crash();
   const current=`${run.id}:${challenge.id}`;if(playedRef.current===current)return;playedRef.current=current;
@@ -33,7 +31,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const steerPointer=(event:React.PointerEvent<HTMLDivElement>)=>{const bounds=event.currentTarget.getBoundingClientRect();steer((event.clientX-bounds.left)/bounds.width);};
  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(!run)return;if(event.key==='ArrowLeft'||event.key==='a'){event.preventDefault();steer(.275);}if(event.key==='ArrowRight'||event.key==='d'){event.preventDefault();steer(.725);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[Boolean(run)]);
  const myRank=data?.ranking.findIndex(item=>item.id===myId)??-1;
- return createPortal(<section className={`hub-page flight-page ${run?'is-playing':''}`} aria-label="불규칙 동사 플라이트">
+ return <section className={`hub-page flight-page ${run?'is-playing':''}`} aria-label="불규칙 동사 플라이트">
   <header className="flight-header"><button aria-label="미니게임 목록으로" onClick={onBack}>←</button>{run?<strong className="flight-hearts" aria-label={`남은 하트 ${run.hearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<run.hearts?'':'spent'}>♥</span>)}</strong>:null}<h1>불규칙 동사 플라이트</h1></header>
   {run&&challenge&&verb?<div className="flight-play">
    <div className="flight-hud"><span><small>거리</small><b>{run.distance.toLocaleString()}m</b></span><span><small>점수</small><b>{run.score.toLocaleString()}</b></span><span><small>속도</small><b>x{run.speed.toFixed(1)}</b></span></div>
@@ -46,5 +44,5 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
    <div className="flight-ranking"><div><h2>비행 랭킹</h2><small>최고 {data?.bestDistance??0}m</small></div><ol>{(data?.ranking??[]).slice(0,expanded?10:3).map((entry,index)=><li key={entry.id}><b>{index+1}</b><Avatar kind="verb" profileId={entry.profileId} frameId={entry.frameId}/><span>{entry.name}</span><strong>{entry.distance.toLocaleString()}m</strong><small>{entry.score}점</small></li>)}</ol>{!data?.ranking.length&&<p>첫 비행 기록을 남겨보세요.</p>}{(data?.ranking.length??0)>3&&<button className="flight-more" onClick={()=>setExpanded(value=>!value)}>{expanded?'접기':'더보기'}</button>}{myRank>=10&&<p>내 순위 {myRank+1}위</p>}</div>
    <button className="flight-start" disabled={!connected} onClick={()=>{prepareMiniAudio();send('flightStart')}}>{data?.lastResult?'다시 비행':'시작'}</button>
   </div>}
- </section>,document.body);
+ </section>;
 }

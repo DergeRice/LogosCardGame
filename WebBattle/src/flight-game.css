@@ -25,3 +25,30 @@
 @media(prefers-reduced-motion:reduce){.flight-impact{animation:none;opacity:1}}
 @media(orientation:landscape) and (max-height:540px){.flight-page.is-playing .flight-header{top:calc(6px + env(safe-area-inset-top));left:10px}.flight-page.is-playing .flight-header>button{width:34px;height:34px}.flight-page.is-playing .flight-hearts{font-size:22px}.flight-page.is-playing .flight-header h1{font-size:13px}.flight-page.is-playing .flight-hud{top:calc(7px + env(safe-area-inset-top));left:auto;right:12px;transform:none;width:min(42%,330px)}.flight-page.is-playing .flight-hud span{min-height:28px;padding:1px 6px}.flight-page.is-playing .flight-hud small{font-size:8px}.flight-page.is-playing .flight-hud b{font-size:15px}.flight-page.is-playing .flight-question{top:calc(43px + env(safe-area-inset-top))}.flight-page.is-playing .flight-question strong{font-size:22px}.flight-page.is-playing .flight-question small{font-size:10px}.flight-page.is-playing .flight-timer{top:calc(78px + env(safe-area-inset-top))}}
 @media(orientation:landscape) and (max-height:540px){.flight-page.is-playing .flight-timer{display:none}}
+
+/* Keep flight inside the mini-game page, with the supplied art inside its playfield. */
+.game-hub .flight-page{position:relative!important;inset:auto!important;z-index:auto;width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;margin:0!important;padding:12px 18px!important;border:1px solid var(--hub-line)!important;border-radius:24px!important;background:#fffdf8!important;color:var(--hub-ink);display:flex!important;overflow:hidden}
+.game-hub .flight-page:not(.is-playing) .flight-header>button{background:#e8f0e6;color:#325d43}
+.game-hub .flight-page:not(.is-playing) .flight-ready{width:min(100%,650px);margin:auto}
+.game-hub .flight-page.is-playing .flight-header{position:relative;top:auto;left:auto;width:100%;height:40px!important;flex:0 0 40px;min-height:0;display:flex;gap:9px}
+.game-hub .flight-page.is-playing .flight-header>button{width:38px;height:38px;border:0;background:#e8f0e6;color:#325d43;box-shadow:none}
+.game-hub .flight-page.is-playing .flight-hearts{font-size:23px}
+.game-hub .flight-page.is-playing .flight-play{position:relative;inset:auto;display:flex;flex:1;min-height:0;gap:5px}
+.game-hub .flight-page.is-playing .flight-hud{position:relative;z-index:auto;top:auto;left:auto;right:auto;transform:none;width:100%;display:flex;justify-content:space-around;gap:5px;pointer-events:none}
+.game-hub .flight-page.is-playing .flight-hud span{min-width:0;min-height:0;flex:1;display:grid;justify-items:center;padding:2px 5px;border:0;background:#edf5eb;box-shadow:none}
+.game-hub .flight-page.is-playing .flight-hud small{color:#6b847a;font-size:10px}.game-hub .flight-page.is-playing .flight-hud b{color:#315c4a;font-size:16px;text-shadow:none}
+.game-hub .flight-page.is-playing .flight-question{position:relative;z-index:auto;top:auto;left:auto;right:auto;display:grid;gap:0;pointer-events:none}
+.game-hub .flight-page.is-playing .flight-question small{color:#678478;font-size:11px;text-shadow:none}.game-hub .flight-page.is-playing .flight-question strong{color:#254c61;font-size:clamp(19px,4vw,29px);text-shadow:none}
+.game-hub .flight-page.is-playing .flight-timer{position:relative;z-index:auto;top:auto;left:auto;right:auto;display:block;height:5px;background:#d5e9e9;box-shadow:none}
+.game-hub .flight-page.is-playing .flight-field{position:relative;inset:auto;width:100%;height:auto;min-height:170px;max-height:none;flex:1;border:2px solid #7fc3d3;border-radius:14px;box-shadow:0 5px 16px #29658220;background:#a7db70 url('/flight/land.png') center/cover no-repeat}
+.flight-page.is-playing .flight-scene{background:url('/flight/clouds.png') center/cover no-repeat}
+.flight-page.is-playing .flight-fallback-gates{left:0;right:0;gap:0;grid-template-columns:1fr 1fr}
+.flight-page.is-playing .flight-fallback-gates:after{top:0;height:100%;background:#145889}
+.flight-page.is-playing .flight-fallback-gates span{height:62px;display:grid;place-items:center;padding:0 3px;border:0;background-image:url('/flight/gate.png');background-size:200% 100%;background-repeat:no-repeat;color:#123a60;text-shadow:-1px -1px 0 white,1px 1px 0 white}
+.flight-page.is-playing .flight-fallback-gates span:first-child{background-position:left center}.flight-page.is-playing .flight-fallback-gates span:last-child{background-position:right center}
+.flight-page.is-playing .flight-plane-fallback{width:62px;height:62px;background-image:url('/flight/plane.png')}
+.flight-page.is-playing .flight-coin-fallback{width:30px;height:30px;border:0;background:url('/currency/coin.webp') center/contain no-repeat;box-shadow:none}
+.flight-page.is-playing .flight-hazard-fallback{width:42px;height:42px;background:url('/flight/objects.png') right top/250px 375px no-repeat;box-shadow:none}.flight-page.is-playing .flight-hazard-fallback:after{display:none}
+.game-hub .flight-page .flight-impact{top:55%}
+@media(max-width:750px) and (orientation:portrait){.game-hub .flight-page{padding:7px!important;gap:4px}.game-hub .flight-page.is-playing .flight-field{min-height:240px}.game-hub .flight-page.is-playing .flight-header{height:34px!important;flex-basis:34px}.game-hub .flight-page.is-playing .flight-header>button{width:32px;height:32px}}
+@media(orientation:landscape) and (max-height:540px){.game-hub .flight-page{padding:4px 8px!important;gap:2px}.game-hub .flight-page.is-playing .flight-header{height:28px!important;flex-basis:28px}.game-hub .flight-page.is-playing .flight-header>button{width:28px;height:27px}.game-hub .flight-page.is-playing .flight-hearts{font-size:17px}.game-hub .flight-page.is-playing .flight-hud span{display:flex;gap:5px;padding:0 4px}.game-hub .flight-page.is-playing .flight-hud b{font-size:12px}.game-hub .flight-page.is-playing .flight-question{display:flex;justify-content:center;gap:5px}.game-hub .flight-page.is-playing .flight-question strong{font-size:16px}.game-hub .flight-page.is-playing .flight-field{min-height:80px}}
