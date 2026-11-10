@@ -99,8 +99,7 @@
 .flight-fallback-object-layer,.flight-fallback-cloud-layer{inset:0;background-size:100% auto;animation-name:flight-fallback-tile;animation-duration:6s}
 .flight-fallback-cloud-layer{animation-duration:5s}
 @keyframes flight-fallback-tile{to{background-position-y:150cqw}}
-.flight-plane-word-fallback{display:grid;justify-items:center;max-width:55%;white-space:normal;text-align:center;line-height:1.12}
-.flight-plane-word-fallback small{font-size:.64em}
+.flight-plane-word-fallback{max-width:55%;white-space:nowrap;text-align:center;line-height:1.12}
 @media(prefers-reduced-motion:reduce){.flight-fallback-object-layer,.flight-fallback-cloud-layer{animation:none}.flight-scene.is-crashing .flight-plane-fallback{animation:flight-plane-word-out .4s ease-out both}}
 .flight-ready-intro{display:grid;justify-items:center;gap:5px;padding:10px 14px 4px;color:#254b50;text-align:center;text-shadow:none}
 .flight-ready-plane{width:62px;height:54px;background:url('/flight/plane.webp') center/contain no-repeat;filter:drop-shadow(0 5px 7px #163d6688)}
@@ -115,8 +114,6 @@
 .flight-ranking li>span:not(.avatar-with-frame):not(.character-avatar){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .flight-ranking li>.avatar-with-frame{overflow:visible}
 @media(orientation:landscape) and (max-height:540px){.flight-ranking li{--flight-rank-avatar:24px}}
-.flight-scene[data-renderer="fallback"].is-impact-correct{animation:flight-impact-correct .3s ease-out}
 .flight-scene[data-renderer="fallback"].is-impact-collision{animation:flight-impact-collision .36s ease-out}
-@keyframes flight-impact-correct{20%{transform:translate(2px,-2px)}45%{transform:translate(-3px,1px)}70%{transform:translate(1px,0)}}
 @keyframes flight-impact-collision{15%{transform:translate(-7px,3px)}35%{transform:translate(6px,-4px)}55%{transform:translate(-4px,2px)}75%{transform:translate(2px,-1px)}}
-@media(prefers-reduced-motion:reduce){.flight-scene[data-renderer="fallback"].is-impact-correct,.flight-scene[data-renderer="fallback"].is-impact-collision{animation:none}}
+@media(prefers-reduced-motion:reduce){.flight-scene[data-renderer="fallback"].is-impact-collision{animation:none}}
