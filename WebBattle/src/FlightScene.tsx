@@ -4,16 +4,16 @@ import type {FlightPublicChallenge} from '../shared/flightGame.js';
 import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 import {pixiResolution,watchContextLoss} from './pixiRuntime.js';
 
-type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number};
+type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number;word:string;meaning:string;showWord:boolean;crashStartedAt?:number};
 const FLIGHT_ART=['/flight/land.webp','/flight/objects-layer.webp','/flight/clouds-layer.webp','/flight/gate.webp','/flight/plane-banking.webp','/flight/plane.webp'];
 let artPromise:Promise<unknown[]>|undefined;
 export function preloadFlightArt(){return artPromise??=import('pixi.js').then(({Assets})=>Promise.all(FLIGHT_ART.map(path=>Assets.load(path)))).catch(error=>{artPromise=undefined;throw error;});}
 
-function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
- const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,startsAt,serverOffset,planeX}),[fallback,setFallback]=useState(true),[fallbackClock,setFallbackClock]=useState(Date.now());
+function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,meaning,showWord,crashStartedAt}:Props){
+ const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,startsAt,serverOffset,planeX,word,meaning,showWord,crashStartedAt}),[fallback,setFallback]=useState(true),[fallbackClock,setFallbackClock]=useState(Date.now());
  const previous=useRef({challenge,startsAt}),outgoing=useRef<{challenge:FlightPublicChallenge;startsAt:number}[]>([]);
  if(previous.current.challenge.id!==challenge.id){outgoing.current.push(previous.current);previous.current={challenge,startsAt};}
- live.current={challenge,speed,startsAt,serverOffset,planeX};
+ live.current={challenge,speed,startsAt,serverOffset,planeX,word,meaning,showWord,crashStartedAt};
  useEffect(()=>{if(!fallback)return;const timer=setInterval(()=>setFallbackClock(Date.now()),50);return()=>clearInterval(timer);},[fallback]);
  useEffect(()=>{
   const node=host.current;if(!node)return;node.dataset.renderer='fallback';
@@ -41,7 +41,8 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
     };
     let current=makeGate(),gateId=live.current.challenge.id,currentWave={challenge:live.current.challenge,startsAt:live.current.startsAt};const departing:{gate:ReturnType<typeof makeGate>;wave:typeof currentWave}[]=[];
     const plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
-    instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane);
+    const planeWord=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:22,fontWeight:'900',fill:0xffffff,stroke:{color:0x12354a,width:5},align:'center'}});planeWord.anchor.set(.5,1);
+    instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane,planeWord);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=60;
     let scroll=0,scrollSpeed=live.current.speed,lastPlaneX=.5,bankDirection=0,bankUntil=0;
@@ -56,7 +57,9 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
       gate.stageLabel.style.fontSize=Math.max(14,Math.min(21,w*.045));gate.stageLabel.position.set(w*.5,-gateH*1.3-4);
      }
      gate.labels.forEach((label,index)=>{const value=index===0?words.left:words.right;if(label.text!==value)label.text=value;});
-     const stage=words.stage==='participle'?'과거분사':'과거형';if(gate.stageLabel.text!==stage)gate.stageLabel.text=stage;gate.stageLabel.visible=y>Math.max(61,gateH*.7);
+     const stage=words.stage==='participle'?'과거분사':'과거형';if(gate.stageLabel.text!==stage)gate.stageLabel.text=stage;
+     const planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15)));
+     gate.stageLabel.visible=y>Math.max(61,gateH*.7)&&y<h*.83-(planeSize+gateH)/2;
     };
     instance.ticker.add(tick=>{
      const w=instance.screen.width,h=instance.screen.height,info=live.current;
@@ -69,11 +72,12 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
       const landCover=Math.max(w/landTexture.width,h/landTexture.height),landX=(w-landTexture.width*landCover)/2;
       landH=landTexture.height*landCover;landY=(h-landH)/2;
       land.forEach(sprite=>{sprite.scale.set(landCover);sprite.x=landX;});
-      const objectScale=Math.min(w/1024,h/500);objectHeight=1536*objectScale;objectStride=(1536-170)*objectScale;objectY=Math.min(0,(h-objectHeight)/2);
+      const objectScale=Math.min(w/1024,h/500);objectHeight=1536*objectScale;objectStride=objectHeight;objectY=Math.min(0,(h-objectHeight)/2);
       objects.forEach((row,side)=>row.forEach(sprite=>{sprite.scale.set(objectScale);sprite.x=side===0?0:w-512*objectScale;}));
       const cloudCover=w<h?w/cloudTexture.width:Math.max(w/cloudTexture.width,h/cloudTexture.height),cloudX=(w-cloudTexture.width*cloudCover)/2;
-      cloudHeight=cloudTexture.height*cloudCover;cloudStride=(cloudTexture.height-220)*cloudCover;cloudY=Math.min(0,(h-cloudHeight)/2);
+      cloudHeight=cloudTexture.height*cloudCover;cloudStride=cloudHeight;cloudY=Math.min(0,(h-cloudHeight)/2);
       clouds.forEach(sprite=>{sprite.scale.set(cloudCover);sprite.x=cloudX;});
+      planeWord.style.fontSize=Math.max(17,Math.min(25,w*.055));
      }
      land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible)sprite.y=top;});
      objects.forEach(row=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.visible=top<h&&top+objectHeight>0;if(sprite.visible)sprite.y=top;}));
@@ -82,11 +86,15 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
      const y=flightGateCenterY(nowServer,info.startsAt,info.challenge.deadline,h,gateH,planeSize);
      drawGate(current,w,h,y,info.challenge);current.group.visible=y<h+gateH*2;
      for(let i=departing.length-1;i>=0;i--){const {gate,wave}=departing[i],oldY=flightGateCenterY(nowServer,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize);
-      if(oldY>h+gateH*2){instance.stage.removeChild(gate.group);gate.group.destroy({children:true});departing.splice(i,1);}else drawGate(gate,w,h,oldY,wave.challenge);
+      if(oldY>h+gateH*2){instance.stage.removeChild(gate.group);gate.group.destroy({children:true});departing.splice(i,1);}else{drawGate(gate,w,h,oldY,wave.challenge);gate.stageLabel.visible=false;}
      }
-     const size=planeSize;plane.width=size;plane.height=size;plane.position.set(w*info.planeX,h*.83);
-     const now=performance.now();if(Math.abs(info.planeX-lastPlaneX)>.012){bankDirection=info.planeX<lastPlaneX?-1:1;bankUntil=now+360;}lastPlaneX=info.planeX;
-     const banked=now<bankUntil,bankState=banked?(bankDirection<0?'left':'right'):'straight';if(node.dataset.bank!==bankState)node.dataset.bank=bankState;
+     const crash=info.crashStartedAt!==undefined,crashProgress=crash?Math.max(0,Math.min(1,(Date.now()-info.crashStartedAt!)/1500)):0;
+     const shrink=crash?Math.max(.03,1-crashProgress*crashProgress*.97):1,planeY=h*.83+crashProgress*crashProgress*h*.17;
+     const targetSize=planeSize*shrink;if(plane.width!==targetSize){plane.width=targetSize;plane.height=targetSize;}plane.position.set(w*info.planeX,planeY);plane.rotation=crashProgress*Math.PI*5;plane.alpha=1-crashProgress*.95;
+     const wordText=info.showWord?`${info.word}\n${info.meaning}`:'';if(planeWord.text!==wordText)planeWord.text=wordText;
+     planeWord.visible=info.showWord&&!crash;planeWord.position.set(w*info.planeX,planeY-planeSize*.64);
+     const now=performance.now();if(!crash&&Math.abs(info.planeX-lastPlaneX)>.012){bankDirection=info.planeX<lastPlaneX?-1:1;bankUntil=now+360;}lastPlaneX=info.planeX;
+     const banked=!crash&&now<bankUntil,bankState=banked?(bankDirection<0?'left':'right'):'straight';if(node.dataset.bank!==bankState)node.dataset.bank=bankState;
      const frame=banked?(bankDirection<0?4:12)+Math.floor(now/90)%4:0;if(plane.texture!==planeFrames[frame])plane.texture=planeFrames[frame];
     });
     const visible=()=>{if(document.hidden)instance.ticker.stop();else if(node.dataset.renderer==='pixi')instance.ticker.start();};document.addEventListener('visibilitychange',visible);cleanupVisibility=()=>document.removeEventListener('visibilitychange',visible);
@@ -100,6 +108,6 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX}:Props){
  const h=host.current?.clientHeight??600,w=host.current?.clientWidth??390,gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),now=fallbackClock+serverOffset;
  const fallbackGates=[...outgoing.current,{challenge,startsAt}].filter(wave=>flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)<h+gateH*2);
  outgoing.current=fallbackGates.filter(wave=>wave.challenge.id!==challenge.id);
- return <div className="flight-scene" ref={host} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
+ return <div className={`flight-scene${crashStartedAt!==undefined?' is-crashing':''}`} ref={host} data-word={showWord?word:''} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}{showWord&&<span className="flight-plane-word-fallback" style={{left:`${planeX*100}%`}}>{word}<small>{meaning}</small></span>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
 }
 export const FlightScene=memo(FlightSceneView);

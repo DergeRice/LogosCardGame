@@ -55,14 +55,15 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
  for(const verb of FLIGHT_VERBS){
   for(const [form,wrong] of [[verb.past,verb.wrongPast],[verb.participle,verb.wrongParticiple]] as const){assert.equal(wrong.length,4,verb.base);assert.equal(new Set(wrong).size,4,verb.base);assert.ok(!wrong.includes(form),verb.base);}
  }
- assert.equal(flightSpeed(0),1);assert.equal(flightSpeed(100000),2.4);
+ assert.equal(flightSpeed(0),1.5);assert.equal(flightSpeed(500),1.74);assert.equal(flightSpeed(100000),3.6);
+ assert.equal(flightWindow(flightSpeed(0)),2533);assert.equal(flightWindow(flightSpeed(4000)),1111);
  assert.deepEqual([.25,.49,.5,.58,.75].map(x=>flightLaneAt(x)),['left','left','right','right','right']);
 });
 
 test('word gates start immediately, connect without pickups, and score 30 each',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.handle(p,{type:'flightStart'});
- let run=view(messages).run!;const first=FLIGHT_VERBS.find(verb=>verb.base===run.verb.base)!;assert.ok(first);assert.equal(run.hearts,3);assert.equal(run.challenge.kind,'gate');assert.ok([run.challenge.left,run.challenge.right].includes(first.past));assert.equal('correctLane' in run.challenge,false);assert.equal('verbOrder' in run,false);assert.equal(run.challenge.coinLane,undefined);assert.equal(run.challenge.hazardLane,undefined);
+ let run=view(messages).run!;const first=FLIGHT_VERBS.find(verb=>verb.base===run.verb.base)!;assert.ok(first);assert.equal(run.hearts,3);assert.equal(run.speed,1.5);assert.equal(run.challenge.deadline-run.challenge.startsAt!,2533);assert.equal(run.challenge.kind,'gate');assert.ok([run.challenge.left,run.challenge.right].includes(first.past));assert.equal('correctLane' in run.challenge,false);assert.equal('verbOrder' in run,false);assert.equal(run.challenge.coinLane,undefined);assert.equal(run.challenge.hazardLane,undefined);
  const choose=(side:'left'|'right')=>{const current=view(messages).run!;now=current.challenge.deadline-100;game.handle(p,{type:'flightChoose',runId:current.id,challengeId:current.challenge.id,side});};
  game.handle(p,{type:'flightChoose',runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});assert.equal(view(messages).run?.score,0);
  choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.speed,flightSpeed(100));assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
@@ -91,7 +92,7 @@ test('wrong word gate removes one heart and repeats the exact same gate while re
  let run=view(messages).run!;choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);
  game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.coinLane});assert.equal(view(messages).run?.coins,0);
  const missed=run.challenge,wrong=answer(game,p.id)==='left'?'right':'left';choose(wrong);run=view(messages).run!;
- assert.equal(run.hearts,2);assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.speed,1);assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
+ assert.equal(run.hearts,2);assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.speed,flightSpeed(0));assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
  game.community.flightChoose(p,{runId:run.id,challengeId:missed.id,side:wrong});game.community.flightStatus(p);
  assert.equal(view(messages).run?.hearts,2,'stale answer and immediate status must not spend another heart');
  choose(answer(game,p.id)==='left'?'right':'left');run=view(messages).run!;assert.equal(run.hearts,1);

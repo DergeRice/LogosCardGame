@@ -90,3 +90,15 @@
 @media(prefers-reduced-motion:reduce){.flight-finished-card,.flight-fallback-object-layer,.flight-fallback-cloud-layer{animation:none}}
 .flight-answer-cue{position:absolute;z-index:6;top:44%;left:50%;transform:translate(-50%,-50%);min-width:130px;padding:7px 18px;border:2px solid #e8fff2;border-radius:16px;background:#1e715ce8;color:#fff;text-align:center;font-size:clamp(24px,6vw,37px);font-weight:900;line-height:1.1;text-shadow:0 2px 4px #153e53;box-shadow:0 6px 18px #0a3f4c66;pointer-events:none;animation:flight-answer-in .18s ease-out both}.flight-answer-cue.collision{background:#a34b56e8;border-color:#ffe0d9}@keyframes flight-answer-in{from{opacity:0;transform:translate(-50%,-42%) scale(.86)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 .flight-page.is-playing .flight-fallback-gates{grid-template-columns:48% 48%;justify-content:space-between;gap:0}.flight-page.is-playing .flight-fallback-gates:after{display:none}.flight-page.is-playing .flight-fallback-gates span{text-align:center}
+.flight-scene{container-type:inline-size}
+.flight-plane-word-fallback{position:absolute;z-index:3;top:calc(83% - 62px);transform:translate(-50%,-100%);max-width:45%;overflow:hidden;text-overflow:ellipsis;color:#fff;font-size:clamp(17px,5vw,24px);font-weight:900;white-space:nowrap;text-shadow:-2px -2px 0 #12354a,2px -2px 0 #12354a,-2px 2px 0 #12354a,2px 2px 0 #12354a}
+.flight-scene.is-crashing .flight-plane-fallback{animation:flight-plane-spin-out 1.5s ease-in both}
+.flight-scene.is-crashing .flight-plane-word-fallback{animation:flight-plane-word-out .4s ease-out both}
+@keyframes flight-plane-spin-out{from{transform:translate(-50%,-50%) rotate(0) scale(1);opacity:1}to{transform:translate(-50%,55%) rotate(900deg) scale(.03);opacity:.05}}
+@keyframes flight-plane-word-out{to{opacity:0;transform:translate(-50%,-125%)}}
+.flight-fallback-object-layer,.flight-fallback-cloud-layer{inset:0;background-size:100% auto;animation-name:flight-fallback-tile;animation-duration:6s}
+.flight-fallback-cloud-layer{animation-duration:5s}
+@keyframes flight-fallback-tile{to{background-position-y:150cqw}}
+.flight-plane-word-fallback{display:grid;justify-items:center;max-width:55%;white-space:normal;text-align:center;line-height:1.12}
+.flight-plane-word-fallback small{font-size:.64em}
+@media(prefers-reduced-motion:reduce){.flight-fallback-object-layer,.flight-fallback-cloud-layer{animation:none}.flight-scene.is-crashing .flight-plane-fallback{animation:flight-plane-word-out .4s ease-out both}}

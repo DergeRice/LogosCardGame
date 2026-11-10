@@ -18,7 +18,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   if(message.type==='flightStart')run={id:'flight-1',startedAt:Date.now(),hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,coinResolved:true,hazardResolved:true,challenge:{id:1,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now(),deadline:Date.now()+3800},lastActionAt:0};
   if(message.type==='flightChoose'&&run&&message.challengeId===run.challenge.id){
    const correct=message.side===run.challenge.correctLane,current=run.challenge,stage=run.stage,verbIndex=run.verbIndex;
-   if(!correct){run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'collision',collisionReason:'gate',lastWord:'break'};}
+   if(!correct){if(run.hearts===1){finishedResult={distance:run.distance,score:run.score,coins:run.coins};run=undefined;}else run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'collision',collisionReason:'gate',lastWord:'break'};}
    else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,coinResolved:true,hazardResolved:true,challenge:{id:current.id+1,kind:'gate',verbIndex,stage:stage==='past'?'participle':'past',left:stage==='past'?'broken':'breaked',right:stage==='past'?'breaken':'broke',correctLane:'left',startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
    pendingChoice=true;
   }
@@ -36,6 +36,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-question')).toContainText('깨다');
   await expect(page.locator('.flight-stage')).toHaveText('과거형');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
+  await expect(page.locator('.flight-scene')).toHaveAttribute('data-word','break');
   const timerBefore=parseFloat(await page.locator('.flight-timer span').evaluate(node=>(node as HTMLElement).style.width)),clockBefore=Date.now();
   serverClockJitter=1600;sendState();await page.waitForTimeout(120);
   const timerAfter=parseFloat(await page.locator('.flight-timer span').evaluate(node=>(node as HTMLElement).style.width));
@@ -76,6 +77,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-score')).toHaveText('30');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
+  await expect(page.locator('.flight-question')).toHaveCount(0);
+  await expect(page.locator('.flight-scene')).toHaveAttribute('data-word','break');
   holdChoice=true;
   if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
    await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
@@ -95,7 +98,15 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   const field=await page.locator('.flight-field').boundingBox();
   expect(field!.width).toBeGreaterThan(100);expect(field!.height).toBeGreaterThan(100);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  run=undefined;finishedResult={distance:100,score:30,coins:0};sendState();
+  run={...run!,hearts:1};sendState();
+  await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 1개');
+  holdChoice=true;
+  await steer(.73);
+  await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 0개');
+  await expect(page.locator('.flight-scene.is-crashing')).toBeVisible();
+  await page.waitForTimeout(650);
+  await page.screenshot({path:`.runtime/v204-flight-crash-${viewport.width}-${test.info().project.name}.png`});
+  holdChoice=false;pendingChoice=false;sendState();
   await expect(page.getByRole('dialog',{name:'비행 종료'})).toBeVisible();
   await expect(page.getByRole('dialog',{name:'비행 종료'})).toContainText('30');
   await expect(page.getByRole('button',{name:'다시 비행'})).toBeVisible();
