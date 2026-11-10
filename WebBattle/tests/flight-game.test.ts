@@ -4,6 +4,15 @@ import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import {flightLaneAt,flightSpeed,flightWindow,FLIGHT_ARRIVAL_GRACE_MS,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
+import {descendingFlightTile} from '../shared/flightVisual.js';
+
+test('flight art moves downward and loops without a jump',()=>{
+ const first=descendingFlightTile(99,500,0,0),next=descendingFlightTile(109,500,0,0);
+ assert.equal(next.top-first.top,10);
+ const beforeSeam=descendingFlightTile(499,500,0,-1),afterSeam=descendingFlightTile(501,500,0,0);
+ assert.equal(afterSeam.top-beforeSeam.top,2);
+ assert.equal(beforeSeam.flipped,afterSeam.flipped);
+});
 
 function player(game:Game){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,'비행 검사'),messages};}
 function view(messages:Record<string,unknown>[]):FlightView{return messages.filter(message=>message.type==='flightState').at(-1)?.data as FlightView;}
