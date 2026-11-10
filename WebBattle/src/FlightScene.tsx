@@ -43,7 +43,7 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
     instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=60;
-    let scroll=0,lastPlaneX=.5,bankDirection=0,bankUntil=0;
+    let scroll=0,scrollSpeed=live.current.speed,lastPlaneX=.5,bankDirection=0,bankUntil=0;
     const drawGate=(gate:ReturnType<typeof makeGate>,w:number,h:number,y:number,words:{left:string;right:string;stage:string})=>{
      const gateH=Math.max(37,Math.min(65,h*.09)),gateWidth=w*.49;
      gate.group.y=y;
@@ -60,7 +60,8 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
      const w=instance.screen.width,h=instance.screen.height,info=live.current;
      if(info.challenge.id!==gateId){departing.push({gate:current,wave:currentWave});current=makeGate();instance.stage.addChildAt(current.group,instance.stage.getChildIndex(plane));gateId=info.challenge.id;}
      currentWave={challenge:info.challenge,startsAt:info.startsAt};
-     scroll+=Math.min(tick.deltaMS,50)*info.speed*.058;
+     scrollSpeed+=(info.speed-scrollSpeed)*Math.min(1,tick.deltaMS/350);
+     scroll+=Math.min(tick.deltaMS,50)*scrollSpeed*.058;
      const landCover=Math.max(w/landTexture.width,h/landTexture.height),landH=landTexture.height*landCover,landX=(w-landTexture.width*landCover)/2,landY=(h-landH)/2;
      land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible){sprite.scale.set(landCover);sprite.position.set(landX,top);}});
      const objectScale=Math.min(w/1024,h/500),objectHeight=1536*objectScale,objectStride=(1536-170)*objectScale,objectY=Math.min(0,(h-objectHeight)/2);

@@ -12,4 +12,5 @@ export type FlightView={serverNow:number;season:string;seasonEndsAt:number;bestD
 export function flightSpeed(distance:number){return Math.min(2.4,1+distance/500*0.12);}
 export function flightWindow(speed:number){return Math.max(2800,Math.round(3800/Math.sqrt(speed)));}
 export function flightLaneAt(x:number,planeWidthFraction=0):FlightSteeringLane{const half=Math.max(0,planeWidthFraction)/2;return x<.49-half?'left':x>.51+half?'right':'center';}
-export const FLIGHT_ARRIVAL_GRACE_MS=800;
+export const FLIGHT_ARRIVAL_GRACE_MS=1800;
+export const FLIGHT_GATE_SPACING_MS=650;
