@@ -636,6 +636,9 @@ export class Game {
   if(msg.type==='miniGameStatus')return this.community.miniStatus(p);
   if(msg.type==='miniGameStart')return this.community.miniStart(p);
   if(msg.type==='miniGameChoose')return this.community.miniChoose(p,msg);
+  if(msg.type==='flightStatus')return this.community.flightStatus(p);
+  if(msg.type==='flightStart')return this.community.flightStart(p);
+  if(msg.type==='flightChoose')return this.community.flightChoose(p,msg);
   if(msg.type==='renameNickname')return renameNickname(this,p,msg);
   if(msg.type==='community')return this.community.send(p);
   if(msg.type==='adRewardTicket')return this.community.issueAdTicket(p,msg);

@@ -3,10 +3,11 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {VERB_CATEGORIES} from '../shared/miniGame.js';
+import {FLIGHT_VERBS} from '../server/flightWords.js';
 
 const temp=resolve('.runtime/mini-audio'),output=resolve('public/audio/mini');
 mkdirSync(temp,{recursive:true});mkdirSync(resolve(output,'clips'),{recursive:true});
-const words=[...new Set(VERB_CATEGORIES.flatMap(category=>category.words))];
+const words=[...new Set([...VERB_CATEGORIES.flatMap(category=>category.words),...FLIGHT_VERBS.flatMap(verb=>[verb.base,verb.past,verb.participle])])];
 writeFileSync(resolve(temp,'words.json'),JSON.stringify(words));
 execFileSync('powershell',['-NoProfile','-ExecutionPolicy','Bypass','-File',resolve('scripts/generate-example-audio.ps1'),'-WordsPath',resolve(temp,'words.json'),'-OutputDirectory',temp],{stdio:'inherit'});
 
@@ -18,5 +19,5 @@ for(const word of words){
  writeFileSync(resolve(output,'clips',file),bytes);
  clips[word]=file;
 }
-writeFileSync(resolve(output,'manifest-v2.json'),JSON.stringify({version:2,voice:'Microsoft Zira Desktop en-US',clips}));
+writeFileSync(resolve(output,'manifest-v3.json'),JSON.stringify({version:3,voice:'Microsoft Zira Desktop en-US',clips}));
 console.log(`${words.length} locally recorded mini-game clips`);

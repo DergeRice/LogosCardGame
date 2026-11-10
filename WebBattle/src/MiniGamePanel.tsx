@@ -1,15 +1,18 @@
 import {useEffect,useMemo,useRef,useState} from 'react';
 import type {MiniGameView} from '../shared/miniGame.js';
+import type {FlightView} from '../shared/flightGame.js';
+import {FlightPanel} from './FlightPanel.js';
 import {Avatar} from './MatchPresentation.js';
 import {playMiniAudio,preloadMiniAudio,preloadMiniClips,prepareMiniAudio,stopMiniAudio} from './miniAudio.js';
 import {predictMiniRun,type MiniPendingPick} from './miniPrediction.js';
 import {MiniComboBurst} from './MiniComboBurst.js';
 import './mini-game.css';
 
-type Props={data:MiniGameView|null;connected:boolean;myId:string;send:(type:string,extra?:Record<string,unknown>)=>boolean};
+type Props={data:MiniGameView|null;flight:FlightView|null;connected:boolean;myId:string;send:(type:string,extra?:Record<string,unknown>)=>boolean};
 type FlyingCard={serial:number;word:string;side:'left'|'right'};
-export function MiniGamePanel({data,connected,myId,send}:Props){
+export function MiniGamePanel({data,flight,connected,myId,send}:Props){
  const [open,setOpen]=useState(false),[expanded,setExpanded]=useState(false),[clock,setClock]=useState(Date.now()),[pending,setPending]=useState<MiniPendingPick[]>([]);
+ const [flightOpen,setFlightOpen]=useState(false);
  const [flying,setFlying]=useState<FlyingCard[]>([]),[comboBurst,setComboBurst]=useState({serial:0,value:0});
  const expiryRequested=useRef(''),seqRef=useRef(0),offset=useMemo(()=>(data?.serverNow??Date.now())-Date.now(),[data?.serverNow]),now=clock+offset,run=data?.run,shown=run?predictMiniRun(run,pending):null;
  const startsAt=run?.startsAt??now,countdown=run?Math.max(0,startsAt-now):0,playing=Boolean(run&&countdown===0);
@@ -27,8 +30,9 @@ export function MiniGamePanel({data,connected,myId,send}:Props){
  const myRank=useMemo(()=>data?.ranking.findIndex(entry=>entry.id===myId)??-1,[data?.ranking,myId]);
  const choose=(side:'left'|'right')=>{if(!run||!shown?.card||!playing||locked||seconds<=0)return;const nextSeq=Math.max(seqRef.current,run.lastClientSeq??0)+1;seqRef.current=nextSeq;const pick:MiniPendingPick={runId:run.id,seq:nextSeq,cardId:shown.card.id,side,at:Date.now()+offset};if(!send('miniGameChoose',{runId:run.id,cardId:pick.cardId,side,seq:nextSeq}))return;const predicted=predictMiniRun(run,[...pending,pick]);setPending(old=>[...old,pick]);setFlying(old=>[...old.slice(-3),{serial:nextSeq,word:shown.card!.word,side}]);window.setTimeout(()=>setFlying(old=>old.filter(card=>card.serial!==nextSeq)),150);if(predicted.combo>=3&&predicted.combo>shown.combo)setComboBurst(old=>({serial:old.serial+1,value:predicted.combo}));};
  const countdownText=countdown>2500?'3':countdown>1500?'2':countdown>500?'1':'시작!';
+ if(flightOpen)return <FlightPanel data={flight} connected={connected} myId={myId} send={send} onBack={()=>setFlightOpen(false)}/>;
  return <section className={`hub-page mini-page ${open?'mini-page-detail':''}`} aria-label="미니게임">
-  {!open?<><header className="mini-heading"><small>MINI GAMES</small><h1>미니게임</h1></header><div className="hub-daily-mission"><strong>일일 미션</strong><span>코인 미션 준비 중</span></div><div className="mini-tiles"><button className="mini-tile mini-verb-tile" onClick={()=>{setExpanded(false);setOpen(true);send('miniGameStatus')}}><span>01</span><strong>동사 분류</strong><small>두 카테고리 · 60초</small><b>플레이 →</b></button><div className="mini-tile mini-empty-tile"><span>02</span><strong>다음 게임</strong><small>준비 중</small></div><div className="mini-tile mini-empty-tile"><span>03</span><strong>다음 게임</strong><small>준비 중</small></div></div></>:<div className="mini-detail">
+  {!open?<><header className="mini-heading"><small>MINI GAMES</small><h1>미니게임</h1></header><div className="hub-daily-mission"><strong>일일 미션</strong><span>코인 미션 준비 중</span></div><div className="mini-tiles"><button className="mini-tile mini-verb-tile" onClick={()=>{setExpanded(false);setOpen(true);send('miniGameStatus')}}><span>01</span><strong>동사 분류</strong><small>두 카테고리 · 60초</small><b>플레이 →</b></button><button className="mini-tile mini-flight-tile" onClick={()=>{setFlightOpen(true);send('flightStatus')}}><span>02</span><strong>불규칙 동사 플라이트</strong><small>게이트를 통과하며 멀리 날기</small><b>플레이 →</b></button><div className="mini-tile mini-empty-tile"><span>03</span><strong>다음 게임</strong><small>준비 중</small></div></div></>:<div className="mini-detail">
    <header className="mini-detail-header"><button aria-label="미니게임 목록으로" onClick={()=>setOpen(false)}>←</button>{playing&&<div className="mini-time" aria-label={`남은 시간 ${seconds}초`}><small>남은 시간</small><strong>{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</strong></div>}</header>
    {run&&shown?<div className="mini-game-stage">
     {playing&&<><div className="mini-combo-stage" role="status" aria-live="polite"><MiniComboBurst serial={comboBurst.serial}/>{shown.combo>=3&&<strong key={comboBurst.serial} className="mini-combo">Combo x{shown.combo}</strong>}</div><div className="mini-arena"><div className="mini-card-stack">{shown.upcoming.slice(0,2).reverse().map((card,index)=><div className={`mini-next-card mini-next-${index}`} key={card.id} aria-hidden="true"><span>{card.word}</span></div>)}{shown.card?<button key={shown.card.id} className="mini-word mini-word-enter" aria-label={`${shown.card.word} 발음 듣기`} onClick={()=>void playMiniAudio(shown.card!.word)}><span>{shown.card.word}</span><small>↗ 다시 듣기</small></button>:<div className="mini-word mini-between-pairs">다음 세트</div>}{flying.map(card=><div key={card.serial} className={`mini-flying-card mini-fly-${card.side}`} aria-hidden="true"><span>{card.word}</span></div>)}{locked&&shown.missedWord&&<div className="mini-wrong-card" aria-label={`오답 ${shown.missedWord}`}><span>{shown.missedWord}</span></div>}</div><div className="mini-sides"><button className="mini-side" disabled={!connected||locked||seconds<=0||!shown.card} onClick={()=>choose('left')}><strong>{run.left.label}</strong></button><button className="mini-side" disabled={!connected||locked||seconds<=0||!shown.card} onClick={()=>choose('right')}><strong>{run.right.label}</strong></button></div></div><p className="mini-feedback" aria-live="polite">{locked?shown.feedback??'':''}</p><div className="mini-current-score">{shown.correct}개</div></>}

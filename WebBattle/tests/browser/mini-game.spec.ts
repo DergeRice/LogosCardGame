@@ -41,7 +41,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   const boxes=await tiles.evaluateAll(elements=>elements.map(element=>{const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}));
   if(viewport.width<viewport.height){expect(boxes[0].y).toBeLessThan(boxes[1].y);expect(boxes[1].y).toBeLessThan(boxes[2].y);}else{expect(boxes[0].x).toBeLessThan(boxes[1].x);expect(boxes[1].x).toBeLessThan(boxes[2].x);}
   await page.getByRole('button',{name:/동사 분류/}).click();
-  await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v2.json'))).toBe(true);
+  await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
   await expect(page.getByRole('button',{name:'미니게임 목록으로'})).toBeVisible();
   await expect(page.locator('.mini-ranking li')).toHaveCount(3);
   const rankBounds=await page.locator('.mini-ranking li').evaluateAll(elements=>elements.map(element=>{const r=element.getBoundingClientRect();return {top:r.top,bottom:r.bottom};}));

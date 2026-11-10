@@ -8,7 +8,7 @@ let active:AudioBufferSourceNode|null=null;
 let request=0;
 
 export function preloadMiniAudio(){
- manifest??=fetch('/audio/mini/manifest-v2.json').then(async response=>{
+ manifest??=fetch('/audio/mini/manifest-v3.json').then(async response=>{
   if(!response.ok)throw Error('Mini-game audio manifest unavailable');
   return await response.json() as Manifest;
  }).catch(error=>{manifest=null;throw error});

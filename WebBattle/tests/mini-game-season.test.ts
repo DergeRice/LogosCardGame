@@ -6,6 +6,7 @@ import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import {seasonAt,seasonStartingRating} from '../shared/season.js';
 import {VERB_CATEGORIES,interleaveVerbCards,type MiniGameView} from '../shared/miniGame.js';
+import {FLIGHT_VERBS} from '../server/flightWords.js';
 
 function player(game:Game,name:string){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,name),messages};}
 function mini(messages:Record<string,unknown>[]):MiniGameView{return messages.filter(message=>message.type==='miniGameState').at(-1)?.data as MiniGameView;}
@@ -90,8 +91,8 @@ test('shared words appear once and either category scores them',()=>{
 });
 
 test('every supplied card has a small pre-recorded local audio file',()=>{
- const manifest=JSON.parse(readFileSync(resolve('public/audio/mini/manifest-v2.json'),'utf8')) as {clips:Record<string,string>};
- const words=new Set(VERB_CATEGORIES.flatMap(category=>category.words));
+ const manifest=JSON.parse(readFileSync(resolve('public/audio/mini/manifest-v3.json'),'utf8')) as {clips:Record<string,string>};
+ const words=new Set([...VERB_CATEGORIES.flatMap(category=>category.words),...FLIGHT_VERBS.flatMap(verb=>[verb.base,verb.past,verb.participle])]);
  assert.equal(Object.keys(manifest.clips).length,words.size);
  for(const word of words){const file=manifest.clips[word];assert.match(file,/^[a-f0-9]{16}\.wav$/);const wav=readFileSync(resolve('public/audio/mini/clips',file));assert.equal(wav.toString('ascii',0,4),'RIFF');assert.equal(wav.toString('ascii',8,12),'WAVE');assert.ok(wav.length>1000&&wav.length<200_000,word);}
 });

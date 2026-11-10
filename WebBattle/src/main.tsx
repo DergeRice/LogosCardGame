@@ -17,6 +17,7 @@ import {GameSettings} from './GameSettings.js';
 import {AdminDashboard} from './AdminDashboard.js';
 import {randomGuestName} from '../shared/guestNames.js';
 import type {MiniGameView} from '../shared/miniGame.js';
+import type {FlightView} from '../shared/flightGame.js';
 import {readSfxLevel,setSfxLevel as applySfxLevel,sfxGain} from './audioSettings.js';
 import {PracticeVoice} from './PracticeVoice.js';
 import {AudioDiagnostics} from './AudioDiagnostics.js';
@@ -122,6 +123,7 @@ function App() {
  const [nicknameResult,setNicknameResult]=useState<NicknameResult|null>(null);
  const [community,setCommunity]=useState<CommunityView|null>(null),[storeResult,setStoreResult]=useState<StoreResult|null>(null),[adTicket,setAdTicket]=useState<AdTicketResponse|null>(null);
  const [miniGame,setMiniGame]=useState<MiniGameView|null>(null);
+ const [flight,setFlight]=useState<FlightView|null>(null);
  const [account,setAccount]=useState<string|null>(null);
  const [linkedProviders,setLinkedProviders]=useState<string[]>([]);
  const [uuid,setUuid]=useState(''),[accountProvider,setAccountProvider]=useState<string|null>(null);
@@ -215,6 +217,7 @@ function App() {
     if(msg.type==='ranking')setRankings(old=>({...old,[msg.tier]:msg.players}));
     if(msg.type==='community'){setCommunity(msg.community);setProfile(old=>({...old,coins:msg.community.store.gold}));}
     if(msg.type==='miniGameState')setMiniGame(msg.data);
+    if(msg.type==='flightState')setFlight(msg.data);
     if(msg.type==='seasonReset'){setProfile(old=>({...old,rating:msg.rating}));setRankings({});}
     if(msg.type==='storeResult')setStoreResult({requestId:msg.requestId,source:msg.source,box:msg.box,rewards:msg.rewards});
     if(msg.type==='iapResult')window.dispatchEvent(new CustomEvent('logos-iap-result',{detail:msg}));
@@ -310,7 +313,7 @@ function App() {
   {error && <div className="toast error" role="alert">{error}<button aria-label="알림 닫기" onClick={() => setError('')}>×</button></div>}
   {notice && <div className="toast" role="status">{notice}<button onClick={() => setNotice('')}>×</button></div>}
   {!room&&<InviteNotice data={community} send={send}/>}
-  {(!room||room.phase==='lobby') && <GameHub adTicket={adTicket} nicknameResult={nicknameResult} communityId={uuid} rankings={rankings} community={community} miniGame={miniGame} storeResult={storeResult} name={name} account={account} profile={profile} rooms={rooms} connected={connected} aiSetting={normalizeAIDifficulty(profile.rating,aiSetting)} onDifficulty={value=>{setAiSetting(value);localStorage.setItem('logos-ai-difficulty',value)}} onQuick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick',{difficulty:normalizeAIDifficulty(profile.rating,aiSetting)});}} send={send} onSettings={()=>setSettingsOpen(true)} onLogin={()=>setAuthMode('login')} onRegister={()=>setAuthMode('register')} onLogout={()=>send('logout')}/>}
+  {(!room||room.phase==='lobby') && <GameHub adTicket={adTicket} nicknameResult={nicknameResult} communityId={uuid} rankings={rankings} community={community} miniGame={miniGame} flight={flight} storeResult={storeResult} name={name} account={account} profile={profile} rooms={rooms} connected={connected} aiSetting={normalizeAIDifficulty(profile.rating,aiSetting)} onDifficulty={value=>{setAiSetting(value);localStorage.setItem('logos-ai-difficulty',value)}} onQuick={()=>{tone();if(matchMedia('(pointer:coarse)').matches)void enterGameFullscreen(true);sessionStorage.setItem('logos-entry','guest');send('quick',{difficulty:normalizeAIDifficulty(profile.rating,aiSetting)});}} send={send} onSettings={()=>setSettingsOpen(true)} onLogin={()=>setAuthMode('login')} onRegister={()=>setAuthMode('register')} onLogout={()=>send('logout')}/>}
   {!room&&roomBrowserOpen&&<RoomBrowser rooms={rooms} connected={connected} onClose={()=>setRoomBrowserOpen(false)} send={send}/>}
   {room?.phase==='lobby'&&<RoomLobby community={community} room={room} connected={connected} send={send}/>}
   {authMode&&!room&&<div className="account-backdrop" onClick={()=>setAuthMode(null)}><form className="account-dialog" role="dialog" aria-label={authMode==='register'?'계정 만들기':'계정 로그인'} onClick={e=>e.stopPropagation()} onSubmit={e=>{e.preventDefault();send(authMode,{username:authName,password:authPassword});}}><h2>{authMode==='register'?'계정 만들기':'계정 로그인'}</h2><p>같은 계정으로 웹과 Unity 웹뷰에서 레이팅을 이어갑니다.</p><label htmlFor="account-name">아이디</label><input id="account-name" autoComplete="username" minLength={3} maxLength={16} value={authName} onChange={e=>setAuthName(e.target.value)} required/><label htmlFor="account-password">비밀번호</label><input id="account-password" type="password" autoComplete={authMode==='register'?'new-password':'current-password'} minLength={10} maxLength={128} value={authPassword} onChange={e=>setAuthPassword(e.target.value)} required/><div className="account-dialog-actions"><button type="button" onClick={()=>setAuthMode(null)}>취소</button><button className="primary" disabled={!connected} type="submit">{authMode==='register'?'만들고 연동':'로그인'}</button></div></form></div>}

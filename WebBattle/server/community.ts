@@ -9,10 +9,12 @@ import type {Peer,CommunityView,Invitation,StoreResult} from '../shared/communit
 import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} from '../shared/store.js';
 import {seasonAt} from '../shared/season.js';
 import {VERB_CATEGORIES,interleaveVerbCards,type MiniGameProgress,type MiniGameRun,type MiniGameView} from '../shared/miniGame.js';
+import {flightSpeed,flightWindow,type FlightChallenge,type FlightLane,type FlightProgress,type FlightRun,type FlightView} from '../shared/flightGame.js';
+import {FLIGHT_VERBS} from './flightWords.js';
 import {kstDay} from './userStats.js';
 type Player=ReturnType<Game['newPlayer']>;
 export type AdTicket={id:string;box:AdBox;day:string;expiresAt:number;eventId?:string;result?:StoreResult};
-export type CommunityRecord={adTicket?:AdTicket;superUser?:boolean;superCatalogSize?:number;nicknameChanges?:{requestId:string;name:string;cost:number}[];id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;seasonGames?:number;gamesPlayed?:number;activeDays?:number;lastActiveDay?:string;rating?:number;ratingHistory?:{season:string;rating:number;rank:number|null;games:number}[];miniGame?:MiniGameProgress;grants?:string[]};
+export type CommunityRecord={adTicket?:AdTicket;superUser?:boolean;superCatalogSize?:number;nicknameChanges?:{requestId:string;name:string;cost:number}[];id:string;name:string;avatar:Player['avatar'];friends:string[];incoming:string[];store:HubSave;results:StoreResult[];lastRequest?:number;rankGames?:number;seasonGames?:number;gamesPlayed?:number;activeDays?:number;lastActiveDay?:string;rating?:number;ratingHistory?:{season:string;rating:number;rank:number|null;games:number}[];miniGame?:MiniGameProgress;flight?:FlightProgress;grants?:string[]};
 export type CommunityInvite=Invitation & {to:string};
 export class Community {
  records=new Map<string,CommunityRecord>();invites=new Map<string,CommunityInvite>();
@@ -22,7 +24,7 @@ export class Community {
  markActive(p:Player){const record=this.record(p),day=kstDay();if(record.lastActiveDay!==day){record.lastActiveDay=day;record.activeDays=(record.activeDays??0)+1;}return record;}
  player(id:string){return [...this.game.sessions.values()].find(p=>this.id(p)===id);}
  peer(id:string):Peer|undefined{const p=this.player(id),r=p?this.record(p):this.records.get(id);return r?{id,name:r.name,avatar:r.avatar,profileId:r.store.profile,characterId:r.store.character,frameId:r.store.frame,online:Boolean(p?.socket?.readyState===1)}:undefined;}
- view(p:Player):CommunityView{const r=this.markActive(p);this.rollMiniSeason();return {serverNow:Date.now(),adEnabled:this.game.adRewardsEnabled,...(r.superUser?{superUser:true}:{}),rankGames:r.rankGames??0,gamesPlayed:r.gamesPlayed??0,activeDays:r.activeDays??0,ratingHistory:r.ratingHistory??[],miniGameHistory:r.miniGame?.history??[],friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
+ view(p:Player):CommunityView{const r=this.markActive(p);this.rollMiniSeason();this.rollFlightSeason();return {serverNow:Date.now(),adEnabled:this.game.adRewardsEnabled,...(r.superUser?{superUser:true}:{}),rankGames:r.rankGames??0,gamesPlayed:r.gamesPlayed??0,activeDays:r.activeDays??0,ratingHistory:r.ratingHistory??[],miniGameHistory:r.miniGame?.history??[],flightHistory:r.flight?.history??[],friends:r.friends.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),incoming:r.incoming.map(id=>this.peer(id)).filter((x):x is Peer=>Boolean(x)),outgoing:[...this.records.values()].filter(x=>x.incoming.includes(r.id)).map(x=>x.id),invites:[...this.invites.values()].filter(i=>i.to===r.id&&i.expiresAt>Date.now()).map(({to,...i})=>i),store:{...r.store,gold:p.coins??0}};}
  send(p:Player){this.game.send(p.socket,{type:'community',community:this.view(p)});}
  publish(){for(const p of this.game.sessions.values())if(p.socket?.readyState===1)this.send(p);}
  migrate(p:Player,oldId:string){const nextId=this.id(p),old=this.records.get(oldId);if(oldId===nextId||!old)return;const target=this.records.get(nextId);if(!target){old.id=nextId;this.records.set(nextId,old);}else{target.friends=[...new Set([...target.friends,...old.friends])].filter(x=>x!==nextId);target.incoming=[...new Set([...target.incoming,...old.incoming])].filter(x=>x!==nextId);}this.records.delete(oldId);for(const r of this.records.values()){r.friends=[...new Set(r.friends.map(x=>x===oldId?nextId:x))].filter(x=>x!==r.id);r.incoming=[...new Set(r.incoming.map(x=>x===oldId?nextId:x))].filter(x=>x!==r.id);}}
@@ -132,5 +134,40 @@ export class Community {
  miniStatus(p:Player){const progress=this.miniProgress(p);if(progress.run&&Date.now()>=progress.run.endsAt){this.finishMiniRun(progress);this.send(p);}this.game.send(p.socket,{type:'miniGameState',data:this.miniView(progress)});}
  miniStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.miniProgress(p),now=Date.now(),season=seasonAt(now);if(progress.run&&now>=progress.run.endsAt)this.finishMiniRun(progress);if(!progress.run){if(season.endAt-now<64_000)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');const startsAt=now+3500,run:MiniGameRun={id:randomUUID(),startedAt:now,startsAt,endsAt:startsAt+60_000,lockedUntil:0,correct:0,wrong:0,pair:['',''],queue:[],nextCardId:0};this.nextMiniPair(run);progress.run=run;}this.miniStatus(p);}
  miniChoose(p:Player,msg:Record<string,unknown>){const progress=this.miniProgress(p),run=progress.run;if(!run)return this.miniStatus(p);const seq=Number(msg.seq);if(msg.runId===run.id&&Number.isSafeInteger(seq)&&seq>0)run.lastClientSeq=Math.max(run.lastClientSeq??0,seq);const now=Date.now();if(now>=run.endsAt)return this.miniStatus(p);if(now<(run.startsAt??run.startedAt))return this.miniStatus(p);if(msg.runId!==run.id||msg.cardId!==run.queue[0]?.id||!['left','right'].includes(String(msg.side)))return this.miniStatus(p);if(now<run.lockedUntil)return this.miniStatus(p);const card=run.queue[0],chosen=run.pair[msg.side==='left'?0:1],chosenCategory=VERB_CATEGORIES.find(category=>category.id===chosen)!;run.queue.shift();if(!run.queue.length)this.nextMiniPair(run);if(chosenCategory.words.some(word=>word.toLowerCase()===card.word.toLowerCase())){run.correct++;run.combo=(run.combo??0)+1;run.feedback=undefined;run.missedWord=undefined;}else{run.wrong++;run.combo=0;run.lockedUntil=now+1000;const category=VERB_CATEGORIES.find(c=>c.id===card.categoryId)!;run.feedback=`${card.word}은 ${category.description} 카드예요.`;run.missedWord=card.word;}this.miniStatus(p);}
+ private flightProgress(p:Player){this.rollFlightSeason();const record=this.record(p),season=seasonAt();return record.flight??(record.flight={season:season.id,bestDistance:0,bestScore:0,plays:0,history:[]});}
+ private finishFlight(progress:FlightProgress){const run=progress.run;if(!run)return;if(run.distance>progress.bestDistance||(run.distance===progress.bestDistance&&run.score>progress.bestScore)){progress.bestDistance=run.distance;progress.bestScore=run.score;}progress.plays++;progress.lastResult={distance:run.distance,score:run.score,coins:run.coins};progress.run=undefined;}
+ rollFlightSeason(now=Date.now()){
+  const season=seasonAt(now),ending=[...this.records.values()].filter(record=>record.flight&&record.flight.season!==season.id);
+  for(const record of ending)this.finishFlight(record.flight!);
+  const ranked=ending.filter(record=>(record.flight?.bestDistance??0)>0).sort((a,b)=>(b.flight!.bestDistance-a.flight!.bestDistance)||(b.flight!.bestScore-a.flight!.bestScore)||a.id.localeCompare(b.id));
+  for(const record of ending){const progress=record.flight!,rank=ranked.findIndex(item=>item.id===record.id);progress.history=[...progress.history,{season:progress.season,bestDistance:progress.bestDistance,bestScore:progress.bestScore,rank:rank<0?null:rank+1,plays:progress.plays}].slice(-12);progress.season=season.id;progress.bestDistance=0;progress.bestScore=0;progress.plays=0;progress.lastResult=undefined;}
+ }
+ private nextFlightChallenge(run:FlightRun,kind:'approach'|'gate',now=Date.now()){
+  const verb=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length],correctLane:FlightLane=randomInt(2)===0?'left':'right';
+  const wrong=run.stage==='past'?verb.wrongPast:verb.wrongParticiple,answer=verb[run.stage],distractor=wrong[randomInt(wrong.length)];
+  const challenge:FlightChallenge={id:++run.challengeId,kind,verbIndex:run.verbIndex,stage:run.stage,left:kind==='approach'?(correctLane==='left'?'코인':'장애물'):(correctLane==='left'?answer:distractor),right:kind==='approach'?(correctLane==='right'?'코인':'장애물'):(correctLane==='right'?answer:distractor),correctLane,deadline:now+flightWindow(run.speed)};
+  run.challenge=challenge;
+ }
+ private flightView(progress:FlightProgress):FlightView{
+  const season=seasonAt(),ranking=[...this.records.values()].filter(record=>record.flight?.season===season.id&&(record.flight?.bestDistance??0)>0).map(record=>({id:record.id,name:record.name,profileId:record.store.profile,frameId:record.store.frame,distance:record.flight!.bestDistance,score:record.flight!.bestScore})).sort((a,b)=>b.distance-a.distance||b.score-a.score||a.id.localeCompare(b.id)).slice(0,100);
+  const run=progress.run,publicRun=run?(()=>{const {correctLane:_secret,...challenge}=run.challenge,{verbIndex:_index,...visible}=run,verb=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length];return {...visible,challenge,verb:{base:verb.base,meaning:verb.meaning}};})():undefined;
+  return {serverNow:Date.now(),season:season.id,seasonEndsAt:season.endAt,bestDistance:progress.bestDistance,bestScore:progress.bestScore,plays:progress.plays,history:progress.history,ranking,...(publicRun?{run:publicRun}:{}),...(progress.lastResult?{lastResult:progress.lastResult}:{})};
+ }
+ private flightCollision(progress:FlightProgress,now=Date.now()){
+  const run=progress.run;if(!run)return;
+  run.hearts--;run.speed=1;run.stage='past';run.lastActionAt=now;run.lastResult='collision';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length].base;
+  if(run.hearts<=0)this.finishFlight(progress);else this.nextFlightChallenge(run,'approach',now);
+ }
+ flightStatus(p:Player){const progress=this.flightProgress(p);if(progress.run&&Date.now()>progress.run.challenge.deadline)this.flightCollision(progress);this.game.send(p.socket,{type:'flightState',data:this.flightView(progress)});}
+ flightStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.flightProgress(p);if(progress.run)return this.flightStatus(p);if(seasonAt().endAt-Date.now()<60_000)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');progress.lastResult=undefined;const now=Date.now(),initial:FlightChallenge={id:0,kind:'approach',verbIndex:5,stage:'past',left:'',right:'',correctLane:'left',deadline:now};const run:FlightRun={id:randomUUID(),startedAt:now,hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:0,challenge:initial,lastActionAt:0};this.nextFlightChallenge(run,'approach',now);progress.run=run;this.flightStatus(p);}
+ flightChoose(p:Player,msg:Record<string,unknown>){const progress=this.flightProgress(p),run=progress.run;if(!run)return this.flightStatus(p);const now=Date.now(),challenge=run.challenge;
+  if(msg.runId!==run.id||msg.challengeId!==challenge.id||!['left','right'].includes(String(msg.side)))return this.flightStatus(p);
+  if(now>challenge.deadline){this.flightCollision(progress,now);return this.flightStatus(p);}
+  const side=msg.side as FlightLane;run.lastActionAt=now;
+  if(side!==challenge.correctLane){this.flightCollision(progress,now);return this.flightStatus(p);}
+  if(challenge.kind==='approach'){run.coins++;run.score++;run.lastResult='coin';run.lastWord=undefined;this.nextFlightChallenge(run,'gate',now);}
+  else{run.distance+=100;run.score+=30;run.speed=flightSpeed(run.distance);run.lastResult='correct';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length][run.stage];if(run.stage==='past')run.stage='participle';else{run.verbIndex=(run.verbIndex+1)%FLIGHT_VERBS.length;run.stage='past';}this.nextFlightChallenge(run,'approach',now);}
+  this.flightStatus(p);
+ }
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}
 }
