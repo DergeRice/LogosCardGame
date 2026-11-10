@@ -3,29 +3,27 @@ import type {FlightView} from '../shared/flightGame.js';
 import {flightLaneAt,flightWindow,FLIGHT_ARRIVAL_GRACE_MS} from '../shared/flightGame.js';
 import {Avatar} from './MatchPresentation.js';
 import {FlightScene,preloadFlightArt} from './FlightScene.js';
-import {playFlightAudioSequence,preloadFlightAudio,preloadFlightClips,prepareFlightAudio,stopFlightAudio} from './flightAudio.js';
+import {playFlightAudioSequence,preloadFlightAudio,prepareFlightAudio,stopFlightAudio} from './flightAudio.js';
 import {unlockGameAudio} from './exampleAudio.js';
 import './flight-game.css';
 
 type Props={data:FlightView|null;connected:boolean;myId:string;send:(type:string,extra?:Record<string,unknown>)=>boolean;onBack:()=>void};
-function ding(){const audio=unlockGameAudio();if(!audio)return;const tone=audio.createOscillator(),gain=audio.createGain(),time=audio.currentTime;tone.type='sine';tone.frequency.setValueAtTime(650,time);tone.frequency.exponentialRampToValueAtTime(980,time+.12);gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(.16,time+.015);gain.gain.exponentialRampToValueAtTime(.0001,time+.24);tone.connect(gain).connect(audio.destination);tone.start(time);tone.stop(time+.25);}
 function crash(){const audio=unlockGameAudio();if(!audio)return;const tone=audio.createOscillator(),gain=audio.createGain(),time=audio.currentTime;tone.type='sawtooth';tone.frequency.setValueAtTime(180,time);tone.frequency.exponentialRampToValueAtTime(65,time+.24);gain.gain.setValueAtTime(.08,time);gain.gain.exponentialRampToValueAtTime(.0001,time+.28);tone.connect(gain).connect(audio.destination);tone.start(time);tone.stop(time+.28);}
 export function FlightPanel({data,connected,myId,send,onBack}:Props){
- const [clock,setClock]=useState(Date.now()),[planeX,setPlaneX]=useState(.5),[expanded,setExpanded]=useState(false),[artReady,setArtReady]=useState(false);
+ const [clock,setClock]=useState(Date.now()),[planeX,setPlaneX]=useState(.5),[expanded,setExpanded]=useState(false),[artReady,setArtReady]=useState(false),[audioReady,setAudioReady]=useState(false);
  const [answerCue,setAnswerCue]=useState<{id:number;text:string;kind:'correct'|'collision'}|null>(null);
  const requestRef=useRef(''),arrivalRef=useRef(''),playedRef=useRef(''),cueTimer=useRef<number|undefined>(undefined),pointerRef=useRef<number|null>(null),planeRef=useRef(.5),fieldRef=useRef<HTMLDivElement>(null),sendRef=useRef(send);
  sendRef.current=send;
  const offset=useMemo(()=>(data?.serverNow??Date.now())-Date.now(),[data?.serverNow]),run=data?.run,challenge=run?.challenge,verb=run?.verb;
  const remaining=(challenge?.deadline??0)-(clock+offset),left=Math.max(0,remaining),total=run?flightWindow(run.speed):3200;
  useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),100);return()=>{clearInterval(timer);stopFlightAudio();clearTimeout(cueTimer.current);};},[]);
- useEffect(()=>{let active=true;void preloadFlightAudio().catch(()=>{});void preloadFlightArt().then(()=>{if(active)setArtReady(true)}).catch(()=>{if(active)setArtReady(true)});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;void preloadFlightAudio().then(()=>{if(active)setAudioReady(true)}).catch(()=>{});void preloadFlightArt().then(()=>{if(active)setArtReady(true)}).catch(()=>{if(active)setArtReady(true)});return()=>{active=false;};},[]);
  useEffect(()=>{if(!challenge||!run||!verb)return;
   const current=`${run.id}:${challenge.id}`;if(playedRef.current===current)return;playedRef.current=current;
   clearTimeout(cueTimer.current);
   const nextBase=run.lastResult==='correct'&&run.stage==='past';
   const words=run.lastResult==='correct'&&run.lastWord?[run.lastWord,...(nextBase?[verb.base]:[])]:[verb.base];
-  preloadFlightClips(words);
-  if(run.lastResult==='correct'&&run.lastWord){ding();setAnswerCue({id:challenge.id,text:run.lastWord,kind:'correct'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
+  if(run.lastResult==='correct'&&run.lastWord){setAnswerCue({id:challenge.id,text:run.lastWord,kind:'correct'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
   else if(run.lastResult==='collision'){crash();setAnswerCue({id:challenge.id,text:verb.base,kind:'collision'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
   else setAnswerCue(null);
   void playFlightAudioSequence(words);
@@ -52,12 +50,12 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
     <h2 id="flight-finished-title">비행 종료</h2>
     <div className="flight-finished-stats"><span><small>점수</small><strong>{data.lastResult.score.toLocaleString()}</strong></span><span><small>비행 거리</small><strong>{data.lastResult.distance.toLocaleString()}<em>m</em></strong></span></div>
     <p>최고 기록 {data.bestScore.toLocaleString()}점{myRank>=0?` · 이번 시즌 ${myRank+1}위`:''}</p>
-    <button className="flight-start" disabled={!connected||!artReady} onClick={()=>{prepareFlightAudio();send('flightStart')}}>{!artReady?'준비 중…':'다시 비행'}</button>
+    <button className="flight-start" disabled={!connected||!artReady||!audioReady} onClick={()=>{prepareFlightAudio();send('flightStart')}}>{!artReady||!audioReady?'준비 중…':'다시 비행'}</button>
     <button className="flight-finished-back" onClick={onBack}>미니게임으로</button>
    </div>
   </div>:<div className="flight-ready">
    <div className="flight-ranking"><div><h2>비행 랭킹</h2><small>최고 {data?.bestDistance??0}m</small></div><ol>{(data?.ranking??[]).slice(0,expanded?10:3).map((entry,index)=><li key={entry.id}><b>{index+1}</b><Avatar kind="verb" profileId={entry.profileId} frameId={entry.frameId}/><span>{entry.name}</span><strong>{entry.distance.toLocaleString()}m</strong><small>{entry.score}점</small></li>)}</ol>{!data?.ranking.length&&<p>첫 비행 기록을 남겨보세요.</p>}{(data?.ranking.length??0)>3&&<button className="flight-more" onClick={()=>setExpanded(value=>!value)}>{expanded?'접기':'더보기'}</button>}{myRank>=10&&<p>내 순위 {myRank+1}위</p>}</div>
-   <button className="flight-start" disabled={!connected||!artReady} onClick={()=>{prepareFlightAudio();send('flightStart')}}>{!artReady?'준비 중…':'시작'}</button>
+   <button className="flight-start" disabled={!connected||!artReady||!audioReady} onClick={()=>{prepareFlightAudio();send('flightStart')}}>{!artReady||!audioReady?'준비 중…':'시작'}</button>
   </div>}
  </section>;
 }

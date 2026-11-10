@@ -1,59 +1,50 @@
 import {unlockGameAudio} from './exampleAudio.js';
 
-type Manifest={clips:Record<string,string>};
-let manifest:Promise<Manifest>|undefined;
-const files=new Map<string,Promise<ArrayBuffer>>();
-const buffers=new Map<string,Promise<AudioBuffer>>();
+type Manifest={sampleRate:number;segments:Record<string,{start:number;length:number}>;clips:Record<string,string>};
+type VoicePack={manifest:Manifest;buffer:AudioBuffer|null};
+let pack:Promise<VoicePack>|undefined;
 let active:AudioBufferSourceNode|null=null,activeElement:HTMLAudioElement|null=null,activeDone:(()=>void)|null=null,request=0;
 
+// Download and decode the complete recorded vocabulary before enabling Start.
+// Gate transitions use offsets into this resident buffer, so they never fetch a word.
 export function preloadFlightAudio(){
- return manifest??=fetch('/audio/flight/manifest-v1.json').then(async response=>{
-  if(!response.ok)throw Error('Flight recordings unavailable');
-  return await response.json() as Manifest;
- }).catch(error=>{manifest=undefined;throw error;});
-}
-
-async function file(word:string){
- let cached=files.get(word);if(cached)return cached;
- cached=(async()=>{
-  const list=await preloadFlightAudio(),name=list.clips[word];
-  if(!name)throw Error('Flight recording missing: '+word);
-  const response=await fetch('/audio/flight/clips/'+name);
-  if(!response.ok)throw Error('Flight recording unavailable: '+word);
-  return await response.arrayBuffer();
- })().catch(error=>{files.delete(word);throw error;});
- files.set(word,cached);return cached;
-}
-
-async function clip(word:string,context:AudioContext){
- let cached=buffers.get(word);if(cached)return cached;
- cached=context.decodeAudioData((await file(word)).slice(0)).catch(error=>{buffers.delete(word);throw error;});
- buffers.set(word,cached);return cached;
+ return pack??=Promise.all([fetch('/audio/flight/manifest-v2.json'),fetch('/audio/flight/flight-voice-v2.wav')]).then(async([manifestResponse,voiceResponse])=>{
+  if(!manifestResponse.ok||!voiceResponse.ok)throw Error('Flight recordings unavailable');
+  const manifest=await manifestResponse.json() as Manifest,bytes=await voiceResponse.arrayBuffer();
+  const context=unlockGameAudio();
+  return {manifest,buffer:context?await context.decodeAudioData(bytes):null};
+ }).catch(error=>{pack=undefined;throw error;});
 }
 
 export function prepareFlightAudio(){unlockGameAudio();void preloadFlightAudio().catch(()=>{});}
-export function preloadFlightClips(words:readonly string[]){const context=unlockGameAudio();for(const word of words){void file(word).catch(()=>{});if(context)void clip(word,context).catch(()=>{});}}
 export function stopFlightAudio(){request++;if(active){try{active.stop()}catch{}active=null;}if(activeElement){activeElement.pause();activeElement=null;}activeDone?.();activeDone=null;}
-async function playElement(word:string,current:number){
- const list=await preloadFlightAudio(),name=list.clips[word];if(!name||current!==request)return;
+
+async function playElement(word:string,current:number,manifest:Manifest){
+ const name=manifest.clips[word];if(!name||current!==request)return;
  await new Promise<void>(resolve=>{
   const element=new Audio('/audio/flight/clips/'+name);activeElement=element;
   const done=()=>{element.onended=null;element.onerror=null;if(activeElement===element)activeElement=null;if(activeDone===done)activeDone=null;resolve();};
   activeDone=done;element.onended=done;element.onerror=done;void element.play().catch(done);
  });
 }
+
 export async function playFlightAudioSequence(words:readonly string[]){
- stopFlightAudio();const current=++request,context=unlockGameAudio();
- for(const word of words){
-  try{
-   if(context){
-    const buffer=await clip(word,context);if(current!==request)return;
-    if(context.state!=='running')await context.resume();
-    if(current!==request)return;
-    if(context.state==='running')await new Promise<void>(resolve=>{const source=context.createBufferSource();source.buffer=buffer;source.connect(context.destination);source.onended=()=>{source.disconnect();if(active===source)active=null;resolve();};active=source;source.start();});
-    else await playElement(word,current);
-   }else await playElement(word,current);
+ stopFlightAudio();const current=++request;
+ try{
+  const {manifest,buffer}=await preloadFlightAudio();if(current!==request)return;
+  const context=unlockGameAudio();
+  if(context&&buffer&&context.state!=='running')await context.resume();
+  for(const word of words){
    if(current!==request)return;
-  }catch{try{await playElement(word,current);}catch{return;}}
- }
+   const segment=manifest.segments[word];if(!segment)continue;
+   if(context?.state==='running'&&buffer){
+    await new Promise<void>(resolve=>{
+     const source=context.createBufferSource();source.buffer=buffer;source.connect(context.destination);
+     const done=()=>{source.onended=null;source.disconnect();if(active===source)active=null;if(activeDone===done)activeDone=null;resolve();};
+     active=source;activeDone=done;source.onended=done;
+     source.start(0,segment.start/manifest.sampleRate,segment.length/manifest.sampleRate);
+    });
+   }else await playElement(word,current,manifest);
+  }
+ }catch{/* A missing recording must not interrupt the flight controls. */}
 }

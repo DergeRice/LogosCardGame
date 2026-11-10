@@ -29,6 +29,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.getByRole('heading',{name:'불규칙 동사 플라이트'})).toBeVisible();
   await expect(page.getByRole('button',{name:'시작',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'시작',exact:true}).click();
+  await page.locator('.flight-field').press('ArrowRight');
   await expect(page.locator('.flight-question')).toContainText('Break');
   await expect(page.locator('.flight-question')).toContainText('깨다');
   await expect(page.locator('.flight-stage')).toHaveText('과거형');
@@ -42,8 +43,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   const frameP95=await page.evaluate(()=>new Promise<number>(resolve=>{const frames:number[]=[],end=performance.now()+700;let previous=0;const sample=(now:number)=>{if(previous)frames.push(now-previous);previous=now;if(now<end)requestAnimationFrame(sample);else resolve(frames.sort((a,b)=>a-b)[Math.floor(frames.length*.95)]??0);};requestAnimationFrame(sample);}));
   console.log(`flight ${viewport.width}x${viewport.height} ${test.info().project.name}: frame p95 ${frameP95.toFixed(1)}ms`);
   expect(frameP95).toBeLessThan(100);
-  await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v1.json'))).toBe(true);
-  await expect.poll(()=>audioResponses.some(url=>url.includes('/clips/'))).toBe(true);
+  await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v2.json'))).toBe(true);
+  await expect.poll(()=>audioResponses.some(url=>url.includes('flight-voice-v2.wav'))).toBe(true);
   for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects-layer.webp','clouds-layer.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
   await page.waitForTimeout(150);
   await page.screenshot({path:`.runtime/v196-flight-opening-${viewport.width}-${test.info().project.name}.png`});
@@ -54,12 +55,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   expect(Math.abs(scoreBox!.x+scoreBox!.width/2-(fieldBox!.x+fieldBox!.width/2))).toBeLessThan(4);
   expect(await page.locator('.game-hub .flight-page').count()).toBe(1);
   const steer=async(x:number)=>{const box=await page.locator('.flight-field').boundingBox();await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.75);await page.mouse.down();await page.mouse.move(box!.x+box!.width*x,box!.y+box!.height*.75,{steps:5});await page.mouse.up();await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',x<.5?/0\.2/:/0\.7/);};
-  await steer(.73);
-  if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
-   await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','right');
-   await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
-   await steer(.73);
-  }
+  await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',/0\.7/);
   await expect(page.locator('.flight-answer-cue')).toHaveText('broke',{timeout:5000});
   await expect(page.locator('.flight-question')).toHaveCSS('opacity','0');
   await page.screenshot({path:`.runtime/v197-flight-answer-${viewport.width}-${test.info().project.name}.png`});
@@ -68,6 +64,10 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-score')).toHaveText('30');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
+  if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
+   await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
+   await steer(.73);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','right');
+  }
   await steer(.73);
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await expect(page.locator('.flight-answer-cue')).toHaveText('break');

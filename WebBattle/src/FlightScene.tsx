@@ -27,33 +27,35 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
     const objectHalves=[0,1].map(index=>new Texture({source:objectTexture.source,frame:new Rectangle(index*512,0,512,1536)}));
     const objects=objectHalves.map(texture=>Array.from({length:3},()=>new Sprite(texture)));
     const clouds=Array.from({length:3},()=>{const sprite=new Sprite(cloudTexture);sprite.alpha=.5;return sprite;});
-    const halves=[0,1].map(index=>new Texture({source:gateTexture.source,frame:new Rectangle(index*1086,160,1086,370)}));
+    // Crop only the transparent outer margin. Each lane gets the complete gate.
+    const wholeGate=new Texture({source:gateTexture.source,frame:new Rectangle(139,212,1895,295)});
     const planeFrames=Array.from({length:16},(_,index)=>new Texture({source:planeSheet.source,frame:new Rectangle(index%4*200,Math.floor(index/4)*200,200,200)}));
     const makeGate=()=>{
-     const group=new Container(),panels=halves.map(texture=>new Sprite(texture)),labels=halves.map(()=>new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:26,fontWeight:'900',fill:0x123a60,stroke:{color:0xeaffff,width:4},align:'center'}})),stageLabel=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:18,fontWeight:'900',fill:0xffffff,stroke:{color:0x17476b,width:5},align:'center'}});
+     const group=new Container(),panels=[new Sprite(wholeGate),new Sprite(wholeGate)],labels=[0,1].map(()=>new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:26,fontWeight:'900',fill:0x123a60,stroke:{color:0xeaffff,width:4},align:'center'}})),stageLabel=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:18,fontWeight:'900',fill:0xffffff,stroke:{color:0x17476b,width:5},align:'center'}});
      panels.forEach(panel=>panel.anchor.set(.5));labels.forEach(label=>label.anchor.set(.5));stageLabel.anchor.set(.5,1);
      group.addChild(...panels,...labels,stageLabel);
      return {group,panels,labels,stageLabel,layoutWidth:0,layoutHeight:0};
     };
-    const current=makeGate(),plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
+    let current=makeGate(),gateId=live.current.challenge.id;const plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
     instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=60;
     let scroll=0,lastPlaneX=.5,bankDirection=0,bankUntil=0;
     const drawGate=(gate:ReturnType<typeof makeGate>,w:number,h:number,y:number,words:{left:string;right:string;stage:string})=>{
-     const gateH=Math.max(48,Math.min(94,h*.115)),gateWidth=w*.48;
+     const gateH=Math.max(37,Math.min(65,h*.09)),gateWidth=w*.49;
      gate.group.y=y*h;
      if(gate.layoutWidth!==w||gate.layoutHeight!==h){
       gate.layoutWidth=w;gate.layoutHeight=h;
       gate.panels.forEach((panel,index)=>{panel.width=gateWidth;panel.height=gateH;panel.position.set(w*(index===0?.25:.75),0);});
-      gate.labels.forEach((label,index)=>{label.style.fontSize=Math.max(15,Math.min(31,w*.067,gateH*.36));label.position.set(w*(index===0?.25:.75),-gateH*.02);});
-      gate.stageLabel.style.fontSize=Math.max(14,Math.min(21,w*.045));gate.stageLabel.position.set(w*.5,-gateH*.55-4);
+      gate.labels.forEach((label,index)=>{label.style.fontSize=Math.max(15,Math.min(31,w*.067));label.position.set(w*(index===0?.25:.75),-gateH*.83);});
+      gate.stageLabel.style.fontSize=Math.max(14,Math.min(21,w*.045));gate.stageLabel.position.set(w*.5,-gateH*1.3-4);
      }
      gate.labels.forEach((label,index)=>{const value=index===0?words.left:words.right;if(label.text!==value)label.text=value;});
      const stage=words.stage==='participle'?'과거분사':'과거형';if(gate.stageLabel.text!==stage)gate.stageLabel.text=stage;gate.stageLabel.visible=y*h>Math.max(61,gateH*.7);
     };
     instance.ticker.add(tick=>{
      const w=instance.screen.width,h=instance.screen.height,info=live.current;
+     if(info.challenge.id!==gateId){instance.stage.removeChild(current.group);current.group.destroy({children:true});current=makeGate();instance.stage.addChildAt(current.group,instance.stage.getChildIndex(plane));gateId=info.challenge.id;}
      scroll+=Math.min(tick.deltaMS,50)*info.speed*.058;
      const landCover=Math.max(w/landTexture.width,h/landTexture.height),landH=landTexture.height*landCover,landX=(w-landTexture.width*landCover)/2,landY=(h-landH)/2;
      land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible){sprite.scale.set(landCover);sprite.position.set(landX,top);}});

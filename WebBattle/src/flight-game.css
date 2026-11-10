@@ -43,8 +43,7 @@
 .game-hub .flight-page.is-playing .flight-field{position:relative;inset:auto;width:100%;height:auto;min-height:170px;max-height:none;flex:1;border:2px solid #7fc3d3;border-radius:14px;box-shadow:0 5px 16px #29658220;background:#a7db70 url('/flight/land.webp') center/cover no-repeat}
 .flight-page.is-playing .flight-fallback-gates{left:0;right:0;gap:0;grid-template-columns:1fr 1fr}
 .flight-page.is-playing .flight-fallback-gates:after{top:0;height:100%;background:#145889}
-.flight-page.is-playing .flight-fallback-gates span{height:62px;display:grid;place-items:center;padding:0 3px;border:0;background-image:url('/flight/gate.webp');background-size:200% 100%;background-repeat:no-repeat;color:#123a60;text-shadow:-1px -1px 0 white,1px 1px 0 white}
-.flight-page.is-playing .flight-fallback-gates span:first-child{background-position:left center}.flight-page.is-playing .flight-fallback-gates span:last-child{background-position:right center}
+.flight-page.is-playing .flight-fallback-gates span{height:62px;display:grid;place-items:start center;padding:0 3px;border:0;background-image:url('/flight/gate.webp');background-size:115% 245%;background-position:center;background-repeat:no-repeat;color:#123a60;text-shadow:-1px -1px 0 white,1px 1px 0 white}
 .flight-page.is-playing .flight-plane-fallback{width:62px;height:62px;background-image:url('/flight/plane.webp')}
 .flight-page.is-playing .flight-coin-fallback{width:30px;height:30px;border:0;background:url('/currency/coin.webp') center/contain no-repeat;box-shadow:none}
 .game-hub .flight-page .flight-impact{top:55%}

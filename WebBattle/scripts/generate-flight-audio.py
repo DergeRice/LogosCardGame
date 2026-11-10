@@ -35,6 +35,10 @@ session = FloatSpeedSession(str(model / 'kokoro-v1.0.onnx'), sess_options=option
                             providers=['CPUExecutionProvider'])
 voice = Kokoro.from_session(session, str(model / 'voices-v1.0.bin'))
 clips = {}
+segments = {}
+packed = []
+cursor = 0
+sample_rate = 24000
 for index, word in enumerate(words, 1):
     name = hashlib.sha256(('kokoro-flight-af_heart-v1/' + word).encode()).hexdigest()[:20] + '.mp3'
     target = clips_dir / name
@@ -49,10 +53,18 @@ for index, word in enumerate(words, 1):
     duration = len(samples) / rate
     if not np.isfinite(samples).all() or not .08 < duration < 8 or np.max(np.abs(samples)) < .02:
         raise RuntimeError('Invalid recorded clip: ' + word)
+    if rate != sample_rate:
+        raise RuntimeError('Unexpected sample rate: ' + word)
     clips[word] = name
+    segments[word] = {'start': cursor, 'length': len(samples)}
+    packed.append(samples)
+    packed.append(np.zeros(1200, dtype=np.float32))
+    cursor += len(samples) + 1200
     if index % 20 == 0 or index == len(words):
         print(f'Flight voice {index}/{len(words)}', flush=True)
 
 manifest = {'version': 1, 'engine': 'Kokoro-82M v1.0', 'voice': 'af_heart', 'clips': clips}
 (output / 'manifest-v1.json').write_text(json.dumps(manifest, ensure_ascii=False), encoding='utf-8')
+(output / 'manifest-v2.json').write_text(json.dumps({'version': 2, 'engine': 'Kokoro-82M v1.0', 'voice': 'af_heart', 'sampleRate': sample_rate, 'segments': segments, 'clips': clips}, ensure_ascii=False), encoding='utf-8')
+sf.write(output / 'flight-voice-v2.wav', np.concatenate(packed), sample_rate, format='WAV', subtype='PCM_16')
 print(f'Generated and verified {len(clips)} flight word recordings', flush=True)
