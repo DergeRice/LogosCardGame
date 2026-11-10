@@ -6,7 +6,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
  const context=await guestContext(browser,{viewport,isMobile:true,hasTouch:true});
  await context.addInitScript(({width,height})=>Object.defineProperty(window,'visualViewport',{value:Object.assign(new EventTarget(),{width,height:height-40,offsetTop:20,offsetLeft:0,scale:1})}),viewport);
  const page=await context.newPage(),errors:string[]=[],audioResponses:string[]=[],artResponses:string[]=[],actions:string[]=[];let run:FlightRun|undefined,finishedResult:FlightResult|undefined,sendState=()=>{};
- page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.url().includes('/audio/mini/')&&response.ok())audioResponses.push(response.url());if(response.url().includes('/flight/')&&response.ok()&&response.headers()['content-type']?.includes('image/'))artResponses.push(response.url());});
+ page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.url().includes('/audio/flight/')&&response.ok())audioResponses.push(response.url());if(response.url().includes('/flight/')&&response.ok()&&response.headers()['content-type']?.includes('image/'))artResponses.push(response.url());});
  const state=()=>{const publicRun=run?(()=>{const {correctLane:_secret,...challenge}=run.challenge,{verbIndex:_index,...visible}=run;return {...visible,challenge,verb:{base:'break',meaning:'깨다'}};})():undefined;return {serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:100,bestScore:30,plays:0,history:[],ranking:[],...(publicRun?{run:publicRun}:{}),...(finishedResult?{lastResult:finishedResult}:{})};};
  await page.routeWebSocket('**/socket',socket=>{sendState=()=>socket.send(JSON.stringify({type:'flightState',data:state()}));socket.onMessage(raw=>{
   const message=JSON.parse(String(raw));
@@ -42,7 +42,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   const frameP95=await page.evaluate(()=>new Promise<number>(resolve=>{const frames:number[]=[],end=performance.now()+700;let previous=0;const sample=(now:number)=>{if(previous)frames.push(now-previous);previous=now;if(now<end)requestAnimationFrame(sample);else resolve(frames.sort((a,b)=>a-b)[Math.floor(frames.length*.95)]??0);};requestAnimationFrame(sample);}));
   console.log(`flight ${viewport.width}x${viewport.height} ${test.info().project.name}: frame p95 ${frameP95.toFixed(1)}ms`);
   expect(frameP95).toBeLessThan(100);
-  await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
+  await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v1.json'))).toBe(true);
+  await expect.poll(()=>audioResponses.some(url=>url.includes('/clips/'))).toBe(true);
   for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects-layer.webp','clouds-layer.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
   await page.waitForTimeout(150);
   await page.screenshot({path:`.runtime/v196-flight-opening-${viewport.width}-${test.info().project.name}.png`});

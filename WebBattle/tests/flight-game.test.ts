@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
 import {flightLaneAt,flightSpeed,flightWindow,FLIGHT_ARRIVAL_GRACE_MS,type FlightView} from '../shared/flightGame.js';
@@ -12,6 +13,14 @@ test('flight art moves downward and loops without a jump',()=>{
  const beforeSeam=descendingFlightTile(499,500,0,-1),afterSeam=descendingFlightTile(501,500,0,0);
  assert.equal(afterSeam.top-beforeSeam.top,2);
  assert.equal('flipped' in afterSeam,false);
+});
+
+test('every base, past and participle has a prerecorded Kokoro flight clip',()=>{
+ const manifest=JSON.parse(readFileSync(new URL('../public/audio/flight/manifest-v1.json',import.meta.url),'utf8')) as {engine:string;clips:Record<string,string>};
+ const required=new Set(FLIGHT_VERBS.flatMap(verb=>[verb.base,verb.past,verb.participle]));
+ assert.equal(manifest.engine,'Kokoro-82M v1.0');
+ assert.deepEqual(new Set(Object.keys(manifest.clips)),required);
+ for(const word of required){const filename=manifest.clips[word];assert.match(filename,/^[a-f0-9]{20}\.mp3$/);const bytes=readFileSync(new URL(`../public/audio/flight/clips/${filename}`,import.meta.url));assert.ok(bytes.length>1000,word);assert.ok(bytes.subarray(0,3).toString()==='ID3'||(bytes[0]===0xff&&(bytes[1]&0xe0)===0xe0),word);}
 });
 
 function player(game:Game){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,'비행 검사'),messages};}
@@ -69,7 +78,7 @@ test('wrong word gate removes one heart and repeats the exact same gate while re
  game.community.flightStart(p);assert.equal(view(messages).run?.hearts,3);assert.equal(view(messages).bestDistance,100);
 });
 
-test('staying on the center divider at gate arrival causes a collision',t=>{
+test('straddling the gap between the two gates causes a collision',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
  const run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;

@@ -17,7 +17,7 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
   let disposed=false,app:Application|undefined,observer:ResizeObserver|undefined,unwatch=()=>{},cleanupVisibility=()=>{};
   void (async()=>{
    try{
-    const {Application,Container,Graphics,Rectangle,Sprite,Text,Texture}=await import('pixi.js');if(disposed)return;
+    const {Application,Container,Rectangle,Sprite,Text,Texture}=await import('pixi.js');if(disposed)return;
     const instance=new Application();app=instance;
     await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:false,autoDensity:true,resolution:pixiResolution(),preference:'webgl'});
     if(disposed){instance.destroy(true,{children:true});return;}
@@ -30,23 +30,22 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
     const halves=[0,1].map(index=>new Texture({source:gateTexture.source,frame:new Rectangle(index*1086,160,1086,370)}));
     const planeFrames=Array.from({length:16},(_,index)=>new Texture({source:planeSheet.source,frame:new Rectangle(index%4*200,Math.floor(index/4)*200,200,200)}));
     const makeGate=()=>{
-     const group=new Container(),panels=halves.map(texture=>new Sprite(texture)),divider=new Graphics(),labels=halves.map(()=>new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:26,fontWeight:'900',fill:0x123a60,stroke:{color:0xeaffff,width:4},align:'center'}})),stageLabel=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:18,fontWeight:'900',fill:0xffffff,stroke:{color:0x17476b,width:5},align:'center'}});
+     const group=new Container(),panels=halves.map(texture=>new Sprite(texture)),labels=halves.map(()=>new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:26,fontWeight:'900',fill:0x123a60,stroke:{color:0xeaffff,width:4},align:'center'}})),stageLabel=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:18,fontWeight:'900',fill:0xffffff,stroke:{color:0x17476b,width:5},align:'center'}});
      panels.forEach(panel=>panel.anchor.set(.5));labels.forEach(label=>label.anchor.set(.5));stageLabel.anchor.set(.5,1);
-     group.addChild(...panels,divider,...labels,stageLabel);
-     return {group,panels,divider,labels,stageLabel,layoutWidth:0,layoutHeight:0};
+     group.addChild(...panels,...labels,stageLabel);
+     return {group,panels,labels,stageLabel,layoutWidth:0,layoutHeight:0};
     };
-    const outgoing=makeGate(),current=makeGate(),plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
-    instance.stage.addChild(...land,...objects.flat(),...clouds,outgoing.group,current.group,plane);
+    const current=makeGate(),plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
+    instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=60;
-    let scroll=0,lastId=live.current.challenge.id,lastY=-.22,lastPlaneX=.5,bankDirection=0,bankUntil=0,outAt=-1,outFrom=.83,outWords={left:'',right:'',stage:'past'};
+    let scroll=0,lastPlaneX=.5,bankDirection=0,bankUntil=0;
     const drawGate=(gate:ReturnType<typeof makeGate>,w:number,h:number,y:number,words:{left:string;right:string;stage:string})=>{
-     const gateH=Math.max(48,Math.min(94,h*.115)),gateWidth=w*.46;
+     const gateH=Math.max(48,Math.min(94,h*.115)),gateWidth=w*.48;
      gate.group.y=y*h;
      if(gate.layoutWidth!==w||gate.layoutHeight!==h){
       gate.layoutWidth=w;gate.layoutHeight=h;
       gate.panels.forEach((panel,index)=>{panel.width=gateWidth;panel.height=gateH;panel.position.set(w*(index===0?.25:.75),0);});
-      gate.divider.clear().roundRect(w*.46,-gateH*.51,w*.08,gateH*1.02,2).fill({color:0x145889,alpha:.95});
       gate.labels.forEach((label,index)=>{label.style.fontSize=Math.max(15,Math.min(31,w*.067,gateH*.36));label.position.set(w*(index===0?.25:.75),-gateH*.02);});
       gate.stageLabel.style.fontSize=Math.max(14,Math.min(21,w*.045));gate.stageLabel.position.set(w*.5,-gateH*.55-4);
      }
@@ -62,14 +61,10 @@ export function FlightScene({challenge,speed,progress,startsAt,serverOffset,plan
      objects.forEach((row,side)=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.visible=top<h&&top+objectHeight>0;if(sprite.visible){sprite.scale.set(objectScale);sprite.position.set(side===0?0:w-512*objectScale,top);}}));
      const cloudCover=w<h?w/cloudTexture.width:Math.max(w/cloudTexture.width,h/cloudTexture.height),cloudHeight=cloudTexture.height*cloudCover,cloudStride=(cloudTexture.height-220)*cloudCover,cloudX=(w-cloudTexture.width*cloudCover)/2,cloudY=Math.min(0,(h-cloudHeight)/2);
      clouds.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*1.06,cloudStride,cloudY,j-1);sprite.visible=top<h&&top+cloudHeight>0;if(sprite.visible){sprite.scale.set(cloudCover);sprite.position.set(cloudX,top);}});
-     if(info.challenge.id!==lastId){outWords={left:current.labels[0].text,right:current.labels[1].text,stage:current.stageLabel.text==='과거분사'?'participle':'past'};outFrom=lastY;outAt=performance.now();lastId=info.challenge.id;}
      const duration=Math.max(1,info.challenge.deadline-info.startsAt),p=Math.max(0,Math.min(1.25,(Date.now()+info.serverOffset-info.startsAt)/duration));
      const gateH=Math.max(48,Math.min(94,h*.115)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15)));
-     const startY=-gateH*.6/h,contactY=.83-(planeSize+gateH)/(2*h),y=startY+p*(contactY-startY);lastY=y;
+     const startY=-gateH*.6/h,contactY=.83-(planeSize+gateH)/(2*h),y=startY+p*(contactY-startY);
      drawGate(current,w,h,y,info.challenge);current.group.visible=info.progress>=0;
-     const elapsed=performance.now()-outAt;
-     outgoing.group.visible=outAt>=0&&elapsed<650;
-     if(outgoing.group.visible){drawGate(outgoing,w,h,outFrom+elapsed/650*.38,outWords);outgoing.group.alpha=1-elapsed/650;}
      const size=planeSize;plane.width=size;plane.height=size;plane.position.set(w*info.planeX,h*.83);
      const now=performance.now();if(Math.abs(info.planeX-lastPlaneX)>.012){bankDirection=info.planeX<lastPlaneX?-1:1;bankUntil=now+360;}lastPlaneX=info.planeX;
      const banked=now<bankUntil,bankState=banked?(bankDirection<0?'left':'right'):'straight';if(node.dataset.bank!==bankState)node.dataset.bank=bankState;
