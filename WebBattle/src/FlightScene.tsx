@@ -5,9 +5,7 @@ import {descendingFlightTile} from '../shared/flightVisual.js';
 import {isMobileGraphics,pixiResolution,watchContextLoss} from './pixiRuntime.js';
 
 type Props={challenge:FlightPublicChallenge;speed:number;progress:number;planeX:number};
-const OBJECT_ART=['tree-a','house-a','tree-b','rocks-a','tree-c','rocks-b','tree-d','house-b','tree-e','house-c','tree-f'].map(name=>`/flight/objects/${name}.webp`);
-const CLOUD_ART=['cloud-a','cloud-b','cloud-c','cloud-d'].map(name=>`/flight/clouds/${name}.webp`);
-const FLIGHT_ART=['/flight/land.webp',...OBJECT_ART,...CLOUD_ART,'/flight/gate.webp','/flight/plane-banking.webp','/flight/plane.webp'];
+const FLIGHT_ART=['/flight/land.webp','/flight/objects-layer.webp','/flight/clouds-layer.webp','/flight/gate.webp','/flight/plane-banking.webp','/flight/plane.webp'];
 let artPromise:Promise<unknown[]>|undefined;
 export function preloadFlightArt(){return artPromise??=import('pixi.js').then(({Assets})=>Promise.all(FLIGHT_ART.map(path=>Assets.load(path)))).catch(error=>{artPromise=undefined;throw error;});}
 
@@ -23,11 +21,12 @@ export function FlightScene({challenge,speed,progress,planeX}:Props){
     const instance=new Application();app=instance;
     await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:true,autoDensity:true,resolution:pixiResolution(),preference:'webgl',powerPreference:'low-power'});
     if(disposed){instance.destroy(true,{children:true});return;}
-    const art=await preloadFlightArt(),landTexture=art[0],objectTextures=art.slice(1,1+OBJECT_ART.length),cloudTextures=art.slice(1+OBJECT_ART.length,1+OBJECT_ART.length+CLOUD_ART.length),gateTexture=art.at(-3),planeSheet=art.at(-2);
+    const [landTexture,objectTexture,cloudTexture,gateTexture,planeSheet]=await preloadFlightArt();
     if(disposed){instance.destroy(true,{children:true});return;}
     const land=Array.from({length:3},()=>new Sprite(landTexture));
-    const objects=objectTextures.map(texture=>{const sprite=new Sprite(texture);sprite.anchor.set(.5);return sprite;});
-    const clouds=cloudTextures.map(texture=>{const sprite=new Sprite(texture);sprite.anchor.set(.5);sprite.alpha=.44;return sprite;});
+    const objectHalves=[0,1].map(index=>new Texture({source:objectTexture.source,frame:new Rectangle(index*512,0,512,1536)}));
+    const objects=objectHalves.map(texture=>Array.from({length:3},()=>new Sprite(texture)));
+    const clouds=Array.from({length:3},()=>{const sprite=new Sprite(cloudTexture);sprite.alpha=.5;return sprite;});
     const halves=[0,1].map(index=>new Texture({source:gateTexture.source,frame:new Rectangle(index*1086,160,1086,370)}));
     const planeFrames=Array.from({length:16},(_,index)=>new Texture({source:planeSheet.source,frame:new Rectangle(index%4*200,Math.floor(index/4)*200,200,200)}));
     const makeGate=()=>{
@@ -37,7 +36,7 @@ export function FlightScene({challenge,speed,progress,planeX}:Props){
      return {group,panels,divider,labels,stageLabel};
     };
     const outgoing=makeGate(),current=makeGate(),engine=new Graphics(),plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
-    instance.stage.addChild(...land,...objects,...clouds,outgoing.group,current.group,engine,plane);
+    instance.stage.addChild(...land,...objects.flat(),...clouds,outgoing.group,current.group,engine,plane);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     instance.ticker.maxFPS=isMobileGraphics()?30:45;
     let scroll=0,lastId=live.current.challenge.id,lastY=-.22,lastPlaneX=.5,bankDirection=0,bankUntil=0,outAt=-1,outFrom=.83,outWords={left:'',right:'',stage:'past'};
@@ -52,12 +51,12 @@ export function FlightScene({challenge,speed,progress,planeX}:Props){
     instance.ticker.add(tick=>{
      const w=instance.screen.width,h=instance.screen.height,info=live.current;
      scroll+=Math.min(tick.deltaMS,50)*info.speed*.058;
-     const cover=Math.max(w/1024,h/1536),tileH=1536*cover,baseX=(w-1024*cover)/2,baseY=(h-tileH)/2;
-     land.forEach((sprite,j)=>{const {top,flipped}=descendingFlightTile(scroll*.6,tileH,baseY,j-1);sprite.scale.set(cover,flipped?-cover:cover);sprite.position.set(baseX,top+(flipped?tileH:0));});
-     const objectPeriod=Math.max(h*2.5,900),objectWidth=Math.min(w*.36,Math.max(92,h*.29));
-     objects.forEach((sprite,j)=>{sprite.width=objectWidth*(j%3===0?.92:1);sprite.height=sprite.width*sprite.texture.height/sprite.texture.width;const side=j%2===0?-1:1,x=w*(side<0?.11:.89)+side*(j%3-1)*w*.025;sprite.position.set(x,((j/objects.length*objectPeriod+scroll*.88)%objectPeriod)-objectWidth*.65);});
-     const cloudPeriod=Math.max(h*2.1,740),cloudWidth=Math.min(w*.7,Math.max(145,h*.48));
-     clouds.forEach((sprite,j)=>{sprite.width=cloudWidth*(j%2===0?1:.78);sprite.height=sprite.width*sprite.texture.height/sprite.texture.width;sprite.position.set(w*(j%2===0?.09:.91),((j/clouds.length*cloudPeriod+scroll*1.08)%cloudPeriod)-cloudWidth*.7);});
+     const landCover=Math.max(w/landTexture.width,h/landTexture.height),landH=landTexture.height*landCover,landX=(w-landTexture.width*landCover)/2,landY=(h-landH)/2;
+     land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.scale.set(landCover);sprite.position.set(landX,top);});
+     const objectScale=Math.min(w/1024,h/500),objectHeight=1536*objectScale,objectStride=(1536-170)*objectScale,objectY=Math.min(0,(h-objectHeight)/2);
+     objects.forEach((row,side)=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.scale.set(objectScale);sprite.position.set(side===0?0:w-512*objectScale,top);}));
+     const cloudCover=w<h?w/cloudTexture.width:Math.max(w/cloudTexture.width,h/cloudTexture.height),cloudHeight=cloudTexture.height*cloudCover,cloudStride=(cloudTexture.height-220)*cloudCover,cloudX=(w-cloudTexture.width*cloudCover)/2,cloudY=Math.min(0,(h-cloudHeight)/2);
+     clouds.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*1.06,cloudStride,cloudY,j-1);sprite.scale.set(cloudCover);sprite.position.set(cloudX,top);});
      if(info.challenge.id!==lastId){outWords={left:current.labels[0].text,right:current.labels[1].text,stage:current.stageLabel.text==='과거분사'?'participle':'past'};outFrom=Math.max(.75,lastY);outAt=performance.now();lastId=info.challenge.id;}
      const p=Math.max(0,Math.min(1.25,info.progress)),y=-.22+p*1.05;lastY=y;
      drawGate(current,w,h,y,info.challenge);current.group.visible=info.progress>=0;
@@ -78,5 +77,5 @@ export function FlightScene({challenge,speed,progress,planeX}:Props){
   })();
   return()=>{disposed=true;observer?.disconnect();cleanupVisibility();unwatch();app?.destroy(true,{children:true});};
  },[]);
- return <div className="flight-scene" ref={host} aria-hidden="true">{fallback&&<>{OBJECT_ART.slice(0,6).map((art,index)=><span key={art} className="flight-fallback-object" style={{left:index%2===0?'2%':'76%',top:`${index*18-20}%`,backgroundImage:`url('${art}')`,animationDelay:`-${index*1.4}s`}}/>)}{CLOUD_ART.map((art,index)=><span key={art} className="flight-fallback-cloud" style={{left:index%2===0?'-5%':'65%',top:`${index*29-25}%`,backgroundImage:`url('${art}')`,animationDelay:`-${index*2.3}s`}}/>)}{progress>=0&&<div className="flight-fallback-gates" style={{top:`${Math.max(-22,-22+Math.min(1.25,progress)*105)}%`}}><b className="flight-fallback-stage">{challenge.stage==='past'?'과거형':'과거분사'}</b><span>{challenge.left}</span><span>{challenge.right}</span></div>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
+ return <div className="flight-scene" ref={host} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{progress>=0&&<div className="flight-fallback-gates" style={{top:`${Math.max(-22,-22+Math.min(1.25,progress)*105)}%`}}><b className="flight-fallback-stage">{challenge.stage==='past'?'과거형':'과거분사'}</b><span>{challenge.left}</span><span>{challenge.right}</span></div>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
 }

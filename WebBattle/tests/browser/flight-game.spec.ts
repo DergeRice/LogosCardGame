@@ -40,9 +40,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-play')).not.toContainText('거리');
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-renderer',/pixi|fallback/);
   await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
-  for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects/tree-a.webp','clouds/cloud-a.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
+  for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects-layer.webp','clouds-layer.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
   await page.waitForTimeout(150);
-  await page.screenshot({path:`.runtime/v195-flight-opening-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v196-flight-opening-${viewport.width}-${test.info().project.name}.png`});
   const pageBox=await page.locator('.flight-page').boundingBox(),fieldBox=await page.locator('.flight-field').boundingBox();
   expect(fieldBox!.y+fieldBox!.height).toBeLessThanOrEqual(pageBox!.y+pageBox!.height+1);
   const heartsBox=await page.locator('.flight-hearts').boundingBox(),scoreBox=await page.locator('.flight-score').boundingBox();
@@ -57,7 +57,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    await steer(.73);
   }
   await page.waitForTimeout(1100);
-  await page.screenshot({path:`.runtime/v195-flight-gate-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v196-flight-gate-${viewport.width}-${test.info().project.name}.png`});
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-score')).toHaveText('30');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
@@ -65,7 +65,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
-  await page.screenshot({path:`.runtime/v195-flight-retry-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v196-flight-retry-${viewport.width}-${test.info().project.name}.png`});
   expect(actions).not.toContain('flightHazard');expect(actions).not.toContain('flightPickup');
   const field=await page.locator('.flight-field').boundingBox();
   expect(field!.width).toBeGreaterThan(100);expect(field!.height).toBeGreaterThan(100);
@@ -76,7 +76,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.getByRole('button',{name:'다시 비행'})).toBeVisible();
   await expect(page.getByRole('button',{name:'미니게임으로'})).toBeVisible();
   await page.waitForTimeout(450);
-  await page.screenshot({path:`.runtime/v195-flight-finished-${viewport.width}-${test.info().project.name}.png`});
+  await page.screenshot({path:`.runtime/v196-flight-finished-${viewport.width}-${test.info().project.name}.png`});
   expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed')&&!error.includes('due to access control checks.'))).toEqual([]);
  }finally{await context.close();}
 });

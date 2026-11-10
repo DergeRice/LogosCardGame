@@ -11,7 +11,7 @@ test('flight art moves downward and loops without a jump',()=>{
  assert.equal(next.top-first.top,10);
  const beforeSeam=descendingFlightTile(499,500,0,-1),afterSeam=descendingFlightTile(501,500,0,0);
  assert.equal(afterSeam.top-beforeSeam.top,2);
- assert.equal(beforeSeam.flipped,afterSeam.flipped);
+ assert.equal('flipped' in afterSeam,false);
 });
 
 function player(game:Game){const messages:Record<string,unknown>[]=[];const socket={readyState:1,bufferedAmount:0,send(text:string){messages.push(JSON.parse(text));},close(){},terminate(){}};return {player:game.hello(socket,undefined,'비행 검사'),messages};}
