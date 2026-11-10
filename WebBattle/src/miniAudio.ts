@@ -36,7 +36,7 @@ export function preloadMiniClips(words:readonly string[]){
  const context=unlockGameAudio();
  words.forEach((word,index)=>{void file(word).catch(()=>{});if(context&&index<3)void clip(word,context).catch(()=>{});});
 }
-export function stopMiniAudio(){request++;if(active){active.onended=null;try{active.stop()}catch{}active.disconnect();active=null;}}
+export function stopMiniAudio(){request++;if(active){try{active.stop()}catch{}active=null;}}
 export async function playMiniAudio(word:string){
  stopMiniAudio();const current=++request,context=unlockGameAudio();if(!context)return;
  try{
@@ -45,4 +45,18 @@ export async function playMiniAudio(word:string){
   source.onended=()=>{source.disconnect();if(active===source)active=null};
   active=source;source.start();
  }catch{ /* Offline audio never blocks card input. */ }
+}
+export async function playMiniAudioSequence(words:readonly string[]){
+ stopMiniAudio();const current=++request,context=unlockGameAudio();if(!context)return;
+ for(const word of words){
+  try{
+   const buffer=await clip(word,context);if(current!==request||context.state!=='running')return;
+   await new Promise<void>(resolve=>{
+    const source=context.createBufferSource();source.buffer=buffer;source.connect(context.destination);
+    source.onended=()=>{source.disconnect();if(active===source)active=null;resolve()};
+    active=source;source.start();
+   });
+   if(current!==request)return;
+  }catch{return;}
+ }
 }

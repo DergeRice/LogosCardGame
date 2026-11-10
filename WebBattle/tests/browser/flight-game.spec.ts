@@ -18,7 +18,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   if(message.type==='flightStart')run={id:'flight-1',startedAt:Date.now(),hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,coinResolved:true,hazardResolved:true,challenge:{id:1,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now(),deadline:Date.now()+3800},lastActionAt:0};
   if(message.type==='flightChoose'&&run&&message.challengeId===run.challenge.id){
    const correct=message.side===run.challenge.correctLane,current=run.challenge,stage=run.stage,verbIndex=run.verbIndex;
-   if(!correct){run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now(),deadline:Date.now()+3800},lastResult:'collision',collisionReason:'gate'};}
+   if(!correct){run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now(),deadline:Date.now()+3800},lastResult:'collision',collisionReason:'gate',lastWord:'break'};}
    else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,coinResolved:true,hazardResolved:true,challenge:{id:current.id+1,kind:'gate',verbIndex,stage:stage==='past'?'participle':'past',left:stage==='past'?'broken':'breaked',right:stage==='past'?'breaken':'broke',correctLane:'left',startsAt:Date.now(),deadline:Date.now()+3800},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
   }
   if(['flightStatus','flightStart','flightChoose'].includes(message.type))sendState();
@@ -39,6 +39,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-play')).not.toContainText('속도');
   await expect(page.locator('.flight-play')).not.toContainText('거리');
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-renderer',/pixi|fallback/);
+  const frameP95=await page.evaluate(()=>new Promise<number>(resolve=>{const frames:number[]=[],end=performance.now()+700;let previous=0;const sample=(now:number)=>{if(previous)frames.push(now-previous);previous=now;if(now<end)requestAnimationFrame(sample);else resolve(frames.sort((a,b)=>a-b)[Math.floor(frames.length*.95)]??0);};requestAnimationFrame(sample);}));
+  console.log(`flight ${viewport.width}x${viewport.height} ${test.info().project.name}: frame p95 ${frameP95.toFixed(1)}ms`);
+  expect(frameP95).toBeLessThan(100);
   await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
   for(const art of ['plane.webp','plane-banking.webp','gate.webp','land.webp','objects-layer.webp','clouds-layer.webp'])await expect.poll(()=>artResponses.some(url=>url.includes(`/flight/${art}`))).toBe(true);
   await page.waitForTimeout(150);
@@ -56,6 +59,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
    await steer(.73);
   }
+  await expect(page.locator('.flight-answer-cue')).toHaveText('broke',{timeout:5000});
+  await expect(page.locator('.flight-question')).toHaveCSS('opacity','0');
+  await page.screenshot({path:`.runtime/v197-flight-answer-${viewport.width}-${test.info().project.name}.png`});
   await page.waitForTimeout(1100);
   await page.screenshot({path:`.runtime/v196-flight-gate-${viewport.width}-${test.info().project.name}.png`});
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
@@ -63,6 +69,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   await steer(.73);
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
+  await expect(page.locator('.flight-answer-cue')).toHaveText('break');
   await expect(page.locator('.flight-stage')).toHaveText('과거분사');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   await page.screenshot({path:`.runtime/v196-flight-retry-${viewport.width}-${test.info().project.name}.png`});

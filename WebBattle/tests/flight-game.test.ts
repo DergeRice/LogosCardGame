@@ -26,20 +26,33 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
   for(const [form,wrong] of [[verb.past,verb.wrongPast],[verb.participle,verb.wrongParticiple]] as const){assert.equal(wrong.length,4,verb.base);assert.equal(new Set(wrong).size,4,verb.base);assert.ok(!wrong.includes(form),verb.base);}
  }
  assert.equal(flightSpeed(0),1);assert.equal(flightSpeed(100000),2.4);
- assert.deepEqual([.25,.5,.75].map(flightLaneAt),['left','center','right']);
+ assert.deepEqual([.25,.5,.75].map(x=>flightLaneAt(x)),['left','center','right']);
+ assert.deepEqual([.35,.42,.58,.65].map(x=>flightLaneAt(x,.2)),['left','center','center','right']);
 });
 
 test('word gates start immediately, connect without pickups, and score 30 each',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.handle(p,{type:'flightStart'});
- let run=view(messages).run!;assert.equal(run.verb.base,'break');assert.equal(run.hearts,3);assert.equal(run.challenge.kind,'gate');assert.ok([run.challenge.left,run.challenge.right].includes('broke'));assert.equal('correctLane' in run.challenge,false);assert.equal(run.challenge.coinLane,undefined);assert.equal(run.challenge.hazardLane,undefined);
+ let run=view(messages).run!;const first=FLIGHT_VERBS.find(verb=>verb.base===run.verb.base)!;assert.ok(first);assert.equal(run.hearts,3);assert.equal(run.challenge.kind,'gate');assert.ok([run.challenge.left,run.challenge.right].includes(first.past));assert.equal('correctLane' in run.challenge,false);assert.equal('verbOrder' in run,false);assert.equal(run.challenge.coinLane,undefined);assert.equal(run.challenge.hazardLane,undefined);
  const choose=(side:'left'|'right')=>{const current=view(messages).run!;now=current.challenge.deadline-100;game.handle(p,{type:'flightChoose',runId:current.id,challengeId:current.challenge.id,side});};
  game.handle(p,{type:'flightChoose',runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});assert.equal(view(messages).run?.score,0);
  choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.speed,flightSpeed(100));assert.equal(run.challenge.startsAt,now);
- assert.ok([run.challenge.left,run.challenge.right].includes('broken'));
+ assert.ok([run.challenge.left,run.challenge.right].includes(first.participle));
  const stale=run.challenge.id-1;game.community.flightChoose(p,{runId:run.id,challengeId:stale,side:answer(game,p.id)});assert.equal(view(messages).run?.score,30);
- choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,200);assert.equal(run.score,60);assert.equal(run.verb.base,'drive');
+ choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,200);assert.equal(run.score,60);assert.notEqual(run.verb.base,first.base);
  const saved=snapshot(game),restored=new Game();restore(restored,saved);assert.equal(restored.community.records.get(p.id)?.flight?.run?.distance,200);
+});
+
+test('a flight shuffles all verbs once per cycle and never repeats across the cycle boundary',t=>{
+ let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
+ const seen:string[]=[];
+ for(let i=0;i<FLIGHT_VERBS.length+1;i++){
+  let run=view(messages).run!;seen.push(run.verb.base);
+  for(let stage=0;stage<2;stage++){run=view(messages).run!;now=run.challenge.deadline;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});}
+ }
+ assert.equal(new Set(seen.slice(0,FLIGHT_VERBS.length)).size,FLIGHT_VERBS.length);
+ assert.notEqual(seen.at(-1),seen.at(-2));
 });
 
 test('wrong word gate removes one heart and repeats the exact same gate while resetting speed',t=>{
@@ -49,7 +62,7 @@ test('wrong word gate removes one heart and repeats the exact same gate while re
  let run=view(messages).run!;choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);
  game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.coinLane});assert.equal(view(messages).run?.coins,0);
  const missed=run.challenge,wrong=answer(game,p.id)==='left'?'right':'left';choose(wrong);run=view(messages).run!;
- assert.equal(run.hearts,2);assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.speed,1);assert.equal(run.stage,'participle');assert.equal(run.verb.base,'break');assert.equal(run.challenge.startsAt,now);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
+ assert.equal(run.hearts,2);assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.speed,1);assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
  choose(answer(game,p.id)==='left'?'right':'left');run=view(messages).run!;assert.equal(run.hearts,1);
  now=run.challenge.deadline+FLIGHT_ARRIVAL_GRACE_MS+1;game.community.flightStatus(p);
  assert.equal(view(messages).run,undefined);assert.deepEqual(view(messages).lastResult,{distance:100,score:30,coins:0});assert.equal(view(messages).ranking[0].distance,100);
@@ -89,7 +102,7 @@ test('a saved coin-or-obstacle challenge resumes as a word gate',t=>{
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
  const legacy=game.community.records.get(p.id)!.flight!.run!;legacy.challenge={...legacy.challenge,kind:'approach',left:'코인',right:'장애물'};
  game.community.flightStatus(p);
- const current=view(messages).run!;assert.equal(current.challenge.kind,'gate');assert.ok([current.challenge.left,current.challenge.right].includes('broke'));assert.equal(current.score,0);
+ const current=view(messages).run!;assert.equal(current.challenge.kind,'gate');assert.ok([current.challenge.left,current.challenge.right].includes(FLIGHT_VERBS.find(verb=>verb.base===current.verb.base)!.past));assert.equal(current.score,0);
 });
 
 test('flight ranking resets separately each season and retains the prior result',t=>{

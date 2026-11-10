@@ -3,7 +3,7 @@ import type {FlightView} from '../shared/flightGame.js';
 import {flightLaneAt,flightWindow,FLIGHT_ARRIVAL_GRACE_MS} from '../shared/flightGame.js';
 import {Avatar} from './MatchPresentation.js';
 import {FlightScene,preloadFlightArt} from './FlightScene.js';
-import {playMiniAudio,preloadMiniAudio,preloadMiniClips,prepareMiniAudio,stopMiniAudio} from './miniAudio.js';
+import {playMiniAudioSequence,preloadMiniAudio,preloadMiniClips,prepareMiniAudio,stopMiniAudio} from './miniAudio.js';
 import {unlockGameAudio} from './exampleAudio.js';
 import './flight-game.css';
 
@@ -12,20 +12,31 @@ function ding(){const audio=unlockGameAudio();if(!audio)return;const tone=audio.
 function crash(){const audio=unlockGameAudio();if(!audio)return;const tone=audio.createOscillator(),gain=audio.createGain(),time=audio.currentTime;tone.type='sawtooth';tone.frequency.setValueAtTime(180,time);tone.frequency.exponentialRampToValueAtTime(65,time+.24);gain.gain.setValueAtTime(.08,time);gain.gain.exponentialRampToValueAtTime(.0001,time+.28);tone.connect(gain).connect(audio.destination);tone.start(time);tone.stop(time+.28);}
 export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const [clock,setClock]=useState(Date.now()),[planeX,setPlaneX]=useState(.5),[expanded,setExpanded]=useState(false),[artReady,setArtReady]=useState(false);
- const [impact,setImpact]=useState<{serial:number;text:string}|null>(null);
- const requestRef=useRef(''),arrivalRef=useRef(''),playedRef=useRef(''),soundTimer=useRef<number|undefined>(undefined),pointerRef=useRef<number|null>(null),planeRef=useRef(.5);
+ const [impact,setImpact]=useState<{serial:number;text:string}|null>(null),[answerCue,setAnswerCue]=useState<{id:number;text:string;kind:'correct'|'collision'}|null>(null);
+ const requestRef=useRef(''),arrivalRef=useRef(''),playedRef=useRef(''),cueTimer=useRef<number|undefined>(undefined),pointerRef=useRef<number|null>(null),planeRef=useRef(.5),fieldRef=useRef<HTMLDivElement>(null),sendRef=useRef(send);
+ sendRef.current=send;
  const previousRef=useRef({id:data?.run?.id??'',score:data?.run?.score??0,hearts:data?.run?.hearts??3}),impactTimer=useRef<number|undefined>(undefined);
  const offset=useMemo(()=>(data?.serverNow??Date.now())-Date.now(),[data?.serverNow]),run=data?.run,challenge=run?.challenge,verb=run?.verb;
  const remaining=(challenge?.deadline??0)-(clock+offset),left=Math.max(0,remaining),total=run?flightWindow(run.speed):3200;
- useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),30);return()=>{clearInterval(timer);stopMiniAudio();clearTimeout(soundTimer.current);clearTimeout(impactTimer.current);};},[]);
+ useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),100);return()=>{clearInterval(timer);stopMiniAudio();clearTimeout(cueTimer.current);clearTimeout(impactTimer.current);};},[]);
  useEffect(()=>{let active=true;void preloadMiniAudio().catch(()=>{});void preloadFlightArt().then(()=>{if(active)setArtReady(true)}).catch(()=>{if(active)setArtReady(true)});return()=>{active=false;};},[]);
- useEffect(()=>{if(!challenge||!run)return;if(run.lastResult==='collision')crash();
+ useEffect(()=>{if(!challenge||!run||!verb)return;
   const current=`${run.id}:${challenge.id}`;if(playedRef.current===current)return;playedRef.current=current;
-  preloadMiniClips([verb!.base,...(run.lastWord?[run.lastWord]:[])]);
-  if(run.lastResult==='correct'&&run.lastWord){ding();void playMiniAudio(run.lastWord);soundTimer.current=window.setTimeout(()=>void playMiniAudio(verb!.base),650);}else void playMiniAudio(verb!.base);
+  clearTimeout(cueTimer.current);
+  const nextBase=run.lastResult==='correct'&&run.stage==='past';
+  const words=run.lastResult==='correct'&&run.lastWord?[run.lastWord,...(nextBase?[verb.base]:[])]:[verb.base];
+  preloadMiniClips(words);
+  if(run.lastResult==='correct'&&run.lastWord){ding();setAnswerCue({id:challenge.id,text:run.lastWord,kind:'correct'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
+  else if(run.lastResult==='collision'){crash();setAnswerCue({id:challenge.id,text:verb.base,kind:'collision'});cueTimer.current=window.setTimeout(()=>setAnswerCue(null),900);}
+  else setAnswerCue(null);
+  void playMiniAudioSequence(words);
  },[run?.id,challenge?.id]);
  useEffect(()=>{if(!run)return;const before=previousRef.current;if(before.id===run.id&&run.score>before.score){setImpact(current=>({serial:(current?.serial??0)+1,text:`+${run.score-before.score}`}));clearTimeout(impactTimer.current);impactTimer.current=window.setTimeout(()=>setImpact(null),700);}previousRef.current={id:run.id,score:run.score,hearts:run.hearts};},[run?.id,run?.score,run?.hearts]);
- useEffect(()=>{if(!challenge||!run)return;const key=`${run.id}:${challenge.id}`;if(remaining<=0&&remaining>-(FLIGHT_ARRIVAL_GRACE_MS-100)&&arrivalRef.current!==key&&connected){const side=flightLaneAt(planeRef.current);if(send('flightChoose',{runId:run.id,challengeId:challenge.id,side}))arrivalRef.current=key;}if(remaining<-(FLIGHT_ARRIVAL_GRACE_MS+100)&&requestRef.current!==key){requestRef.current=key;send('flightStatus');}},[run?.id,challenge?.id,remaining,connected,send]);
+ useEffect(()=>{if(!challenge||!run||!connected)return;const key=`${run.id}:${challenge.id}`,until=challenge.deadline-(Date.now()+offset);
+  const arrival=window.setTimeout(()=>{if(arrivalRef.current===key)return;const w=fieldRef.current?.clientWidth??390,h=fieldRef.current?.clientHeight??600,planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15)));const side=flightLaneAt(planeRef.current,planeSize/w);if(sendRef.current('flightChoose',{runId:run.id,challengeId:challenge.id,side}))arrivalRef.current=key;},Math.max(0,until));
+  const recovery=window.setTimeout(()=>{if(requestRef.current===key)return;requestRef.current=key;sendRef.current('flightStatus');},Math.max(0,until+FLIGHT_ARRIVAL_GRACE_MS+100));
+  return()=>{clearTimeout(arrival);clearTimeout(recovery);};
+ },[run?.id,challenge?.id,connected,offset]);
  const steer=(x:number)=>{const next=Math.max(.13,Math.min(.87,x));planeRef.current=next;setPlaneX(next);};
  const steerPointer=(event:React.PointerEvent<HTMLDivElement>)=>{const bounds=event.currentTarget.getBoundingClientRect();steer((event.clientX-bounds.left)/bounds.width);};
  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(!run)return;if(event.key==='ArrowLeft'||event.key==='a'){event.preventDefault();steer(.275);}if(event.key==='ArrowRight'||event.key==='d'){event.preventDefault();steer(.725);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[Boolean(run)]);
@@ -34,7 +45,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
   <header className="flight-header"><button aria-label="미니게임 목록으로" onClick={onBack}>←</button><h1>불규칙 동사 플라이트</h1></header>
   {run&&challenge&&verb?<div className="flight-play">
    <div className="flight-timer" aria-label={`게이트까지 ${Math.ceil(left/1000)}초`}><span style={{width:`${Math.max(0,Math.min(100,left/total*100))}%`}}/></div>
-   <div className="flight-field" role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 왼쪽 ${challenge.left}, 오른쪽 ${challenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene challenge={challenge} speed={run.speed} progress={1-remaining/total} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${run.hearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<run.hearts?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${run.score}점`}>{run.score.toLocaleString()}</strong></div><span className="flight-stage">{run.stage==='past'?'과거형':'과거분사'}</span><div className="flight-question" style={{opacity:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{verb.base[0].toUpperCase()+verb.base.slice(1)}</strong><small>{verb.meaning}</small></div>{run.lastResult==='collision'&&<span key={challenge.id} className="flight-crash" aria-hidden="true"/>}</div>
+   <div className="flight-field" ref={fieldRef} role="application" tabIndex={0} data-plane-x={planeX.toFixed(3)} aria-label={`비행기 조종. 왼쪽 ${challenge.left}, 오른쪽 ${challenge.right}. 손가락을 누른 채 좌우로 움직이거나 방향키를 사용하세요.`} onPointerDown={event=>{pointerRef.current=event.pointerId;event.currentTarget.setPointerCapture(event.pointerId);steerPointer(event);}} onPointerMove={event=>{if(pointerRef.current===event.pointerId)steerPointer(event);}} onPointerUp={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}} onPointerCancel={event=>{if(pointerRef.current===event.pointerId)pointerRef.current=null;}}><FlightScene challenge={challenge} speed={run.speed} progress={1-remaining/total} startsAt={challenge.startsAt??challenge.deadline-total} serverOffset={offset} planeX={planeX}/><div className="flight-play-hud"><strong className="flight-hearts" aria-label={`남은 하트 ${run.hearts}개`}>{Array.from({length:3},(_,i)=><span key={i} className={i<run.hearts?'':'spent'}>♥</span>)}</strong><strong className="flight-score" aria-label={`점수 ${run.score}점`}>{run.score.toLocaleString()}</strong></div><span className="flight-stage">{run.stage==='past'?'과거형':'과거분사'}</span><div className="flight-question" style={{opacity:answerCue?0:Math.max(0,Math.min(1,(.35-(1-remaining/total))/.15))}}><strong>{verb.base[0].toUpperCase()+verb.base.slice(1)}</strong><small>{verb.meaning}</small></div>{answerCue?.id===challenge.id&&<div key={answerCue.id} className={`flight-answer-cue ${answerCue.kind}`} role="status">{answerCue.text}</div>}{run.lastResult==='collision'&&<span key={challenge.id} className="flight-crash" aria-hidden="true"/>}</div>
    {impact&&<span key={impact.serial} className="flight-impact score" aria-live="polite">{impact.text}</span>}
   </div>:data?.lastResult?<div className="flight-finished" role="dialog" aria-labelledby="flight-finished-title">
    <div className="flight-finished-clouds" aria-hidden="true"/>
