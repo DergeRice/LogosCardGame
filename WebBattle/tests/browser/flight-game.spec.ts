@@ -1,5 +1,6 @@
 import {test,expect,guestContext} from './fixtures.js';
 import {defaultHubSave} from '../../shared/store.js';
+import {FLIGHT_VERBS} from '../../server/flightWords.js';
 
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`flight runs locally ${viewport.width}x${viewport.height}`,async({browser})=>{
  const context=await guestContext(browser,{viewport,isMobile:true,hasTouch:true});
@@ -20,6 +21,22 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`flig
   await expect.poll(async()=>Number(await page.locator('.flight-scene').getAttribute('data-gate-id')),{timeout:6500}).toBe(2);
   await expect(page.locator('.flight-field')).toBeVisible();
   expect(actions.filter(type=>type.startsWith('flight'))).toEqual(['flightStatus']);
+  if(viewport.width===390){
+   for(let miss=0;miss<3;miss++){
+    const gateId=Number(await page.locator('.flight-scene').getAttribute('data-gate-id'));
+    const base=await page.locator('.flight-scene').getAttribute('data-word');
+    const stage=await page.locator('.flight-scene').getAttribute('data-stage-word');
+    const label=await page.locator('.flight-field').getAttribute('aria-label');
+    const options=label?.match(/왼쪽 (.*), 오른쪽 (.*)\.$/);
+    expect(options).not.toBeNull();
+    const verb=FLIGHT_VERBS.find(item=>item.base===base)!;
+    const answer=stage?.includes('과거분사')?verb.participle:verb.past;
+    await page.locator('.flight-field').press(options![1]===answer?'ArrowRight':'ArrowLeft');
+    if(miss<2)await expect.poll(async()=>Number(await page.locator('.flight-scene').getAttribute('data-gate-id')),{timeout:6500}).toBe(gateId+1);
+   }
+   await expect(page.getByRole('dialog',{name:'비행 종료'})).toBeVisible({timeout:6500});
+   expect(actions.filter(type=>type.startsWith('flight'))).toEqual(['flightStatus','flightSubmit']);
+  }
   expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed'))).toEqual([]);
  }finally{await context.close();}
 });
