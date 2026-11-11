@@ -6,6 +6,26 @@ import {snapshot,restore} from '../server/persistence.js';
 import {flightLaneAt,flightSpeed,flightSpeedForStreak,flightWindow,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
 import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
+import {advanceLocalFlight,startLocalFlight,verifyFlightSteps} from '../shared/flightLocal.js';
+
+test('local flight advances gates without any server response',()=>{
+ const started=startLocalFlight(1000),first=started.challenge,side=first.correctLane;
+ assert.ok(first.startsAt!>started.startedAt);
+ const next=advanceLocalFlight(started,side,first.deadline);
+ assert.equal(next.run.score,30);assert.equal(next.run.stage,'participle');
+ assert.equal(next.run.challenge.id,first.id+1);
+ assert.ok(next.run.challenge.startsAt!>first.deadline);
+ assert.deepEqual(verifyFlightSteps(next.run.steps)?.score,30);
+});
+
+test('local wrong answer immediately costs one heart and retries the same gate',()=>{
+ const started=startLocalFlight(1000),first=started.challenge,wrong=first.correctLane==='left'?'right':'left';
+ const result=advanceLocalFlight(started,wrong,first.deadline);
+ assert.equal(result.run.hearts,2);assert.equal(result.run.score,0);
+ assert.equal(result.run.challenge.left,first.left);assert.equal(result.run.challenge.right,first.right);
+ assert.equal(result.run.verbIndex,started.verbIndex);assert.equal(result.run.stage,'past');
+ assert.deepEqual(verifyFlightSteps(result.run.steps)?.hearts,2);
+});
 
 test('flight art moves downward and loops without a jump',()=>{
  const first=descendingFlightTile(99,500,0,0),next=descendingFlightTile(109,500,0,0);
@@ -18,11 +38,12 @@ test('flight art moves downward and loops without a jump',()=>{
 test('a word gate keeps moving below the plane after contact until it exits the field',()=>{
  const start=1000,deadline=4800,h=600,gateH=54,plane=70;
  const before=flightGateCenterY(deadline-50,start,deadline,h,gateH,plane);
+ assert.ok(flightGateCenterY(start,start,deadline,h,gateH,plane)<-gateH,'gate and its label begin above the field');
  const contact=flightGateCenterY(deadline,start,deadline,h,gateH,plane);
  const after=flightGateCenterY(deadline+500,start,deadline,h,gateH,plane);
  const exit=flightGateCenterY(deadline+2000,start,deadline,h,gateH,plane);
  assert.ok(before<contact&&contact<after&&after<exit);
- assert.equal(contact+gateH/2,h*.83-plane/2);
+ assert.ok(Math.abs(contact+gateH/2-(h*.83-plane/2))<1e-9);
  assert.ok(exit>h);
 });
 
@@ -48,6 +69,17 @@ function player(game:Game){const messages:Record<string,unknown>[]=[];const sock
 function view(messages:Record<string,unknown>[]):FlightView{return messages.filter(message=>message.type==='flightState').at(-1)?.data as FlightView;}
 function answer(game:Game,id:string){return game.community.records.get(id)!.flight!.run!.challenge.correctLane;}
 
+test('only the final local transcript is submitted and duplicate uploads do not add plays',()=>{
+ const game=new Game(),{player:p,messages}=player(game),started=startLocalFlight(1000);
+ const after=advanceLocalFlight(started,started.challenge.correctLane,started.challenge.deadline).run;
+ game.handle(p,{type:'flightSubmit',runId:started.id,steps:after.steps});
+ assert.equal(view(messages).lastResult?.score,30);assert.equal(view(messages).bestScore,30);assert.equal(view(messages).plays,1);
+ game.handle(p,{type:'flightSubmit',runId:started.id,steps:after.steps});
+ assert.equal(view(messages).plays,1);
+ game.handle(p,{type:'flightSubmit',runId:'invalid-run-id',steps:[{...after.steps[0],left:'fake',right:'fake'}]});
+ assert.equal(view(messages).plays,1);
+});
+
 test('54 supplied verbs have four distinct plausible wrong forms for each gate',()=>{
  assert.equal(FLIGHT_VERBS.length,54);
  assert.deepEqual(FLIGHT_VERBS.slice(0,3).map(verb=>verb.base),['bear','ride','rise']);
@@ -66,36 +98,18 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
 
 function readyGate(game:Game,p:ReturnType<typeof player>['player'],messages:Record<string,unknown>[]){const run=view(messages).run!;if(run.challenge.awaitingReady)game.community.flightGateReady(p,{runId:run.id,challengeId:run.challenge.id});return view(messages).run!;}
 
-test('initial gate waits for the renderer, then gets its full approach time',t=>{
+test('initial and later gates start without a server-side render hold',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.handle(p,{type:'flightStart'});
- let run=view(messages).run!;assert.equal(run.challenge.awaitingReady,true);assert.equal(run.hearts,3);assert.equal(run.score,0);
- const initialId=run.challenge.id;now+=1500;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
- run=view(messages).run!;assert.equal(run.score,0);assert.equal(run.hearts,3);
- readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.awaitingReady,false);assert.equal(run.startedAt,now);assert.equal(run.endsAt,now+FLIGHT_ROUND_MS);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.equal(run.challenge.deadline-run.challenge.startsAt!,flightWindow(run.speed));
- const start=run.challenge.startsAt;readyGate(game,p,messages);assert.equal(view(messages).run!.challenge.startsAt,start,'duplicate ready must not restart the gate');
+ let run=view(messages).run!;assert.equal(Boolean(run.challenge.awaitingReady),false);assert.equal(run.hearts,3);assert.equal(run.score,0);
+ const initialId=run.challenge.id,initialStart=run.challenge.startsAt;assert.equal(initialStart,now+FLIGHT_GATE_SPACING_MS);
+ game.community.flightGateReady(p,{runId:run.id,challengeId:initialId});assert.equal(view(messages).run!.challenge.startsAt,initialStart,'a stale ready signal cannot restart the gate');
+ assert.equal(run.endsAt,now+FLIGHT_ROUND_MS);assert.equal(run.challenge.deadline-run.challenge.startsAt!,flightWindow(run.speed));
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
- run=view(messages).run!;assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.challenge.awaitingReady,true,'the participle gate must also wait for rendering');
- now+=1200;readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
+ run=view(messages).run!;assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(Boolean(run.challenge.awaitingReady),false);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
- run=view(messages).run!;assert.equal(run.score,60);assert.equal(run.stage,'past');assert.equal(run.challenge.awaitingReady,true,'a new verb must wait for a visible gate');
+ run=view(messages).run!;assert.equal(run.score,60);assert.equal(run.stage,'past');assert.equal(Boolean(run.challenge.awaitingReady),false);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
  const order=game.community.records.get(p.id)!.flight!.run!.verbOrder!;assert.equal(new Set(order).size,FLIGHT_VERBS.length);
-});
-
-test('a fast participle gate waits through late rendering and still gets a full visible approach',t=>{
- let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);let run=readyGate(game,p,messages);
- const internal=game.community.records.get(p.id)!.flight!.run!;internal.speedSteps=25;internal.speed=flightSpeedForStreak(25);
- now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
- run=view(messages).run!;assert.equal(run.stage,'participle');assert.equal(run.challenge.awaitingReady,true);
- now+=1300;game.community.flightStatus(p);run=view(messages).run!;assert.equal(run.hearts,3);assert.equal(run.challenge.awaitingReady,true);
- const parked=flightGateCenterY(now,run.challenge.startsAt!,run.challenge.deadline,600,54,70);
- assert.equal(parked,54*1.7,'the gate stays visible at the top while waiting for render acknowledgement');
- readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
- assert.equal(run.challenge.deadline-run.challenge.startsAt!,1000);
- const h=600,gateH=54,plane=70;
- assert.ok(flightGateCenterY(run.challenge.startsAt!,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)>0,'the next gate is already visible at the top while waiting');
- assert.ok(flightGateCenterY(run.challenge.startsAt!+500,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)<h*.5);
 });
 
 test('a finished past and participle pair advances through unique verbs until the deck is exhausted',t=>{
@@ -134,7 +148,7 @@ test('wrong gate repeats the same words and acceleration rebuilds one step at a 
  const choose=(correct:boolean)=>{let run=readyGate(game,p,messages);now=run.challenge.deadline-100;const side=answer(game,p.id);game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:correct?side:side==='left'?'right':'left'});return view(messages).run!;};
  let run=choose(true);assert.equal(run.speed,flightSpeedForStreak(1));run=choose(true);run=choose(true);assert.equal(run.speedSteps,3);assert.equal(run.speed,flightSpeedForStreak(3));
  run=choose(true);assert.equal(run.speedSteps,4);run=choose(true);assert.equal(run.speedSteps,5);assert.equal(run.speed,flightSpeedForStreak(5));
- const missed=run.challenge;run=choose(false);assert.equal(run.hearts,2);assert.equal(run.speedSteps,0);assert.equal(run.speed,flightSpeedForStreak(0));assert.equal(run.challenge.awaitingReady,true);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
+ const missed=run.challenge;run=choose(false);assert.equal(run.hearts,2);assert.equal(run.speedSteps,0);assert.equal(run.speed,flightSpeedForStreak(0));assert.equal(Boolean(run.challenge.awaitingReady),false);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
  run=choose(true);assert.equal(run.speedSteps,1);assert.equal(run.speed,flightSpeedForStreak(1));assert.equal(run.score,180);
 });
 
@@ -150,7 +164,7 @@ test('flight ends at exactly two minutes and the completed score is ranked',t=>{
 test('a gate crossing the center lane costs one heart and cannot double-trigger',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);const run=readyGate(game,p,messages);now=run.challenge.deadline-100;
- game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});let next=view(messages).run!;assert.equal(next.hearts,2);assert.equal(next.challenge.awaitingReady,true);
+ game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});let next=view(messages).run!;assert.equal(next.hearts,2);assert.equal(Boolean(next.challenge.awaitingReady),false);
  game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});next=view(messages).run!;assert.equal(next.hearts,2);assert.equal(next.score,0);
 });
 

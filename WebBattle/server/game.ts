@@ -637,6 +637,7 @@ export class Game {
   if(msg.type==='miniGameStart')return this.community.miniStart(p);
   if(msg.type==='miniGameChoose')return this.community.miniChoose(p,msg);
   if(msg.type==='flightStatus')return this.community.flightStatus(p);
+  if(msg.type==='flightSubmit')return this.community.flightSubmit(p,msg);
   if(msg.type==='flightStart')return this.community.flightStart(p);
   if(msg.type==='flightGateReady')return this.community.flightGateReady(p,msg);
   if(msg.type==='flightHazard')return this.community.flightHazard(p,msg);

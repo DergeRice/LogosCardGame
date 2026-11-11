@@ -10,6 +10,7 @@ import {COSMETICS,dustPrice,leagueFor,defaultHubSave,openDemoBox,type HubSave} f
 import {seasonAt} from '../shared/season.js';
 import {VERB_CATEGORIES,interleaveVerbCards,type MiniGameProgress,type MiniGameRun,type MiniGameView} from '../shared/miniGame.js';
 import {flightSpeedForStreak,flightWindow,FLIGHT_ARRIVAL_GRACE_MS,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightChallenge,type FlightLane,type FlightProgress,type FlightRun,type FlightView} from '../shared/flightGame.js';
+import {verifyFlightSteps} from '../shared/flightLocal.js';
 import {FLIGHT_VERBS} from './flightWords.js';
 import {kstDay} from './userStats.js';
 type Player=ReturnType<Game['newPlayer']>;
@@ -164,10 +165,22 @@ export class Community {
   const run=progress.run;if(!run)return;
   const previous=run.challenge;
   run.hearts--;run.speedSteps=0;run.speed=flightSpeedForStreak(0);run.lastActionAt=now;run.lastResult='collision';run.collisionReason=reason;run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length].base;
-  if(run.hearts<=0)this.finishFlight(progress);else{const startsAt=run.endsAt??run.startedAt+FLIGHT_ROUND_MS;run.challenge={...previous,id:++run.challengeId,coinLane:undefined,hazardLane:undefined,startsAt,deadline:startsAt+flightWindow(run.speed),awaitingReady:true};run.coinResolved=true;run.hazardResolved=true;}
+  if(run.hearts<=0)this.finishFlight(progress);else{const startsAt=now+FLIGHT_GATE_SPACING_MS;run.challenge={...previous,id:++run.challengeId,coinLane:undefined,hazardLane:undefined,startsAt,deadline:startsAt+flightWindow(run.speed),awaitingReady:false};run.coinResolved=true;run.hazardResolved=true;}
  }
  flightStatus(p:Player){const progress=this.flightProgress(p),run=progress.run,now=Date.now();if(run&&now>=run.startedAt+FLIGHT_ROUND_MS)this.finishFlight(progress);else if(run&&!run.challenge.awaitingReady&&now>run.challenge.deadline+FLIGHT_ARRIVAL_GRACE_MS)this.flightCollision(progress,now,'timeout');this.game.send(p.socket,{type:'flightState',data:this.flightView(progress)});}
- flightStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.flightProgress(p);if(progress.run)return this.flightStatus(p);if(seasonAt().endAt-Date.now()<FLIGHT_ROUND_MS)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');progress.lastResult=undefined;const now=Date.now(),verbOrder=this.shuffledFlightVerbs(),verbIndex=verbOrder[0],initial:FlightChallenge={id:0,kind:'gate',verbIndex,stage:'past',left:'',right:'',correctLane:'left',deadline:now};const run:FlightRun={id:randomUUID(),startedAt:now,endsAt:now+FLIGHT_ROUND_MS,speedSteps:0,hearts:3,distance:0,score:0,coins:0,speed:flightSpeedForStreak(0),verbIndex,verbOrder,verbPosition:0,stage:'past',challengeId:0,challenge:initial,lastActionAt:0};this.nextFlightChallenge(run,now,true);progress.run=run;this.flightStatus(p);}
+ flightSubmit(p:Player,msg:Record<string,unknown>){
+  if(p.room)return this.game.fail(p,'미니게임은 홈에서 진행해 주세요.');
+  const progress=this.flightProgress(p),runId=msg.runId;
+  if(typeof runId!=='string'||runId.length<8||runId.length>80)return this.game.fail(p,'비행 기록이 올바르지 않습니다.');
+  if(progress.lastSubmittedRunId===runId)return this.flightStatus(p);
+  const result=verifyFlightSteps(msg.steps);
+  if(!result)return this.game.fail(p,'비행 기록을 확인할 수 없습니다.');
+  progress.run=undefined;progress.lastSubmittedRunId=runId;progress.plays++;
+  progress.lastResult={distance:result.distance,score:result.score,coins:0};
+  if(result.score>progress.bestScore){progress.bestScore=result.score;progress.bestDistance=result.distance;}
+  this.flightStatus(p);
+ }
+ flightStart(p:Player){if(p.room)return this.game.fail(p,'미니게임은 홈에서 시작해 주세요.');const progress=this.flightProgress(p);if(progress.run)return this.flightStatus(p);if(seasonAt().endAt-Date.now()<FLIGHT_ROUND_MS)return this.game.fail(p,'새 시즌이 곧 시작돼요. 잠시 후 다시 시작해 주세요.');progress.lastResult=undefined;const now=Date.now(),verbOrder=this.shuffledFlightVerbs(),verbIndex=verbOrder[0],initial:FlightChallenge={id:0,kind:'gate',verbIndex,stage:'past',left:'',right:'',correctLane:'left',deadline:now};const run:FlightRun={id:randomUUID(),startedAt:now,endsAt:now+FLIGHT_ROUND_MS,speedSteps:0,hearts:3,distance:0,score:0,coins:0,speed:flightSpeedForStreak(0),verbIndex,verbOrder,verbPosition:0,stage:'past',challengeId:0,challenge:initial,lastActionAt:0};this.nextFlightChallenge(run,now+FLIGHT_GATE_SPACING_MS);progress.run=run;this.flightStatus(p);}
  flightGateReady(p:Player,msg:Record<string,unknown>){const progress=this.flightProgress(p),run=progress.run;if(!run)return this.flightStatus(p);if(Date.now()>=run.startedAt+FLIGHT_ROUND_MS)return this.flightStatus(p);const challenge=run.challenge;if(msg.runId!==run.id||msg.challengeId!==challenge.id||!challenge.awaitingReady)return this.flightStatus(p);const now=Date.now();if(challenge.id===1){run.startedAt=now;run.endsAt=now+FLIGHT_ROUND_MS;}const startsAt=now+FLIGHT_GATE_SPACING_MS;challenge.startsAt=startsAt;challenge.deadline=startsAt+flightWindow(run.speed);challenge.awaitingReady=false;this.flightStatus(p);}
  flightHazard(p:Player,_msg:Record<string,unknown>){this.flightStatus(p);}
  flightPickup(p:Player,_msg:Record<string,unknown>){this.flightStatus(p);}
@@ -178,7 +191,7 @@ export class Community {
   if(!run.hazardResolved){this.flightCollision(progress,now,'hazard');return this.flightStatus(p);}
   const side=msg.side as FlightLane;run.lastActionAt=now;
   if(side!==challenge.correctLane){this.flightCollision(progress,now);return this.flightStatus(p);}
-  run.distance+=100;run.score+=30;run.speedSteps=(run.speedSteps??0)+1;run.speed=flightSpeedForStreak(run.speedSteps);run.lastResult='correct';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length][run.stage];if(run.stage==='past')run.stage='participle';else{if(!run.verbOrder){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=-1;}run.verbPosition=(run.verbPosition??-1)+1;if(run.verbPosition>=run.verbOrder.length){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=0;}run.verbIndex=run.verbOrder[run.verbPosition];run.stage='past';}this.nextFlightChallenge(run,now,true);
+  run.distance+=100;run.score+=30;run.speedSteps=(run.speedSteps??0)+1;run.speed=flightSpeedForStreak(run.speedSteps);run.lastResult='correct';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length][run.stage];if(run.stage==='past')run.stage='participle';else{if(!run.verbOrder){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=-1;}run.verbPosition=(run.verbPosition??-1)+1;if(run.verbPosition>=run.verbOrder.length){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=0;}run.verbIndex=run.verbOrder[run.verbPosition];run.stage='past';}this.nextFlightChallenge(run,now+FLIGHT_GATE_SPACING_MS);
   this.flightStatus(p);
  }
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}
