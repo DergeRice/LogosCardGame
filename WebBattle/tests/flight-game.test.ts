@@ -60,7 +60,7 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
  assert.ok(flightSpeedForStreak(3)-flightSpeedForStreak(2)>flightSpeedForStreak(2)-flightSpeedForStreak(1),'three correct gates add an extra burst');
  assert.equal(flightSpeedForStreak(25),flightSpeedForStreak(24),'a capped run does not gain speed');
  assert.equal(FLIGHT_ROUND_MS,120_000);
- assert.equal(flightWindow(flightSpeed(0)),1949);assert.equal(flightWindow(flightSpeed(100000)),742);
+ assert.equal(flightWindow(flightSpeed(0)),1949);assert.equal(flightWindow(flightSpeed(100000)),1000);
  assert.deepEqual([.25,.49,.5,.58,.75].map(x=>flightLaneAt(x)),['left','left','right','right','right']);
 });
 
@@ -75,10 +75,25 @@ test('initial gate waits for the renderer, then gets its full approach time',t=>
  readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.awaitingReady,false);assert.equal(run.startedAt,now);assert.equal(run.endsAt,now+FLIGHT_ROUND_MS);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.equal(run.challenge.deadline-run.challenge.startsAt!,flightWindow(run.speed));
  const start=run.challenge.startsAt;readyGate(game,p,messages);assert.equal(view(messages).run!.challenge.startsAt,start,'duplicate ready must not restart the gate');
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
- run=view(messages).run!;assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
+ run=view(messages).run!;assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.challenge.awaitingReady,true,'the participle gate must also wait for rendering');
+ now+=1200;readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
  run=view(messages).run!;assert.equal(run.score,60);assert.equal(run.stage,'past');assert.equal(run.challenge.awaitingReady,true,'a new verb must wait for a visible gate');
  const order=game.community.records.get(p.id)!.flight!.run!.verbOrder!;assert.equal(new Set(order).size,FLIGHT_VERBS.length);
+});
+
+test('a fast participle gate waits through late rendering and still gets a full visible approach',t=>{
+ let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);let run=readyGate(game,p,messages);
+ const internal=game.community.records.get(p.id)!.flight!.run!;internal.speedSteps=25;internal.speed=flightSpeedForStreak(25);
+ now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
+ run=view(messages).run!;assert.equal(run.stage,'participle');assert.equal(run.challenge.awaitingReady,true);
+ now+=1300;game.community.flightStatus(p);run=view(messages).run!;assert.equal(run.hearts,3);assert.equal(run.challenge.awaitingReady,true);
+ readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
+ assert.equal(run.challenge.deadline-run.challenge.startsAt!,1000);
+ const h=600,gateH=54,plane=70;
+ assert.ok(flightGateCenterY(run.challenge.startsAt!,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)<0);
+ assert.ok(flightGateCenterY(run.challenge.startsAt!+500,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)<h*.5);
 });
 
 test('wrong gate repeats the same words and acceleration rebuilds one step at a time',t=>{

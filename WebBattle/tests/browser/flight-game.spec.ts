@@ -20,7 +20,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   if(message.type==='flightChoose'&&run&&message.challengeId===run.challenge.id){
    const correct=message.side===run.challenge.correctLane,current=run.challenge,stage=run.stage,verbIndex=run.verbIndex;
    if(!correct){if(run.hearts===1){finishedResult={distance:run.distance,score:run.score,coins:run.coins};run=undefined;}else run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'collision',collisionReason:'gate',lastWord:'break'};}
-   else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,coinResolved:true,hazardResolved:true,challenge:{id:current.id+1,kind:'gate',verbIndex,stage:stage==='past'?'participle':'past',left:stage==='past'?'broken':'breaked',right:stage==='past'?'breaken':'broke',correctLane:'left',startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
+   else run={...run,score:run.score+30,distance:run.distance+100,stage:stage==='past'?'participle':'past',challengeId:current.id+1,coinResolved:true,hazardResolved:true,challenge:{id:current.id+1,kind:'gate',verbIndex,stage:stage==='past'?'participle':'past',left:stage==='past'?'broken':'breaked',right:stage==='past'?'breaken':'broke',correctLane:'left',startsAt:Date.now()+FLIGHT_ROUND_MS,deadline:Date.now()+FLIGHT_ROUND_MS+3800,awaitingReady:true},lastResult:'correct',lastWord:stage==='past'?'broke':'broken'};
    pendingChoice=true;
   }
   if((message.type==='flightChoose'||message.type==='flightStatus')&&holdChoice&&pendingChoice)return;
@@ -93,6 +93,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
   await expect(page.locator('.flight-question')).toHaveCount(0);
   holdChoice=false;pendingChoice=false;sendState();
+  await expect.poll(()=>actions.filter(action=>action==='flightGateReady').length).toBeGreaterThan(1);
+  expect(run!.challenge.awaitingReady).toBe(false);
   run={...run!,speedSteps:3,speed:flightSpeedForStreak(3),lastActionAt:Date.now(),lastResult:'correct'};sendState();
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-speed-up','true');
   await page.waitForTimeout(80);
@@ -111,7 +113,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   sendState();await expect(page.locator('.flight-scene')).toHaveAttribute('data-gate-id','3');
   await expect.poll(()=>actions.filter(action=>action==='flightGateReady').length).toBeGreaterThan(readyBefore);
   expect(Number(await page.locator('.flight-scene').getAttribute('data-gate-y'))).toBeLessThan(40);
-  run={...run!,stage:'participle',challengeId:4,challenge:{id:4,kind:'gate',verbIndex:5,stage:'participle',left:'broken',right:'breaken',correctLane:'left',startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800}};sendState();
+  run={...run!,stage:'participle',challengeId:4,challenge:{id:4,kind:'gate',verbIndex:5,stage:'participle',left:'broken',right:'breaken',correctLane:'left',startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800,awaitingReady:false}};sendState();
   holdChoice=true;
   if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
    await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
