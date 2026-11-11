@@ -178,7 +178,7 @@ export class Community {
   if(!run.hazardResolved){this.flightCollision(progress,now,'hazard');return this.flightStatus(p);}
   const side=msg.side as FlightLane;run.lastActionAt=now;
   if(side!==challenge.correctLane){this.flightCollision(progress,now);return this.flightStatus(p);}
-  run.distance+=100;run.score+=30;run.speedSteps=(run.speedSteps??0)+1;run.speed=flightSpeedForStreak(run.speedSteps);run.lastResult='correct';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length][run.stage];if(run.stage==='past')run.stage='participle';else{if(!run.verbOrder)run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=(run.verbPosition??-1)+1;if(run.verbPosition>=run.verbOrder.length){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=0;}run.verbIndex=run.verbOrder[run.verbPosition];run.stage='past';}this.nextFlightChallenge(run,now,true);
+  run.distance+=100;run.score+=30;run.speedSteps=(run.speedSteps??0)+1;run.speed=flightSpeedForStreak(run.speedSteps);run.lastResult='correct';run.lastWord=FLIGHT_VERBS[run.verbIndex%FLIGHT_VERBS.length][run.stage];if(run.stage==='past')run.stage='participle';else{if(!run.verbOrder){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=-1;}run.verbPosition=(run.verbPosition??-1)+1;if(run.verbPosition>=run.verbOrder.length){run.verbOrder=this.shuffledFlightVerbs(run.verbIndex);run.verbPosition=0;}run.verbIndex=run.verbOrder[run.verbPosition];run.stage='past';}this.nextFlightChallenge(run,now,true);
   this.flightStatus(p);
  }
  cleanup(){for(const [id,i]of this.invites)if(i.expiresAt<=Date.now())this.invites.delete(id);}

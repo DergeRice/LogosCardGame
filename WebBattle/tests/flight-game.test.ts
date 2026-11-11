@@ -89,11 +89,43 @@ test('a fast participle gate waits through late rendering and still gets a full 
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
  run=view(messages).run!;assert.equal(run.stage,'participle');assert.equal(run.challenge.awaitingReady,true);
  now+=1300;game.community.flightStatus(p);run=view(messages).run!;assert.equal(run.hearts,3);assert.equal(run.challenge.awaitingReady,true);
+ const parked=flightGateCenterY(now,run.challenge.startsAt!,run.challenge.deadline,600,54,70);
+ assert.equal(parked,54*1.7,'the gate stays visible at the top while waiting for render acknowledgement');
  readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
  assert.equal(run.challenge.deadline-run.challenge.startsAt!,1000);
  const h=600,gateH=54,plane=70;
- assert.ok(flightGateCenterY(run.challenge.startsAt!,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)<0);
+ assert.ok(flightGateCenterY(run.challenge.startsAt!,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)>0,'the next gate is already visible at the top while waiting');
  assert.ok(flightGateCenterY(run.challenge.startsAt!+500,run.challenge.startsAt!,run.challenge.deadline,h,gateH,plane)<h*.5);
+});
+
+test('a finished past and participle pair advances through unique verbs until the deck is exhausted',t=>{
+ let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
+ const seen=new Set<string>();
+ for(let index=0;index<FLIGHT_VERBS.length+1;index++){
+  let run=view(messages).run!;const base=run.verb.base;
+  if(index<FLIGHT_VERBS.length)assert.equal(seen.has(base),false,`${base} repeated before the shuffled deck was exhausted`);
+  seen.add(base);
+  for(const stage of ['past','participle']){
+   run=readyGate(game,p,messages);assert.equal(run.stage,stage);assert.equal(run.verb.base,base);
+   now=run.challenge.deadline;const internal=game.community.records.get(p.id)!.flight!.run!;internal.startedAt=now;internal.endsAt=now+FLIGHT_ROUND_MS;
+   game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
+  }
+ }
+ assert.equal(seen.size,FLIGHT_VERBS.length);
+});
+
+test('a resumed run without its shuffled order does not repeat the current verb',t=>{
+ let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
+ const base=view(messages).run!.verb.base,internal=game.community.records.get(p.id)!.flight!.run!;
+ internal.verbOrder=undefined;internal.verbPosition=0;
+ for(const stage of ['past','participle']){
+  const run=readyGate(game,p,messages);assert.equal(run.stage,stage);now=run.challenge.deadline;
+  internal.startedAt=now;internal.endsAt=now+FLIGHT_ROUND_MS;
+  game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
+ }
+ assert.notEqual(view(messages).run!.verb.base,base);
 });
 
 test('wrong gate repeats the same words and acceleration rebuilds one step at a time',t=>{

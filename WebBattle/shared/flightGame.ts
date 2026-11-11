@@ -15,4 +15,4 @@ export function flightWindow(speed:number){return Math.max(1000,Math.round(3800/
 export function flightLaneAt(x:number):FlightLane{return x<.5?'left':'right';}
 export const FLIGHT_ROUND_MS=120_000;
 export const FLIGHT_ARRIVAL_GRACE_MS=5000;
-export const FLIGHT_GATE_SPACING_MS=900;
+export const FLIGHT_GATE_SPACING_MS=300;

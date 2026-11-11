@@ -14,6 +14,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const [clock,setClock]=useState(Date.now()),[planeX,setPlaneX]=useState(.5),[expanded,setExpanded]=useState(false),[artReady,setArtReady]=useState(false),[audioReady,setAudioReady]=useState(false),[rendererReady,setRendererReady]=useState('');
  const [answerCue,setAnswerCue]=useState<{id:number;text:string;kind:'correct'|'collision'}|null>(null);
  const [preview,setPreview]=useState<{key:string;hearts:number;score:number;at:number}|null>(null);
+ const [visualImpact,setVisualImpact]=useState<{key:string;at:number;kind:'correct'|'collision'}|null>(null);
  const requestRef=useRef(''),arrivalRef=useRef(''),playedRef=useRef(''),cueTimer=useRef<number|undefined>(undefined),pointerRef=useRef<number|null>(null),planeRef=useRef(.5),fieldRef=useRef<HTMLDivElement>(null),sendRef=useRef(send);
  const contactRef=useRef<{key:string;correct:boolean;audio:Promise<void>}|null>(null);
  const lastRunRef=useRef<NonNullable<FlightView['run']>|null>(null),finishUntilRef=useRef(0),clockSyncRef=useRef<{runId:string;offset:number}|null>(null);
@@ -63,6 +64,7 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
   const recovery=window.setTimeout(()=>{if(requestRef.current===key)return;requestRef.current=key;sendRef.current('flightStatus');},Math.max(0,until+FLIGHT_ARRIVAL_GRACE_MS+100));
   return()=>{clearTimeout(arrival);clearTimeout(recovery);};
  },[run?.id,challenge?.id,challenge?.awaitingReady,connected,offset,run?.hearts,run?.score,run?.stage,verb?.base]);
+ useEffect(()=>{if(!preview||!run||preview.key!==`${run.id}:${challenge?.id}`)return;setVisualImpact(previous=>previous?.key===preview.key?previous:{key:preview.key,at:Date.now(),kind:preview.hearts<run.hearts?'collision':'correct'});},[preview?.key,run?.id,challenge?.id]);
  const steer=(x:number)=>{const next=Math.max(.13,Math.min(.87,x));planeRef.current=next;setPlaneX(next);};
  const steerPointer=(event:React.PointerEvent<HTMLDivElement>)=>{const bounds=event.currentTarget.getBoundingClientRect();steer((event.clientX-bounds.left)/bounds.width);};
  useEffect(()=>{const key=(event:KeyboardEvent)=>{if(!run)return;if(event.key==='ArrowLeft'||event.key==='a'){event.preventDefault();steer(.275);}if(event.key==='ArrowRight'||event.key==='d'){event.preventDefault();steer(.725);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[Boolean(run)]);
@@ -73,11 +75,11 @@ export function FlightPanel({data,connected,myId,send,onBack}:Props){
  const crashStartedAt=preview?.hearts===0&&(run?preview.key===`${run.id}:${challenge?.id}`:Boolean(data?.lastResult))?preview.at:!run&&data?.lastResult&&finishUntilRef.current?finishUntilRef.current-FLIGHT_GAME_OVER_MS:undefined;
  const showPlaneWord=Boolean(run&&crashStartedAt===undefined&&!(run.stage==='participle'&&preview?.key===`${run.id}:${challenge?.id}`&&preview.score>run.score));
  const contactKey=displayRun&&displayChallenge?`${displayRun.id}:${displayChallenge.id}`:null;
- const localHit=Boolean(contactKey&&preview?.key===contactKey&&preview.hearts<displayRun!.hearts&&clock-preview.at<400);
+ const localHit=Boolean(contactKey&&visualImpact?.key===contactKey&&visualImpact.kind==='collision');
  const previousContactKey=run&&challenge?`${run.id}:${challenge.id-1}`:null;
  const serverHit=Boolean(run?.lastResult==='collision'&&contactRef.current?.key!==previousContactKey);
  const hitKey=localHit?contactKey:serverHit?previousContactKey:null;
- const impact=contactKey&&preview?.key===contactKey&&clock-preview.at<450?{at:preview.at,kind:preview.hearts<displayRun!.hearts?'collision' as const:'correct' as const}:undefined;
+ const impact=contactKey&&visualImpact?.key===contactKey?visualImpact:undefined;
  const nextStreak=(run?.speedSteps??0)+1;
  const localMilestone=run&&preview?.key===`${run.id}:${challenge?.id}`&&preview.score>run.score&&nextStreak%3===0&&flightSpeedForStreak(nextStreak)>flightSpeedForStreak(nextStreak-1)?preview.at:undefined;
  const serverMilestone=run?.lastResult==='correct'&&(run.speedSteps??0)>0&&(run.speedSteps??0)%3===0&&run.speed>flightSpeedForStreak((run.speedSteps??0)-1)?run.lastActionAt-offset:undefined;

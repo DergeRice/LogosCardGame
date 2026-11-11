@@ -97,6 +97,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   expect(run!.challenge.awaitingReady).toBe(false);
   run={...run!,speedSteps:3,speed:flightSpeedForStreak(3),lastActionAt:Date.now(),lastResult:'correct'};sendState();
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-speed-up','true');
+  const speedUpGateY=Number(await page.locator('.flight-scene').getAttribute('data-gate-y'));
+  expect(speedUpGateY).toBeGreaterThan(35);
+  expect(speedUpGateY).toBeLessThan(130);
   await page.waitForTimeout(80);
   await page.screenshot({path:`.runtime/flight-speed-up-${viewport.width}-${test.info().project.name}.png`});
   run={...run,speedSteps:1,speed:flightSpeedForStreak(1)};sendState();
@@ -112,7 +115,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   run={...run!,stage:'past',challengeId:3,challenge:{id:3,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now()+FLIGHT_ROUND_MS,deadline:Date.now()+FLIGHT_ROUND_MS+3800,awaitingReady:true}};
   sendState();await expect(page.locator('.flight-scene')).toHaveAttribute('data-gate-id','3');
   await expect.poll(()=>actions.filter(action=>action==='flightGateReady').length).toBeGreaterThan(readyBefore);
-  expect(Number(await page.locator('.flight-scene').getAttribute('data-gate-y'))).toBeLessThan(40);
+  const parkedGateY=Number(await page.locator('.flight-scene').getAttribute('data-gate-y'));
+  expect(parkedGateY).toBeGreaterThan(35);
+  expect(parkedGateY).toBeLessThan(120);
   run={...run!,stage:'participle',challengeId:4,challenge:{id:4,kind:'gate',verbIndex:5,stage:'participle',left:'broken',right:'breaken',correctLane:'left',startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800,awaitingReady:false}};sendState();
   holdChoice=true;
   if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
