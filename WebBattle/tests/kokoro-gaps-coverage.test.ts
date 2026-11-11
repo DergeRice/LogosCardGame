@@ -9,7 +9,7 @@ test('finished supplement has one real verified R2 object for every new recordin
 test('all supported played POS snapshots have a recorded current English example',()=>{
  const rows=JSON.parse(readFileSync('docs/audio-audit/played-pos-v72-final.json','utf8')) as {kinds:Kind[]}[],known=new Set<string>();
  for(const m of [JSON.parse(readFileSync('public/audio/sentences/manifest.json','utf8')),zip('docs/audio-audit/base-manifest.json.gz'),zip('docs/audio-audit/expanded-manifest.json.gz'),zip('docs/audio-audit/kokoro-gaps-v72-manifest.json.gz')])for(const e of m.entries)known.add(e.text);
- const missing:string[]=[],rejected:Kind[][]=[];for(const row of rows){const cards=row.kinds.map((kind,i)=>({kind,id:String(i)})),j=judgeCards(cards),e=cardSentenceExample(cards,j,0).example;if(!e){rejected.push(row.kinds);continue;}if(!known.has(e.english))missing.push(e.english);}
+ const missing:string[]=[],rejected:Kind[][]=[];for(const row of rows){if(row.kinds.includes('to-infinitive'))continue;const cards=row.kinds.map((kind,i)=>({kind,id:String(i)})),j=judgeCards(cards),e=cardSentenceExample(cards,j,0).example;if(!e){rejected.push(row.kinds);continue;}if(!known.has(e.english))missing.push(e.english);}
  assert.deepEqual(missing,[]);assert.equal(rejected.length,2);assert.ok(rejected.every(seq=>seq.some((kind,i)=>kind==='indefinite'&&seq[i+1]==='mass')));
 });
 

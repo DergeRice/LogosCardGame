@@ -1,5 +1,6 @@
 import {type Card,type Judgment,type Kind,CATALOG} from './rules.js';
 import {type SentenceExample,type ExampleRole} from './sentence-examples.js';
+import {parseToInfinitive,toInfinitiveExample} from './to-infinitive-grammar.js';
 type NP={start:number;end:number;head:number;baseEnd:number;pps:PP[]};
 type PP={start:number;end:number;np:NP};
 type Complement={start:number;end:number;kind:'adjective'|'to'|'verb'|'modal'};
@@ -14,6 +15,8 @@ export function cardSentenceExample(cards:Card[],judgment:Judgment,index=0):Card
  const fail=(reason:string):CardExampleResult=>({example:null,reason,positions:seq});
  let contractedNegativeQuestion=false;
  if(!judgment.valid||!end)return fail('인정된 문장 구간이 없습니다.');
+ const toParsed=parseToInfinitive(seq);
+ if(toParsed)return {positions:seq,example:toInfinitiveExample(used,toParsed)};
  const adv=(k:Kind)=>k==='adverb'||k==='frequency';
  const skip=(s:number,e:number)=>{while(s<e&&adv(seq[s]))s++;return s};
  const auxSkip=(s:number,e:number)=>{while(s<e&&(adv(seq[s])||seq[s]==='not'))s++;return s};

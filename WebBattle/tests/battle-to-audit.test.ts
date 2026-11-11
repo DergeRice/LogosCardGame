@@ -7,7 +7,8 @@ import {CheckPlayableSegment,LearningPosType as P} from '../shared/LearningLocal
 import {safeDetails,adminAuthorized} from '../server/audit.js';
 
 test('battle To is a bundled verb in a valid complement position, while original Unity entry stays compatible',()=>{
- for(const s of [['pronoun','verb','pronoun','to-infinitive'],['pronoun','verb','article','count','to-infinitive'],['pronoun','modal','verb','mass','to-infinitive']] as const){const r=judge([...s]);assert.equal(r.valid,true);assert.equal(r.patternType,5);assert.equal(r.usedLength,s.length)}
+ for(const s of [['pronoun','verb','pronoun','to-infinitive'],['pronoun','modal','verb','mass','to-infinitive']] as const){const r=judge([...s]);assert.equal(r.valid,true);assert.equal(r.patternType,5);assert.equal(r.usedLength,s.length)}
+ const adjectiveUse=judge(['pronoun','verb','article','count','to-infinitive']);assert.equal(adjectiveUse.patternType,3);assert.equal(adjectiveUse.usedLength,5);
  assert.equal(judge(['pronoun','verb','to-infinitive']).usedLength,3);
  assert.equal(judge(['pronoun','verb','to-infinitive','verb']).usedLength,3);
  const trailing=judge(['pronoun','verb','pronoun','to-infinitive','verb']);assert.equal(trailing.usedLength,4);assert.equal(trailing.patternType,5);

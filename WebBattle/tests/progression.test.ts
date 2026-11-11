@@ -25,7 +25,7 @@ test('AI difficulty choices follow the player league',()=>{
  assert.equal(aiOpponentTier(1000,'hard'),leagueFor(1000).tier+1);
  assert.equal(aiOpponentTier(1000,'veryHard'),leagueFor(1000).tier+2);
  assert.equal(aiOpponentTier(3900,'veryHard'),7);
- const game=new Game({minimumPlayers:2});const player=game.hello(socket(),null,'tier');player.rating=3301;game.quick(player,'easy');const room=game.rooms.get(player.room!)!;assert.equal(room.aiSetting,'veryHard');game.reveal(room);assert.equal(room.players.find(p=>p.ai)?.ai,'veryHard');assert.equal(room.deck.filter(c=>c.kind==='to-infinitive').length,4);assert.equal(game.view(room,player).deckTotal,75);
+ const game=new Game({minimumPlayers:2});const player=game.hello(socket(),null,'tier');player.rating=3301;game.quick(player,'easy');const room=game.rooms.get(player.room!)!;assert.equal(room.aiSetting,'veryHard');game.reveal(room);assert.equal(room.players.find(p=>p.ai)?.ai,'veryHard');assert.equal(room.deck.filter(c=>c.kind==='to-infinitive').length,3);assert.equal(game.view(room,player).deckTotal,74);
  const challenger=new Game({minimumPlayers:2}),human=challenger.hello(socket(),null,'challenger');human.rating=1000;challenger.quick(human,'veryHard');const challenge=challenger.rooms.get(human.room!)!;challenger.reveal(challenge);assert.equal(challenge.aiSetting,'veryHard');assert.equal(leagueFor(challenge.players.find(p=>p.ai)!.rating).tier,aiOpponentTier(human.rating,'veryHard'));
 });
 test('higher-tier AI victory scales coins, points and rating by league difference',()=>{

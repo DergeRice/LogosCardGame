@@ -1,5 +1,6 @@
 import {cardSentenceExample} from './card-sentence-example.js';
 import { CheckPlayableSegment, LearningPosType, type LearningGrammarCheckResult } from './LearningLocalGrammarChecker.js';
+import {parseToInfinitive} from './to-infinitive-grammar.js';
 // Rendering identifiers map explicitly to the original numeric Unity POS enum.
 export type Kind = 'pronoun' | 'proper' | 'count' | 'mass' | 'article' | 'indefinite' | 'possessive' | 'verb' | 'be' | 'do' | 'modal' | 'not' | 'frequency' | 'adverb' | 'preposition' | 'very' | 'to-infinitive' | 'adjective' | 'get2' | 'get3' | 'rob' | 'exchange' | 'protect' | 'nothing';
 export type Card = { id: string; kind: Kind; variant?: string };
@@ -12,7 +13,7 @@ export const CATALOG: Record<Kind, { name: string; symbol: string; example: stri
  adverb: { name: '부사', symbol: 'ADV', example: 'now · then · soon', sheet: 5, col: 1, row: 2, tone: 'pink' },
  preposition: { name: '전치사', symbol: 'PREP', example: 'in · on · at · by · to', sheet: 4, col: 1, row: 1, tone: 'gold' },
  very: { name: 'Very', symbol: 'VERY', example: 'very', sheet: 5, col: 3, row: 2, tone: 'pink' },
- 'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to + 일반동사 포함 · 보어 자리에서 한 장으로 사용', sheet: 6, col: 0, row: 0, tone: 'green' },
+ 'to-infinitive': { name: 'To부정사', symbol: 'TO', example: 'to + 동사 한 장 · 명사적/형용사적/부사적 용법 · 뒤에 목적어 가능', sheet: 6, col: 0, row: 0, tone: 'green' },
  pronoun: { name: '대명사', symbol: 'P', example: 'I · you · we', sheet: 1, col: 2, row: 0, tone: 'coral' },
  proper: { name: '고유명사', symbol: 'PROPN', example: 'Naro', sheet: 2, col: 2, row: 0, tone: 'blue' },
  count: { name: '셀 수 있는 명사', symbol: 'N', example: 'book · cat', sheet: 2, col: 2, row: 0, tone: 'blue' },
@@ -100,7 +101,7 @@ export const DECK_FACES: Omit<Card,'id'>[] = [
 ];
 export const ADVANCED_DECK_FACES: Omit<Card,'id'>[] = [
  {kind:'to-infinitive'},
- ...Object.entries(VARIANTS).filter(([,face])=>face.kind==='to-infinitive'&&face.sheet===6).map(([variant])=>({kind:'to-infinitive' as const,variant}))
+ ...Object.entries(VARIANTS).filter(([,face])=>face.kind==='to-infinitive'&&face.sheet===6&&face.multiply>=1).map(([variant])=>({kind:'to-infinitive' as const,variant}))
 ];
 export const faceKey = (card: Card | Omit<Card,'id'>) => `${card.kind}:${card.variant??'base'}`;
 export function cardEffect(card: Card) { const effect = card.variant ? VARIANTS[card.variant] : undefined; return effect?.kind === card.kind ? effect : { multiply:1, add:0 }; }
@@ -114,7 +115,21 @@ export function judge(kinds: Kind[]): Judgment {
  if(positions.some(pos=>pos===null))return {valid:false,patternType:1,message:'기능 카드는 문장에 넣을 수 없습니다.',debugLog:'',usedStartIndex:0,usedLength:0,points:0,reason:'기능 카드는 손패에서 사용하세요.',spans:[]};
  let adjectiveRun=0,adverbRun=0;
  for(const kind of kinds){adjectiveRun=kind==='adjective'?adjectiveRun+1:0;adverbRun=['adverb','frequency','very'].includes(kind)?adverbRun+1:0;const message=adjectiveRun>3?'형용사는 연속 3장까지 사용할 수 있습니다.':adverbRun>2?'부사는 연속 2장까지 사용할 수 있습니다.':'';if(message)return {valid:false,patternType:1,message,debugLog:'[BattleSyntax] modifier chain limit',usedStartIndex:0,usedLength:0,points:0,reason:message,spans:[]};}
- const result = CheckPlayableSegment(positions as LearningPosType[], false, true, true);
+ let result = CheckPlayableSegment(positions as LearningPosType[], false, true, true);
+ if(kinds.includes('to-infinitive')){
+  // Keep longest playable segment semantics while accepting the three infinitive uses.
+  for(let length=Math.min(15,kinds.length);length>=1;length--){
+   if(result.valid&&length<result.usedLength)break;
+   let found=false;
+   for(let start=0;start+length<=kinds.length;start++){
+    const parsed=parseToInfinitive(kinds.slice(start,start+length));
+    if(!parsed)continue;
+    result={valid:true,patternType:parsed.pattern as LearningGrammarCheckResult['patternType'],message:`${parsed.pattern}형식 문장`,usedStartIndex:start,usedLength:length,debugLog:'[BattleSyntax] to-infinitive '+parsed.use};
+    found=true;break;
+   }
+   if(found)break;
+  }
+ }
  if(result.valid){const example=cardSentenceExample(kinds.map((kind,i)=>({id:String(i),kind})),{...result,points:0,reason:'',spans:[]});if(!example.example){result.valid=false;result.message='비표준 문장 조합: '+example.reason;result.usedStartIndex=0;result.usedLength=0;}else if(result.patternType!==example.example.patternType){result.debugLog+=' | [BattleSyntax] noun-phrase form corrected';result.patternType=example.example.patternType as LearningGrammarCheckResult['patternType'];result.message=`${result.patternType}형식 문장`;}}
  return { ...result, form: result.valid ? result.patternType : undefined, label: result.message,
   points: result.valid ? result.usedLength : 0,

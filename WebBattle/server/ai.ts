@@ -6,11 +6,14 @@ for (const d of ['article', 'indefinite', 'possessive'] as const) for (const n o
 const templates: Kind[][] = [['verb']];
 for (const s of nounPhrases) {
  templates.push([...s, 'verb'], [...s, 'be', 'adjective'], [...s, 'verb', 'to-infinitive'], [...s, 'be', 'to-infinitive']);
+ templates.push([...s,'verb','adverb','to-infinitive']);
  for (const o of nounPhrases) {
   templates.push([...s, 'be', ...o], [...s, 'verb', ...o], [...s, 'verb', ...o, 'adjective'],[...s,'verb',...o,'to-infinitive']);
+  templates.push([...s,'verb','to-infinitive',...o]);
   for (const o2 of nounPhrases) templates.push([...s, 'verb', ...o, ...o2]);
  }
 }
+templates.push(['to-infinitive','be','adjective'],['to-infinitive','indefinite','count','be','adjective']);
 const expanded:Kind[][]=[...templates];
 for(const template of templates){
  const verbAt=template.findIndex(k=>k==='verb'||k==='be');
