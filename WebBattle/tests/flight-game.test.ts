@@ -55,12 +55,12 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
  for(const verb of FLIGHT_VERBS){
   for(const [form,wrong] of [[verb.past,verb.wrongPast],[verb.participle,verb.wrongParticiple]] as const){assert.equal(wrong.length,4,verb.base);assert.equal(new Set(wrong).size,4,verb.base);assert.ok(!wrong.includes(form),verb.base);}
  }
- assert.ok(Math.abs(flightSpeed(0)/1.5-1.3)<1e-10);assert.ok(flightSpeed(500)>flightSpeed(0));assert.ok(Math.abs(flightSpeed(100000)-6.12*.93)<1e-10);
+ assert.ok(Math.abs(flightSpeed(0)/1.5-1.3)<1e-10);assert.ok(flightSpeed(500)>flightSpeed(0));assert.ok(Math.abs(flightSpeed(100000)-6.12*.93*.9)<1e-10);
  assert.ok(flightSpeed(100)>2.0,'the first correct gate accelerates faster than before');
- assert.ok(flightSpeedForStreak(5)-flightSpeedForStreak(4)>flightSpeedForStreak(4)-flightSpeedForStreak(3),'five correct gates add an extra burst');
+ assert.ok(flightSpeedForStreak(3)-flightSpeedForStreak(2)>flightSpeedForStreak(2)-flightSpeedForStreak(1),'three correct gates add an extra burst');
  assert.equal(flightSpeedForStreak(25),flightSpeedForStreak(24),'a capped run does not gain speed');
  assert.equal(FLIGHT_ROUND_MS,120_000);
- assert.equal(flightWindow(flightSpeed(0)),1949);assert.equal(flightWindow(flightSpeed(100000)),668);
+ assert.equal(flightWindow(flightSpeed(0)),1949);assert.equal(flightWindow(flightSpeed(100000)),742);
  assert.deepEqual([.25,.49,.5,.58,.75].map(x=>flightLaneAt(x)),['left','left','right','right','right']);
 });
 

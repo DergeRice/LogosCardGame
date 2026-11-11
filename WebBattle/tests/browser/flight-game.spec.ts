@@ -90,7 +90,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
   await expect(page.locator('.flight-question')).toHaveCount(0);
   holdChoice=false;pendingChoice=false;sendState();
-  run={...run!,speedSteps:5,speed:flightSpeedForStreak(5),lastActionAt:Date.now(),lastResult:'correct'};sendState();
+  run={...run!,speedSteps:3,speed:flightSpeedForStreak(3),lastActionAt:Date.now(),lastResult:'correct'};sendState();
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-speed-up','true');
   await page.waitForTimeout(80);
   await page.screenshot({path:`.runtime/flight-speed-up-${viewport.width}-${test.info().project.name}.png`});
@@ -103,6 +103,12 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   await expect(page.locator('.flight-question')).toHaveCount(0);
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-word','break');
+  const readyBefore=actions.filter(action=>action==='flightGateReady').length;
+  run={...run!,stage:'past',challengeId:3,challenge:{id:3,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now()+FLIGHT_ROUND_MS,deadline:Date.now()+FLIGHT_ROUND_MS+3800,awaitingReady:true}};
+  sendState();await expect(page.locator('.flight-scene')).toHaveAttribute('data-gate-id','3');
+  await expect.poll(()=>actions.filter(action=>action==='flightGateReady').length).toBeGreaterThan(readyBefore);
+  expect(Number(await page.locator('.flight-scene').getAttribute('data-gate-y'))).toBeLessThan(40);
+  run={...run!,stage:'participle',challengeId:4,challenge:{id:4,kind:'gate',verbIndex:5,stage:'participle',left:'broken',right:'breaken',correctLane:'left',startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800}};sendState();
   holdChoice=true;
   if(await page.locator('.flight-scene').getAttribute('data-renderer')==='pixi'){
    await steer(.27);await expect(page.locator('.flight-scene')).toHaveAttribute('data-bank','left');
