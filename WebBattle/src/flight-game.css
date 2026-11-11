@@ -118,3 +118,6 @@
 .flight-scene[data-renderer="fallback"].is-impact-collision{animation:flight-impact-collision .36s ease-out}
 @keyframes flight-impact-collision{15%{transform:translate(-7px,3px)}35%{transform:translate(6px,-4px)}55%{transform:translate(-4px,2px)}75%{transform:translate(2px,-1px)}}
 @media(prefers-reduced-motion:reduce){.flight-scene[data-renderer="fallback"].is-impact-collision{animation:none}}
+.flight-speed-up-fallback{position:absolute;z-index:7;top:29%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;color:#ffe665;font-size:clamp(28px,9vw,48px);font-weight:950;text-shadow:-3px -3px 0 #164973,3px -3px 0 #164973,-3px 3px 0 #164973,3px 3px 0 #164973,0 5px 14px #164973;animation:flight-speed-up .95s ease-out both;pointer-events:none}
+@keyframes flight-speed-up{0%{opacity:0;transform:translate(-50%,-50%) scale(.55)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-90%) scale(1.25)}}
+@media(prefers-reduced-motion:reduce){.flight-speed-up-fallback{animation:none;opacity:1}}

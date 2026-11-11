@@ -5,16 +5,16 @@ import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js'
 import {pixiResolution,watchContextLoss} from './pixiRuntime.js';
 import type {FlightImpactKind} from './flightFeedback.js';
 
-type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number;word:string;showWord:boolean;impact?:{at:number;kind:FlightImpactKind};crashStartedAt?:number;onReady:()=>void};
+type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number;word:string;showWord:boolean;impact?:{at:number;kind:FlightImpactKind};speedUpAt?:number;crashStartedAt?:number;onReady:()=>void};
 const FLIGHT_ART=['/flight/land.webp','/flight/objects-layer.webp','/flight/clouds-layer.webp','/flight/gate.webp','/flight/plane-banking.webp','/flight/plane.webp'];
 let artPromise:Promise<unknown[]>|undefined;
 export function preloadFlightArt(){return artPromise??=import('pixi.js').then(({Assets})=>Promise.all(FLIGHT_ART.map(path=>Assets.load(path)))).catch(error=>{artPromise=undefined;throw error;});}
 
-function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,crashStartedAt,onReady}:Props){
- const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,crashStartedAt}),[fallback,setFallback]=useState(true),[fallbackClock,setFallbackClock]=useState(Date.now());
+function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,speedUpAt,crashStartedAt,onReady}:Props){
+ const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,speedUpAt,crashStartedAt}),[fallback,setFallback]=useState(true),[fallbackClock,setFallbackClock]=useState(Date.now());
  const previous=useRef({challenge,startsAt}),outgoing=useRef<{challenge:FlightPublicChallenge;startsAt:number}[]>([]);
  if(previous.current.challenge.id!==challenge.id){outgoing.current.push(previous.current);previous.current={challenge,startsAt};}
- live.current={challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,crashStartedAt};
+ live.current={challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,speedUpAt,crashStartedAt};
  useEffect(()=>{if(!fallback)return;const timer=setInterval(()=>setFallbackClock(Date.now()),50);return()=>clearInterval(timer);},[fallback]);
  useEffect(()=>{
   const node=host.current;if(!node)return;node.dataset.renderer='fallback';
@@ -46,7 +46,8 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
     const plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
     const planeWord=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:22,fontWeight:'900',fill:0xffffff,stroke:{color:0x12354a,width:5},align:'center'}});planeWord.anchor.set(.5,1);
     const impactFlash=new Graphics();impactFlash.visible=false;
-    instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane,planeWord,impactFlash);
+    const speedBurst=new Graphics(),speedText=new Text({text:'Speed Up!',style:{fontFamily:'Arial, sans-serif',fontSize:42,fontWeight:'900',fill:0xffe665,stroke:{color:0x164973,width:7},align:'center'}});speedText.anchor.set(.5);speedText.visible=false;speedBurst.visible=false;
+    instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane,planeWord,impactFlash,speedBurst,speedText);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
     clearTimeout(fallbackTimer);requestAnimationFrame(signalReady);
     instance.ticker.maxFPS=60;
@@ -85,6 +86,7 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
       clouds.forEach(sprite=>{sprite.scale.set(cloudCover);sprite.x=cloudX;});
       planeWord.style.fontSize=Math.max(17,Math.min(25,w*.055));
       impactFlash.clear().rect(0,0,w,h).fill(0xffffff);
+      const radius=Math.min(w,h)*.105;speedBurst.clear();for(let ray=0;ray<12;ray++){const angle=ray*Math.PI/6;speedBurst.moveTo(Math.cos(angle)*radius,Math.sin(angle)*radius).lineTo(Math.cos(angle)*radius*1.45,Math.sin(angle)*radius*1.45).stroke({width:Math.max(3,radius*.1),color:ray%2?0xffdc4a:0xffffff,cap:'round'});}speedText.style.fontSize=Math.max(26,Math.min(48,w*.105));
      }
      land.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.6,landH,landY,j-1);sprite.visible=top<h&&top+landH>0;if(sprite.visible)sprite.y=top;});
      objects.forEach(row=>row.forEach((sprite,j)=>{const {top}=descendingFlightTile(scroll*.82,objectStride,objectY,j-1);sprite.visible=top<h&&top+objectHeight>0;if(sprite.visible)sprite.y=top;}));
@@ -109,6 +111,8 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
       instance.stage.position.set(shake?Math.sin(impactElapsed*.12)*force*decay:0,shake?Math.cos(impactElapsed*.17)*force*.65*decay:0);
       impactFlash.visible=true;impactFlash.tint=info.impact.kind==='collision'?0xff6673:0xffe6a0;impactFlash.alpha=(reducedMotion ? .08 : .24)*decay;
      }else{instance.stage.position.set(0,0);impactFlash.visible=false;}
+     const speedElapsed=info.speedUpAt===undefined?Infinity:Date.now()-info.speedUpAt,speedProgress=Math.max(0,Math.min(1,speedElapsed/1000));
+     speedText.visible=speedBurst.visible=speedElapsed>=0&&speedProgress<1;if(speedText.visible){const fade=Math.min(1,speedElapsed/110)*(1-speedProgress)**.65;speedText.position.set(w*.5,h*.29);speedText.alpha=fade;speedText.scale.set(.55+speedProgress*.65);speedBurst.position.set(w*.5,h*.29);speedBurst.alpha=fade*.9;speedBurst.rotation=speedProgress*.55;speedBurst.scale.set(.75+speedProgress*.65);}
     });
     const visible=()=>{if(document.hidden)instance.ticker.stop();else if(node.dataset.renderer==='pixi')instance.ticker.start();};document.addEventListener('visibilitychange',visible);cleanupVisibility=()=>document.removeEventListener('visibilitychange',visible);
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.renderer='fallback';setFallback(true);});
@@ -121,6 +125,6 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
  const h=host.current?.clientHeight??600,w=host.current?.clientWidth??390,gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),now=fallbackClock+serverOffset;
  const fallbackGates=[...outgoing.current,{challenge,startsAt}].filter(wave=>flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)<h+gateH*2);
  outgoing.current=fallbackGates.filter(wave=>wave.challenge.id!==challenge.id);
- return <div className={`flight-scene${crashStartedAt!==undefined?' is-crashing':''}${impact?' is-impact-'+impact.kind:''}`} ref={host} data-word={showWord?word:''} data-impact={impact?.kind??''} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}{showWord&&<span className="flight-plane-word-fallback" style={{left:`${planeX*100}%`}}>{word}</span>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/></>}</div>;
+ return <div className={`flight-scene${crashStartedAt!==undefined?' is-crashing':''}${impact?' is-impact-'+impact.kind:''}`} ref={host} data-word={showWord?word:''} data-impact={impact?.kind??''} data-speed-up={speedUpAt!==undefined?'true':'false'} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}{showWord&&<span className="flight-plane-word-fallback" style={{left:`${planeX*100}%`}}>{word}</span>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/>{speedUpAt!==undefined&&<span className="flight-speed-up-fallback">Speed Up!</span>}</>}</div>;
 }
 export const FlightScene=memo(FlightSceneView);

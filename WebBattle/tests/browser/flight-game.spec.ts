@@ -1,6 +1,6 @@
 import {test,expect,guestContext} from './fixtures.js';
 import {defaultHubSave} from '../../shared/store.js';
-import {FLIGHT_GATE_SPACING_MS,type FlightResult,type FlightRun} from '../../shared/flightGame.js';
+import {flightSpeedForStreak,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightResult,type FlightRun} from '../../shared/flightGame.js';
 
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irregular verb flight ${viewport.width}x${viewport.height}`,async({browser})=>{
  const context=await guestContext(browser,{viewport,isMobile:true,hasTouch:true});
@@ -15,8 +15,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    socket.send(JSON.stringify({type:'session',id:'me',name:'비행 검사',token:'flight-token',avatar:'pronoun',rating:1000,coins:0,points:0}));
    socket.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:defaultHubSave()}}));
   }
-  if(message.type==='flightStart'){finishedResult=undefined;run={id:'flight-1',startedAt:Date.now(),endsAt:Date.now()+60_000,speedSteps:0,hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,coinResolved:true,hazardResolved:true,challenge:{id:1,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now()+60_000,deadline:Date.now()+63_800,awaitingReady:true},lastActionAt:0};}
-  if(message.type==='flightGateReady'&&run&&message.challengeId===run.challenge.id&&run.challenge.awaitingReady){run.challenge={...run.challenge,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800,awaitingReady:false};}
+  if(message.type==='flightStart'){finishedResult=undefined;run={id:'flight-1',startedAt:Date.now(),endsAt:Date.now()+FLIGHT_ROUND_MS,speedSteps:0,hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,coinResolved:true,hazardResolved:true,challenge:{id:1,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now()+FLIGHT_ROUND_MS,deadline:Date.now()+FLIGHT_ROUND_MS+3800,awaitingReady:true},lastActionAt:0};}
+  if(message.type==='flightGateReady'&&run&&message.challengeId===run.challenge.id&&run.challenge.awaitingReady){if(run.challenge.id===1){run.startedAt=Date.now();run.endsAt=run.startedAt+FLIGHT_ROUND_MS;}run.challenge={...run.challenge,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800,awaitingReady:false};}
   if(message.type==='flightChoose'&&run&&message.challengeId===run.challenge.id){
    const correct=message.side===run.challenge.correctLane,current=run.challenge,stage=run.stage,verbIndex=run.verbIndex;
    if(!correct){if(run.hearts===1){finishedResult={distance:run.distance,score:run.score,coins:run.coins};run=undefined;}else run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'collision',collisionReason:'gate',lastWord:'break'};}
@@ -60,6 +60,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 3개');
   await expect(page.locator('.flight-score')).toHaveAttribute('aria-label','점수 0점');
   await expect(page.locator('.flight-time')).toHaveAttribute('aria-label',/남은 시간 \d+초/);
+  expect(Number((await page.locator('.flight-time').textContent())!.replace('초',''))).toBeGreaterThan(110);
   await expect(page.locator('.flight-field .flight-hearts')).toHaveCount(1);
   await expect(page.locator('.flight-play')).not.toContainText('속도');
   await expect(page.locator('.flight-play')).not.toContainText('거리');
@@ -89,6 +90,11 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
   await expect(page.locator('.flight-question')).toHaveCount(0);
   holdChoice=false;pendingChoice=false;sendState();
+  run={...run!,speedSteps:5,speed:flightSpeedForStreak(5),lastActionAt:Date.now(),lastResult:'correct'};sendState();
+  await expect(page.locator('.flight-scene')).toHaveAttribute('data-speed-up','true');
+  await page.waitForTimeout(80);
+  await page.screenshot({path:`.runtime/flight-speed-up-${viewport.width}-${test.info().project.name}.png`});
+  run={...run,speedSteps:1,speed:flightSpeedForStreak(1)};sendState();
   await page.screenshot({path:`.runtime/v197-flight-answer-${viewport.width}-${test.info().project.name}.png`});
   await page.waitForTimeout(1100);
   await page.screenshot({path:`.runtime/v196-flight-gate-${viewport.width}-${test.info().project.name}.png`});

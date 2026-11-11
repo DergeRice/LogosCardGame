@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
-import {flightLaneAt,flightSpeed,flightWindow,FLIGHT_ARRIVAL_GRACE_MS,FLIGHT_GATE_SPACING_MS,type FlightView} from '../shared/flightGame.js';
+import {flightLaneAt,flightSpeed,flightSpeedForStreak,flightWindow,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
 import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 
@@ -55,8 +55,12 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
  for(const verb of FLIGHT_VERBS){
   for(const [form,wrong] of [[verb.past,verb.wrongPast],[verb.participle,verb.wrongParticiple]] as const){assert.equal(wrong.length,4,verb.base);assert.equal(new Set(wrong).size,4,verb.base);assert.ok(!wrong.includes(form),verb.base);}
  }
- assert.ok(Math.abs(flightSpeed(0)/1.5-1.3)<1e-10);assert.ok(flightSpeed(500)>flightSpeed(0));assert.ok(Math.abs(flightSpeed(100000)/3.6-1.7)<1e-10);
- assert.equal(flightWindow(flightSpeed(0)),1949);assert.equal(flightWindow(flightSpeed(100000)),647);
+ assert.ok(Math.abs(flightSpeed(0)/1.5-1.3)<1e-10);assert.ok(flightSpeed(500)>flightSpeed(0));assert.ok(Math.abs(flightSpeed(100000)-6.12*.93)<1e-10);
+ assert.ok(flightSpeed(100)>2.0,'the first correct gate accelerates faster than before');
+ assert.ok(flightSpeedForStreak(5)-flightSpeedForStreak(4)>flightSpeedForStreak(4)-flightSpeedForStreak(3),'five correct gates add an extra burst');
+ assert.equal(flightSpeedForStreak(25),flightSpeedForStreak(24),'a capped run does not gain speed');
+ assert.equal(FLIGHT_ROUND_MS,120_000);
+ assert.equal(flightWindow(flightSpeed(0)),1949);assert.equal(flightWindow(flightSpeed(100000)),668);
  assert.deepEqual([.25,.49,.5,.58,.75].map(x=>flightLaneAt(x)),['left','left','right','right','right']);
 });
 
@@ -68,7 +72,7 @@ test('initial gate waits for the renderer, then gets its full approach time',t=>
  let run=view(messages).run!;assert.equal(run.challenge.awaitingReady,true);assert.equal(run.hearts,3);assert.equal(run.score,0);
  const initialId=run.challenge.id;now+=1500;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
  run=view(messages).run!;assert.equal(run.score,0);assert.equal(run.hearts,3);
- readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.awaitingReady,false);assert.equal(run.startedAt,now);assert.equal(run.endsAt,now+60_000);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.equal(run.challenge.deadline-run.challenge.startsAt!,flightWindow(run.speed));
+ readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.awaitingReady,false);assert.equal(run.startedAt,now);assert.equal(run.endsAt,now+FLIGHT_ROUND_MS);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.equal(run.challenge.deadline-run.challenge.startsAt!,flightWindow(run.speed));
  const start=run.challenge.startsAt;readyGate(game,p,messages);assert.equal(view(messages).run!.challenge.startsAt,start,'duplicate ready must not restart the gate');
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
  run=view(messages).run!;assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
@@ -81,16 +85,17 @@ test('wrong gate repeats the same words and acceleration rebuilds one step at a 
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
  const choose=(correct:boolean)=>{let run=readyGate(game,p,messages);now=run.challenge.deadline-100;const side=answer(game,p.id);game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:correct?side:side==='left'?'right':'left'});return view(messages).run!;};
- let run=choose(true);assert.equal(run.speed,flightSpeed(100));run=choose(true);run=choose(true);assert.equal(run.speedSteps,3);assert.equal(run.speed,flightSpeed(300));
- const missed=run.challenge;run=choose(false);assert.equal(run.hearts,2);assert.equal(run.speedSteps,0);assert.equal(run.speed,flightSpeed(0));assert.equal(run.challenge.awaitingReady,true);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
- run=choose(true);assert.equal(run.speedSteps,1);assert.equal(run.speed,flightSpeed(100));assert.equal(run.score,120);
+ let run=choose(true);assert.equal(run.speed,flightSpeedForStreak(1));run=choose(true);run=choose(true);assert.equal(run.speedSteps,3);assert.equal(run.speed,flightSpeedForStreak(3));
+ run=choose(true);assert.equal(run.speedSteps,4);run=choose(true);assert.equal(run.speedSteps,5);assert.equal(run.speed,flightSpeedForStreak(5));
+ const missed=run.challenge;run=choose(false);assert.equal(run.hearts,2);assert.equal(run.speedSteps,0);assert.equal(run.speed,flightSpeedForStreak(0));assert.equal(run.challenge.awaitingReady,true);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
+ run=choose(true);assert.equal(run.speedSteps,1);assert.equal(run.speed,flightSpeedForStreak(1));assert.equal(run.score,180);
 });
 
-test('flight ends at exactly 60 seconds and the completed score is ranked',t=>{
+test('flight ends at exactly two minutes and the completed score is ranked',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);let run=readyGate(game,p,messages);
  now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
- run=view(messages).run!;assert.equal(run.score,30);now=run.startedAt+59_999;game.community.flightStatus(p);assert.equal(view(messages).run?.score,30);
+ run=view(messages).run!;assert.equal(run.score,30);now=run.startedAt+FLIGHT_ROUND_MS-1;game.community.flightStatus(p);assert.equal(view(messages).run?.score,30);
  now++;game.community.flightStatus(p);assert.equal(view(messages).run,undefined);assert.equal(view(messages).lastResult?.score,30);assert.equal(view(messages).bestScore,30);assert.equal(view(messages).ranking[0]?.score,30);
  const season=view(messages).season;now=Date.parse('2026-11-15T00:00:00+09:00');game.community.rollFlightSeason(now);game.community.flightStatus(p);assert.equal(view(messages).history.at(-1)?.season,season);assert.equal(view(messages).history.at(-1)?.bestScore,30);
 });

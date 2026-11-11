@@ -9,9 +9,10 @@ export type FlightSeasonRecord={season:string;bestDistance:number;bestScore:numb
 export type FlightResult={distance:number;score:number;coins:number};
 export type FlightProgress={season:string;bestDistance:number;bestScore:number;plays:number;history:FlightSeasonRecord[];run?:FlightRun;lastResult?:FlightResult};
 export type FlightView={serverNow:number;season:string;seasonEndsAt:number;bestDistance:number;bestScore:number;plays:number;history:FlightSeasonRecord[];run?:FlightPublicRun;lastResult?:FlightResult;ranking:{id:string;name:string;profileId?:string;frameId?:string;distance:number;score:number}[]};
-export function flightSpeed(distance:number){const oldSpeed=Math.min(3.6,1.5+distance/500*0.24);const progress=(oldSpeed-1.5)/2.1;return oldSpeed*(1.3+0.4*progress);}
+export function flightSpeed(distance:number){const baseSpeed=Math.min(3.6,1.5+distance/500*0.36);const progress=(baseSpeed-1.5)/2.1;return Math.min(6.12*.93,baseSpeed*(1.3+.281*progress));}
+export function flightSpeedForStreak(correctStreak:number){return flightSpeed((correctStreak+Math.floor(correctStreak/5)*2)*100);}
 export function flightWindow(speed:number){return Math.max(647,Math.round(3800/speed));}
 export function flightLaneAt(x:number):FlightLane{return x<.5?'left':'right';}
-export const FLIGHT_ROUND_MS=60_000;
+export const FLIGHT_ROUND_MS=120_000;
 export const FLIGHT_ARRIVAL_GRACE_MS=5000;
 export const FLIGHT_GATE_SPACING_MS=900;
