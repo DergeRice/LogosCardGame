@@ -5,12 +5,12 @@ import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js'
 import {pixiResolution,watchContextLoss} from './pixiRuntime.js';
 import type {FlightImpactKind} from './flightFeedback.js';
 
-type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number;word:string;showWord:boolean;impact?:{at:number;kind:FlightImpactKind};crashStartedAt?:number};
+type Props={challenge:FlightPublicChallenge;speed:number;startsAt:number;serverOffset:number;planeX:number;word:string;showWord:boolean;impact?:{at:number;kind:FlightImpactKind};crashStartedAt?:number;onReady:()=>void};
 const FLIGHT_ART=['/flight/land.webp','/flight/objects-layer.webp','/flight/clouds-layer.webp','/flight/gate.webp','/flight/plane-banking.webp','/flight/plane.webp'];
 let artPromise:Promise<unknown[]>|undefined;
 export function preloadFlightArt(){return artPromise??=import('pixi.js').then(({Assets})=>Promise.all(FLIGHT_ART.map(path=>Assets.load(path)))).catch(error=>{artPromise=undefined;throw error;});}
 
-function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,crashStartedAt}:Props){
+function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,crashStartedAt,onReady}:Props){
  const host=useRef<HTMLDivElement>(null),live=useRef({challenge,speed,startsAt,serverOffset,planeX,word,showWord,impact,crashStartedAt}),[fallback,setFallback]=useState(true),[fallbackClock,setFallbackClock]=useState(Date.now());
  const previous=useRef({challenge,startsAt}),outgoing=useRef<{challenge:FlightPublicChallenge;startsAt:number}[]>([]);
  if(previous.current.challenge.id!==challenge.id){outgoing.current.push(previous.current);previous.current={challenge,startsAt};}
@@ -18,15 +18,17 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
  useEffect(()=>{if(!fallback)return;const timer=setInterval(()=>setFallbackClock(Date.now()),50);return()=>clearInterval(timer);},[fallback]);
  useEffect(()=>{
   const node=host.current;if(!node)return;node.dataset.renderer='fallback';
-  let disposed=false,app:Application|undefined,observer:ResizeObserver|undefined,unwatch=()=>{},cleanupVisibility=()=>{};
+  let disposed=false,fallbackCommitted=false,ready=false,app:Application|undefined,observer:ResizeObserver|undefined,unwatch=()=>{},cleanupVisibility=()=>{};
+  const signalReady=()=>{if(!disposed&&!ready){ready=true;onReady();}};
+  const fallbackTimer=window.setTimeout(()=>{fallbackCommitted=true;signalReady();},1100);
   void (async()=>{
    try{
     const {Application,Container,Graphics,Rectangle,Sprite,Text,Texture}=await import('pixi.js');if(disposed)return;
     const instance=new Application();app=instance;
     await instance.init({width:Math.max(1,node.clientWidth),height:Math.max(1,node.clientHeight),backgroundAlpha:0,antialias:false,autoDensity:true,resolution:pixiResolution(),preference:'webgl'});
-    if(disposed){instance.destroy(true,{children:true});return;}
+    if(disposed||fallbackCommitted){instance.destroy(true,{children:true});app=undefined;return;}
     const [landTexture,objectTexture,cloudTexture,gateTexture,planeSheet]=await preloadFlightArt();
-    if(disposed){instance.destroy(true,{children:true});return;}
+    if(disposed||fallbackCommitted){instance.destroy(true,{children:true});app=undefined;return;}
     const land=Array.from({length:3},()=>new Sprite(landTexture));
     const objectHalves=[0,1].map(index=>new Texture({source:objectTexture.source,frame:new Rectangle(index*512,0,512,1536)}));
     const objects=objectHalves.map(texture=>Array.from({length:3},()=>new Sprite(texture)));
@@ -46,6 +48,7 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
     const impactFlash=new Graphics();impactFlash.visible=false;
     instance.stage.addChild(...land,...objects.flat(),...clouds,current.group,plane,planeWord,impactFlash);
     node.append(instance.canvas);node.dataset.renderer='pixi';setFallback(false);
+    clearTimeout(fallbackTimer);requestAnimationFrame(signalReady);
     instance.ticker.maxFPS=60;
     let scroll=0,scrollSpeed=live.current.speed,lastPlaneX=.5,bankDirection=0,bankUntil=0;
     const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -111,9 +114,9 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
     unwatch=watchContextLoss(instance.canvas,()=>{instance.ticker.stop();node.dataset.renderer='fallback';setFallback(true);});
     observer=new ResizeObserver(()=>{if(disposed)return;const width=Math.max(1,node.clientWidth),height=Math.max(1,node.clientHeight);if(width!==instance.screen.width||height!==instance.screen.height)instance.renderer.resize(width,height);});observer.observe(node);
     if(document.hidden)instance.ticker.stop();
-   }catch{if(!disposed){node.dataset.renderer='fallback';setFallback(true);}}
+   }catch{if(!disposed){node.dataset.renderer='fallback';setFallback(true);clearTimeout(fallbackTimer);signalReady();}}
   })();
-  return()=>{disposed=true;observer?.disconnect();cleanupVisibility();unwatch();app?.destroy(true,{children:true});};
+  return()=>{disposed=true;clearTimeout(fallbackTimer);observer?.disconnect();cleanupVisibility();unwatch();app?.destroy(true,{children:true});};
  },[]);
  const h=host.current?.clientHeight??600,w=host.current?.clientWidth??390,gateH=Math.max(37,Math.min(65,h*.09)),planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15))),now=fallbackClock+serverOffset;
  const fallbackGates=[...outgoing.current,{challenge,startsAt}].filter(wave=>flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)<h+gateH*2);

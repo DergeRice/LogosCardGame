@@ -15,7 +15,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    socket.send(JSON.stringify({type:'session',id:'me',name:'비행 검사',token:'flight-token',avatar:'pronoun',rating:1000,coins:0,points:0}));
    socket.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:defaultHubSave()}}));
   }
-  if(message.type==='flightStart'){finishedResult=undefined;run={id:'flight-1',startedAt:Date.now(),hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,coinResolved:true,hazardResolved:true,challenge:{id:1,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now(),deadline:Date.now()+3800},lastActionAt:0};}
+  if(message.type==='flightStart'){finishedResult=undefined;run={id:'flight-1',startedAt:Date.now(),endsAt:Date.now()+60_000,speedSteps:0,hearts:3,distance:0,score:0,coins:0,speed:1,verbIndex:5,stage:'past',challengeId:1,coinResolved:true,hazardResolved:true,challenge:{id:1,kind:'gate',verbIndex:5,stage:'past',left:'breaked',right:'broke',correctLane:'right',startsAt:Date.now()+60_000,deadline:Date.now()+63_800,awaitingReady:true},lastActionAt:0};}
+  if(message.type==='flightGateReady'&&run&&message.challengeId===run.challenge.id&&run.challenge.awaitingReady){run.challenge={...run.challenge,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800,awaitingReady:false};}
   if(message.type==='flightChoose'&&run&&message.challengeId===run.challenge.id){
    const correct=message.side===run.challenge.correctLane,current=run.challenge,stage=run.stage,verbIndex=run.verbIndex;
    if(!correct){if(run.hearts===1){finishedResult={distance:run.distance,score:run.score,coins:run.coins};run=undefined;}else run={...run,hearts:run.hearts-1,speed:1,challengeId:current.id+1,challenge:{...current,id:current.id+1,startsAt:Date.now()+FLIGHT_GATE_SPACING_MS,deadline:Date.now()+FLIGHT_GATE_SPACING_MS+3800},lastResult:'collision',collisionReason:'gate',lastWord:'break'};}
@@ -23,7 +24,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
    pendingChoice=true;
   }
   if((message.type==='flightChoose'||message.type==='flightStatus')&&holdChoice&&pendingChoice)return;
-  if(['flightStatus','flightStart','flightChoose'].includes(message.type))sendState();
+  if(['flightStatus','flightStart','flightChoose','flightGateReady'].includes(message.type))sendState();
  });});
  try{
   finishedResult={distance:100,score:30,coins:0};
@@ -46,6 +47,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await page.getByRole('button',{name:'게임 시작'}).click();
   await page.locator('.flight-field').press('ArrowRight');
   await expect(page.locator('.flight-question')).toContainText('Break');
+  await expect.poll(()=>actions.includes('flightGateReady')).toBe(true);
   await expect(page.locator('.flight-question')).toContainText('깨다');
   await expect(page.locator('.flight-stage')).toHaveText('과거형');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
@@ -57,6 +59,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   serverClockJitter=0;sendState();
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 3개');
   await expect(page.locator('.flight-score')).toHaveAttribute('aria-label','점수 0점');
+  await expect(page.locator('.flight-time')).toHaveAttribute('aria-label',/남은 시간 \d+초/);
   await expect(page.locator('.flight-field .flight-hearts')).toHaveCount(1);
   await expect(page.locator('.flight-play')).not.toContainText('속도');
   await expect(page.locator('.flight-play')).not.toContainText('거리');

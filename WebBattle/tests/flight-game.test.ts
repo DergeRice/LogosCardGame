@@ -60,101 +60,67 @@ test('54 supplied verbs have four distinct plausible wrong forms for each gate',
  assert.deepEqual([.25,.49,.5,.58,.75].map(x=>flightLaneAt(x)),['left','left','right','right','right']);
 });
 
-test('word gates start immediately, connect without pickups, and score 30 each',t=>{
+function readyGate(game:Game,p:ReturnType<typeof player>['player'],messages:Record<string,unknown>[]){const run=view(messages).run!;if(run.challenge.awaitingReady)game.community.flightGateReady(p,{runId:run.id,challengeId:run.challenge.id});return view(messages).run!;}
+
+test('initial gate waits for the renderer, then gets its full approach time',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.handle(p,{type:'flightStart'});
- let run=view(messages).run!;const first=FLIGHT_VERBS.find(verb=>verb.base===run.verb.base)!;assert.ok(first);assert.equal(run.hearts,3);assert.equal(run.speed,flightSpeed(0));assert.equal(run.challenge.deadline-run.challenge.startsAt!,1949);assert.equal(run.challenge.kind,'gate');assert.ok([run.challenge.left,run.challenge.right].includes(first.past));assert.equal('correctLane' in run.challenge,false);assert.equal('verbOrder' in run,false);assert.equal(run.challenge.coinLane,undefined);assert.equal(run.challenge.hazardLane,undefined);
- const choose=(side:'left'|'right')=>{const current=view(messages).run!;now=current.challenge.deadline-100;game.handle(p,{type:'flightChoose',runId:current.id,challengeId:current.challenge.id,side});};
- game.handle(p,{type:'flightChoose',runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});assert.equal(view(messages).run?.score,0);
- choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.speed,flightSpeed(100));assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
- assert.ok([run.challenge.left,run.challenge.right].includes(first.participle));
- const stale=run.challenge.id-1;game.community.flightChoose(p,{runId:run.id,challengeId:stale,side:answer(game,p.id)});assert.equal(view(messages).run?.score,30);
- choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,200);assert.equal(run.score,60);assert.notEqual(run.verb.base,first.base);
- const saved=snapshot(game),restored=new Game();restore(restored,saved);assert.equal(restored.community.records.get(p.id)?.flight?.run?.distance,200);
+ let run=view(messages).run!;assert.equal(run.challenge.awaitingReady,true);assert.equal(run.hearts,3);assert.equal(run.score,0);
+ const initialId=run.challenge.id;now+=1500;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
+ run=view(messages).run!;assert.equal(run.score,0);assert.equal(run.hearts,3);
+ readyGate(game,p,messages);run=view(messages).run!;assert.equal(run.challenge.awaitingReady,false);assert.equal(run.startedAt,now);assert.equal(run.endsAt,now+60_000);assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.equal(run.challenge.deadline-run.challenge.startsAt!,flightWindow(run.speed));
+ const start=run.challenge.startsAt;readyGate(game,p,messages);assert.equal(view(messages).run!.challenge.startsAt,start,'duplicate ready must not restart the gate');
+ now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:initialId,side:answer(game,p.id)});
+ run=view(messages).run!;assert.equal(run.score,30);assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
+ now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
+ run=view(messages).run!;assert.equal(run.score,60);assert.equal(run.stage,'past');assert.equal(run.challenge.awaitingReady,true,'a new verb must wait for a visible gate');
+ const order=game.community.records.get(p.id)!.flight!.run!.verbOrder!;assert.equal(new Set(order).size,FLIGHT_VERBS.length);
 });
 
-test('a flight shuffles all verbs once per cycle and never repeats across the cycle boundary',t=>{
+test('wrong gate repeats the same words and acceleration rebuilds one step at a time',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
  const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const seen:string[]=[];
- for(let i=0;i<FLIGHT_VERBS.length+1;i++){
-  let run=view(messages).run!;seen.push(run.verb.base);
-  for(let stage=0;stage<2;stage++){run=view(messages).run!;now=run.challenge.deadline;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});}
- }
- assert.equal(new Set(seen.slice(0,FLIGHT_VERBS.length)).size,FLIGHT_VERBS.length);
- assert.notEqual(seen.at(-1),seen.at(-2));
+ const choose=(correct:boolean)=>{let run=readyGate(game,p,messages);now=run.challenge.deadline-100;const side=answer(game,p.id);game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:correct?side:side==='left'?'right':'left'});return view(messages).run!;};
+ let run=choose(true);assert.equal(run.speed,flightSpeed(100));run=choose(true);run=choose(true);assert.equal(run.speedSteps,3);assert.equal(run.speed,flightSpeed(300));
+ const missed=run.challenge;run=choose(false);assert.equal(run.hearts,2);assert.equal(run.speedSteps,0);assert.equal(run.speed,flightSpeed(0));assert.equal(run.challenge.awaitingReady,true);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
+ run=choose(true);assert.equal(run.speedSteps,1);assert.equal(run.speed,flightSpeed(100));assert.equal(run.score,120);
 });
 
-test('wrong word gate removes one heart and repeats the exact same gate while resetting speed',t=>{
+test('flight ends at exactly 60 seconds and the completed score is ranked',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const choose=(side:'left'|'right')=>{let run=view(messages).run!;if(!run.hazardResolved){now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});run=view(messages).run!;}now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side});};
- let run=view(messages).run!;choose(answer(game,p.id));run=view(messages).run!;assert.equal(run.distance,100);
- game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.coinLane});assert.equal(view(messages).run?.coins,0);
- const missed=run.challenge,wrong=answer(game,p.id)==='left'?'right':'left';choose(wrong);run=view(messages).run!;
- assert.equal(run.hearts,2);assert.equal(run.distance,100);assert.equal(run.score,30);assert.equal(run.speed,flightSpeed(0));assert.equal(run.stage,'participle');assert.equal(run.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);assert.deepEqual([run.challenge.left,run.challenge.right],[missed.left,missed.right]);
- game.community.flightChoose(p,{runId:run.id,challengeId:missed.id,side:wrong});game.community.flightStatus(p);
- assert.equal(view(messages).run?.hearts,2,'stale answer and immediate status must not spend another heart');
- choose(answer(game,p.id)==='left'?'right':'left');run=view(messages).run!;assert.equal(run.hearts,1);
- now=run.challenge.deadline+FLIGHT_ARRIVAL_GRACE_MS+1;game.community.flightStatus(p);
- assert.equal(view(messages).run,undefined);assert.deepEqual(view(messages).lastResult,{distance:100,score:30,coins:0});assert.equal(view(messages).ranking[0].distance,100);
- game.community.flightStart(p);assert.equal(view(messages).run?.hearts,3);assert.equal(view(messages).bestDistance,100);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);let run=readyGate(game,p,messages);
+ now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
+ run=view(messages).run!;assert.equal(run.score,30);now=run.startedAt+59_999;game.community.flightStatus(p);assert.equal(view(messages).run?.score,30);
+ now++;game.community.flightStatus(p);assert.equal(view(messages).run,undefined);assert.equal(view(messages).lastResult?.score,30);assert.equal(view(messages).bestScore,30);assert.equal(view(messages).ranking[0]?.score,30);
+ const season=view(messages).season;now=Date.parse('2026-11-15T00:00:00+09:00');game.community.rollFlightSeason(now);game.community.flightStatus(p);assert.equal(view(messages).history.at(-1)?.season,season);assert.equal(view(messages).history.at(-1)?.bestScore,30);
 });
 
-test('overthrow past gate accepts overthrew at contact and waits before the next gate',t=>{
+test('a gate crossing the center lane costs one heart and cannot double-trigger',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const verbIndex=FLIGHT_VERBS.findIndex(verb=>verb.base==='overthrow'),verb=FLIGHT_VERBS[verbIndex];
- assert.equal(verb.past,'overthrew');assert.equal(verb.participle,'overthrown');assert.ok(!verb.wrongPast.includes('overthrew'));
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const saved=game.community.records.get(p.id)!.flight!.run!;saved.verbIndex=verbIndex;saved.stage='past';saved.challenge={...saved.challenge,verbIndex,stage:'past',left:'overthrew',right:'overthrowed',correctLane:'left'};
- now=saved.challenge.deadline+1000;game.community.flightStatus(p);assert.equal(view(messages).run?.hearts,3);
- game.community.flightChoose(p,{runId:saved.id,challengeId:saved.challenge.id,side:'left'});
- const result=view(messages).run!;assert.equal(result.score,30);assert.equal(result.hearts,3);assert.equal(result.lastWord,'overthrew');assert.equal(result.stage,'participle');assert.equal(result.challenge.startsAt,now+FLIGHT_GATE_SPACING_MS);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);const run=readyGate(game,p,messages);now=run.challenge.deadline-100;
+ game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});let next=view(messages).run!;assert.equal(next.hearts,2);assert.equal(next.challenge.awaitingReady,true);
+ game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});next=view(messages).run!;assert.equal(next.hearts,2);assert.equal(next.score,0);
 });
 
-test('straddling the gap between the two gates causes a collision',t=>{
+test('overthrow uses overthrew, with one score award at the gate',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;
- game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'center'});
- assert.equal(view(messages).run?.hearts,2);assert.equal(view(messages).run?.score,0);
+ const index=FLIGHT_VERBS.findIndex(verb=>verb.base==='overthrow'),verb=FLIGHT_VERBS[index];assert.equal(verb.past,'overthrew');
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);const saved=game.community.records.get(p.id)!.flight!.run!;saved.verbIndex=index;saved.challenge={...saved.challenge,verbIndex:index,left:'overthrew',right:'overthrowed',correctLane:'left'};game.community.flightStatus(p);
+ const run=readyGate(game,p,messages);now=run.challenge.deadline;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'left'});
+ assert.equal(view(messages).run?.score,30);assert.equal(view(messages).run?.lastWord,'overthrew');game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:'left'});assert.equal(view(messages).run?.score,30);
 });
 
-test('old coin and obstacle requests cannot grant points or remove hearts',t=>{
+test('legacy pickup and hazard messages cannot grant points',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const saved=game.community.records.get(p.id)!.flight!.run!;saved.challenge.hazardLane='left';saved.challenge.coinLane='right';saved.hazardResolved=false;saved.coinResolved=false;
- game.community.flightStatus(p);const run=view(messages).run!;assert.equal(run.challenge.hazardLane,undefined);assert.equal(run.challenge.coinLane,undefined);
- now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);
- game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:'left'});
- game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:'left'});
- const next=view(messages).run!;assert.equal(next.hearts,3);assert.equal(next.score,0);assert.equal(next.coins,0);assert.equal(next.challenge.id,run.challenge.id);
+ const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);const run=readyGate(game,p,messages);
+ game.community.flightPickup(p,{runId:run.id,challengeId:run.challenge.id,side:'left'});game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:'right'});
+ assert.equal(view(messages).run?.score,0);assert.equal(view(messages).run?.hearts,3);
 });
 
-test('a gate without a coin or obstacle can be passed directly',t=>{
+test('flight leaderboard orders by points even when another player has more distance',t=>{
  let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const saved=game.community.records.get(p.id)!.flight!.run!;saved.challenge.coinLane=undefined;saved.challenge.hazardLane=undefined;saved.coinResolved=true;saved.hazardResolved=true;
- const run=view(messages).run!;now=run.challenge.deadline;
- game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});
- assert.equal(view(messages).run?.score,30);assert.equal(view(messages).run?.hearts,3);
-});
-
-test('a saved coin-or-obstacle challenge resumes as a word gate',t=>{
- let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- const legacy=game.community.records.get(p.id)!.flight!.run!;legacy.challenge={...legacy.challenge,kind:'approach',left:'코인',right:'장애물'};
- game.community.flightStatus(p);
- const current=view(messages).run!;assert.equal(current.challenge.kind,'gate');assert.ok([current.challenge.left,current.challenge.right].includes(FLIGHT_VERBS.find(verb=>verb.base===current.verb.base)!.past));assert.equal(current.score,0);
-});
-
-test('flight ranking resets separately each season and retains the prior result',t=>{
- let now=Date.parse('2026-11-10T11:00:00+09:00');t.mock.method(Date,'now',()=>now);
- const game=new Game(),{player:p,messages}=player(game);game.community.flightStart(p);
- for(let i=0;i<1;i++){const run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)});}
- let run=view(messages).run!;assert.equal(run.distance,100);
- for(let i=0;i<3;i++){run=view(messages).run!;now=run.challenge.deadline-Math.round(flightWindow(run.speed)*.65);game.community.flightHazard(p,{runId:run.id,challengeId:run.challenge.id,side:run.challenge.hazardLane==='left'?'right':'left'});now=run.challenge.deadline-100;game.community.flightChoose(p,{runId:run.id,challengeId:run.challenge.id,side:answer(game,p.id)==='left'?'right':'left'});}
- assert.equal(view(messages).bestDistance,100);
- now=Date.parse('2026-11-15T00:00:00+09:00');game.community.rollFlightSeason(now);game.community.flightStatus(p);
- const next=view(messages);assert.equal(next.bestDistance,0);assert.equal(next.ranking.length,0);assert.deepEqual(next.history.map(item=>({distance:item.bestDistance,rank:item.rank})),[{distance:100,rank:1}]);
+ const game=new Game(),a=player(game),b=player(game);game.community.flightStart(a.player);game.community.flightStart(b.player);
+ const first=game.community.records.get(a.player.id)!.flight!,second=game.community.records.get(b.player.id)!.flight!;
+ first.bestDistance=900;first.bestScore=30;second.bestDistance=100;second.bestScore=60;
+ game.community.flightStatus(a.player);assert.deepEqual(view(a.messages).ranking.map(entry=>entry.score),[60,30]);
 });
