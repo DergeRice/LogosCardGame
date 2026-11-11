@@ -38,10 +38,10 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
     const wholeGate=new Texture({source:gateTexture.source,frame:new Rectangle(139,212,1895,295)});
     const planeFrames=Array.from({length:16},(_,index)=>new Texture({source:planeSheet.source,frame:new Rectangle(index%4*200,Math.floor(index/4)*200,200,200)}));
     const makeGate=()=>{
-     const group=new Container(),panels=[new Sprite(wholeGate),new Sprite(wholeGate)],labels=[0,1].map(()=>new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:26,fontWeight:'900',fill:0x123a60,stroke:{color:0xeaffff,width:4},align:'center'}})),stageLabel=new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:18,fontWeight:'900',fill:0xffffff,stroke:{color:0x17476b,width:5},align:'center'}});
-     panels.forEach(panel=>panel.anchor.set(.5));labels.forEach(label=>label.anchor.set(.5));stageLabel.anchor.set(.5,1);
-     group.addChild(...panels,...labels,stageLabel);
-     return {group,panels,labels,stageLabel,layoutWidth:0,layoutHeight:0};
+     const group=new Container(),panels=[new Sprite(wholeGate),new Sprite(wholeGate)],labels=[0,1].map(()=>new Text({text:'',style:{fontFamily:'Arial, "Malgun Gothic", sans-serif',fontSize:26,fontWeight:'900',fill:0x123a60,stroke:{color:0xeaffff,width:4},align:'center'}}));
+     panels.forEach(panel=>panel.anchor.set(.5));labels.forEach(label=>label.anchor.set(.5));
+     group.addChild(...panels,...labels);
+     return {group,panels,labels,layoutWidth:0,layoutHeight:0};
     };
     let current=makeGate(),gateId=live.current.challenge.id,currentWave={challenge:live.current.challenge,startsAt:live.current.startsAt};const departing:{gate:ReturnType<typeof makeGate>;wave:typeof currentWave}[]=[];
     const plane=new Sprite(planeFrames[0]);plane.anchor.set(.5);
@@ -63,12 +63,8 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
       gate.layoutWidth=w;gate.layoutHeight=h;
       gate.panels.forEach((panel,index)=>{panel.width=gateWidth;panel.height=gateH;panel.position.set(w*(index===0?.25:.75),0);});
       gate.labels.forEach((label,index)=>{label.style.fontSize=Math.max(15,Math.min(31,w*.067));label.position.set(w*(index===0?.25:.75),-gateH*.83);});
-      gate.stageLabel.style.fontSize=Math.max(14,Math.min(21,w*.045));gate.stageLabel.position.set(w*.5,-gateH*1.3-4);
      }
      gate.labels.forEach((label,index)=>{const value=index===0?words.left:words.right;if(label.text!==value)label.text=value;});
-     const stage=words.stage==='participle'?'과거분사':'과거형';if(gate.stageLabel.text!==stage)gate.stageLabel.text=stage;
-     const planeSize=Math.min(90,Math.max(44,Math.min(w*.22,h*.15)));
-     gate.stageLabel.visible=y>Math.max(61,gateH*.7)&&y<h*.83-(planeSize+gateH)/2;
     };
     instance.ticker.add(tick=>{
      const w=instance.screen.width,h=instance.screen.height,info=live.current;
@@ -100,12 +96,12 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
       const id=info.challenge.id;readyScheduled.add(id);requestAnimationFrame(()=>{readyScheduled.delete(id);if(live.current.challenge.id===id)signalReady(id);});
      }
      for(let i=departing.length-1;i>=0;i--){const {gate,wave}=departing[i],oldY=flightGateCenterY(nowServer,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize);
-      if(oldY>h+gateH*2){instance.stage.removeChild(gate.group);gate.group.destroy({children:true});departing.splice(i,1);}else{drawGate(gate,w,h,oldY,wave.challenge);gate.stageLabel.visible=false;}
+      if(oldY>h+gateH*2){instance.stage.removeChild(gate.group);gate.group.destroy({children:true});departing.splice(i,1);}else drawGate(gate,w,h,oldY,wave.challenge);
      }
      const crash=info.crashStartedAt!==undefined,crashProgress=crash?Math.max(0,Math.min(1,(Date.now()-info.crashStartedAt!)/1500)):0;
      const shrink=crash?Math.max(.03,1-crashProgress*crashProgress*.97):1,planeY=h*.83+crashProgress*crashProgress*h*.17;
      const targetSize=planeSize*shrink;if(plane.width!==targetSize){plane.width=targetSize;plane.height=targetSize;}plane.position.set(w*info.planeX,planeY);plane.rotation=crashProgress*Math.PI*5;plane.alpha=1-crashProgress*.95;
-     const wordText=info.showWord?info.word:'';if(planeWord.text!==wordText)planeWord.text=wordText;
+     const wordText=info.showWord?`${info.word[0].toUpperCase()+info.word.slice(1)}의 ${info.challenge.stage==='past'?'과거형':'과거분사'}`:'';if(planeWord.text!==wordText)planeWord.text=wordText;
      planeWord.visible=info.showWord&&!crash&&y<h*.83-planeSize*.48;planeWord.position.set(w*.5,Math.min(y+gateH*.58,planeY-planeSize*.68));
      const now=performance.now();if(!crash&&Math.abs(info.planeX-lastPlaneX)>.012){bankDirection=info.planeX<lastPlaneX?-1:1;bankUntil=now+360;}lastPlaneX=info.planeX;
      const banked=!crash&&now<bankUntil,bankState=banked?(bankDirection<0?'left':'right'):'straight';if(node.dataset.bank!==bankState)node.dataset.bank=bankState;
@@ -131,6 +127,6 @@ function FlightSceneView({challenge,speed,startsAt,serverOffset,planeX,word,show
  const fallbackGates=[...outgoing.current,{challenge,startsAt}].filter(wave=>flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)<h+gateH*2);
  outgoing.current=fallbackGates.filter(wave=>wave.challenge.id!==challenge.id);
  const currentGateY=flightGateCenterY(now,startsAt,challenge.deadline,h,gateH,planeSize);
- return <div className={`flight-scene${crashStartedAt!==undefined?' is-crashing':''}${impact?' is-impact-'+impact.kind:''}`} ref={host} data-word={showWord?word:''} data-gate-id={challenge.id} data-gate-y={Math.round(currentGateY)} data-impact={impact?.kind??''} data-speed-up={speedUpAt!==undefined?'true':'false'} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><b className="flight-fallback-stage">{wave.challenge.stage==='past'?'과거형':'과거분사'}</b><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}{showWord&&currentGateY<h*.83-planeSize*.48&&<span className="flight-plane-word-fallback" style={{left:'50%',top:`${Math.min(currentGateY+gateH*.58,h*.83-planeSize*.68)/h*100}%`}}>{word}</span>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/>{speedUpAt!==undefined&&<span className="flight-speed-up-fallback">Speed Up!</span>}</>}</div>;
+ return <div className={`flight-scene${crashStartedAt!==undefined?' is-crashing':''}${impact?' is-impact-'+impact.kind:''}`} ref={host} data-word={showWord?word:''} data-stage-word={showWord?`${word[0].toUpperCase()+word.slice(1)}의 ${challenge.stage==='past'?'과거형':'과거분사'}`:''} data-gate-id={challenge.id} data-gate-y={Math.round(currentGateY)} data-impact={impact?.kind??''} data-speed-up={speedUpAt!==undefined?'true':'false'} aria-hidden="true">{fallback&&<><span className="flight-fallback-object-layer"/><span className="flight-fallback-cloud-layer"/>{fallbackGates.map(wave=><div key={wave.challenge.id} className="flight-fallback-gates" style={{top:`${flightGateCenterY(now,wave.startsAt,wave.challenge.deadline,h,gateH,planeSize)/h*100}%`}}><span>{wave.challenge.left}</span><span>{wave.challenge.right}</span></div>)}{showWord&&currentGateY<h*.83-planeSize*.48&&<span className="flight-plane-word-fallback" style={{left:'50%',top:`${Math.min(currentGateY+gateH*.58,h*.83-planeSize*.68)/h*100}%`}}>{word[0].toUpperCase()+word.slice(1)}의 {challenge.stage==='past'?'과거형':'과거분사'}</span>}<span className="flight-plane-fallback" style={{left:`${planeX*100}%`}}/>{speedUpAt!==undefined&&<span className="flight-speed-up-fallback">Speed Up!</span>}</>}</div>;
 }
 export const FlightScene=memo(FlightSceneView);

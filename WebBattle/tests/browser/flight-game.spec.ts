@@ -49,7 +49,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await expect(page.locator('.flight-question')).toContainText('Break');
   await expect.poll(()=>actions.includes('flightGateReady')).toBe(true);
   await expect(page.locator('.flight-question')).toContainText('깨다');
-  await expect(page.locator('.flight-stage')).toHaveText('과거형');
+  await expect(page.locator('.flight-stage')).toHaveCount(0);
+  await expect(page.locator('.flight-scene')).toHaveAttribute('data-stage-word','Break의 과거형');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/breaked.*broke/);
   await expect(page.locator('.flight-scene')).toHaveAttribute('data-word','break');
   const timerBefore=parseFloat(await page.locator('.flight-timer span').evaluate(node=>(node as HTMLElement).style.width)),clockBefore=Date.now();
@@ -59,8 +60,8 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   serverClockJitter=0;sendState();
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 3개');
   await expect(page.locator('.flight-score')).toHaveAttribute('aria-label','점수 0점');
-  await expect(page.locator('.flight-time')).toHaveAttribute('aria-label',/남은 시간 \d+초/);
-  expect(Number((await page.locator('.flight-time').textContent())!.replace('초',''))).toBeGreaterThan(110);
+  await expect(page.locator('.flight-time')).toHaveCount(0);
+  await expect(page.locator('.flight-timer')).toHaveAttribute('aria-label',/남은 시간 \d+초/);
   await expect(page.locator('.flight-field .flight-hearts')).toHaveCount(1);
   await expect(page.locator('.flight-play')).not.toContainText('속도');
   await expect(page.locator('.flight-play')).not.toContainText('거리');
@@ -77,7 +78,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   expect(fieldBox!.y+fieldBox!.height).toBeLessThanOrEqual(pageBox!.y+pageBox!.height+1);
   const heartsBox=await page.locator('.flight-hearts').boundingBox(),scoreBox=await page.locator('.flight-score').boundingBox();
   expect(heartsBox!.x).toBeLessThan(fieldBox!.x+fieldBox!.width*.3);
-  expect(Math.abs(scoreBox!.x+scoreBox!.width/2-(fieldBox!.x+fieldBox!.width/2))).toBeLessThan(4);
+  expect(scoreBox!.x).toBeGreaterThan(fieldBox!.x+fieldBox!.width*.65);
+  expect(scoreBox!.x+scoreBox!.width).toBeLessThanOrEqual(fieldBox!.x+fieldBox!.width+1);
+  expect(scoreBox!.y+scoreBox!.height).toBeLessThanOrEqual(fieldBox!.y+1);
   expect(await page.locator('.game-hub .flight-page').count()).toBe(1);
   const steer=async(x:number)=>{const box=await page.locator('.flight-field').boundingBox();await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.75);await page.mouse.down();await page.mouse.move(box!.x+box!.width*x,box!.y+box!.height*.75,{steps:5});await page.mouse.up();await expect(page.locator('.flight-field')).toHaveAttribute('data-plane-x',x<.5?/0\.2/:/0\.7/);};
   const firstField=await page.locator('.flight-field').boundingBox();
@@ -98,7 +101,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   await page.screenshot({path:`.runtime/v197-flight-answer-${viewport.width}-${test.info().project.name}.png`});
   await page.waitForTimeout(1100);
   await page.screenshot({path:`.runtime/v196-flight-gate-${viewport.width}-${test.info().project.name}.png`});
-  await expect(page.locator('.flight-stage')).toHaveText('과거분사');
+  await expect(page.locator('.flight-scene')).toHaveAttribute('data-stage-word','Break의 과거분사');
   await expect(page.locator('.flight-score')).toHaveText('30');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   await expect(page.locator('.flight-question')).toHaveCount(0);
@@ -125,7 +128,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`irre
   holdChoice=false;pendingChoice=false;sendState();
   await page.waitForTimeout(700);
   await expect(page.locator('.flight-hearts')).toHaveAttribute('aria-label','남은 하트 2개');
-  await expect(page.locator('.flight-stage')).toHaveText('과거분사');
+  await expect(page.locator('.flight-scene')).toHaveAttribute('data-stage-word','Break의 과거분사');
   await expect(page.locator('.flight-field')).toHaveAttribute('aria-label',/broken.*breaken/);
   await page.screenshot({path:`.runtime/v196-flight-retry-${viewport.width}-${test.info().project.name}.png`});
   expect(actions).not.toContain('flightHazard');expect(actions).not.toContain('flightPickup');
