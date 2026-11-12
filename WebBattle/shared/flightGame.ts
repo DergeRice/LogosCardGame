@@ -12,6 +12,10 @@ export type FlightView={serverNow:number;season:string;seasonEndsAt:number;bestD
 export function flightSpeed(distance:number){const baseSpeed=Math.min(3.6,1.5+distance/500*0.32);const progress=(baseSpeed-1.5)/2.1;return Math.min(6.12*.93*.9,baseSpeed*(1.3+.281*progress));}
 export function flightSpeedForStreak(correctStreak:number){return flightSpeed((correctStreak+Math.floor(correctStreak/3)*2)*100);}
 export function flightWindow(speed:number){return Math.max(1000,Math.round(3800/speed));}
+// Give new and recently hit players room to read the word. The extra time
+// fades with each correct gate and is gone by the twelfth consecutive answer.
+export function flightWindowForStreak(streak:number){return Math.round(flightWindow(flightSpeedForStreak(streak))*(1+1.7*Math.max(0,1-streak/12)));}
+export function flightGateSpacingForStreak(streak:number){return Math.round(FLIGHT_GATE_SPACING_MS*(1+1.7*Math.max(0,1-streak/12)));}
 export function flightLaneAt(x:number):FlightLane{return x<.5?'left':'right';}
 export const FLIGHT_ROUND_MS=120_000;
 export const FLIGHT_ARRIVAL_GRACE_MS=5000;

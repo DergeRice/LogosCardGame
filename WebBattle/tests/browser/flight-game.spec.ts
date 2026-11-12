@@ -18,11 +18,13 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`flig
   await expect(page.locator('.flight-field')).toBeVisible();
   const first=Number(await page.locator('.flight-scene').getAttribute('data-gate-id'));
   expect(first).toBe(1);
-  await expect.poll(async()=>Number(await page.locator('.flight-scene').getAttribute('data-gate-id')),{timeout:6500}).toBe(2);
+  await expect.poll(async()=>Number(await page.locator('.flight-scene').getAttribute('data-gate-id')),{timeout:10000}).toBe(2);
   await expect(page.locator('.flight-field')).toBeVisible();
   expect(actions.filter(type=>type.startsWith('flight'))).toEqual(['flightStatus']);
   if(viewport.width===390){
    for(let miss=0;miss<3;miss++){
+    const hearts=Number((await page.locator('.flight-hearts').getAttribute('aria-label'))?.match(/\d+/)?.[0]);
+    if(hearts===0)break;
     const gateId=Number(await page.locator('.flight-scene').getAttribute('data-gate-id'));
     const base=await page.locator('.flight-scene').getAttribute('data-word');
     const stage=await page.locator('.flight-scene').getAttribute('data-stage-word');
@@ -32,9 +34,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`flig
     const verb=FLIGHT_VERBS.find(item=>item.base===base)!;
     const answer=stage?.includes('과거분사')?verb.participle:verb.past;
     await page.locator('.flight-field').press(options![1]===answer?'ArrowRight':'ArrowLeft');
-    if(miss<2)await expect.poll(async()=>Number(await page.locator('.flight-scene').getAttribute('data-gate-id')),{timeout:6500}).toBe(gateId+1);
+    if(hearts>1)await expect.poll(async()=>Number(await page.locator('.flight-scene').getAttribute('data-gate-id')),{timeout:10000}).toBe(gateId+1);
    }
-   await expect(page.getByRole('dialog',{name:'비행 종료'})).toBeVisible({timeout:6500});
+   await expect(page.getByRole('dialog',{name:'비행 종료'})).toBeVisible({timeout:10000});
    expect(actions.filter(type=>type.startsWith('flight'))).toEqual(['flightStatus','flightSubmit']);
   }
   expect(errors.filter(error=>!error.startsWith('ResizeObserver loop completed'))).toEqual([]);

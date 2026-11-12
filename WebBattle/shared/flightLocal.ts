@@ -1,5 +1,5 @@
 import {FLIGHT_VERBS} from '../server/flightWords.js';
-import {flightSpeedForStreak,flightWindow,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightChallenge,type FlightLane,type FlightStage,type FlightSteeringLane} from './flightGame.js';
+import {flightSpeedForStreak,flightWindowForStreak,flightGateSpacingForStreak,FLIGHT_ROUND_MS,type FlightChallenge,type FlightLane,type FlightStage,type FlightSteeringLane} from './flightGame.js';
 
 export type FlightStep={verbIndex:number;stage:FlightStage;left:string;right:string;side:FlightSteeringLane;at:number};
 export type LocalFlightRun={id:string;startedAt:number;endsAt:number;hearts:number;score:number;distance:number;speedSteps:number;speed:number;verbIndex:number;verbOrder:number[];verbPosition:number;stage:FlightStage;challengeId:number;challenge:FlightChallenge;steps:FlightStep[];lastResult?:'correct'|'collision';lastWord?:string;lastActionAt:number;gameOverAt?:number};
@@ -8,8 +8,8 @@ function shuffledVerbs(previous?:number){const order=Array.from({length:FLIGHT_V
 function makeChallenge(run:LocalFlightRun,now:number,first=false):FlightChallenge{
  const verb=FLIGHT_VERBS[run.verbIndex],answer=verb[run.stage],wrong=run.stage==='past'?verb.wrongPast:verb.wrongParticiple;
  const distractor=wrong[Math.floor(Math.random()*wrong.length)],correctLane:FlightLane=Math.random()<.5?'left':'right';
- const startsAt=now+(first?450:FLIGHT_GATE_SPACING_MS);
- return {id:++run.challengeId,kind:'gate',verbIndex:run.verbIndex,stage:run.stage,left:correctLane==='left'?answer:distractor,right:correctLane==='right'?answer:distractor,correctLane,startsAt,deadline:startsAt+flightWindow(run.speed)};
+ const startsAt=now+(first?Math.round(450*2.7):flightGateSpacingForStreak(run.speedSteps));
+ return {id:++run.challengeId,kind:'gate',verbIndex:run.verbIndex,stage:run.stage,left:correctLane==='left'?answer:distractor,right:correctLane==='right'?answer:distractor,correctLane,startsAt,deadline:startsAt+flightWindowForStreak(run.speedSteps)};
 }
 export function startLocalFlight(now=Date.now()):LocalFlightRun{
  const order=shuffledVerbs(),run:LocalFlightRun={id:`${now}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`,startedAt:now,endsAt:now+FLIGHT_ROUND_MS,hearts:3,score:0,distance:0,speedSteps:0,speed:flightSpeedForStreak(0),verbIndex:order[0],verbOrder:order,verbPosition:0,stage:'past',challengeId:0,challenge:null as unknown as FlightChallenge,steps:[],lastActionAt:0};
@@ -19,7 +19,7 @@ export function advanceLocalFlight(run:LocalFlightRun,side:FlightSteeringLane,no
  const current=run.challenge,verb=FLIGHT_VERBS[run.verbIndex],correct=side===current.correctLane;
  const step:FlightStep={verbIndex:run.verbIndex,stage:run.stage,left:current.left,right:current.right,side,at:Math.max(0,now-run.startedAt)};
  const next:LocalFlightRun={...run,steps:[...run.steps,step],lastResult:correct?'correct':'collision',lastWord:correct?verb[run.stage]:verb.base,lastActionAt:now};
- if(!correct){next.hearts--;next.speedSteps=0;next.speed=flightSpeedForStreak(0);if(next.hearts<=0)next.gameOverAt=now;else next.challenge={...current,id:++next.challengeId,startsAt:now+FLIGHT_GATE_SPACING_MS,deadline:now+FLIGHT_GATE_SPACING_MS+flightWindow(next.speed)};return {run:next,correct,word:verb.base,speedUp:false};}
+ if(!correct){next.hearts--;next.speedSteps=0;next.speed=flightSpeedForStreak(0);if(next.hearts<=0)next.gameOverAt=now;else{const startsAt=now+flightGateSpacingForStreak(0);next.challenge={...current,id:++next.challengeId,startsAt,deadline:startsAt+flightWindowForStreak(0)};}return {run:next,correct,word:verb.base,speedUp:false};}
  next.score+=30;next.distance+=100;next.speedSteps++;next.speed=flightSpeedForStreak(next.speedSteps);
  const speedUp=next.speedSteps%3===0&&next.speed>flightSpeedForStreak(next.speedSteps-1);
  if(next.stage==='past')next.stage='participle';else{next.verbPosition++;if(next.verbPosition>=next.verbOrder.length){next.verbOrder=shuffledVerbs(next.verbIndex);next.verbPosition=0;}next.verbIndex=next.verbOrder[next.verbPosition];next.stage='past';}

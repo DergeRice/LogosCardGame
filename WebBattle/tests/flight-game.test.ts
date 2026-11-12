@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
-import {flightLaneAt,flightSpeed,flightSpeedForStreak,flightWindow,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightView} from '../shared/flightGame.js';
+import {flightLaneAt,flightSpeed,flightSpeedForStreak,flightWindow,flightWindowForStreak,flightGateSpacingForStreak,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
 import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 import {advanceLocalFlight,startLocalFlight,verifyFlightSteps} from '../shared/flightLocal.js';
@@ -16,6 +16,16 @@ test('local flight advances gates without any server response',()=>{
  assert.equal(next.run.challenge.id,first.id+1);
  assert.ok(next.run.challenge.startsAt!>first.deadline);
  assert.deepEqual(verifyFlightSteps(next.run.steps)?.score,30);
+});
+
+test('opening gate takes 170 percent more time and eases into the existing maximum pace',()=>{
+ const opening=startLocalFlight(1000).challenge;
+ const oldOpening=450+flightWindow(flightSpeedForStreak(0));
+ assert.ok(Math.abs((opening.deadline-1000)/oldOpening-2.7)<.002);
+ for(let streak=0;streak<12;streak++)assert.ok(flightWindowForStreak(streak+1)<flightWindowForStreak(streak));
+ assert.equal(flightWindowForStreak(12),flightWindow(flightSpeedForStreak(12)));
+ assert.equal(flightGateSpacingForStreak(0),405);
+ assert.equal(flightGateSpacingForStreak(12),FLIGHT_GATE_SPACING_MS);
 });
 
 test('local wrong answer immediately costs one heart and retries the same gate',()=>{
