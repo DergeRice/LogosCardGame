@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Game} from '../server/game.js';
 import {snapshot,restore} from '../server/persistence.js';
-import {flightLaneAt,flightSpeed,flightSpeedForStreak,flightWindow,flightWindowForStreak,flightGateSpacingForStreak,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightView} from '../shared/flightGame.js';
+import {flightLaneAt,flightSpeed,flightSpeedForStreak,flightWindow,flightWindowForStreak,flightGateIntervalForStreak,FLIGHT_GATE_SPACING_MS,FLIGHT_ROUND_MS,type FlightView} from '../shared/flightGame.js';
 import {FLIGHT_VERBS} from '../server/flightWords.js';
 import {descendingFlightTile,flightGateCenterY} from '../shared/flightVisual.js';
 import {advanceLocalFlight,startLocalFlight,verifyFlightSteps} from '../shared/flightLocal.js';
@@ -18,14 +18,26 @@ test('local flight advances gates without any server response',()=>{
  assert.deepEqual(verifyFlightSteps(next.run.steps)?.score,30);
 });
 
-test('opening gate takes 170 percent more time and eases into the existing maximum pace',()=>{
+test('flight gates start at four seconds and gain 200 ms per Speed Up level down to 2.2 seconds',()=>{
  const opening=startLocalFlight(1000).challenge;
- const oldOpening=450+flightWindow(flightSpeedForStreak(0));
- assert.ok(Math.abs((opening.deadline-1000)/oldOpening-2.7)<.002);
- for(let streak=0;streak<12;streak++)assert.ok(flightWindowForStreak(streak+1)<flightWindowForStreak(streak));
- assert.equal(flightWindowForStreak(12),flightWindow(flightSpeedForStreak(12)));
- assert.equal(flightGateSpacingForStreak(0),405);
- assert.equal(flightGateSpacingForStreak(12),FLIGHT_GATE_SPACING_MS);
+ assert.equal(opening.deadline-1000,4000);
+ for(let level=0;level<=9;level++){
+  const expected=4000-level*200;
+  assert.equal(flightGateIntervalForStreak(level*3),expected);
+  assert.equal(flightWindowForStreak(level*3)+FLIGHT_GATE_SPACING_MS,expected);
+  if(level<9)assert.equal(flightGateIntervalForStreak(level*3+2),expected);
+ }
+ assert.equal(flightGateIntervalForStreak(30),2200);
+ let run=startLocalFlight(1000),milestone=false;
+ for(let answer=1;answer<=3;answer++){
+  const result=advanceLocalFlight(run,run.challenge.correctLane,run.challenge.deadline);
+  run=result.run;milestone=result.speedUp;
+  assert.equal(run.challenge.deadline-run.lastActionAt,answer===3?3800:4000);
+ }
+ assert.equal(milestone,true);
+ const wrong=run.challenge.correctLane==='left'?'right':'left';
+ run=advanceLocalFlight(run,wrong,run.challenge.deadline).run;
+ assert.equal(run.challenge.deadline-run.lastActionAt,4000);
 });
 
 test('local wrong answer immediately costs one heart and retries the same gate',()=>{
