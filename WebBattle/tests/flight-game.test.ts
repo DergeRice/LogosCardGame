@@ -18,21 +18,21 @@ test('local flight advances gates without any server response',()=>{
  assert.deepEqual(verifyFlightSteps(next.run.steps)?.score,30);
 });
 
-test('flight gates start at four seconds and gain 200 ms per Speed Up level down to 2.2 seconds',()=>{
+test('flight gates start at four seconds and gain 300 ms per Speed Up level down to 2.2 seconds',()=>{
  const opening=startLocalFlight(1000).challenge;
  assert.equal(opening.deadline-1000,4000);
- for(let level=0;level<=9;level++){
-  const expected=4000-level*200;
+ for(let level=0;level<=6;level++){
+  const expected=4000-level*300;
   assert.equal(flightGateIntervalForStreak(level*3),expected);
   assert.equal(flightWindowForStreak(level*3)+FLIGHT_GATE_SPACING_MS,expected);
-  if(level<9)assert.equal(flightGateIntervalForStreak(level*3+2),expected);
+  if(level<6)assert.equal(flightGateIntervalForStreak(level*3+2),expected);
  }
- assert.equal(flightGateIntervalForStreak(30),2200);
+ assert.equal(flightGateIntervalForStreak(21),2200);
  let run=startLocalFlight(1000),milestone=false;
  for(let answer=1;answer<=3;answer++){
   const result=advanceLocalFlight(run,run.challenge.correctLane,run.challenge.deadline);
   run=result.run;milestone=result.speedUp;
-  assert.equal(run.challenge.deadline-run.lastActionAt,answer===3?3800:4000);
+  assert.equal(run.challenge.deadline-run.lastActionAt,answer===3?3700:4000);
  }
  assert.equal(milestone,true);
  const wrong=run.challenge.correctLane==='left'?'right':'left';
