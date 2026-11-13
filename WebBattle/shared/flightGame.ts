@@ -14,7 +14,7 @@ export function flightSpeedForStreak(correctStreak:number){return flightSpeed((c
 export function flightWindow(speed:number){return Math.max(1000,Math.round(3800/speed));}
 // One Speed Up level is earned for every three consecutive correct gates.
 // This is the full interval from one gate contact to the next.
-export function flightGateIntervalForStreak(streak:number){return Math.max(2200,4000-Math.floor(Math.max(0,streak)/3)*300);}
+export function flightGateIntervalForStreak(streak:number){return Math.max(2200,3200-Math.floor(Math.max(0,streak)/3)*300);}
 export function flightWindowForStreak(streak:number){return flightGateIntervalForStreak(streak)-FLIGHT_GATE_SPACING_MS;}
 export function flightLaneAt(x:number):FlightLane{return x<.5?'left':'right';}
 export const FLIGHT_ROUND_MS=120_000;

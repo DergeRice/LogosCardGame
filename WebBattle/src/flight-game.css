@@ -117,3 +117,13 @@
 .flight-speed-up-fallback{position:absolute;z-index:7;top:29%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;color:#ffe665;font-size:clamp(28px,9vw,48px);font-weight:950;text-shadow:-3px -3px 0 #164973,3px -3px 0 #164973,-3px 3px 0 #164973,3px 3px 0 #164973,0 5px 14px #164973;animation:flight-speed-up .95s ease-out both;pointer-events:none}
 @keyframes flight-speed-up{0%{opacity:0;transform:translate(-50%,-50%) scale(.55)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-90%) scale(1.25)}}
 @media(prefers-reduced-motion:reduce){.flight-speed-up-fallback{animation:none;opacity:1}}
+.flight-ready .flight-title-button{display:block;align-self:center;flex:0 0 auto;width:min(100%,400px);height:150px;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;cursor:pointer}
+.flight-ready .flight-title-button .mini-title-art,.flight-ready .flight-title-button img{display:block;width:100%;height:100%}
+.flight-ready .flight-title-button img{object-fit:contain}
+.flight-ranking li{min-height:38px;padding:3px 7px}
+.flight-ranking li>.avatar-with-frame{display:inline-grid;place-items:center;box-sizing:border-box}
+.flight-ranking li>.avatar-with-frame>.character-avatar{box-sizing:border-box}
+.flight-empty-rank-avatar{flex:0 0 var(--flight-rank-avatar);width:var(--flight-rank-avatar);height:var(--flight-rank-avatar);border-radius:50%;background:#e9ece2}
+@media(orientation:portrait) and (max-width:750px){.flight-ready .flight-title-button{width:116px;height:116px}.flight-ranking{gap:4px;padding:7px}.flight-ranking ol{gap:2px}.flight-ranking li{--flight-rank-avatar:24px;min-height:29px;padding:1px 7px}}
+@media(orientation:landscape) and (max-height:540px){.flight-ready{display:grid;grid-template-columns:180px minmax(0,1fr);grid-template-rows:minmax(0,1fr) 35px;column-gap:8px;row-gap:3px}.flight-ready .flight-title-button{grid-column:1;grid-row:1;width:170px;height:65px;align-self:center}.flight-ready .flight-ranking{grid-column:2;grid-row:1;gap:2px;padding:3px 7px}.flight-ready .flight-start{grid-column:1/-1;grid-row:2}.flight-ranking ol{grid-auto-flow:column;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));column-gap:8px;row-gap:1px}.flight-ranking li{--flight-rank-avatar:18px;min-height:21px;gap:4px}}
+@media(orientation:landscape) and (max-height:540px){.flight-ready .flight-ranking{overflow:hidden;gap:0}.flight-ready .flight-ranking h2{font-size:12px;line-height:16px}.flight-ready .flight-ranking ol{min-height:0;grid-template-rows:repeat(5,22px);row-gap:1px}.flight-ready .flight-ranking li{--flight-rank-avatar:16px;height:22px;min-height:22px;padding:0 4px;font-size:11px;line-height:1}}

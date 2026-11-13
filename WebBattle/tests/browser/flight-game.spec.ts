@@ -9,12 +9,22 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`flig
  page.on('pageerror',error=>errors.push(error.message));
  await page.routeWebSocket('**/socket',socket=>socket.onMessage(raw=>{const message=JSON.parse(String(raw));actions.push(message.type);
   if(message.type==='hello'){socket.send(JSON.stringify({type:'session',id:'me',name:'비행 검사',token:'flight-token',avatar:'pronoun',rating:1000,coins:0,points:0}));socket.send(JSON.stringify({type:'community',community:{friends:[],incoming:[],outgoing:[],invites:[],store:defaultHubSave()}}));}
-  if(message.type==='flightStatus'||message.type==='flightSubmit')socket.send(JSON.stringify({type:'flightState',data:{serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:0,bestScore:0,plays:0,history:[],ranking:[]}}));
+  if(message.type==='flightStatus'||message.type==='flightSubmit')socket.send(JSON.stringify({type:'flightState',data:{serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,bestDistance:0,bestScore:0,plays:0,history:[],ranking:Array.from({length:10},(_,i)=>({id:`rank-${i}`,name:`유저 ${i+1}`,score:120-i,frameId:i===0?'frame-style-01':undefined}))}}));
  }));
  try{
   await page.goto('/');await page.getByRole('tab',{name:'미니게임',exact:true}).click();await page.getByRole('button',{name:/불규칙 동사 플라이트/}).click();
-  await expect(page.locator('.flight-ready-intro h2')).toHaveText('불규칙 동사 플라이트');
-  await page.getByRole('button',{name:'게임 시작'}).click();
+  await expect(page.locator('.flight-title-button img')).toBeVisible();
+  expect(await page.locator('.flight-title-button img').evaluate(img=>(img as HTMLImageElement).currentSrc)).toContain(viewport.width<viewport.height?'flight-portrait.webp':'flight-landscape.webp');
+  await expect(page.locator('.flight-ranking li')).toHaveCount(10);
+  const lastRank=await page.locator('.flight-ranking li').last().boundingBox(),ranking=await page.locator('.flight-ranking').boundingBox();
+  expect(lastRank!.y+lastRank!.height).toBeLessThanOrEqual(ranking!.y+ranking!.height+1);
+  const framed=page.locator('.flight-ranking li').first().locator('.avatar-with-frame');
+  await expect(framed).toBeVisible();
+  const frame=await framed.boundingBox(),face=await framed.locator('.character-avatar').boundingBox();
+  expect(Math.abs(frame!.x+frame!.width/2-face!.x-face!.width/2)).toBeLessThan(2);
+  expect(Math.abs(frame!.y+frame!.height/2-face!.y-face!.height/2)).toBeLessThan(2);
+  await page.screenshot({path:`.runtime/v219-flight-ready-${viewport.width}-${test.info().project.name}.png`});
+  await page.getByRole('button',{name:'게임 시작',exact:true}).click();
   await expect(page.locator('.flight-field')).toBeVisible();
   const first=Number(await page.locator('.flight-scene').getAttribute('data-gate-id'));
   expect(first).toBe(1);
