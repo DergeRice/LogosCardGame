@@ -8,7 +8,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
  page.on('pageerror',error=>errors.push(error.message));
  page.on('response',response=>{if(response.url().includes('/audio/mini/')&&response.ok())audioResponses.push(response.url());});
  let activeRun:Record<string,unknown>|null=null;
- const miniState=(run:Record<string,unknown>|null)=>({serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,best:0,plays:0,history:[],ranking:Array.from({length:10},(_,i)=>({id:`rank-${i}`,name:`유저 ${i+1}`,score:12-i,frameId:i===0?'frame-style-01':undefined})),...(run?{run}:{})});
+ const miniState=(run:Record<string,unknown>|null)=>({serverNow:Date.now(),season:'2026-11-01',seasonEndsAt:Date.now()+86400000,best:0,plays:0,history:[],ranking:Array.from({length:4},(_,i)=>({id:`rank-${i}`,name:`유저 ${i+1}`,score:12-i,frameId:i===0?'frame-style-01':undefined})),...(run?{run}:{})});
  await page.routeWebSocket('**/socket',socket=>socket.onMessage(raw=>{
   const message=JSON.parse(String(raw));sent.push(message);
   if(message.type==='hello'){
@@ -38,19 +38,23 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`verb
   await page.getByRole('tab',{name:'미니게임',exact:true}).click();
   await expect(page.locator('.mini-page .hub-daily-mission')).toBeVisible();
   const tiles=page.locator('.mini-tile');await expect(tiles).toHaveCount(3);
-  await expect(page.locator('.mini-verb-tile img')).toHaveAttribute('src','/mini-games/verb-landscape.webp');
+  const expectedEntry=viewport.width<viewport.height?'landscape':'portrait';
+  for(const game of ['verb','flight'])await expect.poll(()=>page.evaluate(({game,expectedEntry})=>performance.getEntriesByType('resource').some(entry=>entry.name.includes(`/mini-games/${game}-${expectedEntry}.webp`)),{game,expectedEntry})).toBe(true);
+  expect(await page.locator('.mini-verb-tile img').evaluate(img=>(img as HTMLImageElement).currentSrc)).toContain(`verb-${expectedEntry}.webp`);
+  expect(await page.locator('.mini-flight-tile img').evaluate(img=>(img as HTMLImageElement).currentSrc)).toContain(`flight-${expectedEntry}.webp`);
   const boxes=await tiles.evaluateAll(elements=>elements.map(element=>{const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}));
   if(viewport.width<viewport.height){expect(boxes[0].y).toBeLessThan(boxes[1].y);expect(boxes[1].y).toBeLessThan(boxes[2].y);}else{expect(boxes[0].x).toBeLessThan(boxes[1].x);expect(boxes[1].x).toBeLessThan(boxes[2].x);}
+  await page.screenshot({path:`.runtime/v220-mini-list-${viewport.width}-${test.info().project.name}.png`});
   await page.getByRole('button',{name:/동사 분류/}).click();
   await expect.poll(()=>audioResponses.some(url=>url.includes('manifest-v3.json'))).toBe(true);
   await expect(page.getByRole('button',{name:'미니게임 목록으로'})).toBeVisible();
-  await expect(page.locator('.mini-ranking li')).toHaveCount(10);
+  await expect(page.locator('.mini-ranking li')).toHaveCount(4);
   await expect(page.locator('.mini-detail-title img')).toBeVisible();
-  expect(await page.locator('.mini-detail-title img').evaluate(img=>(img as HTMLImageElement).currentSrc)).toContain(viewport.width<viewport.height?'verb-portrait.webp':'verb-landscape.webp');
+  expect(await page.locator('.mini-detail-title img').evaluate(img=>(img as HTMLImageElement).currentSrc)).toContain('verb-landscape.webp');
   const rankBounds=await page.locator('.mini-ranking li').evaluateAll(elements=>elements.map(element=>{const r=element.getBoundingClientRect();return {top:r.top,bottom:r.bottom};}));
   const rankingPanel=await page.locator('.mini-ranking').boundingBox();
   expect(rankBounds[0].top).toBeGreaterThanOrEqual(rankingPanel!.y);
-  const lastRank=rankBounds[9];expect(lastRank.bottom).toBeLessThanOrEqual(rankingPanel!.y+rankingPanel!.height+1);
+  const lastRank=rankBounds[3];expect(lastRank.bottom).toBeLessThanOrEqual(rankingPanel!.y+rankingPanel!.height+1);
   const framed=page.locator('.mini-ranking li').first().locator('.avatar-with-frame');
   await expect(framed).toBeVisible();
   const frame=await framed.boundingBox(),face=await framed.locator('.character-avatar').boundingBox();
